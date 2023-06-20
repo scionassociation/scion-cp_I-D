@@ -28,7 +28,7 @@ submissiontype: independent
 docname: draft-dekater-scion-controlplane-latest
 number:
 date:
-consensus: true
+consensus:
 v: 3
 area: "IRTF"
 workgroup: "Path Aware Networking RG"
