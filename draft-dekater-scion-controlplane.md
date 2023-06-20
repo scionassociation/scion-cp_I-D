@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 ###
 # Internet-Draft Markdown Template
 #
@@ -19,35 +20,64 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
+
+title: "SCION Control Plane"
+abbrev: "SCION CP"
+category: info
+submissiontype: independent
+
+docname: draft-dekater-scion-controlplane-latest
+=======
 title: "TODO - Your title"
 abbrev: "TODO - Abbreviation"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-dekater-scion-controlplane-latest
 submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
+>>>>>>> a7eefb085ffdd67d0f43a88f42d698aec1d81bb5
 number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+<<<<<<< HEAD
+area: "IRTF"
+workgroup: "Path Aware Networking RG"
+keyword: Internet-Draft
+venue:
+  group: "Path Aware Networking RG"
+  type: "Research Group"
+  mail: "panrg@irtf.org"
+  arch: "https://www.ietf.org/mail-archive/web/panrg/"
+=======
+# area: AREA
+# workgroup: WG Working Group
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+#  group: WG
+#  type: Working Group
+#  mail: WG@example.com
+#  arch: https://example.com/WG
+>>>>>>> a7eefb085ffdd67d0f43a88f42d698aec1d81bb5
+  github: "scionassociation/scion-cp_I-D"
+  latest: "https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.html"
 
 author:
+<<<<<<< HEAD
+ -   ins: C. de Kater
+     name: Corine de Kater
+     org: SCION Association
+     email: cdk@scion.org
+
+
+=======
  -
     fullname: Your Name Here
     organization: Your Organization Here
-    email: your.email@example.com
+    email: "cdk@scion.org"
+>>>>>>> a7eefb085ffdd67d0f43a88f42d698aec1d81bb5
 
 normative:
 
