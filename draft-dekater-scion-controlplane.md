@@ -460,8 +460,6 @@ The following sections provide detailed specifications of the PCB messages, star
 
 #### PCB Top-Level Message Format {#segment}
 
-test
-
 ~~~~
 +-------------+-------------+------------+------+------------+
 |Segment Info | AS Entry 0  | AS Entry 1 |  ... | AS Entry N |
@@ -475,12 +473,12 @@ Each PCB at least consists of:
 
 The following code block defines the PCB on top level in Protobuf message format.
 
-~~~~proto
-message PathSegment {
-    bytes segment_info = 1;
-    repeated ASEntry as_entries = 2;
-}
-~~~~
+~~~
+   message PathSegment {
+       bytes segment_info = 1;
+       repeated ASEntry as_entries = 2;
+   }
+~~~
 
 - `segment_info`: This field is used as input for the PCB signature. It is the encoded version of the component `SegmentInformation`, which provides basic information about the PCB.  The `SegmentInformation` component is specified in detail in [](#seginfo).
 - `as_entries`: Contains the `ASEntry` component of all ASes on the path segment represented by this PCB.
@@ -488,8 +486,6 @@ message PathSegment {
 
 
 #### Segment Information {#seginfo}
-
-test
 
 ~~~~
 +----------------------------+
@@ -508,11 +504,11 @@ Each PCB MUST include an information component with basic information about the 
 
 In the Protobuf message format, the information component of a PCB is called the ``SegmentInformation`` message. The following code block shows the Protobuf message definition for the ``SegmentInformation`` message.
 
-~~~~proto
-message SegmentInformation {
-    int64 timestamp = 1;
-    uint32 segment_id = 2;
-}
+~~~~
+   message SegmentInformation {
+       int64 timestamp = 1;
+       uint32 segment_id = 2;
+   }
 ~~~~
 
 - `timestamp`: The 64-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
@@ -522,8 +518,6 @@ message SegmentInformation {
 
 
 #### AS Entry {#ase-message}
-
-test
 
 ~~~~
                            +--------------+
@@ -546,10 +540,10 @@ One AS entry contains the complete hop information for this specific AS in this 
 The code block below defines an AS entry `ASEntry` in Protobuf message format.
 
 ~~~~
-message ASEntry {
-    SignedMessage signed = 1;
-    PathSegmentUnsignedExtensions unsigned = 2;
-}
+   message ASEntry {
+       SignedMessage signed = 1;
+       PathSegmentUnsignedExtensions unsigned = 2;
+   }
 ~~~~
 
 It includes the following components:
@@ -581,7 +575,7 @@ This section specifies the signed component of an AS entry. The signed component
 - Body
 - Signature
 
-In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part `header_and_body` and a raw signature `signature`. See also the code block below.
+In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part `header_and_body` and a raw signature `signature`. See also the code blocks below.
 
 ~~~~
    message SignedMessage {
@@ -590,9 +584,9 @@ In the Protobuf message-format implementation, the signed component of an AS ent
    }
 ~~~~
 
-Low-level representation of HeaderAndBody used for signature computation input. This should not be used by external code.
-
 ~~~~
+   // Low-level representation of HeaderAndBody used for signature computation
+   // input. This should not be used by external code.
    message HeaderAndBodyInternal {
        // Encoded header suitable for signature computation.
        bytes header = 1;
@@ -669,16 +663,24 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 ##### AS Entry Signed Body {#ase-sign}
 
-.. figure:: fig/signed-as-body.png
-   :width: 75 %
-   :figwidth: 100 %
+~~~~
+                +--------------------------------------+
+                |                 Body                 |
+                +--------------------------------------+
+                *- - - - - - - - - -#- - - - - - - - - *
+                                    |
+                                    |
+*- - - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - -*
++------+-----------+---------++------------+---+------------++---+----+
+|ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0|...|Peer Entry N||MTU|Ext.|
++------+-----------+---------++------------+---+------------++---+----+
+~~~~
 
-The body of an AS entry consists of the signed component ``ASEntrySignedBody`` of all ASes in the path segment represented by the PCB, up until and including the current AS.
+The body of an AS entry consists of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
 
-The following code block defines the signed body of one AS entry in Protobuf message format (called the ``ASEntrySignedBody`` message).
+The following code block defines the signed body of one AS entry in Protobuf message format (called the `ASEntrySignedBody` message).
 
-.. code-block:: proto
-
+~~~~
    message ASEntrySignedBody {
        uint64 isd_as = 1;
        uint64 next_isd_as = 2;
@@ -687,23 +689,23 @@ The following code block defines the signed body of one AS entry in Protobuf mes
        uint32 mtu = 5;
        PathSegmentExtensions extensions = 6;
    }
+~~~~
 
-
-- ``isd_as``: The ISD-AS number of the AS that created this AS entry.
-- ``next_isd_as``: The ISD-AS number of the downstream AS to which the PCB should be forwarded.
-- ``hop_entry``: The hop entry (``HopEntry``) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see :ref:`hopentry`.
-- ``peer_entries``: The list of optional peer entries (``PeerEntry``). For a specification of one peer entry, see :ref:`peerentry`.
-- ``mtu``: The size of the maximum transmission unit (MTU) within the current AS's network.
-- ``extensions``: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field should therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see :ref:`pcb-ext`.
+- `isd_as`: The ISD-AS number of the AS that created this AS entry.
+- `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB should be forwarded.
+- `hop_entry`: The hop entry (`HopEntry`) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see [](#hopentry).
+- `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
+- `mtu`: The size of the maximum transmission unit (MTU) within the current AS's network.
+- `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field should therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
 
 ##### AS Entry Signature {#sign}
 
 The signature of an AS entry is computed over the AS entry's signed component. This is the input for the computation of the signature:
 
-- The signed header and body of the current AS (``header_and_body``).
-- The ``segment_info`` component of the current AS. This is the encoded version of the ``SegmentInformation`` component containing basic information about the path segment represented by the PCB. For the specification of ``SegmentInformation``, see :ref:`seginfo`.
-- The signed header_and_body/signature combination of each previous AS on this specific path segment.
+- The signed header and body of the current AS (`header_and_body`).
+- The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
+- The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.
 
@@ -721,89 +723,139 @@ associated_data(ps, i) = ps.segment_info ||
 
 #### Hop Entry {#hopentry}
 
-.. figure:: fig/hop-entry.png
-   :width: 75 %
-   :figwidth: 100 %
+~~~~
+       +-----------+
+       | Hop Entry |
+       +-----------+
+       *- - -#- - -*
+             |
+ - - - - - - v - - - - - - *
++-------------+------------+
+| Ingress MTU | Hop Field  |
++-------------+------------+
+~~~~
 
 Each body of an AS entry MUST contain exactly one hop entry component. The hop entry component specifies forwarding information for the data plane. The data plane requires this information to create the hop through the current AS (in the direction of the beaconing).
 
-The following code block defines the hop entry component ``HopEntry`` in Protobuf message format:
+The following code block defines the hop entry component `HopEntry` in Protobuf message format:
 
-.. code-block:: proto
-
+~~~~
    message HopEntry {
        HopField hop_field = 1;
        uint32 ingress_mtu = 2;
    }
+~~~~
 
-
-- ``hop_field``: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see :ref:`hopfield`.
-- ``ingress_mtu``: Specifies the maximum transmission unit (MTU) of the ingress interface of the current AS.
-
+- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface of the current AS.
 
 
 #### Hop Field {#hopfield}
 
-.. figure:: fig/hop-field.png
-   :width: 75 %
-   :figwidth: 100 %
+~~~~
+                      +-----------+
+                      | Hop Field |
+                      +-----------+
+                      *- - -#- - -*
+                            |
+                            |
+ - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
++---------------------------+-------------------+----------+
+|                  Egress   |  Expiration Time  |   MAC    |
++---------------------------+-------------------+----------+
+~~~~
 
 The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC).
 
-The following code block defines the hop field component ``HopField`` in Protobuf message format:
+The following code block defines the hop field component `HopField` in Protobuf message format:
 
-.. code-block:: proto
-
+~~~~
    message HopField {
        uint64 ingress = 1;
        uint64 egress = 2;
        uint32 exp_time = 3;
        bytes mac = 4;
    }
+~~~~
 
-- ``ingress``: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
+- `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
 
-  .. note::
+**Note:** For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
 
-   For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
-
-- ``egress``: The 16-bit egress interface identifier (in the direction of beaconing).
-- ``exp_time``: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also :ref:`seginfo`). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets that use the hop field after the expiration time MUST be dropped.
-- ``mac``: The message authentication code (MAC) used in the data plane to verify the hop field.
+- `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
+- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets that use the hop field after the expiration time MUST be dropped.
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field.
 
 
 #### Peer Entry {#peerentry}
 
-.. figure:: fig/peer-entry-pcb.png
-   :width: 75 %
-   :figwidth: 100 %
-
+~~~~
+                      +--------------+
+                      |  Peer Entry  |
+                      +--------------+
+                      *- - - -#- - - *
+                              |
+*- - - - - - - - - - - - - - -v- - - - - - - - - - - - - - *
++-------------+------------+--------------+----------------+
+|  Hop Field  |  Peer MTU  | Peer ISD-AS  | Peer Interface |
++-------------+------------+--------------+----------------+
+~~~~
 
 By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.
 
-The following code block defines the peer entry component ``PeerEntry`` in Protobuf message format:
+The following code block defines the peer entry component `PeerEntry` in Protobuf message format:
 
-.. code-block:: proto
-
+~~~~
    message PeerEntry {
        uint64 peer_isd_as = 1;
        uint64 peer_interface = 2;
        uint32 peer_mtu = 3;
        HopField hop_field = 4;
    }
+~~~~
 
+- `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
+- `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
+- `peer_mtu`: Specifies the maximum transmission unit MTU on the peering link.
+- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-5}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
 
-- ``peer_isd_as``: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
-- ``peer_interface``: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
-- ``peer_mtu``: Specifies the maximum transmission unit MTU on the peering link.
-- ``hop_field``: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also the next figure). The data plane needs this information to forward packets through the current AS. For further specifications, see :ref:`hopfield`.
-
-.. figure:: fig/peer-entry.png
-   :width: 50 %
-   :figwidth: 100 %
-
-   *Peer entry information, in the direction of beaconing*
-
+~~~~
+       .-------.
+     ,'         `.
+    ;             :
+    :  parent AS  ;
+     \           /
+      `.       ,'
+        `--+--'
+           |
+           |
+           |
+           |ASE.HF.ingress_interface
+      .----#----.                              .---------.
+   ,-'           '-.                        ,-'           '-.
+  /        |        \                      /                 \
+ /                   \         PE.peer_   /                   \
+;          |          :        interface ;                     :
+:                     #------------------#         peer AS     ;
+ :         |         ; PE.HF.ingress_     :                   ;
+ :                   ; interface          :                   ;
+  `.       |       ,'                      `.               ,'
+    '-.    v    ,-'                          '-.         ,-'
+       `---#---'                                `-------'
+           |PE.HF.egress_interface
+           |ASE.HF.egress_interface
+           |
+           |
+           |
+       .---+---.
+     ,'         `.
+    ;             :
+    :  child AS   ;
+     \           /
+      `.       ,'
+        `-----'
+~~~~
+{: #figure-5 title="Peer entry information, in the direction of beaconing"}
 
 
 ### PCB Extensions {#pcb-ext}
@@ -812,13 +864,10 @@ In addition to basic routing information like hop entries and peer entries, PCBs
 
 On code-level and in Protobuf message format, extensions are specified as follows:
 
-- Unsigned extensions ``PathSegmentUnsignedExtensions`` are part of the AS entry component (the ``ASEntry`` message, see also :ref:`ase-message`).
-- Signed extensions ``PathSegmentExtensions`` are part of the signed body component of an AS entry (the ``ASEntrySignedBody`` message, see also :ref:`ase-sign`).
+- Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#ase-message)).
+- Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
-.. note::
-
-   SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
-
+**Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
 
 ## Propagation of PCBs {#path-prop}
@@ -839,32 +888,23 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 - The *best PCBs set size* SHOULD be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing.
 
-.. note::
-
-   Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.
+**Note:** Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-.. note::
-
-   Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS should forward the PCB immediately, to ensure quick connectivity establishment.
+**Note:** Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS should forward the PCB immediately, to ensure quick connectivity establishment.
 
 
 #### Selection Policy Example
 
-
-The following figure illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments. The selected path segments are represented by the bold or colored lines.
+**Figure 6** below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments. The selected path segments are represented by the bold or colored lines.
 
 - The network on the left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency.
 - The network in the middle uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
 - The network on the right selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure.
 
-
-.. figure:: fig/path-segment-selection.png
-   :width: 75 %
-   :figwidth: 100 %
-
-   *Example networks to illustrate path-segment selection based on different path properties. The selected path segments are represented by the bold or colored lines.* \ :sup:`© ETH Zürich/Springer Verlag`
+**images/path-segment-selection.png**
+Figure 6: *Example networks to illustrate path-segment selection based on different path properties. The selected path segments are represented by the bold or colored lines.*<sup>Copyright: ETH Zürich/Springer Verlag</sup>
 
 
 
@@ -872,33 +912,18 @@ The following figure illustrates the selection of path segments in three network
 
 Once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. Both processes are described here.
 
-To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special
-kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it
-is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular
-dependency. The One-Hop Path Type is described in more detail in the SCION Data Plane specification.
+To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.
 
 
 #### Propagation - First Steps
 
 The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:
 
-1. Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.
-
-   .. note::
-
-      The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
-
-2. As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes therefore performs the following additional checks:
-   - Does the PCB include an AS entry created by the core AS itself?
-
-   If the answer to this question is yes, the PCB is discarded in order to avoid loops.
-
-  .. note::
-
-     It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
-
-
-3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see :ref:`selection`.
+1. Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.<br>
+**Note:** The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
+2. As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes therefore checks whether the PCB includes an AS entry created by the core AS itself. If so, the PCB is discarded in order to avoid loops.<br>
+**Note:** It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
+3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
 
 
 #### Propagation of PCBs in Intra-ISD Beaconing {#intra-prop}
@@ -907,51 +932,33 @@ The propagation process in intra-ISD beaconing includes the following steps:
 
 1. From the candidate PCBs stored in the beacon store, the control service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
 2. The control service adds a new AS entry to every selected PCB. This AS entry MUST at least include:
-   a. The ingress interface to this AS, in the hop field component (part of the AS entry's signed body component).
-   b. The egress interface to the neighboring AS, also in the hop field component.
-   c. The ISD_AS number of the next AS, in the signed body component of the AS entry.
-   d. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
+   - The ingress interface to this AS, in the hop field component (part of the AS entry's signed body component).
+   - The egress interface to the neighboring AS, also in the hop field component.
+   - The ISD_AS number of the next AS, in the signed body component of the AS entry.
+   - If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
 3. The control service MUST now sign each selected, extended PCB and append the computed signature.
-4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the ``SegmentCreationService.Beacon`` remote procedure call (RPC) in the control services of the neighboring ASes (see also :ref:`prop-proto`).
+4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring ASes (see also [](#prop-proto)).
 
-
-.. note::
-
-   - For more information on the signed body component of an AS entry, see :ref:`ase-sign`.
-   - For more information on a peer entry, see :ref:`peerentry`.
-   - For more information on the hop field component, see :ref:`hopfield`.
-   - For more information on signing an AS entry, see :ref:`sign`.
 
 
 #### Propagation of PCBs in Core Beaconing
-
 
 The propagation process in core beaconing includes the following steps:
 
 1. The core control service selects the best PCBs to forward to neighboring core ASes observed so far.
 2. The service adds a new AS entry to every selected PCB. This AS entry MUST at least include:
-   a. The egress interface to the neighboring core AS, in the hop field component (part of the AS entry's signed body component).
-   b. The ISD_AS number of the neighboring core AS, in the signed body component of the AS entry.
+   - The egress interface to the neighboring core AS, in the hop field component (part of the AS entry's signed body component).
+   - The ISD_AS number of the neighboring core AS, in the signed body component of the AS entry.
 3. The core control service MUST now sign the extended PCBs.
-4. As a final step, the service propagates the extended PCBs to the neighboring core ASes, by invoking the ``SegmentCreationService.Beacon`` remote procedure call (RPC) in the control services of the neighboring core ASes (see also :ref:`prop-proto`).
-
-
-.. note::
-
-   - For more information on the signed body component of an AS entry, see :ref:`ase-sign`.
-   - For more information on signing an AS entry, see :ref:`sign`.
-   - For more information on the hop field component, see :ref:`hopfield`.
-   - For more information on signing an AS entry, see :ref:`sign`.
+4. As a final step, the service propagates the extended PCBs to the neighboring core ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring core ASes (see also [](#prop-proto)).
 
 
 
 #### Propagation of PCBs in Protobuf Message Format {#prop-proto}
 
-Step 4 of the above described propagation procedures is implemented as follows in Protobuf message format:
+The last step of the above described core and intra-ISD propagation procedures is implemented as follows in Protobuf message format:
 
-
-.. code-block:: proto
-
+~~~~
    service SegmentCreationService {
        rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
    }
@@ -961,18 +968,15 @@ Step 4 of the above described propagation procedures is implemented as follows i
    }
 
    message BeaconResponse {}
-
+~~~~
 
 The propagation procedure includes the following elements:
 
-
-- ``SegmentCreationService``: Specifies the service via which the extended PCB is propagated to the control service of the neighboring AS.
-  - ``Beacon``: Specifies the method that calls the control service at the neighboring AS in order to propagate the extended PCB.
-- ``BeaconRequest``: Specifies the request message sent by the ``Beacon`` method to the control service of the neighboring AS. It contains the following element:
-  - ``PathSegment``: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type ``PathSegment``, see :ref:`segment`.
-- ``BeaconResponse``: Specifies the response message from the neighboring AS.
-
-
+- `SegmentCreationService`: Specifies the service via which the extended PCB is propagated to the control service of the neighboring AS.
+   - `Beacon`: Specifies the method that calls the control service at the neighboring AS in order to propagate the extended PCB.
+- `BeaconRequest`: Specifies the request message sent by the `Beacon` method to the control service of the neighboring AS. It contains the following element:
+   - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
+- `BeaconResponse`: Specifies the response message from the neighboring AS.
 
 
 
