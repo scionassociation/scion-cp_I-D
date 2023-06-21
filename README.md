@@ -1,4 +1,4 @@
-# TODO - Your title
+# SCION Control Plane Specification
 
 This is the working area for the individual Internet-Draft, "TODO - Your title".
 
