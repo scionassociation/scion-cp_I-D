@@ -1,5 +1,4 @@
 ---
-
 title: "SCION Control Plane"
 abbrev: "SCION CP"
 category: info
@@ -136,9 +135,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-
-
-
 
 --- abstract
 
@@ -333,7 +329,7 @@ All communication between the control services in different ASes is expressed in
 **Note:** The details for how gRPC is mapped to the SCION data plane will be described in a separate document.
 
 
-# Path Exploration (Beaconing) {#beaconing}
+# Path Exploration or Beaconing {#beaconing}
 
 
 ## Introduction and Overview
@@ -550,20 +546,19 @@ One AS entry contains the complete hop information for this specific AS in this 
 The code block below defines an AS entry `ASEntry` in Protobuf message format.
 
 ~~~~
-   message ASEntry {
-       SignedMessage signed = 1;
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+message ASEntry {
+    SignedMessage signed = 1;
+    PathSegmentUnsignedExtensions unsigned = 2;
+}
 ~~~~
 
 It includes the following components:
 
-- `SignedMessage`: The signed component of an AS entry. For the specification of this part of the AS entry, see :ref:`signed-compo` below.
+- `SignedMessage`: The signed component of an AS entry. For the specification of this part of the AS entry, see [](#signed-compo) below.
 - `PathSegmentUnsignedExtensions`: The unsigned and thus unprotected part of the AS entry. These are extensions with metadata that need no explicit protection.
 
 
 #### AS Entry Signed Component {#signed-compo}
-
 
 ~~~~
         +------------------------------------------------------+
@@ -586,8 +581,7 @@ This section specifies the signed component of an AS entry. The signed component
 - Body
 - Signature
 
-In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part `header_and_body`, and a raw signature `signature`. See also the code block below.
-
+In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part `header_and_body` and a raw signature `signature`. See also the code block below.
 
 ~~~~
    message SignedMessage {
@@ -596,8 +590,7 @@ In the Protobuf message-format implementation, the signed component of an AS ent
    }
 ~~~~
 
-   // Low-level representation of HeaderAndBody used for signature computation
-   // input. This should not be used by external code.
+Low-level representation of HeaderAndBody used for signature computation input. This should not be used by external code.
 
 ~~~~
    message HeaderAndBodyInternal {
@@ -608,17 +601,30 @@ In the Protobuf message-format implementation, the signed component of an AS ent
    }
 ~~~~
 
-- For the specification of the signed header, see :ref:`ase-header`.
-- For the specification of the signed body, see :ref:`ase-sign`.
-- For the specification of the ``signature`` field, see :ref:`sign`.
+- For the specification of the signed header, see [](#ase-header).
+- For the specification of the signed body, see [](#ase-sign).
+- For the specification of the `signature` field, see [](#sign).
 
 
 ##### AS Entry Signed Header {#ase-header}
 
-.. figure:: fig/signed-header.png
-   :width: 75 %
-   :figwidth: 100 %
-
+~~~~
+           +-----------------+
+           |     Header      |
+           +-----------------+
+           *- - - - # - - - -*
+                    |
+ - - - - - - - - - -v- - - - - - - - - *
++----------------+---------------------+
+| Signature Alg. | Verification Key ID |
++----------------+---------------------+
+                 *- - - - - # - - - - -*
+                            |
+ - - - - - - - - - - - - - -v- - - - - - - - - -
++---------+---------+------------+--------------+
+| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
++---------+---------+------------+--------------+
+~~~~
 
 The header part defines metadata that is relevant to (the computation and verification of) the signature. It MUST at least include the following metadata:
 
@@ -626,11 +632,9 @@ The header part defines metadata that is relevant to (the computation and verifi
 - The identifier of the public key used to verify the signature (i.e., the public key certified by the AS's certificate)
 - The ISD-AS number of the AS
 
-The following code block defines the signed header of an AS entry in Protobuf message format (called the ``Header`` message).
+The following code block defines the signed header of an AS entry in Protobuf message format (called the `Header` message).
 
-
-.. code-block:: proto
-
+~~~~
    message Header {
        SignatureAlgorithm signature_algorithm = 1;
        bytes verification_key_id = 2;
@@ -647,24 +651,20 @@ The following code block defines the signed header of an AS entry in Protobuf me
        uint64 trc_base = 3;
        uint64 trc_serial = 4;
    }
-
+~~~~
 
 - `signature_algorithm`: Specifies the algorithm to compute the signature.
-- ``verification_key_id``: Holds the serialized data defined by the ``VerificationKeyID`` message type. The ``VerificationKeyID`` message contains more information that is relevant to signing and verifying PCBs and other control-plane messages. The ``VerificationKeyID`` message type includes the following fields (see also the above code block):
+- `verification_key_id`: Holds the serialized data defined by the `VerificationKeyID` message type. The `VerificationKeyID` message contains more information that is relevant to signing and verifying PCBs and other control-plane messages. The `VerificationKeyID` message type includes the following fields (see also the above code block):
+  - `isd_as`: The ISD-AS number of the current AS.
+  - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
+  - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
+  - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-  - ``isd_as``: The ISD-AS number of the current AS.
-  - ``subject_key_id``: Refers to the certificate that contains the public key needed to verify this PCB's signature.
-  - ``trc_base``: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
-  - ``trc_serial``: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
+**Note:** For more information on signing and verifying PCBs, see the chapter Certificate Specification of the SCION Control-Plane PKI Specification. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification.
 
-  .. note::
-
-     | For more information on signing and verifying PCBs, see :ref:`signing-verifying-cp-messages` in the chapter Certificate Specification of the SCION Control-Plane PKI Specification.
-     | For more information on the TRC base and serial number, see the section :ref:`id` in the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification.
-
-- ``timestamp``: Defines the signature creation timestamp. This field is optional.
-- ``metadata``: Can be used to include arbitrary per-protocol metadata. This field is optional.
-- ``associated_data_length``: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
+- `timestamp`: Defines the signature creation timestamp. This field is optional.
+- `metadata`: Can be used to include arbitrary per-protocol metadata. This field is optional.
+- `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
 
 
 ##### AS Entry Signed Body {#ase-sign}
@@ -703,21 +703,20 @@ The signature of an AS entry is computed over the AS entry's signed component. T
 
 - The signed header and body of the current AS (``header_and_body``).
 - The ``segment_info`` component of the current AS. This is the encoded version of the ``SegmentInformation`` component containing basic information about the path segment represented by the PCB. For the specification of ``SegmentInformation``, see :ref:`seginfo`.
-- The signed [``header_and_body``/ ``signature``] combination of each previous AS on this specific path segment.
+- The signed header_and_body/signature combination of each previous AS on this specific path segment.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.
 
-.. code-block::
+~~~
+input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
-   input(ps, i) = signed.header_and_body || associated_data(ps, i)
-
-   associated_data(ps, i) = ps.segment_info ||
-                            ps.as_entries[1].signed.header_and_body ||
-                            ps.as_entries[1].signed.signature ||
-                            ...
-                            ps.as_entries[i-1].signed.header_and_body ||
-                            ps.as_entries[i-1].signed.signature
-
+associated_data(ps, i) = ps.segment_info ||
+                         ps.as_entries[1].signed.header_and_body ||
+                         ps.as_entries[1].signed.signature ||
+                         ...
+                         ps.as_entries[i-1].signed.header_and_body ||
+                         ps.as_entries[i-1].signed.signature
+~~~
 
 
 #### Hop Entry {#hopentry}
@@ -911,7 +910,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
    a. The ingress interface to this AS, in the hop field component (part of the AS entry's signed body component).
    b. The egress interface to the neighboring AS, also in the hop field component.
    c. The ISD_AS number of the next AS, in the signed body component of the AS entry.
-   d. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
+   d. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
 3. The control service MUST now sign each selected, extended PCB and append the computed signature.
 4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the ``SegmentCreationService.Beacon`` remote procedure call (RPC) in the control services of the neighboring ASes (see also :ref:`prop-proto`).
 
