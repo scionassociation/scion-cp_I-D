@@ -185,6 +185,11 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
 
+## Conventions and Definitions
+
+{::boilerplate bcp14-tagged}
+
+
 ## Paths and Links
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
@@ -1118,30 +1123,16 @@ The process to look up and fetch path segments consists of the following steps:
 
 {{table-3}} below shows which control service provides the source endpoint with which type of path segment.
 
-
-============ ===========================
-Segment Type Responsible control service(s)
-============ ===========================
-Up-segment   Control service of the source AS
-Core-segment Control service of core ASes in source ISD
-Down-segment Control service of core ASes in destination ISD (either the local ISD or a remote ISD)
-============ ===========================
-
-| AS               | Size        | Description                                                                 |
-|------------------+-------------+-----------------------------------------------------------------------------|
-| 0                | 1           | The wildcard AS                                                             |
-| 1-4294967295     | ~4.3&nbsp;bill.  | 32-bit BGP AS numbers, formatted as decimal. If a BGP AS deploys SCION, it has the same AS number for both BGP and SCION.<sup>1</sup> |
-| `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Public SCION-only ASes (i.e., ASes that are created for SCION, and are no existing BGP ASes). They should be allocated in ascending order, without gaps and "vanity" numbers. |
-| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
-| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
+| Segment&nbsp;Type | Responsible control service(s)                    |
+|-------------------+---------------------------------------------------|
+| Up-segment        | Control service of the source AS                  |
+| Core-segment      | Control service of core ASes in source ISD        |
+| Down-segment      | Control service of core ASes in destination ISD (either the local ISD or a remote ISD)|
 {: #table-3 title="Control services responsible for different types of path segments"}
 
 
 
-Sequence of Lookup Requests
----------------------------
+### Sequence of Lookup Requests
 
 The overall sequence of requests to resolve a path should be as follows:
 
@@ -1150,8 +1141,7 @@ The overall sequence of requests to resolve a path should be as follows:
 3. Request down-segments starting at core ASes in the destination ISD.
 
 
-Caching
--------
+### Caching
 
 For the sake of efficiency, the control service of the source AS should cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations. The use of caching is also essential to ensure that the path-lookup process is scalable and can be performed with low latency.
 
@@ -1163,12 +1153,62 @@ In general, to improve overall efficiency, the control services of all ASes shou
 
 ## Behavior of Actors in the Lookup Process
 
+As described above, the source endpoint resolves paths with a sequence of segment requests to the control service of the source AS. The control service in the source AS answers directly, or forwards these requests to the responsible control services of core ASes. In SCION, the instances that handle these segment requests at the control services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively. This section specifies the behavior of the segment-request handlers in the lookup process. First, the use of wildcards in the lookup process is briefly addressed.
+
+
 ### Use of Wildcard Addresses in the Lookup Process {#wildcard}
 
+Endpoints can use wildcard addresses to designate any core AS in path-segment requests. The segment-request handlers must expand these wildcard addresses and translate them into one or more actual addresses. {{table-4}} below shows who is responsible for what.
 
-# Conventions and Definitions
+**Note:** For general information on the use of wildcard addresses in SCION, see [](#serv-disc).
 
-{::boilerplate bcp14-tagged}
+
+| Segment Request | Wildcard Represents                       | Expanded/Translated By                 | Translated Into            |
+|-----------------+-------------------------------------------|----------------------------------------|----------------------------|
+| Up-segment      | "Destination" core AS (where up-segment ends) | Control service of the *source AS* | Actual address destination core AS in source ISD |
+| Core-segment    | Source core AS (where core-segment starts)<sup>1</sup> | Control service of the *source AS* | Actual address source core AS in source ISD |
+| Core-segment    | Destination core AS (where core-segment ends) | Control service of the *source core AS* | Actual address destination core AS in destination ISD |
+| Down-segment    | "Source" core AS (where down-segment starts)<sup>2</sup> | Control service of the *source AS* | Actual address source core AS in destination ISD |
+{: #table-4 title="Use of wildcards in path segments requests"}
+
+1) Includes all core ASes for which an up-segment from the source AS exists.<br>
+2) Includes all core ASes in destination ISD with a down-segment to destination AS.
+
+
+
+### Segment-Request Handler of the Non-Core Source AS
+
+When the segment-request handler of the control service of a *non-core* source AS receives a path segment request, it MUST proceed as follows:
+
+1. Determine the requested segment type.
+2. In the case of an up-segment request, look up matching up-segments in the path database and return them.
+3. In the case of a core-segment request from a source core AS to a destination core AS:
+   - Expand the source wildcard into separate requests for each reachable core AS in the source ISD.
+   - For each core-segment request,
+     - If possible, return matching core-segments from cache;
+     - otherwise, request the core-segments from the control services of each reachable core AS at the source (start) of the core-segment. Add the retrieved core-segments to the cache.
+4. In the case of a down-segment request:
+   - Expand the source wildcard into separate requests for every core AS in the destination ISD (destination ISD refers to the ISD to which the destination endpoint belongs).
+   - For each segment request,
+     - If possible, return matching down-segments from cache;
+     - otherwise, request the down-segment from the control services of the core ASes at the source (start) of the down-segment. Sending the request may require looking up core-segments to the source core AS of the down-segment. Add the retrieved down-segments to the cache.
+
+
+
+### Segment-Request Handler of a Core AS
+
+When the segment-request handler of a *core AS* control service receives a path segment request, it MUST proceed as follows:
+
+1. Validate the request:
+   - The source of the path segment must be this core AS.
+   - The request must either be
+     - for a core-segment to a core AS in this ISD or another ISD, or
+     - for a down-segment to an AS in this ISD.
+2. If the destination is a core or wildcard address, then load matching core-segments from the path database and return.
+3. Otherwise, load the matching down-segments from the path database and return.
+
+[](#app-a) shows by means of an illustration how the lookup of path segments in SCION works.
+
 
 
 # Security Considerations
@@ -1188,9 +1228,22 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+TODO acknowledgements
 
 
-# Appendix A. Path-Lookup Examples {#app-a}
+# Path-Lookup Examples {#app-a}
 {:numbered="false"}
+
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in In **figure-7** below. In both examples, the source endpoint is in AS A. In **figure-8**, the destination is in AS D. In **figure-9**, the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C.
+
+For the sequence diagram of the first example, see the second figure; for the sequence diagram of the second example, see the third figure.
+
+**images/lookup-sample-network-topologies.png**
+Figure 7: *Topology used in the path lookup examples.*
+
+**images/sequence-diagram-1.png**
+Figure 8: *Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down-segments between any core AS in the source ISD and destination D.*
+
+**images/sequence-diagram-2.png**
+Figure 9: *Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G.*
 
