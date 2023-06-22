@@ -571,11 +571,11 @@ Each AS entry of a PCB MUST include a signed component as well as a signature co
 
 This section specifies the signed component of an AS entry. The signed component of an AS entry MUST include the following elements:
 
-- Header
-- Body
-- Signature
+- a header,
+- a body, and
+- a signature.
 
-In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part `header_and_body` and a raw signature `signature`. See also the code blocks below.
+In the Protobuf message-format implementation, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part (`header_and_body`) and a raw signature (`signature`). See also the code block below.
 
 ~~~~
    message SignedMessage {
@@ -584,9 +584,9 @@ In the Protobuf message-format implementation, the signed component of an AS ent
    }
 ~~~~
 
+The following code block shows the low-level representation of the `HeaderAndBodyInternal` message used for signature computation input. This message should not be used by external code.
+
 ~~~~
-   // Low-level representation of HeaderAndBody used for signature computation
-   // input. This should not be used by external code.
    message HeaderAndBodyInternal {
        // Encoded header suitable for signature computation.
        bytes header = 1;
@@ -982,14 +982,184 @@ The propagation procedure includes the following elements:
 
 # Registration of Path Segments {#path-segment-reg}
 
-kyxsnmcs
+**Path registration** is the process where an AS transforms selected PCBs into path segments, and adds these segments to the relevant path databases, thus making them available to other ASes.
+
+As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down-path segments through which it wants to be reached, based on AS-specific selection critera. The next step is to register the selected down-segments with the control service of the relevant core ASes, according to a process called *intra-ISD path-segment registration*. As a result, a core AS's control service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS control service also stores preferred core-path segments to other core ASes, in the *core-segment registration* process. Both processes are described below.
+
+
+
+## Intra-ISD Path-Segment Registration {#intra-reg}
+
+Every *registration period* (determined by each AS), the AS's control service selects two sets of PCBs to transform into two types of path segments:
+
+- Up-segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and
+- down-segments, which allow remote entities to reach this AS.
+
+The up- and down-segments do not have to be equal. An AS may want to communicate with core ASes via one or more up-segments that differ from the down-segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up- and down-segment sets. Also, the processes of transforming a PCB in an up-segment or a down-segment differ slightly. Both processes are described below.
+
+
+### Terminating a PCB {#term-pcb}
+
+Both the up- and down-segments end at the AS. One could therefore say that by transforming a PCB in a path segment, an AS "terminates" the PCB for this AS ingress interface and at this moment in time.
+
+The control service of a non-core AS must perform the following steps to "terminate" a PCB:
+
+1. The control service adds a new AS entry to the PCB. This new AS entry MUST be defined as follows:
+   - The next AS MUST NOT be specified.
+     - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
+   - The egress interface in the hop field component MUST NOT be specified.
+     - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
+2. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry MUST have value "0" as the egress interface ID.
+   - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
+3. As a last step, the control service MUST sign the modified PCB and append the computed signature.
+
+**Note:**
+
+- For more information on the signed body component of an AS entry, see [](#ase-sign).
+- For more information on a peer entry, see [](#peerentry).
+- For more information on the hop field component, see [](#hopfield).
+- For more information on signing an AS entry, see [](#sign).
+
+
+
+### Transforming a PCB into an Up-Segment
+
+Every registration period, the control service of a non-core AS performs the following steps to transform PCBs into up-segments:
+
+1. The control service selects the PCBs that it wants to transform into up-segments from the candidate PCBs in the beacon store.
+2. The control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **up-segments**.
+3. The control service now adds the newly created up-segments to its own path database.
+
+**Note:** For more information on possible selection strategies of PCBs, see [](#selection).
+
+
+
+### Transforming a PCB into a Down-Segment
+
+Every registration period, the control service of a non-core AS performs the following steps to transform PCBs into down-segments:
+
+1. The control service selects the PCBs that it wants to transform into down-segments from the candidate PCBs in the beacon store.
+2. The control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down-segments**.
+3. The control service now registers the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs, by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the control services of the relevant core ASes (see also [](#reg-proto)).
+
+**Note:** For more information on possible selection strategies of PCBs, see [](#selection).
+
+
+
+## Core Path-Segment Registration
+
+The core beaconing process creates path segments from core AS to core AS. These core-segments are then added to the control service path database of the core AS that created the segment, so that local and remote endpoints can obtain and use these core-segments. In contrast to the intra-ISD registration procedure, there is no need to register core-segments with other core ASes (as each core AS will receive PCBs originated from every other core AS).
+
+In every registration period, the control service of a core AS performs the following operations:
+
+1. The core control service selects the best PCBs towards each core AS observed so far.
+2. The core control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **core-segments**.
+3. As a final step, the control service adds the newly created core-segments to its own path database.
+
+**Note:** For more information on possible selection strategies of PCBs, see [](#selection).
+
+
+## Path-Segment Registration on Code-Level {#reg-proto}
+
+The control service of a non-core AS has to register the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This registration step is implemented as follows in Protobuf message format:
+
+~~~~
+   enum SegmentType {
+       SEGMENT_TYPE_UNSPECIFIED = 0;
+       SEGMENT_TYPE_UP = 1;
+       SEGMENT_TYPE_DOWN = 2;
+       SEGMENT_TYPE_CORE = 3;
+   }
+
+   service SegmentRegistrationService {
+       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
+   }
+
+   message SegmentsRegistrationRequest {
+       message Segments {
+           repeated PathSegment segments = 1;
+       }
+
+       map<int32, Segments> segments = 1;
+   }
+
+   message SegmentsRegistrationResponse {}
+~~~~
+
+- `SegmentType`: Specifies the type of the path segment that must be registered. Currently, only the following type is used:
+  - `SEGMENT_TYPE_DOWN`: Specifies a down-segment.
+- `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
 
 
 # Path Lookup {#lookup}
 
-yxcxyc
+The *path lookup* is a fundamental building block of SCION's path management, as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
+
 
 ## Lookup Process
+
+An endpoint (source) that wants to start communication with another endpoint (destination), requires up to three path segments:
+
+- An up-path segment to reach the core of the source ISD (only if the source endpoint is a non-core AS),
+- a core-path segment to reach
+  - another core AS in the source ISD, in case the destination AS is in the same source ISD, or
+  - a core AS in a remote ISD, if the destination AS is in another ISD, and
+- a down-path segment to reach the destination AS.
+
+**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by the SCION Data Plane Specification document.
+
+The process to look up and fetch path segments consists of the following steps:
+
+1. First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately.
+2. If there are no appropriate core-segments and down-segments, the control service in the source AS queries the control services of the reachable core ASes in the source ISD, for core-path segments to core ASes in the destination ISD (which is either the own or a remote ISD). To reach the core control services, the control service of the source AS uses the locally stored up-path segments.
+3. Next, the control service of the source AS combines up-path segments with the newly retrieved core-path segments. The control service then queries the control services of the remote core ASes in the destination ISD, to fetch down-path segments to the destination AS. To reach the remote core ASes, the control service of the source AS uses the previously obtained and combined up- and core segments.
+4. Finally, the control service of the source AS returns all retrieved path segments to the source endpoint.
+5. Once it has obtained all path segments, the endpoint combines them into an end-to-end path in the data plane.
+
+{{table-3}} below shows which control service provides the source endpoint with which type of path segment.
+
+
+============ ===========================
+Segment Type Responsible control service(s)
+============ ===========================
+Up-segment   Control service of the source AS
+Core-segment Control service of core ASes in source ISD
+Down-segment Control service of core ASes in destination ISD (either the local ISD or a remote ISD)
+============ ===========================
+
+| AS               | Size        | Description                                                                 |
+|------------------+-------------+-----------------------------------------------------------------------------|
+| 0                | 1           | The wildcard AS                                                             |
+| 1-4294967295     | ~4.3&nbsp;bill.  | 32-bit BGP AS numbers, formatted as decimal. If a BGP AS deploys SCION, it has the same AS number for both BGP and SCION.<sup>1</sup> |
+| `1:0:0`          | 1           | Reserved                                                                    |
+| `2:0:0/16`       | ~4.3&nbsp;bill.  | Public SCION-only ASes (i.e., ASes that are created for SCION, and are no existing BGP ASes). They should be allocated in ascending order, without gaps and "vanity" numbers. |
+| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
+| `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
+{: #table-3 title="Control services responsible for different types of path segments"}
+
+
+
+Sequence of Lookup Requests
+---------------------------
+
+The overall sequence of requests to resolve a path should be as follows:
+
+1. Request up-segments for the source endpoint at the control service of the source AS.
+2. Request core-segments, which start at the core ASes that are reachable with up-segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up-segment.
+3. Request down-segments starting at core ASes in the destination ISD.
+
+
+Caching
+-------
+
+For the sake of efficiency, the control service of the source AS should cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations. The use of caching is also essential to ensure that the path-lookup process is scalable and can be performed with low latency.
+
+In general, to improve overall efficiency, the control services of all ASes should do the following:
+
+- Cache the returned path segments.
+- Send requests in parallel when requesting path segments from other control services.
+
 
 ## Behavior of Actors in the Lookup Process
 
@@ -1005,6 +1175,8 @@ yxcxyc
 
 One of the fundamental objectives that guided the design of SCION is security, in particular network security. See chapter 7 of the SCION book (Security Analysis), which states the precise security goals of various network participants and how SCION achieves these goals in the presence of different types of adversaries {{CHUAT22}}.
 
+To be precised.
+
 
 # IANA Considerations
 
@@ -1017,3 +1189,8 @@ TODO IANA considerations.
 {:numbered="false"}
 
 TODO acknowledge.
+
+
+# Appendix A. Path-Lookup Examples {#app-a}
+{:numbered="false"}
+
