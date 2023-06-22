@@ -1051,15 +1051,88 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 #### Selection Policy Example
 
-**Figure 6** below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments. The selected path segments are represented by the bold or colored lines.
+{{figure-6}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments. The selected path segments are represented by the bold or colored lines.
 
-- The network on the left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency.
-- The network in the middle uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
-- The network on the right selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure.
+- The network at the upper left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency.
+- The network at the upper right uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
+- The network below selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure.
 
-**images/path-segment-selection.png**
-Figure 6: *Example networks to illustrate path-segment selection based on different path properties. The selected path segments are represented by the bold or colored lines.*<sup>Copyright: ETH Zürich/Springer Verlag</sup>
 
+~~~~
+         ISD A:                               ISD B:
+       Path Length                         Peering Links
+
+       .---------.                        .-------------.
+   _.-' ISD Core  `--.                _.-'  ISD Core     `--.
+  /.---.         .---.\             ,'.---.             .---.`.
+ /(  A  ) - - - (  C  )\           / (  A  ) - - - - - (  C  ) \
+;  `-#-'         `---'  :       + - - `---'             `---'   :
+:    ||   .---.   | |   ;         :       |  .---. - - - - +    ;
+ \   | - (  B  ) -     /        |  \    |  -(  B  )            /
+  \  |    `-+-'     | /             \        `-#-||           /
+   \ |               /          |    `. |      |   - - - - -,- - - +
+    `+-.    |    _.-|                  `--.    | |      _.-'
+     |  `-------'               |       |  `---+-------'           |
+     |      |     .-+-.                        | + - - - - +
+     |    .---.  (  E  )        |       |      |                   |
+     |   (  D  )  `-+-'                        |           |
+     |    `-+-'     |         .-+-.     |    .-#-.       .---.   .-+-.
+     |            .-+-.      (  D  )-PL-----(  E  )--PL-(  F  ) (  G  )
+     |      |    (  F  )      `---'     |    `-#-'       `---'   `---'
+   .-#-.          `---'                        |           |       |
+  (  G  ) - +       |               - - +      |
+   `---- - - - - - -               |           |           |       |
+                                 .---.       .-#-.       .---.   .---.
+                                (  H  )-PL--(  I  )--PL-(  J  ) (  K  )
+                                 `---'       `-#-'       `---'   `---'
+                                               |           |       |
+                                               |
+                                             .-#-.         |       |
+                                            (  L  ) - - - -
+                     ISD C:                  `---' - - - - - - - - +
+                  Disjointness
+
+               .-------------.
+           _.-'     ISD Core  `--.
+        ,-'                       '-.
+       /   .---.               .---. \
+      /   (  A  ) - - - - - - (  C  ) \
+     ;     `-*-'               `-#-'   :
+     :         |     .---.     | |     ;
+      \      |  - - (  B  ) - -  |    /
+       \     |       `---'       |   /
+        \    |                   |  /
+         '-.                     |-'
+            `+-.             _.-'|
+             |  `-----------'    |
+        .----*.                .-#---.
+       (   D   )              (   E   )
+        `----*'                `-#---'
+        |    |                   |   |
+           +---------------------+
+        |  | |                       |
+           | +- --- --- --- --- +
+        |  |                    |    |
+        .--#--.                .*----.
+       (   F   #-------+      (   G   )
+        `-----'        |       `*----|
+        |          +-- +-- --- -+
+                       |             |
+        |-----.    |   |       .-----.
+       (   H  *-- -+   +------#   I   )
+        `---*-'                `-#---'
+            |                    |
+            |       .---.        |
+             --- --*  J  #-------+
+                    `---'
+
+
+    #---------------#
+    *-- --- --- --- *  : Selected path segment
+
+    PL : Peering Link
+~~~~
+{: #figure-6 title="Example networks to illustrate path-segment selection based on different path properties."}
 
 
 ### Propagation of Selected PCBs {#path-segment-prop}
