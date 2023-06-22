@@ -456,11 +456,88 @@ To propagate PCBs to neighboring ASes to which no forwarding path is available y
 ~~~~
 {: #figure-2 title="Intra-ISD PCB propagation from the ISD core to child ASes"}
 
+PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in {{figure-2}}. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and on a given AS interface X. This is illustrated by {{figure-3}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
-PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in **Figure 2**. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and on a given AS interface X. This is illustrated by **Figure 3**. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
+~~~~
+                 AS Entry Core         AS Entry F            AS Entry G
 
-**images/pcb-propagation.png**
-Figure 3: *Possible up- or down-path segments for AS G*
+                           .---.
+                          (  H  )- -- -- +
+                           `---'         |
+                    .-----.             .-------.            .------.
+                  ,'       `.        ,-' 4       '-.       ,'        `.
+                 ;           :      /       AS F    \     ;            :
+path segment 1   :  Core   1 ;     ; 3             5 :    : 1   AS G   ;
+                  \         /      :                 ;     \          /
+                   `.   2 #---------#-2-----------6-#--------# 5    ,'
+                     `---'           \             /          `----'
+                                      '-. 1   7 ,-'
+                                         `-----'
+                              .---.       |
+                             (  J  )-- -- +
+                              `---'
+                  egress 2          ingress 2 - egress 6     ingress 5
+                                      Peer J: ingress 1
+                                      Peer H: ingress 4
+------------------------------------------------------------------------
+                           .---.
+                          (  H  )- -- -- +
+                           `---'         |
+                    .-----.             .-------.            .------.
+                  ,'       `.        ,-' 4       '-.       ,'        `.
+                 ;           :      /       AS F    \     ;            :
+path segment 2   :  Core   1 ;     ; 3        +----5-#----# 1   AS G   ;
+                  \         /      :          |      ;     \          /
+                   `.   2 #---------#-2-------+     /       `. 5    ,'
+                     `---'           \            6/          `----'
+                                      '-. 1   7 ,-'
+                                         `-----'
+                              .---.       |
+                             (  J  )-- -- +
+                              `---'
+                  egress 2          ingress 2 - egress 5     ingress 1
+                                      Peer J: ingress 1
+                                      Peer H: ingress 4
+------------------------------------------------------------------------
+                           .---.
+                          (  H  )- -- -- +
+                           `---'         |
+                    .-----.             .-------.            .------.
+                  ,'       `.        ,-' 4       '-.       ,'        `.
+                 ;           :      /       AS F    \     ;            :
+path segment 3   :  Core   1 #-----#-3-----+       5 :    : 1   AS G   ;
+                  \         /      :       |         ;     \          /
+                   `.   2 ,'        \ 2    +------6-#--------# 5    ,'
+                     `---'           \             /          `----'
+                                      '-. 1   7 ,-'
+                                         `-----'
+                              .---.       |
+                             (  J  )-- -- +
+                              `---'
+                  egress 1          ingress 3 - egress 6     ingress 5
+                                      Peer J: ingress 1
+                                      Peer H: ingress 4
+------------------------------------------------------------------------
+                           .---.
+                          (  H  )- -- -- +
+                           `---'         |
+                    .-----.             .-------.            .------.
+                  ,'       `.        ,-' 4       '-.       ,'        `.
+                 ;           :      /       AS F    \     ;            :
+path segment 2   :  Core   1 #-----#-3-------------5-#----# 1   AS G   ;
+                  \         /      :                 ;     \          /
+                   `.   2 ,'        \ 2             /       `. 5    ,'
+                     `---'           \            6/          `----'
+                                      '-. 1   7 ,-'
+                                         `-----'
+                              .---.       |
+                             (  J  )-- -- +
+                              `---'
+                  egress 1          ingress 3 - egress 5     ingress 1
+                                      Peer J: ingress 1
+                                      Peer H: ingress 4
+~~~~
+{: #figure-3 title="Possible up- or down-path segments for AS G"}
 
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
