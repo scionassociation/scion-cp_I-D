@@ -377,10 +377,85 @@ To propagate PCBs to neighboring ASes to which no forwarding path is available y
 
 ### PCB Propagation - Illustrated Examples
 
-**Figure 2** below shows how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards both of them over a single link to a child AS.
+{{figure-2}} below shows how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards both of them over a single link to a child AS.
 
-**images/intra-isd-beaconing-paths.png**
-Figure 2: *Intra-ISD PCB propagation from the ISD core to child ASes*
+~~~~
+                                .-------.
+            +--------+        ,'         `.
+            |PCB     |       ;             :
+            |========|       :    Core     ;    +--------+
+            |Core    #---+    \           /     |PCB     |
+            |- Out:2 |   |     `. 2   1 ,'  -- -+++++++++|
+            +--------+   |       `+---+'   |    |Core    |
+                         |        |   |    |    |- Out:1 |
+                         |        |   |         +--------+
+    +--------+           | +-----+|   |    |
+    |PCB     |           +-# PCB ||   |    |
+    |========|             +--+--+|   |+-----+
+    |Core    |                |   |   || PCB |
+    |- Out:2 |                v   |   |+--+--+
+    |--------|                    |   |   |
+    |AS F    |          .---.     |   |   v
+    |-In:2   #----+    (  J  )    |   |
+    |-Out:7  |    |     `---'     |   |       .---.
+    |-PeerJ:1|    |       |       |   |      (  H  )
+    |-PeerH:4|    |       |     .-v---v-.     `---'
+    +--------+    |        --,-'  2   3  '-.    |
++--------+      +-#---+     / 1             \   |
+|PCB     |  <---+ PCB |    ;               4 :--
+|++++++++|      +-----+    :      AS F       ;
+|Core    |  <---------------\ 7             /
+|- Out:1 |         +-----+   \             /
+|--------|     <---+ PCB |    '-. 6   5 ,-'
+|AS F    |         +--+--+       `+---+'        +---------+
+|-In:3   |            |           |   |         | PCB     |
+|-Out:7  + -- -- -- --            |   |         | ========|
+|-PeerJ:1|                        |   |         | Core    |
+|-PeerH:4|   +--------+           |   |         | - Out:2 |
++--------+   |PCB     |           |   |         | --------|
+             |========|           |   |         | AS F    |
+             |Core    |           |   |+-----+  | -In:2   |+---------+
+             |- Out:2 |           |   || PCB #--# -Out:5  || PCB     |
+ +--------+  |--------|           |   |+--+--+  | -PeerJ:1|| ++++++++|
+ |PCB     |  |AS F    |    +-----+|   |   |     | -PeerH:4|| Core    |
+ |++++++++|  |-In:2   #---#| PCB ||   |   v     +---------+| - Out:1 |
+ |Core    |  |-Out:6  |    +--+--+|   |                    | --------|
+ |- Out:1 |  |-PeerJ:1|       |   |   | +-----+            | AS F    |
+ |--------|  |-PeerH:4|       v   |   | | PCB +- -- -- -- -+ -In:3   |
+ |AS F    |  +--------+  +-----+  |   | +--+--+            | -Out:5  |
+ |-In:3   +- -- -- -- -- + PCB |  |   |    |               | -PeerJ:1|
+ |-Out:6  |              +--+--+  |   |    v               | -PeerH:4|
+ |-PeerJ:1|                 |     |   |                    +---------+
+ |-PeerH:4|                 v   .-v---v-.
+ +--------+                  ,-'  5   1  '-.
+                            /               \
+                  <--------; 4               : +---------+
+                           :      AS G       ; | PCB     |
+               +--------+   \               /  | ========|
+               |PCB     |    \             /   | Core    |
+               |========|     '-.   3   ,-'    | - Out:2 |
+               |Core    |        `--+--'       | --------|
+   +--------+  |- Out:2 |           |          | AS F    |+---------+
+   |PCB     |  |--------|           |          | -In:2   || PCB     |
+   |++++++++|  |AS F    |           | +-----+  | -Out:5  || ++++++++|
+   |Core    |  |-In:2   |           | | PCB #--# -PeerJ:1|| Core    |
+   |- Out:1 |  |-Out:6  |    +-----+| +--+--+  | -PeerH:4|| - Out:1 |
+   |--------|  |-PeerJ:1#----# PCB ||    |     | --------|| --------|
+   |AS F    |  |-PeerH:4|    +--+--+|    v     | AS G    || AS F    |
+   |-In:3   |  |--------|       |   |          | -In:1   || -In:3   |
+   |-Out:6  |  |AS G    |       v   |          | -Out:3  || -Out:5  |
+   |-PeerJ:1|  |-In:5   |           |          +---------+| -PeerJ:1|
+   |-PeerH:4|  |-Out:3  |           | +-----+             | -PeerH:4|
+   |--------|  +--------+   +-----+ | | PCB |-- -- -- -- -+ --------|
+   |AS G    +- -- -- -- -- -+ PCB | | +--+--+             | AS G    |
+   |-In:5   |               +--+--+ |    |                | -In:1   |
+   |-Out:3  |                  |    |    v                | -Out:3  |
+   +--------+                  v    |                     +---------+
+                                    |
+                                    v
+~~~~
+{: #figure-2 title="Intra-ISD PCB propagation from the ISD core to child ASes"}
+
 
 PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in **Figure 2**. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and on a given AS interface X. This is illustrated by **Figure 3**. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
