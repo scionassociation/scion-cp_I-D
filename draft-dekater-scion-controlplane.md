@@ -1456,7 +1456,7 @@ TODO acknowledgements
 # Path-Lookup Examples {#app-a}
 {:numbered="false"}
 
-To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-7}} below. In both examples, the source endpoint is in AS A. In {{figure-8}}, the destination is in AS D. In **figure-9**, the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C.
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-7}} below. In both examples, the source endpoint is in AS A. In {{figure-8}}, the destination is in AS D. In {{figure-9}}, the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C.
 
 For the sequence diagram of the first example, see the second figure; for the sequence diagram of the second example, see the third figure.
 
@@ -1490,65 +1490,129 @@ For the sequence diagram of the first example, see the second figure; for the se
 
 
 ~~~~
-   +---------+          +---------+          +---------+        +---------+
-   |Endpoint |          |Source AS|          | Core AS |        | Core AS |
-   |         |          | CS (A)  |          | CS (B)  |        | CS (C)  |
-   +----+----+          +----+----+          +----+----+        +-----+---+
-        |                    |                    |                   |
-       +++                   |                    |                   |
- +-----+-+-----+             |                    |                   |
- |send requests|             |                    |                   |
- | in parallel |             |                    |                   |
- +-----+-+-----+             |                    |                   |
-       | |                   |                    |                   |
-       | |  request (up)     |                    |                   |
-       | +----------------->+++                   |                   |
-       | |< -- -- -- -- -- -+++                   |                   |
-       | | reply (up,[A->B]) |                    |                   |
-       | |                   |                    |                   |
-       | |                   |                    |                   |
-       | |                   |                    |                   |
-       | |request (core,*,*) |                    |                   |
-       | +----------------->+++                   |                   |
-       | |                  | |request (core,B,*) |                   |
-       | |                  | +----------------->+++                  |
-       | |                  | |<-- -- -- -- -- --+++                  |
-       | |                  | | reply(core,[B->C])|                   |
-       | |< -- -- -- -- -- -+++                   |                   |
-       | |reply (core,[B->C])|                    |                   |
-       | |                   |                    |                   |
-       | |                   |                    |                   |
-       | |request (down,*,D) |                    |                   |
-       | +----------------->+++                   |                   |
-       | |            +-----+-+-----+             |                   |
-       | |            |send requests|             |                   |
-       | |            | in parallel |             |                   |
-       | |            +-----+-+-----+             |                   |
-       | |                  | |                   |                   |
-       | |                  | |request (down,B,D) |                   |
-       | |                  | +----------------->+++                  |
-       | |                  | |<-- -- -- -- -- --+++                  |
-       | |                  | | reply(down,[B->D])|                   |
-       | |                  | |                   |                   |
-       | |                  | |                   |request (down,C,D) |
-       | |                  | +-------------------+----------------->+++
-       | |                  | <-- -- -- -- -- -- -+ -- -- -- -- -- --+++
-       | |   reply (down,   | |                   | reply(down,[C->D])|
-       | |   [B->D, C->D])  | |                   |                   |
-       | |< -- -- -- -- -- -+++                   |                   |
-       | |                   |                    |                   |
-+------+-+-------+           |                    |                   |
-|combine segments|           |                    |                   |
-+------+-+-------+           |                    |                   |
-       | |                   |                    |                   |
-       +++                   |                    |                   |
-        |                    |                    |                   |
-    +---+----+           +---+----+          +----+---+          +----+---+
-    +--------+           +--------+          +--------+          +--------+
++---------+          +---------+          +---------+        +---------+
+|Endpoint |          |Source AS|          | Core AS |        | Core AS |
+|         |          | CS (A)  |          | CS (B)  |        | CS (C)  |
++----+----+          +----+----+          +----+----+        +-----+---+
+    +++                   |                    |                   |
+    | |                   |                    |                   |
++---+-+-------+           |                    |                   |
+|send requests|           |                    |                   |
+| in parallel |           |                    |                   |
++---+-+-------+           |                    |                   |
+    | |                   |                    |                   |
+    | |  request (up)     |                    |                   |
+    | +----------------->+++                   |                   |
+    | |< -- -- -- -- -- -+++                   |                   |
+    | | reply (up,[A->B]) |                    |                   |
+    | |                   |                    |                   |
+    | |                   |                    |                   |
+    | |                   |                    |                   |
+    | |request (core,*,*) |                    |                   |
+    | +----------------->+++                   |                   |
+    | |                  | |request (core,B,*) |                   |
+    | |                  | +----------------->+++                  |
+    | |                  | |<-- -- -- -- -- --+++                  |
+    | |                  | | reply(core,[B->C])|                   |
+    | |< -- -- -- -- -- -+++                   |                   |
+    | |reply (core,[B->C])|                    |                   |
+    | |                   |                    |                   |
+    | |                   |                    |                   |
+    | |request (down,*,D) |                    |                   |
+    | +----------------->+++                   |                   |
+    | |            +-----+-+-----+             |                   |
+    | |            |send requests|             |                   |
+    | |            | in parallel |             |                   |
+    | |            +-----+-+-----+             |                   |
+    | |                  | |                   |                   |
+    | |                  | |request (down,B,D) |                   |
+    | |                  | +----------------->+++                  |
+    | |                  | |<-- -- -- -- -- --+++                  |
+    | |                  | | reply(down,[B->D])|                   |
+    | |                  | |                   |                   |
+    | |                  | |                   |request (down,C,D) |
+    | |                  | +-------------------+----------------->+++
+    | |                  | <-- -- -- -- -- -- -+ -- -- -- -- -- --+++
+    | |   reply (down,   | |                   | reply(down,[C->D])|
+    | |   [B->D, C->D])  | |                   |                   |
+    | |< -- -- -- -- -- -+++                   |                   |
+    | |                   |                    |                   |
++---+-+----------+        |                    |                   |
+|combine segments|        |                    |                   |
++---+-+----------+        |                    |                   |
+    | |                   |                    |                   |
+    +++                   |                    |                   |
+     |                    |                    |                   |
+ +---+----+           +---+----+          +----+---+          +----+---+
+ +--------+           +--------+          +--------+          +--------+
 ~~~~
 {: #figure-8 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down-segments between any core AS in the source ISD and destination D."}
 
-
-**images/sequence-diagram-2.png**
-Figure 9: *Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G.*
+~~~~
++---------+     +---------+      +---------+   +---------+   +---------+
+|Endpoint |     |Source AS|      | Core AS |   | Core AS |   | Core AS |
+|         |     | CS (A)  |      | CS (B)  |   | CS (E)  |   | CS (F)  |
++---+-----+     +----+----+      +----+----+   +----+----+   +----+----+
+    |                |                |             |             |
+   +++               |                |             |             |
+   | |               |                |             |             |
++--+-+------+        |                |             |             |
+|   send    |        |                |             |             |
+|requests in|        |                |             |             |
+| parallel  |        |                |             |             |
++--+-+------+        |                |             |             |
+   | |               |                |             |             |
+   | |  request (up) |                |             |             |
+   | +------------->+++               |             |             |
+   | |<- -- -- -- --+++               |             |             |
+   | |    reply      |                |             |             |
+   | | (up,[A->B])   |                |             |             |
+   | |               |                |             |             |
+   | |               |                |             |             |
+   | |   request     |                |             |             |
+   | |(core,*,(2,*)) |                |             |             |
+   | +------------->+++    request    |             |             |
+   | |              | |(core,B,(2,*)) |             |             |
+   | |              | +------------->+++            |             |
+   | |              | |<- -- -- -- --+++            |             |
+   | |              | | reply (core,  |             |             |
+   | |              | | [B->E,B->F])  |             |             |
+   | |<- -- -- -- --+++               |             |             |
+   | | reply (core,  |                |             |             |
+   | | [B->E,B->F])  |                |             |             |
+   | |               |                |             |             |
+   | |               |                |             |             |
+   | |               |                |             |             |
+   | |   request     |                |             |             |
+   | |(down,(2,*),G) |                |             |             |
+   | +------------->+++               |             |             |
+   | |        +-----+-+-----+         |             |             |
+   | |        |send requests|         |             |             |
+   | |        | in parallel |         |             |             |
+   | |        +-----+-+-----+         |   request   |             |
+   | |              | |               | (down,E,G)  |             |
+   | |              | +---------------+----------->+++            |
+   | |              | <- -- -- -- -- -+ -- -- -- --+++            |
+   | |              | |               |    reply    |             |
+   | |              | |               |(down,[E->G])|             |
+   | |              | |               |             |   request   |
+   | |              | |               |             | (down,F,G)  |
+   | |              | +---------------+-------------+----------->+++
+   | |              | < -- -- -- -- --|-- -- -- -- -+ -- -- -- --+++
+   | |              | |               |             |    reply    |
+   | | reply (down, | |               |             |(down,[F->G])|
+   | | [E->G,F->G]) | |               |             |             |
+   | |<- -- -- -- --+++               |             |             |
+   | |               |                |             |             |
++--+-+----+          |                |             |             |
+| combine |          |                |             |             |
+|segments |          |                |             |             |
++--+-+----+          |                |             |             |
+   | |               |                |             |             |
+   +++               |                |             |             |
+    |                |                |             |             |
++---+----+       +---+----+       +---+----+    +---+----+    +---+----+
++--------+       +--------+       +--------+    +--------+    +--------+
+~~~~
+{: #figure-9 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G."}
 
