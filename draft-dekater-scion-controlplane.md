@@ -1168,6 +1168,13 @@ The propagation process in intra-ISD beaconing includes the following steps:
 4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring ASes (see also [](#prop-proto)).
 
 
+**Note:**
+
+- For more information on the signed body component of an AS entry, see [](#ase-sign).
+- For more information on a peer entry, see [](#peerentry).
+- For more information on the hop field component, see [](#hopfield).
+- For more information on signing an AS entry, see [](#sign).
+
 
 #### Propagation of PCBs in Core Beaconing
 
@@ -1228,7 +1235,7 @@ The up- and down-segments do not have to be equal. An AS may want to communicate
 
 ### Terminating a PCB {#term-pcb}
 
-Both the up- and down-segments end at the AS. One could therefore say that by transforming a PCB in a path segment, an AS "terminates" the PCB for this AS ingress interface and at this moment in time.
+Both the up- and down-segments end at the AS. One could therefore say that by transforming a PCB into a path segment, an AS "terminates" the PCB for this AS ingress interface and at this moment in time.
 
 The control service of a non-core AS must perform the following steps to "terminate" a PCB:
 
@@ -1237,7 +1244,7 @@ The control service of a non-core AS must perform the following steps to "termin
      - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
    - The egress interface in the hop field component MUST NOT be specified.
      - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
-2. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry MUST have value "0" as the egress interface ID.
+2. If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the hop field component of each added peer entry MUST NOT be specified.
    - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
 3. As a last step, the control service MUST sign the modified PCB and append the computed signature.
 
@@ -1268,7 +1275,7 @@ Every registration period, the control service of a non-core AS performs the fol
 
 1. The control service selects the PCBs that it wants to transform into down-segments from the candidate PCBs in the beacon store.
 2. The control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down-segments**.
-3. The control service now registers the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs, by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the control services of the relevant core ASes (see also [](#reg-proto)).
+3. The control service now registers the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the control services of the relevant core ASes (see also [](#reg-proto)).
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
@@ -1399,7 +1406,7 @@ Endpoints can use wildcard addresses to designate any core AS in path-segment re
 
 
 
-### Segment-Request Handler of the Non-Core Source AS
+### Segment-Request Handler of a Non-Core Source AS
 
 When the segment-request handler of the control service of a *non-core* source AS receives a path segment request, it MUST proceed as follows:
 
@@ -1457,9 +1464,8 @@ Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH 
 # Path-Lookup Examples {#app-a}
 {:numbered="false"}
 
-To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-7}} below. In both examples, the source endpoint is in AS A. In {{figure-8}}, the destination is in AS D. In {{figure-9}}, the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C.
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-7}} below. In both examples, the source endpoint is in AS A. {{figure-8}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-9}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.
 
-For the sequence diagram of the first example, see the second figure; for the sequence diagram of the second example, see the third figure.
 
 ~~~~
 +----------------------------+     +----------------------------+
