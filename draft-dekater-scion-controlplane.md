@@ -140,7 +140,7 @@ informative:
 
 This document describes the control plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints. In fact, endpoints can choose between multiple path options, enabling the optimization of network paths. The SCION control plane is responsible for discovering these paths and making them available to the endpoints.
 
-The main goal of SCION's control plane is to create and manage path segments, which can then be combined into forwarding paths to transmit packets in the data plane. This document first discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION autonomous system (AS) can register segments according to its own policy - it is free to specify which path properties and algorithm to use in the selection procedure. The document then describes the path lookup process, where endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.
+The main goal of SCION's control plane is to create and manage path segments, which can then be combined into forwarding paths to transmit packets in the data plane. This document first discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION autonomous system (AS) can register segments according to its own policy - it is free to specify which path properties and algorithm(s) to use in the selection procedure. The document then describes the path lookup process, where endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.
 
 
 --- middle
@@ -151,7 +151,7 @@ The SCION control plane is responsible for discovering path segments and making 
 
 As SCION is an *inter-domain* network architecture, it only deals with *inter*-domain routing. One feature of SCION is the decoupling of inter-domain routing from endpoint addressing. This Introduction section provides a description of the SCION addressing system in more detail.
 
-**Note:** It is assumed that readers of this draft are familiar with the basic concept of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
+**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
 
 
 ## Terminology {#terms}
@@ -201,7 +201,7 @@ In SCION, autonomous systems (ASes) are organized into logical groups called iso
 - *Parent-child* links create a hierarchy between the parent and the child. ASes with a parent-child link typically have a provider-customer relationship.
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. Peering links can only be used to reach destinations within or downstream of the peering AS. They can be established between any two core or non-core ASes, and between core and non-core ASes. Peering links can also cross ISD boundaries.
 
-Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. These IDs only need to be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination.
+Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. These interface IDs only need to be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination.
 
 
 ## Routing
@@ -303,7 +303,7 @@ In SCION, the following rules apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
 - In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range (0 - 2<sup>32-1</sup>) SHOULD be represented as decimal. It is allowed to write a BGP AS number in the SCION AS syntax. However, programs SHOULD always use the decimal representation for display. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551".
-- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit ASNs (0-4294967295) can be represented as `0:0:0/16`.
+- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 The next table gives an overview of the AS number allocation.
 
@@ -340,9 +340,9 @@ All communication between the control services in different ASes is expressed in
 
 ## Introduction and Overview
 
-**Path exploration** is the process where an AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing*. This section explains the SCION beaconing process in detail.
+**Path exploration** is the process where an AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing*. This section gives a detailed explanation of the SCION beaconing process.
 
-In SCION, the *control service* of each AS is responsible for the beaconing process. The control service generates, receives, and propagates so-called *path-segment construction beacons (PCBs)* on a regular basis, to iteratively construct path segments. PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. This division of routing levels is a key architectural decision of SCION and important for achieving a better scalability.
+In SCION, the *control service* of each AS is responsible for the beaconing process. The control service generates, receives, and propagates so-called *path-segment construction beacons (PCBs)* on a regular basis, to iteratively construct path segments. PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the control service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy-compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the control service of a core AS creates PCBs and sends them to the non-core child ASes (typically customer ASes). The control service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on. This procedure continues until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
@@ -1031,7 +1031,7 @@ This section describes how PCBs are selected and propagated in the path explorat
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on *path* properties (e.g., length, disjointness across different paths) as well as on *PCB* properties (e.g., age, remaining lifetime of sent instances) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements, and identifies the best PCBs or paths segments for this AS.
+As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on *path* properties (e.g., length, disjointness across different paths) as well as on *PCB* properties (e.g., age, remaining lifetime of sent instances) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.
 
 
 #### Storing and Selecting Candidate PCBs
@@ -1051,14 +1051,21 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 #### Selection Policy Example
 
-{{figure-6}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments. The selected path segments are represented by the bold or colored lines.
+{{figure-6}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.
 
-- The network at the upper left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency.
-- The network at the upper right uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
-- The network below selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure.
+- The network at the upper left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency. Based on this criterion, the network will select the PCB representing path segment A-G (in direction of beaconing) to propagate.
+- The network at the upper right uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this criterion, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.
+- The lower network selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.
 
 
 ~~~~
+#---------------#
+*-- --- --- --- *  : Selected path segment
+
+PL : Peering Link
+
+
+
          ISD A:                               ISD B:
        Path Length                         Peering Links
 
@@ -1125,19 +1132,13 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
             |       .---.        |
              --- --*  J  #-------+
                     `---'
-
-
-    #---------------#
-    *-- --- --- --- *  : Selected path segment
-
-    PL : Peering Link
 ~~~~
 {: #figure-6 title="Example networks to illustrate path-segment selection based on different path properties."}
 
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
-Once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. Both processes are described here.
+As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
 To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.
 
@@ -1159,7 +1160,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
 
 1. From the candidate PCBs stored in the beacon store, the control service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
 2. The control service adds a new AS entry to every selected PCB. This AS entry MUST at least include:
-   - The ingress interface to this AS, in the hop field component (part of the AS entry's signed body component).
+   - The ingress interface to this AS, in the hop field component.
    - The egress interface to the neighboring AS, also in the hop field component.
    - The ISD_AS number of the next AS, in the signed body component of the AS entry.
    - If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
@@ -1174,9 +1175,9 @@ The propagation process in core beaconing includes the following steps:
 
 1. The core control service selects the best PCBs to forward to neighboring core ASes observed so far.
 2. The service adds a new AS entry to every selected PCB. This AS entry MUST at least include:
-   - The egress interface to the neighboring core AS, in the hop field component (part of the AS entry's signed body component).
+   - The egress interface to the neighboring core AS, in the hop field component.
    - The ISD_AS number of the neighboring core AS, in the signed body component of the AS entry.
-3. The core control service MUST now sign the extended PCBs.
+3. The core control service MUST now sign the extended PCBs and append the computed signature.
 4. As a final step, the service propagates the extended PCBs to the neighboring core ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring core ASes (see also [](#prop-proto)).
 
 
@@ -1450,7 +1451,7 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledgements
+Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Path-Lookup Examples {#app-a}
