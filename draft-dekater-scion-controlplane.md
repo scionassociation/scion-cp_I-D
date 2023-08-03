@@ -913,10 +913,10 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
                       *- - -#- - -*
                             |
                             |
- - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
-+---------------------------+-------------------+----------+
-|                  Egress   |  Expiration Time  |   MAC    |
-+---------------------------+-------------------+----------+
+*- - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
++-------------+-------------+-------------------+----------+
+|   Ingress   |    Egress   |  Expiration Time  |   MAC    |
++-------------+-------------+-------------------+----------+
 ~~~~
 
 The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC).
