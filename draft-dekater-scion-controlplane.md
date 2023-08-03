@@ -279,10 +279,10 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 | ISD          | Description                                                                             |
 |--------------+-----------------------------------------------------------------------------------------|
 | 0            | The wildcard ISD.                                                                       |
-| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}.                   |
-| 16 - 63      | Private use (analogous to {{RFC6996}}. Can be used for testing and private deployments. |
+| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                   |
+| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments. |
 | 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
-| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                                |
+| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
 A suitable mechanism to globally coordinate the assignation of ISD numbers does not yet exist. However, we hope that in the future an organization such as ICANN or a regional Internet registry (e.g., RIPE NCC) will take on the responsibility of assigning ISD and AS numbers.
@@ -666,7 +666,7 @@ In the Protobuf message format, the information component of a PCB is called the
 ~~~~
 
 - `timestamp`: The 64-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
-- `segment_id`: The 32-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The `segment_id` field is an updatable field. The originating core AS MUST fill this field with a cryptographically random number. Each following AS MUST then update the segment ID correctly for the next AS to be able to verify the hop field in the data plane.
+- `segment_id`: The 32-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
 
 **Note:** See [](#hopfield) for more information on the hop field message format. The SCION Data Plane Specification provides a detailed description of the computation of the segment ID field and the verification of the hop field in the data plane.
 
