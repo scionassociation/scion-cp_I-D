@@ -41,6 +41,10 @@ normative:
   RFC5952:
   RFC6996:
   RFC8174:
+  gRPC:
+    title: "gRPC, an open-source universal RPC framework"
+    date: 2023
+    target: https://grpc.io/
   I-D.path-properties-voc:
     title: A Vocabulary of Path Properties
     date: 2023
@@ -54,6 +58,10 @@ normative:
         ins: C. Krähenbühl
         name: Cyrill Krähenbühl
         org: ETH Zuerich
+  proto3:
+    title: "Protocol Buffers Language Guide version 3"
+    date: 2023
+    target: https://protobuf.dev/programming-guides/proto3/
 
 informative:
   CHUAT22:
@@ -202,7 +210,6 @@ In SCION, autonomous systems (ASes) are organized into logical groups called iso
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. Peering links can only be used to reach destinations within or downstream of the peering AS. They can be established between any two core or non-core ASes, and between core and non-core ASes. Peering links can also cross ISD boundaries.
 
 The following figure shows the three types of links for one small ISD with the two core ASes A and C, and the four non-core ASes D,E,F, and G.
-
 
 ~~~~
        .-----------.
@@ -356,7 +363,7 @@ SCION allows endpoints to use wildcard addresses in the control-plane routing, t
 
 ## Communication Protocol
 
-All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see [](https://grpc.io)). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see [](https://protobuf.dev)).
+All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
 **Note:** The details for how gRPC is mapped to the SCION data plane will be described in a separate document.
 
@@ -1485,6 +1492,81 @@ TODO IANA considerations.
 {:numbered="false"}
 
 Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+
+~~~~
+   message PathSegment {
+       bytes segment_info = 1;
+       repeated ASEntry as_entries = 2;
+   }
+
+   message SegmentInformation {
+       int64 timestamp = 1;
+       uint32 segment_id = 2;
+   }
+
+   message ASEntry {
+       SignedMessage signed = 1;
+       // Optional
+       PathSegmentUnsignedExtensions unsigned = 2;
+   }
+
+   message SignedMessage {
+       bytes header_and_body = 1;
+       bytes signature = 2;
+   }
+
+   message HeaderAndBodyInternal {
+       bytes header = 1;
+       bytes body = 2;
+   }
+
+   message Header {
+       SignatureAlgorithm signature_algorithm = 1;
+       bytes verification_key_id = 2;
+       // Optional
+       google.protobuf.Timestamp timestamp = 3;
+       // Optional
+       bytes metadata = 4;
+       int32 associated_data_length = 5;
+   }
+
+   message VerificationKeyID {
+       uint64 isd_as = 1;
+       bytes subject_key_id = 2;
+       uint64 trc_base = 3;
+      uint64 trc_serial = 4;
+   }
+
+   message ASEntrySignedBody {
+       uint64 isd_as = 1;
+       uint64 next_isd_as = 2;
+       HopEntry hop_entry = 3;
+       repeated PeerEntry peer_entries = 4;
+       uint32 mtu = 5;
+       // Optional
+       PathSegmentExtensions extensions = 6;
+   }
+
+   message HopEntry {
+       HopField hop_field = 1;
+       uint32 ingress_mtu = 2;
+   }
+
+   message PeerEntry {
+       uint64 peer_isd_as = 1;
+       uint64 peer_interface = 2;
+       uint32 peer_mtu = 3;
+       HopField hop_field = 4;
+   }
+
+   message HopField {
+       uint64 ingress = 1;
+       uint64 egress = 2;
+       uint32 exp_time = 3;
+       bytes mac = 4;
+   }
+~~~~
+
 
 
 # Path-Lookup Examples {#app-a}
