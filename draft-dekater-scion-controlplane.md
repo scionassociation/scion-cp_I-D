@@ -330,7 +330,7 @@ An AS number is the 48-bit identifier for an AS.  SCION inherits the existing 32
 
 #### Formatting
 
-The default formatting for AS numbers in SCION is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit `:`-separated lower-case hex encoding with leading 0's ommitted: `0:0:0` to `ffff:ffff:ffff`.
+The default formatting for AS numbers in SCION is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's ommitted: `0:0:0` to `ffff:ffff:ffff`.
 
 In SCION, the following rules apply:
 
@@ -644,6 +644,7 @@ This section provides a detailed specification of a single PCB and its message f
 
 The following sections provide detailed specifications of the PCB messages, starting with the top-level message of one PCB, and then diving deeper into each of the PCB's message components.
 
+**Note:** For a full example of one PCB in the Protobuf message format, please see [](#app-a).
 
 #### PCB Top-Level Message Format {#segment}
 
@@ -1470,7 +1471,7 @@ When the segment-request handler of a *core AS* control service receives a path 
 2. If the destination is a core or wildcard address, then load matching core-segments from the path database and return.
 3. Otherwise, load the matching down-segments from the path database and return.
 
-[](#app-a) shows by means of an illustration how the lookup of path segments in SCION works.
+[](#app-b) shows by means of an illustration how the lookup of path segments in SCION works.
 
 
 
@@ -1493,6 +1494,14 @@ TODO IANA considerations.
 
 Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
+
+
+# PCB Protobuf Messages - Full Example {#app-a}
+{:numbered="false"}
+
+The following code block provides a full example of one PCB in the Protobuf message format.
+
+
 ~~~~
    message PathSegment {
        bytes segment_info = 1;
@@ -1505,18 +1514,38 @@ Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH 
    }
 
    message ASEntry {
+       // The signed part of the AS entry. The body of the SignedMessage
+       // is the serialized ASEntrySignedBody.
+       // The signature input is defined as following:
+       //
+       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
+       //
+       // associated_data(ps, i) =
+       //             ps.segment_info ||
+       //             ps.as_entries[1].signed.header_and_body ||
+       //             ps.as_entries[1].signed.signature ||
+       //             ...
+       //             ps.as_entries[i-1].signed.header_and_body ||
+       //             ps.as_entries[i-1].signed.signature
+       //
        SignedMessage signed = 1;
        // Optional
        PathSegmentUnsignedExtensions unsigned = 2;
    }
 
    message SignedMessage {
+       // Encoded header and body.
        bytes header_and_body = 1;
+       // Raw signature. The signature is computed over the
+       // concatenation of the header and body, and the optional
+       // associated data.
        bytes signature = 2;
    }
 
    message HeaderAndBodyInternal {
+       // Encoded header suitable for signature computation.
        bytes header = 1;
+       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 
@@ -1534,7 +1563,7 @@ Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH 
        uint64 isd_as = 1;
        bytes subject_key_id = 2;
        uint64 trc_base = 3;
-      uint64 trc_serial = 4;
+       uint64 trc_serial = 4;
    }
 
    message ASEntrySignedBody {
@@ -1569,7 +1598,7 @@ Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH 
 
 
 
-# Path-Lookup Examples {#app-a}
+# Path-Lookup Examples {#app-b}
 {:numbered="false"}
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.
