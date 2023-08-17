@@ -162,6 +162,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 **Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
 
 
+
 ## Terminology {#terms}
 
 **Autonomous System (AS)**: An autonomous system is a network under a common administrative control. For example, the network of an Internet service provider, company, or university can constitute an AS.
@@ -212,15 +213,15 @@ In SCION, autonomous systems (ASes) are organized into logical groups called iso
 The following figure shows the three types of links for one small ISD with the two core ASes A and C, and the four non-core ASes D,E,F, and G.
 
 ~~~~
-       .-----------.
-   _.-'             `--.              #
- ,'      ISD Core       `.            |  parent-child
-;  .---.           .---.  :           |  link
-: (  A  )*-------*(  C  ) ;           |
- \ `-#-'           `-#-' /            #
-  `. |               | ,'
-    `+-.           _.+'       *-------*  core link
-     |  `---------'  |
++-------------------------+
+|                         |           #
+|        ISD Core         |           |  parent-child
+|  .---.           .---.  |           |  link
+| (  A  )*-------*(  C  ) |           |
+|  `-#-'           `-#-'  |           #
+|    |               |    |
++----+---------------+----+   *-------*  core link
+     |               |
      |               |        < - - - >  peering link
    .-#-.           .-#-.
   (  D  )< - - - >(  E  )
@@ -300,7 +301,7 @@ All path segments are invertible: A core-segment can be used bidirectionally, an
 
 The inter-domain SCION routing is based on the <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or MAC address, for example - in fact, the endpoint address is the "normal", currently used, non-SCION-specific endpoint address.
 
-However, the ISD-AS number is a SCION-specific number. It consists of 64-bits, with the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a `-`(dash) separator between the ISD and AS numbers, for example: `4-ff00:1:f`. This section provides more details about the numbering scheme for SCION ISD and AS numbers.
+However, the ISD-AS number is a SCION-specific number. It consists of 64-bits, with the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash-separator between the ISD and AS numbers, for example: `4-ff00:1:f`. This section provides more details about the numbering scheme for SCION ISD and AS numbers.
 
 **Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g., IS-IS, OSPF, SR) and communication fabric (e.g., IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
@@ -335,7 +336,7 @@ The default formatting for AS numbers in SCION is very similar to IPv6 (see {{RF
 In SCION, the following rules apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range (0 - 2<sup>32-1</sup>) SHOULD be represented as decimal. It is allowed to write a BGP AS number in the SCION AS syntax. However, programs SHOULD always use the decimal representation for display. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551".
+- In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range should be represented as decimal. This is especially relevant for display representation. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551". Note that this solely pertains to *BGP* AS numbers, that is, SCION AS numbers in the range of 0 - 2<sup>32-1</sup>!
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 The next table gives an overview of the AS number allocation.
@@ -402,10 +403,22 @@ For every selected PCB and egress interface combination, the AS extends the PCB 
 - For more details on propagating PCBs, see [](#path-segment-prop)
 
 
-### One-Hop Paths
 
-To propagate PCBs to neighboring ASes to which no forwarding path is available yet, SCION uses so-called *one-hop paths*. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).
+### Avoiding Circular Dependencies and Partitioning
 
+A secure and reliable routing architecture must be designed specifically to avoid circular dependencies. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. Operating SCION networks in the real world for several years with multiple bootstrapping phases has provided experimental evidence for the absence of circular dependencies. This section lists the concepts SCION uses to prevent circular dependencies.
+
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).
+- Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
+- Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup.
+- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including TRCs and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
+**Note:** For more information on the availability of certificates and TRCs, see the chapter "Deploying a TRC", especially "TRC Update Discovery" of the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
+
+#### Network Partition and Healing
+
+Besides inter-dependencies, another threat to the Internet is network partition. Partition occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen: During normal operation, the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required, as SCION-enabled ASes could always switch to otherwise unused links.
+
+Recovering (also called healing) from a partitioned network is also seamless, as only coarse time synchronisation between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.
 
 
 ### PCB Propagation - Illustrated Examples
@@ -413,162 +426,117 @@ To propagate PCBs to neighboring ASes to which no forwarding path is available y
 {{figure-3}} below shows how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
 
 ~~~~
-                                .-------.
-            +--------+        ,'         `.
-            |PCB     |       ;             :
-            |========|       :    Core     ;    +--------+
-            |Core    #---+    \           /     |PCB     |
-            |- Out:2 |   |     `. 2   1 ,'  -- -+++++++++|
-            +--------+   |       `+---+'   |    |Core    |
-                         |        |   |    |    |- Out:1 |
-                         |        |   |         +--------+
-    +--------+           | +-----+|   |    |
-    |PCB     |           +-# PCB ||   |    |
-    |========|             +--+--+|   |+-----+
-    |Core    |                |   |   || PCB |
-    |- Out:2 |                v   |   |+--+--+
-    |--------|                    |   |   |
-    |AS F    |          .---.     |   |   v
-    |-In:2   #----+    (  J  )    |   |
-    |-Out:7  |    |     `---'     |   |       .---.
-    |-PeerJ:1|    |       |       |   |      (  H  )
-    |-PeerH:4|    |       |     .-v---v-.     `---'
-    +--------+    |        --,-'  2   3  '-.    |
-+--------+      +-#---+     / 1             \   |
-|PCB     |  <---+ PCB |    ;               4 :--
-|++++++++|      +-----+    :      AS F       ;
-|Core    |  <---------------\ 7             /
-|- Out:1 |         +-----+   \             /
-|--------|     <---+ PCB |    '-. 6   5 ,-'
-|AS F    |         +--+--+       `+---+'        +---------+
-|-In:3   |            |           |   |         | PCB     |
-|-Out:7  + -- -- -- --            |   |         | ========|
-|-PeerJ:1|                        |   |         | Core    |
-|-PeerH:4|   +--------+           |   |         | - Out:2 |
-+--------+   |PCB     |           |   |         | --------|
-             |========|           |   |         | AS F    |
-             |Core    |           |   |+-----+  | -In:2   |+---------+
-             |- Out:2 |           |   || PCB #--# -Out:5  || PCB     |
- +--------+  |--------|           |   |+--+--+  | -PeerJ:1|| ++++++++|
- |PCB     |  |AS F    |    +-----+|   |   |     | -PeerH:4|| Core    |
- |++++++++|  |-In:2   #---#| PCB ||   |   v     +---------+| - Out:1 |
- |Core    |  |-Out:6  |    +--+--+|   |                    | --------|
- |- Out:1 |  |-PeerJ:1|       |   |   | +-----+            | AS F    |
- |--------|  |-PeerH:4|       v   |   | | PCB +- -- -- -- -+ -In:3   |
- |AS F    |  +--------+  +-----+  |   | +--+--+            | -Out:5  |
- |-In:3   +- -- -- -- -- + PCB |  |   |    |               | -PeerJ:1|
- |-Out:6  |              +--+--+  |   |    v               | -PeerH:4|
- |-PeerJ:1|                 |     |   |                    +---------+
- |-PeerH:4|                 v   .-v---v-.
- +--------+                  ,-'  5   1  '-.
-                            /               \
-                  <--------; 4               : +---------+
-                           :      AS G       ; | PCB     |
-               +--------+   \               /  | ========|
-               |PCB     |    \             /   | Core    |
-               |========|     '-.   3   ,-'    | - Out:2 |
-               |Core    |        `--+--'       | --------|
-   +--------+  |- Out:2 |           |          | AS F    |+---------+
-   |PCB     |  |--------|           |          | -In:2   || PCB     |
-   |++++++++|  |AS F    |           | +-----+  | -Out:5  || ++++++++|
-   |Core    |  |-In:2   |           | | PCB #--# -PeerJ:1|| Core    |
-   |- Out:1 |  |-Out:6  |    +-----+| +--+--+  | -PeerH:4|| - Out:1 |
-   |--------|  |-PeerJ:1#----# PCB ||    |     | --------|| --------|
-   |AS F    |  |-PeerH:4|    +--+--+|    v     | AS G    || AS F    |
-   |-In:3   |  |--------|       |   |          | -In:1   || -In:3   |
-   |-Out:6  |  |AS G    |       v   |          | -Out:3  || -Out:5  |
-   |-PeerJ:1|  |-In:5   |           |          +---------+| -PeerJ:1|
-   |-PeerH:4|  |-Out:3  |           | +-----+             | -PeerH:4|
-   |--------|  +--------+   +-----+ | | PCB |-- -- -- -- -+ --------|
-   |AS G    +- -- -- -- -- -+ PCB | | +--+--+             | AS G    |
-   |-In:5   |               +--+--+ |    |                | -In:1   |
-   |-Out:3  |                  |    |    v                | -Out:3  |
-   +--------+                  v    |                     +---------+
-                                    |
-                                    v
+                  +-------------+
+                  |   Core AS   |
+                  |             |
+                  |             |
+                  |    2   1    |
+                  +----#---#----+
+                       |   |
++--------+             |   |             +--------+
+|PCB     |     +-----+ |   | +-----+     |PCB     |
+|========|-----|PCB 1| |   | |PCB 2|=====|++++++++|
+|Core    |     +-----+ |   | +-----+     |Core    |
+|- Out:2 |        |    |   |    |        |- Out:1 |
++--------+        v    |   |    v        +--------+
+                       |   |
+                       |   |
+                       v   v
+~~~~
+
+cxcxsacx
+xaxxxax
+
+~~~~
+        +--------+          +-----+       +-----+
+        |PCB     |          |PCB 1| |   | |PCB 2|
+        |========|          +-----+ |   | +-----+
+        |Core    |             |    |   |    |
+        |- Out:2 |             v    |   |    v
+        |--------|                  |   |
+        |AS F    |        .---.     |   |
+        |-In:2   |-----+ (  J  )    |   |
+        |-Out:7  |     |  `---'     v   v       .---.
+        |-PeerJ:1|     |    |  +----#---#----+ (  H  )
+        |-PeerH:4|     |    |  |    2   3    |  `---'
+        +--------+     |     --# 1           |    |
++--------+           +------+  |     AS F    |    |
+|PCB     |           | PCB1*|  |           4 #- --
+|++++++++|           +------+  |             |
+|Core    |    <----------------# 7           |
+|- Out:1 |           +------+  |    6   5    |      +---------+
+|--------|           | PCB2*|  +----#---#----+      | PCB     |
+|AS F    |           +------+       |   |           | ========|
+|-In:3   |               |          |   |           | Core    |
+|-Out:7  |================          |   |           | - Out:2 |
+|-PeerJ:1|                          |   | +-----+   | --------|
+|-PeerH:4|     +--------+           |   | |PCB  |   | AS F    |
++--------+     |PCB     |           |   | |1*** |---| -In:2   |
+               |========|           |   | +-----+   | -Out:5  |
+               |Core    |           |   |    |      | -PeerJ:1|
+               |- Out:2 |    +-----+|   |    v      | -PeerH:4|
+   +--------+  |--------|    | PCB ||   |           +---------+
+   |PCB     |  |AS F    |----| 1** ||   |           +---------+
+   |++++++++|  |-In:2   |    +-----+|   |           | PCB     |
+   |Core    |  |-Out:6  |       |   |   |           | ++++++++|
+   |- Out:1 |  |-PeerJ:1|       v   |   | +-----+   | Core    |
+   |--------|  |-PeerH:4|           |   | |PCB  |   | - Out:1 |
+   |AS F    |  +--------+  +-----+  |   | |2*** |===| --------|
+   |-In:3   |              | PCB |  |   | +-----+   | AS F    |
+   |-Out:6  |==============| 2** |  |   |    |      | -In:3   |
+   |-PeerJ:1|              +-----+  |   |    v      | -Out:5  |
+   |-PeerH:4|                 |     v   v           | -PeerJ:1|
+   +--------+                 v                     | -PeerH:4|
+                                                    +---------+
 ~~~~
 {: #figure-3 title="Intra-ISD PCB propagation from the ISD core to child ASes"}
 
-PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in {{figure-3}}. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and on a given AS interface X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
+PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in {{figure-3}}. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
 ~~~~
-                 AS Entry Core         AS Entry F            AS Entry G
+                AS Entry Core         AS Entry F          AS Entry G
 
-                           .---.
-                          (  H  )- -- -- +
-                           `---'         |
-                    .-----.             .-------.            .------.
-                  ,'       `.        ,-' 4       '-.       ,'        `.
-                 ;           :      /       AS F    \     ;            :
-path segment 1   :  Core   1 ;     ; 3             5 :    : 1   AS G   ;
-                  \         /      :                 ;     \          /
-                   `.   2 #---------#-2-----------6-#--------# 5    ,'
-                     `---'           \             /          `----'
-                                      '-. 1   7 ,-'
-                                         `-----'
-                              .---.       |
-                             (  J  )-- -- +
-                              `---'
-                  egress 2          ingress 2 - egress 6     ingress 5
-                                      Peer J: ingress 1
-                                      Peer H: ingress 4
+               +-------------+     +-------------+     +-------------+
+               |  Core AS    |     |    AS F     |     |     AS G    |
+path segment 1 |            1#     #3            5     #1            |
+               |             |     |             |     |             |
+               |            2#-----#2----------- 6-----#5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                 egress 2       ingress 2 - egress 6      ingress 5
+
+----------------------------------------------------------------------
+
+               +-------------+     +-------------+     +-------------+
+               |  Core AS    |     |    AS F     |     |     AS G    |
+               |            1#     #3     +-----5#-----#1            |
+path segment 2 |             |     |      |      |     |             |
+               |            2#-----#2-----+     6#     #5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                 egress 2       ingress 2 - egress 5      ingress 1
+
 ------------------------------------------------------------------------
-                           .---.
-                          (  H  )- -- -- +
-                           `---'         |
-                    .-----.             .-------.            .------.
-                  ,'       `.        ,-' 4       '-.       ,'        `.
-                 ;           :      /       AS F    \     ;            :
-path segment 2   :  Core   1 ;     ; 3        +----5-#----# 1   AS G   ;
-                  \         /      :          |      ;     \          /
-                   `.   2 #---------#-2-------+     /       `. 5    ,'
-                     `---'           \            6/          `----'
-                                      '-. 1   7 ,-'
-                                         `-----'
-                              .---.       |
-                             (  J  )-- -- +
-                              `---'
-                  egress 2          ingress 2 - egress 5     ingress 1
-                                      Peer J: ingress 1
-                                      Peer H: ingress 4
+
+               +-------------+     +-------------+     +-------------+
+               |  Core AS    |     |    AS F     |     |     AS G    |
+               |            1#-----# -----+      5     #  1          |
+path segment 3 |             |     |      |      |     |             |
+               |            2#     # 2    +----- 6-----#  5          |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                 egress 1       ingress 3 - egress 6      ingress 5
+
 ------------------------------------------------------------------------
-                           .---.
-                          (  H  )- -- -- +
-                           `---'         |
-                    .-----.             .-------.            .------.
-                  ,'       `.        ,-' 4       '-.       ,'        `.
-                 ;           :      /       AS F    \     ;            :
-path segment 3   :  Core   1 #-----#-3-----+       5 :    : 1   AS G   ;
-                  \         /      :       |         ;     \          /
-                   `.   2 ,'        \ 2    +------6-#--------# 5    ,'
-                     `---'           \             /          `----'
-                                      '-. 1   7 ,-'
-                                         `-----'
-                              .---.       |
-                             (  J  )-- -- +
-                              `---'
-                  egress 1          ingress 3 - egress 6     ingress 5
-                                      Peer J: ingress 1
-                                      Peer H: ingress 4
-------------------------------------------------------------------------
-                           .---.
-                          (  H  )- -- -- +
-                           `---'         |
-                    .-----.             .-------.            .------.
-                  ,'       `.        ,-' 4       '-.       ,'        `.
-                 ;           :      /       AS F    \     ;            :
-path segment 4   :  Core   1 #-----#-3-------------5-#----# 1   AS G   ;
-                  \         /      :                 ;     \          /
-                   `.   2 ,'        \ 2             /       `. 5    ,'
-                     `---'           \            6/          `----'
-                                      '-. 1   7 ,-'
-                                         `-----'
-                              .---.       |
-                             (  J  )-- -- +
-                              `---'
-                  egress 1          ingress 3 - egress 5     ingress 1
-                                      Peer J: ingress 1
-                                      Peer H: ingress 4
+
+               +-------------+     +-------------+     +-------------+
+               |  Core AS    |     |   AS F      |     |     AS G    |
+               |            1#-----# ----------- 5-----#  1          |
+path segment 4 |             |     |             |     |             |
+               |            2#     # 2           6     #  5          |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                 egress 1       ingress 3 - egress 5      ingress 1
 ~~~~
 {: #figure-4 title="Possible up- or down-path segments for AS G"}
 
@@ -842,7 +810,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
   - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-**Note:** For more information on signing and verifying PCBs, see the chapter Certificate Specification of the SCION Control-Plane PKI Specification. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification.
+**Note:** For more information on signing and verifying PCBs, see the chapter Certificate Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
 - `timestamp`: Defines the signature creation timestamp. This field is optional.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is optional.
@@ -889,11 +857,18 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-The signature of an AS entry is computed over the AS entry's signed component. This is the input for the computation of the signature:
+Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS’s certificate. The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
 
 - The signed header and body of the current AS (`header_and_body`).
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
+
+The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computer as follows:
+
+Σ<sub>i</sub> =
+Sign<sub>i</sub>{INF || ASE<sub>0</sub><sup>(signed)</sup> || Σ<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Σ<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup>}
+
+The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.
 
@@ -1183,7 +1158,8 @@ The following first steps of the propagation procedure are the same for both int
 
 1. Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.<br>
 **Note:** The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
-2. As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes therefore checks whether the PCB includes an AS entry created by the core AS itself. If so, the PCB is discarded in order to avoid loops.<br>
+2. As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes therefore checks whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB is discarded in order to avoid loops. Core ASes could also forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once.
+<br>
 **Note:** It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
 3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
 
