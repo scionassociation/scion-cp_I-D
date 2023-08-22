@@ -423,7 +423,7 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 ### PCB Propagation - Illustrated Examples
 
-{{figure-3}} below shows how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
+The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
 
 ~~~~
                             +-------------+
@@ -532,7 +532,7 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 ~~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
-PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in {{figure-3}}. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
+PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in the previous figures. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
 ~~~~
                 AS Entry Core         AS Entry F          AS Entry G
