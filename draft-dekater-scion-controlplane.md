@@ -214,13 +214,13 @@ The following figure shows the three types of links for one small ISD with the t
 
 ~~~~
 +-------------------------+
-|                         |           #
-|        ISD Core         |           |  parent-child
-|  .---.           .---.  |           |  link
-| (  A  )*-------*(  C  ) |           |
-|  `-#-'           `-#-'  |           #
+|                         |       #
+|        ISD Core         |       |      parent-child
+|  .---.           .---.  |       |      link
+| (  A  )*-------*(  C  ) |       |
+|  `-#-'           `-#-'  |       #
 |    |               |    |
-+----+---------------+----+   *-------*  core link
++----|---------------|----+   *-------*  core link
      |               |
      |               |        < - - - >  peering link
    .-#-.           .-#-.
@@ -414,7 +414,7 @@ A secure and reliable routing architecture must be designed specifically to avoi
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including TRCs and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
 **Note:** For more information on the availability of certificates and TRCs, see the chapter "Deploying a TRC", especially "TRC Update Discovery" of the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
 
-#### Network Partition and Healing
+#### Partition and Healing
 
 Besides inter-dependencies, another threat to the Internet is network partition. Partition occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen: During normal operation, the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required, as SCION-enabled ASes could always switch to otherwise unused links.
 
@@ -423,78 +423,76 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 ### PCB Propagation - Illustrated Examples
 
-The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding. Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
+The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding.
+
+In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB a leaves core AS X via egress interface "2", whereas PCB b is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~~
                             +-------------+
-                            |  Core AS    |
-                            |             |
+                            | Core AS X   |
                             |             |
                             |    2   1    |
                             +----#---#----+
-                                 |   |
           +--------+             |   |             +--------+
           |PCB     |     +-----+ |   | +-----+     |PCB     |
-          |========|-----|PCB 1| |   | |PCB 2|=====|++++++++|
+          |========|-----|PCB a| |   | |PCB b|=====|++++++++|
           |Core    |     +-----+ |   | +-----+     |Core    |
           |- Out:2 |        |    |   |    |        |- Out:1 |
           +--------+        v    |   |    v        +--------+
-                                 |   |
                                  v   v
+                            +----#---#----+
+                            |     AS Y    |
 ~~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
+AS Y will receive the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). At the same time, AS Y forwards four other PCBs, which also originate from core AS X, to AS Z, using the two different (egress) links "5" and "6". AS Y extends these PCBs with the corresponding ingress and egress interface information. Additionally, AS Y announces two peering links to its neighboring peers V and W, over the interfaces "1" and "4", respectively - this information is also added to the PCBs. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
+
 
 ~~~~
-                        +-----+       +-----+
-                        |PCB 1| |   | |PCB 2|
+                        +-----+ |   | +-----+
+                        |PCB a| |   | |PCB b|
                         +-----+ |   | +-----+
                            |    |   |    |
                            v    |   |    v
-                                |   |
                                 v   v
                            +----#---#----+
                  .---.     |    2   3    |
                 (  J  )- --# 1           |
-                 `---'     |     AS F    |     .---.
+                 `---'     |     AS Y    |     .---.
                            |           4 #- --(  H  )
                            |             |     `---'
-                           |             |
                            |    6   5    |
             +--------+     +----#---#----+     +--------+
             |PCB     |          |   |          |PCB     |
             |========|          |   |          |========|
             |Core    |          |   |          |Core    |
-            |- Out:2 |  +-----+ |   | +-----+  |- Out:2 |
-+--------+  |--------|  | PCB | |   | | PCB |  |--------|  +--------+
-|PCB     |  |AS F    |--| 1*  | |   | | 1** |--|AS F    |  |PCB     |
+            |- Out:2 |          |   |          |- Out:2 |
++--------+  |--------|  +-----+ |   | +-----+  |--------|  +--------+
+|PCB     |  |AS F    |--|PCB c| |   | |PCB d|--|AS F    |  |PCB     |
 |++++++++|  |-In:2   |  +-----+ |   | +-----+  |-In:2   |  |++++++++|
 |Core    |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core    |
 |- Out:1 |  |-PeerJ:1|     v    |   |    v     |-PeerJ:1|  |- Out:1 |
 |--------|  |-PeerH:4|          |   |          |-PeerH:4|  |--------|
-|AS F    |  +--------+  +-----+ |   | +-----+  +--------+  |AS F    |
-|-In:3   |              | PCB | |   | | PCB |              |-In:3   |
-|-Out:6  |==============| 2*  | |   | | 2** |==============|-Out:5  |
+|AS F    |  +--------+          |   |          +--------+  |AS F    |
+|-In:3   |              +-----+ |   | +-----+              |-In:3   |
+|-Out:6  |==============|PCB e| |   | |PCB f|==============|-Out:5  |
 |-PeerJ:1|              +-----+ |   | +-----+              |-PeerJ:1|
 |-PeerH:4|                 |    |   |    |                 |-PeerH:4|
 +--------+                 v    |   |    v                 +--------+
-                                |   |
-                                |   |
                                 v   v
+                           +----#---#----+
+                           |    AS Z     |
 ~~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
+The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs c and e will access AS Z over ingress interface 5, whereas PCBs d and f enter AS Z via ingress interface 1. Additionally, AS Z propagates PCBs g, h, i, and j further down, all over the same link (egress interface 3). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~~
-                        +-----+ |   | +-----+
-                        | PCB | |   | | PCB |
-                        | 1*  | |   | | 1** |
-                        +-----+ |   | +-----+
-                           |    |   |    |
-                           v    |   |    v
-                        +-----+ |   | +-----+
-                        | PCB | |   | | PCB |
-                        | 2*  | |   | | 2** |
+                   +-----+      |   |      +-----+
+                   |PCB c|      |   |      |PCB d|
+                   +-----+      |   |      +-----+
+                     |  +-----+ |   | +-----+  |
+                     v  |PCB e| |   | |PCB f|  v
                         +-----+ |   | +-----+
                            |    |   |    |
                            v    |   |    v
@@ -502,43 +500,44 @@ The following three figures show how intra-ISD PCB propagation works, from the I
                          +------#---#------+
                          |      5   1      |
                          |                 |
-                         |      AS G       |
-                         |                 |
-                         |        3        |
-                         +--------#--------+
-            +--------+            |            +--------+
-            |PCB     |            |            |PCB     |
+                         | AS Z            |
+            +--------+   |        3        |   +--------+
+            |PCB     |   +--------#--------+   |PCB     |
             |========|            |            |========|
-            |Core    |            |            |Core    |
+            |Core X  |            |            |Core X  |
 +--------+  |- Out:2 |            |            |- Out:2 |  +--------+
 |PCB     |  |--------|            |            |--------|  |PCB     |
-|++++++++|  |AS F    |            |            |AS F    |  |++++++++|
-|Core    |  |-In:2   |   +-----+  |  +-----+   |-In:2   |  |Core    |
-|- Out:1 |  |-Out:6  |   | PCB |  |  |PCB  |   |-Out:5  |  |- Out:1 |
-|--------|  |-PeerJ:1|---| 1***|  |  |1****|---|-PeerJ:1|  |--------|
-|AS F    |  |-PeerH:4|   +-----+  |  +-----+   |-PeerH:4|  |AS F    |
+|++++++++|  |AS Y    |            |            |AS Y    |  |++++++++|
+|Core X  |  |-In:2   |            |            |-In:2   |  |Core X  |
+|- Out:1 |  |-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
+|--------|  |-PeerV:1|---|PCB g|  |  |PCB h|---|-PeerV:1|  |--------|
+|AS Y    |  |-PeerW:4|   +-----+  |  +-----+   |-PeerW:4|  |AS Y    |
 |-In:3   |  |--------|      |     |     |      |--------|  |-In:3   |
-|-Out:6  |  |AS G    |      v     |     v      |AS G    |  |-Out:5  |
-|-PeerJ:1|  |-In:5   |            |            |-In:1   |  |-PeerJ:1|
-|-PeerH:4|  |-Out:3  |            |            |-Out:3  |  |-PeerH:4|
-|--------|  +--------+   +-----+  |  +-----+   +--------+  |--------|
-|AS G    |               | PCB |  |  |PCB  |               |AS G    |
-|-In:5   |===============| 2***|  |  |2****|===============|-In:1   |
+|-Out:6  |  |AS Z    |      v     |     v      |AS Z    |  |-Out:5  |
+|-PeerV:1|  |-In:5   |            |            |-In:1   |  |-PeerV:1|
+|-PeerW:4|  |-Out:3  |            |            |-Out:3  |  |-PeerW:4|
+|--------|  +--------+            |            +--------+  |--------|
+|AS Z    |               +-----+  |  +-----+               |AS Z    |
+|-In:5   |===============|PCB i|  |  |PCB j|===============|-In:1   |
 |-Out:3  |               +-----+  |  +-----+               |-Out:3  |
 +--------+                  |     |     |                  +--------+
                             v     |     v
-                                  |
                                   v
 ~~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
+Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
+
+
+
 PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in the previous figures. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
 ~~~~
-                AS Entry Core         AS Entry F          AS Entry G
+
+                AS Entry Core         AS Entry Y          AS Entry Z
 
                +-------------+     +-------------+     +-------------+
-               |  Core AS    |     |    AS F     |     |     AS G    |
+               |  Core AS X  |     |    AS Y     |     |     AS Z    |
 path segment 1 |            1#     #3            5     #1            |
                |             |     |             |     |             |
                |            2#-----#2----------- 6-----#5            |
@@ -549,7 +548,7 @@ path segment 1 |            1#     #3            5     #1            |
 ----------------------------------------------------------------------
 
                +-------------+     +-------------+     +-------------+
-               |  Core AS    |     |    AS F     |     |     AS G    |
+               |  Core AS X  |     |    AS Y     |     |     AS Z    |
                |            1#     #3     +-----5#-----#1            |
 path segment 2 |             |     |      |      |     |             |
                |            2#-----#2-----+     6#     #5            |
@@ -560,10 +559,10 @@ path segment 2 |             |     |      |      |     |             |
 ------------------------------------------------------------------------
 
                +-------------+     +-------------+     +-------------+
-               |  Core AS    |     |    AS F     |     |     AS G    |
-               |            1#-----# -----+      5     #  1          |
+               |  Core AS X  |     |    AS Y     |     |     AS Z    |
+               |            1#-----#3-----+     5#     #1            |
 path segment 3 |             |     |      |      |     |             |
-               |            2#     # 2    +----- 6-----#  5          |
+               |            2#     #2     +-----6#-----#5            |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 6      ingress 5
@@ -571,10 +570,10 @@ path segment 3 |             |     |      |      |     |             |
 ------------------------------------------------------------------------
 
                +-------------+     +-------------+     +-------------+
-               |  Core AS    |     |   AS F      |     |     AS G    |
-               |            1#-----# ----------- 5-----#  1          |
+               |  Core AS X  |     |   AS Y      |     |     AS Z    |
+               |            1#-----#3-----------5#-----#1            |
 path segment 4 |             |     |             |     |             |
-               |            2#     # 2           6     #  5          |
+               |            2#     #2           6#     #5            |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
@@ -904,7 +903,7 @@ Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
 
-The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computer as follows:
+The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:
 
 Σ<sub>i</sub> =
 Sign<sub>i</sub>{INF || ASE<sub>0</sub><sup>(signed)</sup> || Σ<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Σ<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup>}
