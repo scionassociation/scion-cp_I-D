@@ -193,6 +193,8 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
+**Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
+
 
 ## Conventions and Definitions
 
@@ -306,7 +308,7 @@ However, the ISD-AS number is a SCION-specific number. It consists of 64-bits, w
 **Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g., IS-IS, OSPF, SR) and communication fabric (e.g., IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
 
-### ISD numbers
+### ISD Numbers
 
 An ISD number is the 16-bit global identifier for an ISD. It MUST be globally unique. The following table gives an overview of the ISD number allocation.
 
@@ -324,7 +326,7 @@ A suitable mechanism to globally coordinate the assignation of ISD numbers does 
 Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.
 
 
-### AS numbers
+### AS Numbers
 
 An AS number is the 48-bit identifier for an AS.  SCION inherits the existing 32-bit AS numbers from RFC4893, but provides an extended 48-bit space, allowing for additional SCION-only AS numbers beyond the 32-bit space in use today.
 
@@ -336,7 +338,7 @@ The default formatting for AS numbers in SCION is very similar to IPv6 (see {{RF
 In SCION, the following rules apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range should be represented as decimal. This is especially relevant for display representation. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551". Note that this solely pertains to *BGP* AS numbers, that is, SCION AS numbers in the range of 0 - 2<sup>32-1</sup>!
+- In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range should be represented as decimal. This is especially relevant for display representation. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551". Note that this solely pertains to *BGP* AS numbers, that is, SCION AS numbers in the range of 0 - 2<sup>32-1</sup>.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 The next table gives an overview of the AS number allocation.
@@ -359,14 +361,14 @@ The rest of the space is currently unallocated.
 
 ### Wildcard Addressing {#serv-disc}
 
-SCION allows endpoints to use wildcard addresses in the control-plane routing, to designate any core AS, e.g., to place requests for core- or down path segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. Here, "0" is the wildcard for the AS. For more information, see [](#wildcard).
+SCION allows endpoints to use wildcard addresses in the control-plane routing, to designate any core AS, e.g., to place requests for core- or down-segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. Here, "0" is the wildcard for the AS. For more information, see [](#wildcard).
 
 
 ## Communication Protocol
 
 All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-**Note:** The details for how gRPC is mapped to the SCION data plane will be described in a separate document.
+**Note:** The details of how gRPC is mapped to the SCION data plane will be described in a separate document.
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -411,8 +413,8 @@ A secure and reliable routing architecture must be designed specifically to avoi
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
 - Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup.
-- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including TRCs and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
-**Note:** For more information on the availability of certificates and TRCs, see the chapter "Deploying a TRC", especially "TRC Update Discovery" of the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
+- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
+**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
 
 #### Partition and Healing
 
@@ -425,7 +427,7 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values. In practice, each AS can choose any encoding for its interfaces; in fact, only the AS itself needs to understand its encoding.
 
-In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB a leaves core AS X via egress interface "2", whereas PCB b is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
+In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~~
                             +-------------+
@@ -445,8 +447,7 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
 ~~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
-AS Y will receive the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). At the same time, AS Y forwards four other PCBs, which also originate from core AS X, to AS Z, using the two different (egress) links "5" and "6". AS Y extends these PCBs with the corresponding ingress and egress interface information. Additionally, AS Y announces two peering links to its neighboring peers V and W, over the interfaces "1" and "4", respectively - this information is also added to the PCBs. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
-
+AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). At the same time, AS Y forwards four other PCBs, which also originate from core AS X, to AS Z, using the two different (egress) links "5" and "6". AS Y extends these PCBs with the corresponding ingress and egress interface information. Additionally, AS Y announces two peering links to its neighboring peers V and W, over the interfaces "1" and "4", respectively - this information is also added to the PCBs. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
 ~~~~
                         +-----+ |   | +-----+
@@ -457,27 +458,27 @@ AS Y will receive the two PCBs "a" and "b" through two different (ingress) inter
                                 v   v
                            +----#---#----+
                  .---.     |    2   3    |
-                (  J  )- --# 1           |
+                (  V  )- --# 1           |
                  `---'     |     AS Y    |     .---.
-                           |           4 #- --(  H  )
+                           |           4 #- --(  W  )
                            |             |     `---'
                            |    6   5    |
             +--------+     +----#---#----+     +--------+
             |PCB     |          |   |          |PCB     |
             |========|          |   |          |========|
-            |Core    |          |   |          |Core    |
+            |Core X  |          |   |          |Core X  |
             |- Out:2 |          |   |          |- Out:2 |
 +--------+  |--------|  +-----+ |   | +-----+  |--------|  +--------+
-|PCB     |  |AS F    |--|PCB c| |   | |PCB d|--|AS F    |  |PCB     |
+|PCB     |  |AS Y    |--|PCB c| |   | |PCB d|--|AS Y    |  |PCB     |
 |++++++++|  |-In:2   |  +-----+ |   | +-----+  |-In:2   |  |++++++++|
-|Core    |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core    |
-|- Out:1 |  |-PeerJ:1|     v    |   |    v     |-PeerJ:1|  |- Out:1 |
-|--------|  |-PeerH:4|          |   |          |-PeerH:4|  |--------|
-|AS F    |  +--------+          |   |          +--------+  |AS F    |
+|Core X  |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core X  |
+|- Out:1 |  |-PeerV:1|     v    |   |    v     |-PeerV:1|  |- Out:1 |
+|--------|  |-PeerW:4|          |   |          |-PeerW:4|  |--------|
+|AS Y    |  +--------+          |   |          +--------+  |AS Y    |
 |-In:3   |              +-----+ |   | +-----+              |-In:3   |
 |-Out:6  |==============|PCB e| |   | |PCB f|==============|-Out:5  |
-|-PeerJ:1|              +-----+ |   | +-----+              |-PeerJ:1|
-|-PeerH:4|                 |    |   |    |                 |-PeerH:4|
+|-PeerV:1|              +-----+ |   | +-----+              |-PeerV:1|
+|-PeerW:4|                 |    |   |    |                 |-PeerW:4|
 +--------+                 v    |   |    v                 +--------+
                                 v   v
                            +----#---#----+
@@ -485,7 +486,7 @@ AS Y will receive the two PCBs "a" and "b" through two different (ingress) inter
 ~~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
-The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs c and e will access AS Z over ingress interface 5, whereas PCBs d and f enter AS Z via ingress interface 1. Additionally, AS Z propagates PCBs g, h, i, and j further down, all over the same link (egress interface 3). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
+The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" will access AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~~
                    +-----+      |   |      +-----+
@@ -526,14 +527,9 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 ~~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
-Here, AS F receives two different PCBs via two different links from core AS Core. Moreover, AS F uses two different links to send two different PCBs to AS G, each PCB containing the respective egress interfaces. AS G extends the two PCBs and forwards them over a single link to a child AS.
-
-
-
-PCBs are used to explore paths within or between ISDs. As PCBs traverse the network, they accumulate path and forwarding information on AS-level. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries as it transits the network, as is shown in the previous figures. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS X. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS G. It is up to AS G to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
+As shown in the previous figures, PCBs accumulate path and forwarding information on AS-level when they transit the network. One could say that a PCB represents a single path segment that can be used to construct end-to-end forwarding paths. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to decide via which of these path segments it wants to be reached, and thus which path segments it will register.
 
 ~~~~
-
                 AS Entry Core         AS Entry Y          AS Entry Z
 
                +-------------+     +-------------+     +-------------+
@@ -578,7 +574,7 @@ path segment 4 |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
 ~~~~
-{: #figure-4 title="Possible up- or down-path segments for AS G"}
+{: #figure-4 title="Possible up- or down-segments for AS Z"}
 
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
@@ -850,7 +846,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
   - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-**Note:** For more information on signing and verifying PCBs, see the chapter Certificate Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
+**Note:** For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
 - `timestamp`: Defines the signature creation timestamp. This field is optional.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is optional.
@@ -897,7 +893,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS’s certificate. The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
+Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
 
 - The signed header and body of the current AS (`header_and_body`).
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
@@ -906,7 +902,7 @@ Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the
 The signature Σ<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:
 
 Σ<sub>i</sub> =
-Sign<sub>i</sub>{INF || ASE<sub>0</sub><sup>(signed)</sup> || Σ<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Σ<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup>}
+K<sub>i</sub>{Info || ASE<sub>0</sub><sup>(signed)</sup> || Σ<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Σ<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup>}
 
 The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
