@@ -23,11 +23,6 @@ author:
      org: SCION Association
      email: cdk@scion.org
 
- -   ins: M. Frei
-     name: Matthias Frei
-     org: SCION Association
-     email: matzf@scion.org
-
  -   ins: N. Rustignoli
      name: Nicola Rustignoli
      org: SCION Association
@@ -315,8 +310,8 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 | ISD          | Description                                                                             |
 |--------------+-----------------------------------------------------------------------------------------|
 | 0            | The wildcard ISD.                                                                       |
-| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                   |
-| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments. |
+| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
+| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments |
 | 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
@@ -1481,7 +1476,7 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 
