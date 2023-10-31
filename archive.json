@@ -1,0 +1,111 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-10-31T00:15:38.720917+00:00",
+  "repo": "scionassociation/scion-cp_I-D",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOJx2-rs5YmfhB",
+      "title": "Cdk addressing feedback",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/1",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-08-23T13:57:12Z",
+      "updatedAt": "2023-08-23T14:04:21Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d5cc2c4cfa275a0fef6a1d0c601c88cd7f379a40",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk_addressing-feedback",
+      "headRefOid": "38e5e307f15a9371a4b7a9ca14cd9071a942424f",
+      "closedAt": "2023-08-23T14:04:21Z",
+      "mergedAt": "2023-08-23T14:04:21Z",
+      "mergedBy": "cdekater",
+      "mergeCommit": {
+        "oid": "c4dc53e6651bc781cc36aa4e0a0dd6ad894045b3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOJx2-rs5Ymx-Q",
+      "title": "Final corrections",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/2",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-08-23T14:41:29Z",
+      "updatedAt": "2023-08-23T14:41:39Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c4dc53e6651bc781cc36aa4e0a0dd6ad894045b3",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk_addressing-feedback",
+      "headRefOid": "d42375418c49f53429755b7f79aa0654438e1d2c",
+      "closedAt": "2023-08-23T14:41:39Z",
+      "mergedAt": "2023-08-23T14:41:39Z",
+      "mergedBy": "cdekater",
+      "mergeCommit": {
+        "oid": "530f3f0cd218685a12eb4df72024f252446b07d7"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
