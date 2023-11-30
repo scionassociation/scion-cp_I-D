@@ -1461,9 +1461,10 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 # Security Considerations
 
-One of the fundamental objectives that guided the design of SCION is security, in particular network security. See chapter 7 of the SCION book (Security Analysis), which states the precise security goals of various network participants and how SCION achieves these goals in the presence of different types of adversaries {{CHUAT22}}.
+This section describes the possible security risks and attacks that SCION's control plane may be prone to, and how these may be mitigated. The focus lies on *inter*-AS routing: SCION does not solve intra-AS routing issues, nor does it provide end-to-end payload encryption, and identity authentication. These topics lie therefore outside the scope of this section.
 
-To be precised.
+**Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
+
 
 
 # IANA Considerations
