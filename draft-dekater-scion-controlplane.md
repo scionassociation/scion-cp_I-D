@@ -1474,7 +1474,7 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 This section describes the possible security risks and attacks that SCION's control plane may be prone to, and how these may be mitigated. The focus lies on *inter*-AS routing: SCION does not solve intra-AS routing issues, nor does it provide end-to-end payload encryption, and identity authentication. These topics lie therefore outside the scope of this section.
 
-As described previously, the goal of SCION’s beaconing process is to discover paths between any two ASes. The path-registration and -lookup mechanisms provide endpoints with access to these paths. An on-path adversary can, for example, interfere with endpoint communication by not disseminating beacons or simply dropping packets. An adversary can also attempt to attract traffic by selectively disseminating PCBs or by forging new PCBs. This section examines several possible approaches to manipulating paths in the SCION control plane, and shows for each case to what extent SCION's design can prevent the corresponding attack or help to mitigate it.
+As described previously, the goal of SCION’s beaconing process is to discover paths between any two ASes and make them available to other ASes. This section examines several possible approaches to manipulating the beaconing process in the SCION control plane, and shows for each case to what extent SCION's design can prevent the corresponding attack or help to mitigate it.
 
 - Path hijacking through interposition (see [](#path-hijack))
 - Creation of spurious ASes (see [](#fake-ases))
@@ -1486,18 +1486,18 @@ As described previously, the goal of SCION’s beaconing process is to discover 
 
 ## Path Hijacking through Interposition {#path-hijack}
 
-To attract traffic and to include its own AS in segments and paths, an adversary might try to manipulate the beaconing process. There are several options for a malicious AS M to do this:
+To attract traffic and to include its own AS in segments and paths, an adversary might try to manipulate the beaconing process. There are several imaginable options for a malicious AS M to do this:
 
-- By intercepting and disseminating a PCB on its way from AS A to neighbor AS B, and injecting its (AS M's) own hop fields into the PCB toward downstream ASes. This could offer B an attractive up-segment traversing AS M to the core.
-- By modifying the hop fields of an already existing path, in order to interpose the own AS in the path.
 - By blocking the traffic between A and B, and thus force traffic redirection through M.
+- By intercepting and disseminating a PCB on its way from AS A to neighbor AS B, and injecting its (AS M's) own hop fields into the PCB toward downstream ASes. The goal is to offer AS B an attractive up-segment that traverses AS M to the core.
+- By modifying the hop fields of an already existing path, in order to interpose the own AS in the path.
 
-The last attack is fundamental and generally cannot be prevented. But SCION is able to mitigate the other two attacks: The first attack is detectable by downstream ASes, because the PCBs disseminated by A towards B contain B as an egress AS identifier. This will cause verification of the manipulated inbound PCBs to fail, because the adversary's PCBs cannot contain A's correct signature. The second attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path. This prevents hop fields from malicious modifications.
+The first attack is fundamental and generally cannot be prevented. But SCION is able to mitigate the other two attacks: The second attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains an identifier for the egress interface from AS A to AS B, protected by A's signature. This will cause verification of the manipulated inbound PCBs to fail, as the adversary's PCBs cannot contain A's correct signature. The third attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
 
 
 ## Creation of Spurious ASes {#fake-ases}
 
-An alternative scenario is when an adversary tries to spoof other ASes by introducing nonexistent entities. This would enable the adversary to send traffic with the spoofed entity as a source, and thus allows them to plausibly deny the misbehavior and to complicate the detection of this attack.
+An alternative scenario is when an adversary tries to spoof other ASes by introducing nonexistent entities. This would enable the adversary to send traffic with the spoofed entity as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.
 
 However, spoofing a new AS requires a registration of that AS with the ISD core to obtain a valid AS certificate; otherwise the adversary cannot construct valid PCBs. As this registration includes a thorough check and authentication by a CA, this cannot be done stealthily, which defeats the original purpose.
 
@@ -1506,7 +1506,7 @@ Similarly to creating a fake AS, an adversary could try to introduce a new, fake
 
 ## Peering Link Misuse {#peer-link-misuse}
 
-The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors, B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary hop fields by querying a control service and extracting the hop fields from registered paths.
+The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors, AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary hop fields by querying a control service and extracting the hop fields from registered paths.
 
 Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack: Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.
 
@@ -1515,7 +1515,7 @@ Even if an adversary succeeds in misusing a peering link as described above, SCI
 
 Path selection is one of the main benefits of SCION compared to the current Internet, where hosts have no control over the forwarding paths that their packets traverse. However, with the benefits of freedom regarding path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
 
-In SCION, path selection is used in three cases. First, an AS selects the PCBs to forward to its neighbors. Second, the ASes chooses the paths it wants to register at the local control service as up-segments and at the core control service as down-segments. Third, the endpoint performs path selection from all available path segments. The following text describes attacks that aim at influencing the path-selection process in SCION.
+In SCION, path selection is used in three cases. First, an AS selects the PCBs to forward to its neighbors. Second, the AS chooses the paths it wants to register at the local control service as up-segments and at the core control service as down-segments. Third, the endpoint performs path selection from all available path segments. The following text describes attacks that aim at influencing the path-selection process in SCION.
 
 Note that these attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, regular ASes will be able to identify paths traversing the adversary AS and avoid these paths.
 
@@ -1523,7 +1523,7 @@ Note that these attacks are only successful if the adversary is located within t
 **Announcing Seemingly Desirable Path Segments** <br>
 An adversary who wants to attract traffic from its customers can forward PCBs received from its providers to its customers enriched with metadata. Although this metadata is signed and thus attributable to the adversary, the recipient cannot directly verify the accuracy of the data itself. Therefore, the adversary can add fake metadata that makes the PCB seem desirable. If such an adversary-announced path complies with the policy of the customer ASes, the corresponding PCB may be added as one of the paths available to the endpoint. At this point, the endpoint may select such a path traversing the adversary for communication.
 
-Although it is difficult to prevent an adversary from performing the above behavior in the control plane, the issue may be solved naturally in the date plane: If the metadata in the PCBs does not match the measurements / real characteristics of the corresponding path in the data plane, or high loss rates are experienced, endpoints or customer ASes can and may easily move to other paths with better quality.
+Although it is difficult to prevent an adversary from performing the above behavior in the control plane, the issue may be solved naturally in the date plane: If the metadata in the PCBs does not match the measurements/characteristics of the corresponding path in the data plane, or high loss rates are experienced, endpoints or customer ASes can and may easily move to other paths with better quality.
 
 
 **Announcing Large Numbers of Path Segments** <br>
@@ -1533,14 +1533,15 @@ In general, the number of PCBs that an adversary can announce this way scales ex
 
 
 **Wormhole Attack** <br>
-A malicious node M1 can send a PCB not only to their customers, but also out-of-band to another, colluding malicious node M2. This creates new segments to M2 and their customers, which may not correspond to actual paths in the network topology. Similarly, a fake path can be announced through a fake peering link and attract traffic even across ISDs. Without specific prevention mechanisms, a wormhole attack is unavoidable in routing. The current implementation of SCION does not provide such wormhole prevention mechanisms (yet).
+A malicious AS M1 can send a PCB not only to their customers, but also out-of-band to another, colluding malicious AS M2. This creates new segments to M2 and their customers, which may not correspond to actual paths in the network topology. Similarly, a fake path can be announced through a fake peering link and attract traffic even across ISDs.
+
+Without specific prevention mechanisms, these so-called wormhole attacks are unavoidable in routing. The current implementation of SCION does not provide wormhole prevention mechanisms (yet).
 
 
 **Fake Peering Link Announcement** <br>
 As an instance of a wormhole attack, an adversary can advertise fake peering links, thus offering short routes to many destination ASes within and outside its own ISD. Downstream ASes will likely have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Similarly, endpoints are more likely to choose short routes that make use of peering links. However, a peering link can only be used if the neighboring AS also announces it. If the adversary is colluding with an external AS, a wormhole becomes possible. In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering hop fields with valid hop fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added hop fields with the fake peering link hop fields the sender inserted.
 
 To defend against this kind of wormhole attacks, it is necessary to be able to detect these attacks. The current implementation of SCION is not able to do this (yet).
-
 
 
 
