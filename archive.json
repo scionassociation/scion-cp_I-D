@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-07T00:16:08.101948+00:00",
+  "timestamp": "2023-12-10T00:18:07.874979+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -106,6 +106,65 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOJx2-rs5hbWZZ",
+      "title": "Update Security Considerations Section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/3",
+      "state": "OPEN",
+      "author": "cdekater",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-12-07T14:11:45Z",
+      "updatedAt": "2023-12-07T14:59:29Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk-security-considerations-cp",
+      "headRefOid": "d5b826d75a720e1f2f85974621b1955210a5064b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5phCfW",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "The \"customer\" term is really confusing. I would prefer it changed. Everything else is just my two cents.",
+          "createdAt": "2023-12-07T14:18:44Z",
+          "updatedAt": "2023-12-07T14:59:29Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "What's \"AS M\" in \"for a malicious AS M\"? Oh, I get it. It's a name for the hypothetical AS that is malicious. The phrasing doesn't make it too obvious.\r\n\r\nI would suggest a few things:\r\n* In security circles, the good guys trying to communicate are typically called A (for Alice), and B (for Bob), while the villain is C (for Charlie).\r\n* May be start with. In what follows, we postulate two legitimate ASes, A (operated by Alice) and B (operated by Bob), and a malicious AS C, operated by Charlie.\r\n\r\nThat might make it easier to describe motivations and methods.\r\n",
+              "createdAt": "2023-12-07T14:18:44Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "I think the first attack might deserve a little more explanation:\r\n* How could charlie block the Alice-Bob connection?\r\n* Why would the traffic be re-directed to Charlie, without Charlie being already in a privileged position?\r\n* Why is it that we can't prevent it?\r\nI personally do not have the answers.\r\n",
+              "createdAt": "2023-12-07T14:31:05Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            },
+            {
+              "originalPosition": 90,
+              "body": "In what follows, I think that by \"customer\" you mean \"consumer [of BCPs]\" right? \"Customer\" is confusing; it implies a commercial relationship, which doesn't seem to apply here. Or does it?",
+              "createdAt": "2023-12-07T14:53:50Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
