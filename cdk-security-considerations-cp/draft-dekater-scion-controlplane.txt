@@ -5,7 +5,7 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 9 June 2024                                     7 December 2023
+Expires: 16 June 2024                                   14 December 2023
 
 
                           SCION Control Plane
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 June 2024.
+   This Internet-Draft will expire on 16 June 2024.
 
 Copyright Notice
 
@@ -116,10 +116,12 @@ Table of Contents
        4.2.2.  Segment-Request Handler of a Non-Core Source AS
        4.2.3.  Segment-Request Handler of a Core AS
    5.  Security Considerations
-     5.1.  Path Hijacking through Interposition
-     5.2.  Creation of Spurious ASes
-     5.3.   Peering Link Misuse
-     5.4.  Manipulation of the Path-Selection Process
+     5.1.  New section
+     5.2.  Path Hijacking through Interposition
+     5.3.  Creation of Spurious ASes
+     5.4.   Peering Link Misuse
+     5.5.  Manipulation of the Path-Selection Process
+     5.6.  Denial of Service Attacks
    6.  IANA Considerations
    7.  References
      7.1.  Normative References
@@ -2260,13 +2262,13 @@ path segment 4 |             |     |             |     |             |
    shows for each case to what extent SCION's design can prevent the
    corresponding attack or help to mitigate it.
 
-   *  Path hijacking through interposition (see Section 5.1)
+   *  Path hijacking through interposition (see Section 5.2)
 
-   *  Creation of spurious ASes (see Section 5.2)
+   *  Creation of spurious ASes (see Section 5.3)
 
-   *  Peering link misuse (see Section 5.3)
+   *  Peering link misuse (see Section 5.4)
 
-   *  Manipulation of the path selection process (see Section 5.4)
+   *  Manipulation of the path selection process (see Section 5.5)
 
    *Note:* This section only discusses SCION control plane- and routing-
    specific security considerations.  For security considerations
@@ -2274,7 +2276,26 @@ path segment 4 |             |     |             |     |             |
    [I-D.scion-dp] includes security considerations that concern the
    SCION data plane and data forwarding.
 
-5.1.  Path Hijacking through Interposition
+5.1.  New section
+
+   Another possible attack is when a core AS stops propagating PCBs,
+   thus frustrating the discovery of new paths.  In this case,
+   downstream ASes will notice that PCBs are no longer being propagated,
+   but all previously discovered (and still valid) paths are still
+   usable for data-plane forwarding until they expire.
+
+   Perhaps a more stealthy kill switch would be to shut down control
+   services in victim ASes.  An adversarial entity controlling an ISD
+   (e.g., a government) might compel core and non-core ASes to stop
+   replying to path requests.  Alternatively, the compelled ASes might
+   return only a subset of all available paths.  If this attack were
+   used in conjunction with blackholing, where traffic is redirected to
+   a non-existent resource, senders in the ISD would have difficulty
+   getting traffic out of the ISD.  In SCION, however, existing paths
+   can continue to be used in the data plane as long as the traversed
+   ASes allow the forwarding.
+
+5.2.  Path Hijacking through Interposition
 
    To attract traffic and to include its own AS in segments and paths,
    an adversary might try to manipulate the beaconing process.  There
@@ -2302,7 +2323,7 @@ path segment 4 |             |     |             |     |             |
    hop field's integrity and chains it with the previous hop fields on
    the path.
 
-5.2.  Creation of Spurious ASes
+5.3.  Creation of Spurious ASes
 
    An alternative scenario is when an adversary tries to spoof other
    ASes by introducing nonexistent entities.  This would enable the
@@ -2324,7 +2345,7 @@ path segment 4 |             |     |             |     |             |
    more than one malicious entity.  Here, the "costs" of setting up the
    fake ISD may outweigh the benefits.
 
-5.3.   Peering Link Misuse
+5.4.   Peering Link Misuse
 
    The misuse of a peering link by an adversary represents another type
    of attack.  Consider the case where AS A wants to share its peering
@@ -2345,7 +2366,7 @@ path segment 4 |             |     |             |     |             |
    interface mismatches.  Therefore, the peering link can only be used
    by the intended AS.
 
-5.4.  Manipulation of the Path-Selection Process
+5.5.  Manipulation of the Path-Selection Process
 
    Path selection is one of the main benefits of SCION compared to the
    current Internet, where hosts have no control over the forwarding
@@ -2443,6 +2464,20 @@ path segment 4 |             |     |             |     |             |
    To defend against this kind of wormhole attacks, it is necessary to
    be able to detect these attacks.  The current implementation of SCION
    is not able to do this (yet).
+
+5.6.  Denial of Service Attacks
+
+   DoS attacks, where attackers overload different parts of the IT
+   infrastructure, may impede this process of retrieving missing
+   cryptographic material.  SCION offers protection against volumetric
+   DoS attacks, which aim to exhaust network bandwidth on links; in this
+   case, ASes can switch to alternative paths that do not contain the
+   congested links.  Transport protocol attacks however, where the
+   attacker tries to exhaust the resources on a target server by opening
+   a large number of connections, may be more difficult to avoid.
+   Possible means to mitigate this kind of DoS attacks are basically the
+   same as for the current Internet, e.g., geo-blocking or using
+   cookies.
 
 6.  IANA Considerations
 
