@@ -1484,6 +1484,13 @@ As described previously, the goal of SCION’s beaconing process is to discover 
 **Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
 
 
+## New section
+
+Another possible attack is when a core AS stops propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.
+
+Perhaps a more stealthy kill switch would be to shut down control services in victim ASes. An adversarial entity controlling an ISD (e.g., a government) might compel core and non-core ASes to stop replying to path requests. Alternatively, the compelled ASes might return only a subset of all available paths. If this attack were used in conjunction with blackholing, where traffic is redirected to a non-existent resource, senders in the ISD would have difficulty getting traffic out of the ISD. In SCION, however, existing paths can continue to be used in the data plane as long as the traversed ASes allow the forwarding.
+
+
 ## Path Hijacking through Interposition {#path-hijack}
 
 To attract traffic and to include its own AS in segments and paths, an adversary might try to manipulate the beaconing process. There are several imaginable options for a malicious AS M to do this:
@@ -1542,6 +1549,11 @@ Without specific prevention mechanisms, these so-called wormhole attacks are una
 As an instance of a wormhole attack, an adversary can advertise fake peering links, thus offering short routes to many destination ASes within and outside its own ISD. Downstream ASes will likely have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Similarly, endpoints are more likely to choose short routes that make use of peering links. However, a peering link can only be used if the neighboring AS also announces it. If the adversary is colluding with an external AS, a wormhole becomes possible. In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering hop fields with valid hop fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added hop fields with the fake peering link hop fields the sender inserted.
 
 To defend against this kind of wormhole attacks, it is necessary to be able to detect these attacks. The current implementation of SCION is not able to do this (yet).
+
+
+## Denial of Service Attacks
+
+DoS attacks, where attackers overload different parts of the IT infrastructure, may impede this process of retrieving missing cryptographic material. SCION offers protection against volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. Transport protocol attacks however, where the attacker tries to exhaust the resources on a target server by opening a large number of connections, may be more difficult to avoid. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., geo-blocking or using cookies.
 
 
 
