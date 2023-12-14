@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-12T00:16:23.574967+00:00",
+  "timestamp": "2023-12-14T00:16:12.914381+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -119,7 +119,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2023-12-07T14:59:29Z",
+      "updatedAt": "2023-12-12T14:56:37Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
@@ -161,6 +161,38 @@
               "body": "In what follows, I think that by \"customer\" you mean \"consumer [of BCPs]\" right? \"Customer\" is confusing; it implies a commercial relationship, which doesn't seem to apply here. Or does it?",
               "createdAt": "2023-12-07T14:53:50Z",
               "updatedAt": "2023-12-07T14:59:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5p6kWF",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-12T08:57:46Z",
+          "updatedAt": "2023-12-12T14:56:37Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": ".... and injecting its own ~~hop fields~~ _AS entry_ into the PCB toward downstream ASes.",
+              "createdAt": "2023-12-12T08:57:46Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "> The second attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains an identifier for the egress interface from AS A to AS B, protected by A's signature\r\n\r\nI think the interface identifier is not what is relevant here. The \"next ISD AS\" field in the AS Entry is the thing that will allow a verifier to detect that something is wrong.",
+              "createdAt": "2023-12-12T09:45:13Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "It's not really clear what the attack here is and why such a modified PCB would be attractive.",
+              "createdAt": "2023-12-12T09:46:07Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
             }
           ]
         }
