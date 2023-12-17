@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-14T00:16:12.914381+00:00",
+  "timestamp": "2023-12-17T00:17:58.979717+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -119,13 +119,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2023-12-12T14:56:37Z",
+      "updatedAt": "2023-12-14T15:29:19Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cdk-security-considerations-cp",
-      "headRefOid": "d5b826d75a720e1f2f85974621b1955210a5064b",
+      "headRefOid": "4321ed95dc19904c78994bd62273ebbba745c2fa",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
