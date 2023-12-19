@@ -3378,13 +3378,13 @@ associated_data(ps, i) = ps.segment_info ||
           <h4 id="name-path-hijacking-through-inte">
 <a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-path-hijacking-through-inte" class="section-name selfRef">Path Hijacking through Interposition</a>
           </h4>
-<p id="section-5.2.1-1">To attract traffic and to include its own AS in segments and paths, an adversary might try to manipulate the beaconing process. There are several imaginable options for a malicious AS to do this:<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-1">To attract traffic and to include its own AS in segments and paths, an adversary might try in the following ways to manipulate the beaconing process:<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2.1-2.1">
-              <p id="section-5.2.1-2.1.1">The adversary could block the traffic between A and B, and thus force traffic redirection through its own AS (that is, of the adversary).<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.1.1">The adversary could block the traffic between a specific AS A and AS B, in order to force traffic redirection through its own AS (that is, of the adversary).<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.2">
-              <p id="section-5.2.1-2.2.1">The adversary could intercept and disseminate a PCB on its way from AS A to neighbor AS B, and injecting its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's AS to the core.<a href="#section-5.2.1-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-5.2.1-2.2.1">The adversary could intercept and disseminate a PCB on its way from a specific AS A to the neighboring AS B, and injecting its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's own AS to the core.<a href="#section-5.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.2.1-2.3">
               <p id="section-5.2.1-2.3.1">The adversary could modify the hop fields of an already existing path, in order to interpose the own AS in the path.<a href="#section-5.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -3441,7 +3441,8 @@ As an instance of a wormhole attack, an adversary can advertise fake peering lin
         <h3 id="name-denial-of-service-attacks">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
         </h3>
-<p id="section-5.3-1">DoS attacks, where attackers overload different parts of the IT infrastructure, may impede this process of retrieving missing cryptographic material. SCION offers protection against volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. Transport protocol attacks however, where the attacker tries to exhaust the resources on a target server by opening a large number of connections, may be more difficult to avoid. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., geo-blocking or using cookies.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-1">The beaconing process in the SCION control plane relies on control-plane communication: When ASes are propagating PCBs to downstream neighbor ASes, when they are registering PCBs as path segments at the core control services, or when they are looking up path segments at their own or a neighboring ISD's core, they constantly exchange control-plane messages with other ASes. DoS attacks, where attackers overload different parts of the IT infrastructure, may make it difficult to exchange these messages.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">SCION offers protection against volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. However, it may be more difficult to avoid transport protocol attacks, where the attacker tries to exhaust the resources on a target server, such as a control service server, by opening many connections to this server. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., geo-blocking or using cookies.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
