@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-17T00:17:58.979717+00:00",
+  "timestamp": "2023-12-19T00:16:24.264394+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -119,13 +119,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2023-12-14T15:29:19Z",
+      "updatedAt": "2023-12-18T16:06:59Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cdk-security-considerations-cp",
-      "headRefOid": "4321ed95dc19904c78994bd62273ebbba745c2fa",
+      "headRefOid": "2ebd3be58bc26d04fe55ec0902bb776425c73929",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -193,6 +193,106 @@
               "body": "It's not really clear what the attack here is and why such a modified PCB would be attractive.",
               "createdAt": "2023-12-12T09:46:07Z",
               "updatedAt": "2023-12-12T14:56:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhOT0",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T14:58:46Z",
+          "updatedAt": "2023-12-18T14:58:47Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "@jiceatscion, thank you for your suggestion!\r\nI have removed the M for malicious, and also rephrased the text a bit. Hope it is more clear now. ",
+              "createdAt": "2023-12-18T14:58:46Z",
+              "updatedAt": "2023-12-18T14:58:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhRH_",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:02:11Z",
+          "updatedAt": "2023-12-18T15:02:11Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "@jiceatscion, I think you have a fair point. But unfortunately, I also have no answers. I took it from the SCION book, and given the fact that there was no explanation there, I thought it was obvious for all people with an IT background...   ",
+              "createdAt": "2023-12-18T15:02:11Z",
+              "updatedAt": "2023-12-18T15:02:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhRm7",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:03:13Z",
+          "updatedAt": "2023-12-18T15:03:14Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "@jiceatscion, thanks. I have removed \"customer\" everywhere and replaced it with downstream ASes.  ",
+              "createdAt": "2023-12-18T15:03:13Z",
+              "updatedAt": "2023-12-18T15:03:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhSm2",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:05:02Z",
+          "updatedAt": "2023-12-18T15:05:02Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "@matzf: thanks for the correction/feedback!\r\nRegarding \"attractive\": I have replaced it with \"alternative\". ",
+              "createdAt": "2023-12-18T15:05:02Z",
+              "updatedAt": "2023-12-18T15:05:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhS8F",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:05:40Z",
+          "updatedAt": "2023-12-18T15:05:40Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "@matzf: good point, thanks! I have changed the text accordingly. ",
+              "createdAt": "2023-12-18T15:05:40Z",
+              "updatedAt": "2023-12-18T15:05:40Z"
             }
           ]
         }
