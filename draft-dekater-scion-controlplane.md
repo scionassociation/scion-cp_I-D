@@ -1512,10 +1512,10 @@ This section examines several possible approaches open to an "ordinary" non-core
 
 ### Path Hijacking through Interposition {#path-hijack}
 
-To attract traffic and to include its own AS in segments and paths, an adversary might try to manipulate the beaconing process. There are several imaginable options for a malicious AS to do this:
+To attract traffic and to include its own AS in segments and paths, an adversary might try in the following ways to manipulate the beaconing process:
 
-- The adversary could block the traffic between A and B, and thus force traffic redirection through its own AS (that is, of the adversary).
-- The adversary could intercept and disseminate a PCB on its way from AS A to neighbor AS B, and injecting its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's AS to the core.
+- The adversary could block the traffic between a specific AS A and AS B, in order to force traffic redirection through its own AS (that is, of the adversary).
+- The adversary could intercept and disseminate a PCB on its way from a specific AS A to the neighboring AS B, and injecting its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's own AS to the core.
 - The adversary could modify the hop fields of an already existing path, in order to interpose the own AS in the path.
 
 The first attack is fundamental and generally cannot be prevented. But SCION is able to mitigate the other two attacks: The second attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. This will cause verification of the manipulated inbound PCBs to fail, as the adversary's PCBs cannot contain A's correct signature. The third attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
@@ -1572,7 +1572,9 @@ To defend against this kind of wormhole attacks, it is necessary to be able to d
 
 ## Denial of Service Attacks {#dos-cp}
 
-DoS attacks, where attackers overload different parts of the IT infrastructure, may impede this process of retrieving missing cryptographic material. SCION offers protection against volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. Transport protocol attacks however, where the attacker tries to exhaust the resources on a target server by opening a large number of connections, may be more difficult to avoid. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., geo-blocking or using cookies.
+The beaconing process in the SCION control plane relies on control-plane communication: When ASes are propagating PCBs to downstream neighbor ASes, when they are registering PCBs as path segments at the core control services, or when they are looking up path segments at their own or a neighboring ISD's core, they constantly exchange control-plane messages with other ASes. DoS attacks, where attackers overload different parts of the IT infrastructure, may make it difficult to exchange these messages.
+
+SCION offers protection against volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. However, it may be more difficult to avoid transport protocol attacks, where the attacker tries to exhaust the resources on a target server, such as a control service server, by opening many connections to this server. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., geo-blocking or using cookies.
 
 
 
