@@ -342,9 +342,8 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-A suitable mechanism to globally coordinate the assignation of ISD numbers does not yet exist. However, we hope that in the future an organization such as ICANN or a regional Internet registry (e.g., RIPE NCC) will take on the responsibility of assigning ISD and AS numbers.
 
-Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.
+Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
 
 
 ### AS Numbers
@@ -1582,7 +1581,7 @@ SCION offers protection against volumetric DoS attacks, which aim to exhaust net
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions. This task is currently being transitioned  from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
 
 
 --- back
