@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-19T00:16:24.264394+00:00",
+  "timestamp": "2023-12-21T00:16:22.847641+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -110,7 +110,7 @@
     {
       "number": 3,
       "id": "PR_kwDOJx2-rs5hbWZZ",
-      "title": "Update Security Considerations Section",
+      "title": "Update Security Considerations and IANA Section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/3",
       "state": "OPEN",
       "author": "cdekater",
@@ -119,13 +119,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2023-12-18T16:06:59Z",
+      "updatedAt": "2023-12-20T14:20:58Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cdk-security-considerations-cp",
-      "headRefOid": "2ebd3be58bc26d04fe55ec0902bb776425c73929",
+      "headRefOid": "1d77fb685d63799c4b7e2c9e9c0597bb810e912b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -293,6 +293,66 @@
               "body": "@matzf: good point, thanks! I have changed the text accordingly. ",
               "createdAt": "2023-12-18T15:05:40Z",
               "updatedAt": "2023-12-18T15:05:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qqzBK",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-19T19:42:11Z",
+          "updatedAt": "2023-12-19T19:42:11Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "```suggestion\r\nThis document has no IANA actions.\r\n\r\nThe ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions. This task is currently being transitioned  from Anapaya to the SCION Association.\r\n```\r\nBesides that, I'd add a reference to: https://docs.anapaya.net/en/latest/resources/isd-as-assignments \r\nAs we (Association) take over the task, we will update this to our page. \r\n",
+              "createdAt": "2023-12-19T19:42:11Z",
+              "updatedAt": "2023-12-19T19:42:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qq0CK",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-19T19:45:15Z",
+          "updatedAt": "2023-12-19T19:45:15Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "Also, I would delete from section 1.5.1 this text: \r\n``` \r\nA suitable mechanism to globally coordinate the assignation of ISD\r\n   numbers does not yet exist.  However, we hope that in the future an\r\n   organization such as ICANN or a regional Internet registry (e.g.,\r\n   RIPE NCC) will take on the responsibility of assigning ISD and AS\r\n   numbers.\r\n   ```\r\n   This is because the mechanism exists and it is Anapaya.. To get to have internet registries, we need the IANA section, which needs an IETF publication... So I'd just omit this text .\r\n   \r\n   Also, I'd add the same reference to Anapaya's page also there. \r\n   ",
+              "createdAt": "2023-12-19T19:45:15Z",
+              "updatedAt": "2023-12-19T19:45:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qwGfp",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "cdekater",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-20T14:20:58Z",
+          "updatedAt": "2023-12-20T14:20:58Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "@nicorusti: Thank you for your feedback. I have changed this draft, and also the other two drafts, accordingly.\r\nBest\r\nCorine",
+              "createdAt": "2023-12-20T14:20:58Z",
+              "updatedAt": "2023-12-20T14:20:58Z"
             }
           ]
         }
