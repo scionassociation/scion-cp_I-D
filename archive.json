@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-07T00:18:08.376698+00:00",
+  "timestamp": "2024-01-09T00:17:01.684423+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -47,9 +47,127 @@
       "name": "wontfix",
       "description": "This will not be worked on",
       "color": "ffffff"
+    },
+    {
+      "name": "Prio 1",
+      "description": "",
+      "color": "DC0E1A"
+    },
+    {
+      "name": "Prio 2",
+      "description": "",
+      "color": "FBCA04"
+    },
+    {
+      "name": "Prio 3",
+      "description": "",
+      "color": "0E8A16"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 5,
+      "id": "I_kwDOJx2-rs57ZNLr",
+      "title": "Language: MAC v.s. MAC",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/5",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "We should only use MAC with one meaning, not with two at the same time\r\n\r\n(Moved from https://github.com/scionassociation/standards/issues/98)\r\n",
+      "createdAt": "2024-01-08T10:56:49Z",
+      "updatedAt": "2024-01-08T10:59:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOJx2-rs57Z9-D",
+      "title": "Unaddressed Feedback from Reviews",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/6",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1",
+        "Prio 2"
+      ],
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [ ] #7 \r\n- [ ] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [ ] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)): \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [ ] If time allows, add related work (not too academical, just overview)\r\n- [ ] Check for possible IPR issues\r\n- [ ] #8\r\n- [ ] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [ ]  **peering AS**. We use the expression in the introduction.  We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n- [ ] **Add a section \u201cLife of a routing advertisement\u201d** summarizing the steps for routing,  from a initial state, to exploration, registration (a numbered list of steps). It could be something similar to what is in our 117 slides. This will give the draft an overall structure that shows: Here is the process, here is an example, here it is the details.  \r\n- [ ] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [ ] **Clarify dependencies**:\r\n    - Time syncronization: there will be a dialogue on this . What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n    - Certificate validation for gRPC calls\r\n- [ ] **IPR**: there must be interoperability, so it would be good to mention about existing patents. In case they impede deployment, these patents should be liberally licensed for success. Better to do this sooner than later. \r\n- [ ] **Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.    \r\n- [ ] **Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association \r\n- [ ] **2.1.2**: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section \r\n- [ ] **Manageability:** small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n- [ ] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [ ]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 2.2.1 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [ ] Where do the suggested values for set size and propagation time of PCBs in section 2.4.3 \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain.\r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n- [ ] I think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help. _CdK: Is this true, that SCION is not symmetrical? Or does the destination AS uses the same path as the source AS to return messages?_ \r\n",
+      "createdAt": "2024-01-08T12:56:27Z",
+      "updatedAt": "2024-01-08T13:28:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOJx2-rs57aARE",
+      "title": "Write IANA Considerations Section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/7",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
+      "createdAt": "2024-01-08T13:01:45Z",
+      "updatedAt": "2024-01-08T13:01:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOJx2-rs57aHuA",
+      "title": "Add section on convergence time",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/8",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "Prio 2"
+      ],
+      "body": "(Copied from https://github.com/scionassociation/standards/issues/82)\r\n\r\nJeff Tantsura at our IETF117 presentation mentioned that it was not clear how SCION does in terms of convergence time. Something about this should be added to the draft.\r\n\r\nWe could use something like this:\r\n> Note that, since there is no convergence phase in SCION, we cannot compare to BGP\u2019s convergence time. SCION path-segments are stable as soon as they are disseminated.\r\n\r\nSource:\r\nhttps://netsec.ethz.ch/publications/papers/2021_conext_deployment.pdf\r\n",
+      "createdAt": "2024-01-08T13:19:15Z",
+      "updatedAt": "2024-01-08T13:19:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOJx2-rs57aLVE",
+      "title": "Adapt Section on SCION AS Numbers",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/9",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "(Moved from https://github.com/scionassociation/standards/issues/91)\r\n\r\nSection 1.5.2 on AS numbering in the Control Plane draft must be changed, as it may cause problems or even a blocking of the draft at the IETF.  See also Eliot Lear's mail from 28.8:\r\n\r\n> There is an issue in Section 1.5.2:\r\n> There will be a conflict if the IETF decides to increase the ASN size.  This may not make it past the IESG in RFC 5742 review.  I just went through this with GNS and would not like to repeat that experience.  Therefore, my suggestion is that you view the ASN field as two separate fields: BASE and and EXTENSION, where if EXTENSION is 0, base must be an IANA-assigned ASN value.\r\n> \r\n\r\nAt the 3rd TC meeting on Tuesday 5 September, it was decided that the SCION AS numbering will not be described in detail in the CP draft. It should be mentioned that the SCION AS numbering is totally independent from the BGP AS numbering. For all other details, refer to a future and/or other draft.   \r\n\r\nFor the problem description and possible future solution, see slide 11-14 of the slide deck for the TC Standardisation meeting on 5.9.23. [TC-Standardisation_3meeting_Sept23.pdf](https://github.com/scionassociation/standards/files/12534358/TC-Standardisation_3meeting_Sept23.pdf)",
+      "createdAt": "2024-01-08T13:27:03Z",
+      "updatedAt": "2024-01-08T13:27:04Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
@@ -357,6 +475,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOJx2-rs5jdeyR",
+      "title": "Disambiguate the use of \"MAC\".",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/4",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #5 ",
+      "createdAt": "2024-01-08T10:33:57Z",
+      "updatedAt": "2024-01-08T10:57:17Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "fix_MAC",
+      "headRefOid": "c9937d970ee8e565129b8b9e4fcb2e85d556c572",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
