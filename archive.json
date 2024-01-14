@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-11T00:16:43.684993+00:00",
+  "timestamp": "2024-01-14T00:18:13.025389+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -123,9 +123,17 @@
       ],
       "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
       "createdAt": "2024-01-08T13:01:45Z",
-      "updatedAt": "2024-01-08T13:01:46Z",
+      "updatedAt": "2024-01-11T14:01:14Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "NONE",
+          "body": "For the control plane, there seems to be only two IANA consideration to address:\r\n- Informational: The fact that SCION mirrors the UDP port space into the SCION/UDP port space. \r\n- The control service/discovery SCION/UDP port at 30252 which may need to become a reserved UDP/IP port as a consequence of the first point.\r\n \r\nEverything else is AS-internal so requires no IANA arbitration.\r\n\r\nRegarding port 30252, it is not even clear if that needs to be a reserved SCION/UDP port, given that it needs not be addressed directly but can be reached by way of a service address (and was once a dynamic port). As for port 30252 in to UDP/IP space, it is an AS-internal configuration anyway, so unless port 30252 needs to be reserved in the SCION/UDP space, it doesn't need to be reserved in the UDP/IP space.\r\n\r\nOn the other hand, Service Addresses themselves contain a hard-coded well-known number, so we might need to establish a registry for those. However, that would not be in the CP draft but may-be in the DP draft. Opinions welcome.\r\n\r\n",
+          "createdAt": "2024-01-11T14:01:13Z",
+          "updatedAt": "2024-01-11T14:01:13Z"
+        }
+      ]
     },
     {
       "number": 8,
@@ -237,7 +245,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2023-12-21T14:03:20Z",
+      "updatedAt": "2024-01-12T09:09:32Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
@@ -473,6 +481,19 @@
               "updatedAt": "2023-12-20T14:20:58Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5sWGUL",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "My comments have been sufficiently addressed for now.",
+          "createdAt": "2024-01-12T09:09:32Z",
+          "updatedAt": "2024-01-12T09:09:32Z",
+          "comments": []
         }
       ]
     },
@@ -521,6 +542,32 @@
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "AS_num",
       "headRefOid": "400909da6044ccdcdc1d163fb3b9fb9c40453d1d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOJx2-rs5j1VQk",
+      "title": "Improve references classification and uses of MUST and SHOULD",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/11",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "There's still some more MUST required IMHO.\r\n",
+      "createdAt": "2024-01-11T16:38:55Z",
+      "updatedAt": "2024-01-11T16:39:23Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Normative_refs_terms",
+      "headRefOid": "c4fe83614cc268508378482cb065b0d40a4bc93a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
