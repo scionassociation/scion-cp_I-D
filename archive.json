@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-14T00:18:13.025389+00:00",
+  "timestamp": "2024-01-16T00:16:34.150479+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -184,7 +184,7 @@
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/1",
       "state": "MERGED",
       "author": "cdekater",
-      "authorAssociation": "COLLABORATOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
@@ -212,7 +212,7 @@
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/2",
       "state": "MERGED",
       "author": "cdekater",
-      "authorAssociation": "COLLABORATOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
@@ -240,7 +240,7 @@
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/3",
       "state": "OPEN",
       "author": "cdekater",
-      "authorAssociation": "COLLABORATOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
@@ -328,7 +328,7 @@
             "abbreviatedOid": "d5b826d"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-18T14:58:46Z",
@@ -348,7 +348,7 @@
             "abbreviatedOid": "d5b826d"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-18T15:02:11Z",
@@ -368,7 +368,7 @@
             "abbreviatedOid": "d5b826d"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-18T15:03:13Z",
@@ -388,7 +388,7 @@
             "abbreviatedOid": "d5b826d"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-18T15:05:02Z",
@@ -408,7 +408,7 @@
             "abbreviatedOid": "d5b826d"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-18T15:05:40Z",
@@ -468,7 +468,7 @@
             "abbreviatedOid": "8e08e0f"
           },
           "author": "cdekater",
-          "authorAssociation": "COLLABORATOR",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2023-12-20T14:20:58Z",
