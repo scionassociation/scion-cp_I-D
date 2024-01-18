@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-16T00:16:34.150479+00:00",
+  "timestamp": "2024-01-18T00:16:39.811156+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -245,7 +245,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2024-01-12T09:09:32Z",
+      "updatedAt": "2024-01-16T13:15:54Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
@@ -494,6 +494,26 @@
           "createdAt": "2024-01-12T09:09:32Z",
           "updatedAt": "2024-01-12T09:09:32Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5srdSP",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-16T13:15:54Z",
+          "updatedAt": "2024-01-16T13:15:54Z",
+          "comments": [
+            {
+              "originalPosition": 188,
+              "body": "```suggestion\r\nMany thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.\r\n```",
+              "createdAt": "2024-01-16T13:15:54Z",
+              "updatedAt": "2024-01-16T13:15:54Z"
+            }
+          ]
         }
       ]
     },
