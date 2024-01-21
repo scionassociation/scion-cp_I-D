@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-18T00:16:39.811156+00:00",
+  "timestamp": "2024-01-21T00:18:16.668144+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -245,7 +245,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:11:45Z",
-      "updatedAt": "2024-01-16T13:15:54Z",
+      "updatedAt": "2024-01-18T03:17:51Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
@@ -512,6 +512,94 @@
               "body": "```suggestion\r\nMany thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.\r\n```",
               "createdAt": "2024-01-16T13:15:54Z",
               "updatedAt": "2024-01-16T13:15:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5s_ihM",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-18T02:31:27Z",
+          "updatedAt": "2024-01-18T02:31:27Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "I'm not sure 'frustrate' is the right term here, but I need to understand the context better. ",
+              "createdAt": "2024-01-18T02:31:27Z",
+              "updatedAt": "2024-01-18T02:31:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5s_jA8",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-18T02:33:18Z",
+          "updatedAt": "2024-01-18T03:17:51Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "```suggestion\r\nThe first kind of risk to the beaconing process in the control plane comes from an adversarial entity that controls one or all core ASes in an ISD (e.g., a government). One possible attack would be when this entity stops the core AS(es) from propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.\r\n```",
+              "createdAt": "2024-01-18T02:33:18Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 92,
+              "body": "```suggestion\r\nAnother possible attack of this adversarial entity could be to shut down the control services, by compelling core and non-core ASes to stop replying to path requests, or only return a subset of all available paths. If this attack were used in conjunction with blackholing, where traffic is redirected to a non-existent resource, senders in the ISD would have difficulty getting traffic out of the ISD. In SCION, however, existing paths can continue to be used in the data plane as long as the traversed ASes allow the forwarding.\r\n```",
+              "createdAt": "2024-01-18T02:35:23Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 110,
+              "body": "```suggestion\r\n- The adversary could intercept and disseminate a PCB on its way from a specific AS A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's own AS to the core.\r\n```",
+              "createdAt": "2024-01-18T02:37:18Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 111,
+              "body": "```suggestion\r\n- The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.\r\n```",
+              "createdAt": "2024-01-18T02:38:15Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 113,
+              "body": "```suggestion\r\nThe first type of attack generally cannot be prevented, but SCION is able to mitigate the other two types of attack.\r\n\r\nThe second type of attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains the \"Next ISD AS\" field in the entry of AS A, pointing to AS B, and protected by A's signature. This will cause verification of the manipulated inbound PCBs to fail, as the adversary's PCBs cannot contain A's correct signature.\r\n\r\nThe third type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.\r\n```",
+              "createdAt": "2024-01-18T02:40:16Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 134,
+              "body": "```suggestion\r\nPath selection is one of the main benefits of SCION compared to the current Internet, where hosts have no control over the forwarding paths that their packets traverse. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.\r\n```",
+              "createdAt": "2024-01-18T02:43:26Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 150,
+              "body": "```suggestion\r\nIn general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.\r\n```",
+              "createdAt": "2024-01-18T02:57:14Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 156,
+              "body": "```suggestion\r\nWithout specific prevention mechanisms, these so-called wormhole attacks are unavoidable in routing. The current implementation of SCION does not yet provide wormhole prevention mechanisms.\r\n```",
+              "createdAt": "2024-01-18T02:57:55Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 162,
+              "body": "```suggestion\r\nTo defend against this kind of wormhole attacks, it is necessary to be able to detect these attacks. The current implementation of SCION is not yet able to do this.\r\n```",
+              "createdAt": "2024-01-18T02:58:35Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
             }
           ]
         }
