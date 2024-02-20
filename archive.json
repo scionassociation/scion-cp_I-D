@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-18T00:16:49.659829+00:00",
+  "timestamp": "2024-02-20T00:15:19.028412+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -617,7 +617,7 @@
       "labels": [],
       "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #5 ",
       "createdAt": "2024-01-08T10:33:57Z",
-      "updatedAt": "2024-01-08T10:57:17Z",
+      "updatedAt": "2024-02-19T18:41:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
