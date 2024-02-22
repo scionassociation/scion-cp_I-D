@@ -1152,7 +1152,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.1.2.5.2.1.1"><a href="#section-1.5.1" class="auto internal xref">1.5.1</a>.  <a href="#name-isd-numbers" class="internal xref">ISD Numbers</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5.2.2">
-                    <p id="section-toc.1-1.1.2.5.2.2.1"><a href="#section-1.5.2" class="auto internal xref">1.5.2</a>.  <a href="#name-as-numbers" class="internal xref">AS Numbers</a></p>
+                    <p id="section-toc.1-1.1.2.5.2.2.1"><a href="#section-1.5.2" class="auto internal xref">1.5.2</a>.  <a href="#name-scion-as-numbers" class="internal xref">SCION AS Numbers</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5.2.3">
                     <p id="section-toc.1-1.1.2.5.2.3.1"><a href="#section-1.5.3" class="auto internal xref">1.5.3</a>.  <a href="#name-wildcard-addressing" class="internal xref">Wildcard Addressing</a></p>
@@ -1530,31 +1530,35 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="as-numbers">
+<div id="scion-as-numbers">
 <section id="section-1.5.2">
-          <h4 id="name-as-numbers">
-<a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-as-numbers" class="section-name selfRef">AS Numbers</a>
+          <h4 id="name-scion-as-numbers">
+<a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-scion-as-numbers" class="section-name selfRef">SCION AS Numbers</a>
           </h4>
-<p id="section-1.5.2-1">An AS number is the 48-bit identifier for an AS.  SCION inherits the existing 32-bit AS numbers from RFC4893, but provides an extended 48-bit space, allowing for additional SCION-only AS numbers beyond the 32-bit space in use today.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
-<div id="formatting">
+<p id="section-1.5.2-1">A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION autonomous systems use a SCION AS number where the first 16 bits are 0, and the remaining 32 bits are identical to their BGP ASN. There is no technical requirement for such an equality.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
+<div id="text-representation">
 <section id="section-1.5.2.1">
-            <h5 id="name-formatting">
-<a href="#section-1.5.2.1" class="section-number selfRef">1.5.2.1. </a><a href="#name-formatting" class="section-name selfRef">Formatting</a>
+            <h5 id="name-text-representation">
+<a href="#section-1.5.2.1" class="section-number selfRef">1.5.2.1. </a><a href="#name-text-representation" class="section-name selfRef">Text Representation</a>
             </h5>
-<p id="section-1.5.2.1-1">The default formatting for AS numbers in SCION is very similar to IPv6 (see <span>[<a href="#RFC5952" class="cite xref">RFC5952</a>]</span>). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: <code>0:0:0</code> to <code>ffff:ffff:ffff</code>.<a href="#section-1.5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.2.1-1">The default text representation for SCION AS numbers is very similar to IPv6 (see <span>[<a href="#RFC5952" class="cite xref">RFC5952</a>]</span>). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: <code>0:0:0</code> to <code>ffff:ffff:ffff</code>.<a href="#section-1.5.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.5.2.1-2">In SCION, the following rules apply:<a href="#section-1.5.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.5.2.1-3.1">
                 <p id="section-1.5.2.1-3.1.1">The <code>::</code> zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.<a href="#section-1.5.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-1.5.2.1-3.2">
-                <p id="section-1.5.2.1-3.2.1">In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range should be represented as decimal. This is especially relevant for display representation. For example, if a program receives the AS number <code>0:1:f</code>, it should display the number as "65551".<a href="#section-1.5.2.1-3.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-1.5.2.1-3.3">
-                <p id="section-1.5.2.1-3.3.1">A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges (<span>[<a href="#RFC4632" class="cite xref">RFC4632</a>]</span>). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as <code>0:0:0/16</code>.<a href="#section-1.5.2.1-3.3.1" class="pilcrow">¶</a></p>
+                <p id="section-1.5.2.1-3.2.1">A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges (<span>[<a href="#RFC4632" class="cite xref">RFC4632</a>]</span>). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as <code>0:0:0/16</code>.<a href="#section-1.5.2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-1.5.2.1-4">The next table gives an overview of the AS number allocation.<a href="#section-1.5.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.5.2.1-4">For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number <code>0:1:f</code>, it may display the number as "65551".<a href="#section-1.5.2.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="special-purpose-scion-as-numbers">
+<section id="section-1.5.2.2">
+            <h5 id="name-special-purpose-scion-as-nu">
+<a href="#section-1.5.2.2" class="section-number selfRef">1.5.2.2. </a><a href="#name-special-purpose-scion-as-nu" class="section-name selfRef">Special-Purpose SCION AS Numbers</a>
+            </h5>
 <span id="name-as-number-allocations"></span><div id="_table-2">
 <table class="center" id="table-2">
               <caption>
@@ -1570,15 +1574,18 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               </thead>
               <tbody>
                 <tr>
-                  <td class="text-left" rowspan="1" colspan="1">0</td>
+                  <td class="text-left" rowspan="1" colspan="1">
+                    <code>0:0:0</code>
+</td>
                   <td class="text-left" rowspan="1" colspan="1">1</td>
                   <td class="text-left" rowspan="1" colspan="1">The wildcard AS</td>
                 </tr>
                 <tr>
-                  <td class="text-left" rowspan="1" colspan="1">1-4294967295</td>
-                  <td class="text-left" rowspan="1" colspan="1">~4.3 bill.</td>
-                  <td class="text-left" rowspan="1" colspan="1">32-bit BGP AS numbers, formatted as decimal. If a BGP AS deploys SCION, it has the same AS number for both BGP and SCION.<sup>1</sup>
+                  <td class="text-left" rowspan="1" colspan="1">
+                    <code>0:0:1-0:ffff:ffff</code>
 </td>
+                  <td class="text-left" rowspan="1" colspan="1">~4.3 bill.</td>
+                  <td class="text-left" rowspan="1" colspan="1">Public SCION AS numbers</td>
                 </tr>
                 <tr>
                   <td class="text-left" rowspan="1" colspan="1">
@@ -1592,7 +1599,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                     <code>2:0:0/16</code>
 </td>
                   <td class="text-left" rowspan="1" colspan="1">~4.3 bill.</td>
-                  <td class="text-left" rowspan="1" colspan="1">Public SCION-only ASes (i.e., ASes that are created for SCION, and are no existing BGP ASes). They should be allocated in ascending order, without gaps and "vanity" numbers.</td>
+                  <td class="text-left" rowspan="1" colspan="1">Additional public SCION AS numbers</td>
                 </tr>
                 <tr>
                   <td class="text-left" rowspan="1" colspan="1">
@@ -1618,8 +1625,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               </tbody>
             </table>
 </div>
-<p id="section-1.5.2.1-6">1) Some 32-bit AS numbers are reserved for special purposes. For more details, see <a href="https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml">"IANA: Special-Purpose Autonomous System (AS) Numbers"</a>.<a href="#section-1.5.2.1-6" class="pilcrow">¶</a></p>
-<p id="section-1.5.2.1-7">The rest of the space is currently unallocated.<a href="#section-1.5.2.1-7" class="pilcrow">¶</a></p>
+<p id="section-1.5.2.2-2">The rest of the space is currently unallocated.<a href="#section-1.5.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
