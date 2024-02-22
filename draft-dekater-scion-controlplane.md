@@ -323,35 +323,35 @@ A suitable mechanism to globally coordinate the assignation of ISD numbers does 
 Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.
 
 
-### AS Numbers
+### SCION AS Numbers
 
-An AS number is the 48-bit identifier for an AS.  SCION inherits the existing 32-bit AS numbers from RFC4893, but provides an extended 48-bit space, allowing for additional SCION-only AS numbers beyond the 32-bit space in use today.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION autonomous systems use a SCION AS number where the first 16 bits are 0, and the remaining 32 bits are identical to their BGP ASN. There is no technical requirement for such an equality.
 
 
-#### Formatting
+#### Text Representation
 
-The default formatting for AS numbers in SCION is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
+The default text representation for SCION AS numbers is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
 
 In SCION, the following rules apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- In order to provide easy comparison with BGP AS numbers, any AS number in the BGP AS range should be represented as decimal. This is especially relevant for display representation. For example, if a program receives the AS number `0:1:f`, it should display the number as "65551".
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
-The next table gives an overview of the AS number allocation.
+For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it may display the number as "65551".
+
+
+#### Special-Purpose SCION AS Numbers
 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
-| 0                | 1           | The wildcard AS                                                             |
-| 1-4294967295     | ~4.3&nbsp;bill.  | 32-bit BGP AS numbers, formatted as decimal. If a BGP AS deploys SCION, it has the same AS number for both BGP and SCION.<sup>1</sup> |
+| `0:0:0`          | 1           | The wildcard AS                                                             |
+| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
 | `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Public SCION-only ASes (i.e., ASes that are created for SCION, and are no existing BGP ASes). They should be allocated in ascending order, without gaps and "vanity" numbers. |
+| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
 | `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
 | `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
-
-1) Some 32-bit AS numbers are reserved for special purposes. For more details, see ["IANA: Special-Purpose Autonomous System (AS) Numbers"](https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml).
 
 The rest of the space is currently unallocated.
 
