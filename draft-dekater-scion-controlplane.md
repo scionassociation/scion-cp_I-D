@@ -182,6 +182,8 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
+**MAC**: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
+
 **Packet-Carried Forwarding State (PCFS)**: Rather than relying on costly inter-domain forwarding tables, SCION data packets contain all the necessary path information. We refer to this property as packet-carried forwarding state or PCFS.
 
 **Path Segment**: Path segments are derived from path-segment construction beacons (PCBs) and registered at control services. A path segment can be (1) an up-segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down-segment (i.e., the same as an up-segment, but in the opposite direction), or (3) a core-segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.
@@ -296,7 +298,7 @@ All path segments are invertible: A core-segment can be used bidirectionally, an
 
 ## Addressing {#numbering}
 
-The inter-domain SCION routing is based on the <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or MAC address, for example - in fact, the endpoint address is the "normal", currently used, non-SCION-specific endpoint address.
+The inter-domain SCION routing is based on the <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address, for example - in fact, the endpoint address is the "normal", currently used, non-SCION-specific endpoint address.
 
 However, the ISD-AS number is a SCION-specific number. It consists of 64-bits, with the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash-separator between the ISD and AS numbers, for example: `4-ff00:1:f`. This section provides more details about the numbering scheme for SCION ISD and AS numbers.
 
