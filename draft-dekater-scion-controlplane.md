@@ -1494,11 +1494,9 @@ As described previously, the goal of SCION’s beaconing process in the control 
 This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the IT infrastructure (see [](#dos-cp)).
 
 
-## Top-Down Manipulation of Beaconing {#topdown-manipulate}
+## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
-The first kind of risk to the beaconing process in the control plane comes from an adversarial entity that controls one or all core ASes in an ISD (e.g., a government). One possible attack would be when this entity stops the core AS(es) from propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.
-
-Another possible attack of this adversarial entity could be to shut down the control services, by compelling core and non-core ASes to stop replying to path requests, or only return a subset of all available paths. If this attack were used in conjunction with blackholing, where traffic is redirected to a non-existent resource, senders in the ISD would have difficulty getting traffic out of the ISD. In SCION, however, existing paths can continue to be used in the data plane as long as the traversed ASes allow the forwarding.
+The first kind of risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths halts. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths remain usable for data-plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes.
 
 
 ## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
