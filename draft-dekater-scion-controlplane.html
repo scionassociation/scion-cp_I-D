@@ -7,6 +7,7 @@
 <title>SCION Control Plane</title>
 <meta content="Corine de Kater" name="author">
 <meta content="Nicola Rustignoli" name="author">
+<meta content="Samuel Hitz" name="author">
 <meta content="
        This document describes the control plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints. In fact, endpoints can choose between multiple path options, enabling the optimization of network paths. The SCION control plane is responsible for discovering these paths and making them available to the endpoints. 
        The main goal of SCION's control plane is to create and manage path segments, which can then be combined into forwarding paths to transmit packets in the data plane. This document first discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION autonomous system (AS) can register segments according to its own policy - it is free to specify which path properties and algorithm(s) to use in the selection procedure. The document then describes the path lookup process, where endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths. 
@@ -1030,8 +1031,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">February 2024</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">de Kater &amp; Rustignoli</td>
-<td class="center">Expires 25 August 2024</td>
+<td class="left">de Kater, et al.</td>
+<td class="center">Expires 26 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-22" class="published">22 February 2024</time>
+<time datetime="2024-02-23" class="published">23 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-25">25 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-26">26 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1059,6 +1060,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div class="author">
       <div class="author-name">N. Rustignoli</div>
 <div class="org">SCION Association</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Hitz</div>
+<div class="org">Anapaya Systems</div>
 </div>
 </dd>
 </dl>
@@ -1099,7 +1104,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1270,6 +1275,31 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-manipulation-of-the-beaconi" class="internal xref">Manipulation of the Beaconing Process by a Core Adversary</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-manipulation-of-the-beaconin" class="internal xref">Manipulation of the Beaconing Process by a Non-Core Adversary</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-path-hijacking-through-inte" class="internal xref">Path Hijacking through Interposition</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
+                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-creation-of-spurious-ases-a" class="internal xref">Creation of Spurious ASes and ISDs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.3">
+                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-peering-link-misuse" class="internal xref">Peering Link Misuse</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.4">
+                    <p id="section-toc.1-1.5.2.2.2.4.1"><a href="#section-5.2.4" class="auto internal xref">5.2.4</a>.  <a href="#name-manipulation-of-the-path-se" class="internal xref">Manipulation of the Path-Selection Process</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-denial-of-service-attacks" class="internal xref">Denial of Service Attacks</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
@@ -1526,8 +1556,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </tbody>
           </table>
 </div>
-<p id="section-1.5.1-3">A suitable mechanism to globally coordinate the assignation of ISD numbers does not yet exist. However, we hope that in the future an organization such as ICANN or a regional Internet registry (e.g., RIPE NCC) will take on the responsibility of assigning ISD and AS numbers.<a href="#section-1.5.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.5.1-3">Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>).<a href="#section-1.5.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scion-as-numbers">
@@ -3318,8 +3347,118 @@ associated_data(ps, i) = ps.segment_info ||
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">One of the fundamental objectives that guided the design of SCION is security, in particular network security. See chapter 7 of the SCION book (Security Analysis), which states the precise security goals of various network participants and how SCION achieves these goals in the presence of different types of adversaries <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">To be precised.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-1">As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on <em>inter</em>-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2"><strong>Note:</strong> This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> includes security considerations that concern the SCION data plane and data forwarding.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see <a href="#topdown-manipulate" class="auto internal xref">Section 5.1</a>). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see <a href="#manipulate-beaconing" class="auto internal xref">Section 5.2</a>). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 5.3</a>).<a href="#section-5-3" class="pilcrow">¶</a></p>
+<div id="topdown-manipulate">
+<section id="section-5.1">
+        <h3 id="name-manipulation-of-the-beaconi">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Core Adversary</a>
+        </h3>
+<p id="section-5.1-1">The first kind of risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths halts. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths remain usable for data-plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="manipulate-beaconing">
+<section id="section-5.2">
+        <h3 id="name-manipulation-of-the-beaconin">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-manipulation-of-the-beaconin" class="section-name selfRef">Manipulation of the Beaconing Process by a Non-Core Adversary</a>
+        </h3>
+<p id="section-5.2-1">This section examines several possible approaches open to an "ordinary" non-core adversary to manipulate the beaconing process in the SCION control plane, and shows for each case to what extent SCION's design can prevent the corresponding attack or help to mitigate it.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-2.1">
+            <p id="section-5.2-2.1.1">Path hijacking through interposition (see <a href="#path-hijack" class="auto internal xref">Section 5.2.1</a>)<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.2">
+            <p id="section-5.2-2.2.1">Creation of spurious ASes and ISDs (see <a href="#fake-ases" class="auto internal xref">Section 5.2.2</a>)<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.3">
+            <p id="section-5.2-2.3.1">Peering link misuse (see <a href="#peer-link-misuse" class="auto internal xref">Section 5.2.3</a>)<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.4">
+            <p id="section-5.2-2.4.1">Manipulation of the path selection process (see <a href="#manipulate-selection" class="auto internal xref">Section 5.2.4</a>)<a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div id="path-hijack">
+<section id="section-5.2.1">
+          <h4 id="name-path-hijacking-through-inte">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-path-hijacking-through-inte" class="section-name selfRef">Path Hijacking through Interposition</a>
+          </h4>
+<p id="section-5.2.1-1">An malicious AS M might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via M. If M can interpose itself on the path between A and B, then it could attempt several potential attacks:<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2.1-2.1">
+              <p id="section-5.2.1-2.1.1">The adversary M could intercept and disseminate a PCB on its way from A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.2.1-2.2">
+              <p id="section-5.2.1-2.2.1">The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.<a href="#section-5.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.2.1-2.3">
+              <p id="section-5.2.1-2.3.1">The adversary could fully block traffic between AS A and AS B, in order to force traffic redirection through an alternate path that includes its own AS.<a href="#section-5.2.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-5.2.1-3">The first type of attack is detectable and blocked by downstream ASes (e.g. B), because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.
+The second type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
+The third type of attack generally cannot be prevented, however the alternate path would be immediately visible to endpoints, as traffic must include hop fields from AS M.<a href="#section-5.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="fake-ases">
+<section id="section-5.2.2">
+          <h4 id="name-creation-of-spurious-ases-a">
+<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-creation-of-spurious-ases-a" class="section-name selfRef">Creation of Spurious ASes and ISDs</a>
+          </h4>
+<p id="section-5.2.2-1">An alternative scenario is when an adversary tries to introduce and spoof a nonexistent ASes. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-2">However, spoofing a new AS requires a registration of that AS with the ISD core to obtain a valid AS certificate; otherwise the adversary cannot construct valid PCBs. As this registration includes a thorough check and authentication by a CA, this cannot be done stealthily, which defeats the original purpose.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-3">Similarly to creating a fake AS, an adversary could try to introduce a new, malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort, and may need the involvement of more than one malicious entity. Here, the "costs" of setting up the fake ISD may outweigh the benefits.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="peer-link-misuse">
+<section id="section-5.2.3">
+          <h4 id="name-peering-link-misuse">
+<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-peering-link-misuse" class="section-name selfRef">Peering Link Misuse</a>
+          </h4>
+<p id="section-5.2.3-1">The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors, AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary hop fields by querying a control service and extracting the hop fields from registered paths.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.3-2">Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack: Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.<a href="#section-5.2.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="manipulate-selection">
+<section id="section-5.2.4">
+          <h4 id="name-manipulation-of-the-path-se">
+<a href="#section-5.2.4" class="section-number selfRef">5.2.4. </a><a href="#name-manipulation-of-the-path-se" class="section-name selfRef">Manipulation of the Path-Selection Process</a>
+          </h4>
+<p id="section-5.2.4-1">Endpoint path control is one of the main benefits of SCION compared to the current Internet, as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-2">In SCION, overall path selection is the result of three steps. First, each AS selects which PCBs are further forwarded to its neighbors. Second, each AS chooses the paths it wants to register at the local control service (as up-segments) and at the core control service (as down-segments). Third, the endpoint performs path selection among all available paths resulting from a path lookup process. The following text describes attacks that aim at influencing the path-selection process.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-3">These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.<a href="#section-5.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-4"><strong>Announcing Large Numbers of Path Segments</strong> <br>
+This attack is possible if the adversary controls multiple (at least two) ASes. The adversary can create a large number of links between the ASes under its control, which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes. This in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.<a href="#section-5.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-5">In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.<a href="#section-5.2.4-5" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-6"><strong>Wormhole Attack</strong> <br>
+A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another, non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.<a href="#section-5.2.4-6" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes, even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Similarly, endpoints are more likely to choose short paths that make use of peering links. In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering hop fields with valid hop fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added hop fields with the fake peering link hop fields the sender inserted.<a href="#section-5.2.4-7" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-8">To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-5.2.4-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="dos-cp">
+<section id="section-5.3">
+        <h3 id="name-denial-of-service-attacks">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
+        </h3>
+<p id="section-5.3-1">The beaconing process in the SCION control plane relies on control-plane communication. ASes exchange control-plane messages within each other when propagating PCBs to downstream neighbors,  when registering PCBs as path segments at the core control services, or during core path lookup. Volumetric DoS attacks, where attackers overload a link, may make it difficult to exchange these messages. SCION limits the impact of volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. In addition, reflection-based attacks are prevented, as thanks to path-awareness, response packets are returned on the same path to the actual sender. Control plane traffic can also be marked with priority using the TrafficClass field in the SCION common header, and mapped to a prioritized queue on border routers.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">In addition to this, critical control services should be further protected to preserve their availability with filtering and rate-limiting. Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms, that can be employed to prevent misuse of critical request to the control plane:<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.3-3.1">
+            <p id="section-5.3-3.1.1">ISD / AS whitelisting only allows requests from certain categories to pass the filter (e.g. requests from infrastructure nodes of the same AS, ISD, or from neighboring ASes)<a href="#section-5.3-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.3-3.2">
+            <p id="section-5.3-3.2.1">Path length filtering discriminates packets based on the length of the traversed path (e.g. empty path for AS internal traffic, one hop paths limiting traffic to one-hop neighbors; and based on the number of path segments  to distinguish requests from external ISDs)<a href="#section-5.3-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.3-3.3">
+            <p id="section-5.3-3.3.1">Rate limiting, that can be applied based on various identifiers (endpoint address, AS, or ISD)<a href="#section-5.3-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.3-4">A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances. Different instances can be made available only to specific groups of endpoints. For example, an AS could set up path server replicas such that one replica handles all requests originating from outside the AS, whereas another replica can only be reached by end hosts within an AS.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="iana-considerations">
@@ -3327,7 +3466,8 @@ associated_data(ps, i) = ps.segment_info ||
       <h2 id="name-iana-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-6-1">TODO IANA considerations.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This document has no IANA actions.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-7">
@@ -3399,7 +3539,11 @@ associated_data(ps, i) = ps.segment_info ||
 <dd class="break"></dd>
 <dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span> and <span class="refAuthor">N. Rustignoli</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.scion-dp">[I-D.scion-dp]</dt>
+        <dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.scion-overview">[I-D.scion-overview]</dt>
       <dd>
@@ -3414,7 +3558,7 @@ associated_data(ps, i) = ps.segment_info ||
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-a">
@@ -3710,7 +3854,7 @@ associated_data(ps, i) = ps.segment_info ||
 <div dir="auto" class="left"><span class="org">SCION Association</span></div>
 <div class="email">
 <span>Email:</span>
-<a href="mailto:cdk@scion.org" class="email">cdk@scion.org</a>
+<a href="mailto:c_de_kater@gmx.ch" class="email">c_de_kater@gmx.ch</a>
 </div>
 </address>
 <address class="vcard">
@@ -3719,6 +3863,14 @@ associated_data(ps, i) = ps.segment_info ||
 <div class="email">
 <span>Email:</span>
 <a href="mailto:nic@scion.org" class="email">nic@scion.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Samuel Hitz</span></div>
+<div dir="auto" class="left"><span class="org">Anapaya Systems</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:hitz@anapaya.net" class="email">hitz@anapaya.net</a>
 </div>
 </address>
 </section>
