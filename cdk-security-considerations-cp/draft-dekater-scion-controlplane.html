@@ -1277,10 +1277,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-top-down-manipulation-of-be" class="internal xref">Top-Down Manipulation of Beaconing</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-manipulation-of-the-beaconi" class="internal xref">Manipulation of the Beaconing Process by a Core Adversary</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-manipulation-of-the-beaconi" class="internal xref">Manipulation of the Beaconing Process by a Non-Core Adversary</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-manipulation-of-the-beaconin" class="internal xref">Manipulation of the Beaconing Process by a Non-Core Adversary</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
                     <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-path-hijacking-through-inte" class="internal xref">Path Hijacking through Interposition</a></p>
@@ -3352,17 +3352,16 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-5-3">This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see <a href="#topdown-manipulate" class="auto internal xref">Section 5.1</a>). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see <a href="#manipulate-beaconing" class="auto internal xref">Section 5.2</a>). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the IT infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 5.3</a>).<a href="#section-5-3" class="pilcrow">¶</a></p>
 <div id="topdown-manipulate">
 <section id="section-5.1">
-        <h3 id="name-top-down-manipulation-of-be">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-top-down-manipulation-of-be" class="section-name selfRef">Top-Down Manipulation of Beaconing</a>
+        <h3 id="name-manipulation-of-the-beaconi">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Core Adversary</a>
         </h3>
-<p id="section-5.1-1">The first kind of risk to the beaconing process in the control plane comes from an adversarial entity that controls one or all core ASes in an ISD (e.g., a government). One possible attack would be when this entity stops the core AS(es) from propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">Another possible attack of this adversarial entity could be to shut down the control services, by compelling core and non-core ASes to stop replying to path requests, or only return a subset of all available paths. If this attack were used in conjunction with blackholing, where traffic is redirected to a non-existent resource, senders in the ISD would have difficulty getting traffic out of the ISD. In SCION, however, existing paths can continue to be used in the data plane as long as the traversed ASes allow the forwarding.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">The first kind of risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths halts. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths remain usable for data-plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manipulate-beaconing">
 <section id="section-5.2">
-        <h3 id="name-manipulation-of-the-beaconi">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Non-Core Adversary</a>
+        <h3 id="name-manipulation-of-the-beaconin">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-manipulation-of-the-beaconin" class="section-name selfRef">Manipulation of the Beaconing Process by a Non-Core Adversary</a>
         </h3>
 <p id="section-5.2-1">This section examines several possible approaches open to an "ordinary" non-core adversary to manipulate the beaconing process in the SCION control plane, and shows for each case to what extent SCION's design can prevent the corresponding attack or help to mitigate it.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
