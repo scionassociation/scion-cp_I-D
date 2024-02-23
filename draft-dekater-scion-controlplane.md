@@ -1513,7 +1513,7 @@ This section examines several possible approaches open to an "ordinary" non-core
 
 An malicious AS M might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via M. If M can interpose itself on the path between A and B, then it could attempt several potential attacks:
 
-- The adversary M could intercept and disseminate a PCB on its way from a A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.
+- The adversary M could intercept and disseminate a PCB on its way from A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.
 - The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.
 - The adversary could fully block traffic between AS A and AS B, in order to force traffic redirection through an alternate path that includes its own AS.
 
