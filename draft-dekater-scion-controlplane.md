@@ -21,12 +21,17 @@ author:
  -   ins: C. de Kater
      name: Corine de Kater
      org: SCION Association
-     email: cdk@scion.org
+     email: c_de_kater@gmx.ch
 
  -   ins: N. Rustignoli
      name: Nicola Rustignoli
      org: SCION Association
      email: nic@scion.org
+
+ -   ins: S. Hitz
+     name: Samuel Hitz
+     org: Anapaya Systems
+     email: hitz@anapaya.net
 
 normative:
   I-D.scion-components:
@@ -181,6 +186,8 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
+**MAC**: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
+
 **Packet-Carried Forwarding State (PCFS)**: Rather than relying on costly inter-domain forwarding tables, SCION data packets contain all the necessary path information. We refer to this property as packet-carried forwarding state or PCFS.
 
 **Path Segment**: Path segments are derived from path-segment construction beacons (PCBs) and registered at control services. A path segment can be (1) an up-segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down-segment (i.e., the same as an up-segment, but in the opposite direction), or (3) a core-segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.
@@ -295,7 +302,7 @@ All path segments are invertible: A core-segment can be used bidirectionally, an
 
 ## Addressing {#numbering}
 
-The inter-domain SCION routing is based on the <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or MAC address, for example - in fact, the endpoint address is the "normal", currently used, non-SCION-specific endpoint address.
+The inter-domain SCION routing is based on the <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address, for example - in fact, the endpoint address is the "normal", currently used, non-SCION-specific endpoint address.
 
 However, the ISD-AS number is a SCION-specific number. It consists of 64-bits, with the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash-separator between the ISD and AS numbers, for example: `4-ff00:1:f`. This section provides more details about the numbering scheme for SCION ISD and AS numbers.
 
@@ -315,37 +322,35 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-A suitable mechanism to globally coordinate the assignation of ISD numbers does not yet exist. However, we hope that in the future an organization such as ICANN or a regional Internet registry (e.g., RIPE NCC) will take on the responsibility of assigning ISD and AS numbers.
 
-Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions.
-
-
-### AS Numbers
-
-An AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some autonomous systems use a SCION AS number and a BGP ASN that are numerically identical. There is no technical requirement for such an equality.
+Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
 
 
-#### Formatting
+### SCION AS Numbers
 
-The default formatting for AS numbers in SCION is derived from the IPv6 addresses notation (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION autonomous systems use a SCION AS number where the first 16 bits are 0, and the remaining 32 bits are identical to their BGP ASN. There is no technical requirement for such an equality.
+
+
+#### Text Representation
+
+The default text representation for SCION AS numbers is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
 
 In SCION, the following modifications apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- For historical reasons, SCION AS numbers in the lower 32 bit range MAY be represented as decimal for human consumption. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551". Such a decimal representation SHOULD be accepted while processing human input.
-- A range of AS numbers MUST be represented either in traditional range notation or, when possible, with the notation used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers MUST be represented as one of:
-  - (0-4294967295)
-  - (`0:0:0`-`0:ffff:ffff`)
-  - `0:0:0/16`
+- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
-The next table gives an overview of the AS number allocation.
+For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it may display the number as "65551".
+
+
+#### Special-Purpose SCION AS Numbers
 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
-| 0                | 1           | The wildcard AS                                                             |
-| 1-4294967295     | ~4.3&nbsp;bill.  | 32-bit SCION AS numbers                                                |
+| `0:0:0`          | 1           | The wildcard AS                                                             |
+| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
 | `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional 32-bit range of SCION AS numbers                            |
+| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
 | `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
 | `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
@@ -1442,7 +1447,6 @@ When the segment-request handler of the control service of a *non-core* source A
      - otherwise, request the down-segment from the control services of the core ASes at the source (start) of the down-segment. Sending the request may require looking up core-segments to the source core AS of the down-segment. Add the retrieved down-segments to the cache.
 
 
-
 ### Segment-Request Handler of a Core AS
 
 When the segment-request handler of a *core AS* control service receives a path segment request, it MUST proceed as follows:
@@ -1461,14 +1465,97 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 # Security Considerations
 
-One of the fundamental objectives that guided the design of SCION is security, in particular network security. See chapter 7 of the SCION book (Security Analysis), which states the precise security goals of various network participants and how SCION achieves these goals in the presence of different types of adversaries {{CHUAT22}}.
+As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
 
-To be precised.
+**Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
 
+This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the infrastructure (see [](#dos-cp)).
+
+
+## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
+
+The first kind of risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths halts. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths remain usable for data-plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
+
+
+## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
+
+This section examines several possible approaches open to an "ordinary" non-core adversary to manipulate the beaconing process in the SCION control plane, and shows for each case to what extent SCION's design can prevent the corresponding attack or help to mitigate it.
+
+- Path hijacking through interposition (see [](#path-hijack))
+- Creation of spurious ASes and ISDs (see [](#fake-ases))
+- Peering link misuse (see [](#peer-link-misuse))
+- Manipulation of the path selection process (see [](#manipulate-selection))
+
+
+### Path Hijacking through Interposition {#path-hijack}
+
+An malicious AS M might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via M. If M can interpose itself on the path between A and B, then it could attempt several potential attacks:
+
+- The adversary M could intercept and disseminate a PCB on its way from A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.
+- The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.
+- The adversary could fully block traffic between AS A and AS B, in order to force traffic redirection through an alternate path that includes its own AS.
+
+The first type of attack is detectable and blocked by downstream ASes (e.g. B), because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.
+The second type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
+The third type of attack generally cannot be prevented, however the alternate path would be immediately visible to endpoints, as traffic must include hop fields from AS M.
+
+
+### Creation of Spurious ASes and ISDs {#fake-ases}
+
+An alternative scenario is when an adversary tries to introduce and spoof a nonexistent ASes. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.
+
+However, spoofing a new AS requires a registration of that AS with the ISD core to obtain a valid AS certificate; otherwise the adversary cannot construct valid PCBs. As this registration includes a thorough check and authentication by a CA, this cannot be done stealthily, which defeats the original purpose.
+
+Similarly to creating a fake AS, an adversary could try to introduce a new, malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort, and may need the involvement of more than one malicious entity. Here, the "costs" of setting up the fake ISD may outweigh the benefits.
+
+
+### Peering Link Misuse {#peer-link-misuse}
+
+The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors, AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary hop fields by querying a control service and extracting the hop fields from registered paths.
+
+Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack: Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.
+
+
+### Manipulation of the Path-Selection Process {#manipulate-selection}
+
+Endpoint path control is one of the main benefits of SCION compared to the current Internet, as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
+
+In SCION, overall path selection is the result of three steps. First, each AS selects which PCBs are further forwarded to its neighbors. Second, each AS chooses the paths it wants to register at the local control service (as up-segments) and at the core control service (as down-segments). Third, the endpoint performs path selection among all available paths resulting from a path lookup process. The following text describes attacks that aim at influencing the path-selection process.
+
+These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
+
+
+**Announcing Large Numbers of Path Segments** <br>
+This attack is possible if the adversary controls multiple (at least two) ASes. The adversary can create a large number of links between the ASes under its control, which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes. This in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.
+
+In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.
+
+
+**Wormhole Attack** <br>
+A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another, non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.
+
+Similarly, a fake path can be announced through a fake peering link between two colluding ASes, even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Similarly, endpoints are more likely to choose short paths that make use of peering links. In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering hop fields with valid hop fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added hop fields with the fake peering link hop fields the sender inserted.
+
+To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
+
+
+## Denial of Service Attacks {#dos-cp}
+
+The beaconing process in the SCION control plane relies on control-plane communication. ASes exchange control-plane messages within each other when propagating PCBs to downstream neighbors,  when registering PCBs as path segments at the core control services, or during core path lookup. Volumetric DoS attacks, where attackers overload a link, may make it difficult to exchange these messages. SCION limits the impact of volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. In addition, reflection-based attacks are prevented, as thanks to path-awareness, response packets are returned on the same path to the actual sender. Control plane traffic can also be marked with priority using the TrafficClass field in the SCION common header, and mapped to a prioritized queue on border routers.
+
+In addition to this, critical control services should be further protected to preserve their availability with filtering and rate-limiting. Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms, that can be employed to prevent misuse of critical request to the control plane:
+
+- ISD / AS whitelisting only allows requests from certain categories to pass the filter (e.g. requests from infrastructure nodes of the same AS, ISD, or from neighboring ASes)
+- Path length filtering discriminates packets based on the length of the traversed path (e.g. empty path for AS internal traffic, one hop paths limiting traffic to one-hop neighbors; and based on the number of path segments  to distinguish requests from external ISDs)
+- Rate limiting, that can be applied based on various identifiers (endpoint address, AS, or ISD)
+
+A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances. Different instances can be made available only to specific groups of endpoints. For example, an AS could set up path server replicas such that one replica handles all requests originating from outside the AS, whereas another replica can only be reached by end hosts within an AS.
 
 # IANA Considerations
 
-TODO IANA considerations.
+This document has no IANA actions.
+
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
 
 
 --- back
@@ -1476,7 +1563,7 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Samuel Hitz (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 
