@@ -114,19 +114,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.path-properties-voc:
-    title: A Vocabulary of Path Properties
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-irtf-panrg-path-properties/
-    author:
-      -
-        ins: R. Enghardt
-        name: Reese Enghardt
-        org: Netflix
-      -
-        ins: C. Krähenbühl
-        name: Cyrill Krähenbühl
-        org: ETH Zuerich
   I-D.scion-overview:
     title: SCION Overview
     date: 2023
@@ -163,6 +150,7 @@ informative:
         org: Anapaya Systems
   RFC5398:
   RFC6996:
+  RFC9473:
 
 --- abstract
 
@@ -195,7 +183,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Core AS**: Each isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").
 
-**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{I-D.path-properties-voc}}.
+**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).
 
@@ -356,7 +344,7 @@ A SCION AS number is the 48-bit identifier for an AS. Although they play a simil
 
 The default text representation for SCION AS numbers is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
 
-In SCION, the following modifications apply:
+In SCION, the following rules apply:
 
 - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
