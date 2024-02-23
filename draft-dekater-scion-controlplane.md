@@ -1524,8 +1524,6 @@ The second type of attack is made impossible by the hop field's MAC, which prote
 The third type of attack generally cannot be prevented, however the alternate path would be immediately visible to endpoints, as traffic must include hop fields from AS E.
 
 
-
-
 ### Creation of Spurious ASes {#fake-ases}
 
 An alternative scenario is when an adversary tries to spoof other ASes by introducing nonexistent entities. This would enable the adversary to send traffic with the spoofed entity as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.
@@ -1544,17 +1542,11 @@ Even if an adversary succeeds in misusing a peering link as described above, SCI
 
 ### Manipulation of the Path-Selection Process {#manipulate-selection}
 
-Path selection is one of the main benefits of SCION compared to the current Internet, where hosts have no control over the forwarding paths that their packets traverse. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
+Endpoint path control is one of the main benefits of SCION compared to the current Internet, as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
 
-In SCION, path selection is used in three cases. First, an AS selects the PCBs to forward to its neighbors. Second, the AS chooses the paths it wants to register at the local control service as up-segments and at the core control service as down-segments. Third, the endpoint performs path selection from all available path segments. The following text describes attacks that aim at influencing the path-selection process in SCION.
+In SCION, overall path selection is the result of three steps. First, each AS selects which PCBs are further forwarded to its neighbors. Second, each AS chooses the paths it wants to register at the local control service (as up-segments) and at the core control service (as down-segments). Third, the endpoint performs path selection among all available paths resulting from a path lookup process. The following text describes attacks that aim at influencing the path-selection process.
 
-Note that these attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, regular ASes will be able to identify paths traversing the adversary AS and avoid these paths.
-
-
-**Announcing Seemingly Desirable Path Segments** <br>
-An adversary who wants to attract traffic from downstream ASes (as seen from the ISD core) can forward PCBs received from upstream ASes to downstream ASes enriched with metadata. Although this metadata is signed and thus attributable to the adversary, the recipient cannot directly verify the accuracy of the data itself. Therefore, the adversary can add fake metadata that makes the PCB seem desirable. If such an adversary-announced path complies with the policy of the downstream ASes, the corresponding PCB may be added as one of the paths available to the endpoint. At this point, the endpoint may select such a path traversing the adversary for communication.
-
-Although it is difficult to prevent an adversary from performing the above behavior in the control plane, the issue may be solved naturally in the date plane: If the metadata in the PCBs does not match the measurements/characteristics of the corresponding path in the data plane, or high loss rates are experienced, endpoints or downstream ASes can and may easily move to other paths with better quality.
+These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
 
 
 **Announcing Large Numbers of Path Segments** <br>
