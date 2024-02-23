@@ -34,30 +34,45 @@ author:
      email: hitz@anapaya.net
 
 normative:
+  I-D.scion-components:
+    title: SCION Components Analysis
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
+    author:
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+  I-D.scion-cppki:
+    title: SCION Control-Plane PKI
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
   RFC1122:
   RFC2119:
   RFC4632:
-  RFC5398:
   RFC5952:
-  RFC6996:
   RFC8174:
   gRPC:
     title: "gRPC, an open-source universal RPC framework"
     date: 2023
     target: https://grpc.io/
-  I-D.path-properties-voc:
-    title: A Vocabulary of Path Properties
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-irtf-panrg-path-properties/
-    author:
-      -
-        ins: R. Enghardt
-        name: Reese Enghardt
-        org: Netflix
-      -
-        ins: C. Krähenbühl
-        name: Cyrill Krähenbühl
-        org: ETH Zuerich
   proto3:
     title: "Protocol Buffers Language Guide version 3"
     date: 2023
@@ -99,36 +114,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-components:
-    title: SCION Components Analysis
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
-    author:
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-  I-D.scion-cppki:
-    title: SCION Control-Plane PKI
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
   I-D.scion-overview:
     title: SCION Overview
     date: 2023
@@ -163,7 +148,9 @@ informative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
-
+  RFC5398:
+  RFC6996:
+  RFC9473:
 
 --- abstract
 
@@ -196,7 +183,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Core AS**: Each isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").
 
-**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{I-D.path-properties-voc}}.
+**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).
 
@@ -388,7 +375,7 @@ SCION allows endpoints to use wildcard addresses in the control-plane routing, t
 
 ## Avoiding Circular Dependencies and Partitioning
 
-A secure and reliable routing architecture must be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
+A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
@@ -433,7 +420,7 @@ PCBs do not traverse peering links. Instead, peering links are announced along w
 
 ### Extending a PCB
 
-Every propagation period (as configured by the AS), the control service
+Every propagation period (as configured by the AS), the control service:
 
 - selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e., a child AS or a core AS), and
 - sends each selected PCB to the selected egress interface(s) associated with it.
@@ -680,7 +667,7 @@ The following sections provide detailed specifications of the PCB messages, star
 +-------------+-------------+------------+------+------------+
 ~~~~
 
-Each PCB at least consists of:
+Each PCB MUST consists of at least:
 
 - An information field with an identifier and a timestamp.
 - Entries of all ASes on the path segment represented by this PCB.
@@ -834,7 +821,7 @@ The following code block shows the low-level representation of the `HeaderAndBod
 +---------+---------+------------+--------------+
 ~~~~
 
-The header part defines metadata that is relevant to (the computation and verification of) the signature. It MUST at least include the following metadata:
+The header part defines metadata that is relevant to (the computation and verification of) the signature. It MUST include at least the following metadata:
 
 - The algorithm to compute the signature
 - The identifier of the public key used to verify the signature (i.e., the public key certified by the AS's certificate)
@@ -890,7 +877,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 +------+-----------+---------++------------+---+------------++---+----+
 ~~~~
 
-The body of an AS entry consists of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
+The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
 
 The following code block defines the signed body of one AS entry in Protobuf message format (called the `ASEntrySignedBody` message).
 
@@ -910,7 +897,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `hop_entry`: The hop entry (`HopEntry`) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see [](#hopentry).
 - `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
 - `mtu`: The size of the maximum transmission unit (MTU) within the current AS's network.
-- `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field should therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
+- `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
 
 ##### AS Entry Signature {#sign}
@@ -1105,7 +1092,7 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-**Note:** Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS should forward the PCB immediately, to ensure quick connectivity establishment.
+**Note:** Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
 
 
 #### Selection Policy Example
@@ -1208,7 +1195,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
    - The ingress interface to this AS, in the hop field component.
    - The egress interface to the neighboring AS, also in the hop field component.
    - The ISD_AS number of the next AS, in the signed body component of the AS entry.
-   - If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.
+   - If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry MUST have a specified egress interface.
 3. The control service MUST now sign each selected, extended PCB and append the computed signature.
 4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring ASes (see also [](#prop-proto)).
 
