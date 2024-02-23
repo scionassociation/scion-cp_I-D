@@ -1349,7 +1349,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-3"><strong>Control Plane</strong>: The SCION control plane is responsible for the propagation and discovery of network paths, i.e., for the exchange of routing information between network nodes. The control plane thus determines where traffic can be sent and deals with questions such as how paths are discovered, which paths exist, what quality individual links offer, etc. Within a SCION AS, such functionalities are carried out by the control service. Packet forwarding is instead a task pertaining to the data plane.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <p id="section-1.1-4"><strong>Control Service</strong>: The control service is the main control-plane infrastructure component within a SCION AS. It is responsible for the path exploration and registration processes that take place within the control plane.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <p id="section-1.1-5"><strong>Core AS</strong>: Each isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").<a href="#section-1.1-5" class="pilcrow">¶</a></p>
-<p id="section-1.1-6"><strong>Endpoint</strong>: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#I-D.path-properties-voc" class="cite xref">I-D.path-properties-voc</a>]</span>.<a href="#section-1.1-6" class="pilcrow">¶</a></p>
+<p id="section-1.1-6"><strong>Endpoint</strong>: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <p id="section-1.1-7"><strong>Forwarding Path</strong>: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).<a href="#section-1.1-7" class="pilcrow">¶</a></p>
 <p id="section-1.1-8"><strong>Hop Field (HF)</strong>: As they traverse the network, path-segment construction beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of hop fields. In the data plane, hop fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 <p id="section-1.1-9"><strong>Info Field (INF)</strong>: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
@@ -1674,7 +1674,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-avoiding-circular-dependenc">
 <a href="#section-1.6" class="section-number selfRef">1.6. </a><a href="#name-avoiding-circular-dependenc" class="section-name selfRef">Avoiding Circular Dependencies and Partitioning</a>
         </h3>
-<p id="section-1.6-1">A secure and reliable routing architecture must be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
+<p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
             <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
@@ -1746,7 +1746,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-extending-a-pcb">
 <a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-extending-a-pcb" class="section-name selfRef">Extending a PCB</a>
           </h4>
-<p id="section-2.1.2-1">Every propagation period (as configured by the AS), the control service<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-1">Every propagation period (as configured by the AS), the control service:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1.2-2.1">
               <p id="section-2.1.2-2.1.1">selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e., a child AS or a core AS), and<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
@@ -2039,7 +2039,7 @@ path segment 4 |             |     |             |     |             |
 +-------------+-------------+------------+------+------------+
 </pre><a href="#section-2.2.1.1-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.1-2">Each PCB at least consists of:<a href="#section-2.2.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.1-2">Each PCB <span class="bcp14">MUST</span> consists of at least:<a href="#section-2.2.1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.1-3.1">
                 <p id="section-2.2.1.1-3.1.1">An information field with an identifier and a timestamp.<a href="#section-2.2.1.1-3.1.1" class="pilcrow">¶</a></p>
@@ -2241,7 +2241,7 @@ path segment 4 |             |     |             |     |             |
 +---------+---------+------------+--------------+
 </pre><a href="#section-2.2.1.4.1-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4.1-2">The header part defines metadata that is relevant to (the computation and verification of) the signature. It <span class="bcp14">MUST</span> at least include the following metadata:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-2">The header part defines metadata that is relevant to (the computation and verification of) the signature. It <span class="bcp14">MUST</span> include at least the following metadata:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-3.1">
                   <p id="section-2.2.1.4.1-3.1.1">The algorithm to compute the signature<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
@@ -2329,7 +2329,7 @@ path segment 4 |             |     |             |     |             |
 +------+-----------+---------++------------+---+------------++---+----+
 </pre><a href="#section-2.2.1.4.2-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4.2-2">The body of an AS entry consists of the signed component <code>ASEntrySignedBody</code> of all ASes in the path segment represented by the PCB, up until and including the current AS.<a href="#section-2.2.1.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.2-2">The body of an AS entry <span class="bcp14">MUST</span> consist of the signed component <code>ASEntrySignedBody</code> of all ASes in the path segment represented by the PCB, up until and including the current AS.<a href="#section-2.2.1.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.2-3">The following code block defines the signed body of one AS entry in Protobuf message format (called the <code>ASEntrySignedBody</code> message).<a href="#section-2.2.1.4.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.2-4">
 <pre>
@@ -2360,7 +2360,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.2-5.5.1"><code>mtu</code>: The size of the maximum transmission unit (MTU) within the current AS's network.<a href="#section-2.2.1.4.2-5.5.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.6">
-                  <p id="section-2.2.1.4.2-5.6.1"><code>extensions</code>: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field should therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see <a href="#pcb-ext" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2.1.4.2-5.6.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.2-5.6.1"><code>extensions</code>: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field <span class="bcp14">SHOULD</span> therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see <a href="#pcb-ext" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2.1.4.2-5.6.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </section>
@@ -2625,7 +2625,7 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.3.1.1-5.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.1.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.3.1.1-6"><strong>Note:</strong> Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS should forward the PCB immediately, to ensure quick connectivity establishment.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-6"><strong>Note:</strong> Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS <span class="bcp14">SHOULD</span> forward the PCB immediately, to ensure quick connectivity establishment.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="selection-policy-example">
@@ -2769,7 +2769,7 @@ associated_data(ps, i) = ps.segment_info ||
                     <p id="section-2.3.2.2-2.2.2.3.1">The ISD_AS number of the next AS, in the signed body component of the AS entry.<a href="#section-2.3.2.2-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
                   <li class="normal" id="section-2.3.2.2-2.2.2.4">
-                    <p id="section-2.3.2.2-2.2.2.4.1">If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry must have a specified egress interface.<a href="#section-2.3.2.2-2.2.2.4.1" class="pilcrow">¶</a></p>
+                    <p id="section-2.3.2.2-2.2.2.4.1">If the AS has peering links, the control service should add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry <span class="bcp14">MUST</span> have a specified egress interface.<a href="#section-2.3.2.2-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
@@ -3484,9 +3484,13 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
         <dd>
 <span class="refTitle">"gRPC, an open-source universal RPC framework"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://grpc.io/">https://grpc.io/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.path-properties-voc">[I-D.path-properties-voc]</dt>
+<dt id="I-D.scion-components">[I-D.scion-components]</dt>
         <dd>
-<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-irtf-panrg-path-properties/">https://datatracker.ietf.org/doc/draft-irtf-panrg-path-properties/</a>&gt;</span>. </dd>
+<span class="refAuthor">Rustignoli, N.</span> and <span class="refAuthor">C. de Kater</span>, <span class="refTitle">"SCION Components Analysis"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/">https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
+        <dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>
@@ -3504,17 +3508,9 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
         <dd>
 <span class="refAuthor">Fuller, V.</span> and <span class="refAuthor">T. Li</span>, <span class="refTitle">"Classless Inter-domain Routing (CIDR): The Internet Address Assignment and Aggregation Plan"</span>, <span class="seriesInfo">BCP 122</span>, <span class="seriesInfo">RFC 4632</span>, <span class="seriesInfo">DOI 10.17487/RFC4632</span>, <time datetime="2006-08" class="refDate">August 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4632">https://www.rfc-editor.org/rfc/rfc4632</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC5398">[RFC5398]</dt>
-        <dd>
-<span class="refAuthor">Huston, G.</span>, <span class="refTitle">"Autonomous System (AS) Number Reservation for Documentation Use"</span>, <span class="seriesInfo">RFC 5398</span>, <span class="seriesInfo">DOI 10.17487/RFC5398</span>, <time datetime="2008-12" class="refDate">December 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5398">https://www.rfc-editor.org/rfc/rfc5398</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC5952">[RFC5952]</dt>
         <dd>
 <span class="refAuthor">Kawamura, S.</span> and <span class="refAuthor">M. Kawashima</span>, <span class="refTitle">"A Recommendation for IPv6 Address Text Representation"</span>, <span class="seriesInfo">RFC 5952</span>, <span class="seriesInfo">DOI 10.17487/RFC5952</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5952">https://www.rfc-editor.org/rfc/rfc5952</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6996">[RFC6996]</dt>
-        <dd>
-<span class="refAuthor">Mitchell, J.</span>, <span class="refTitle">"Autonomous System (AS) Reservation for Private Use"</span>, <span class="seriesInfo">BCP 6</span>, <span class="seriesInfo">RFC 6996</span>, <span class="seriesInfo">DOI 10.17487/RFC6996</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6996">https://www.rfc-editor.org/rfc/rfc6996</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
@@ -3533,21 +3529,25 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
         <dd>
 <span class="refAuthor">Chuat, L.</span>, <span class="refAuthor">Legner, M.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Hausheer, D.</span>, <span class="refAuthor">Hitz, S.</span>, <span class="refAuthor">Mueller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"The Complete Guide to SCION"</span>, <span class="seriesInfo">ISBN 978-3-031-05287-3</span>, <time datetime="2022" class="refDate">2022</time>, <span>&lt;<a href="https://doi.org/10.1007/978-3-031-05288-0">https://doi.org/10.1007/978-3-031-05288-0</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-components">[I-D.scion-components]</dt>
-        <dd>
-<span class="refAuthor">Rustignoli, N.</span> and <span class="refAuthor">C. de Kater</span>, <span class="refTitle">"SCION Components Analysis"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/">https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
-        <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.scion-dp">[I-D.scion-dp]</dt>
         <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.scion-overview">[I-D.scion-overview]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/">https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5398">[RFC5398]</dt>
+        <dd>
+<span class="refAuthor">Huston, G.</span>, <span class="refTitle">"Autonomous System (AS) Number Reservation for Documentation Use"</span>, <span class="seriesInfo">RFC 5398</span>, <span class="seriesInfo">DOI 10.17487/RFC5398</span>, <time datetime="2008-12" class="refDate">December 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5398">https://www.rfc-editor.org/rfc/rfc5398</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6996">[RFC6996]</dt>
+        <dd>
+<span class="refAuthor">Mitchell, J.</span>, <span class="refTitle">"Autonomous System (AS) Reservation for Private Use"</span>, <span class="seriesInfo">BCP 6</span>, <span class="seriesInfo">RFC 6996</span>, <span class="seriesInfo">DOI 10.17487/RFC6996</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6996">https://www.rfc-editor.org/rfc/rfc6996</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9473">[RFC9473]</dt>
+      <dd>
+<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

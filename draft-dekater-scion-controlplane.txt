@@ -189,7 +189,7 @@ Table of Contents
    *Endpoint*: An endpoint is the start- or the endpoint of a SCION
    path.  For example, an endpoint can be a host as defined in
    [RFC1122], or a gateway bridging a SCION and an IP domain.  This
-   definition is based on the definition in [I-D.path-properties-voc].
+   definition is based on the definition in [RFC9473].
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
    between two SCION hosts, which is used to transmit packets in the
@@ -559,7 +559,7 @@ Table of Contents
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
-   A secure and reliable routing architecture must be designed
+   A secure and reliable routing architecture has to be designed
    specifically to avoid circular dependencies during network
    initialization.  One goal of SCION is that the Internet can start up
    even after large outages or attacks, in addition to avoiding cascades
@@ -678,7 +678,7 @@ Table of Contents
 2.1.2.  Extending a PCB
 
    Every propagation period (as configured by the AS), the control
-   service
+   service:
 
    *  selects the best combinations of PCBs and interfaces connecting to
       a neighboring AS (i.e., a child AS or a core AS), and
@@ -971,7 +971,7 @@ path segment 4 |             |     |             |     |             |
    |Segment Info | AS Entry 0  | AS Entry 1 |  ... | AS Entry N |
    +-------------+-------------+------------+------+------------+
 
-   Each PCB at least consists of:
+   Each PCB MUST consists of at least:
 
    *  An information field with an identifier and a timestamp.
 
@@ -1159,7 +1159,7 @@ path segment 4 |             |     |             |     |             |
    +---------+---------+------------+--------------+
 
    The header part defines metadata that is relevant to (the computation
-   and verification of) the signature.  It MUST at least include the
+   and verification of) the signature.  It MUST include at least the
    following metadata:
 
    *  The algorithm to compute the signature
@@ -1242,7 +1242,7 @@ path segment 4 |             |     |             |     |             |
  |ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0|...|Peer Entry N||MTU|Ext.|
  +------+-----------+---------++------------+---+------------++---+----+
 
-   The body of an AS entry consists of the signed component
+   The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all ASes in the path segment represented by the
    PCB, up until and including the current AS.
 
@@ -1276,7 +1276,7 @@ path segment 4 |             |     |             |     |             |
 
    *  extensions: List of (signed) extensions (optional).  PCB
       extensions defined here are part of the signed AS entry.  This
-      field should therefore only contain extensions that include
+      field SHOULD therefore only contain extensions that include
       important metadata for which cryptographic protection is required.
       For more information on PCB extensions, see Section 2.2.2.
 
@@ -1551,7 +1551,7 @@ path segment 4 |             |     |             |     |             |
       beaconing.
 
    *Note:* Note that during bootstrapping and if the AS obtains a PCB
-   containing a previously unknown path, the AS should forward the PCB
+   containing a previously unknown path, the AS SHOULD forward the PCB
    immediately, to ensure quick connectivity establishment.
 
 2.3.1.2.  Selection Policy Example
@@ -1724,7 +1724,7 @@ path segment 4 |             |     |             |     |             |
           corresponding peer entry components to the signed body of the
           AS entry; one peer entry component for each peering link that
           the AS wants to advertise.  The hop field component of each
-          added peer entry must have a specified egress interface.
+          added peer entry MUST have a specified egress interface.
 
    3.  The control service MUST now sign each selected, extended PCB and
        append the computed signature.
@@ -2503,10 +2503,15 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.path-properties-voc]
-              Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
-              Properties", 2023, <https://datatracker.ietf.org/doc/
-              draft-irtf-panrg-path-properties/>.
+   [I-D.scion-components]
+              Rustignoli, N. and C. de Kater, "SCION Components
+              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
+              rustignoli-panrg-scion-components/>.
+
+   [I-D.scion-cppki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-pki/>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
@@ -2526,18 +2531,10 @@ path segment 4 |             |     |             |     |             |
               Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
               2006, <https://www.rfc-editor.org/rfc/rfc4632>.
 
-   [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
-              Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
-              December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
-
    [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
               Address Text Representation", RFC 5952,
               DOI 10.17487/RFC5952, August 2010,
               <https://www.rfc-editor.org/rfc/rfc5952>.
-
-   [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
-              Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
-              2013, <https://www.rfc-editor.org/rfc/rfc6996>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -2550,16 +2547,6 @@ path segment 4 |             |     |             |     |             |
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.scion-components]
-              Rustignoli, N. and C. de Kater, "SCION Components
-              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
-              rustignoli-panrg-scion-components/>.
-
-   [I-D.scion-cppki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
-
    [I-D.scion-dp]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
               Plane", 2023, <https://datatracker.ietf.org/doc/draft-
@@ -2569,6 +2556,18 @@ path segment 4 |             |     |             |     |             |
               de Kater, C., Rustignoli, N., and A. Perrig, "SCION
               Overview", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-panrg-scion-overview/>.
+
+   [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
+              Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
+              December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
+
+   [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
+              Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
+              2013, <https://www.rfc-editor.org/rfc/rfc6996>.
+
+   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
 Acknowledgments
 
