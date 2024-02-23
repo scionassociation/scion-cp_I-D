@@ -1487,14 +1487,14 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 # Security Considerations
 
-As described previously, the goal of SCION’s beaconing process in the control plane is to discover paths between any two ASes and make them available to other ASes. This section describes the possible security risks and attacks that SCION's control plane may be prone to, and how these may be mitigated. The focus lies on *inter*-AS routing: SCION does not solve intra-AS routing issues, nor does it provide end-to-end payload encryption, and identity authentication. These topics lie therefore outside the scope of this section.
+As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
 
 **Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
 
-This section focuses on three kinds of security risks in the control plane. The first risk is when an adversarial entity (e.g., a government) controls one or all core ASes of an ISD and tries to frustrate the beaconing process from the top down (see [](#topdown-frust)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the IT infrastructure (see [](#dos-cp)).
+This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the IT infrastructure (see [](#dos-cp)).
 
 
-## Top-Down Manipulation of Beaconing {#topdown-frust}
+## Top-Down Manipulation of Beaconing {#topdown-manipulate}
 
 The first kind of risk to the beaconing process in the control plane comes from an adversarial entity that controls one or all core ASes in an ISD (e.g., a government). One possible attack would be when this entity stops the core AS(es) from propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.
 
@@ -1513,17 +1513,17 @@ This section examines several possible approaches open to an "ordinary" non-core
 
 ### Path Hijacking through Interposition {#path-hijack}
 
-To attract traffic and to include its own AS in segments and paths, an adversary might try in the following ways to manipulate the beaconing process:
+An adversarial AS E might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via E. If E can interpose itself on the path between A and B, then it could attempt several potential attacks:
 
-- The adversary could block the traffic between a specific AS A and AS B, in order to force traffic redirection through its own AS (that is, of the adversary).
-- The adversary could intercept and disseminate a PCB on its way from a specific AS A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's own AS to the core.
+- The adversary E could intercept and disseminate a PCB on its way from a A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.
 - The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.
+- The adversary could fully block traffic between AS A and AS B, in order to force traffic redirection through an alternate path that includes its own AS.
 
-The first type of attack generally cannot be prevented, but SCION is able to mitigate the other two types of attack.
+The first type of attack is detectable and blocked by downstream ASes (e.g. B), because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If E manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.
+The second type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
+The third type of attack generally cannot be prevented, however the alternate path would be immediately visible to endpoints, as traffic must include hop fields from AS E.
 
-The second type of attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. This will cause verification of the manipulated inbound PCBs to fail, as the adversary's PCBs cannot contain A's correct signature.
 
-The third type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
 
 
 ### Creation of Spurious ASes {#fake-ases}
