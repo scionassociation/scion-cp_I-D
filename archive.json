@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-25T00:16:58.998624+00:00",
+  "timestamp": "2024-02-27T00:15:53.363125+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -821,7 +821,7 @@
       "labels": [],
       "body": "There's still some more MUST required IMHO.\r\n",
       "createdAt": "2024-01-11T16:38:55Z",
-      "updatedAt": "2024-02-23T18:43:23Z",
+      "updatedAt": "2024-02-26T09:34:28Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "cdd780068b10d3a42eacf4bcbf092bcfd518ed40",
@@ -834,7 +834,15 @@
       "mergeCommit": {
         "oid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6"
       },
-      "comments": [],
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As far as I remember, I went through every instance of must may should and their negatives. The should that I left in lowercase were likely intentional: layman use of the word for phrasing as opposed to normative, or sufficiently optional to not deserve an uppercase \"should\". But my opinion is just that, of course.\r\n\r\n",
+          "createdAt": "2024-02-26T09:34:27Z",
+          "updatedAt": "2024-02-26T09:34:27Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs5xLENk",
