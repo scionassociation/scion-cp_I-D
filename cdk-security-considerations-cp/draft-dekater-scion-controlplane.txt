@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 30 August 2024                                          S. Hitz
+Expires: 31 August 2024                                          S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2024
+                                                        28 February 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2024.
+   This Internet-Draft will expire on 31 August 2024.
 
 Copyright Notice
 
@@ -2461,22 +2461,27 @@ path segment 4 |             |     |             |     |             |
    such as a control service server, by opening many connections to this
    server.  Possible means to mitigate this kind of DoS attacks are
    basically the same as for the current Internet, e.g., filtering, geo-
-   blocking or using cookies.  Thanks to its path-awareness, SCION
-   enables more fine-grained filtering mechanisms, that can be employed
-   to prevent misuse of critical request to the control plane:
+   blocking or using cookies.
 
-   *  ISD / AS whitelisting only allows requests from certain categories
-      to pass the filter (e.g. requests from infrastructure nodes of the
-      same AS, ISD, or from neighboring ASes)
+   Thanks to its path-awareness, SCION enables more fine-grained
+   filtering mechanisms based on certain path properties.  For example,
+   control-plane RPC methods that are available to endpoints within an
+   AS are strictly separate from methods available to endpoints from
+   other ASes.  Specifically, expensive recursive path segment and trust
+   material lookups are thus shielded from abuse by unauthorized
+   entities.  For RPC methods exposed to other ASes, the control service
+   implementation minimizes its attack surface by rejecting illegitimate
+   callers based on ISD/AS, path type and length and any other available
+   data points as soon as possible, i.e. immediately after determining
+   the request type.  For example:
 
-   *  Path length filtering discriminates packets based on the length of
-      the traversed path (e.g. empty path for AS internal traffic, one
-      hop paths limiting traffic to one-hop neighbors; and based on the
-      number of path segments to distinguish requests from external
-      ISDs)
+   *  SegmentCreationService.Beacon can only be called by direct
+      neighbors and thus calls from peers with a path length greater
+      than one can immediately be discarded.
 
-   *  Rate limiting, that can be applied on control plane RPCs that
-      require authentication
+   *  SegmentRegistrationService.SegmentsRegistration can only be called
+      from within the same ISD, thus the source address must match the
+      local ISD and the number of path segments must be 1.
 
    A combination of the mechanism above is used to prevent flooding
    attacks on the control service.  In addition, the control services
