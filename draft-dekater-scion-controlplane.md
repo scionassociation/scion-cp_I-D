@@ -1552,11 +1552,14 @@ To defend against this attack, methods to detect the wormhole attack are needed.
 
 The beaconing process in the SCION control plane relies on control-plane communication. ASes exchange control-plane messages within each other when propagating PCBs to downstream neighbors,  when registering PCBs as path segments at the core control services, or during core path lookup. Volumetric DoS attacks, where attackers overload a link, may make it difficult to exchange these messages. SCION limits the impact of volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. In addition, reflection-based attacks are prevented, as thanks to path-awareness, response packets are returned on the same path to the actual sender.
 
-Other mechanisms are required to avoid transport protocol attacks, where the attacker tries to exhaust the resources on a target server, such as a control service server, by opening many connections to this server. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., filtering, geo-blocking or using cookies. Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms, that can be employed to prevent misuse of critical request to the control plane:
+Other mechanisms are required to avoid transport protocol attacks, where the attacker tries to exhaust the resources on a target server, such as a control service server, by opening many connections to this server. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., filtering, geo-blocking or using cookies.
 
-- ISD / AS whitelisting only allows requests from certain categories to pass the filter (e.g. requests from infrastructure nodes of the same AS, ISD, or from neighboring ASes)
-- Path length filtering discriminates packets based on the length of the traversed path (e.g. empty path for AS internal traffic, one hop paths limiting traffic to one-hop neighbors; and based on the number of path segments  to distinguish requests from external ISDs)
-- Rate limiting, that can be applied on control plane RPCs that require authentication
+Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control-plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.
+For RPC methods exposed to other ASes, the control service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:
+
+- `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
+- `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.
+
 
 A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances so that requests can be balanced.
 
