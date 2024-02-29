@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-27T00:15:53.363125+00:00",
+  "timestamp": "2024-02-29T00:15:22.308714+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -856,6 +856,73 @@
           "createdAt": "2024-02-23T18:43:01Z",
           "updatedAt": "2024-02-23T18:43:01Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOJx2-rs5oBktS",
+      "title": "Security considerations - DoS",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/13",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-27T10:18:47Z",
+      "updatedAt": "2024-02-28T15:16:33Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk-security-considerations-cp",
+      "headRefOid": "c43af41f2b53bc9ba0f0c8157ca3e08f639bb0c9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5xiB5t",
+          "commit": {
+            "abbreviatedOid": "c90b1b9"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T20:27:24Z",
+          "updatedAt": "2024-02-27T20:27:24Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Suggestion:\r\n\r\n---\r\n\r\n[...] e.g. filtering, geo-blocking or using cookies.\r\n\r\nRPC methods that are available to endpoints in the local AS are strictly separate from methods available to from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.\r\nFor RPC methods exposed to other ASes, the control service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:\r\n- `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded. \r\n- `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.\r\n",
+              "createdAt": "2024-02-27T20:27:24Z",
+              "updatedAt": "2024-02-27T20:27:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xo4Ny",
+          "commit": {
+            "abbreviatedOid": "c90b1b9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T15:16:32Z",
+          "updatedAt": "2024-02-28T15:16:33Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Awesome, that is exactly what I was looking for. I introduced your points. I just slightly changed the wording of the first part  a bit (e.g. on local AS), but the concept should be unchanged.  ",
+              "createdAt": "2024-02-28T15:16:33Z",
+              "updatedAt": "2024-02-28T15:16:33Z"
+            }
+          ]
         }
       ]
     }
