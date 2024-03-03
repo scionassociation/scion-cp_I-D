@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-29T00:15:22.308714+00:00",
+  "timestamp": "2024-03-03T00:16:48.452076+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -871,7 +871,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-02-27T10:18:47Z",
-      "updatedAt": "2024-02-28T15:16:33Z",
+      "updatedAt": "2024-03-01T11:02:53Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6",
@@ -882,7 +882,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell if you can have a wording pass, can you go through the whole security considerations section? (lines 1475-1565)?",
+          "createdAt": "2024-03-01T11:02:52Z",
+          "updatedAt": "2024-03-01T11:02:52Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs5xiB5t",
