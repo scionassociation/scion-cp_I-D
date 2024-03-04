@@ -167,7 +167,7 @@ The SCION control plane is responsible for discovering path segments and making 
 
 As SCION is an *inter-domain* network architecture, it only deals with *inter*-domain routing. One feature of SCION is the decoupling of inter-domain routing from endpoint addressing. This Introduction section provides a description of the SCION addressing system in more detail.
 
-**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
+**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, {{I-D.scion-dp}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
 
 
 
