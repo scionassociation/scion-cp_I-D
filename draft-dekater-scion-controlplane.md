@@ -167,7 +167,7 @@ The SCION control plane is responsible for discovering path segments and making 
 
 As SCION is an *inter-domain* network architecture, it only deals with *inter*-domain routing. One feature of SCION is the decoupling of inter-domain routing from endpoint addressing. This Introduction section provides a description of the SCION addressing system in more detail.
 
-**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
+**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, {{I-D.scion-dp}}, and {{I-D.scion-cppki}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
 
 
 
@@ -1476,7 +1476,6 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
 
-**Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
 
 This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the infrastructure (see [](#dos-cp)).
 
@@ -1550,15 +1549,18 @@ To defend against this attack, methods to detect the wormhole attack are needed.
 
 ## Denial of Service Attacks {#dos-cp}
 
-The beaconing process in the SCION control plane relies on control-plane communication. ASes exchange control-plane messages within each other when propagating PCBs to downstream neighbors,  when registering PCBs as path segments at the core control services, or during core path lookup. Volumetric DoS attacks, where attackers overload a link, may make it difficult to exchange these messages. SCION limits the impact of volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. In addition, reflection-based attacks are prevented, as thanks to path-awareness, response packets are returned on the same path to the actual sender. Control plane traffic can also be marked with priority using the TrafficClass field in the SCION common header, and mapped to a prioritized queue on border routers.
+The beaconing process in the SCION control plane relies on control-plane communication. ASes exchange control-plane messages within each other when propagating PCBs to downstream neighbors,  when registering PCBs as path segments at the core control services, or during core path lookup. Volumetric DoS attacks, where attackers overload a link, may make it difficult to exchange these messages. SCION limits the impact of volumetric DoS attacks, which aim to exhaust network bandwidth on links; in this case, ASes can switch to alternative paths that do not contain the congested links. In addition, reflection-based attacks are prevented, as thanks to path-awareness, response packets are returned on the same path to the actual sender.
 
-In addition to this, critical control services should be further protected to preserve their availability with filtering and rate-limiting. Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms, that can be employed to prevent misuse of critical request to the control plane:
+Other mechanisms are required to avoid transport protocol attacks, where the attacker tries to exhaust the resources on a target server, such as a control service server, by opening many connections to this server. Possible means to mitigate this kind of DoS attacks are basically the same as for the current Internet, e.g., filtering, geo-blocking or using cookies.
 
-- ISD / AS whitelisting only allows requests from certain categories to pass the filter (e.g. requests from infrastructure nodes of the same AS, ISD, or from neighboring ASes)
-- Path length filtering discriminates packets based on the length of the traversed path (e.g. empty path for AS internal traffic, one hop paths limiting traffic to one-hop neighbors; and based on the number of path segments  to distinguish requests from external ISDs)
-- Rate limiting, that can be applied based on various identifiers (endpoint address, AS, or ISD)
+Thanks to its path-awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control-plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.
+For RPC methods exposed to other ASes, the control service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:
 
-A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances. Different instances can be made available only to specific groups of endpoints. For example, an AS could set up path server replicas such that one replica handles all requests originating from outside the AS, whereas another replica can only be reached by end hosts within an AS.
+- `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
+- `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.
+
+
+A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances so that requests can be balanced.
 
 # IANA Considerations
 
