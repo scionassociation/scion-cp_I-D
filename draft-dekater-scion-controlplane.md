@@ -1476,7 +1476,6 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
 
-**Note:** This section only discusses SCION control plane- and routing-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-dp}} includes security considerations that concern the SCION data plane and data forwarding.
 
 This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the infrastructure (see [](#dos-cp)).
 
