@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-03T00:16:48.452076+00:00",
+  "timestamp": "2024-03-05T00:15:19.545005+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -864,24 +864,26 @@
       "id": "PR_kwDOJx2-rs5oBktS",
       "title": "Security considerations - DoS",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/13",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-27T10:18:47Z",
-      "updatedAt": "2024-03-01T11:02:53Z",
+      "updatedAt": "2024-03-04T15:23:53Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cdk-security-considerations-cp",
-      "headRefOid": "c43af41f2b53bc9ba0f0c8157ca3e08f639bb0c9",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "ebaa0373a7d916e8fd82865abff954dc582ef3dc",
+      "closedAt": "2024-03-04T15:23:53Z",
+      "mergedAt": "2024-03-04T15:23:53Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db"
+      },
       "comments": [
         {
           "author": "nicorusti",
