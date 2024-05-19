@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-16T00:16:18.588587+00:00",
+  "timestamp": "2024-05-19T00:18:22.963430+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -79,15 +79,16 @@
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
-        "jiceatscion"
+        "nicorusti",
+        "knmeynell"
       ],
       "labels": [
         "Prio 1",
         "Prio 2"
       ],
-      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [ ] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [ ] If time allows, add related work (not too academical, just overview)\r\n- [ ] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [ ] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [ ]  **peering AS**. We use the expression in the introduction.  We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n- [ ] **Add a section \u201cLife of a routing advertisement\u201d** summarizing the steps for routing,  from a initial state, to exploration, registration (a numbered list of steps). It could be something similar to what is in our 117 slides. This will give the draft an overall structure that shows: Here is the process, here is an example, here it is the details.  \r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [ ] **Clarify dependencies**:\r\n    - Time syncronization: there will be a dialogue on this . What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n    - Certificate validation for gRPC calls \r\n- [ ] **Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.    \r\n- [ ] **Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association \r\n- [ ] **2.1.2**: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section \r\n- [ ] **Manageability:** small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n- [ ] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 2.2.1 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [ ] Where do the suggested values for set size and propagation time of PCBs in section 2.4.3 \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain.\r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n- [ ] I think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help.  @nicorusti: a sentence to clarify this could be added in 1.6. at bullet point path reversal.   \r\n",
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [ ] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [ ] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [ ] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [ ] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [ ]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [ ] #18\r\n- [ ] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [ ] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [ ] #19\r\n- [ ] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [ ] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\", handled in #8 \r\n- [ ] #22\r\n",
       "createdAt": "2024-01-08T12:56:27Z",
-      "updatedAt": "2024-05-14T14:35:59Z",
+      "updatedAt": "2024-05-16T10:55:18Z",
       "closedAt": null,
       "comments": []
     },
@@ -96,7 +97,7 @@
       "id": "I_kwDOJx2-rs57aARE",
       "title": "Write IANA Considerations Section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -108,8 +109,8 @@
       ],
       "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
       "createdAt": "2024-01-08T13:01:45Z",
-      "updatedAt": "2024-02-23T18:04:00Z",
-      "closedAt": null,
+      "updatedAt": "2024-05-16T10:34:52Z",
+      "closedAt": "2024-05-16T10:34:51Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -131,6 +132,13 @@
           "body": "Hi @jceatscion in the draft we don't have the service discovery part (there was some discussion about this a while ago, and I think we removed it from the drafts, it might be in the old repo) ",
           "createdAt": "2024-02-23T18:03:59Z",
           "updatedAt": "2024-02-23T18:03:59Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We discussed this with @jiceatscion and @matzf, port 30252 does not need to be reserved, this is an AS local configuration.",
+          "createdAt": "2024-05-16T10:34:51Z",
+          "updatedAt": "2024-05-16T10:34:51Z"
         }
       ]
     },
@@ -147,11 +155,11 @@
       ],
       "labels": [
         "enhancement",
-        "Prio 3"
+        "Prio 1"
       ],
-      "body": "Jeff Tantsura at our IETF117 presentation mentioned that it was not clear how SCION does in terms of convergence time. \r\nThen we also got this question from the iSE review: \r\n\r\n> From:\tJoel Halpern\r\n> There appears to be a very fundamental gap in the scaling description.  On the one hand, SCION claims to scale well (presumably to large numbers of participating AS.  There is no discussion of the effect of the number of participants or meshiness on the number of PCBs.  There are very strict limits on the rate at which PCBs are propagated.  But no analysis as to whether the system will ever converge .  Particularly if the number of interfaces between AS becomes large. \r\n\r\nSomething about convergence time and scalability should be added to the draft. We could start from something like this:\r\n> Note that, since there is no convergence phase in SCION, we cannot compare to BGP\u2019s convergence time. SCION path-segments are stable as soon as they are disseminated.\r\n\r\nSource:\r\nhttps://netsec.ethz.ch/publications/papers/2021_conext_deployment.pdf\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/82)\r\n\r\n",
+      "body": "Jeff Tantsura at our IETF117 presentation mentioned that it was not clear how SCION does in terms of convergence time. \r\nThen we also got this question from the iSE review: \r\n\r\n> From:\tJoel Halpern\r\n> There appears to be a very fundamental gap in the scaling description.  On the one hand, SCION claims to scale well (presumably to large numbers of participating AS.  There is no discussion of the effect of the number of participants or meshiness on the number of PCBs.  There are very strict limits on the rate at which PCBs are propagated.  But no analysis as to whether the system will ever converge .  Particularly if the number of interfaces between AS becomes large. \r\n\r\nSomething about convergence time and scalability should be added to the draft. We could start from something like this:\r\n> Note that, since there is no convergence phase in SCION, we cannot compare to BGP\u2019s convergence time. SCION path-segments are stable as soon as they are disseminated.\r\n\r\nSource:\r\nhttps://netsec.ethz.ch/publications/papers/2021_conext_deployment.pdf\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/82)\r\n\r\n> From Roger Lapuh:  Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n\r\n> From Juan Garcia Pardo:  Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. \r\n",
       "createdAt": "2024-01-08T13:19:15Z",
-      "updatedAt": "2024-05-15T16:15:56Z",
+      "updatedAt": "2024-05-17T09:33:54Z",
       "closedAt": null,
       "comments": []
     },
@@ -183,20 +191,30 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [
         "editorial"
       ],
       "body": "Continue work done in #11: \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", if not needed\r\n      \r\n\r\netc.",
       "createdAt": "2024-02-23T18:42:28Z",
-      "updatedAt": "2024-05-14T13:02:46Z",
+      "updatedAt": "2024-05-16T09:10:56Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Let's fix the: \"Allowed\", review use of MAY, and then resolve this",
+          "createdAt": "2024-05-16T09:10:56Z",
+          "updatedAt": "2024-05-16T09:10:56Z"
+        }
+      ]
     },
     {
       "number": 14,
       "id": "I_kwDOJx2-rs6IwwiF",
-      "title": "referencing documents not to be published...",
+      "title": "Extend introduction and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "state": "OPEN",
       "author": "elear",
@@ -206,18 +224,20 @@
         "knmeynell"
       ],
       "labels": [
+        "enhancement",
+        "Prio 1",
         "editorial"
       ],
-      "body": ">   \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\nthe first two documents are not in my queue and I don't expect them.",
+      "body": ">   \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\nthe first two documents are not in my queue and I don't expect them.\r\n\r\n\r\nSame issue in other drafts: \r\n- DP https://github.com/scionassociation/scion-dp_I-D/issues/10\r\n- CPPKI https://github.com/scionassociation/scion-cppki_I-D/issues/29",
       "createdAt": "2024-05-14T05:57:55Z",
-      "updatedAt": "2024-05-14T14:54:35Z",
+      "updatedAt": "2024-05-17T14:12:35Z",
       "closedAt": null,
       "comments": []
     },
     {
       "number": 15,
       "id": "I_kwDOJx2-rs6IwxcL",
-      "title": "dangling reference",
+      "title": "gRPC & service discovery - dangling reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/15",
       "state": "OPEN",
       "author": "elear",
@@ -227,13 +247,22 @@
         "jiceatscion"
       ],
       "labels": [
-        "editorial"
+        "question",
+        "needs-discussion"
       ],
       "body": "\r\n   > \\*Note:\\* The details of how gRPC is mapped to the SCION data plane\r\n   will be described in a separate document.\r\n\r\nWhich document?",
       "createdAt": "2024-05-14T05:59:13Z",
-      "updatedAt": "2024-05-14T13:03:21Z",
+      "updatedAt": "2024-05-16T10:28:26Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\n",
+          "createdAt": "2024-05-16T10:23:09Z",
+          "updatedAt": "2024-05-16T10:28:26Z"
+        }
+      ]
     },
     {
       "number": 16,
@@ -243,31 +272,173 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
-      "labels": [
-        "question"
+      "assignees": [
+        "matzf"
       ],
-      "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\n",
+      "labels": [
+        "question",
+        "needs-discussion"
+      ],
+      "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2024-05-15T15:57:30Z",
+      "updatedAt": "2024-05-17T07:44:49Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Ideally, we'd like not to mandate or recommend any specific selection policy. PCB selection, overall gives some control to the AS, that can \"limit\" what its endpoint gets. \r\nFor an AS where endpoints are direct customers, selection policies can be driven by what was bought by customer (e.g. premium paths or not). \r\nFor a transit AS, this gets more complicated.",
+          "createdAt": "2024-05-16T10:46:52Z",
+          "updatedAt": "2024-05-17T07:42:46Z"
+        }
+      ]
     },
     {
       "number": 17,
       "id": "I_kwDOJx2-rs6I_apu",
-      "title": "Clarifications about AS interfaces",
+      "title": "Clarifications about AS interfaces and peering",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/17",
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "matzf",
+        "jiceatscion"
+      ],
       "labels": [
         "question"
       ],
-      "body": "> From:\tJoel Halpern \r\n> There is no description of how an A control service knows the existence of the many AS interfaces, whether they are core, up, down, or peering interfaces, and what AS they go to.\r\n\r\n> There is also no information about how the needed properties of peering adjacencies are made available to the control service.\r\n\r\n> Also, somewhere (not sure if it is a data plane or control plane mechanism), there needs to be a mechanism to translate neighbor interface identifiers to underlay addresses.\r\n\r\nMost if this is pre-configured by the AS, in the OS implementation in the [topology file](https://docs.scion.org/en/latest/manuals/common.html#topology-json), we should indeed add something about this to the draft.\r\n ",
+      "body": "> From:\tJoel Halpern \r\n> There is no description of how an A control service knows the existence of the many AS interfaces, whether they are core, up, down, or peering interfaces, and what AS they go to.\r\n\r\n> There is also no information about how the needed properties of peering adjacencies are made available to the control service.\r\n\r\n> Also, somewhere (not sure if it is a data plane or control plane mechanism), there needs to be a mechanism to translate neighbor interface identifiers to underlay addresses.\r\n\r\nMost if this is pre-configured by the AS, in the OS implementation in the [topology file](https://docs.scion.org/en/latest/manuals/common.html#topology-json), we should indeed add something about this to the draft.\r\n\r\n\r\nAlso, Eliot commented about  peering ASe: We use the expression in the introduction. We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n ",
       "createdAt": "2024-05-15T16:10:06Z",
-      "updatedAt": "2024-05-15T16:10:06Z",
+      "updatedAt": "2024-05-16T10:53:00Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOJx2-rs6JFOrJ",
+      "title": "Clarify time synchronization dependency",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/18",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "question"
+      ],
+      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [ ] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity). Also, there is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [ ] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [ ] Check if DP draft also needs to be updated\r\n- [ ] Certificate validation for gRPC calls: what is the tolerance and where is it specified",
+      "createdAt": "2024-05-16T09:26:22Z",
+      "updatedAt": "2024-05-16T09:29:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOJx2-rs6JFS5N",
+      "title": "Add context to bullet points in 2.1.2 (Extending a PCB) ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/19",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": " 2.1.2: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section\r\n ```\r\n   *  For the specification of one PCB, see Section 2.2\r\n\r\n   *  For more details on selecting PCBs, see Section 2.3.1\r\n\r\n   *  For more details on propagating PCBs, see Section 2.3.2\r\n ```\r\n\r\nFrom discussion with Eliot (28.08.23)",
+      "createdAt": "2024-05-16T09:34:23Z",
+      "updatedAt": "2024-05-17T10:06:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOJx2-rs6JFU0C",
+      "title": "Manageability: what must an AS keep track of (paths, links, certificates, \u2026)",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/20",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 3"
+      ],
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\n",
+      "createdAt": "2024-05-16T09:38:07Z",
+      "updatedAt": "2024-05-17T09:54:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOJx2-rs6JFXal",
+      "title": "Add a section \u201cLife of a routing advertisement\u201d ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/21",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "Add a section \u201cLife of a routing advertisement\u201d summarizing the steps for routing,  from a initial state, to exploration, registration (a numbered list of steps). It could be something similar to what is in our 117 slides. This will give the draft an overall structure that shows: Here is the process, here is an example, here it is the details.",
+      "createdAt": "2024-05-16T09:43:10Z",
+      "updatedAt": "2024-05-16T10:55:18Z",
+      "closedAt": "2024-05-16T10:55:17Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This was already added in 1.4.  Routing, issue is obsolete. ",
+          "createdAt": "2024-05-16T10:55:17Z",
+          "updatedAt": "2024-05-16T10:55:17Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOJx2-rs6JFfLE",
+      "title": "Clarify path reversal for symmetric routing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/22",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "question"
+      ],
+      "body": " think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help.\r\n \r\n  @nicorusti: a sentence to clarify this could be added in 1.6. at bullet point path reversal.",
+      "createdAt": "2024-05-16T09:55:40Z",
+      "updatedAt": "2024-05-16T09:56:53Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOJx2-rs6JR5P1",
+      "title": "Clarify selection of MAC algorithm",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/23",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "question",
+        "Prio 2"
+      ],
+      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n we could make it clearer also in the control plane draft  \r\n\r\nRelates to https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
+      "createdAt": "2024-05-17T16:38:24Z",
+      "updatedAt": "2024-05-17T16:40:44Z",
       "closedAt": null,
       "comments": []
     }
@@ -887,7 +1058,7 @@
       "labels": [],
       "body": "There's still some more MUST required IMHO.\r\n",
       "createdAt": "2024-01-11T16:38:55Z",
-      "updatedAt": "2024-02-26T09:34:28Z",
+      "updatedAt": "2024-05-17T09:40:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "cdd780068b10d3a42eacf4bcbf092bcfd518ed40",
@@ -937,7 +1108,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-02-27T10:18:47Z",
-      "updatedAt": "2024-03-04T15:23:53Z",
+      "updatedAt": "2024-05-17T09:40:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6",
