@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-21T00:17:00.452562+00:00",
+  "timestamp": "2024-05-23T00:16:34.956099+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -252,15 +252,15 @@
       ],
       "body": "\r\n   > \\*Note:\\* The details of how gRPC is mapped to the SCION data plane\r\n   will be described in a separate document.\r\n\r\nWhich document?",
       "createdAt": "2024-05-14T05:59:13Z",
-      "updatedAt": "2024-05-16T10:28:26Z",
+      "updatedAt": "2024-05-21T09:03:14Z",
       "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\n",
+          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/issues/4434 / https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\n",
           "createdAt": "2024-05-16T10:23:09Z",
-          "updatedAt": "2024-05-16T10:28:26Z"
+          "updatedAt": "2024-05-21T09:03:14Z"
         }
       ]
     },
