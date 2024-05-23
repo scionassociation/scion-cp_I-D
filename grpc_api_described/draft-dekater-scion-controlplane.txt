@@ -5,7 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 25 August 2024                                 22 February 2024
+Expires: 24 November 2024                                        S. Hitz
+                                                         Anapaya Systems
+                                                             23 May 2024
 
 
                           SCION Control Plane
@@ -61,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 August 2024.
+   This Internet-Draft will expire on 24 November 2024.
 
 Copyright Notice
 
@@ -116,12 +118,20 @@ Table of Contents
        4.2.2.  Segment-Request Handler of a Non-Core Source AS
        4.2.3.  Segment-Request Handler of a Core AS
    5.  Security Considerations
+     5.1.  Manipulation of the Beaconing Process by a Core Adversary
+     5.2.  Manipulation of the Beaconing Process by a Non-Core
+           Adversary
+       5.2.1.  Path Hijacking through Interposition
+       5.2.2.  Creation of Spurious ASes and ISDs
+       5.2.3.   Peering Link Misuse
+       5.2.4.  Manipulation of the Path-Selection Process
+     5.3.  Denial of Service Attacks
    6.  IANA Considerations
    7.  References
      7.1.  Normative References
      7.2.  Informative References
    Acknowledgments
-   PCB Protobuf Messages - Full Example
+   Control Service gRPC API
    Path-Lookup Examples
    Authors' Addresses
 
@@ -143,9 +153,9 @@ Table of Contents
    the basic concepts of the SCION next-generation inter-domain network
    architecture.  If not, please find more detailed information in the
    IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],
-   and [I-D.scion-cppki], as well as in [CHUAT22], especially Chapter 2.
-   A short description of the SCION basic terms and elements can be
-   found in Section 1.1 below.
+   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],
+   especially Chapter 2.  A short description of the SCION basic terms
+   and elements can be found in Section 1.1 below.
 
 1.1.  Terminology
 
@@ -179,7 +189,7 @@ Table of Contents
    *Endpoint*: An endpoint is the start- or the endpoint of a SCION
    path.  For example, an endpoint can be a host as defined in
    [RFC1122], or a gateway bridging a SCION and an IP domain.  This
-   definition is based on the definition in [I-D.path-properties-voc].
+   definition is based on the definition in [RFC9473].
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
    between two SCION hosts, which is used to transmit packets in the
@@ -207,6 +217,11 @@ Table of Contents
 
    *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
    ASes.
+
+   *MAC*: Message Authentication Code.  In the rest of this document,
+   "MAC" always refers to "Message Authentication Code" and never to
+   "Medium Access Control".  When "Medium Access Control address" is
+   implied, the phrase "Link Layer Address" is used.
 
    *Packet-Carried Forwarding State (PCFS)*: Rather than relying on
    costly inter-domain forwarding tables, SCION data packets contain all
@@ -427,9 +442,9 @@ Table of Contents
    endpoint address> 3-tuple, the endpoint address is not used for
    inter-domain routing or forwarding.  The endpoint address can be of
    variable length, does not need to be globally unique, and can thus be
-   an IPv4, IPv6, or MAC address, for example - in fact, the endpoint
-   address is the "normal", currently used, non-SCION-specific endpoint
-   address.
+   an IPv4, IPv6, or link layer address, for example - in fact, the
+   endpoint address is the "normal", currently used, non-SCION-specific
+   endpoint address.
 
    However, the ISD-AS number is a SCION-specific number.  It consists
    of 64-bits, with the top 16 bits indicating the ISD, and the bottom
@@ -468,14 +483,10 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   A suitable mechanism to globally coordinate the assignation of ISD
-   numbers does not yet exist.  However, we hope that in the future an
-   organization such as ICANN or a regional Internet registry (e.g.,
-   RIPE NCC) will take on the responsibility of assigning ISD and AS
-   numbers.
-
    Currently, ISD numbers are allocated by Anapaya, the Swiss-based
-   provider of SCION-based networking software and solutions.
+   provider of SCION-based networking software and solutions (see
+   Anapaya ISD AS assignments
+   (https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
 
 1.5.2.  SCION AS Numbers
 
@@ -548,7 +559,7 @@ Table of Contents
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
-   A secure and reliable routing architecture must be designed
+   A secure and reliable routing architecture has to be designed
    specifically to avoid circular dependencies during network
    initialization.  One goal of SCION is that the Internet can start up
    even after large outages or attacks, in addition to avoiding cascades
@@ -611,8 +622,15 @@ Table of Contents
    Buffer "proto3" interface definition language (for details, see
    [proto3]).
 
-   *Note:* The details of how gRPC is mapped to the SCION data plane
-   will be described in a separate document.
+   In current practice, the gRPC messages are transported via HTTP/2
+   ([RFC9113]).  The HTTP protocol itself is implemented on-top of QUIC
+   connections ([RFC9000]), themselves on top of the SCION data plane.
+   This stack is not desirable and is being deprecated in favor of
+   (Connect)[https://connectrpc.com/].  The SCION community has only
+   started the migration process.
+
+   Appendix Appendix "Control Service gRPC API" provides the entire
+   control service API definitino in protobuf format.
 
 2.  Path Exploration or Beaconing
 
@@ -667,7 +685,7 @@ Table of Contents
 2.1.2.  Extending a PCB
 
    Every propagation period (as configured by the AS), the control
-   service
+   service:
 
    *  selects the best combinations of PCBs and interfaces connecting to
       a neighboring AS (i.e., a child AS or a core AS), and
@@ -952,7 +970,7 @@ path segment 4 |             |     |             |     |             |
    diving deeper into each of the PCB's message components.
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "PCB Protobuf Messages - Full Example".
+   please see Appendix "Control Service gRPC API".
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -960,7 +978,7 @@ path segment 4 |             |     |             |     |             |
    |Segment Info | AS Entry 0  | AS Entry 1 |  ... | AS Entry N |
    +-------------+-------------+------------+------+------------+
 
-   Each PCB at least consists of:
+   Each PCB MUST consists of at least:
 
    *  An information field with an identifier and a timestamp.
 
@@ -1148,7 +1166,7 @@ path segment 4 |             |     |             |     |             |
    +---------+---------+------------+--------------+
 
    The header part defines metadata that is relevant to (the computation
-   and verification of) the signature.  It MUST at least include the
+   and verification of) the signature.  It MUST include at least the
    following metadata:
 
    *  The algorithm to compute the signature
@@ -1231,7 +1249,7 @@ path segment 4 |             |     |             |     |             |
  |ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0|...|Peer Entry N||MTU|Ext.|
  +------+-----------+---------++------------+---+------------++---+----+
 
-   The body of an AS entry consists of the signed component
+   The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all ASes in the path segment represented by the
    PCB, up until and including the current AS.
 
@@ -1265,7 +1283,7 @@ path segment 4 |             |     |             |     |             |
 
    *  extensions: List of (signed) extensions (optional).  PCB
       extensions defined here are part of the signed AS entry.  This
-      field should therefore only contain extensions that include
+      field SHOULD therefore only contain extensions that include
       important metadata for which cryptographic protection is required.
       For more information on PCB extensions, see Section 2.2.2.
 
@@ -1540,7 +1558,7 @@ path segment 4 |             |     |             |     |             |
       beaconing.
 
    *Note:* Note that during bootstrapping and if the AS obtains a PCB
-   containing a previously unknown path, the AS should forward the PCB
+   containing a previously unknown path, the AS SHOULD forward the PCB
    immediately, to ensure quick connectivity establishment.
 
 2.3.1.2.  Selection Policy Example
@@ -1713,7 +1731,7 @@ path segment 4 |             |     |             |     |             |
           corresponding peer entry components to the signed body of the
           AS entry; one peer entry component for each peering link that
           the AS wants to advertise.  The hop field component of each
-          added peer entry must have a specified egress interface.
+          added peer entry MUST have a specified egress interface.
 
    3.  The control service MUST now sign each selected, extended PCB and
        append the computed signature.
@@ -2231,17 +2249,256 @@ path segment 4 |             |     |             |     |             |
 
 5.  Security Considerations
 
-   One of the fundamental objectives that guided the design of SCION is
-   security, in particular network security.  See chapter 7 of the SCION
-   book (Security Analysis), which states the precise security goals of
-   various network participants and how SCION achieves these goals in
-   the presence of different types of adversaries [CHUAT22].
+   As described previously, the goal of SCION’s beaconing process in the
+   control plane is to securely discover and disseminate paths between
+   any two ASes.  This section describes security considerations for
+   SCION's control plane, that focuses on _inter_-domain routing.  SCION
+   does not provide intra-domain routing, nor does it provide end-to-end
+   payload encryption.  These topics lie therefore outside the scope of
+   this section.
 
-   To be precised.
+   This section focuses on three kinds of security risks in the control
+   plane.  The first risk is when an adversary controls one or all core
+   ASes of an ISD and tries to manipulate the beaconing process from the
+   top down (see Section 5.1).  Also "ordinary" (non-core) adversaries
+   that try to manipulate the beaconing process pose a risk to the
+   control plane (see Section 5.2).  The third kind of security risks
+   are Denial of Services (DoS) attacks, where attackers overload
+   different parts of the infrastructure (see Section 5.3).
+
+5.1.  Manipulation of the Beaconing Process by a Core Adversary
+
+   The first kind of risk to the beaconing process comes from an
+   adversary controlling one or more core ASes in an ISD.  If the
+   adversary stops all core AS(es) within an ISD from propagating PCBs,
+   the discovery of new paths halts.  In this case, downstream ASes will
+   notice that PCBs are no longer being propagated, but all previously
+   discovered (and still valid) paths remain usable for data-plane
+   forwarding until they expire.  This is an unlikely scenario, as it
+   would require compromise of all core ASes within an ISD.
+
+5.2.  Manipulation of the Beaconing Process by a Non-Core Adversary
+
+   This section examines several possible approaches open to an
+   "ordinary" non-core adversary to manipulate the beaconing process in
+   the SCION control plane, and shows for each case to what extent
+   SCION's design can prevent the corresponding attack or help to
+   mitigate it.
+
+   *  Path hijacking through interposition (see Section 5.2.1)
+
+   *  Creation of spurious ASes and ISDs (see Section 5.2.2)
+
+   *  Peering link misuse (see Section 5.2.3)
+
+   *  Manipulation of the path selection process (see Section 5.2.4)
+
+5.2.1.  Path Hijacking through Interposition
+
+   An malicious AS M might try to manipulate the beaconing process
+   between two neighbor ASes A and B, with the goal to hijack traffic to
+   flow via M.  If M can interpose itself on the path between A and B,
+   then it could attempt several potential attacks:
+
+   *  The adversary M could intercept and disseminate a PCB on its way
+      from A to the neighboring AS B, and inject its own AS entry into
+      the PCB toward downstream ASes.
+
+   *  The adversary could modify the hop fields of an already existing
+      path, in order to insert its own AS in the path.
+
+   *  The adversary could fully block traffic between AS A and AS B, in
+      order to force traffic redirection through an alternate path that
+      includes its own AS.
+
+   The first type of attack is detectable and blocked by downstream ASes
+   (e.g.  B), because a PCB disseminated by AS A towards AS B contains
+   the "Next ISD AS" field in the entry of AS A, pointing to AS B, and
+   protected by A's signature.  If M manipulates the PCB while in flight
+   from A to B, then verification of the manipulated inbound PCBs will
+   fail at AS B, as the adversary's PCBs cannot contain A's correct
+   signature.  The second type of attack is made impossible by the hop
+   field's MAC, which protects the hop field's integrity and chains it
+   with the previous hop fields on the path.  The third type of attack
+   generally cannot be prevented, however the alternate path would be
+   immediately visible to endpoints, as traffic must include hop fields
+   from AS M.
+
+5.2.2.  Creation of Spurious ASes and ISDs
+
+   An alternative scenario is when an adversary tries to introduce and
+   spoof a nonexistent ASes.  This would enable the adversary to send
+   traffic with the spoofed AS as a source, allowing the adversary to
+   complicate the detection of its attack and to plausibly deny the
+   misbehavior.
+
+   However, spoofing a new AS requires a registration of that AS with
+   the ISD core to obtain a valid AS certificate; otherwise the
+   adversary cannot construct valid PCBs.  As this registration includes
+   a thorough check and authentication by a CA, this cannot be done
+   stealthily, which defeats the original purpose.
+
+   Similarly to creating a fake AS, an adversary could try to introduce
+   a new, malicious ISD.  This involves the generation of its own TRC,
+   finding core ASes to peer with, and convincing other ISDs of its
+   legitimacy to accept the new TRC.  Although this setup is not
+   entirely impossible, it requires substantial time and effort, and may
+   need the involvement of more than one malicious entity.  Here, the
+   "costs" of setting up the fake ISD may outweigh the benefits.
+
+5.2.3.   Peering Link Misuse
+
+   The misuse of a peering link by an adversary represents another type
+   of attack.  Consider the case where AS A wants to share its peering
+   link only with one of its downstream neighbors, AS B, and therefore
+   selectively includes the peering link only in PCBs sent to B.  An
+   adversary may now try to gain access to this peering link by
+   prepending the relevant PCBs to its own path.  For this, the
+   adversary needs to be able to (1) eavesdrop on the link from A to B,
+   and (2) obtain the necessary hop fields by querying a control service
+   and extracting the hop fields from registered paths.
+
+   Even if an adversary succeeds in misusing a peering link as described
+   above, SCION is able to mitigate this kind of attack: Each AS
+   includes an egress interface as well as specific “next hop”
+   information to the PCB before disseminating it further downstream.
+   If a malicious entity tries to misuse a stolen PCB by adding it to
+   its own segments, verification will fail upstream as the egress
+   interface mismatches.  Therefore, the peering link can only be used
+   by the intended AS.
+
+5.2.4.  Manipulation of the Path-Selection Process
+
+   Endpoint path control is one of the main benefits of SCION compared
+   to the current Internet, as SCION endpoints can select inter-domain
+   forwarding paths for each packet.  However, with the benefits of path
+   selection comes the risk of endpoints selecting non-optimal paths.
+   This section discusses some mechanisms with which an adversary can
+   attempt to trick endpoints downstream (in the direction of beaconing)
+   into choosing non-optimal paths.  The goal of such attacks is to make
+   paths that are controlled by the adversary more attractive than other
+   available paths.
+
+   In SCION, overall path selection is the result of three steps.
+   First, each AS selects which PCBs are further forwarded to its
+   neighbors.  Second, each AS chooses the paths it wants to register at
+   the local control service (as up-segments) and at the core control
+   service (as down-segments).  Third, the endpoint performs path
+   selection among all available paths resulting from a path lookup
+   process.  The following text describes attacks that aim at
+   influencing the path-selection process.
+
+   These attacks are only successful if the adversary is located within
+   the same ISD and upstream relative to the victim AS.  It is not
+   possible to attract traffic away from the core as traffic travels
+   upstream towards the core.  Furthermore, the attack may either be
+   discovered downstream (e.g., by seeing large numbers of paths
+   becoming available), or during path registrations.  After detection,
+   non-core ASes will be able to identify paths traversing the adversary
+   AS and avoid these paths.
+
+   *Announcing Large Numbers of Path Segments*
+   This attack is possible if the adversary controls multiple (at least
+   two) ASes.  The adversary can create a large number of links between
+   the ASes under its control, which do not necessarily correspond to
+   physical links.  This allows the adversary to multiply the number of
+   PCBs forwarded to its downstream neighbor ASes.  This in turn
+   increases the chance that one or several of these forwarded PCBs are
+   selected by the downstream ASes.
+
+   In general, the number of PCBs that an adversary can announce this
+   way scales exponentially with the number of consecutive ASes the
+   adversary controls.  However, this also decreases their chance of
+   being chosen by a downstream AS for PCB dissemination or by an
+   endpoint for path construction, as these relatively long paths have
+   to compete with other, shorter paths.  Furthermore, both endpoints
+   and downstream ASes can detect poorer quality paths in the data plane
+   and switch to better paths.
+
+   *Wormhole Attack*
+   A malicious AS M1 can send a PCB not only to their downstream
+   neighbor ASes, but also out-of-band to another, non-neighbor
+   colluding malicious AS M2.  This creates new segments to M2 and M2's
+   downstream neighbor ASes, simulating a link between M1 and M2 which
+   may not correspond to an actual link in the network topology.
+
+   Similarly, a fake path can be announced through a fake peering link
+   between two colluding ASes, even if in different ISDs.  An adversary
+   can advertise fake peering links between the two colluding ASes, thus
+   offering short paths to many destination ASes.  Downstream ASes might
+   have a policy of preferring paths with many peering links and thus
+   are more likely to disseminate PCBs from the adversary.  Similarly,
+   endpoints are more likely to choose short paths that make use of
+   peering links.  In the data plane, whenever the adversary receives a
+   packet containing a fake peering link, it can transparently exchange
+   the fake peering hop fields with valid hop fields to the colluding
+   AS.  To avoid detection of the path alteration by the receiver, the
+   colluding AS can replace the added hop fields with the fake peering
+   link hop fields the sender inserted.
+
+   To defend against this attack, methods to detect the wormhole attack
+   are needed.  Per link or path latency measurements can help reveal
+   the wormhole and render the fake peering link suspicious or
+   unattractive.  Without specific detection mechanisms these so-called
+   wormhole attacks are unavoidable in routing.
+
+5.3.  Denial of Service Attacks
+
+   The beaconing process in the SCION control plane relies on control-
+   plane communication.  ASes exchange control-plane messages within
+   each other when propagating PCBs to downstream neighbors, when
+   registering PCBs as path segments at the core control services, or
+   during core path lookup.  Volumetric DoS attacks, where attackers
+   overload a link, may make it difficult to exchange these messages.
+   SCION limits the impact of volumetric DoS attacks, which aim to
+   exhaust network bandwidth on links; in this case, ASes can switch to
+   alternative paths that do not contain the congested links.  In
+   addition, reflection-based attacks are prevented, as thanks to path-
+   awareness, response packets are returned on the same path to the
+   actual sender.
+
+   Other mechanisms are required to avoid transport protocol attacks,
+   where the attacker tries to exhaust the resources on a target server,
+   such as a control service server, by opening many connections to this
+   server.  Possible means to mitigate this kind of DoS attacks are
+   basically the same as for the current Internet, e.g., filtering, geo-
+   blocking or using cookies.
+
+   Thanks to its path-awareness, SCION enables more fine-grained
+   filtering mechanisms based on certain path properties.  For example,
+   control-plane RPC methods that are available to endpoints within an
+   AS are strictly separate from methods available to endpoints from
+   other ASes.  Specifically, expensive recursive path segment and trust
+   material lookups are thus shielded from abuse by unauthorized
+   entities.  For RPC methods exposed to other ASes, the control service
+   implementation minimizes its attack surface by rejecting illegitimate
+   callers based on ISD/AS, path type and length and any other available
+   data points as soon as possible, i.e. immediately after determining
+   the request type.  For example:
+
+   *  SegmentCreationService.Beacon can only be called by direct
+      neighbors and thus calls from peers with a path length greater
+      than one can immediately be discarded.
+
+   *  SegmentRegistrationService.SegmentsRegistration can only be called
+      from within the same ISD, thus the source address must match the
+      local ISD and the number of path segments must be 1.
+
+   A combination of the mechanism above is used to prevent flooding
+   attacks on the control service.  In addition, the control services
+   are designed to be deployed on replicated instances so that requests
+   can be balanced.
 
 6.  IANA Considerations
 
-   TODO IANA considerations.
+   This document has no IANA actions.
+
+   The ISD and SCION AS number are SCION-specific numbers.  They are
+   currently allocated by Anapaya Systems, a provider of SCION-based
+   networking software and solutions (see Anapaya ISD AS assignments
+   (https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
+   This task is currently being transitioned from Anapaya to the SCION
+   Association.
 
 7.  References
 
@@ -2250,10 +2507,15 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.path-properties-voc]
-              Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
-              Properties", 2023, <https://datatracker.ietf.org/doc/
-              draft-irtf-panrg-path-properties/>.
+   [I-D.scion-components]
+              Rustignoli, N. and C. de Kater, "SCION Components
+              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
+              rustignoli-panrg-scion-components/>.
+
+   [I-D.scion-cppki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-pki/>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
@@ -2273,22 +2535,23 @@ path segment 4 |             |     |             |     |             |
               Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
               2006, <https://www.rfc-editor.org/rfc/rfc4632>.
 
-   [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
-              Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
-              December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
-
    [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
               Address Text Representation", RFC 5952,
               DOI 10.17487/RFC5952, August 2010,
               <https://www.rfc-editor.org/rfc/rfc5952>.
 
-   [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
-              Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
-              2013, <https://www.rfc-editor.org/rfc/rfc6996>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RFC9113]  Thomson, M., Ed. and C. Benfield, Ed., "HTTP/2", RFC 9113,
+              DOI 10.17487/RFC9113, June 2022,
+              <https://www.rfc-editor.org/rfc/rfc9113>.
 
 7.2.  Informative References
 
@@ -2297,139 +2560,205 @@ path segment 4 |             |     |             |     |             |
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.scion-components]
-              Rustignoli, N. and C. de Kater, "SCION Components
-              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
-              rustignoli-panrg-scion-components/>.
-
-   [I-D.scion-cppki]
-              de Kater, C. and N. Rustignoli, "SCION Control-Plane PKI",
-              2023, <https://datatracker.ietf.org/doc/draft-dekater-
-              scion-pki/>.
+   [I-D.scion-dp]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
+              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-dataplane/>.
 
    [I-D.scion-overview]
               de Kater, C., Rustignoli, N., and A. Perrig, "SCION
               Overview", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-panrg-scion-overview/>.
 
+   [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
+              Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
+              December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
+
+   [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
+              Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
+              2013, <https://www.rfc-editor.org/rfc/rfc6996>.
+
+   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
 Acknowledgments
 
    Many thanks go to William Boye (Swiss National Bank), Matthias Frei
-   (SCION Association), Juan A.  Garcia Prado (ETH Zurich), Samuel Hitz
-   (Anapaya), and Roger Lapuh (Extreme Networks) for reviewing this
-   document.  We are also very grateful to Adrian Perrig (ETH Zurich),
-   for providing guidance and feedback about each aspect of SCION.
-   Finally, we are indebted to the SCION development teams of Anapaya
-   and ETH Zurich, for their practical knowledge and for the
+   (SCION Association), Kevin Meynell (SCION Association), Juan A.
+   Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for
+   reviewing this document.  We are also very grateful to Adrian Perrig
+   (ETH Zurich), for providing guidance and feedback about each aspect
+   of SCION.  Finally, we are indebted to the SCION development teams of
+   Anapaya and ETH Zurich, for their practical knowledge and for the
    documentation about the SCION Control Plane, as well as to the
    authors of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
 
-PCB Protobuf Messages - Full Example
+Control Service gRPC API
 
-   The following code block provides a full example of one PCB in the
+   The following code block provides the full control service API in the
    Protobuf message format.
 
-   message PathSegment {
-       bytes segment_info = 1;
-       repeated ASEntry as_entries = 2;
-   }
+enum SegmentType {
+    // Unknown segemnt type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+  }
 
-   message SegmentInformation {
-       int64 timestamp = 1;
-       uint32 segment_id = 2;
-   }
 
-   message ASEntry {
-       // The signed part of the AS entry. The body of the SignedMessage
-       // is the serialized ASEntrySignedBody.
-       // The signature input is defined as following:
-       //
-       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
-       //
-       // associated_data(ps, i) =
-       //             ps.segment_info ||
-       //             ps.as_entries[1].signed.header_and_body ||
-       //             ps.as_entries[1].signed.signature ||
-       //             ...
-       //             ps.as_entries[i-1].signed.header_and_body ||
-       //             ps.as_entries[i-1].signed.signature
-       //
-       SignedMessage signed = 1;
-       // Optional
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
 
-   message SignedMessage {
-       // Encoded header and body.
-       bytes header_and_body = 1;
-       // Raw signature. The signature is computed over the
-       // concatenation of the header and body, and the optional
-       // associated data.
-       bytes signature = 2;
-   }
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
 
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
-       bytes header = 1;
-       // Raw payload suitable for signature computation.
-       bytes body = 2;
-   }
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message Header {
-       SignatureAlgorithm signature_algorithm = 1;
-       bytes verification_key_id = 2;
-       // Optional
-       google.protobuf.Timestamp timestamp = 3;
-       // Optional
-       bytes metadata = 4;
-       int32 associated_data_length = 5;
-   }
+    // Mapping from path segment type to path segments. The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
 
-   message VerificationKeyID {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       uint64 trc_base = 3;
-       uint64 trc_serial = 4;
-   }
+    // Deprecated list of signed revocations. Will be removed with header v1.
+    repeated bytes deprecated_signed_revocations = 1000;
+}
 
-   message ASEntrySignedBody {
-       uint64 isd_as = 1;
-       uint64 next_isd_as = 2;
-       HopEntry hop_entry = 3;
-       repeated PeerEntry peer_entries = 4;
-       uint32 mtu = 5;
-       // Optional
-       PathSegmentExtensions extensions = 6;
-   }
+service SegmentRegistrationService {
+    // SegmentsRegistration registers segments at the remote.
+    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
+}
 
-   message HopEntry {
-       HopField hop_field = 1;
-       uint32 ingress_mtu = 2;
-   }
+message SegmentsRegistrationRequest {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message PeerEntry {
-       uint64 peer_isd_as = 1;
-       uint64 peer_interface = 2;
-       uint32 peer_mtu = 3;
-       HopField hop_field = 4;
-   }
+    // Mapping from path segment type to path segments. The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message HopField {
-       uint64 ingress = 1;
-       uint64 egress = 2;
-       uint32 exp_time = 3;
-       bytes mac = 4;
-   }
+message SegmentsRegistrationResponse {}
+
+service SegmentCreationService {
+    // Beacon sends a beacon to the remote.
+    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+}
+
+message BeaconRequest {
+    // Beacon in form of a partial path segment.
+    PathSegment segment = 1;
+}
+
+message BeaconResponse {}
+
+message PathSegment {
+    // The encoded SegmentInformation. It is used for signature input.
+    bytes segment_info = 1;
+    // Entries of ASes on the path.
+    repeated ASEntry as_entries = 2;
+}
+
+message SegmentInformation {
+    // Segment creation time set by the originating AS. Segment expiration time
+    // is computed relative to this timestamp. The timestamp is encoded as
+    // number of seconds elapsed since January 1, 1970 UTC.
+    int64 timestamp = 1;
+    // The 16-bit segment ID integer used for MAC computation.
+    uint32 segment_id = 2;
+}
+
+message ASEntry {
+    // The signed part of the AS entry. The body of the SignedMessage is the
+    // serialized ASEntrySignedBody. The signature input is defined as following:
+    //
+    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+    //
+    //  associated_data(ps, i) = ps.segment_info ||
+    //                           ps.as_entries[1].signed.header_and_body ||
+    //                           ps.as_entries[1].signed.signature ||
+    //                           ...
+    //                           ps.as_entries[i-1].signed.header_and_body ||
+    //                           ps.as_entries[i-1].signed.signature
+    //
+    proto.crypto.v1.SignedMessage signed = 1;
+    // The unsigned part of the AS entry.
+    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+}
+
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+}
+
+message HopEntry {
+    // Material to create the data-plane hop field.
+    HopField hop_field = 1;
+    // MTU on the ingress link.
+    uint32 ingress_mtu = 2;
+}
+
+message PeerEntry {
+    // ISD-AS of peer AS. This is used to match peering segments during path
+    // construction.
+    uint64 peer_isd_as = 1;
+    // Remote peer interface identifier. This is used to match peering segments
+    // during path construction.
+    uint64 peer_interface = 2;
+    // MTU on the peering link.
+    uint32 peer_mtu = 3;
+    // Material to create the data-plane hop field
+    HopField hop_field = 4;
+}
+
+message HopField {
+    // Ingress interface identifier.
+    uint64 ingress = 1;
+    // Egress interface identifier.
+    uint64 egress = 2;
+    // 8-bit encoded expiration offset relative to the segment creation
+    // timestamp.
+    uint32 exp_time = 3;
+    // MAC used in the dataplane to verify the hop field.
+    bytes mac = 4;
+}
+
+            Figure 10: Control Service gRPC API definition
 
 Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 10 below.  In both examples, the source
-   endpoint is in AS A.  Figure 11 shows the sequence diagram for the
+   is represented in Figure 11 below.  In both examples, the source
+   endpoint is in AS A.  Figure 12 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 12 shows the path lookup sequence diagram if the destination
+   Figure 13 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e., there is no up-segment from A to C.
@@ -2459,7 +2788,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 10: Topology used in the path lookup examples.
+           Figure 11: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -2517,7 +2846,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 11: Sequence diagram illustrating a path lookup for a
+     Figure 12: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down-segments between any core AS in the source ISD and
@@ -2588,7 +2917,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 12: Sequence diagram illustrating a path lookup for a
+     Figure 13: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down-
@@ -2598,9 +2927,14 @@ Authors' Addresses
 
    Corine de Kater
    SCION Association
-   Email: cdk@scion.org
+   Email: c_de_kater@gmx.ch
 
 
    Nicola Rustignoli
    SCION Association
    Email: nic@scion.org
+
+
+   Samuel Hitz
+   Anapaya Systems
+   Email: hitz@anapaya.net
