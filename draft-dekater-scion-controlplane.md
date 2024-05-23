@@ -69,6 +69,8 @@ normative:
   RFC4632:
   RFC5952:
   RFC8174:
+  RFC9000:
+  RFC9113:
   gRPC:
     title: "gRPC, an open-source universal RPC framework"
     date: 2023
@@ -395,7 +397,9 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-**Note:** The details of how gRPC is mapped to the SCION data plane will be described in a separate document.
+In current practice, the gRPC messages are transported via HTTP/2 ({{RFC9113}}). The HTTP protocol itself is implemented on-top of QUIC connections ({{RFC9000}}), themselves on top of the SCION data plane. This stack is not desirable and is being deprecated in favor of (Connect)[https://connectrpc.com/]. The SCION community has only started the migration process.
+
+Appendix {{app-a}} provides the entire control service API definitino in protobuf format.
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -1578,106 +1582,162 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 
 
 
-# PCB Protobuf Messages - Full Example {#app-a}
+# Control Service gRPC API {#app-a}
 {:numbered="false"}
 
-The following code block provides a full example of one PCB in the Protobuf message format.
-
+The following code block provides the full control service API in the Protobuf message format.
 
 ~~~~
-   message PathSegment {
-       bytes segment_info = 1;
-       repeated ASEntry as_entries = 2;
-   }
+enum SegmentType {
+    // Unknown segemnt type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+  }
 
-   message SegmentInformation {
-       int64 timestamp = 1;
-       uint32 segment_id = 2;
-   }
 
-   message ASEntry {
-       // The signed part of the AS entry. The body of the SignedMessage
-       // is the serialized ASEntrySignedBody.
-       // The signature input is defined as following:
-       //
-       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
-       //
-       // associated_data(ps, i) =
-       //             ps.segment_info ||
-       //             ps.as_entries[1].signed.header_and_body ||
-       //             ps.as_entries[1].signed.signature ||
-       //             ...
-       //             ps.as_entries[i-1].signed.header_and_body ||
-       //             ps.as_entries[i-1].signed.signature
-       //
-       SignedMessage signed = 1;
-       // Optional
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
 
-   message SignedMessage {
-       // Encoded header and body.
-       bytes header_and_body = 1;
-       // Raw signature. The signature is computed over the
-       // concatenation of the header and body, and the optional
-       // associated data.
-       bytes signature = 2;
-   }
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
 
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
-       bytes header = 1;
-       // Raw payload suitable for signature computation.
-       bytes body = 2;
-   }
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message Header {
-       SignatureAlgorithm signature_algorithm = 1;
-       bytes verification_key_id = 2;
-       // Optional
-       google.protobuf.Timestamp timestamp = 3;
-       // Optional
-       bytes metadata = 4;
-       int32 associated_data_length = 5;
-   }
+    // Mapping from path segment type to path segments. The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
 
-   message VerificationKeyID {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       uint64 trc_base = 3;
-       uint64 trc_serial = 4;
-   }
+    // Deprecated list of signed revocations. Will be removed with header v1.
+    repeated bytes deprecated_signed_revocations = 1000;
+}
 
-   message ASEntrySignedBody {
-       uint64 isd_as = 1;
-       uint64 next_isd_as = 2;
-       HopEntry hop_entry = 3;
-       repeated PeerEntry peer_entries = 4;
-       uint32 mtu = 5;
-       // Optional
-       PathSegmentExtensions extensions = 6;
-   }
+service SegmentRegistrationService {
+    // SegmentsRegistration registers segments at the remote.
+    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
+}
 
-   message HopEntry {
-       HopField hop_field = 1;
-       uint32 ingress_mtu = 2;
-   }
+message SegmentsRegistrationRequest {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message PeerEntry {
-       uint64 peer_isd_as = 1;
-       uint64 peer_interface = 2;
-       uint32 peer_mtu = 3;
-       HopField hop_field = 4;
-   }
+    // Mapping from path segment type to path segments. The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message HopField {
-       uint64 ingress = 1;
-       uint64 egress = 2;
-       uint32 exp_time = 3;
-       bytes mac = 4;
-   }
+message SegmentsRegistrationResponse {}
+
+service SegmentCreationService {
+    // Beacon sends a beacon to the remote.
+    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+}
+
+message BeaconRequest {
+    // Beacon in form of a partial path segment.
+    PathSegment segment = 1;
+}
+
+message BeaconResponse {}
+
+message PathSegment {
+    // The encoded SegmentInformation. It is used for signature input.
+    bytes segment_info = 1;
+    // Entries of ASes on the path.
+    repeated ASEntry as_entries = 2;
+}
+
+message SegmentInformation {
+    // Segment creation time set by the originating AS. Segment expiration time
+    // is computed relative to this timestamp. The timestamp is encoded as
+    // number of seconds elapsed since January 1, 1970 UTC.
+    int64 timestamp = 1;
+    // The 16-bit segment ID integer used for MAC computation.
+    uint32 segment_id = 2;
+}
+
+message ASEntry {
+    // The signed part of the AS entry. The body of the SignedMessage is the
+    // serialized ASEntrySignedBody. The signature input is defined as following:
+    //
+    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+    //
+    //  associated_data(ps, i) = ps.segment_info ||
+    //                           ps.as_entries[1].signed.header_and_body ||
+    //                           ps.as_entries[1].signed.signature ||
+    //                           ...
+    //                           ps.as_entries[i-1].signed.header_and_body ||
+    //                           ps.as_entries[i-1].signed.signature
+    //
+    proto.crypto.v1.SignedMessage signed = 1;
+    // The unsigned part of the AS entry.
+    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+}
+
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+}
+
+message HopEntry {
+    // Material to create the data-plane hop field.
+    HopField hop_field = 1;
+    // MTU on the ingress link.
+    uint32 ingress_mtu = 2;
+}
+
+message PeerEntry {
+    // ISD-AS of peer AS. This is used to match peering segments during path
+    // construction.
+    uint64 peer_isd_as = 1;
+    // Remote peer interface identifier. This is used to match peering segments
+    // during path construction.
+    uint64 peer_interface = 2;
+    // MTU on the peering link.
+    uint32 peer_mtu = 3;
+    // Material to create the data-plane hop field
+    HopField hop_field = 4;
+}
+
+message HopField {
+    // Ingress interface identifier.
+    uint64 ingress = 1;
+    // Egress interface identifier.
+    uint64 egress = 2;
+    // 8-bit encoded expiration offset relative to the segment creation
+    // timestamp.
+    uint32 exp_time = 3;
+    // MAC used in the dataplane to verify the hop field.
+    bytes mac = 4;
+}
 ~~~~
-
+{: #figure-11 title="Control Service gRPC API definition"}
 
 
 # Path-Lookup Examples {#app-b}
