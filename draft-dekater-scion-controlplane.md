@@ -438,7 +438,9 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
+
 ~~~~
+
                             +-------------+
                             | Core AS X   |
                             |             |
@@ -459,6 +461,7 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
 AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y extends the four PCBs with the corresponding ingress and egress interface information. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
 ~~~~
+
                         +-----+ |   | +-----+
                         |PCB a| |   | |PCB b|
                         +-----+ |   | +-----+
@@ -492,12 +495,14 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                                 v   v
                            +----#---#----+
                            |    AS Z     |
+
 ~~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~~
+
                    +-----+      |   |      +-----+
                    |PCB c|      |   |      |PCB d|
                    +-----+      |   |      +-----+
@@ -533,12 +538,14 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 +--------+                  |     |     |                  +--------+
                             v     |     v
                                   v
+
 ~~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a (registered) path segment. A PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A (registered) path segment, instead, is a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
 ~~~~
+
                 AS Entry Core         AS Entry Y          AS Entry Z
 
                +-------------+     +-------------+     +-------------+
@@ -582,6 +589,7 @@ path segment 4 |             |     |             |     |             |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
+
 ~~~~
 {: #figure-4 title="Possible up- or down-segments for AS Z"}
 
@@ -598,6 +606,7 @@ This section provides a detailed specification of a single PCB and its message f
 {{figure-5}} graphically represents the PCB message format:
 
 ~~~~
+
                               PCB / PATH SEGMENT
 
 +-------------+------------+------------+--------+--------------------+
@@ -991,7 +1000,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 **Note:** For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
-- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets that use the hop field after the expiration time MUST be dropped.
+- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). This fields expresses a duration according to the formula: `duration = (1 + exp_time) * (24 hours/256)`. By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets containing an expired hop field MUST be dropped by the router processing that hop.
 - `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
 
 
@@ -1069,6 +1078,15 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
+### Effects of Clock Inaccuracy
+
+Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.
+
+This expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; without limits as a segment from the future is still considered valid. A slow clock at origination or a fast clock at a router will yield a shortened time to live; all the way to zero.
+
+The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds. Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the published segments remain usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
+
+Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 ## Propagation of PCBs {#path-prop}
 
