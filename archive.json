@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-23T00:16:34.956099+00:00",
+  "timestamp": "2024-05-26T00:18:23.903722+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -328,11 +328,26 @@
       "labels": [
         "question"
       ],
-      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [ ] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity). Also, there is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [ ] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [ ] Check if DP draft also needs to be updated\r\n- [ ] Certificate validation for gRPC calls: what is the tolerance and where is it specified",
+      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [x] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity).\r\n- [ ] There is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [x] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [x] Check if DP draft also needs to be updated\r\n- [ ] Certificate validation for gRPC calls: what is the tolerance and where is it specified",
       "createdAt": "2024-05-16T09:26:22Z",
-      "updatedAt": "2024-05-16T09:29:25Z",
+      "updatedAt": "2024-05-24T17:25:03Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Addressed the question of clock drift in the dataplane with: https://github.com/scionassociation/scion-dp_I-D/pull/19",
+          "createdAt": "2024-05-24T15:19:30Z",
+          "updatedAt": "2024-05-24T15:19:30Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Also copied the formula to interpret expTime from the DP draft.",
+          "createdAt": "2024-05-24T17:25:03Z",
+          "updatedAt": "2024-05-24T17:25:03Z"
+        }
+      ]
     },
     {
       "number": 19,
@@ -1172,6 +1187,58 @@
           ]
         }
       ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOJx2-rs5wW4yN",
+      "title": "Add tentative description of CS API.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/24",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is a proposed place holder, until/unless we are comfortable documenting the work from IETF118 as the new standard.\r\n\r\nFixes #15 ",
+      "createdAt": "2024-05-23T16:45:12Z",
+      "updatedAt": "2024-05-23T16:52:12Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "grpc_api_described",
+      "headRefOid": "468675cd81f43b4a271992c7d972234953ceb502",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOJx2-rs5we-iv",
+      "title": "Added an explanation regarding clock drift.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/25",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is almost identical to what I added to the DP draft. I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
+      "createdAt": "2024-05-24T16:05:35Z",
+      "updatedAt": "2024-05-24T16:14:11Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "clock_drift",
+      "headRefOid": "267175e074b240c95817e44dd3d22640439627de",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
