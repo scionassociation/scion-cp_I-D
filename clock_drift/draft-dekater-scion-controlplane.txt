@@ -1537,6 +1537,14 @@ path segment 4 |             |     |             |     |             |
    lived segment and the most recent segment are usable.  To that end, a
    clock accuracy better than 1 minute is more than sufficient.
 
+   The control service and its clients authenticate each-other according
+   to their respective AS's certificate.  Path segments are
+   authenticated based on the certificates of the ASes that they refer
+   to.  The time validity of a certificate is affected by the offset
+   between verifier and originator clocks.  The expiration of a SCION AS
+   certificate typically ranges from 3h to 5 years.  As a result, a time
+   offset measured in minutes is immaterial.
+
    Each administrator of a SCION router or core control service is
    responsible for maintaining sufficient clock accuracy.  No particular
    method is assumed by this specification.
