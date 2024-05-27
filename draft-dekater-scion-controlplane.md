@@ -1087,6 +1087,8 @@ This expiration time is calculated as described in [](#hopfield) on the basis of
 
 The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds ([](#hopfield)) and a segment is valid up to that same amount of time prior to its origination timestamp ([](#seginfo)). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the shortest-lived segment and the most recent segment are usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
 
+The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The time validity of a certificate is affected by the offset between verifier and originator clocks. The expiration of a SCION AS certificate typically ranges from 3h to 5 years. As a result, a time offset measured in minutes is immaterial.
+
 Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 ## Propagation of PCBs {#path-prop}
