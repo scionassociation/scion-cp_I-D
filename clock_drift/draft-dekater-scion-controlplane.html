@@ -2376,7 +2376,7 @@ path segment 4 |             |     |             |     |             |
               <h6 id="name-as-entry-signature">
 <a href="#section-2.2.1.4.3" class="section-number selfRef">2.2.1.4.3. </a><a href="#name-as-entry-signature" class="section-name selfRef">AS Entry Signature</a>
               </h6>
-<p id="section-2.2.1.4.3-1">Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-1">Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The certificate used for the purpose of verification <span class="bcp14">MUST</span> have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.3-2.1">
                   <p id="section-2.2.1.4.3-2.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.1.4.3-2.1.1" class="pilcrow">¶</a></p>
@@ -2392,7 +2392,7 @@ path segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-4">Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-5">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-7">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)

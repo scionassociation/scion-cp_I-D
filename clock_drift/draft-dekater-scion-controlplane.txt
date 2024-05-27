@@ -1287,9 +1287,12 @@ path segment 4 |             |     |             |     |             |
 2.2.1.4.3.  AS Entry Signature
 
    Each AS entry is signed with a private key K_i that corresponds to
-   the public key certified by the AS's certificate.  The signature
-   Sig_i of an AS entry ASE_i is computed over the AS entry's signed
-   component.  This is the input for the computation of the signature:
+   the public key certified by the AS's certificate.  The certificate
+   used for the purpose of verification MUST have a validity period
+   fully containing that of the segment being verified; regardless of
+   current time.  The signature Sig_i of an AS entry ASE_i is computed
+   over the AS entry's signed component.  This is the input for the
+   computation of the signature:
 
    *  The signed header and body of the current AS (header_and_body).
 
@@ -1315,7 +1318,7 @@ path segment 4 |             |     |             |     |             |
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
-   Note that the signature has a nested, onion-like structure.
+   Note that the signature has a nested structure.
 
    input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
