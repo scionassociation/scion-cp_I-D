@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 25 November 2024</td>
+<td class="center">Expires 28 November 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-05-24" class="published">24 May 2024</time>
+<time datetime="2024-05-27" class="published">27 May 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-11-25">25 November 2024</time></dd>
+<dd class="expires"><time datetime="2024-11-28">28 November 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1104,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 28 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1680,7 +1680,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
-            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.2">
             <p id="section-1.6-2.2.1">Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.<a href="#section-1.6-2.2.1" class="pilcrow">¶</a></p>
@@ -2109,13 +2109,13 @@ path segment 4 |             |     |             |     |             |
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.2-5.1">
-                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC). Segment with a future timestamp are invalid. For the purpose of validation, a time stamp is considered "future" if it is later than the current time available at the point of use plus 337.5 seconds (i.e. the minimum time to live of a hop).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.2-5.2">
                 <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-message">
@@ -2492,7 +2492,7 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.6-7.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This fields expresses a duration according to the formula: <code>duration = (1 + exp_time) * (24 hours/256)</code>. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets containing an expired hop field <span class="bcp14">MUST</span> be dropped by the router processing that hop.<a href="#section-2.2.1.6-7.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-7.3">
-                <p id="section-2.2.1.6-7.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.6-7.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.6-7.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.6-7.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2605,8 +2605,8 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.2.3" class="section-number selfRef">2.2.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>
           </h4>
 <p id="section-2.2.3-1">Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.3-2">This expiration time is calculated as described in <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; without limits as a segment from the future is still considered valid. A slow clock at origination or a fast clock at a router will yield a shortened time to live; all the way to zero.<a href="#section-2.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.3-3">The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds. Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the published segments remain usable. To that end, a clock accuracy better than 1 minute is more than sufficient.<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-2">This expiration time is calculated as described in <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.<a href="#section-2.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-3">The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds (<a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) and a segment is valid up to that same amount of time prior to its origination timestamp (<a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the shortest-lived segment and the most recent segment are usable. To that end, a clock accuracy better than 1 minute is more than sufficient.<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.3-4">Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2742,7 +2742,7 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
 <p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
 <div id="propagation-first-steps">
 <section id="section-2.3.2.1">
             <h5 id="name-propagation-first-steps">
@@ -3114,7 +3114,7 @@ associated_data(ps, i) = ps.segment_info ||
             <p id="section-4.1-2.3.1">a down-path segment to reach the destination AS.<a href="#section-4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by the SCION Data Plane Specification document.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">
