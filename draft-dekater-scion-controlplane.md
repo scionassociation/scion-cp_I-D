@@ -912,7 +912,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
+Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The certificate used for the purpose of verification MUST have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
 
 - The signed header and body of the current AS (`header_and_body`).
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
@@ -925,7 +925,7 @@ K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub>
 
 The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
-The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.
+The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
 
 ~~~
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
