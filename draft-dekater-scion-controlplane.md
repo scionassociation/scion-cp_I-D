@@ -377,7 +377,7 @@ SCION allows endpoints to use wildcard addresses in the control-plane routing, t
 
 A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
-- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in {{I-D.scion-dp}}.
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
 - Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
@@ -721,10 +721,11 @@ In the Protobuf message format, the information component of a PCB is called the
    }
 ~~~~
 
-- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
+- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC). Segment with a future timestamp are invalid. For the purpose of validation, a time stamp is considered "future" if it is later than the current time available at the point of use plus 337.5 seconds (i.e. the minimum time to live of a hop).
+
 - `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
 
-**Note:** See [](#hopfield) for more information on the hop field message format. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
+**Note:** See [](#hopfield) for more information on the hop field message format. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
 
 
 #### AS Entry {#ase-message}
@@ -1001,7 +1002,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This fields expresses a duration according to the formula: `duration = (1 + exp_time) * (24 hours/256)`. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets containing an expired hop field MUST be dropped by the router processing that hop.
-- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
 
 
 #### Peer Entry {#peerentry}
@@ -1082,9 +1083,9 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.
 
-This expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; without limits as a segment from the future is still considered valid. A slow clock at origination or a fast clock at a router will yield a shortened time to live; all the way to zero.
+This expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.
 
-The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds. Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the published segments remain usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
+The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds ([](#hopfield)) and a segment is valid up to that same amount of time prior to its origination timestamp ([](#seginfo)). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the shortest-lived segment and the most recent segment are usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
 
 Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
@@ -1191,7 +1192,7 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
-To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.
+To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in {{I-D.scion-dp}}.
 
 
 #### Propagation - First Steps
@@ -1391,7 +1392,7 @@ An endpoint (source) that wants to start communication with another endpoint (de
   - a core AS in a remote ISD, if the destination AS is in another ISD, and
 - a down-path segment to reach the destination AS.
 
-**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by the SCION Data Plane Specification document.
+**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by {{I-D.scion-dp}}.
 
 The process to look up and fetch path segments consists of the following steps:
 
