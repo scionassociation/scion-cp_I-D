@@ -3454,7 +3454,7 @@ For RPC methods exposed to other ASes, the control service implementation minimi
             <p id="section-5.3-4.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.<a href="#section-5.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-5.3-5">A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances so that requests can be balanced.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3-5">A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control service should be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
