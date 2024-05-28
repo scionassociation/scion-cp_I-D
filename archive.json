@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-26T00:18:23.903722+00:00",
+  "timestamp": "2024-05-28T00:16:59.064852+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -328,9 +328,9 @@
       "labels": [
         "question"
       ],
-      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [x] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity).\r\n- [ ] There is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [x] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [x] Check if DP draft also needs to be updated\r\n- [ ] Certificate validation for gRPC calls: what is the tolerance and where is it specified",
+      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [x] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity).\r\n- [x] There is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [x] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [x] Check if DP draft also needs to be updated\r\n- [x] Certificate validation for gRPC calls: what is the tolerance and where is it specified",
       "createdAt": "2024-05-16T09:26:22Z",
-      "updatedAt": "2024-05-24T17:25:03Z",
+      "updatedAt": "2024-05-27T15:30:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -346,6 +346,13 @@
           "body": "Also copied the formula to interpret expTime from the DP draft.",
           "createdAt": "2024-05-24T17:25:03Z",
           "updatedAt": "2024-05-24T17:25:03Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Note that the time-tolerance for certificates is no-longer needed nor applied: Updated the cp draft to clarify that segments are not authenticated by certificates valid \"now\", but by certificates valid for the same period as the segment. Therefore current time during validation plays no role. Possibly a time offset between an AS's certificate originator and that of its core control service could play a role, but I think it's safe to assume that, being in the same AS, they can have the same time source. gRPC connections are quic/TLS connections, authenticated with the same AS certs. Subject to the same time check. No tolerance. None needed. Clarified that in the draft.\r\n",
+          "createdAt": "2024-05-27T12:58:04Z",
+          "updatedAt": "2024-05-27T15:30:54Z"
         }
       ]
     },
@@ -1200,7 +1207,7 @@
       "labels": [],
       "body": "This is a proposed place holder, until/unless we are comfortable documenting the work from IETF118 as the new standard.\r\n\r\nFixes #15 ",
       "createdAt": "2024-05-23T16:45:12Z",
-      "updatedAt": "2024-05-23T16:52:12Z",
+      "updatedAt": "2024-05-27T12:13:04Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
@@ -1212,12 +1219,75 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs58AqRM",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-27T09:58:27Z",
+          "updatedAt": "2024-05-27T12:13:04Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "Tangential: I saw this note:\r\n```\r\n**Note:** The SCION open-source implementation makes use of Protobuf (Protocol Buffers), a free and open-source cross-platform data format developed by Google and used to serialize structured data. The messages and remote procedure calls described below are in \"proto3\" language. For more information on Protobuf, see the official [\"Protocol Buffers Documentation\"](https://protobuf.dev/).\r\n```\r\n\r\nThis looks a bit out of place where it currently is and I think it's redundant with the information in the \"## Communication protocol\" section. I'd suggest to remove it (or integrate anything that could still be relevant into the Communication Protocol section).",
+              "createdAt": "2024-05-27T09:58:27Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "definitino -> definition",
+              "createdAt": "2024-05-27T09:59:34Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "Personally, I would only describe the connect RPC approach and leave out the complication that there is an ongoing transition. Optimistically, this will be complete once this document is published. We know that it works, we know how to do the transition with forwards and backwards and sideways compatibility etc and I think it's fair to assume that a future reader of the document will not have any interest in our current sub-optimal implementation.\r\n\r\n@nicorusti?",
+              "createdAt": "2024-05-27T10:07:29Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "There are still some detail about how QUIC connections are established missing here.\r\nMy suggestion would be to add an Appendix B with this information, something like \"Data plane considerations for control plane\".\r\n\r\n- the paths:\r\n  - Client side of QUIC connection determines path, server uses reverse path.\r\n  - neighbor-to-neighbor ASes use one-hop paths that are always available to control plane nodes. This is used for all path discovery.\r\n  - path segment registration uses the path being registered.\r\n  - path lookup is incremental (not sure if this is already described somewhere else); use any known up-segment to lookup core segments to destination ISD. Then use any up-core paths to lookup down segments in destination ISD.\r\n    For this type of requests, typically many paths will be available to choose from. Basic implementation can pick random path and simply retry on faults. Better would be to keep track of path properties like experienced latency, loss rate, etc and pick \r\n  - None of these are binding, CS can arbitrarily pick any available path.\r\n- Service address resultion: even though I'd like this to go away, I'm not optimistic about finding a consensus for an alternative approach for this and implementing it quickly. I think we should include how this currently works:\r\n  - document the message types from `svc_resolution.proto`.\r\n  - the service resolution protocol:\r\n     - send service resolution request ; single UDP pkt with `ServiceResolutionRequest{}`  destination port 0, dst host SVC_CS. Note request is an empty protobuf message, so this is an empty datagram.\r\n     - whoever is SVC_CS in destination AS (resolved by ingress router, see service addresses in dataplane draft) sends single UDP pkt reply to source ISD-AS,address:port of the request with `ServiceResolutionResponse{}` body, that contains a host addresses + UDP port for the transport type \"QUIC\".\r\n  - initiate QUIC connection to address in `response.transports[\"QUIC\"]`.\r\n- TLS certificates for QUIC: for all the RPCs described here, self signed dummy certificates can be used, as we do _not_ check the server (or client) certificates; the messages transported over the RPCs are individually authenticated and we do not need a secure channel.\r\n  - Side note: in practice, we use CP-PKI AS certificates, just because we can, and because we use it to establish a secure channel for experimental extensions that _do_ benefit from a secure channel (i.e. for DRKey, but perhaps we shouldn't mention this).",
+              "createdAt": "2024-05-27T11:51:38Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 163,
+              "body": "Remove this line; it doesn't do anything and should long have been deleted.",
+              "createdAt": "2024-05-27T11:57:03Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 125,
+              "body": "Maybe try phrase this to clarify that this is the API exposed to other ASes, i.e. to other control services.",
+              "createdAt": "2024-05-27T12:04:26Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 225,
+              "body": "The `SignedMessage` message type and its internal details were previously included here, I think we need it. We can either add it back directly into the same code block, or we can create a separate block with just these helper types.\r\nWe need:\r\n- SignedMessage \r\n- HeaderAndBodyInternal\r\n- Header\r\n- VerificationKeyID\r\n- SignatureAlgorithm (previously missing).",
+              "createdAt": "2024-05-27T12:11:38Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 141,
+              "body": "Maybe add a comment to hint that this LookupService is only exposed on control services of core ASes?",
+              "createdAt": "2024-05-27T12:12:48Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 25,
       "id": "PR_kwDOJx2-rs5we-iv",
-      "title": "Added an explanation regarding clock drift.",
+      "title": "Address clock drift.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/25",
       "state": "OPEN",
       "author": "jiceatscion",
@@ -1226,13 +1296,13 @@
       "labels": [],
       "body": "This is almost identical to what I added to the DP draft. I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
       "createdAt": "2024-05-24T16:05:35Z",
-      "updatedAt": "2024-05-24T16:14:11Z",
+      "updatedAt": "2024-05-27T15:30:21Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "267175e074b240c95817e44dd3d22640439627de",
+      "headRefOid": "297e8d2c828228e22542cd27c6b708f29586a440",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
