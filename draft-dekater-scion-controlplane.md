@@ -1560,7 +1560,7 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 - `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.
 
 
-A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances so that requests can be balanced.
+A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control service should be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
 
 # IANA Considerations
 
