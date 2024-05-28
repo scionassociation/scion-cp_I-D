@@ -203,6 +203,8 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
+**Peering Link**: A connection between two border routers, of different ASes and possibly different ISDs, that are not necessarily core ASes. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
+
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 
@@ -304,7 +306,7 @@ As described previously, the main goal of SCION's control plane is to create and
 
 So each path segment either ends at a core AS, or starts at a core AS, or both.
 
-**Note:** There are no SCION path segments that start and end at a non-core AS. However, when combining path segments into an end-to-end SCION path, it is possible to use peering links. For more information on SCION and peering links, see [](#beaconing).
+**Note:** There are no SCION path segments that start and end at a non-core AS. However, when combining path segments into an end-to-end SCION path, that path can extend from a non-core AS to another, necessarily traversing one or more core-ASes. It is possible to use peering links as shortcuts, which could remove all core ASes from the path. For more information on SCION and peering links, see [](#beaconing).
 
 All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
@@ -1069,6 +1071,28 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
+<<<<<<< Updated upstream
+=======
+### Configuration
+
+For the purpose of constructing and propagating path segments, the control service needs to be aware of existing links with neighboring ASes and the relative possition of these ASes and of the local AS in the network topology. A link can be a "core link" (connection two core ASes), a "parent link" (connecting a non-core AS to an AS that is closer to, or is, a core AS), a "child link" (connecting an AS to an AS that is farther away from a core AS), or a "peering link" (connecting the local AS to any AS that matches none of these descriptions).
+
+The existence and nature of these links is the result of mutual agreements between the organizations operating the ASes at each end of each link. This standard does not specify how that information is conveyed to the control service. Current practice is that this information is conveyed by a configuration file.
+
+### Effects of Clock Inaccuracy
+
+Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.
+
+This expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.
+
+By default, segments are propagated once a minute. A segment is registered by the last AS of that segment, therefore up to N minutes after origination, where N is the length of the segment. As a result, a segment must have a life time of at least N minutes to be of any use. N being the length of the segment. On the other hand, a very recent segment, which cllocks offset could make appear from the future, ages by 1 minute per hop before being used, thereby reducing the impact of clock drift in that respect.
+
+The unit of a segment's time-to-live is 5 minutes and 37 seconds (and 500 ms), or the equivalent of 5 hops. Given the above constraints, it is unreasonable to create a segment with a short time-to-live, while each additional time-to-live unit adds more than 5 minutes. As a result, a clock drift of up to 1 minute can be safely neglected.
+
+The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The time validity of a certificate is affected by the offset between verifier and originator clocks. The expiration of a SCION AS certificate typically ranges from 3h to 5 years. As a result, a time offset measured in minutes is immaterial.
+
+Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+>>>>>>> Stashed changes
 
 ## Propagation of PCBs {#path-prop}
 
