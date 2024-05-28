@@ -361,7 +361,7 @@ For historical reasons, SCION AS numbers in the lower 32 bit range may also be r
 | `1:0:0`          | 1           | Reserved                                                                    |
 | `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
 | `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
 
