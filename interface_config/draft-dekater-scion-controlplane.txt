@@ -1574,7 +1574,7 @@ path segment 4 |             |     |             |     |             |
 
    Each administrator of a SCION router or core control service is
    responsible for maintaining sufficient clock accuracy.  No particular
-   method is assumed by this specification. >>>>>>> Stashed changes
+   method is assumed by this specification.
 
 2.3.  Propagation of PCBs
 
