@@ -214,7 +214,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 
 
-## Paths and Links
+## Paths and Links {#paths-links}
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
 
@@ -249,7 +249,7 @@ The following figure shows the three types of links for one small ISD with the t
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD"}
 
-Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. These interface IDs only need to be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination.
+Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
 
 
 ## Routing
@@ -1075,9 +1075,12 @@ On code-level and in Protobuf message format, extensions are specified as follow
 =======
 ### Configuration
 
-For the purpose of constructing and propagating path segments, the control service needs to be aware of existing links with neighboring ASes and the relative possition of these ASes and of the local AS in the network topology. A link can be a "core link" (connection two core ASes), a "parent link" (connecting a non-core AS to an AS that is closer to, or is, a core AS), a "child link" (connecting an AS to an AS that is farther away from a core AS), or a "peering link" (connecting the local AS to any AS that matches none of these descriptions).
+For the purpose of constructing and propagating path segments, an AS control service must be configured with links to neighboring ASes. Such information may be conveyed to the control service in an out of band fashion (e.g in a configuration file). For each link, these values must be configured:
 
-The existence and nature of these links is the result of mutual agreements between the organizations operating the ASes at each end of each link. This standard does not specify how that information is conveyed to the control service. Current practice is that this information is conveyed by a configuration file.
+- Local interface ID
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor ISD-AS number
+- Neighbor interface underlay address
 
 ### Effects of Clock Inaccuracy
 
