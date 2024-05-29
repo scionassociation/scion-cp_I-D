@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 29 November 2024                                        S. Hitz
+Expires: 30 November 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                             28 May 2024
+                                                             29 May 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2024.
+   This Internet-Draft will expire on 30 November 2024.
 
 Copyright Notice
 
@@ -1533,7 +1533,7 @@ path segment 4 |             |     |             |     |             |
    after origination, where N is the length of the segment.  As a
    result, a segment must have a life time of at least N minutes to be
    of any use.  N being the length of the segment.  On the other hand, a
-   very recent segment, which cllocks offset could make appear from the
+   very recent segment, which clocks offset could make appear from the
    future, ages by 1 minute per hop before being used, thereby reducing
    the impact of clock drift in that respect.
 
