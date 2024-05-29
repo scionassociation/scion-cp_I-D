@@ -203,7 +203,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
-**Peering Link**: A connection between two border routers, of different ASes and possibly different ISDs, that are not necessarily core ASes. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
+**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
 
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
@@ -1071,8 +1071,6 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
-<<<<<<< Updated upstream
-=======
 ### Configuration
 
 For the purpose of constructing and propagating path segments, the control service needs to be aware of existing links with neighboring ASes and the relative possition of these ASes and of the local AS in the network topology. A link can be a "core link" (connection two core ASes), a "parent link" (connecting a non-core AS to an AS that is closer to, or is, a core AS), a "child link" (connecting an AS to an AS that is farther away from a core AS), or a "peering link" (connecting the local AS to any AS that matches none of these descriptions).
