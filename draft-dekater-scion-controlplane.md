@@ -1090,7 +1090,6 @@ The unit of a segment's time-to-live is 5 minutes and 37 seconds (and 500 ms), o
 The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The time validity of a certificate is affected by the offset between verifier and originator clocks. The expiration of a SCION AS certificate typically ranges from 3h to 5 years. As a result, a time offset measured in minutes is immaterial.
 
 Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
->>>>>>> Stashed changes
 
 ## Propagation of PCBs {#path-prop}
 
