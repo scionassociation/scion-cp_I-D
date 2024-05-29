@@ -249,7 +249,7 @@ The following figure shows the three types of links for one small ISD with the t
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD"}
 
-Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
+Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.scion-dp}}). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
 
 
 ## Routing
