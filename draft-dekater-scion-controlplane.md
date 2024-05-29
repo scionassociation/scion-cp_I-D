@@ -306,7 +306,6 @@ As described previously, the main goal of SCION's control plane is to create and
 
 So each path segment either ends at a core AS, or starts at a core AS, or both.
 
-**Note:** There are no SCION path segments that start and end at a non-core AS. However, when combining path segments into an end-to-end SCION path, that path can extend from a non-core AS to another, necessarily traversing one or more core-ASes. It is possible to use peering links as shortcuts, which could remove all core ASes from the path. For more information on SCION and peering links, see [](#beaconing).
 
 All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
