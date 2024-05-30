@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 September 2024                                        S. Hitz
+Expires: 1 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                            4 March 2024
+                                                             30 May 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2024.
+   This Internet-Draft will expire on 1 December 2024.
 
 Copyright Notice
 
@@ -537,7 +537,7 @@ Table of Contents
     |                   |             | and test/sample code          |
     |                   |             | (analogous to [RFC5398]).     |
     +-------------------+-------------+-------------------------------+
-    | ff00:0:0/24       | ~16.8 mill. | Reserved for private use      |
+    | ffaa:0:0/24       | ~16.8 mill. | Reserved for private use      |
     |                   |             | (analogous to [RFC6996]).     |
     |                   |             | These numbers can be used for |
     |                   |             | testing/private deployments.  |
@@ -2478,9 +2478,10 @@ path segment 4 |             |     |             |     |             |
       local ISD and the number of path segments must be 1.
 
    A combination of the mechanism above is used to prevent flooding
-   attacks on the control service.  In addition, the control services
-   are designed to be deployed on replicated instances so that requests
-   can be balanced.
+   attacks on the control service.  In addition, the control service
+   should be deployed in a distributed and replicated manner so that
+   requests can be balanced and a single instance failure does not
+   result in a complete failure of the control plane of a SCION AS.
 
 6.  IANA Considerations
 
