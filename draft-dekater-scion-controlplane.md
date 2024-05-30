@@ -361,7 +361,7 @@ For historical reasons, SCION AS numbers in the lower 32 bit range may also be r
 | `1:0:0`          | 1           | Reserved                                                                    |
 | `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
 | `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ff00:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
 
@@ -1560,7 +1560,7 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 - `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.
 
 
-A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control services are designed to be deployed on replicated instances so that requests can be balanced.
+A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control service should be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
 
 # IANA Considerations
 
