@@ -1100,7 +1100,7 @@ This section describes how PCBs are selected and propagated in the path explorat
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on *path* properties (e.g., length, disjointness across different paths) as well as on *PCB* properties (e.g., age, remaining lifetime of sent instances) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.
+As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on *path* properties (e.g., length, disjointness across different paths) as well as on *PCB* properties (e.g., age, expiration time) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.
 
 
 #### Storing and Selecting Candidate PCBs
@@ -1199,13 +1199,13 @@ As mentioned above, once per *propagation period* (determined by each AS), an AS
 To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in {{I-D.scion-dp}}.
 
 
-#### Propagation - First Steps
+#### Reception of PCBs
 
 The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:
 
-1. Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.<br>
-**Note:** The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
-2. As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. **Note:** Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
+1. Upon receiving a PCB, the control service of an AS verifies the structure and validity of all signatures in the PCB. Invalid PCBs MUST be discarded.
+The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
+2. As core beaconing is based on flooding PCBs, it is necessary to avoid loops during path creation. The control service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. **Note:** Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
 3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
 
 
