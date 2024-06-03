@@ -203,6 +203,8 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
+**Peering Link**: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
+
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 
@@ -212,7 +214,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 
 
-## Paths and Links
+## Paths and Links {#paths-links}
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
 
@@ -247,7 +249,7 @@ The following figure shows the three types of links for one small ISD with the t
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD"}
 
-Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. These interface IDs only need to be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination.
+Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.scion-dp}}). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
 
 
 ## Routing
@@ -304,7 +306,6 @@ As described previously, the main goal of SCION's control plane is to create and
 
 So each path segment either ends at a core AS, or starts at a core AS, or both.
 
-**Note:** There are no SCION path segments that start and end at a non-core AS. However, when combining path segments into an end-to-end SCION path, it is possible to use peering links. For more information on SCION and peering links, see [](#beaconing).
 
 All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
@@ -1068,6 +1069,16 @@ On code-level and in Protobuf message format, extensions are specified as follow
 - Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
+
+
+### Configuration
+
+For the purpose of constructing and propagating path segments, an AS control service must be configured with links to neighboring ASes. Such information may be conveyed to the control service in an out of band fashion (e.g in a configuration file). For each link, these values must be configured:
+
+- Local interface ID
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor ISD-AS number
+- Neighbor interface underlay address
 
 
 ## Propagation of PCBs {#path-prop}
