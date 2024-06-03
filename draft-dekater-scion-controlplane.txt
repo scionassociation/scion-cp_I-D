@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 December 2024                                         S. Hitz
+Expires: 5 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             30 May 2024
+                                                             3 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 December 2024.
+   This Internet-Draft will expire on 5 December 2024.
 
 Copyright Notice
 
@@ -99,6 +99,7 @@ Table of Contents
      2.2.  Path-Segment Construction Beacons (PCBs)
        2.2.1.  Components of a PCB in Message Format
        2.2.2.  PCB Extensions
+       2.2.3.  Configuration
      2.3.  Propagation of PCBs
        2.3.1.  Selection of PCBs to Propagate
        2.3.2.  Propagation of Selected PCBs
@@ -242,6 +243,13 @@ Table of Contents
    ASes.  As a PCB traverses the network, it carries path segments,
    which can subsequently be used for traffic forwarding.
 
+   *Peering Link*: A specific type of link between two SCION border
+   routers of different ASes, which may also be in different ISDs.  A
+   peering link can be seen as a short-cut on a normal path.  Peering
+   link information is added to segment information during the beaconing
+   process and used to shorten paths while assembling them from
+   segments.
+
    *Trust Root Configuration (TRC)*: A trust root configuration or TRC
    is a signed collection of certificates pertaining to an isolation
    domain (ISD).  TRCs also contain ISD-specific policies.
@@ -311,10 +319,11 @@ Table of Contents
             Figure 1: The three types of SCION links in one ISD
 
    Each link connecting SCION routers is bidirectional and identified by
-   its corresponding egress and ingress interface IDs.  These interface
-   IDs only need to be unique within each AS.  Therefore, they can be
-   chosen and encoded by each AS independently and without any need for
-   coordination.
+   its corresponding egress and ingress interface IDs.  An interface ID
+   consists of a 16-bit identifier that MUST be unique within each AS,
+   with the exception of value 0 (see [I-D.scion-dp]).  Therefore, they
+   can be chosen and encoded by each AS independently and without any
+   need for coordination between ASes.
 
 1.4.  Routing
 
@@ -423,11 +432,6 @@ Table of Contents
 
    So each path segment either ends at a core AS, or starts at a core
    AS, or both.
-
-   *Note:* There are no SCION path segments that start and end at a non-
-   core AS.  However, when combining path segments into an end-to-end
-   SCION path, it is possible to use peering links.  For more
-   information on SCION and peering links, see Section 2.
 
    All path segments are invertible: A core-segment can be used
    bidirectionally, and an up-segment can be converted into a down-
@@ -1505,6 +1509,24 @@ path segment 4 |             |     |             |     |             |
    be signed and verified without actually including the detachable
    extension in the signature.  This prevents a possible processing
    overhead caused by large cryptographically-protected extensions.
+
+2.2.3.  Configuration
+
+   For the purpose of constructing and propagating path segments, an AS
+   control service must be configured with links to neighboring ASes.
+   Such information may be conveyed to the control service in an out of
+   band fashion (e.g in a configuration file).  For each link, these
+   values must be configured:
+
+   *  Local interface ID
+
+   *  Neighbor type (core, parent, child, peer), depending on link type
+      (see Section 1.3).  Link type depends on mutual agreements between
+      the organizations operating the ASes at each end of each link.
+
+   *  Neighbor ISD-AS number
+
+   *  Neighbor interface underlay address
 
 2.3.  Propagation of PCBs
 
