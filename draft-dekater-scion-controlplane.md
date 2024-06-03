@@ -1079,19 +1079,19 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
-### Effects of Clock Inaccuracy
 
-Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.
+### PCB Validity {#pcb-validity}
 
-This expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.
+The be valid (that is, usable to construct a valid path), a PCB must:
 
-By default, segments are propagated once a minute. A segment is registered by the last AS of that segment, therefore up to N minutes after origination, where N is the length of the segment. As a result, a segment must have a life time of at least N minutes to be of any use. N being the length of the segment. On the other hand, a very recent segment, which clocks offset could make appear from the future, ages by 1 minute per hop before being used, thereby reducing the impact of clock drift in that respect.
+* Contain valid AS Entry signatures ([](#sign)).
+* Have a timestamp ([](#seginfo)) that is not in the future.
+* Contain only unexpired hops ([](#hopfield)).
 
-The unit of a segment's time-to-live is 5 minutes and 37 seconds (and 500 ms), or the equivalent of 5 hops. Given the above constraints, it is unreasonable to create a segment with a short time-to-live, while each additional time-to-live unit adds more than 5 minutes. As a result, a clock drift of up to 1 minute can be safely neglected.
+For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see [](#hopfield)).
 
-The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The time validity of a certificate is affected by the offset between verifier and originator clocks. The expiration of a SCION AS certificate typically ranges from 3h to 5 years. As a result, a time offset measured in minutes is immaterial.
+For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
 
-Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1203,7 +1203,7 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 
 The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:
 
-1. Upon receiving a PCB, the control service of an AS verifies the structure and validity of all signatures in the PCB. Invalid PCBs MUST be discarded.
+1. Upon receiving a PCB, the control service of an AS verifies the validity of the PCB (see [](#pcb-validity)). Invalid PCBs MUST be discarded.
 The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
 2. As core beaconing is based on flooding PCBs, it is necessary to avoid loops during path creation. The control service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. **Note:** Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
 3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
@@ -1269,13 +1269,27 @@ The propagation procedure includes the following elements:
 - `BeaconResponse`: Specifies the response message from the neighboring AS.
 
 
+### Effects of Clock Inaccuracy
+
+A PCB originated by a given control service is validated by all the control services that receive it. All have different clocks. Their differences affect the validation process:
+
+* A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
+
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.
+
+The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
+
+In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+
 
 # Registration of Path Segments {#path-segment-reg}
 
 **Path registration** is the process where an AS transforms selected PCBs into path segments, and adds these segments to the relevant path databases, thus making them available to other ASes.
 
 As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down-path segments through which it wants to be reached, based on AS-specific selection criteria. The next step is to register the selected down-segments with the control service of the relevant core ASes, according to a process called *intra-ISD path-segment registration*. As a result, a core AS's control service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS control service also stores preferred core-path segments to other core ASes, in the *core-segment registration* process. Both processes are described below.
-
 
 
 ## Intra-ISD Path-Segment Registration {#intra-reg}
