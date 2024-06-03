@@ -377,7 +377,7 @@ SCION allows endpoints to use wildcard addresses in the control-plane routing, t
 
 A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
-- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in {{I-D.scion-dp}}.
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
 - Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
@@ -721,7 +721,7 @@ In the Protobuf message format, the information component of a PCB is called the
    }
 ~~~~
 
-- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC). Segment with a future timestamp are invalid. For the purpose of validation, a time stamp is considered "future" if it is later than the current time available at the point of use plus 337.5 seconds (i.e. the minimum time to live of a hop).
+- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
 - `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
 
@@ -912,7 +912,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The certificate used for the purpose of verification MUST have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
 
 - The signed header and body of the current AS (`header_and_body`).
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
@@ -1001,8 +1001,8 @@ The following code block defines the hop field component `HopField` in Protobuf 
 **Note:** For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
-- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This fields expresses a duration according to the formula: `duration = (1 + exp_time) * (24 hours/256)`. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets containing an expired hop field MUST be dropped by the router processing that hop.
-- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
+- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, an AS can compute the absolute expiration time of the hop field.
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.
 
 
 #### Peer Entry {#peerentry}
