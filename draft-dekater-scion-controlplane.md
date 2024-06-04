@@ -991,7 +991,10 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 +-------------+-------------+-------------------+----------+
 ~~~~
 
-The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC).
+The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.
+
+The computation of the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+Control service and router implementations SHOULD support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
 
 The following code block defines the hop field component `HopField` in Protobuf message format:
 
@@ -1010,8 +1013,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the hop field is the sum of these two values.
-- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.
-
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field.
 
 #### Peer Entry {#peerentry}
 
