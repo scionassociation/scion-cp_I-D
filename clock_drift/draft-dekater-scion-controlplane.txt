@@ -1686,7 +1686,7 @@ path segment 4 |             |     |             |     |             |
    handles beaconing between neighboring ASes for which no forwarding
    path may be available yet.  In fact, it is the task of beaconing to
    discover such forwarding paths.  The purpose of one-hop paths is thus
-   to break this circular dependency.  The One-Hop Path Type will be
+   to break this circular dependency.  The One-Hop Path Type is
    described in more detail in [I-D.scion-dp].
 
 2.3.2.1.  Reception of PCBs
