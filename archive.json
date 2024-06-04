@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-02T00:18:32.521686+00:00",
+  "timestamp": "2024-06-04T00:16:53.696824+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -214,7 +214,7 @@
     {
       "number": 14,
       "id": "I_kwDOJx2-rs6IwwiF",
-      "title": "Extend introduction and remove/edit notes",
+      "title": "Extend introduction, add overview and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "state": "OPEN",
       "author": "elear",
@@ -230,7 +230,7 @@
       ],
       "body": ">   \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\nthe first two documents are not in my queue and I don't expect them.\r\n\r\n\r\nSame issue in other drafts: \r\n- DP https://github.com/scionassociation/scion-dp_I-D/issues/10\r\n- CPPKI https://github.com/scionassociation/scion-cppki_I-D/issues/29",
       "createdAt": "2024-05-14T05:57:55Z",
-      "updatedAt": "2024-05-17T14:12:35Z",
+      "updatedAt": "2024-06-03T07:10:13Z",
       "closedAt": null,
       "comments": []
     },
@@ -252,15 +252,15 @@
       ],
       "body": "\r\n   > \\*Note:\\* The details of how gRPC is mapped to the SCION data plane\r\n   will be described in a separate document.\r\n\r\nWhich document?",
       "createdAt": "2024-05-14T05:59:13Z",
-      "updatedAt": "2024-05-21T09:03:14Z",
+      "updatedAt": "2024-06-03T07:48:49Z",
       "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/issues/4434 / https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\n",
+          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/issues/4434 / https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\nRelates to https://github.com/scionassociation/scion-dp_I-D/issues/13 \r\n\r\n",
           "createdAt": "2024-05-16T10:23:09Z",
-          "updatedAt": "2024-05-21T09:03:14Z"
+          "updatedAt": "2024-06-03T07:48:49Z"
         }
       ]
     },
@@ -524,7 +524,7 @@
       "id": "I_kwDOJx2-rs6KdvU1",
       "title": "Add component overview",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/30",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -533,9 +533,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-05-29T11:13:20Z",
-      "updatedAt": "2024-05-29T11:13:20Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-06-03T07:10:44Z",
+      "closedAt": "2024-06-03T07:10:44Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Duplicate of #14",
+          "createdAt": "2024-06-03T07:10:44Z",
+          "updatedAt": "2024-06-03T07:10:44Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -1280,7 +1288,7 @@
       "labels": [],
       "body": "Documents connectRPC as the RPC protocol instead of the old gRPC/HTTP2/QUIC stack. Document service resolution minimally.\r\n\r\nFixes #15\r\n",
       "createdAt": "2024-05-23T16:45:12Z",
-      "updatedAt": "2024-05-30T12:31:37Z",
+      "updatedAt": "2024-06-03T15:17:10Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
@@ -1554,6 +1562,19 @@
               "updatedAt": "2024-05-30T12:31:37Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580pk5",
+          "commit": {
+            "abbreviatedOid": "573335f"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-06-03T15:17:10Z",
+          "updatedAt": "2024-06-03T15:17:10Z",
+          "comments": []
         }
       ]
     },
@@ -1569,13 +1590,13 @@
       "labels": [],
       "body": "This is almost identical to what I added to the DP draft. I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
       "createdAt": "2024-05-24T16:05:35Z",
-      "updatedAt": "2024-05-31T16:12:22Z",
+      "updatedAt": "2024-06-03T15:51:17Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "e4df3eb36255698fb580f4ba50ecfa0b1c8f1173",
+      "headRefOid": "d7008aca1fc6d9f79f09f1af307faa301d33ee32",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1608,9 +1629,9 @@
             },
             {
               "originalPosition": 78,
-              "body": "What happens if an AS receives a future PCB that is invalid? Must it be dropped? This should be clearer in the text, A suggestion including some word smithing (assuming it MUST be dropped): \r\n```suggestion\r\n- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding hop fields is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC). PCBs with a future timestamp MUST be dropped. For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time available at the point of use plus the minimum expiration time of a hop field (337.5 seconds, see [](#hopfield)).\r\n```\r\n\r\n> The expiration time of the corresponding path segment\r\n\r\nAlso, shouldn't expiration time in a PCB refer to hop fields and not to the path segment, or am I confused?\r\n",
+              "body": "What happens if an AS receives a future PCB that is invalid? Must it be dropped? This should be clearer in the text, A suggestion including some word smithing (assuming it MUST be dropped): \r\n```suggestion\r\n- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).\r\n```\r\n\r\n> The expiration time of the corresponding path segment\r\n\r\nAlso, shouldn't expiration time in a PCB refer to hop fields and not to the path segment, or am I confused?\r\n",
               "createdAt": "2024-05-31T13:43:48Z",
-              "updatedAt": "2024-05-31T16:12:22Z"
+              "updatedAt": "2024-06-03T11:55:27Z"
             },
             {
               "originalPosition": 111,
@@ -1620,9 +1641,9 @@
             },
             {
               "originalPosition": 112,
-              "body": "```suggestion\r\n- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of MAC computation and hop field verification.\r\n```",
+              "body": "```suggestion\r\n- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.\r\n```",
               "createdAt": "2024-05-31T14:06:49Z",
-              "updatedAt": "2024-05-31T16:12:22Z"
+              "updatedAt": "2024-06-03T12:00:48Z"
             },
             {
               "originalPosition": 132,
@@ -1649,6 +1670,46 @@
               "updatedAt": "2024-05-31T16:12:22Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580bNv",
+          "commit": {
+            "abbreviatedOid": "615582c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T14:54:35Z",
+          "updatedAt": "2024-06-03T14:56:22Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "> By combining these two values, an AS can compute the absolute expiration time of the hop field.\r\n\r\nNit: _anyone_ can compute the expiration time, not only \"an AS\". E.g. endpoints might have to do this to check if a path is still usable.",
+              "createdAt": "2024-06-03T14:54:35Z",
+              "updatedAt": "2024-06-03T14:56:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580_Jo",
+          "commit": {
+            "abbreviatedOid": "615582c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T15:47:53Z",
+          "updatedAt": "2024-06-03T15:47:53Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "as we discussed. I added a PCB validity section and moved, and simplify, the clock accuracy section.",
+              "createdAt": "2024-06-03T15:47:53Z",
+              "updatedAt": "2024-06-03T15:47:53Z"
+            }
+          ]
         }
       ]
     },
@@ -1664,7 +1725,7 @@
       "labels": [],
       "body": "Set of changes addressing:\r\n- #26 \r\n",
       "createdAt": "2024-05-28T14:07:49Z",
-      "updatedAt": "2024-05-30T09:14:48Z",
+      "updatedAt": "2024-06-03T07:15:24Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
@@ -1699,24 +1760,26 @@
       "id": "PR_kwDOJx2-rs5wygww",
       "title": "Add some explanation regarding interface configuration.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/29",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Explanations include a clarification (hopefully) of what a peering link is.\r\n\r\nAddresses #17 \r\n\r\nSimilar PR for DP draft: https://github.com/scionassociation/scion-dp_I-D/pull/21 \r\n",
       "createdAt": "2024-05-28T16:44:32Z",
-      "updatedAt": "2024-05-30T09:19:04Z",
+      "updatedAt": "2024-06-03T15:53:51Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "interface_config",
       "headRefOid": "df96a1cb2dde59296e0d20514bf283c9f08d2b6a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-06-03T15:53:37Z",
+      "mergedAt": "2024-06-03T15:53:37Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "7af3379e03c1a053b250daded414bbf2465cf9af"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1936,8 +1999,108 @@
               "updatedAt": "2024-05-30T08:34:39Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58xkGR",
+          "commit": {
+            "abbreviatedOid": "478cf27"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:56:40Z",
+          "updatedAt": "2024-06-03T09:56:41Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "I removed the underlay addresses from the list. Also used the same intro paragraph as in the DP draft.\r\n",
+              "createdAt": "2024-06-03T09:56:40Z",
+              "updatedAt": "2024-06-03T09:56:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580Yav",
+          "commit": {
+            "abbreviatedOid": "478cf27"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T14:50:07Z",
+          "updatedAt": "2024-06-03T14:50:07Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": ":+1: ",
+              "createdAt": "2024-06-03T14:50:07Z",
+              "updatedAt": "2024-06-03T14:50:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580Y6M",
+          "commit": {
+            "abbreviatedOid": "df96a1c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:50:57Z",
+          "updatedAt": "2024-06-03T14:50:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs581B5S",
+          "commit": {
+            "abbreviatedOid": "df96a1c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T15:52:50Z",
+          "updatedAt": "2024-06-03T15:52:50Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 32,
+      "id": "PR_kwDOJx2-rs5xRKNJ",
+      "title": "Introduce motivation for link types, explain restrictions for peering links",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/32",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #17 (by virtue of avoiding the phrase \"peering AS\").\r\n",
+      "createdAt": "2024-06-03T08:50:43Z",
+      "updatedAt": "2024-06-03T08:53:02Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c16dda05c7b2808a7c6c7b50719a1bb96a20ac2c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "motivate-link-types",
+      "headRefOid": "2bcdc0038813b445c8e6e491217c33133e24c46f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "body": "As discussed, this is overlapping with #29. \r\n#29 should be merged first,  then I'll take another look on how to unify the two changes.",
+          "createdAt": "2024-06-03T08:53:00Z",
+          "updatedAt": "2024-06-03T08:53:00Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
