@@ -1001,7 +1001,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 **Note:** For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
-- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, an AS can compute the absolute expiration time of the hop field.
+- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the hop field is the sum of these two values.
 - `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.
 
 
