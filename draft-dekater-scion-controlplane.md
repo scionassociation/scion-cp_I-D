@@ -1196,7 +1196,7 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
-To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in {{I-D.scion-dp}}.
+To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.
 
 
 #### Reception of PCBs
