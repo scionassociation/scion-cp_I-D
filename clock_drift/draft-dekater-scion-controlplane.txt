@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 December 2024                                         S. Hitz
+Expires: 6 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2024
+                                                             4 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 6 December 2024.
 
 Copyright Notice
 
@@ -1404,8 +1404,8 @@ path segment 4 |             |     |             |     |             |
       (24*60*60/256).  The minimum duration is therefore 337.5 s.  This
       duration is relative to the PCB creation timestamp set in the
       PCB's segment information component (see also Section 2.2.1.2).
-      By combining these two values, an AS can compute the absolute
-      expiration time of the hop field.
+      Therefore, the absolute expiration time of the hop field is the
+      sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
       to verify the hop field.  [I-D.scion-dp] provides a detailed
