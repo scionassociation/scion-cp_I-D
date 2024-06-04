@@ -69,6 +69,8 @@ normative:
   RFC4632:
   RFC5952:
   RFC8174:
+  RFC9000:
+  RFC9114:
   gRPC:
     title: "gRPC, an open-source universal RPC framework"
     date: 2023
@@ -396,8 +398,11 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-**Note:** The details of how gRPC is mapped to the SCION data plane will be described in a separate document.
+The RPC messages are transported via the [Connect](https://connectrpc.com/)'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
 
+Appendix {{app-a}} provides the entire control service API definition in protobuf format.
+
+Appendix {{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
 
 # Path Exploration or Beaconing {#beaconing}
 
@@ -590,8 +595,6 @@ path segment 4 |             |     |             |     |             |
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
 This section provides a detailed specification of a single PCB and its message format.
-
-**Note:** The SCION open-source implementation makes use of Protobuf (Protocol Buffers), a free and open-source cross-platform data format developed by Google and used to serialize structured data. The messages and remote procedure calls described below are in "proto3" language. For more information on Protobuf, see the official ["Protocol Buffers Documentation"](https://protobuf.dev/).
 
 
 ### Components of a PCB in Message Format {#pcb-compos}
@@ -1350,7 +1353,8 @@ The control service of a non-core AS has to register the newly created down-segm
    }
 
    service SegmentRegistrationService {
-       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
+       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+         SegmentsRegistrationResponse) {}
    }
 
    message SegmentsRegistrationRequest {
@@ -1479,7 +1483,7 @@ When the segment-request handler of a *core AS* control service receives a path 
 2. If the destination is a core or wildcard address, then load matching core-segments from the path database and return.
 3. Otherwise, load the matching down-segments from the path database and return.
 
-[](#app-b) shows by means of an illustration how the lookup of path segments in SCION works.
+[](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
 
 
 
@@ -1589,109 +1593,290 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 
 
 
-# PCB Protobuf Messages - Full Example {#app-a}
+# Control Service gRPC API {#app-a}
 {:numbered="false"}
 
-The following code block provides a full example of one PCB in the Protobuf message format.
-
+The following code block provides, in protobuf format, the API by which control services interract.
 
 ~~~~
-   message PathSegment {
-       bytes segment_info = 1;
-       repeated ASEntry as_entries = 2;
-   }
+enum SegmentType {
+    // Unknown segemnt type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+}
 
-   message SegmentInformation {
-       int64 timestamp = 1;
-       uint32 segment_id = 2;
-   }
 
-   message ASEntry {
-       // The signed part of the AS entry. The body of the SignedMessage
-       // is the serialized ASEntrySignedBody.
-       // The signature input is defined as following:
-       //
-       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
-       //
-       // associated_data(ps, i) =
-       //             ps.segment_info ||
-       //             ps.as_entries[1].signed.header_and_body ||
-       //             ps.as_entries[1].signed.signature ||
-       //             ...
-       //             ps.as_entries[i-1].signed.header_and_body ||
-       //             ps.as_entries[i-1].signed.signature
-       //
-       SignedMessage signed = 1;
-       // Optional
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
+// control services on the "intra-protocol" network.
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
 
-   message SignedMessage {
-       // Encoded header and body.
-       bytes header_and_body = 1;
-       // Raw signature. The signature is computed over the
-       // concatenation of the header and body, and the optional
-       // associated data.
-       bytes signature = 2;
-   }
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
 
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
-       bytes header = 1;
-       // Raw payload suitable for signature computation.
-       bytes body = 2;
-   }
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message Header {
-       SignatureAlgorithm signature_algorithm = 1;
-       bytes verification_key_id = 2;
-       // Optional
-       google.protobuf.Timestamp timestamp = 3;
-       // Optional
-       bytes metadata = 4;
-       int32 associated_data_length = 5;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message VerificationKeyID {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       uint64 trc_base = 3;
-       uint64 trc_serial = 4;
-   }
+// This API is only exposed by core ASes and only on the SCION dataplane.
+service SegmentRegistrationService {
+    // SegmentsRegistration registers segments at the remote.
+    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+        SegmentsRegistrationResponse) {}
+}
 
-   message ASEntrySignedBody {
-       uint64 isd_as = 1;
-       uint64 next_isd_as = 2;
-       HopEntry hop_entry = 3;
-       repeated PeerEntry peer_entries = 4;
-       uint32 mtu = 5;
-       // Optional
-       PathSegmentExtensions extensions = 6;
-   }
+message SegmentsRegistrationRequest {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message HopEntry {
-       HopField hop_field = 1;
-       uint32 ingress_mtu = 2;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message PeerEntry {
-       uint64 peer_isd_as = 1;
-       uint64 peer_interface = 2;
-       uint32 peer_mtu = 3;
-       HopField hop_field = 4;
-   }
+message SegmentsRegistrationResponse {}
 
-   message HopField {
-       uint64 ingress = 1;
-       uint64 egress = 2;
-       uint32 exp_time = 3;
-       bytes mac = 4;
-   }
+service SegmentCreationService {
+    // Beacon sends a beacon to the remote.
+    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+}
+
+message BeaconRequest {
+    // Beacon in form of a partial path segment.
+    PathSegment segment = 1;
+}
+
+message BeaconResponse {}
+
+message PathSegment {
+    // The encoded SegmentInformation. It is used for signature input.
+    bytes segment_info = 1;
+    // Entries of ASes on the path.
+    repeated ASEntry as_entries = 2;
+}
+
+message SegmentInformation {
+    // Segment creation time set by the originating AS. Segment
+    // expiration time is computed relative to this timestamp.
+    // The timestamp is encoded as the number of seconds elapsed
+    // since January 1, 1970 UTC.
+    int64 timestamp = 1;
+    // The 16-bit segment ID integer used for MAC computation.
+    uint32 segment_id = 2;
+}
+
+message ASEntry {
+    // The signed part of the AS entry. The body of the SignedMessage
+    // is the serialized ASEntrySignedBody. The signature input is
+    // defined as follows:
+    //
+    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+    //
+    //  associated_data(ps, i) =
+    //          ps.segment_info ||
+    //          ps.as_entries[1].signed.header_and_body ||
+    //          ps.as_entries[1].signed.signature ||
+    //          ...
+    //          ps.as_entries[i-1].signed.header_and_body ||
+    //          ps.as_entries[i-1].signed.signature
+    //
+    proto.crypto.v1.SignedMessage signed = 1;
+    // The unsigned part of the AS entry.
+    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+}
+
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+}
+
+message HopEntry {
+    // Material to create the data-plane hop field.
+    HopField hop_field = 1;
+    // MTU on the ingress link.
+    uint32 ingress_mtu = 2;
+}
+
+message PeerEntry {
+    // ISD-AS of peer AS. This is used to match peering segments during
+    // path construction.
+    uint64 peer_isd_as = 1;
+    // Remote peer interface identifier. This is used to match
+    // peering segments
+    // during path construction.
+    uint64 peer_interface = 2;
+    // MTU on the peering link.
+    uint32 peer_mtu = 3;
+    // Material to create the data-plane hop field
+    HopField hop_field = 4;
+}
+
+message HopField {
+    // Ingress interface identifier.
+    uint64 ingress = 1;
+    // Egress interface identifier.
+    uint64 egress = 2;
+    // 8-bit encoded expiration offset relative to the segment creation
+    // timestamp.
+    uint32 exp_time = 3;
+    // MAC used in the dataplane to verify the hop field.
+    bytes mac = 4;
+}
+
+enum SignatureAlgorithm {
+    // Unspecified signature algorithm. This value is never valid.
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    // ECDS with SHA256.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    // ECDS with SHA384.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    // ECDS with SHA512.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+}
+
+message SignedMessage {
+    // Encoded header and body.
+    bytes header_and_body = 1;
+    // Raw signature. The signature is computed over the concatenation
+    // of the header and body, and the optional associated data.
+    bytes signature = 2;
+}
+
+message Header {
+    // Algorithm used to compute the signature.
+    SignatureAlgorithm signature_algorithm = 1;
+    // Optional arbitrary per-protocol key identifier.
+    bytes verification_key_id = 2;
+    // Optional signature creation timestamp.
+    google.protobuf.Timestamp timestamp = 3;
+    // Optional arbitrary per-protocol metadata.
+    bytes metadata = 4;
+    // Length of associated data that is covered by the signature, but
+    // is not included in the header and body. This is zero, if no
+    // associated data is covered by the signature.
+    int32 associated_data_length = 5;
+}
+
+// Low-level representation of HeaderAndBody used for signature
+// computation input. This should not be used by external code.
+message HeaderAndBodyInternal {
+    // Enocded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
+}
+
+message VerificationKeyID {
+    uint64 isd_as = 1;
+    bytes subject_key_id = 2;
+    uint64 trc_base = 3;
+    uint64 trc_serial = 4;
+}
+
+~~~~
+{: #figure-11 title="Control Service gRPC API definition"}
+
+
+# SCION data plane use by the SCION control plane {#app-b}
+{:numbered="false"}
+
+The SCION control plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the control service is itself the source of path segment information, the following bootstraping strategies apply:
+
+* Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.
+* Constructed multihop paths are registered with the control service at the origin core AS. The path to that AS is the very path being
+  registered.
+* Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local control service.
+* Control services respond to requests from remote ASes by reversing the path via which the request came.
+* Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.scion-dp}}).
+
+The mechanics of service address resolution are the following:
+
+* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an enpoint address constructed as follows:
+  * Common Header:
+    * Path type: SCION (0x01)
+    * DT/DL: "Service" (0b0100)
+  * Address Header:
+    * DstHostAddr: "SVC_CS" (0x0002)
+  * UDP Header:
+    * DstPort: 0
+* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This standard does not mandate any specific method for this resolution.
+* The ingress border router forwards the message to the resolved address.
+* The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.
+* The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
+
+The following code block provides the full service resolution API in the Protobuf message format.
+
 ~~~~
 
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map<string, Transport> transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.168.0.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+~~~~
+{: #figure-12 title="Service Resolution gRPC API definition"}
 
 
-# Path-Lookup Examples {#app-b}
+# Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.
