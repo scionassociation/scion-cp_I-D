@@ -1118,8 +1118,12 @@ This section describes how PCBs are selected and propagated in the path explorat
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on *path* properties (e.g., length, disjointness across different paths) as well as on *PCB* properties (e.g., age, expiration time) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.
+As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.
 
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
+From these viable PCBs, only a relatively small subset can be propagated, to avoid excessive overhead of the path discovery system in bigger networks.
+The goal of the AS should be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.
 
 #### Storing and Selecting Candidate PCBs
 
