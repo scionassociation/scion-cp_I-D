@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 December 2024                                         S. Hitz
+Expires: 7 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             4 June 2024
+                                                             5 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2024.
+   This Internet-Draft will expire on 7 December 2024.
 
 Copyright Notice
 
@@ -1520,7 +1520,7 @@ path segment 4 |             |     |             |     |             |
 
 2.2.3.  PCB Validity
 
-   The be valid (that is, usable to construct a valid path), a PCB must:
+   To be valid (that is, usable to construct a valid path), a PCB must:
 
    *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
 
@@ -2120,7 +2120,7 @@ path segment 4 |             |     |             |     |             |
    *Note:* The actual number of required path segments depends on the
    location of the destination AS as well as on the availability of
    shortcuts and peering links.  More information on combining and
-   constructing paths will be provided by [I-D.scion-dp].
+   constructing paths is provided by [I-D.scion-dp].
 
    The process to look up and fetch path segments consists of the
    following steps:
