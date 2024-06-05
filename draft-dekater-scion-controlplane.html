@@ -1204,7 +1204,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="auto internal xref">2.2.2</a>.  <a href="#name-pcb-extensions" class="internal xref">PCB Extensions</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.3">
-                    <p id="section-toc.1-1.2.2.2.2.3.1"><a href="#section-2.2.3" class="auto internal xref">2.2.3</a>.  <a href="#name-configuration" class="internal xref">Configuration</a></p>
+                    <p id="section-toc.1-1.2.2.2.2.3.1"><a href="#section-2.2.3" class="auto internal xref">2.2.3</a>.  <a href="#name-pcb-validity" class="internal xref">PCB Validity</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.4">
+                    <p id="section-toc.1-1.2.2.2.2.4.1"><a href="#section-2.2.4" class="auto internal xref">2.2.4</a>.  <a href="#name-configuration" class="internal xref">Configuration</a></p>
 </li>
                 </ul>
 </li>
@@ -1216,6 +1219,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
                     <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-effects-of-clock-inaccuracy" class="internal xref">Effects of Clock Inaccuracy</a></p>
 </li>
                 </ul>
 </li>
@@ -1683,7 +1689,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
-            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.2">
             <p id="section-1.6-2.2.1">Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.<a href="#section-1.6-2.2.1" class="pilcrow">¶</a></p>
@@ -1846,6 +1852,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                                 v   v
                            +----#---#----+
                            |    AS Z     |
+
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
@@ -1892,6 +1899,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 +--------+                  |     |     |                  +--------+
                             v     |     v
                                   v
+
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
@@ -1946,6 +1954,7 @@ path segment 4 |             |     |             |     |             |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
+
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
@@ -2110,13 +2119,13 @@ path segment 4 |             |     |             |     |             |
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.2-5.1">
-                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.2-5.2">
                 <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-message">
@@ -2377,7 +2386,7 @@ path segment 4 |             |     |             |     |             |
               <h6 id="name-as-entry-signature">
 <a href="#section-2.2.1.4.3" class="section-number selfRef">2.2.1.4.3. </a><a href="#name-as-entry-signature" class="section-name selfRef">AS Entry Signature</a>
               </h6>
-<p id="section-2.2.1.4.3-1">Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-1">Each AS entry <span class="bcp14">MUST</span> be signed with the AS certificate's private key K<sub>i</sub>. The certificate <span class="bcp14">MUST</span> have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.3-2.1">
                   <p id="section-2.2.1.4.3-2.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.1.4.3-2.1.1" class="pilcrow">¶</a></p>
@@ -2393,7 +2402,7 @@ path segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-4">Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-5">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-7">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -2490,10 +2499,10 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.6-7.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.1.6-7.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-7.2">
-                <p id="section-2.2.1.6-7.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets that use the hop field after the expiration time <span class="bcp14">MUST</span> be dropped.<a href="#section-2.2.1.6-7.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.6-7.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Therefore, the absolute expiration time of the hop field is the sum of these two values.<a href="#section-2.2.1.6-7.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-7.3">
-                <p id="section-2.2.1.6-7.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.6-7.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.6-7.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field.<a href="#section-2.2.1.6-7.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2600,24 +2609,45 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.2.2-4"><strong>Note:</strong> SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="configuration">
+<div id="pcb-validity">
 <section id="section-2.2.3">
-          <h4 id="name-configuration">
-<a href="#section-2.2.3" class="section-number selfRef">2.2.3. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+          <h4 id="name-pcb-validity">
+<a href="#section-2.2.3" class="section-number selfRef">2.2.3. </a><a href="#name-pcb-validity" class="section-name selfRef">PCB Validity</a>
           </h4>
-<p id="section-2.2.3-1">For the purpose of constructing and propagating path segments, an AS control service must be configured with links to neighboring ASes. Such information may be conveyed to the control service in an out of band fashion (e.g in a configuration file). For each link, these values must be configured:<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-1">To be valid (that is, usable to construct a valid path), a PCB must:<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3-2.1">
-              <p id="section-2.2.3-2.1.1">Local interface ID<a href="#section-2.2.3-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-2.1.1">Contain valid AS Entry signatures (<a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>).<a href="#section-2.2.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.3-2.2">
-              <p id="section-2.2.3-2.2.1">Neighbor type (core, parent, child, peer), depending on link type (see <a href="#paths-links" class="auto internal xref">Section 1.3</a>). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.<a href="#section-2.2.3-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-2.2.1">Have a timestamp (<a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>) that is not in the future.<a href="#section-2.2.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.3-2.3">
-              <p id="section-2.2.3-2.3.1">Neighbor ISD-AS number<a href="#section-2.2.3-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-2.3.1">Contain only unexpired hops (<a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.2.3-2.4">
-              <p id="section-2.2.3-2.4.1">Neighbor interface underlay address<a href="#section-2.2.3-2.4.1" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-2.2.3-3">For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-4">For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>, is later than the current time at the point of validation.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configuration">
+<section id="section-2.2.4">
+          <h4 id="name-configuration">
+<a href="#section-2.2.4" class="section-number selfRef">2.2.4. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+          </h4>
+<p id="section-2.2.4-1">For the purpose of constructing and propagating path segments, an AS control service must be configured with links to neighboring ASes. Such information may be conveyed to the control service in an out of band fashion (e.g in a configuration file). For each link, these values must be configured:<a href="#section-2.2.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.4-2.1">
+              <p id="section-2.2.4-2.1.1">Local interface ID<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.2">
+              <p id="section-2.2.4-2.2.1">Neighbor type (core, parent, child, peer), depending on link type (see <a href="#paths-links" class="auto internal xref">Section 1.3</a>). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.<a href="#section-2.2.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.3">
+              <p id="section-2.2.4-2.3.1">Neighbor ISD-AS number<a href="#section-2.2.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.4">
+              <p id="section-2.2.4-2.4.1">Neighbor interface underlay address<a href="#section-2.2.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2635,7 +2665,7 @@ associated_data(ps, i) = ps.segment_info ||
           <h4 id="name-selection-of-pcbs-to-propag">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on <em>path</em> properties (e.g., length, disjointness across different paths) as well as on <em>PCB</em> properties (e.g., age, remaining lifetime of sent instances) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on <em>path</em> properties (e.g., length, disjointness across different paths) as well as on <em>PCB</em> properties (e.g., age, expiration time) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <div id="storing-and-selecting-candidate-pcbs">
 <section id="section-2.3.1.1">
             <h5 id="name-storing-and-selecting-candi">
@@ -2754,20 +2784,20 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
 <p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<div id="propagation-first-steps">
+<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<div id="reception-of-pcbs">
 <section id="section-2.3.2.1">
-            <h5 id="name-propagation-first-steps">
-<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-propagation-first-steps" class="section-name selfRef">Propagation - First Steps</a>
+            <h5 id="name-reception-of-pcbs">
+<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
             </h5>
 <p id="section-2.3.2.1-1">The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:<a href="#section-2.3.2.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.2.1-2">
 <li id="section-2.3.2.1-2.1">
-                <p id="section-2.3.2.1-2.1.1">Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.<br>
-                  <strong>Note:</strong> The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.1-2.1.1">Upon receiving a PCB, the control service of an AS verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>). Invalid PCBs <span class="bcp14">MUST</span> be discarded.
+The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.2">
-                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on flooding PCBs, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.3">
                 <p id="section-2.3.2.1-2.3.1">If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.3.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -2899,6 +2929,26 @@ associated_data(ps, i) = ps.segment_info ||
             </ul>
 </section>
 </div>
+</section>
+</div>
+<div id="effects-of-clock-inaccuracy">
+<section id="section-2.3.3">
+          <h4 id="name-effects-of-clock-inaccuracy">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>
+          </h4>
+<p id="section-2.3.3-1">A PCB originated by a given control service is validated by all the control services that receive it. All have different clocks. Their differences affect the validation process:<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.3-2.1">
+              <p id="section-2.3.3-2.1.1">A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.<a href="#section-2.3.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-2.2">
+              <p id="section-2.3.3-2.2.1">A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.<a href="#section-2.3.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-4">The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-5">In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-6">Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-2.3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3127,7 +3177,7 @@ associated_data(ps, i) = ps.segment_info ||
             <p id="section-4.1-2.3.1">a down-path segment to reach the destination AS.<a href="#section-4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by the SCION Data Plane Specification document.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">

@@ -99,10 +99,12 @@ Table of Contents
      2.2.  Path-Segment Construction Beacons (PCBs)
        2.2.1.  Components of a PCB in Message Format
        2.2.2.  PCB Extensions
-       2.2.3.  Configuration
+       2.2.3.  PCB Validity
+       2.2.4.  Configuration
      2.3.  Propagation of PCBs
        2.3.1.  Selection of PCBs to Propagate
        2.3.2.  Propagation of Selected PCBs
+       2.3.3.  Effects of Clock Inaccuracy
    3.  Registration of Path Segments
      3.1.  Intra-ISD Path-Segment Registration
        3.1.1.  Terminating a PCB
@@ -579,8 +581,7 @@ Table of Contents
       hop path type, which does not rely on any path information.  SCION
       uses these _one-hop paths_ to propagate PCBs to neighboring ASes
       to which no forwarding path is available yet.  The One-Hop Path
-      Type will be described in more detail in the SCION Data Plane
-      specification (this document will be available later this year).
+      Type is described in more detail in [I-D.scion-dp].
 
    *  Path segment types: SCION uses different types of path segments to
       compose end-to-end paths.  Notably, a single path segment already
@@ -1034,8 +1035,8 @@ path segment 4 |             |     |             |     |             |
 
    *  timestamp: The 32-bit timestamp indicates the creation time of
       this PCB.  It is set by the originating core AS.  The expiration
-      time of the corresponding path segment is computed relative to
-      this timestamp.  The timestamp is encoded as the number of seconds
+      time of each hop field in the PCB is computed relative to this
+      timestamp.  The timestamp is encoded as the number of seconds
       elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
    *  segment_id: The 16-bit identifier of this PCB and the
@@ -1046,9 +1047,9 @@ path segment 4 |             |     |             |     |             |
       cryptographically random number.
 
    *Note:* See Section 2.2.1.6 for more information on the hop field
-   message format.  The SCION Data Plane Specification provides a
-   detailed description of the computation of the MAC and the
-   verification of the hop field in the data plane.
+   message format.  [I-D.scion-dp] provides a detailed description of
+   the computation of the MAC and the verification of the hop field in
+   the data plane.
 
 2.2.1.3.  AS Entry
 
@@ -1289,10 +1290,12 @@ path segment 4 |             |     |             |     |             |
 
 2.2.1.4.3.  AS Entry Signature
 
-   Each AS entry is signed with a private key K_i that corresponds to
-   the public key certified by the AS's certificate.  The signature
-   Sig_i of an AS entry ASE_i is computed over the AS entry's signed
-   component.  This is the input for the computation of the signature:
+   Each AS entry MUST be signed with the AS certificate's private key
+   K_i.  The certificate MUST have a validity period fully containing
+   that of the segment being verified; regardless of current time.  The
+   signature Sig_i of an AS entry ASE_i is computed over the AS entry's
+   signed component.  This is the input for the computation of the
+   signature:
 
    *  The signed header and body of the current AS (header_and_body).
 
@@ -1318,7 +1321,7 @@ path segment 4 |             |     |             |     |             |
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
-   Note that the signature has a nested, onion-like structure.
+   Note that the signature has a nested structure.
 
    input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
@@ -1403,17 +1406,18 @@ path segment 4 |             |     |             |     |             |
       of beaconing).
 
    *  exp_time: The 8-bit encoded expiration time of the hop field,
-      indicating how long the hop field is valid.  This value is an
-      offset relative to the PCB creation timestamp set in the PCB's
-      segment information component (see also Section 2.2.1.2).  By
-      combining these two values, the AS can compute the absolute
-      expiration time of the hop field.  Data-plane packets that use the
-      hop field after the expiration time MUST be dropped.
+      indicating its validity.  This field expresses a duration in
+      seconds according to the formula: duration = (1 + exp_time) *
+      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This
+      duration is relative to the PCB creation timestamp set in the
+      PCB's segment information component (see also Section 2.2.1.2).
+      Therefore, the absolute expiration time of the hop field is the
+      sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field.  The SCION Data Plane Specification
-      provides a detailed description of the computation of the MAC and
-      the verification of the hop field in the data plane.
+      to verify the hop field.  [I-D.scion-dp] provides a detailed
+      description of the computation of the MAC and the verification of
+      the hop field.
 
 2.2.1.7.  Peer Entry
 
@@ -1513,7 +1517,26 @@ path segment 4 |             |     |             |     |             |
    extension in the signature.  This prevents a possible processing
    overhead caused by large cryptographically-protected extensions.
 
-2.2.3.  Configuration
+2.2.3.  PCB Validity
+
+   To be valid (that is, usable to construct a valid path), a PCB must:
+
+   *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
+
+   *  Have a timestamp (Section 2.2.1.2) that is not in the future.
+
+   *  Contain only unexpired hops (Section 2.2.1.6).
+
+   For the purpose of validation, a timestamp is considered "future" if
+   it is later than the current time at the point of validation plus the
+   minimum expiration time of a hop field (337.5 seconds, see
+   Section 2.2.1.6).
+
+   For the purpose of validation, a hop is considered expired if its
+   absolute expiration time, calculated as defined in Section 2.2.1.6,
+   is later than the current time at the point of validation.
+
+2.2.4.  Configuration
 
    For the purpose of constructing and propagating path segments, an AS
    control service must be configured with links to neighboring ASes.
@@ -1543,13 +1566,12 @@ path segment 4 |             |     |             |     |             |
    local policy on the basis of which PCBs are evaluated, selected or
    eliminated.  The selection process can be based on _path_ properties
    (e.g., length, disjointness across different paths) as well as on
-   _PCB_ properties (e.g., age, remaining lifetime of sent instances) -
-   each AS is free to use those properties that suit the AS best.  The
-   control service can then compute the overall quality of each
-   candidate PCB based on these properties.  For this, the AS should use
-   a selection algorithm or metric that reflects its needs and
-   requirements and identifies the best PCBs or paths segments for this
-   AS.
+   _PCB_ properties (e.g., age, expiration time) - each AS is free to
+   use those properties that suit the AS best.  The control service can
+   then compute the overall quality of each candidate PCB based on these
+   properties.  For this, the AS should use a selection algorithm or
+   metric that reflects its needs and requirements and identifies the
+   best PCBs or paths segments for this AS.
 
 2.3.1.1.  Storing and Selecting Candidate PCBs
 
@@ -1689,35 +1711,36 @@ path segment 4 |             |     |             |     |             |
    handles beaconing between neighboring ASes for which no forwarding
    path may be available yet.  In fact, it is the task of beaconing to
    discover such forwarding paths.  The purpose of one-hop paths is thus
-   to break this circular dependency.  The One-Hop Path Type will be
-   described in more detail in the SCION Data Plane specification.
+   to break this circular dependency.  The One-Hop Path Type is
+   described in more detail in [I-D.scion-dp].
 
-2.3.2.1.  Propagation - First Steps
+2.3.2.1.  Reception of PCBs
 
    The following first steps of the propagation procedure are the same
    for both intra-ISD and core beaconing:
 
    1.  Upon receiving a PCB, the control service of an AS verifies the
-       structure and all signatures on the PCB.
-       *Note:* The PCB contains the version numbers of the trust root
-       configuration(s) (TRC) and certificate(s) that must be used to
-       verify its signatures.  This enables the control service to check
-       whether it has the relevant TRC(s) and certificate(s); if not,
-       they can be requested from the control service of the sending AS.
+       validity of the PCB (see Section 2.2.3).  Invalid PCBs MUST be
+       discarded.  The PCB contains the version numbers of the trust
+       root configuration(s) (TRC) and certificate(s) that must be used
+       to verify its signatures.  This enables the control service to
+       check whether it has the relevant TRC(s) and certificate(s); if
+       not, they can be requested from the control service of the
+       sending AS.
 
-   2.  As core beaconing is based on sending PCBs without a defined
-       direction, it is necessary to avoid loops during path creation.
-       The control service of core ASes MUST therefore check whether the
-       PCB includes duplicate hop entries created by the core AS itself
-       or by other ASes.  If so, the PCB MUST be discarded in order to
-       avoid loops.  Additionally, core ASes could forbid, that is, not
-       propagate, beacons containing path segments that traverse the
-       same ISD more than once. *Note:* Where loops must always be
-       avoided, it is a policy decision to forbid ISD double-crossing.
-       It can be legitimate to cross the same ISD multiple times: For
-       example, if the ISD spans a large geographical area, a path
-       transiting another ISD may constitute a shortcut.  However, it is
-       up to each core AS to decide whether it wants to allow this.
+   2.  As core beaconing is based on flooding PCBs, it is necessary to
+       avoid loops during path creation.  The control service of core
+       ASes MUST therefore check whether the PCB includes duplicate hop
+       entries created by the core AS itself or by other ASes.  If so,
+       the PCB MUST be discarded in order to avoid loops.  Additionally,
+       core ASes could forbid, that is, not propagate, beacons
+       containing path segments that traverse the same ISD more than
+       once. *Note:* Where loops must always be avoided, it is a policy
+       decision to forbid ISD double-crossing.  It can be legitimate to
+       cross the same ISD multiple times: For example, if the ISD spans
+       a large geographical area, a path transiting another ISD may
+       constitute a shortcut.  However, it is up to each core AS to
+       decide whether it wants to allow this.
 
    3.  If the PCB verification is successful, the control service
        decides whether to store the PCB as a candidate for propagation
@@ -1833,6 +1856,44 @@ path segment 4 |             |     |             |     |             |
 
    *  BeaconResponse: Specifies the response message from the
       neighboring AS.
+
+2.3.3.  Effects of Clock Inaccuracy
+
+   A PCB originated by a given control service is validated by all the
+   control services that receive it.  All have different clocks.  Their
+   differences affect the validation process:
+
+   *  A fast clock at origination or a slow clock at reception will
+      yield a lengthened expiration time for hops, and possibly an
+      origination time in the future.
+
+   *  A slow clock at origination or a fast clock at reception will
+      yield a shortened expiration time for hops, and possibly an
+      expiration time in the past.
+
+   This bias comes in addition to a structural delay: PCBs are
+   propagated at a configurable interval (typically, one minute).  As a
+   result of this and the way they are iteratively constructed, PCBs
+   with N hops may be validated up to N intervals (so typically N
+   minutes) after origination.  This creates a constraint on the
+   expiration of hops.  Hops of the minimal expiration time (337.5
+   seconds - see Section 2.2.1.6) would render useless any PCB
+   describing a path longer than 5 hops.  For this reason, it is
+   unadvisable to create hops with a short expiration time.  The norm is
+   6 hours.
+
+   The control service and its clients authenticate each-other according
+   to their respective AS's certificate.  Path segments are
+   authenticated based on the certificates of the ASes that they refer
+   to.  The expiration of a SCION AS certificate typically ranges from
+   3h to 5 years.
+
+   In comparison to these time scales, clock offsets in the order of
+   minutes are immaterial.
+
+   Each administrator of a SCION control service is responsible for
+   maintaining sufficient clock accuracy.  No particular method is
+   assumed by this specification.
 
 3.  Registration of Path Segments
 
@@ -2058,8 +2119,7 @@ path segment 4 |             |     |             |     |             |
    *Note:* The actual number of required path segments depends on the
    location of the destination AS as well as on the availability of
    shortcuts and peering links.  More information on combining and
-   constructing paths will be provided by the SCION Data Plane
-   Specification document.
+   constructing paths is provided by [I-D.scion-dp].
 
    The process to look up and fetch path segments consists of the
    following steps:
