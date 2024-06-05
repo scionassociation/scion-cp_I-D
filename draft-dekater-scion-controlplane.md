@@ -79,6 +79,10 @@ normative:
     title: "Protocol Buffers Language Guide version 3"
     date: 2023
     target: https://protobuf.dev/programming-guides/proto3/
+  Connect:
+    title: "Connect Protocol Reference"
+    date: 2024
+    target: https://connectrpc.com/docs/protocol/
 
 informative:
   CHUAT22:
@@ -398,7 +402,7 @@ Recovering (also called healing) from a partitioned network is also seamless, as
 
 All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-The RPC messages are transported via the [Connect](https://connectrpc.com/)'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
+The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
 
 Appendix {{app-a}} provides the entire control service API definition in protobuf format.
 
@@ -1831,7 +1835,7 @@ The mechanics of service address resolution are the following:
     * DstHostAddr: "SVC_CS" (0x0002)
   * UDP Header:
     * DstPort: 0
-* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This standard does not mandate any specific method for this resolution.
+* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
 * The ingress border router forwards the message to the resolved address.
 * The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.
 * The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
