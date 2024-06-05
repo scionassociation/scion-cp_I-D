@@ -1,0 +1,2106 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-06-04T00:16:53.696824+00:00",
+  "repo": "scionassociation/scion-cp_I-D",
+  "labels": [
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "Prio 1",
+      "description": "",
+      "color": "DC0E1A"
+    },
+    {
+      "name": "Prio 2",
+      "description": "",
+      "color": "FBCA04"
+    },
+    {
+      "name": "Prio 3",
+      "description": "",
+      "color": "0E8A16"
+    },
+    {
+      "name": "editorial",
+      "description": "",
+      "color": "9855E2"
+    },
+    {
+      "name": "needs-discussion",
+      "description": "",
+      "color": "fbca04"
+    },
+    {
+      "name": "design",
+      "description": "",
+      "color": "1d76db"
+    }
+  ],
+  "issues": [
+    {
+      "number": 5,
+      "id": "I_kwDOJx2-rs57ZNLr",
+      "title": "Language: MAC v.s. MAC",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/5",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "We should only use MAC with one meaning, not with two at the same time\r\n\r\n(Moved from https://github.com/scionassociation/standards/issues/98)\r\n",
+      "createdAt": "2024-01-08T10:56:49Z",
+      "updatedAt": "2024-02-22T16:55:35Z",
+      "closedAt": "2024-02-22T16:55:35Z",
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOJx2-rs57Z9-D",
+      "title": "Unaddressed Feedback from Reviews",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/6",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 1",
+        "Prio 2"
+      ],
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [ ] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [ ] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [ ] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [ ] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [ ]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [ ] #18\r\n- [ ] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [ ] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [ ] #19\r\n- [ ] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [ ] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\", handled in #8 \r\n- [ ] #22\r\n",
+      "createdAt": "2024-01-08T12:56:27Z",
+      "updatedAt": "2024-05-16T10:55:18Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOJx2-rs57aARE",
+      "title": "Write IANA Considerations Section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/7",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
+      "createdAt": "2024-01-08T13:01:45Z",
+      "updatedAt": "2024-05-16T10:34:52Z",
+      "closedAt": "2024-05-16T10:34:51Z",
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For the control plane, there seems to be only two IANA consideration to address:\r\n- Informational: The fact that SCION mirrors the UDP port space into the SCION/UDP port space. \r\n- The control service/discovery SCION/UDP port at 30252 which may need to become a reserved UDP/IP port as a consequence of the first point.\r\n \r\nEverything else is AS-internal so requires no IANA arbitration.\r\n\r\nRegarding port 30252, it is not even clear if that needs to be a reserved SCION/UDP port, given that it needs not be addressed directly but can be reached by way of a service address (and was once a dynamic port). As for port 30252 in to UDP/IP space, it is an AS-internal configuration anyway, so unless port 30252 needs to be reserved in the SCION/UDP space, it doesn't need to be reserved in the UDP/IP space.\r\n\r\nOn the other hand, Service Addresses themselves contain a hard-coded well-known number, so we might need to establish a registry for those. However, that would not be in the CP draft but may-be in the DP draft. Opinions welcome.\r\n\r\n",
+          "createdAt": "2024-01-11T14:01:13Z",
+          "updatedAt": "2024-01-11T14:01:13Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Update: our internet drafts must not have any IANA actions so, for better or for worse we have to let everything be freely configurable. We might mention that \"Informational: The fact that SCION mirrors the UDP port space into the SCION/UDP port space.\" as a justification for the absence of any IANA action requirement. Otherwise, should we just close this issue?\r\n",
+          "createdAt": "2024-02-22T15:14:33Z",
+          "updatedAt": "2024-02-22T15:15:01Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @jceatscion in the draft we don't have the service discovery part (there was some discussion about this a while ago, and I think we removed it from the drafts, it might be in the old repo) ",
+          "createdAt": "2024-02-23T18:03:59Z",
+          "updatedAt": "2024-02-23T18:03:59Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We discussed this with @jiceatscion and @matzf, port 30252 does not need to be reserved, this is an AS local configuration.",
+          "createdAt": "2024-05-16T10:34:51Z",
+          "updatedAt": "2024-05-16T10:34:51Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOJx2-rs57aHuA",
+      "title": "Add section on scalability and convergence time",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/8",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1"
+      ],
+      "body": "Jeff Tantsura at our IETF117 presentation mentioned that it was not clear how SCION does in terms of convergence time. \r\nThen we also got this question from the iSE review: \r\n\r\n> From:\tJoel Halpern\r\n> There appears to be a very fundamental gap in the scaling description.  On the one hand, SCION claims to scale well (presumably to large numbers of participating AS.  There is no discussion of the effect of the number of participants or meshiness on the number of PCBs.  There are very strict limits on the rate at which PCBs are propagated.  But no analysis as to whether the system will ever converge .  Particularly if the number of interfaces between AS becomes large. \r\n\r\nSomething about convergence time and scalability should be added to the draft. We could start from something like this:\r\n> Note that, since there is no convergence phase in SCION, we cannot compare to BGP\u2019s convergence time. SCION path-segments are stable as soon as they are disseminated.\r\n\r\nSource:\r\nhttps://netsec.ethz.ch/publications/papers/2021_conext_deployment.pdf\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/82)\r\n\r\n> From Roger Lapuh:  Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n\r\n> From Juan Garcia Pardo:  Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. \r\n",
+      "createdAt": "2024-01-08T13:19:15Z",
+      "updatedAt": "2024-05-17T09:33:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOJx2-rs57aLVE",
+      "title": "Adapt Section on SCION AS Numbers",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/9",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "(Moved from https://github.com/scionassociation/standards/issues/91)\r\n\r\nSection 1.5.2 on AS numbering in the Control Plane draft must be changed, as it may cause problems or even a blocking of the draft at the IETF.  See also Eliot Lear's mail from 28.8:\r\n\r\n> There is an issue in Section 1.5.2:\r\n> There will be a conflict if the IETF decides to increase the ASN size.  This may not make it past the IESG in RFC 5742 review.  I just went through this with GNS and would not like to repeat that experience.  Therefore, my suggestion is that you view the ASN field as two separate fields: BASE and and EXTENSION, where if EXTENSION is 0, base must be an IANA-assigned ASN value.\r\n> \r\n\r\nAt the 3rd TC meeting on Tuesday 5 September, it was decided that the SCION AS numbering will not be described in detail in the CP draft. It should be mentioned that the SCION AS numbering is totally independent from the BGP AS numbering. For all other details, refer to a future and/or other draft.   \r\n\r\nFor the problem description and possible future solution, see slide 11-14 of the slide deck for the TC Standardisation meeting on 5.9.23. [TC-Standardisation_3meeting_Sept23.pdf](https://github.com/scionassociation/standards/files/12534358/TC-Standardisation_3meeting_Sept23.pdf)",
+      "createdAt": "2024-01-08T13:27:03Z",
+      "updatedAt": "2024-02-22T18:20:57Z",
+      "closedAt": "2024-02-22T18:20:57Z",
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOJx2-rs6APwCE",
+      "title": "Continue improving use of MUST and SHOULD according to rfc2119 and rfc8174",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/12",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Continue work done in #11: \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", if not needed\r\n      \r\n\r\netc.",
+      "createdAt": "2024-02-23T18:42:28Z",
+      "updatedAt": "2024-05-16T09:10:56Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Let's fix the: \"Allowed\", review use of MAY, and then resolve this",
+          "createdAt": "2024-05-16T09:10:56Z",
+          "updatedAt": "2024-05-16T09:10:56Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOJx2-rs6IwwiF",
+      "title": "Extend introduction, add overview and remove/edit notes",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/14",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1",
+        "editorial"
+      ],
+      "body": ">   \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\nthe first two documents are not in my queue and I don't expect them.\r\n\r\n\r\nSame issue in other drafts: \r\n- DP https://github.com/scionassociation/scion-dp_I-D/issues/10\r\n- CPPKI https://github.com/scionassociation/scion-cppki_I-D/issues/29",
+      "createdAt": "2024-05-14T05:57:55Z",
+      "updatedAt": "2024-06-03T07:10:13Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOJx2-rs6IwxcL",
+      "title": "gRPC & service discovery - dangling reference",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/15",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
+      "labels": [
+        "question",
+        "needs-discussion"
+      ],
+      "body": "\r\n   > \\*Note:\\* The details of how gRPC is mapped to the SCION data plane\r\n   will be described in a separate document.\r\n\r\nWhich document?",
+      "createdAt": "2024-05-14T05:59:13Z",
+      "updatedAt": "2024-06-03T07:48:49Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This is referring to the SCION gRPC API. \r\n\r\nP.S.: There is ongoing work to transition to connect, see https://github.com/scionproto/scion/issues/4434 / https://github.com/scionproto/scion/tree/connectrpc (which is incrementally deployable and backwards compatible to  legacy gRPC nodes), [also see IETF 118 Hackathon presentation](https://github.com/IETF-Hackathon/ietf118-project-presentations/blob/main/ietf118-SCION-apps-RPC.pdf)\r\n\r\n@matzf @jiceatscion check status in scionproto and see how this can be described within this draft. We could use some text from [here](https://github.com/scionassociation/standards/blob/f9aeed78d97a1bcc79938fce4b5d140b59273e56/source/control-plane/service-discovery.rst)\r\n\r\nRelates to https://github.com/scionassociation/scion-dp_I-D/issues/13 \r\n\r\n",
+          "createdAt": "2024-05-16T10:23:09Z",
+          "updatedAt": "2024-06-03T07:48:49Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOJx2-rs6I_TuN",
+      "title": "Clarify PCB selection policies and how they meet endpoint's needs ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/16",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "question",
+        "needs-discussion"
+      ],
+      "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
+      "createdAt": "2024-05-15T15:57:30Z",
+      "updatedAt": "2024-05-31T14:53:56Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Ideally, we'd like not to mandate or recommend any specific selection policy. PCB selection, overall gives some control to the AS, that can \"limit\" what its endpoint gets. \r\nFor an AS where endpoints are direct customers, selection policies can be driven by what was bought by customer (e.g. premium paths or not). \r\nFor a transit AS, this gets more complicated.",
+          "createdAt": "2024-05-16T10:46:52Z",
+          "updatedAt": "2024-05-17T07:42:46Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Maybe giving what we have in the OS as an example could help? \r\nhttps://docs.scion.org/en/latest/dev/design/BeaconService.html#beacon-selection \r\n",
+          "createdAt": "2024-05-31T14:53:55Z",
+          "updatedAt": "2024-05-31T14:53:55Z"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOJx2-rs6I_apu",
+      "title": "Clarifications about AS interfaces and peering",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/17",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf",
+        "jiceatscion"
+      ],
+      "labels": [
+        "question"
+      ],
+      "body": "> From:\tJoel Halpern \r\n> There is no description of how an A control service knows the existence of the many AS interfaces, whether they are core, up, down, or peering interfaces, and what AS they go to.\r\n\r\n> There is also no information about how the needed properties of peering adjacencies are made available to the control service.\r\n\r\n> Also, somewhere (not sure if it is a data plane or control plane mechanism), there needs to be a mechanism to translate neighbor interface identifiers to underlay addresses.\r\n\r\nMost if this is pre-configured by the AS, in the OS implementation in the [topology file](https://docs.scion.org/en/latest/manuals/common.html#topology-json), we should indeed add something about this to the draft.\r\n\r\n\r\nAlso, Eliot commented about  peering ASe: We use the expression in the introduction. We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n ",
+      "createdAt": "2024-05-15T16:10:06Z",
+      "updatedAt": "2024-05-28T16:47:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I tried to address all three points by I probably failed at least one. PTAL.\r\n\r\n",
+          "createdAt": "2024-05-28T16:46:59Z",
+          "updatedAt": "2024-05-28T16:47:53Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOJx2-rs6JFOrJ",
+      "title": "Clarify time synchronization dependency",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/18",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "question"
+      ],
+      "body": "What are the time synchronization dependencies between routers? Do you assume NTP? What happens if clocks drift?  Any dependencies must be listed. Maybe we could even have a section about dependencies. It is important as SCION is a such fundamentalc component that we must clearly list dependencies.. \r\n\r\n- [x] CLarify  routers requires syncronized time for path segments expiration (depending on lifetime on path segments, between 6m and one day, with 6m granularity).\r\n- [x] There is a tolerance value for CP certificate verification. In SCIONLab this had to be extended where NTPs did not work. \r\n- [x] Add a reference to where lifetimes are specified (could be the DP draft)\r\n- [x] Check if DP draft also needs to be updated\r\n- [x] ~Certificate validation for gRPC calls: what is the tolerance and where is it specified~",
+      "createdAt": "2024-05-16T09:26:22Z",
+      "updatedAt": "2024-05-31T15:39:50Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Addressed the question of clock drift in the dataplane with: https://github.com/scionassociation/scion-dp_I-D/pull/19",
+          "createdAt": "2024-05-24T15:19:30Z",
+          "updatedAt": "2024-05-24T15:19:30Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Also copied the formula to interpret expTime from the DP draft.",
+          "createdAt": "2024-05-24T17:25:03Z",
+          "updatedAt": "2024-05-24T17:25:03Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Note that the time-tolerance for certificates is no-longer needed nor applied: Updated the cp draft to clarify that segments are not authenticated by certificates valid \"now\", but by certificates valid for the same period as the segment. Therefore current time during validation plays no role. Possibly a time offset between an AS's certificate originator and that of its core control service could play a role, but I think it's safe to assume that, being in the same AS, they can have the same time source. gRPC connections are quic/TLS connections, authenticated with the same AS certs. Subject to the same time check. No tolerance. None needed. Clarified that in the draft.\r\n",
+          "createdAt": "2024-05-27T12:58:04Z",
+          "updatedAt": "2024-05-27T15:30:54Z"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOJx2-rs6JFS5N",
+      "title": "Add context to bullet points in 2.1.2 (Extending a PCB) ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/19",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": " 2.1.2: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section\r\n ```\r\n   *  For the specification of one PCB, see Section 2.2\r\n\r\n   *  For more details on selecting PCBs, see Section 2.3.1\r\n\r\n   *  For more details on propagating PCBs, see Section 2.3.2\r\n ```\r\n\r\nFrom discussion with Eliot (28.08.23)",
+      "createdAt": "2024-05-16T09:34:23Z",
+      "updatedAt": "2024-05-17T10:06:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOJx2-rs6JFU0C",
+      "title": "Manageability: what must an AS keep track of (paths, links, certificates, \u2026)",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/20",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 3"
+      ],
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\n",
+      "createdAt": "2024-05-16T09:38:07Z",
+      "updatedAt": "2024-05-17T09:54:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOJx2-rs6JFXal",
+      "title": "Add a section \u201cLife of a routing advertisement\u201d ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/21",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "Add a section \u201cLife of a routing advertisement\u201d summarizing the steps for routing,  from a initial state, to exploration, registration (a numbered list of steps). It could be something similar to what is in our 117 slides. This will give the draft an overall structure that shows: Here is the process, here is an example, here it is the details.",
+      "createdAt": "2024-05-16T09:43:10Z",
+      "updatedAt": "2024-05-16T10:55:18Z",
+      "closedAt": "2024-05-16T10:55:17Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This was already added in 1.4.  Routing, issue is obsolete. ",
+          "createdAt": "2024-05-16T10:55:17Z",
+          "updatedAt": "2024-05-16T10:55:17Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOJx2-rs6JFfLE",
+      "title": "Clarify path reversal for symmetric routing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/22",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "question"
+      ],
+      "body": " think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help.\r\n \r\n  @nicorusti: a sentence to clarify this could be added in 1.6. at bullet point path reversal.",
+      "createdAt": "2024-05-16T09:55:40Z",
+      "updatedAt": "2024-05-16T09:56:53Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOJx2-rs6JR5P1",
+      "title": "Clarify selection of MAC algorithm",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/23",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "question",
+        "Prio 2"
+      ],
+      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n we could make it clearer also in the control plane draft  \r\n\r\nRelates to https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
+      "createdAt": "2024-05-17T16:38:24Z",
+      "updatedAt": "2024-05-17T16:40:44Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOJx2-rs6KWhZE",
+      "title": "Private AS range typo",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/26",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "There is a typo here, this range should be `ffaa:0:0/24`,  same as in the [scionproto wiki](https://github.com/scionproto/scion/wiki/ISD-and-AS-numbering)\r\n```\r\n    +-------------------+-------------+-------------------------------+\r\n    | ff00:0:0/24       | ~16.8 mill. | Reserved for private use      |\r\n    |                   |             | (analogous to [RFC6996]).     |\r\n    |                   |             | These numbers can be used for |\r\n    |                   |             | testing/private deployments.  |\r\n    +-------------------+-------------+-------------------------------+\r\n```\r\n\r\n\r\n\r\nIntroduced in this initial commit https://github.com/scionassociation/scion-cp_I-D/commit/d427570b5b9d0ed0f7155e895bb87e185dec9688",
+      "createdAt": "2024-05-28T14:01:17Z",
+      "updatedAt": "2024-05-30T09:14:56Z",
+      "closedAt": "2024-05-30T09:14:56Z",
+      "comments": []
+    },
+    {
+      "number": 28,
+      "id": "I_kwDOJx2-rs6KWwVP",
+      "title": "High availability language",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/28",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "This is a bit vague: \r\n```\r\nIn addition, the control services\r\n   are designed to be deployed on replicated instances so that requests\r\n   can be balanced.\r\n```\r\n\r\n@shitz proposes \r\n\"In addition, control services should be implemented in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a total failure of the control plane of a SCION AS.\"",
+      "createdAt": "2024-05-28T14:25:20Z",
+      "updatedAt": "2024-05-28T14:26:36Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOJx2-rs6KdvU1",
+      "title": "Add component overview",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/30",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-29T11:13:20Z",
+      "updatedAt": "2024-06-03T07:10:44Z",
+      "closedAt": "2024-06-03T07:10:44Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Duplicate of #14",
+          "createdAt": "2024-06-03T07:10:44Z",
+          "updatedAt": "2024-06-03T07:10:44Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOJx2-rs5YmfhB",
+      "title": "Cdk addressing feedback",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/1",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-08-23T13:57:12Z",
+      "updatedAt": "2023-08-23T14:04:21Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d5cc2c4cfa275a0fef6a1d0c601c88cd7f379a40",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk_addressing-feedback",
+      "headRefOid": "38e5e307f15a9371a4b7a9ca14cd9071a942424f",
+      "closedAt": "2023-08-23T14:04:21Z",
+      "mergedAt": "2023-08-23T14:04:21Z",
+      "mergedBy": "cdekater",
+      "mergeCommit": {
+        "oid": "c4dc53e6651bc781cc36aa4e0a0dd6ad894045b3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOJx2-rs5Ymx-Q",
+      "title": "Final corrections",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/2",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-08-23T14:41:29Z",
+      "updatedAt": "2024-05-28T14:02:31Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c4dc53e6651bc781cc36aa4e0a0dd6ad894045b3",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk_addressing-feedback",
+      "headRefOid": "d42375418c49f53429755b7f79aa0654438e1d2c",
+      "closedAt": "2023-08-23T14:41:39Z",
+      "mergedAt": "2023-08-23T14:41:39Z",
+      "mergedBy": "cdekater",
+      "mergeCommit": {
+        "oid": "530f3f0cd218685a12eb4df72024f252446b07d7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOJx2-rs5hbWZZ",
+      "title": "Update Security Considerations and IANA Section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/3",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-12-07T14:11:45Z",
+      "updatedAt": "2024-02-23T18:00:34Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "5bef5e20fe1ac7147d271afc1aec46e1d2ce98a9",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk-security-considerations-cp",
+      "headRefOid": "dfb3675b91e6bcf78ded6bd54eb2863850884c8c",
+      "closedAt": "2024-02-23T18:00:27Z",
+      "mergedAt": "2024-02-23T18:00:27Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "cdd780068b10d3a42eacf4bcbf092bcfd518ed40"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5phCfW",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "The \"customer\" term is really confusing. I would prefer it changed. Everything else is just my two cents.",
+          "createdAt": "2023-12-07T14:18:44Z",
+          "updatedAt": "2023-12-07T14:59:29Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "What's \"AS M\" in \"for a malicious AS M\"? Oh, I get it. It's a name for the hypothetical AS that is malicious. The phrasing doesn't make it too obvious.\r\n\r\nI would suggest a few things:\r\n* In security circles, the good guys trying to communicate are typically called A (for Alice), and B (for Bob), while the villain is C (for Charlie).\r\n* May be start with. In what follows, we postulate two legitimate ASes, A (operated by Alice) and B (operated by Bob), and a malicious AS C, operated by Charlie.\r\n\r\nThat might make it easier to describe motivations and methods.\r\n",
+              "createdAt": "2023-12-07T14:18:44Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "I think the first attack might deserve a little more explanation:\r\n* How could charlie block the Alice-Bob connection?\r\n* Why would the traffic be re-directed to Charlie, without Charlie being already in a privileged position?\r\n* Why is it that we can't prevent it?\r\nI personally do not have the answers.\r\n",
+              "createdAt": "2023-12-07T14:31:05Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            },
+            {
+              "originalPosition": 90,
+              "body": "In what follows, I think that by \"customer\" you mean \"consumer [of BCPs]\" right? \"Customer\" is confusing; it implies a commercial relationship, which doesn't seem to apply here. Or does it?",
+              "createdAt": "2023-12-07T14:53:50Z",
+              "updatedAt": "2023-12-07T14:59:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5p6kWF",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-12T08:57:46Z",
+          "updatedAt": "2023-12-12T14:56:37Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": ".... and injecting its own ~~hop fields~~ _AS entry_ into the PCB toward downstream ASes.",
+              "createdAt": "2023-12-12T08:57:46Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "> The second attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains an identifier for the egress interface from AS A to AS B, protected by A's signature\r\n\r\nI think the interface identifier is not what is relevant here. The \"next ISD AS\" field in the AS Entry is the thing that will allow a verifier to detect that something is wrong.",
+              "createdAt": "2023-12-12T09:45:13Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "It's not really clear what the attack here is and why such a modified PCB would be attractive.",
+              "createdAt": "2023-12-12T09:46:07Z",
+              "updatedAt": "2023-12-12T14:56:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhOT0",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T14:58:46Z",
+          "updatedAt": "2023-12-18T14:58:47Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "@jiceatscion, thank you for your suggestion!\r\nI have removed the M for malicious, and also rephrased the text a bit. Hope it is more clear now. ",
+              "createdAt": "2023-12-18T14:58:46Z",
+              "updatedAt": "2023-12-18T14:58:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhRH_",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:02:11Z",
+          "updatedAt": "2023-12-18T15:02:11Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "@jiceatscion, I think you have a fair point. But unfortunately, I also have no answers. I took it from the SCION book, and given the fact that there was no explanation there, I thought it was obvious for all people with an IT background...   ",
+              "createdAt": "2023-12-18T15:02:11Z",
+              "updatedAt": "2023-12-18T15:02:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhRm7",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:03:13Z",
+          "updatedAt": "2023-12-18T15:03:14Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "@jiceatscion, thanks. I have removed \"customer\" everywhere and replaced it with downstream ASes.  ",
+              "createdAt": "2023-12-18T15:03:13Z",
+              "updatedAt": "2023-12-18T15:03:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhSm2",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:05:02Z",
+          "updatedAt": "2023-12-18T15:05:02Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "@matzf: thanks for the correction/feedback!\r\nRegarding \"attractive\": I have replaced it with \"alternative\". ",
+              "createdAt": "2023-12-18T15:05:02Z",
+              "updatedAt": "2023-12-18T15:05:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qhS8F",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-18T15:05:40Z",
+          "updatedAt": "2023-12-18T15:05:40Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "@matzf: good point, thanks! I have changed the text accordingly. ",
+              "createdAt": "2023-12-18T15:05:40Z",
+              "updatedAt": "2023-12-18T15:05:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qqzBK",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-19T19:42:11Z",
+          "updatedAt": "2023-12-19T19:42:11Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "```suggestion\r\nThis document has no IANA actions.\r\n\r\nThe ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions. This task is currently being transitioned  from Anapaya to the SCION Association.\r\n```\r\nBesides that, I'd add a reference to: https://docs.anapaya.net/en/latest/resources/isd-as-assignments \r\nAs we (Association) take over the task, we will update this to our page. \r\n",
+              "createdAt": "2023-12-19T19:42:11Z",
+              "updatedAt": "2023-12-19T19:42:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qq0CK",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-19T19:45:15Z",
+          "updatedAt": "2023-12-19T19:45:15Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "Also, I would delete from section 1.5.1 this text: \r\n``` \r\nA suitable mechanism to globally coordinate the assignation of ISD\r\n   numbers does not yet exist.  However, we hope that in the future an\r\n   organization such as ICANN or a regional Internet registry (e.g.,\r\n   RIPE NCC) will take on the responsibility of assigning ISD and AS\r\n   numbers.\r\n   ```\r\n   This is because the mechanism exists and it is Anapaya.. To get to have internet registries, we need the IANA section, which needs an IETF publication... So I'd just omit this text .\r\n   \r\n   Also, I'd add the same reference to Anapaya's page also there. \r\n   ",
+              "createdAt": "2023-12-19T19:45:15Z",
+              "updatedAt": "2023-12-19T19:45:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5qwGfp",
+          "commit": {
+            "abbreviatedOid": "8e08e0f"
+          },
+          "author": "cdekater",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-12-20T14:20:58Z",
+          "updatedAt": "2023-12-20T14:20:58Z",
+          "comments": [
+            {
+              "originalPosition": 160,
+              "body": "@nicorusti: Thank you for your feedback. I have changed this draft, and also the other two drafts, accordingly.\r\nBest\r\nCorine",
+              "createdAt": "2023-12-20T14:20:58Z",
+              "updatedAt": "2023-12-20T14:20:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5sWGUL",
+          "commit": {
+            "abbreviatedOid": "5f59666"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "My comments have been sufficiently addressed for now.",
+          "createdAt": "2024-01-12T09:09:32Z",
+          "updatedAt": "2024-02-22T18:24:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5srdSP",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-16T13:15:54Z",
+          "updatedAt": "2024-01-16T13:15:54Z",
+          "comments": [
+            {
+              "originalPosition": 188,
+              "body": "```suggestion\r\nMany thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.\r\n```",
+              "createdAt": "2024-01-16T13:15:54Z",
+              "updatedAt": "2024-01-16T13:15:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5s_ihM",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-18T02:31:27Z",
+          "updatedAt": "2024-01-18T02:31:27Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "I'm not sure 'frustrate' is the right term here, but I need to understand the context better. ",
+              "createdAt": "2024-01-18T02:31:27Z",
+              "updatedAt": "2024-01-18T02:31:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5s_jA8",
+          "commit": {
+            "abbreviatedOid": "2f4ecf5"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-18T02:33:18Z",
+          "updatedAt": "2024-01-18T03:17:51Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "```suggestion\r\nThe first kind of risk to the beaconing process in the control plane comes from an adversarial entity that controls one or all core ASes in an ISD (e.g., a government). One possible attack would be when this entity stops the core AS(es) from propagating PCBs, thus frustrating the discovery of new paths. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths are still usable for data-plane forwarding until they expire.\r\n```",
+              "createdAt": "2024-01-18T02:33:18Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 92,
+              "body": "```suggestion\r\nAnother possible attack of this adversarial entity could be to shut down the control services, by compelling core and non-core ASes to stop replying to path requests, or only return a subset of all available paths. If this attack were used in conjunction with blackholing, where traffic is redirected to a non-existent resource, senders in the ISD would have difficulty getting traffic out of the ISD. In SCION, however, existing paths can continue to be used in the data plane as long as the traversed ASes allow the forwarding.\r\n```",
+              "createdAt": "2024-01-18T02:35:23Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 110,
+              "body": "```suggestion\r\n- The adversary could intercept and disseminate a PCB on its way from a specific AS A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes. The goal is to offer AS B an alternative up-segment that traverses the adversary's own AS to the core.\r\n```",
+              "createdAt": "2024-01-18T02:37:18Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 111,
+              "body": "```suggestion\r\n- The adversary could modify the hop fields of an already existing path, in order to insert its own AS in the path.\r\n```",
+              "createdAt": "2024-01-18T02:38:15Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 113,
+              "body": "```suggestion\r\nThe first type of attack generally cannot be prevented, but SCION is able to mitigate the other two types of attack.\r\n\r\nThe second type of attack is detectable by downstream ASes, because a PCB disseminated by AS A towards AS B contains the \"Next ISD AS\" field in the entry of AS A, pointing to AS B, and protected by A's signature. This will cause verification of the manipulated inbound PCBs to fail, as the adversary's PCBs cannot contain A's correct signature.\r\n\r\nThe third type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.\r\n```",
+              "createdAt": "2024-01-18T02:40:16Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 134,
+              "body": "```suggestion\r\nPath selection is one of the main benefits of SCION compared to the current Internet, where hosts have no control over the forwarding paths that their packets traverse. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.\r\n```",
+              "createdAt": "2024-01-18T02:43:26Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 150,
+              "body": "```suggestion\r\nIn general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.\r\n```",
+              "createdAt": "2024-01-18T02:57:14Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 156,
+              "body": "```suggestion\r\nWithout specific prevention mechanisms, these so-called wormhole attacks are unavoidable in routing. The current implementation of SCION does not yet provide wormhole prevention mechanisms.\r\n```",
+              "createdAt": "2024-01-18T02:57:55Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            },
+            {
+              "originalPosition": 162,
+              "body": "```suggestion\r\nTo defend against this kind of wormhole attacks, it is necessary to be able to detect these attacks. The current implementation of SCION is not yet able to do this.\r\n```",
+              "createdAt": "2024-01-18T02:58:35Z",
+              "updatedAt": "2024-01-18T03:17:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xIfzV",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T12:57:42Z",
+          "updatedAt": "2024-02-23T12:57:42Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "This is coming from section 7.4.1 Path Hijacking through Interposition. These attacks requires the adversary to be on-path (which is a very strong assumption).  I clarified this in the text and reworded. Also the last attach could not be prevented, but the different path would be immediately visible to endpoints.",
+              "createdAt": "2024-02-23T12:57:42Z",
+              "updatedAt": "2024-02-23T12:57:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xIqm4",
+          "commit": {
+            "abbreviatedOid": "d5b826d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T13:17:45Z",
+          "updatedAt": "2024-02-23T13:17:46Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "Metadata is generally contained in PCB extensions. Such extensions that express path properties are not described in this draft, as far as I know they are also not widely used in productive implementations. \r\nI'll therefore remove this section, as I feel it does not apply to the content of the draft. ",
+              "createdAt": "2024-02-23T13:17:45Z",
+              "updatedAt": "2024-02-23T13:17:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xJU8n",
+          "commit": {
+            "abbreviatedOid": "42a5d09"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T14:40:34Z",
+          "updatedAt": "2024-02-23T14:40:34Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "This part about shutting down the control service of an AS is more of a kill-switch than an attack, and it requires access or control over an AS. This cannot be performed remotely. \r\nI'd therefore remove this paragraph",
+              "createdAt": "2024-02-23T14:40:34Z",
+              "updatedAt": "2024-02-23T14:40:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xJdPv",
+          "commit": {
+            "abbreviatedOid": "3e768ad"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T14:54:35Z",
+          "updatedAt": "2024-02-23T14:54:35Z",
+          "comments": [
+            {
+              "originalPosition": 129,
+              "body": "This seems to me just a special case of \"Path Hijacking through Interposition\"  described in the paragraph above. I'd leave it for now, but perhaps it could be merged to the paragraph above in the long term.\r\n",
+              "createdAt": "2024-02-23T14:54:35Z",
+              "updatedAt": "2024-02-23T14:54:36Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOJx2-rs5jdeyR",
+      "title": "Disambiguate the use of \"MAC\".",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/4",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #5 ",
+      "createdAt": "2024-01-08T10:33:57Z",
+      "updatedAt": "2024-02-22T16:55:37Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "fix_MAC",
+      "headRefOid": "c9937d970ee8e565129b8b9e4fcb2e85d556c572",
+      "closedAt": "2024-02-22T16:55:34Z",
+      "mergedAt": "2024-02-22T16:55:34Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "65f3a7186d96a7a39b1bb5627a713e0674b630b2"
+      },
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks! Time to remove the 2-approval rule?",
+          "createdAt": "2024-02-22T15:06:49Z",
+          "updatedAt": "2024-02-22T15:06:49Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5xBAyg",
+          "commit": {
+            "abbreviatedOid": "c9937d9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM \r\n",
+          "createdAt": "2024-02-22T15:02:46Z",
+          "updatedAt": "2024-02-22T15:02:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOJx2-rs5jkC0K",
+      "title": "Declare SCION AS numbers independant from BGP ASNs.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/10",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is my proposal to address the scion/BGP AS number objection.\r\n\r\nFixes #9 ",
+      "createdAt": "2024-01-09T10:36:18Z",
+      "updatedAt": "2024-02-22T18:20:59Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "41a1ec696545909a3b1bff38af8af3a19d0628c4",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "AS_num",
+      "headRefOid": "39fbe9c3bfd94195b70b4652188102043a085417",
+      "closedAt": "2024-02-22T18:20:56Z",
+      "mergedAt": "2024-02-22T18:20:56Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5bef5e20fe1ac7147d271afc1aec46e1d2ce98a9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5xC7u1",
+          "commit": {
+            "abbreviatedOid": "39fbe9c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I edited a bit of wording, it overall looks good to me. ",
+          "createdAt": "2024-02-22T18:20:28Z",
+          "updatedAt": "2024-02-22T18:20:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOJx2-rs5j1VQk",
+      "title": "Improve references classification and uses of MUST and SHOULD",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/11",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There's still some more MUST required IMHO.\r\n",
+      "createdAt": "2024-01-11T16:38:55Z",
+      "updatedAt": "2024-05-17T09:40:16Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "cdd780068b10d3a42eacf4bcbf092bcfd518ed40",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Normative_refs_terms",
+      "headRefOid": "6041f1a1f255486346f6309f72f5dc4ab96677dd",
+      "closedAt": "2024-02-23T18:43:23Z",
+      "mergedAt": "2024-02-23T18:43:23Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6"
+      },
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As far as I remember, I went through every instance of must may should and their negatives. The should that I left in lowercase were likely intentional: layman use of the word for phrasing as opposed to normative, or sufficiently optional to not deserve an uppercase \"should\". But my opinion is just that, of course.\r\n\r\n",
+          "createdAt": "2024-02-26T09:34:27Z",
+          "updatedAt": "2024-02-26T09:34:27Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5xLENk",
+          "commit": {
+            "abbreviatedOid": "6041f1a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Hi JC, IN see that you left several should etc in lowercase. Was this intentional, based on [rfc8174](https://datatracker.ietf.org/doc/html/rfc8174)?\r\n\r\nI agree with you that some more work on these terms might be needed, I openet #12  to track this, as I'll merge this one to submit a new version to datatracker ",
+          "createdAt": "2024-02-23T18:43:01Z",
+          "updatedAt": "2024-02-23T18:43:01Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOJx2-rs5oBktS",
+      "title": "Security considerations - DoS",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/13",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-27T10:18:47Z",
+      "updatedAt": "2024-05-17T09:40:14Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "9ff5f72e47343502fba72129ec79d4f5e46a44b6",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cdk-security-considerations-cp",
+      "headRefOid": "ebaa0373a7d916e8fd82865abff954dc582ef3dc",
+      "closedAt": "2024-03-04T15:23:53Z",
+      "mergedAt": "2024-03-04T15:23:53Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell if you can have a wording pass, can you go through the whole security considerations section? (lines 1475-1565)?",
+          "createdAt": "2024-03-01T11:02:52Z",
+          "updatedAt": "2024-03-01T11:02:52Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5xiB5t",
+          "commit": {
+            "abbreviatedOid": "c90b1b9"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T20:27:24Z",
+          "updatedAt": "2024-02-27T20:27:24Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Suggestion:\r\n\r\n---\r\n\r\n[...] e.g. filtering, geo-blocking or using cookies.\r\n\r\nRPC methods that are available to endpoints in the local AS are strictly separate from methods available to from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.\r\nFor RPC methods exposed to other ASes, the control service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:\r\n- `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded. \r\n- `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address must match the local ISD and the number of path segments must be 1.\r\n",
+              "createdAt": "2024-02-27T20:27:24Z",
+              "updatedAt": "2024-02-27T20:27:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5xo4Ny",
+          "commit": {
+            "abbreviatedOid": "c90b1b9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T15:16:32Z",
+          "updatedAt": "2024-02-28T15:16:33Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Awesome, that is exactly what I was looking for. I introduced your points. I just slightly changed the wording of the first part  a bit (e.g. on local AS), but the concept should be unchanged.  ",
+              "createdAt": "2024-02-28T15:16:33Z",
+              "updatedAt": "2024-02-28T15:16:33Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOJx2-rs5wW4yN",
+      "title": "Add tentative description of CS API.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/24",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Documents connectRPC as the RPC protocol instead of the old gRPC/HTTP2/QUIC stack. Document service resolution minimally.\r\n\r\nFixes #15\r\n",
+      "createdAt": "2024-05-23T16:45:12Z",
+      "updatedAt": "2024-06-03T15:17:10Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "grpc_api_described",
+      "headRefOid": "573335ff67a69ede6b39860864e201ea37aaff90",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs58AqRM",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-27T09:58:27Z",
+          "updatedAt": "2024-05-27T12:13:04Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "Tangential: I saw this note:\r\n```\r\n**Note:** The SCION open-source implementation makes use of Protobuf (Protocol Buffers), a free and open-source cross-platform data format developed by Google and used to serialize structured data. The messages and remote procedure calls described below are in \"proto3\" language. For more information on Protobuf, see the official [\"Protocol Buffers Documentation\"](https://protobuf.dev/).\r\n```\r\n\r\nThis looks a bit out of place where it currently is and I think it's redundant with the information in the \"## Communication protocol\" section. I'd suggest to remove it (or integrate anything that could still be relevant into the Communication Protocol section).",
+              "createdAt": "2024-05-27T09:58:27Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "definitino -> definition",
+              "createdAt": "2024-05-27T09:59:34Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "Personally, I would only describe the connect RPC approach and leave out the complication that there is an ongoing transition. Optimistically, this will be complete once this document is published. We know that it works, we know how to do the transition with forwards and backwards and sideways compatibility etc and I think it's fair to assume that a future reader of the document will not have any interest in our current sub-optimal implementation.\r\n\r\n@nicorusti?",
+              "createdAt": "2024-05-27T10:07:29Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "There are still some detail about how QUIC connections are established missing here.\r\nMy suggestion would be to add an Appendix B with this information, something like \"Data plane considerations for control plane\".\r\n\r\n- the paths:\r\n  - Client side of QUIC connection determines path, server uses reverse path.\r\n  - neighbor-to-neighbor ASes use one-hop paths that are always available to control plane nodes. This is used for all path discovery.\r\n  - path segment registration uses the path being registered.\r\n  - path lookup is incremental (not sure if this is already described somewhere else); use any known up-segment to lookup core segments to destination ISD. Then use any up-core paths to lookup down segments in destination ISD.\r\n    For this type of requests, typically many paths will be available to choose from. Basic implementation can pick random path and simply retry on faults. Better would be to keep track of path properties like experienced latency, loss rate, etc and pick \r\n  - None of these are binding, CS can arbitrarily pick any available path.\r\n- Service address resultion: even though I'd like this to go away, I'm not optimistic about finding a consensus for an alternative approach for this and implementing it quickly. I think we should include how this currently works:\r\n  - document the message types from `svc_resolution.proto`.\r\n  - the service resolution protocol:\r\n     - send service resolution request ; single UDP pkt with `ServiceResolutionRequest{}`  destination port 0, dst host SVC_CS. Note request is an empty protobuf message, so this is an empty datagram.\r\n     - whoever is SVC_CS in destination AS (resolved by ingress router, see service addresses in dataplane draft) sends single UDP pkt reply to source ISD-AS,address:port of the request with `ServiceResolutionResponse{}` body, that contains a host addresses + UDP port for the transport type \"QUIC\".\r\n  - initiate QUIC connection to address in `response.transports[\"QUIC\"]`.\r\n- TLS certificates for QUIC: for all the RPCs described here, self signed dummy certificates can be used, as we do _not_ check the server (or client) certificates; the messages transported over the RPCs are individually authenticated and we do not need a secure channel.\r\n  - Side note: in practice, we use CP-PKI AS certificates, just because we can, and because we use it to establish a secure channel for experimental extensions that _do_ benefit from a secure channel (i.e. for DRKey, but perhaps we shouldn't mention this).",
+              "createdAt": "2024-05-27T11:51:38Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 163,
+              "body": "Remove this line; it doesn't do anything and should long have been deleted.",
+              "createdAt": "2024-05-27T11:57:03Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 125,
+              "body": "Maybe try phrase this to clarify that this is the API exposed to other ASes, i.e. to other control services.",
+              "createdAt": "2024-05-27T12:04:26Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 225,
+              "body": "The `SignedMessage` message type and its internal details were previously included here, I think we need it. We can either add it back directly into the same code block, or we can create a separate block with just these helper types.\r\nWe need:\r\n- SignedMessage \r\n- HeaderAndBodyInternal\r\n- Header\r\n- VerificationKeyID\r\n- SignatureAlgorithm (previously missing).",
+              "createdAt": "2024-05-27T12:11:38Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            },
+            {
+              "originalPosition": 141,
+              "body": "Maybe add a comment to hint that this LookupService is only exposed on control services of core ASes?",
+              "createdAt": "2024-05-27T12:12:48Z",
+              "updatedAt": "2024-05-27T12:13:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58IrUD",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:29:03Z",
+          "updatedAt": "2024-05-28T12:29:03Z",
+          "comments": [
+            {
+              "originalPosition": 141,
+              "body": "I wasn't aware of that. Looking into the code, I can see that non-core servers are different (they are forwarding servers - presumably forwarding to core servers). But the API is the exact same, so if we need to make a distinction, this might not be the most relevant spot. Do we have to mandate that non-core servers know nothing?",
+              "createdAt": "2024-05-28T12:29:03Z",
+              "updatedAt": "2024-05-28T12:29:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8LC",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:18Z",
+          "updatedAt": "2024-05-28T12:58:18Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "gone",
+              "createdAt": "2024-05-28T12:58:18Z",
+              "updatedAt": "2024-05-28T12:58:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8MS",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:20Z",
+          "updatedAt": "2024-05-28T12:58:20Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "done",
+              "createdAt": "2024-05-28T12:58:20Z",
+              "updatedAt": "2024-05-28T12:58:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8N3",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:22Z",
+          "updatedAt": "2024-05-28T12:58:22Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "done",
+              "createdAt": "2024-05-28T12:58:22Z",
+              "updatedAt": "2024-05-28T12:58:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8QK",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:25Z",
+          "updatedAt": "2024-05-28T12:58:25Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Did my best without writing a whole new chapter.\r\n",
+              "createdAt": "2024-05-28T12:58:25Z",
+              "updatedAt": "2024-05-28T12:58:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8Vm",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:34Z",
+          "updatedAt": "2024-05-28T12:58:34Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "gone",
+              "createdAt": "2024-05-28T12:58:34Z",
+              "updatedAt": "2024-05-28T12:58:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8Yp",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:38Z",
+          "updatedAt": "2024-05-28T12:58:38Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "done",
+              "createdAt": "2024-05-28T12:58:38Z",
+              "updatedAt": "2024-05-28T12:58:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58I8ex",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T12:58:48Z",
+          "updatedAt": "2024-05-28T12:58:48Z",
+          "comments": [
+            {
+              "originalPosition": 225,
+              "body": "done\r\n",
+              "createdAt": "2024-05-28T12:58:48Z",
+              "updatedAt": "2024-05-28T12:58:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58b2Y7",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T08:52:12Z",
+          "updatedAt": "2024-05-30T08:52:12Z",
+          "comments": [
+            {
+              "originalPosition": 141,
+              "body": "> But the API is the exact same, so if we need to make a distinction, this might not be the most relevant spot\r\n\r\nAs far as I remember, for the non-core ASes the Segment Lookup API is only exposed on the AS-internal TCP gRPC server. It doesn't exist in the inter-AS SCION/QUIC gRPC service. (See https://github.com/scionproto/scion/blob/9d52e2f8d2211427707dfe5b4028158759ebddeb/control/cmd/control/main.go#L366C1-L371C1; the SegmentLookupService is only available on the QUIC server in core ASes)",
+              "createdAt": "2024-05-30T08:52:12Z",
+              "updatedAt": "2024-05-30T08:52:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58dq63",
+          "commit": {
+            "abbreviatedOid": "468675c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T12:31:37Z",
+          "updatedAt": "2024-05-30T12:31:37Z",
+          "comments": [
+            {
+              "originalPosition": 141,
+              "body": "done\r\n",
+              "createdAt": "2024-05-30T12:31:37Z",
+              "updatedAt": "2024-05-30T12:31:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580pk5",
+          "commit": {
+            "abbreviatedOid": "573335f"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-06-03T15:17:10Z",
+          "updatedAt": "2024-06-03T15:17:10Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOJx2-rs5we-iv",
+      "title": "Address clock drift.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/25",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is almost identical to what I added to the DP draft. I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
+      "createdAt": "2024-05-24T16:05:35Z",
+      "updatedAt": "2024-06-03T15:51:17Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "clock_drift",
+      "headRefOid": "d7008aca1fc6d9f79f09f1af307faa301d33ee32",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs58nyMh",
+          "commit": {
+            "abbreviatedOid": "e4df3eb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Hi @jiceatscion there are a few things worth addressing, the biggest one regards the new section on clock drift. Let's perhaps discuss this directly after you take a look at my comments. ",
+          "createdAt": "2024-05-31T13:12:11Z",
+          "updatedAt": "2024-05-31T16:12:22Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.\r\n```",
+              "createdAt": "2024-05-31T13:12:42Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n```\r\nIs there any reason why you added these newlines? \r\nApparently they don't change anything in the final draft, see \r\nhttps://author-tools.ietf.org/iddiff?url1=draft-dekater-scion-controlplane-03&url2=https://scionassociation.github.io/scion-cp_I-D/clock_drift/draft-dekater-scion-controlplane.txt&difftype=--html",
+              "createdAt": "2024-05-31T13:15:18Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 78,
+              "body": "What happens if an AS receives a future PCB that is invalid? Must it be dropped? This should be clearer in the text, A suggestion including some word smithing (assuming it MUST be dropped): \r\n```suggestion\r\n- `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).\r\n```\r\n\r\n> The expiration time of the corresponding path segment\r\n\r\nAlso, shouldn't expiration time in a PCB refer to hop fields and not to the path segment, or am I confused?\r\n",
+              "createdAt": "2024-05-31T13:43:48Z",
+              "updatedAt": "2024-06-03T11:55:27Z"
+            },
+            {
+              "originalPosition": 111,
+              "body": "I'd remove the reference to expired hop fields in the data plane, and keep this info in the DP draft directly.\r\n```suggestion\r\n- `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). By combining these two values, an AS can compute the absolute expiration time of the hop field.\r\n```",
+              "createdAt": "2024-05-31T14:01:16Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 112,
+              "body": "```suggestion\r\n- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.\r\n```",
+              "createdAt": "2024-05-31T14:06:49Z",
+              "updatedAt": "2024-06-03T12:00:48Z"
+            },
+            {
+              "originalPosition": 132,
+              "body": "I'd remove this section from here and put it later. How about we put it in  section `Reception of PCBs`? or after `Path-Segment Registration on Code-Level`? \r\n\r\nAlso, I'd  separate text for each one of the drafts. Here, I'd mention only text that is specific to the control plane, and I'd put it somewhere else. \r\n\r\n> Routers along a packet's path verify the validity of hop fields by comparing the current time with a hop's expiration time.\r\nThis expiration time is calculated as described in [](#hopfield) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.\r\n> By default, segments are propagated once a minute. A segment is registered by the last AS of that segment, therefore up to N minutes after origination, where N is the length of the segment. As a result, a segment must have a life time of at least N minutes to be of any use. N being the length of the segment. On the other hand, a very recent segment, which clocks offset could make appear from the future, ages by 1 minute per hop before being used, thereby reducing the impact of clock drift in that respect.\r\n\r\nThis feels more like a discussion about propagation interval, it is something that is missing on the draft, but I don't think it strictly relates to clock drift.\r\nIn the CP it is not routers, but the control service who is validating  hop field validity in PCBs. I think this section is not about clock drift, more about how propagation interval and HF expiration time interplay. I think this paragraph could go where we say `- The *propagation interval* SHOULD be at least \"5\" (seconds) for intra-ISD beaconing and at least \"60\" (seconds) for core beaconing.`\r\n\r\n\r\n> The unit of a segment's time-to-live is 5 minutes and 37 seconds (and 500 ms), or the equivalent of 5 hops. Given the above constraints, it is unreasonable to create a segment with a short time-to-live, while each additional time-to-live unit adds more than 5 minutes. As a result, a clock drift of up to 1 minute can be safely neglected.\r\nThe control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The time validity of a certificate is affected by the offset between verifier and originator clocks. The expiration of a SCION AS certificate typically ranges from 3h to 5 years. As a result, a time offset measured in minutes is immaterial.\r\nEach administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.\r\n\r\nI'd reword this section to say that the maximum clock drift between any two ASes is in the range of the \r\nmin(`exp_time`) - sum(propagation intervals along a path) where min(`exp_time`) is 337.5s. \r\nIt would be also nice to say something more about propagation intervals in the section described above. Is there a maximum propagation interval somewhere? If not, shall we explain what are the tradeoffs and why we recommend min 5 and 60s (and why this value should not be too high)? ",
+              "createdAt": "2024-05-31T14:24:54Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 92,
+              "body": "I'd simplify wording on certificate a bit, as the key pair belongs to the same cert (or could you use a different certificate to verify the AS entry?) \r\n\r\n\r\n```suggestion\r\nEach AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:\r\n```\r\n\r\n> validity period fully containing that of the segment being verified; regardless of current time.\r\n\r\nI find thus wording confusing. Shouldn't the validity of the cert be > than the longest expiration time among alll hop fields included in the AS entry? I'd also not mention \"regardless of current time\"\r\n",
+              "createdAt": "2024-05-31T14:41:17Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 172,
+              "body": " I slightly reworded the existing text to make clear that, when receiving a PCB, the CS must validate it. ",
+              "createdAt": "2024-05-31T15:34:55Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            },
+            {
+              "originalPosition": 78,
+              "body": "Also, please try to reuse the terminology already in use in the draft. For Hop fields, we use \"expiration time\", not \"time to live\"",
+              "createdAt": "2024-05-31T15:51:54Z",
+              "updatedAt": "2024-05-31T16:12:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580bNv",
+          "commit": {
+            "abbreviatedOid": "615582c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T14:54:35Z",
+          "updatedAt": "2024-06-03T14:56:22Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "> By combining these two values, an AS can compute the absolute expiration time of the hop field.\r\n\r\nNit: _anyone_ can compute the expiration time, not only \"an AS\". E.g. endpoints might have to do this to check if a path is still usable.",
+              "createdAt": "2024-06-03T14:54:35Z",
+              "updatedAt": "2024-06-03T14:56:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580_Jo",
+          "commit": {
+            "abbreviatedOid": "615582c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T15:47:53Z",
+          "updatedAt": "2024-06-03T15:47:53Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "as we discussed. I added a PCB validity section and moved, and simplify, the clock accuracy section.",
+              "createdAt": "2024-06-03T15:47:53Z",
+              "updatedAt": "2024-06-03T15:47:53Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOJx2-rs5wxX4_",
+      "title": "Fix private AS range typo, replicated CP - language clarification",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/27",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Set of changes addressing:\r\n- #26 \r\n",
+      "createdAt": "2024-05-28T14:07:49Z",
+      "updatedAt": "2024-06-03T07:15:24Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "editorial",
+      "headRefOid": "498247739e1a066a9911bd55b6cd7d6b4013c928",
+      "closedAt": "2024-05-30T09:14:48Z",
+      "mergedAt": "2024-05-30T09:14:48Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "c16dda05c7b2808a7c6c7b50719a1bb96a20ac2c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs58Kdm3",
+          "commit": {
+            "abbreviatedOid": "4982477"
+          },
+          "author": "shitz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-05-28T15:08:11Z",
+          "updatedAt": "2024-05-28T15:08:11Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOJx2-rs5wygww",
+      "title": "Add some explanation regarding interface configuration.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/29",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Explanations include a clarification (hopefully) of what a peering link is.\r\n\r\nAddresses #17 \r\n\r\nSimilar PR for DP draft: https://github.com/scionassociation/scion-dp_I-D/pull/21 \r\n",
+      "createdAt": "2024-05-28T16:44:32Z",
+      "updatedAt": "2024-06-03T15:53:51Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "interface_config",
+      "headRefOid": "df96a1cb2dde59296e0d20514bf283c9f08d2b6a",
+      "closedAt": "2024-06-03T15:53:37Z",
+      "mergedAt": "2024-06-03T15:53:37Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "7af3379e03c1a053b250daded414bbf2465cf9af"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs58SYKD",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T11:57:26Z",
+          "updatedAt": "2024-05-29T11:57:27Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.\r\n```",
+              "createdAt": "2024-05-29T11:57:26Z",
+              "updatedAt": "2024-05-29T11:58:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58S9HO",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T13:00:48Z",
+          "updatedAt": "2024-05-29T13:00:48Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "This is already in #25 \r\n```suggestion\r\n```",
+              "createdAt": "2024-05-29T13:00:48Z",
+              "updatedAt": "2024-05-29T13:00:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58S9Pl",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T13:01:02Z",
+          "updatedAt": "2024-05-29T13:01:02Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2024-05-29T13:01:02Z",
+              "updatedAt": "2024-05-29T13:01:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58UBxl",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T14:39:03Z",
+          "updatedAt": "2024-05-29T14:39:04Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "I did remove the merge marker though.\r\n",
+              "createdAt": "2024-05-29T14:39:04Z",
+              "updatedAt": "2024-05-29T14:39:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58UEGM",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T14:42:36Z",
+          "updatedAt": "2024-05-29T14:42:36Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "Weird, github deleted my comment when I marked the issue resolved....\r\nI was saying that the repetition is intentional. The original question concerned both data plane and control plane and I do not want to dilute the explanation by classifying bits and pieces into each document. Better to have the whole story in both drafts.\r\n",
+              "createdAt": "2024-05-29T14:42:36Z",
+              "updatedAt": "2024-05-29T14:42:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58UFcZ",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T14:44:32Z",
+          "updatedAt": "2024-05-29T14:44:33Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "Oh, wait...you mean the change is in two PRs on the CP draft.\r\nArgg. I hate git.\r\nOk, I'll sort it out.\r\n",
+              "createdAt": "2024-05-29T14:44:33Z",
+              "updatedAt": "2024-05-29T14:44:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58UMzS",
+          "commit": {
+            "abbreviatedOid": "a7568ba"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T14:55:52Z",
+          "updatedAt": "2024-05-29T14:55:52Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "Sorted.\r\n",
+              "createdAt": "2024-05-29T14:55:52Z",
+              "updatedAt": "2024-05-29T14:55:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58TO3M",
+          "commit": {
+            "abbreviatedOid": "478cf27"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "I restructured the configuration section a bit, a few more changes are still proposed",
+          "createdAt": "2024-05-29T13:27:48Z",
+          "updatedAt": "2024-05-29T16:56:55Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\nA path segment MUST either start at a core AS, end at a core AS, or both start and end at a core AS. A single path segment MUST NOT start and end at a non-core AS. A path between two non-core ASes may be created by combining multiple path segments. If two of the ASes on path share a peering link, this can be used as a shortcut. For more information on SCION and peering links, see [](#beaconing).\r\n```",
+              "createdAt": "2024-05-29T13:27:48Z",
+              "updatedAt": "2024-05-29T16:56:55Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": ">  necessarily traversing one or more core-ASes.\r\n\r\nThis is not true, there is a case where an up and down segment can be joined without going via the core:\r\n<img width=\"105\" alt=\"Screenshot 2024-05-29 at 15 28 36\" src=\"https://github.com/scionassociation/scion-cp_I-D/assets/11498717/a87a950c-9abb-4f9f-9372-603df4b860a1\">\r\n\r\nI propose that we just remove this line and I merged all in the line above.\r\n```suggestion\r\n```",
+              "createdAt": "2024-05-29T13:29:29Z",
+              "updatedAt": "2024-05-29T16:56:55Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "@matzf could you double check that the list is correct?",
+              "createdAt": "2024-05-29T16:56:25Z",
+              "updatedAt": "2024-05-29T16:56:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58V1t6",
+          "commit": {
+            "abbreviatedOid": "1dc381f"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:16:32Z",
+          "updatedAt": "2024-05-29T18:20:46Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "That seems very redundant. I am not against mentioning the shortcut again, but how about a bit more concision:\r\n\r\n\"A path segment MUST either start at a core AS, or end at a core AS, or both. A path between two non-core ASes may be created by combining multiple path segments. If two of the ASes on path share a peering link, this can be used as a shortcut. For more information on SCION and peering links, see [](#beaconing).\"\r\n",
+              "createdAt": "2024-05-29T18:16:32Z",
+              "updatedAt": "2024-05-29T18:20:46Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "Right, I was missing that. Will fix. In fact I am no longer sure we need to mention the removal of core-AS from the middle at all, since not having any core ASes on the path is nothing special, as you correctly point out. It happens even in the absence of peering links.\r\n",
+              "createdAt": "2024-05-29T18:20:41Z",
+              "updatedAt": "2024-05-29T18:20:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58brmM",
+          "commit": {
+            "abbreviatedOid": "9745ab3"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T08:34:38Z",
+          "updatedAt": "2024-05-30T08:34:39Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n**Peering Link**: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.\r\n```",
+              "createdAt": "2024-05-30T08:34:38Z",
+              "updatedAt": "2024-05-30T08:34:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs58xkGR",
+          "commit": {
+            "abbreviatedOid": "478cf27"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:56:40Z",
+          "updatedAt": "2024-06-03T09:56:41Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "I removed the underlay addresses from the list. Also used the same intro paragraph as in the DP draft.\r\n",
+              "createdAt": "2024-06-03T09:56:40Z",
+              "updatedAt": "2024-06-03T09:56:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580Yav",
+          "commit": {
+            "abbreviatedOid": "478cf27"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T14:50:07Z",
+          "updatedAt": "2024-06-03T14:50:07Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": ":+1: ",
+              "createdAt": "2024-06-03T14:50:07Z",
+              "updatedAt": "2024-06-03T14:50:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs580Y6M",
+          "commit": {
+            "abbreviatedOid": "df96a1c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:50:57Z",
+          "updatedAt": "2024-06-03T14:50:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs581B5S",
+          "commit": {
+            "abbreviatedOid": "df96a1c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T15:52:50Z",
+          "updatedAt": "2024-06-03T15:52:50Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "PR_kwDOJx2-rs5xRKNJ",
+      "title": "Introduce motivation for link types, explain restrictions for peering links",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/32",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #17 (by virtue of avoiding the phrase \"peering AS\").\r\n",
+      "createdAt": "2024-06-03T08:50:43Z",
+      "updatedAt": "2024-06-03T08:53:02Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c16dda05c7b2808a7c6c7b50719a1bb96a20ac2c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "motivate-link-types",
+      "headRefOid": "2bcdc0038813b445c8e6e491217c33133e24c46f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "body": "As discussed, this is overlapping with #29. \r\n#29 should be merged first,  then I'll take another look on how to unify the two changes.",
+          "createdAt": "2024-06-03T08:53:00Z",
+          "updatedAt": "2024-06-03T08:53:00Z"
+        }
+      ],
+      "reviews": []
+    }
+  ]
+}
