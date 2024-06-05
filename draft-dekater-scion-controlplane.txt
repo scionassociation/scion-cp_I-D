@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 December 2024                                         S. Hitz
+Expires: 7 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             4 June 2024
+                                                             5 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2024.
+   This Internet-Draft will expire on 7 December 2024.
 
 Copyright Notice
 
@@ -627,11 +627,10 @@ Table of Contents
    Buffer "proto3" interface definition language (for details, see
    [proto3]).
 
-   The RPC messages are transported via the Connect
-   (https://connectrpc.com/)'s rpc protocol; a gRPC-like protocol that
-   carries messages over HTTP/3 (see [RFC9114])).  HTTP3 traffic uses
-   QUIC/UDP ([RFC9000]) as a transport layer.  In the case of SCION, UDP
-   relies on the SCION data plane.
+   The RPC messages are transported via the [Connect]'s rpc protocol; a
+   gRPC-like protocol that carries messages over HTTP/3 (see
+   [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
+   layer.  In the case of SCION, UDP relies on the SCION data plane.
 
    Appendix Appendix "Control Service gRPC API" provides the entire
    control service API definition in protobuf format.
@@ -2525,6 +2524,9 @@ path segment 4 |             |     |             |     |             |
 
 7.1.  Normative References
 
+   [Connect]  "Connect Protocol Reference", 2024,
+              <https://connectrpc.com/docs/protocol/>.
+
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
@@ -2876,7 +2878,7 @@ SCION data plane use by the SCION control plane
          o  DstPort: 0
 
    *  The ingress border router at the destination AS resolves the
-      service destination to an actual endpoint address.  This standard
+      service destination to an actual endpoint address.  This document
       does not mandate any specific method for this resolution.
 
    *  The ingress border router forwards the message to the resolved
