@@ -1086,7 +1086,7 @@ On code-level and in Protobuf message format, extensions are specified as follow
 
 ### PCB Validity {#pcb-validity}
 
-The be valid (that is, usable to construct a valid path), a PCB must:
+To be valid (that is, usable to construct a valid path), a PCB must:
 
 * Contain valid AS Entry signatures ([](#sign)).
 * Have a timestamp ([](#seginfo)) that is not in the future.
@@ -1425,7 +1425,7 @@ An endpoint (source) that wants to start communication with another endpoint (de
   - a core AS in a remote ISD, if the destination AS is in another ISD, and
 - a down-path segment to reach the destination AS.
 
-**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by {{I-D.scion-dp}}.
+**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by {{I-D.scion-dp}}.
 
 The process to look up and fetch path segments consists of the following steps:
 
