@@ -442,6 +442,18 @@ Table of Contents
    path.  This means that all path segments can be used to send data
    traffic in both directions.
 
+   The cryptographic protection of PCBs / path segments is based on the
+   Control-Plane PKI.  The signatures are structured such that the
+   entire message sequence constituting the path segment can be
+   authenticated.  The authenticity can be verified by anyone with
+   access to this PKI.  For fast validation of the path information
+   carried in individual packets during packet forwarding, symmetric key
+   cryptography is used instead.  For this purpose, the hop fields
+   contain a MAC.  These MACs are structured to allow verifying the
+   sequence of hops, reflecting the structure of the PCBs, but, in
+   contrast to the PCBs, this can only be validated by the border
+   routers of the respective AS.
+
 1.5.  Addressing
 
    The inter-domain SCION routing is based on the <ISD, AS> tuple.
