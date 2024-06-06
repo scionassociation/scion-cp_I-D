@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 December 2024                                         S. Hitz
+Expires: 8 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             4 June 2024
+                                                             6 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2024.
+   This Internet-Draft will expire on 8 December 2024.
 
 Copyright Notice
 
@@ -1523,7 +1523,7 @@ path segment 4 |             |     |             |     |             |
 
    Naturally, an AS's policy selects PCBs corresponding to paths that
    are commercially or otherwise operationally viable.  From these
-   viable PCBs, only a relatively small subset can be propagated, to
+   viable PCBs, only a relatively small subset should be propagated, to
    avoid excessive overhead of the path discovery system in bigger
    networks.  The goal of the AS should be to propagate those candidate
    PCBs with the highest probability of collectively meeting the needs
