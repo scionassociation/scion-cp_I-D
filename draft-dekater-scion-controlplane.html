@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 7 December 2024</td>
+<td class="center">Expires 8 December 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-06-05" class="published">5 June 2024</time>
+<time datetime="2024-06-06" class="published">6 June 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-12-07">7 December 2024</time></dd>
+<dd class="expires"><time datetime="2024-12-08">8 December 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1104,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2797,7 +2797,7 @@ associated_data(ps, i) = ps.segment_info ||
 The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.2">
-                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on flooding PCBs, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.3">
                 <p id="section-2.3.2.1-2.3.1">If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.3.2.1-2.3.1" class="pilcrow">¶</a></p>
