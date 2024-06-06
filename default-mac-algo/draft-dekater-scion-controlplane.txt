@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 December 2024                                         S. Hitz
+Expires: 8 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             4 June 2024
+                                                             6 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2024.
+   This Internet-Draft will expire on 8 December 2024.
 
 Copyright Notice
 
@@ -1414,7 +1414,7 @@ path segment 4 |             |     |             |     |             |
       hop field after the expiration time MUST be dropped.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field.
+      to verify the hop field, as described in [I-D.scion-dp].
 
 2.2.1.7.  Peer Entry
 
