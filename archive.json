@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-04T00:16:53.696824+00:00",
+  "timestamp": "2024-06-06T00:16:48.412713+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -239,7 +239,7 @@
       "id": "I_kwDOJx2-rs6IwxcL",
       "title": "gRPC & service discovery - dangling reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/15",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -252,8 +252,8 @@
       ],
       "body": "\r\n   > \\*Note:\\* The details of how gRPC is mapped to the SCION data plane\r\n   will be described in a separate document.\r\n\r\nWhich document?",
       "createdAt": "2024-05-14T05:59:13Z",
-      "updatedAt": "2024-06-03T07:48:49Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-04T08:55:04Z",
+      "closedAt": "2024-06-04T08:55:04Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -317,7 +317,7 @@
       ],
       "body": "> From:\tJoel Halpern \r\n> There is no description of how an A control service knows the existence of the many AS interfaces, whether they are core, up, down, or peering interfaces, and what AS they go to.\r\n\r\n> There is also no information about how the needed properties of peering adjacencies are made available to the control service.\r\n\r\n> Also, somewhere (not sure if it is a data plane or control plane mechanism), there needs to be a mechanism to translate neighbor interface identifiers to underlay addresses.\r\n\r\nMost if this is pre-configured by the AS, in the OS implementation in the [topology file](https://docs.scion.org/en/latest/manuals/common.html#topology-json), we should indeed add something about this to the draft.\r\n\r\n\r\nAlso, Eliot commented about  peering ASe: We use the expression in the introduction. We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n ",
       "createdAt": "2024-05-15T16:10:06Z",
-      "updatedAt": "2024-05-28T16:47:53Z",
+      "updatedAt": "2024-06-05T15:03:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -326,6 +326,13 @@
           "body": "I tried to address all three points by I probably failed at least one. PTAL.\r\n\r\n",
           "createdAt": "2024-05-28T16:46:59Z",
           "updatedAt": "2024-05-28T16:47:53Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I think this is addressed",
+          "createdAt": "2024-06-05T08:37:02Z",
+          "updatedAt": "2024-06-05T08:37:02Z"
         }
       ]
     },
@@ -473,11 +480,19 @@
         "question",
         "Prio 2"
       ],
-      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n we could make it clearer also in the control plane draft  \r\n\r\nRelates to https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
+      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n Two points should be clarified: \r\n- [ ] make it clearer also in the control plane draft that MAC algorithm is AS specific\r\n- [ ] Clarify vendor interoperability _within an AS_: e.g. mention one mandatory algorithm within an AS \r\n\r\n   \r\n\r\nIssue in DP: https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
       "createdAt": "2024-05-17T16:38:24Z",
-      "updatedAt": "2024-05-17T16:40:44Z",
+      "updatedAt": "2024-06-04T10:55:01Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@matzf I was looking into Joel's emails, he provided some more hints: \r\n\r\n> <jmh>Yes, I get that each AS can in principle use a different algorithm.  Now look at it from the point of view of an implementor.  What algorithm shall I implement?  I am expecting to sell to multiple operators.  I am expecting to need to interoperate with solutions from other vendors.  I have no problem with allowing a range of choices.  But I need something that ensures interoperability.  The usual answer is to say that all implementations must implement and support X, and that operators can use anything they like that their devices support as long as all devices in the AS use the same thing. </jmh>\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> <jmh>If it depends upon the MAC that is used, then you need to tell operators enough to make an appropriate choice of MAC.  Still seems that XORing together th three \"xhorts\" from the MAC would always be stronger.  But I am not a security expert. </jmh> ",
+          "createdAt": "2024-06-04T10:39:09Z",
+          "updatedAt": "2024-06-04T10:39:09Z"
+        }
+      ]
     },
     {
       "number": 26,
@@ -1281,25 +1296,35 @@
       "id": "PR_kwDOJx2-rs5wW4yN",
       "title": "Add tentative description of CS API.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/24",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Documents connectRPC as the RPC protocol instead of the old gRPC/HTTP2/QUIC stack. Document service resolution minimally.\r\n\r\nFixes #15\r\n",
       "createdAt": "2024-05-23T16:45:12Z",
-      "updatedAt": "2024-06-03T15:17:10Z",
+      "updatedAt": "2024-06-04T19:52:01Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "grpc_api_described",
       "headRefOid": "573335ff67a69ede6b39860864e201ea37aaff90",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2024-06-04T08:55:03Z",
+      "mergedAt": "2024-06-04T08:55:03Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "66253684fc5e9ae56ad10f7cc1677016b0df7a27"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot and sorry for my late review. LGTM, I Just fixed a reference and a word in #35 ",
+          "createdAt": "2024-06-04T19:51:01Z",
+          "updatedAt": "2024-06-04T19:52:01Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs58AqRM",
@@ -1583,24 +1608,26 @@
       "id": "PR_kwDOJx2-rs5we-iv",
       "title": "Address clock drift.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/25",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "This is almost identical to what I added to the DP draft. I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
+      "body": "This is almost identical to what I [added to the DP draft](https://github.com/scionassociation/scion-dp_I-D/pull/19). I also fixed a weird sentence about the routers dropping packets with expired hops.\r\n\r\nThe reviewers attention is kindly directed to section 2.2.3.\r\n\r\nAddresses #18 ",
       "createdAt": "2024-05-24T16:05:35Z",
-      "updatedAt": "2024-06-03T15:51:17Z",
+      "updatedAt": "2024-06-05T15:02:05Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "3eaea5e79fce293c359d66a1e66ca681ec2c90db",
+      "baseRefOid": "66253684fc5e9ae56ad10f7cc1677016b0df7a27",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "d7008aca1fc6d9f79f09f1af307faa301d33ee32",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "3f0e73de94f2002ec0197c9c0ef1d52c5e3f48af",
+      "closedAt": "2024-06-05T15:02:00Z",
+      "mergedAt": "2024-06-05T15:02:00Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "60418e3460510480b9560bcaaf601a4ef2031c90"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1710,6 +1737,79 @@
               "updatedAt": "2024-06-03T15:47:53Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs586xlX",
+          "commit": {
+            "abbreviatedOid": "615582c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T08:59:51Z",
+          "updatedAt": "2024-06-04T08:59:51Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "done.\r\n",
+              "createdAt": "2024-06-04T08:59:51Z",
+              "updatedAt": "2024-06-04T08:59:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5861AB",
+          "commit": {
+            "abbreviatedOid": "49b9d77"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T09:05:56Z",
+          "updatedAt": "2024-06-04T09:05:56Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "I rewrote/moved based on these comments and our subsequent discussions. I leaned in the direction of less: the reader needs to be aware of the forces at play but can draw their own conclusions. They are fairly obvious but highly dependent on use case and policies. If we try to give advice we end-up with a complete administrator's manual. Not what we want here.\r\n\r\nTentatively resolving now.\r\n",
+              "createdAt": "2024-06-04T09:05:56Z",
+              "updatedAt": "2024-06-04T09:05:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs59I3zD",
+          "commit": {
+            "abbreviatedOid": "49b9d77"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-05T14:58:38Z",
+          "updatedAt": "2024-06-05T14:58:38Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "Thanks a lot, looks good now! ",
+              "createdAt": "2024-06-05T14:58:38Z",
+              "updatedAt": "2024-06-05T14:58:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs59I5xY",
+          "commit": {
+            "abbreviatedOid": "3f0e73d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Thanks a lot for restructuring the paragraph, looks good! ",
+          "createdAt": "2024-06-05T15:01:42Z",
+          "updatedAt": "2024-06-05T15:01:42Z",
+          "comments": []
         }
       ]
     },
@@ -2080,7 +2180,7 @@
       "labels": [],
       "body": "Contributes to #17 (by virtue of avoiding the phrase \"peering AS\").\r\n",
       "createdAt": "2024-06-03T08:50:43Z",
-      "updatedAt": "2024-06-03T08:53:02Z",
+      "updatedAt": "2024-06-05T15:10:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c16dda05c7b2808a7c6c7b50719a1bb96a20ac2c",
@@ -2100,7 +2200,216 @@
           "updatedAt": "2024-06-03T08:53:00Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs586Zrm",
+          "commit": {
+            "abbreviatedOid": "2bcdc00"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T08:25:39Z",
+          "updatedAt": "2024-06-04T08:25:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs59I9QW",
+          "commit": {
+            "abbreviatedOid": "2bcdc00"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Thanks a lot, crisp and clear! @matzf maybe before merging, we could check wether we want to remove the definition of peering links now in the glossary: \r\n\r\n> Peering Link: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.\r\n\r\n\r\n\r\n\r\nThis is also in the dataplane draft",
+          "createdAt": "2024-06-05T15:07:16Z",
+          "updatedAt": "2024-06-05T15:10:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOJx2-rs5xYzUn",
+      "title": "Clarify PCB selection policies and endpoint's needs",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/33",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #16.\r\n\r\n> > From: Joel Halpern\r\n> > There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction. Of course, this AS doesn't know that. But the text ignores this distinction.\r\n> \r\n> Tis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n> >  how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ..\r\n\r\n---- \r\n\r\nVery good phrasing from reviewer, paraphrased in the text.\r\nTried to clarify the incentives by explaining it as a two stage process. First the AS removes anything that doesn't seem \"viable\";  among the remaining PCBs, the incentives of AS and endpoints are aligned. \r\n",
+      "createdAt": "2024-06-04T07:36:33Z",
+      "updatedAt": "2024-06-05T14:22:00Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "7af3379e03c1a053b250daded414bbf2465cf9af",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "selection-policy-endpoint-needs",
+      "headRefOid": "9495ea901cac45cf12bc2debc2e64dc393826e92",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs586XGM",
+          "commit": {
+            "abbreviatedOid": "9495ea9"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T08:21:24Z",
+          "updatedAt": "2024-06-04T08:21:24Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs59Idpi",
+          "commit": {
+            "abbreviatedOid": "9495ea9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-05T14:21:00Z",
+          "updatedAt": "2024-06-05T14:22:00Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": ">  Of course, this AS doesn't know that. But the text ignores this distinction. \r\n\r\nHow would you handle this comment? Is the policy you mention above sufficient? ",
+              "createdAt": "2024-06-05T14:21:00Z",
+              "updatedAt": "2024-06-05T14:22:00Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nFrom these viable PCBs, only a relatively small subset should be propagated, to avoid excessive overhead of the path discovery system in bigger networks.\r\n```\r\n\r\nIs it a must? A should? How _small_ should the subset be?  ",
+              "createdAt": "2024-06-05T14:21:57Z",
+              "updatedAt": "2024-06-05T14:22:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOJx2-rs5xZwY_",
+      "title": "Clarify selection of MAC",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/34",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Refer to default hop field MAC algorithm in DP draft, which SHOULD be supported.\r\n\r\nContributes to #23.\r\nRefers to https://github.com/scionassociation/scion-dp_I-D/pull/26, and uses ~identical paragraph.",
+      "createdAt": "2024-06-04T09:45:01Z",
+      "updatedAt": "2024-06-04T11:02:21Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "66253684fc5e9ae56ad10f7cc1677016b0df7a27",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "default-mac-algo",
+      "headRefOid": "cd0ad9e3ccc0ed367a17ddc47dc1981b0397344d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs587RRQ",
+          "commit": {
+            "abbreviatedOid": "cd0ad9e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T09:56:22Z",
+          "updatedAt": "2024-06-04T09:56:22Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs587zng",
+          "commit": {
+            "abbreviatedOid": "cd0ad9e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Just some minor comments (also related to my comments in https://github.com/scionassociation/scion-dp_I-D/pull/26 )",
+          "createdAt": "2024-06-04T10:59:03Z",
+          "updatedAt": "2024-06-04T11:02:21Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nThe algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.\r\nControl service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.\r\n```",
+              "createdAt": "2024-06-04T10:59:03Z",
+              "updatedAt": "2024-06-04T11:02:22Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\n- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field, as described in {{I-D.scion-dp}}.\r\n```\r\nI think one more reference does not hurt",
+              "createdAt": "2024-06-04T11:01:45Z",
+              "updatedAt": "2024-06-04T11:02:22Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "PR_kwDOJx2-rs5xd1Yv",
+      "title": "CS API - minor wording change",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/35",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-04T19:47:51Z",
+      "updatedAt": "2024-06-05T13:29:30Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "66253684fc5e9ae56ad10f7cc1677016b0df7a27",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "grpc_api_described_wordsmithing",
+      "headRefOid": "2ea280f93d3993a539d36d6817a256b809d129bf",
+      "closedAt": "2024-06-05T12:51:40Z",
+      "mergedAt": "2024-06-05T12:51:39Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "89d9bf1fb384c523516750bb253522a557e3148d"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I added a potential reference for the connect RPC, feel free to change it if you think there is a better reference ",
+          "createdAt": "2024-06-05T07:13:36Z",
+          "updatedAt": "2024-06-05T07:13:36Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs59EwCS",
+          "commit": {
+            "abbreviatedOid": "2ea280f"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-05T08:27:23Z",
+          "updatedAt": "2024-06-05T08:27:23Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
