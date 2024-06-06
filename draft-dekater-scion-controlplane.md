@@ -209,8 +209,6 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
-**Peering Link**: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
-
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 
