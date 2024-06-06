@@ -1122,7 +1122,7 @@ As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.
 
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
-From these viable PCBs, only a relatively small subset can be propagated, to avoid excessive overhead of the path discovery system in bigger networks.
+From these viable PCBs, only a relatively small subset should be propagated, to avoid excessive overhead of the path discovery system in bigger networks.
 The goal of the AS should be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.
 
 #### Storing and Selecting Candidate PCBs
