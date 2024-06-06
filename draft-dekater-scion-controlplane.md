@@ -993,8 +993,8 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 
 The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.
 
-The computation of the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
-Control service and router implementations SHOULD support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
+The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+Control service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
 
 The following code block defines the hop field component `HopField` in Protobuf message format:
 
