@@ -315,6 +315,8 @@ So each path segment either ends at a core AS, or starts at a core AS, or both.
 
 All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
+The cryptographic protection of PCBs / path segments is based on the Control-Plane PKI. The signatures are structured such that the entire message sequence constituting the path segment can be authenticated. The authenticity can be verified by anyone with access to this PKI.
+For fast validation of the path information carried in individual packets during packet forwarding, symmetric key cryptography is used instead. For this purpose, the hop fields contain a MAC. These MACs are structured to allow verifying the sequence of hops, reflecting the structure of the PCBs, but, in contrast to the PCBs, this can only be validated by the border routers of the respective AS.
 
 ## Addressing {#numbering}
 
@@ -421,7 +423,6 @@ In SCION, the *control service* of each AS is responsible for the beaconing proc
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the control service of a core AS creates PCBs and sends them to the non-core child ASes (typically customer ASes). The control service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on. This procedure continues until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
 
 On its way, a PCB accumulates cryptographically protected path- and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces are added to the PCB.
-
 
 ### Peering Links
 
