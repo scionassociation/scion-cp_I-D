@@ -99,9 +99,12 @@ Table of Contents
      2.2.  Path-Segment Construction Beacons (PCBs)
        2.2.1.  Components of a PCB in Message Format
        2.2.2.  PCB Extensions
+       2.2.3.  PCB Validity
+       2.2.4.  Configuration
      2.3.  Propagation of PCBs
        2.3.1.  Selection of PCBs to Propagate
        2.3.2.  Propagation of Selected PCBs
+       2.3.3.  Effects of Clock Inaccuracy
    3.  Registration of Path Segments
      3.1.  Intra-ISD Path-Segment Registration
        3.1.1.  Terminating a PCB
@@ -131,7 +134,8 @@ Table of Contents
      7.1.  Normative References
      7.2.  Informative References
    Acknowledgments
-   PCB Protobuf Messages - Full Example
+   Control Service gRPC API
+   SCION data plane use by the SCION control plane
    Path-Lookup Examples
    Authors' Addresses
 
@@ -242,6 +246,13 @@ Table of Contents
    ASes.  As a PCB traverses the network, it carries path segments,
    which can subsequently be used for traffic forwarding.
 
+   *Peering Link*: A specific type of link between two SCION border
+   routers of different ASes, which may also be in different ISDs.  A
+   peering link can be seen as a short-cut on a normal path.  Peering
+   link information is added to segment information during the beaconing
+   process and used to shorten paths while assembling them from
+   segments.
+
    *Trust Root Configuration (TRC)*: A trust root configuration or TRC
    is a signed collection of certificates pertaining to an isolation
    domain (ISD).  TRCs also contain ISD-specific policies.
@@ -311,10 +322,11 @@ Table of Contents
             Figure 1: The three types of SCION links in one ISD
 
    Each link connecting SCION routers is bidirectional and identified by
-   its corresponding egress and ingress interface IDs.  These interface
-   IDs only need to be unique within each AS.  Therefore, they can be
-   chosen and encoded by each AS independently and without any need for
-   coordination.
+   its corresponding egress and ingress interface IDs.  An interface ID
+   consists of a 16-bit identifier that MUST be unique within each AS,
+   with the exception of value 0 (see [I-D.scion-dp]).  Therefore, they
+   can be chosen and encoded by each AS independently and without any
+   need for coordination between ASes.
 
 1.4.  Routing
 
@@ -423,11 +435,6 @@ Table of Contents
 
    So each path segment either ends at a core AS, or starts at a core
    AS, or both.
-
-   *Note:* There are no SCION path segments that start and end at a non-
-   core AS.  However, when combining path segments into an end-to-end
-   SCION path, it is possible to use peering links.  For more
-   information on SCION and peering links, see Section 2.
 
    All path segments are invertible: A core-segment can be used
    bidirectionally, and an up-segment can be converted into a down-
@@ -574,8 +581,7 @@ Table of Contents
       hop path type, which does not rely on any path information.  SCION
       uses these _one-hop paths_ to propagate PCBs to neighboring ASes
       to which no forwarding path is available yet.  The One-Hop Path
-      Type will be described in more detail in the SCION Data Plane
-      specification (this document will be available later this year).
+      Type is described in more detail in [I-D.scion-dp].
 
    *  Path segment types: SCION uses different types of path segments to
       compose end-to-end paths.  Notably, a single path segment already
@@ -622,8 +628,17 @@ Table of Contents
    Buffer "proto3" interface definition language (for details, see
    [proto3]).
 
-   *Note:* The details of how gRPC is mapped to the SCION data plane
-   will be described in a separate document.
+   The RPC messages are transported via the [Connect]'s rpc protocol; a
+   gRPC-like protocol that carries messages over HTTP/3 (see
+   [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
+   layer.  In the case of SCION, UDP relies on the SCION data plane.
+
+   Appendix Appendix "Control Service gRPC API" provides the entire
+   control service API definition in protobuf format.
+
+   Appendix Appendix "SCION data plane use by the SCION control plane"
+   provides details about the establishment of the underlying QUIC
+   connections through the SCION data plane.
 
 2.  Path Exploration or Beaconing
 
@@ -890,13 +905,6 @@ path segment 4 |             |     |             |     |             |
    This section provides a detailed specification of a single PCB and
    its message format.
 
-   *Note:* The SCION open-source implementation makes use of Protobuf
-   (Protocol Buffers), a free and open-source cross-platform data format
-   developed by Google and used to serialize structured data.  The
-   messages and remote procedure calls described below are in "proto3"
-   language.  For more information on Protobuf, see the official
-   "Protocol Buffers Documentation" (https://protobuf.dev/).
-
 2.2.1.  Components of a PCB in Message Format
 
    Figure 7 graphically represents the PCB message format:
@@ -963,7 +971,7 @@ path segment 4 |             |     |             |     |             |
    diving deeper into each of the PCB's message components.
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "PCB Protobuf Messages - Full Example".
+   please see Appendix "Control Service gRPC API".
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1027,8 +1035,8 @@ path segment 4 |             |     |             |     |             |
 
    *  timestamp: The 32-bit timestamp indicates the creation time of
       this PCB.  It is set by the originating core AS.  The expiration
-      time of the corresponding path segment is computed relative to
-      this timestamp.  The timestamp is encoded as the number of seconds
+      time of each hop field in the PCB is computed relative to this
+      timestamp.  The timestamp is encoded as the number of seconds
       elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
    *  segment_id: The 16-bit identifier of this PCB and the
@@ -1039,9 +1047,9 @@ path segment 4 |             |     |             |     |             |
       cryptographically random number.
 
    *Note:* See Section 2.2.1.6 for more information on the hop field
-   message format.  The SCION Data Plane Specification provides a
-   detailed description of the computation of the MAC and the
-   verification of the hop field in the data plane.
+   message format.  [I-D.scion-dp] provides a detailed description of
+   the computation of the MAC and the verification of the hop field in
+   the data plane.
 
 2.2.1.3.  AS Entry
 
@@ -1282,10 +1290,12 @@ path segment 4 |             |     |             |     |             |
 
 2.2.1.4.3.  AS Entry Signature
 
-   Each AS entry is signed with a private key K_i that corresponds to
-   the public key certified by the AS's certificate.  The signature
-   Sig_i of an AS entry ASE_i is computed over the AS entry's signed
-   component.  This is the input for the computation of the signature:
+   Each AS entry MUST be signed with the AS certificate's private key
+   K_i.  The certificate MUST have a validity period fully containing
+   that of the segment being verified; regardless of current time.  The
+   signature Sig_i of an AS entry ASE_i is computed over the AS entry's
+   signed component.  This is the input for the computation of the
+   signature:
 
    *  The signed header and body of the current AS (header_and_body).
 
@@ -1311,7 +1321,7 @@ path segment 4 |             |     |             |     |             |
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
-   Note that the signature has a nested, onion-like structure.
+   Note that the signature has a nested structure.
 
    input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
@@ -1406,12 +1416,13 @@ path segment 4 |             |     |             |     |             |
       of beaconing).
 
    *  exp_time: The 8-bit encoded expiration time of the hop field,
-      indicating how long the hop field is valid.  This value is an
-      offset relative to the PCB creation timestamp set in the PCB's
-      segment information component (see also Section 2.2.1.2).  By
-      combining these two values, the AS can compute the absolute
-      expiration time of the hop field.  Data-plane packets that use the
-      hop field after the expiration time MUST be dropped.
+      indicating its validity.  This field expresses a duration in
+      seconds according to the formula: duration = (1 + exp_time) *
+      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This
+      duration is relative to the PCB creation timestamp set in the
+      PCB's segment information component (see also Section 2.2.1.2).
+      Therefore, the absolute expiration time of the hop field is the
+      sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
       to verify the hop field, as described in [I-D.scion-dp].
@@ -1514,6 +1525,43 @@ path segment 4 |             |     |             |     |             |
    extension in the signature.  This prevents a possible processing
    overhead caused by large cryptographically-protected extensions.
 
+2.2.3.  PCB Validity
+
+   To be valid (that is, usable to construct a valid path), a PCB must:
+
+   *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
+
+   *  Have a timestamp (Section 2.2.1.2) that is not in the future.
+
+   *  Contain only unexpired hops (Section 2.2.1.6).
+
+   For the purpose of validation, a timestamp is considered "future" if
+   it is later than the current time at the point of validation plus the
+   minimum expiration time of a hop field (337.5 seconds, see
+   Section 2.2.1.6).
+
+   For the purpose of validation, a hop is considered expired if its
+   absolute expiration time, calculated as defined in Section 2.2.1.6,
+   is later than the current time at the point of validation.
+
+2.2.4.  Configuration
+
+   For the purpose of constructing and propagating path segments, an AS
+   control service must be configured with links to neighboring ASes.
+   Such information may be conveyed to the control service in an out of
+   band fashion (e.g in a configuration file).  For each link, these
+   values must be configured:
+
+   *  Local interface ID
+
+   *  Neighbor type (core, parent, child, peer), depending on link type
+      (see Section 1.3).  Link type depends on mutual agreements between
+      the organizations operating the ASes at each end of each link.
+
+   *  Neighbor ISD-AS number
+
+   *  Neighbor interface underlay address
+
 2.3.  Propagation of PCBs
 
    This section describes how PCBs are selected and propagated in the
@@ -1526,13 +1574,12 @@ path segment 4 |             |     |             |     |             |
    local policy on the basis of which PCBs are evaluated, selected or
    eliminated.  The selection process can be based on _path_ properties
    (e.g., length, disjointness across different paths) as well as on
-   _PCB_ properties (e.g., age, remaining lifetime of sent instances) -
-   each AS is free to use those properties that suit the AS best.  The
-   control service can then compute the overall quality of each
-   candidate PCB based on these properties.  For this, the AS should use
-   a selection algorithm or metric that reflects its needs and
-   requirements and identifies the best PCBs or paths segments for this
-   AS.
+   _PCB_ properties (e.g., age, expiration time) - each AS is free to
+   use those properties that suit the AS best.  The control service can
+   then compute the overall quality of each candidate PCB based on these
+   properties.  For this, the AS should use a selection algorithm or
+   metric that reflects its needs and requirements and identifies the
+   best PCBs or paths segments for this AS.
 
 2.3.1.1.  Storing and Selecting Candidate PCBs
 
@@ -1672,24 +1719,25 @@ path segment 4 |             |     |             |     |             |
    handles beaconing between neighboring ASes for which no forwarding
    path may be available yet.  In fact, it is the task of beaconing to
    discover such forwarding paths.  The purpose of one-hop paths is thus
-   to break this circular dependency.  The One-Hop Path Type will be
-   described in more detail in the SCION Data Plane specification.
+   to break this circular dependency.  The One-Hop Path Type is
+   described in more detail in [I-D.scion-dp].
 
-2.3.2.1.  Propagation - First Steps
+2.3.2.1.  Reception of PCBs
 
    The following first steps of the propagation procedure are the same
    for both intra-ISD and core beaconing:
 
    1.  Upon receiving a PCB, the control service of an AS verifies the
-       structure and all signatures on the PCB.
-       *Note:* The PCB contains the version numbers of the trust root
-       configuration(s) (TRC) and certificate(s) that must be used to
-       verify its signatures.  This enables the control service to check
-       whether it has the relevant TRC(s) and certificate(s); if not,
-       they can be requested from the control service of the sending AS.
+       validity of the PCB (see Section 2.2.3).  Invalid PCBs MUST be
+       discarded.  The PCB contains the version numbers of the trust
+       root configuration(s) (TRC) and certificate(s) that must be used
+       to verify its signatures.  This enables the control service to
+       check whether it has the relevant TRC(s) and certificate(s); if
+       not, they can be requested from the control service of the
+       sending AS.
 
-   2.  As core beaconing is based on sending PCBs without a defined
-       direction, it is necessary to avoid loops during path creation.
+   2.  As core beaconing is based on propagating PCBs to all AS
+       neighbors, it is necessary to avoid loops during path creation.
        The control service of core ASes MUST therefore check whether the
        PCB includes duplicate hop entries created by the core AS itself
        or by other ASes.  If so, the PCB MUST be discarded in order to
@@ -1816,6 +1864,44 @@ path segment 4 |             |     |             |     |             |
 
    *  BeaconResponse: Specifies the response message from the
       neighboring AS.
+
+2.3.3.  Effects of Clock Inaccuracy
+
+   A PCB originated by a given control service is validated by all the
+   control services that receive it.  All have different clocks.  Their
+   differences affect the validation process:
+
+   *  A fast clock at origination or a slow clock at reception will
+      yield a lengthened expiration time for hops, and possibly an
+      origination time in the future.
+
+   *  A slow clock at origination or a fast clock at reception will
+      yield a shortened expiration time for hops, and possibly an
+      expiration time in the past.
+
+   This bias comes in addition to a structural delay: PCBs are
+   propagated at a configurable interval (typically, one minute).  As a
+   result of this and the way they are iteratively constructed, PCBs
+   with N hops may be validated up to N intervals (so typically N
+   minutes) after origination.  This creates a constraint on the
+   expiration of hops.  Hops of the minimal expiration time (337.5
+   seconds - see Section 2.2.1.6) would render useless any PCB
+   describing a path longer than 5 hops.  For this reason, it is
+   unadvisable to create hops with a short expiration time.  The norm is
+   6 hours.
+
+   The control service and its clients authenticate each-other according
+   to their respective AS's certificate.  Path segments are
+   authenticated based on the certificates of the ASes that they refer
+   to.  The expiration of a SCION AS certificate typically ranges from
+   3h to 5 years.
+
+   In comparison to these time scales, clock offsets in the order of
+   minutes are immaterial.
+
+   Each administrator of a SCION control service is responsible for
+   maintaining sufficient clock accuracy.  No particular method is
+   assumed by this specification.
 
 3.  Registration of Path Segments
 
@@ -1978,26 +2064,27 @@ path segment 4 |             |     |             |     |             |
    originated the corresponding PCBs.  This registration step is
    implemented as follows in Protobuf message format:
 
-   enum SegmentType {
-       SEGMENT_TYPE_UNSPECIFIED = 0;
-       SEGMENT_TYPE_UP = 1;
-       SEGMENT_TYPE_DOWN = 2;
-       SEGMENT_TYPE_CORE = 3;
-   }
+     enum SegmentType {
+         SEGMENT_TYPE_UNSPECIFIED = 0;
+         SEGMENT_TYPE_UP = 1;
+         SEGMENT_TYPE_DOWN = 2;
+         SEGMENT_TYPE_CORE = 3;
+     }
 
-   service SegmentRegistrationService {
-       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
-   }
+     service SegmentRegistrationService {
+         rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+           SegmentsRegistrationResponse) {}
+     }
 
-   message SegmentsRegistrationRequest {
-       message Segments {
-           repeated PathSegment segments = 1;
-       }
+     message SegmentsRegistrationRequest {
+         message Segments {
+             repeated PathSegment segments = 1;
+         }
 
-       map<int32, Segments> segments = 1;
-   }
+         map<int32, Segments> segments = 1;
+     }
 
-   message SegmentsRegistrationResponse {}
+     message SegmentsRegistrationResponse {}
 
    *  SegmentType: Specifies the type of the path segment that must be
       registered.  Currently, only the following type is used:
@@ -2040,8 +2127,7 @@ path segment 4 |             |     |             |     |             |
    *Note:* The actual number of required path segments depends on the
    location of the destination AS as well as on the availability of
    shortcuts and peering links.  More information on combining and
-   constructing paths will be provided by the SCION Data Plane
-   Specification document.
+   constructing paths is provided by [I-D.scion-dp].
 
    The process to look up and fetch path segments consists of the
    following steps:
@@ -2506,6 +2592,9 @@ path segment 4 |             |     |             |     |             |
 
 7.1.  Normative References
 
+   [Connect]  "Connect Protocol Reference", 2024,
+              <https://connectrpc.com/docs/protocol/>.
+
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
@@ -2545,6 +2634,14 @@ path segment 4 |             |     |             |     |             |
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RFC9114]  Bishop, M., Ed., "HTTP/3", RFC 9114, DOI 10.17487/RFC9114,
+              June 2022, <https://www.rfc-editor.org/rfc/rfc9114>.
 
 7.2.  Informative References
 
@@ -2588,111 +2685,326 @@ Acknowledgments
    authors of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
 
-PCB Protobuf Messages - Full Example
+Control Service gRPC API
 
-   The following code block provides a full example of one PCB in the
-   Protobuf message format.
+   The following code block provides, in protobuf format, the API by
+   which control services interract.
 
-   message PathSegment {
-       bytes segment_info = 1;
-       repeated ASEntry as_entries = 2;
-   }
+enum SegmentType {
+    // Unknown segemnt type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+}
 
-   message SegmentInformation {
-       int64 timestamp = 1;
-       uint32 segment_id = 2;
-   }
 
-   message ASEntry {
-       // The signed part of the AS entry. The body of the SignedMessage
-       // is the serialized ASEntrySignedBody.
-       // The signature input is defined as following:
-       //
-       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
-       //
-       // associated_data(ps, i) =
-       //             ps.segment_info ||
-       //             ps.as_entries[1].signed.header_and_body ||
-       //             ps.as_entries[1].signed.signature ||
-       //             ...
-       //             ps.as_entries[i-1].signed.header_and_body ||
-       //             ps.as_entries[i-1].signed.signature
-       //
-       SignedMessage signed = 1;
-       // Optional
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
+// control services on the "intra-protocol" network.
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
 
-   message SignedMessage {
-       // Encoded header and body.
-       bytes header_and_body = 1;
-       // Raw signature. The signature is computed over the
-       // concatenation of the header and body, and the optional
-       // associated data.
-       bytes signature = 2;
-   }
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
 
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
-       bytes header = 1;
-       // Raw payload suitable for signature computation.
-       bytes body = 2;
-   }
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message Header {
-       SignatureAlgorithm signature_algorithm = 1;
-       bytes verification_key_id = 2;
-       // Optional
-       google.protobuf.Timestamp timestamp = 3;
-       // Optional
-       bytes metadata = 4;
-       int32 associated_data_length = 5;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message VerificationKeyID {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       uint64 trc_base = 3;
-       uint64 trc_serial = 4;
-   }
+// This API is only exposed by core ASes and only on the SCION dataplane.
+service SegmentRegistrationService {
+    // SegmentsRegistration registers segments at the remote.
+    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+        SegmentsRegistrationResponse) {}
+}
 
-   message ASEntrySignedBody {
-       uint64 isd_as = 1;
-       uint64 next_isd_as = 2;
-       HopEntry hop_entry = 3;
-       repeated PeerEntry peer_entries = 4;
-       uint32 mtu = 5;
-       // Optional
-       PathSegmentExtensions extensions = 6;
-   }
+message SegmentsRegistrationRequest {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message HopEntry {
-       HopField hop_field = 1;
-       uint32 ingress_mtu = 2;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
 
-   message PeerEntry {
-       uint64 peer_isd_as = 1;
-       uint64 peer_interface = 2;
-       uint32 peer_mtu = 3;
-       HopField hop_field = 4;
-   }
+message SegmentsRegistrationResponse {}
 
-   message HopField {
-       uint64 ingress = 1;
-       uint64 egress = 2;
-       uint32 exp_time = 3;
-       bytes mac = 4;
-   }
+service SegmentCreationService {
+    // Beacon sends a beacon to the remote.
+    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+}
+
+message BeaconRequest {
+    // Beacon in form of a partial path segment.
+    PathSegment segment = 1;
+}
+
+message BeaconResponse {}
+
+message PathSegment {
+    // The encoded SegmentInformation. It is used for signature input.
+    bytes segment_info = 1;
+    // Entries of ASes on the path.
+    repeated ASEntry as_entries = 2;
+}
+
+message SegmentInformation {
+    // Segment creation time set by the originating AS. Segment
+    // expiration time is computed relative to this timestamp.
+    // The timestamp is encoded as the number of seconds elapsed
+    // since January 1, 1970 UTC.
+    int64 timestamp = 1;
+    // The 16-bit segment ID integer used for MAC computation.
+    uint32 segment_id = 2;
+}
+
+message ASEntry {
+    // The signed part of the AS entry. The body of the SignedMessage
+    // is the serialized ASEntrySignedBody. The signature input is
+    // defined as follows:
+    //
+    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+    //
+    //  associated_data(ps, i) =
+    //          ps.segment_info ||
+    //          ps.as_entries[1].signed.header_and_body ||
+    //          ps.as_entries[1].signed.signature ||
+    //          ...
+    //          ps.as_entries[i-1].signed.header_and_body ||
+    //          ps.as_entries[i-1].signed.signature
+    //
+    proto.crypto.v1.SignedMessage signed = 1;
+    // The unsigned part of the AS entry.
+    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+}
+
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+}
+
+message HopEntry {
+    // Material to create the data-plane hop field.
+    HopField hop_field = 1;
+    // MTU on the ingress link.
+    uint32 ingress_mtu = 2;
+}
+
+message PeerEntry {
+    // ISD-AS of peer AS. This is used to match peering segments during
+    // path construction.
+    uint64 peer_isd_as = 1;
+    // Remote peer interface identifier. This is used to match
+    // peering segments
+    // during path construction.
+    uint64 peer_interface = 2;
+    // MTU on the peering link.
+    uint32 peer_mtu = 3;
+    // Material to create the data-plane hop field
+    HopField hop_field = 4;
+}
+
+message HopField {
+    // Ingress interface identifier.
+    uint64 ingress = 1;
+    // Egress interface identifier.
+    uint64 egress = 2;
+    // 8-bit encoded expiration offset relative to the segment creation
+    // timestamp.
+    uint32 exp_time = 3;
+    // MAC used in the dataplane to verify the hop field.
+    bytes mac = 4;
+}
+
+enum SignatureAlgorithm {
+    // Unspecified signature algorithm. This value is never valid.
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    // ECDS with SHA256.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    // ECDS with SHA384.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    // ECDS with SHA512.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+}
+
+message SignedMessage {
+    // Encoded header and body.
+    bytes header_and_body = 1;
+    // Raw signature. The signature is computed over the concatenation
+    // of the header and body, and the optional associated data.
+    bytes signature = 2;
+}
+
+message Header {
+    // Algorithm used to compute the signature.
+    SignatureAlgorithm signature_algorithm = 1;
+    // Optional arbitrary per-protocol key identifier.
+    bytes verification_key_id = 2;
+    // Optional signature creation timestamp.
+    google.protobuf.Timestamp timestamp = 3;
+    // Optional arbitrary per-protocol metadata.
+    bytes metadata = 4;
+    // Length of associated data that is covered by the signature, but
+    // is not included in the header and body. This is zero, if no
+    // associated data is covered by the signature.
+    int32 associated_data_length = 5;
+}
+
+// Low-level representation of HeaderAndBody used for signature
+// computation input. This should not be used by external code.
+message HeaderAndBodyInternal {
+    // Enocded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
+}
+
+message VerificationKeyID {
+    uint64 isd_as = 1;
+    bytes subject_key_id = 2;
+    uint64 trc_base = 3;
+    uint64 trc_serial = 4;
+}
+
+            Figure 10: Control Service gRPC API definition
+
+SCION data plane use by the SCION control plane
+
+   The SCION control plane RPC APIs rely on QUIC connections carried by
+   the SCION dataplane.  The main difference between QUIC over native
+   UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection
+   initiator to identify the relevant peer (service resolution) and to
+   select a path to it.  Since the control service is itself the source
+   of path segment information, the following bootstraping strategies
+   apply:
+
+   *  Neighboring ASes craft one-hop-paths directly.  This allows
+      multihop paths to be constructed and propagated incrementally.
+
+   *  Constructed multihop paths are registered with the control service
+      at the origin core AS.  The path to that AS is the very path being
+      registered.
+
+   *  Paths to far ASes are available from neighboring ASes.  Clients
+      obtain paths to remote ASes from their local control service.
+
+   *  Control services respond to requests from remote ASes by reversing
+      the path via which the request came.
+
+   *  Clients find the relevant control service endpoint by resolving a
+      "service address" (that is an address where the DT/DL field of the
+      common header is set to 1/0 (see [I-D.scion-dp]).
+
+   The mechanics of service address resolution are the following:
+
+   *  To resolve the address of the control service at a given AS, a
+      client sends a ServiceResolutionRequest RPC (which has no
+      parameters) to an enpoint address constructed as follows:
+
+      -  Common Header:
+
+         o  Path type: SCION (0x01)
+
+         o  DT/DL: "Service" (0b0100)
+
+      -  Address Header:
+
+         o  DstHostAddr: "SVC_CS" (0x0002)
+
+      -  UDP Header:
+
+         o  DstPort: 0
+
+   *  The ingress border router at the destination AS resolves the
+      service destination to an actual endpoint address.  This document
+      does not mandate any specific method for this resolution.
+
+   *  The ingress border router forwards the message to the resolved
+      address.
+
+   *  The destination service responds to the client with a
+      ServiceResolutionResponse.  That response contain one or more
+      transport options.
+
+   *  The client uses the address and port from the "QUIC" option to
+      establish a QUIC connection, which can then be used for regular
+      RPCs.
+
+   The following code block provides the full service resolution API in
+   the Protobuf message format.
+
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map<string, Transport> transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.168.0.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+          Figure 11: Service Resolution gRPC API definition
 
 Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 10 below.  In both examples, the source
-   endpoint is in AS A.  Figure 11 shows the sequence diagram for the
+   is represented in Figure 12 below.  In both examples, the source
+   endpoint is in AS A.  Figure 13 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 12 shows the path lookup sequence diagram if the destination
+   Figure 14 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e., there is no up-segment from A to C.
@@ -2722,7 +3034,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 10: Topology used in the path lookup examples.
+           Figure 12: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -2780,7 +3092,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 11: Sequence diagram illustrating a path lookup for a
+     Figure 13: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down-segments between any core AS in the source ISD and
@@ -2851,7 +3163,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 12: Sequence diagram illustrating a path lookup for a
+     Figure 14: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down-

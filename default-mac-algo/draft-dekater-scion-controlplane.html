@@ -1203,6 +1203,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.2">
                     <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="auto internal xref">2.2.2</a>.  <a href="#name-pcb-extensions" class="internal xref">PCB Extensions</a></p>
 </li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.3">
+                    <p id="section-toc.1-1.2.2.2.2.3.1"><a href="#section-2.2.3" class="auto internal xref">2.2.3</a>.  <a href="#name-pcb-validity" class="internal xref">PCB Validity</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.4">
+                    <p id="section-toc.1-1.2.2.2.2.4.1"><a href="#section-2.2.4" class="auto internal xref">2.2.4</a>.  <a href="#name-configuration" class="internal xref">Configuration</a></p>
+</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
@@ -1213,6 +1219,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
                     <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-effects-of-clock-inaccuracy" class="internal xref">Effects of Clock Inaccuracy</a></p>
 </li>
                 </ul>
 </li>
@@ -1319,13 +1328,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-pcb-protobuf-messages-full-" class="internal xref">PCB Protobuf Messages - Full Example</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-control-service-grpc-api" class="internal xref">Control Service gRPC API</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION data plane use by the SCION control plane</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1359,7 +1371,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-13"><strong>Packet-Carried Forwarding State (PCFS)</strong>: Rather than relying on costly inter-domain forwarding tables, SCION data packets contain all the necessary path information. We refer to this property as packet-carried forwarding state or PCFS.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
 <p id="section-1.1-14"><strong>Path Segment</strong>: Path segments are derived from path-segment construction beacons (PCBs) and registered at control services. A path segment can be (1) an up-segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down-segment (i.e., the same as an up-segment, but in the opposite direction), or (3) a core-segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
 <p id="section-1.1-15"><strong>Path-Segment Construction Beacon (PCB)</strong>: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
-<p id="section-1.1-16"><strong>Trust Root Configuration (TRC)</strong>: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-16"><strong>Peering Link</strong>: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-17"><strong>Trust Root Configuration (TRC)</strong>: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1373,7 +1386,7 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="paths-and-links">
+<div id="paths-links">
 <section id="section-1.3">
         <h3 id="name-paths-and-links">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-paths-and-links" class="section-name selfRef">Paths and Links</a>
@@ -1421,7 +1434,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#name-the-three-types-of-scion-li" class="selfRef">The three types of SCION links in one ISD</a>
           </figcaption></figure>
 </div>
-<p id="section-1.3-6">Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. These interface IDs only need to be unique within each AS. Therefore, they can be chosen and encoded by each AS independently and without any need for coordination.<a href="#section-1.3-6" class="pilcrow">¶</a></p>
+<p id="section-1.3-6">Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that <span class="bcp14">MUST</span> be unique within each AS, with the exception of value 0 (see <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.<a href="#section-1.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="routing">
@@ -1500,8 +1513,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </li>
           </ul>
 <p id="section-1.4.1-3">So each path segment either ends at a core AS, or starts at a core AS, or both.<a href="#section-1.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.4.1-4"><strong>Note:</strong> There are no SCION path segments that start and end at a non-core AS. However, when combining path segments into an end-to-end SCION path, it is possible to use peering links. For more information on SCION and peering links, see <a href="#beaconing" class="auto internal xref">Section 2</a>.<a href="#section-1.4.1-4" class="pilcrow">¶</a></p>
-<p id="section-1.4.1-5">All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.<a href="#section-1.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.4.1-4">All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.<a href="#section-1.4.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1677,7 +1689,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
-            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification (this document will be available later this year).<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.2">
             <p id="section-1.6-2.2.1">Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.<a href="#section-1.6-2.2.1" class="pilcrow">¶</a></p>
@@ -1707,7 +1719,9 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-1.7" class="section-number selfRef">1.7. </a><a href="#name-communication-protocol" class="section-name selfRef">Communication Protocol</a>
         </h3>
 <p id="section-1.7-1">All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span>). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.7-1" class="pilcrow">¶</a></p>
-<p id="section-1.7-2"><strong>Note:</strong> The details of how gRPC is mapped to the SCION data plane will be described in a separate document.<a href="#section-1.7-2" class="pilcrow">¶</a></p>
+<p id="section-1.7-2">The RPC messages are transported via the <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)). HTTP3 traffic uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.<a href="#section-1.7-2" class="pilcrow">¶</a></p>
+<p id="section-1.7-3">Appendix <a href="#app-a" class="auto internal xref">Appendix "Control Service gRPC API"</a> provides the entire control service API definition in protobuf format.<a href="#section-1.7-3" class="pilcrow">¶</a></p>
+<p id="section-1.7-4">Appendix <a href="#app-b" class="auto internal xref">Appendix "SCION data plane use by the SCION control plane"</a> provides details about the establishment of the underlying QUIC connections through the SCION data plane.<a href="#section-1.7-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1838,6 +1852,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                                 v   v
                            +----#---#----+
                            |    AS Z     |
+
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
@@ -1884,6 +1899,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 +--------+                  |     |     |                  +--------+
                             v     |     v
                                   v
+
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
@@ -1938,6 +1954,7 @@ path segment 4 |             |     |             |     |             |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
+
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
@@ -1954,7 +1971,6 @@ path segment 4 |             |     |             |     |             |
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-segment-construction-b" class="section-name selfRef">Path-Segment Construction Beacons (PCBs)</a>
         </h3>
 <p id="section-2.2-1">This section provides a detailed specification of a single PCB and its message format.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2"><strong>Note:</strong> The SCION open-source implementation makes use of Protobuf (Protocol Buffers), a free and open-source cross-platform data format developed by Google and used to serialize structured data. The messages and remote procedure calls described below are in "proto3" language. For more information on Protobuf, see the official <a href="https://protobuf.dev/">"Protocol Buffers Documentation"</a>.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <div id="pcb-compos">
 <section id="section-2.2.1">
           <h4 id="name-components-of-a-pcb-in-mess">
@@ -2026,7 +2042,7 @@ path segment 4 |             |     |             |     |             |
             </figcaption></figure>
 </div>
 <p id="section-2.2.1-3">The following sections provide detailed specifications of the PCB messages, starting with the top-level message of one PCB, and then diving deeper into each of the PCB's message components.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.1-4"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "PCB Protobuf Messages - Full Example"</a>.<a href="#section-2.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-4"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Control Service gRPC API"</a>.<a href="#section-2.2.1-4" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2103,13 +2119,13 @@ path segment 4 |             |     |             |     |             |
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.2-5.1">
-                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of the corresponding path segment is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.2-5.2">
                 <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. The SCION Data Plane Specification provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-message">
@@ -2370,7 +2386,7 @@ path segment 4 |             |     |             |     |             |
               <h6 id="name-as-entry-signature">
 <a href="#section-2.2.1.4.3" class="section-number selfRef">2.2.1.4.3. </a><a href="#name-as-entry-signature" class="section-name selfRef">AS Entry Signature</a>
               </h6>
-<p id="section-2.2.1.4.3-1">Each AS entry is signed with a private key K<sub>i</sub> that corresponds to the public key certified by the AS's certificate. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-1">Each AS entry <span class="bcp14">MUST</span> be signed with the AS certificate's private key K<sub>i</sub>. The certificate <span class="bcp14">MUST</span> have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.3-2.1">
                   <p id="section-2.2.1.4.3-2.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.1.4.3-2.1.1" class="pilcrow">¶</a></p>
@@ -2386,7 +2402,7 @@ path segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-4">Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-5">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that should be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested, onion-like structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-7">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -2485,7 +2501,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
                 <p id="section-2.2.1.6-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.1.6-8.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-8.2">
-                <p id="section-2.2.1.6-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating how long the hop field is valid. This value is an offset relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). By combining these two values, the AS can compute the absolute expiration time of the hop field. Data-plane packets that use the hop field after the expiration time <span class="bcp14">MUST</span> be dropped.<a href="#section-2.2.1.6-8.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.6-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Therefore, the absolute expiration time of the hop field is the sum of these two values.<a href="#section-2.2.1.6-8.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-8.3">
                 <p id="section-2.2.1.6-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field, as described in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.2.1.6-8.3.1" class="pilcrow">¶</a></p>
@@ -2595,6 +2611,49 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
 <p id="section-2.2.2-4"><strong>Note:</strong> SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="pcb-validity">
+<section id="section-2.2.3">
+          <h4 id="name-pcb-validity">
+<a href="#section-2.2.3" class="section-number selfRef">2.2.3. </a><a href="#name-pcb-validity" class="section-name selfRef">PCB Validity</a>
+          </h4>
+<p id="section-2.2.3-1">To be valid (that is, usable to construct a valid path), a PCB must:<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.3-2.1">
+              <p id="section-2.2.3-2.1.1">Contain valid AS Entry signatures (<a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>).<a href="#section-2.2.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.3-2.2">
+              <p id="section-2.2.3-2.2.1">Have a timestamp (<a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>) that is not in the future.<a href="#section-2.2.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.3-2.3">
+              <p id="section-2.2.3-2.3.1">Contain only unexpired hops (<a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.2.3-3">For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-4">For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>, is later than the current time at the point of validation.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configuration">
+<section id="section-2.2.4">
+          <h4 id="name-configuration">
+<a href="#section-2.2.4" class="section-number selfRef">2.2.4. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+          </h4>
+<p id="section-2.2.4-1">For the purpose of constructing and propagating path segments, an AS control service must be configured with links to neighboring ASes. Such information may be conveyed to the control service in an out of band fashion (e.g in a configuration file). For each link, these values must be configured:<a href="#section-2.2.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.4-2.1">
+              <p id="section-2.2.4-2.1.1">Local interface ID<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.2">
+              <p id="section-2.2.4-2.2.1">Neighbor type (core, parent, child, peer), depending on link type (see <a href="#paths-links" class="auto internal xref">Section 1.3</a>). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.<a href="#section-2.2.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.3">
+              <p id="section-2.2.4-2.3.1">Neighbor ISD-AS number<a href="#section-2.2.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.4-2.4">
+              <p id="section-2.2.4-2.4.1">Neighbor interface underlay address<a href="#section-2.2.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="path-prop">
@@ -2608,7 +2667,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
           <h4 id="name-selection-of-pcbs-to-propag">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on <em>path</em> properties (e.g., length, disjointness across different paths) as well as on <em>PCB</em> properties (e.g., age, remaining lifetime of sent instances) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it must select the PCBs it will use to continue beaconing. Each AS must specify a local policy on the basis of which PCBs are evaluated, selected or eliminated. The selection process can be based on <em>path</em> properties (e.g., length, disjointness across different paths) as well as on <em>PCB</em> properties (e.g., age, expiration time) - each AS is free to use those properties that suit the AS best. The control service can then compute the overall quality of each candidate PCB based on these properties. For this, the AS should use a selection algorithm or metric that reflects its needs and requirements and identifies the best PCBs or paths segments for this AS.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <div id="storing-and-selecting-candidate-pcbs">
 <section id="section-2.3.1.1">
             <h5 id="name-storing-and-selecting-candi">
@@ -2727,20 +2786,20 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
 <p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type will be described in more detail in the SCION Data Plane specification.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<div id="propagation-first-steps">
+<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<div id="reception-of-pcbs">
 <section id="section-2.3.2.1">
-            <h5 id="name-propagation-first-steps">
-<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-propagation-first-steps" class="section-name selfRef">Propagation - First Steps</a>
+            <h5 id="name-reception-of-pcbs">
+<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
             </h5>
 <p id="section-2.3.2.1-1">The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:<a href="#section-2.3.2.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.2.1-2">
 <li id="section-2.3.2.1-2.1">
-                <p id="section-2.3.2.1-2.1.1">Upon receiving a PCB, the control service of an AS verifies the structure and all signatures on the PCB.<br>
-                  <strong>Note:</strong> The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.1-2.1.1">Upon receiving a PCB, the control service of an AS verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>). Invalid PCBs <span class="bcp14">MUST</span> be discarded.
+The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that must be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.2">
-                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on sending PCBs without a defined direction, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The control service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. <strong>Note:</strong> Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.2.1-2.3">
                 <p id="section-2.3.2.1-2.3.1">If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.3.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -2872,6 +2931,26 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
             </ul>
 </section>
 </div>
+</section>
+</div>
+<div id="effects-of-clock-inaccuracy">
+<section id="section-2.3.3">
+          <h4 id="name-effects-of-clock-inaccuracy">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>
+          </h4>
+<p id="section-2.3.3-1">A PCB originated by a given control service is validated by all the control services that receive it. All have different clocks. Their differences affect the validation process:<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.3-2.1">
+              <p id="section-2.3.3-2.1.1">A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.<a href="#section-2.3.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-2.2">
+              <p id="section-2.3.3-2.2.1">A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.<a href="#section-2.3.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-4">The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-5">In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-6">Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-2.3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3037,7 +3116,8 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
    }
 
    service SegmentRegistrationService {
-       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (SegmentsRegistrationResponse) {}
+       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+         SegmentsRegistrationResponse) {}
    }
 
    message SegmentsRegistrationRequest {
@@ -3099,7 +3179,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
             <p id="section-4.1-2.3.1">a down-path segment to reach the destination AS.<a href="#section-4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths will be provided by the SCION Data Plane Specification document.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-3"><strong>Note:</strong> The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">
@@ -3337,7 +3417,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
               <p id="section-4.2.3-2.3.1">Otherwise, load the matching down-segments from the path database and return.<a href="#section-4.2.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.2.3-3"><a href="#app-b" class="auto internal xref">Appendix "Path-Lookup Examples"</a> shows by means of an illustration how the lookup of path segments in SCION works.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.3-3"><a href="#app-c" class="auto internal xref">Appendix "Path-Lookup Examples"</a> shows by means of an illustration how the lookup of path segments in SCION works.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3480,6 +3560,10 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="Connect">[Connect]</dt>
+        <dd>
+<span class="refTitle">"Connect Protocol Reference"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://connectrpc.com/docs/protocol/">https://connectrpc.com/docs/protocol/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="gRPC">[gRPC]</dt>
         <dd>
 <span class="refTitle">"gRPC, an open-source universal RPC framework"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://grpc.io/">https://grpc.io/</a>&gt;</span>. </dd>
@@ -3513,8 +3597,16 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <span class="refAuthor">Kawamura, S.</span> and <span class="refAuthor">M. Kawashima</span>, <span class="refTitle">"A Recommendation for IPv6 Address Text Representation"</span>, <span class="seriesInfo">RFC 5952</span>, <span class="seriesInfo">DOI 10.17487/RFC5952</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5952">https://www.rfc-editor.org/rfc/rfc5952</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9000">[RFC9000]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9114">[RFC9114]</dt>
+      <dd>
+<span class="refAuthor">Bishop, M., Ed.</span>, <span class="refTitle">"HTTP/3"</span>, <span class="seriesInfo">RFC 9114</span>, <span class="seriesInfo">DOI 10.17487/RFC9114</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9114">https://www.rfc-editor.org/rfc/rfc9114</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3563,116 +3655,353 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 </div>
 <div id="app-a">
 <section id="appendix-B">
-      <h2 id="name-pcb-protobuf-messages-full-">
-<a href="#name-pcb-protobuf-messages-full-" class="section-name selfRef">PCB Protobuf Messages - Full Example</a>
+      <h2 id="name-control-service-grpc-api">
+<a href="#name-control-service-grpc-api" class="section-name selfRef">Control Service gRPC API</a>
       </h2>
-<p id="appendix-B-1">The following code block provides a full example of one PCB in the Protobuf message format.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-B-2">
+<p id="appendix-B-1">The following code block provides, in protobuf format, the API by which control services interract.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<span id="name-control-service-grpc-api-de"></span><div id="_figure-11">
+<figure id="figure-10">
+        <div class="alignLeft art-text artwork" id="appendix-B-2.1">
 <pre>
-   message PathSegment {
-       bytes segment_info = 1;
-       repeated ASEntry as_entries = 2;
-   }
+enum SegmentType {
+    // Unknown segemnt type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+}
 
-   message SegmentInformation {
-       int64 timestamp = 1;
-       uint32 segment_id = 2;
-   }
 
-   message ASEntry {
-       // The signed part of the AS entry. The body of the SignedMessage
-       // is the serialized ASEntrySignedBody.
-       // The signature input is defined as following:
-       //
-       // input(ps, i) = signed.header_and_body || associated_data(ps,i)
-       //
-       // associated_data(ps, i) =
-       //             ps.segment_info ||
-       //             ps.as_entries[1].signed.header_and_body ||
-       //             ps.as_entries[1].signed.signature ||
-       //             ...
-       //             ps.as_entries[i-1].signed.header_and_body ||
-       //             ps.as_entries[i-1].signed.signature
-       //
-       SignedMessage signed = 1;
-       // Optional
-       PathSegmentUnsignedExtensions unsigned = 2;
-   }
+// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
+// control services on the "intra-protocol" network.
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
 
-   message SignedMessage {
-       // Encoded header and body.
-       bytes header_and_body = 1;
-       // Raw signature. The signature is computed over the
-       // concatenation of the header and body, and the optional
-       // associated data.
-       bytes signature = 2;
-   }
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
 
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
-       bytes header = 1;
-       // Raw payload suitable for signature computation.
-       bytes body = 2;
-   }
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message Header {
-       SignatureAlgorithm signature_algorithm = 1;
-       bytes verification_key_id = 2;
-       // Optional
-       google.protobuf.Timestamp timestamp = 3;
-       // Optional
-       bytes metadata = 4;
-       int32 associated_data_length = 5;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map&lt;int32, Segments&gt; segments = 1;
+}
 
-   message VerificationKeyID {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       uint64 trc_base = 3;
-       uint64 trc_serial = 4;
-   }
+// This API is only exposed by core ASes and only on the SCION dataplane.
+service SegmentRegistrationService {
+    // SegmentsRegistration registers segments at the remote.
+    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+        SegmentsRegistrationResponse) {}
+}
 
-   message ASEntrySignedBody {
-       uint64 isd_as = 1;
-       uint64 next_isd_as = 2;
-       HopEntry hop_entry = 3;
-       repeated PeerEntry peer_entries = 4;
-       uint32 mtu = 5;
-       // Optional
-       PathSegmentExtensions extensions = 6;
-   }
+message SegmentsRegistrationRequest {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
 
-   message HopEntry {
-       HopField hop_field = 1;
-       uint32 ingress_mtu = 2;
-   }
+    // Mapping from path segment type to path segments.
+    // The key is the integer
+    // representation of the SegmentType enum.
+    map&lt;int32, Segments&gt; segments = 1;
+}
 
-   message PeerEntry {
-       uint64 peer_isd_as = 1;
-       uint64 peer_interface = 2;
-       uint32 peer_mtu = 3;
-       HopField hop_field = 4;
-   }
+message SegmentsRegistrationResponse {}
 
-   message HopField {
-       uint64 ingress = 1;
-       uint64 egress = 2;
-       uint32 exp_time = 3;
-       bytes mac = 4;
-   }
-</pre><a href="#appendix-B-2" class="pilcrow">¶</a>
+service SegmentCreationService {
+    // Beacon sends a beacon to the remote.
+    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+}
+
+message BeaconRequest {
+    // Beacon in form of a partial path segment.
+    PathSegment segment = 1;
+}
+
+message BeaconResponse {}
+
+message PathSegment {
+    // The encoded SegmentInformation. It is used for signature input.
+    bytes segment_info = 1;
+    // Entries of ASes on the path.
+    repeated ASEntry as_entries = 2;
+}
+
+message SegmentInformation {
+    // Segment creation time set by the originating AS. Segment
+    // expiration time is computed relative to this timestamp.
+    // The timestamp is encoded as the number of seconds elapsed
+    // since January 1, 1970 UTC.
+    int64 timestamp = 1;
+    // The 16-bit segment ID integer used for MAC computation.
+    uint32 segment_id = 2;
+}
+
+message ASEntry {
+    // The signed part of the AS entry. The body of the SignedMessage
+    // is the serialized ASEntrySignedBody. The signature input is
+    // defined as follows:
+    //
+    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+    //
+    //  associated_data(ps, i) =
+    //          ps.segment_info ||
+    //          ps.as_entries[1].signed.header_and_body ||
+    //          ps.as_entries[1].signed.signature ||
+    //          ...
+    //          ps.as_entries[i-1].signed.header_and_body ||
+    //          ps.as_entries[i-1].signed.signature
+    //
+    proto.crypto.v1.SignedMessage signed = 1;
+    // The unsigned part of the AS entry.
+    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+}
+
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+}
+
+message HopEntry {
+    // Material to create the data-plane hop field.
+    HopField hop_field = 1;
+    // MTU on the ingress link.
+    uint32 ingress_mtu = 2;
+}
+
+message PeerEntry {
+    // ISD-AS of peer AS. This is used to match peering segments during
+    // path construction.
+    uint64 peer_isd_as = 1;
+    // Remote peer interface identifier. This is used to match
+    // peering segments
+    // during path construction.
+    uint64 peer_interface = 2;
+    // MTU on the peering link.
+    uint32 peer_mtu = 3;
+    // Material to create the data-plane hop field
+    HopField hop_field = 4;
+}
+
+message HopField {
+    // Ingress interface identifier.
+    uint64 ingress = 1;
+    // Egress interface identifier.
+    uint64 egress = 2;
+    // 8-bit encoded expiration offset relative to the segment creation
+    // timestamp.
+    uint32 exp_time = 3;
+    // MAC used in the dataplane to verify the hop field.
+    bytes mac = 4;
+}
+
+enum SignatureAlgorithm {
+    // Unspecified signature algorithm. This value is never valid.
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    // ECDS with SHA256.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    // ECDS with SHA384.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    // ECDS with SHA512.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+}
+
+message SignedMessage {
+    // Encoded header and body.
+    bytes header_and_body = 1;
+    // Raw signature. The signature is computed over the concatenation
+    // of the header and body, and the optional associated data.
+    bytes signature = 2;
+}
+
+message Header {
+    // Algorithm used to compute the signature.
+    SignatureAlgorithm signature_algorithm = 1;
+    // Optional arbitrary per-protocol key identifier.
+    bytes verification_key_id = 2;
+    // Optional signature creation timestamp.
+    google.protobuf.Timestamp timestamp = 3;
+    // Optional arbitrary per-protocol metadata.
+    bytes metadata = 4;
+    // Length of associated data that is covered by the signature, but
+    // is not included in the header and body. This is zero, if no
+    // associated data is covered by the signature.
+    int32 associated_data_length = 5;
+}
+
+// Low-level representation of HeaderAndBody used for signature
+// computation input. This should not be used by external code.
+message HeaderAndBodyInternal {
+    // Enocded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
+}
+
+message VerificationKeyID {
+    uint64 isd_as = 1;
+    bytes subject_key_id = 2;
+    uint64 trc_base = 3;
+    uint64 trc_serial = 4;
+}
+
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-control-service-grpc-api-de" class="selfRef">Control Service gRPC API definition</a>
+        </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="app-b">
 <section id="appendix-C">
+      <h2 id="name-scion-data-plane-use-by-the">
+<a href="#name-scion-data-plane-use-by-the" class="section-name selfRef">SCION data plane use by the SCION control plane</a>
+      </h2>
+<p id="appendix-C-1">The SCION control plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the control service is itself the source of path segment information, the following bootstraping strategies apply:<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-2.1">
+          <p id="appendix-C-2.1.1">Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.<a href="#appendix-C-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-2.2">
+          <p id="appendix-C-2.2.1">Constructed multihop paths are registered with the control service at the origin core AS. The path to that AS is the very path being
+registered.<a href="#appendix-C-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-2.3">
+          <p id="appendix-C-2.3.1">Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local control service.<a href="#appendix-C-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-2.4">
+          <p id="appendix-C-2.4.1">Control services respond to requests from remote ASes by reversing the path via which the request came.<a href="#appendix-C-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-2.5">
+          <p id="appendix-C-2.5.1">Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>).<a href="#appendix-C-2.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-C-3">The mechanics of service address resolution are the following:<a href="#appendix-C-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1">
+          <p id="appendix-C-4.1.1">To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an enpoint address constructed as follows:<a href="#appendix-C-4.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1.2.1">
+              <p id="appendix-C-4.1.2.1.1">Common Header:<a href="#appendix-C-4.1.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1.2.1.2.1">
+                  <p id="appendix-C-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#appendix-C-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="appendix-C-4.1.2.1.2.2">
+                  <p id="appendix-C-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#appendix-C-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="appendix-C-4.1.2.2">
+              <p id="appendix-C-4.1.2.2.1">Address Header:<a href="#appendix-C-4.1.2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1.2.2.2.1">
+                  <p id="appendix-C-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#appendix-C-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="appendix-C-4.1.2.3">
+              <p id="appendix-C-4.1.2.3.1">UDP Header:<a href="#appendix-C-4.1.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1.2.3.2.1">
+                  <p id="appendix-C-4.1.2.3.2.1.1">DstPort: 0<a href="#appendix-C-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="appendix-C-4.2">
+          <p id="appendix-C-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#appendix-C-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-4.3">
+          <p id="appendix-C-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#appendix-C-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-4.4">
+          <p id="appendix-C-4.4.1">The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.<a href="#appendix-C-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-4.5">
+          <p id="appendix-C-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#appendix-C-4.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-C-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
+<span id="name-service-resolution-grpc-api"></span><div id="_figure-12">
+<figure id="figure-11">
+        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
+<pre>
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map&lt;string, Transport&gt; transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.168.0.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+</pre>
+</div>
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<a href="#name-service-resolution-grpc-api" class="selfRef">Service Resolution gRPC API definition</a>
+        </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="app-c">
+<section id="appendix-D">
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-C-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 10</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 11</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 12</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 12</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 13</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 14</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
-<figure id="figure-10">
-        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
+<figure id="figure-12">
+        <div class="alignLeft art-text artwork" id="appendix-D-2.1">
 <pre>
 +----------------------------+     +----------------------------+
 |                            |     |                            |
@@ -3699,13 +4028,13 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 +----------------------------+     +----------------------------+
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-9">
-<figure id="figure-11">
-        <div class="alignLeft art-text artwork" id="appendix-C-3.1">
+<figure id="figure-13">
+        <div class="alignLeft art-text artwork" id="appendix-D-3.1">
 <pre>
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -3764,13 +4093,13 @@ For RPC methods exposed to other ASes, the control service implementation minimi
  +--------+           +--------+          +--------+          +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down-segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-10">
-<figure id="figure-12">
-        <div class="alignLeft art-text artwork" id="appendix-C-4.1">
+<figure id="figure-14">
+        <div class="alignLeft art-text artwork" id="appendix-D-4.1">
 <pre>
 +---------+     +---------+      +---------+   +---------+   +---------+
 |Endpoint |     |Source AS|      | Core AS |   | Core AS |   | Core AS |
@@ -3838,14 +4167,14 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 +--------+       +--------+       +--------+    +--------+    +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-D">
+<section id="appendix-E">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
