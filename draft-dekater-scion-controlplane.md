@@ -226,7 +226,7 @@ In SCION, autonomous systems (ASes) are organized into logical groups called iso
 
 SCION distinguishes three types of links between ASes: (1) core links, (2) parent-child links, and (3) peering links.
 
-- *Core* links connect two core ASes, which are either within the same or in a different ISD. Core links can exist for various underlying business relationships, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
+- *Core* links connect two core ASes, which are either within the same or in different ISDs. Core links can exist for various underlying business relationships, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. They can be established between any two ASes (core or non-core). Peering links can cross ISD boundaries.
 
