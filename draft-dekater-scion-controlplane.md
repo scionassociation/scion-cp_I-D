@@ -230,8 +230,8 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. They can be established between any two ASes (core or non-core). Peering links can cross ISD boundaries.
 
-These link types form the basis for the notion of "valley-free" paths. Valley-freedom simply means that a child AS does not carry transit traffic from a parent AS.
-The SCION paths are always valley-free, and consist of (at most) three segments; first an up-segment, traversing links from child to parent, then a core-segment consisting of core-links and then a down-segment traversing links from parent to child.
+These link types form the basis for the notion of "valley free" paths. Valley freeness means that a child AS does not carry transit traffic from a parent AS.
+The SCION paths are always valley free, and consist of (at most) three segments; first an up-segment, traversing links from child to parent, then a core-segment consisting of core-links and then a down-segment traversing links from parent to child.
 Peering link can be used as "shortcuts" in such an up-core-down path. A path can contain at most one peering link shortcut. Implicitly, peering links can thus only be used in paths between ASes in the "customer-cone" of the ASes connected by the peering link.
 
 The following figure shows the three types of links for one small ISD with the two core ASes A and C, and the four non-core ASes D,E,F, and G.
