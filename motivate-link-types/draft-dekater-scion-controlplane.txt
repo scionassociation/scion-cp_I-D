@@ -273,7 +273,7 @@ Table of Contents
    links, (2) parent-child links, and (3) peering links.
 
    *  _Core_ links connect two core ASes, which are either within the
-      same or in a different ISD.  Core links can exist for various
+      same or in different ISDs.  Core links can exist for various
       underlying business relationships, including provider-customer
       (where the customer pays the provider for traffic) and peering
       relationships.
