@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 8 December 2024                                         S. Hitz
+Expires: 9 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             6 June 2024
+                                                             7 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 December 2024.
+   This Internet-Draft will expire on 9 December 2024.
 
 Copyright Notice
 
@@ -287,10 +287,10 @@ Table of Contents
       two ASes (core or non-core).  Peering links can cross ISD
       boundaries.
 
-   These link types form the basis for the notion of "valley-free"
-   paths.  Valley-freedom simply means that a child AS does not carry
-   transit traffic from a parent AS.  The SCION paths are always valley-
-   free, and consist of (at most) three segments; first an up-segment,
+   These link types form the basis for the notion of "valley free"
+   paths.  Valley freeness means that a child AS does not carry transit
+   traffic from a parent AS.  The SCION paths are always valley free,
+   and consist of (at most) three segments; first an up-segment,
    traversing links from child to parent, then a core-segment consisting
    of core-links and then a down-segment traversing links from parent to
    child.  Peering link can be used as "shortcuts" in such an up-core-
