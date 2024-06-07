@@ -209,8 +209,6 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
-**Peering Link**: A specific type of link between two SCION border routers of different ASes, which may also be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
-
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 
@@ -224,11 +222,17 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
 
-In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (i.e., a common jurisdiction). An ISD is administered by a set of distinguished ASes called core ASes. Within and between ISDs, SCION supports three types of links: (1) core links, (2) parent-child links, and (3) peering links.
+In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (i.e., a common jurisdiction). An ISD is administered by a set of distinguished ASes called core ASes.
 
-- A *core* link always connects two core ASes, which are either within the same or in a different ISD. Core links can exist for various underlying business relationships, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
-- *Parent-child* links create a hierarchy between the parent and the child. ASes with a parent-child link typically have a provider-customer relationship.
-- *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. Peering links can only be used to reach destinations within or downstream of the peering AS. They can be established between any two core or non-core ASes, and between core and non-core ASes. Peering links can also cross ISD boundaries.
+SCION distinguishes three types of links between ASes: (1) core links, (2) parent-child links, and (3) peering links.
+
+- *Core* links connect two core ASes, which are either within the same or in different ISDs. Core links can exist for various underlying business relationships, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
+- *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
+- *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. They can be established between any two ASes (core or non-core). Peering links can cross ISD boundaries.
+
+These link types form the basis for the notion of "valley free" paths. Valley freeness means that a child AS does not carry transit traffic from a parent AS.
+The SCION paths are always valley free, and consist of (at most) three segments; first an up-segment, traversing links from child to parent, then a core-segment consisting of core-links and then a down-segment traversing links from parent to child.
+Peering link can be used as "shortcuts" in such an up-core-down path. A path can contain at most one peering link shortcut. Implicitly, peering links can thus only be used in paths between ASes in the "customer-cone" of the ASes connected by the peering link.
 
 The following figure shows the three types of links for one small ISD with the two core ASes A and C, and the four non-core ASes D,E,F, and G.
 
