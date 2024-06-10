@@ -131,7 +131,7 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-dp:
+  I-D.scion-dataplane:
     title: SCION Data Plane
     date: 2023
     target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
@@ -148,9 +148,12 @@ informative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  RFC5280:
   RFC5398:
   RFC6996:
+  RFC9217:
   RFC9473:
+  
 
 --- abstract
 
