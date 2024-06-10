@@ -224,17 +224,6 @@ This document describes the SCION Control Plane component.
 {::boilerplate bcp14-tagged}
 
 
-## Overview
-
-SCION is a path-aware internetworking routing architecture as described in [RFC9217]. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is not concerned with intra-domain forwarding. 
-
-To achieve scalability and trust, SCION organizes existing Autonomous Systems (ASes) into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format [RFC5280]. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure [I-D.dekater-scion-pki] which the SCION control plane is reliant on for the authentication of messages that is used for the SCION control plane.
-
-The SCION control plane is responsible for discovering inter-domain paths between ASes. The core ASes use *Path-segment Construction Beacons (PCBs)* to explore intra-ISD paths, or to explore paths across different ISDs.
-
-The SCION data plane forwards inter-domain packets between ASes [I-D.dekater-scion-dataplane]. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
-
-
 ## Paths and Links
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
