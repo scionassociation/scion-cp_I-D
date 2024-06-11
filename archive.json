@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-09T00:19:31.611328+00:00",
+  "timestamp": "2024-06-11T00:17:20.147790+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2612,6 +2612,32 @@
       "mergeCommit": {
         "oid": "f6dbf5677ee5a2f1ed892277e2a4f6dda422c3d5"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOJx2-rs5x_BvJ",
+      "title": "Added revised Introduction",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/38",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Introduction with problem statement and component overview",
+      "createdAt": "2024-06-10T14:17:58Z",
+      "updatedAt": "2024-06-10T14:17:58Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "knmeynell-patch-1",
+      "headRefOid": "55ee565fd8792d5e80375acbbef737a5a6f2a1b1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
