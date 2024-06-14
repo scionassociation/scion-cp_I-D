@@ -34,6 +34,12 @@ author:
      email: hitz@anapaya.net
 
 normative:
+  RFC1122:
+  RFC4632:
+  RFC5280:
+  RFC5952:
+  RFC9217:
+  RFC9473:
   I-D.scion-cppki:
     title: SCION Control-Plane PKI
     date: 2023
@@ -51,11 +57,23 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
-  RFC1122:
-  RFC2119:
-  RFC4632:
-  RFC5952:
-  RFC8174:
+  I-D.scion-dataplane:
+    title: SCION Data Plane
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
   gRPC:
     title: "gRPC, an open-source universal RPC framework"
     date: 2023
@@ -66,6 +84,8 @@ normative:
     target: https://protobuf.dev/programming-guides/proto3/
 
 informative:
+  RFC5398:
+  RFC6996:
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -101,28 +121,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-dataplane:
-    title: SCION Data Plane
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
-  RFC5280:
-  RFC5398:
-  RFC6996:
-  RFC9217:
-  RFC9473:
 
 --- abstract
 
@@ -168,7 +166,7 @@ This document describes the SCION Control Plane component.
 
 **Core AS**: Each isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").
 
-**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
+**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{}}.
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).
 
