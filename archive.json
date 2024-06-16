@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-13T00:17:13.842620+00:00",
+  "timestamp": "2024-06-16T00:19:14.114518+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -159,9 +159,17 @@
       ],
       "body": "Jeff Tantsura at our IETF117 presentation mentioned that it was not clear how SCION does in terms of convergence time. \r\nThen we also got this question from the iSE review: \r\n\r\n> From:\tJoel Halpern\r\n> There appears to be a very fundamental gap in the scaling description.  On the one hand, SCION claims to scale well (presumably to large numbers of participating AS.  There is no discussion of the effect of the number of participants or meshiness on the number of PCBs.  There are very strict limits on the rate at which PCBs are propagated.  But no analysis as to whether the system will ever converge .  Particularly if the number of interfaces between AS becomes large. \r\n\r\nSomething about convergence time and scalability should be added to the draft. We could start from something like this:\r\n> Note that, since there is no convergence phase in SCION, we cannot compare to BGP\u2019s convergence time. SCION path-segments are stable as soon as they are disseminated.\r\n\r\nSource:\r\nhttps://netsec.ethz.ch/publications/papers/2021_conext_deployment.pdf\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/82)\r\n\r\n> From Roger Lapuh:  Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n\r\n> From Juan Garcia Pardo:  Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. \r\n",
       "createdAt": "2024-01-08T13:19:15Z",
-      "updatedAt": "2024-05-17T09:33:54Z",
+      "updatedAt": "2024-06-13T08:58:48Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Convergence time: \r\n\r\n- Clarify there is no convergence\r\n- Time to bootstrap \r\n- Time to discover new link\r\n\r\n\r\nScalability: clarify tradeoffs\r\n- Number of ISDs and core ASes\r\n- Propagation intervals\r\n- Number of AS entries\r\n- meshyness of network\r\n\r\nWhat is the cost metric: communication, storage, computation (e.g. signature verification) \r\n",
+          "createdAt": "2024-06-13T08:58:47Z",
+          "updatedAt": "2024-06-13T08:58:47Z"
+        }
+      ]
     },
     {
       "number": 9,
@@ -313,7 +321,7 @@
       "id": "I_kwDOJx2-rs6I_apu",
       "title": "Clarifications about AS interfaces and peering",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/17",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -325,8 +333,8 @@
       ],
       "body": "> From:\tJoel Halpern \r\n> There is no description of how an A control service knows the existence of the many AS interfaces, whether they are core, up, down, or peering interfaces, and what AS they go to.\r\n\r\n> There is also no information about how the needed properties of peering adjacencies are made available to the control service.\r\n\r\n> Also, somewhere (not sure if it is a data plane or control plane mechanism), there needs to be a mechanism to translate neighbor interface identifiers to underlay addresses.\r\n\r\nMost if this is pre-configured by the AS, in the OS implementation in the [topology file](https://docs.scion.org/en/latest/manuals/common.html#topology-json), we should indeed add something about this to the draft.\r\n\r\n\r\nAlso, Eliot commented about  peering ASe: We use the expression in the introduction. We say that peering links can cross ISDs. We need to define what is a peering AS (especially WRT to case outside an ISD). Important to make it clear that peering is possible across ISDs. \r\n ",
       "createdAt": "2024-05-15T16:10:06Z",
-      "updatedAt": "2024-06-05T15:03:30Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-13T08:41:56Z",
+      "closedAt": "2024-06-13T08:41:56Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -2450,7 +2458,7 @@
       "labels": [],
       "body": "Refer to default hop field MAC algorithm in DP draft, which MUST be supported.\r\n\r\nContributes to #23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7:\r\n- Explain why there is both a \"chaining\" of signatures in PCBs, and chaining of MACs in hop fields.\r\n\r\nRefers to https://github.com/scionassociation/scion-dp_I-D/pull/26, and uses ~identical paragraph.",
       "createdAt": "2024-06-04T09:45:01Z",
-      "updatedAt": "2024-06-06T16:53:56Z",
+      "updatedAt": "2024-06-14T11:36:37Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f6dbf5677ee5a2f1ed892277e2a4f6dda422c3d5",
@@ -2533,6 +2541,19 @@
           "body": "",
           "createdAt": "2024-06-06T16:53:56Z",
           "updatedAt": "2024-06-06T16:53:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5-QM0w",
+          "commit": {
+            "abbreviatedOid": "3bc1d7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-14T11:36:37Z",
+          "updatedAt": "2024-06-14T11:36:37Z",
           "comments": []
         }
       ]
@@ -2627,7 +2648,7 @@
       "labels": [],
       "body": "Introduction with problem statement and component overview",
       "createdAt": "2024-06-10T14:17:58Z",
-      "updatedAt": "2024-06-10T14:17:58Z",
+      "updatedAt": "2024-06-14T11:34:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
@@ -2639,7 +2660,68 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5-QL_I",
+          "commit": {
+            "abbreviatedOid": "55ee565"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-14T11:34:26Z",
+          "updatedAt": "2024-06-14T11:34:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOJx2-rs5yYqb8",
+      "title": "remove allowed",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/39",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves https://github.com/scionassociation/scion-dp_I-D/issues/11 ",
+      "createdAt": "2024-06-13T16:15:33Z",
+      "updatedAt": "2024-06-13T16:47:14Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "allowed",
+      "headRefOid": "cd401f8c1d4e84a3469c797e83aaa6c8a85edfa8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5-JIw9",
+          "commit": {
+            "abbreviatedOid": "cd401f8"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-06-13T16:47:02Z",
+          "updatedAt": "2024-06-13T16:47:14Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"... of IPv6 is MUST NOT be used.\" You have a stray \"is\" in-there.\r\n",
+              "createdAt": "2024-06-13T16:47:02Z",
+              "updatedAt": "2024-06-13T16:47:14Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
