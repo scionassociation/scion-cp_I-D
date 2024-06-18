@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-16T00:19:14.114518+00:00",
+  "timestamp": "2024-06-18T00:17:24.592473+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -594,6 +594,27 @@
       "createdAt": "2024-06-06T08:55:53Z",
       "updatedAt": "2024-06-06T12:06:35Z",
       "closedAt": "2024-06-06T12:06:35Z",
+      "comments": []
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOJx2-rs6MeGq8",
+      "title": "Normative/informative references",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/40",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [x] Check if other drafts affected",
+      "createdAt": "2024-06-17T08:16:14Z",
+      "updatedAt": "2024-06-17T08:33:59Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -2720,6 +2741,59 @@
               "updatedAt": "2024-06-13T16:47:14Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOJx2-rs5yqPB-",
+      "title": "Move informative references to the informative section. Delete un-used ones",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/41",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #40 ",
+      "createdAt": "2024-06-17T08:22:11Z",
+      "updatedAt": "2024-06-17T13:23:02Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "informative_normative",
+      "headRefOid": "0e060bc0170e2b32be7718f353fd7c85b86a24f1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5-iOQL",
+          "commit": {
+            "abbreviatedOid": "0e060bc"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-17T13:22:42Z",
+          "updatedAt": "2024-06-17T13:22:42Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5-iOdp",
+          "commit": {
+            "abbreviatedOid": "0e060bc"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-17T13:23:02Z",
+          "updatedAt": "2024-06-17T13:23:02Z",
+          "comments": []
         }
       ]
     }
