@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 9 December 2024                                         S. Hitz
+Expires: 21 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                             7 June 2024
+                                                            19 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 December 2024.
+   This Internet-Draft will expire on 21 December 2024.
 
 Copyright Notice
 
@@ -2606,11 +2606,6 @@ path segment 4 |             |     |             |     |             |
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
 
-   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
-              Communication Layers", STD 3, RFC 1122,
-              DOI 10.17487/RFC1122, October 1989,
-              <https://www.rfc-editor.org/rfc/rfc1122>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -2654,6 +2649,11 @@ path segment 4 |             |     |             |     |             |
               de Kater, C., Rustignoli, N., and A. Perrig, "SCION
               Overview", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-panrg-scion-overview/>.
+
+   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
+              Communication Layers", STD 3, RFC 1122,
+              DOI 10.17487/RFC1122, October 1989,
+              <https://www.rfc-editor.org/rfc/rfc1122>.
 
    [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
               Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
