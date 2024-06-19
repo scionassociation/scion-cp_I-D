@@ -64,11 +64,8 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
-  RFC1122:
-  RFC2119:
   RFC4632:
   RFC5952:
-  RFC8174:
   RFC9000:
   RFC9114:
   gRPC:
@@ -154,6 +151,7 @@ informative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  RFC1122:
   RFC5398:
   RFC6996:
   RFC9473:
