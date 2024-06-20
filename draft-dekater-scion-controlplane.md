@@ -357,7 +357,7 @@ The default text representation for SCION AS numbers is very similar to IPv6 (se
 
 In SCION, the following rules apply:
 
-- The `::` zero-compression feature of IPv6 is MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
+- The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it may display the number as "65551".
