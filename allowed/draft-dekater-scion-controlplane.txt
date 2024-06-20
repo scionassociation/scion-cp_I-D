@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 December 2024                                        S. Hitz
+Expires: 22 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            13 June 2024
+                                                            20 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 December 2024.
+   This Internet-Draft will expire on 22 December 2024.
 
 Copyright Notice
 
@@ -515,7 +515,7 @@ Table of Contents
 
    In SCION, the following rules apply:
 
-   *  The :: zero-compression feature of IPv6 is MUST NOT be used.  The
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
       feature has very limited use in a 48-bit address space and would
       only add more complexity.
 
