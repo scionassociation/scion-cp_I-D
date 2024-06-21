@@ -2645,6 +2645,11 @@ path segment 4 |             |     |             |     |             |
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC4632]  Fuller, V. and T. Li, "Classless Inter-domain Routing
+              (CIDR): The Internet Address Assignment and Aggregation
+              Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
+              2006, <https://www.rfc-editor.org/rfc/rfc4632>.
+
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
               Infrastructure Certificate and Certificate Revocation List
@@ -2679,11 +2684,6 @@ path segment 4 |             |     |             |     |             |
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
               <https://www.rfc-editor.org/rfc/rfc1122>.
-
-   [RFC4632]  Fuller, V. and T. Li, "Classless Inter-domain Routing
-              (CIDR): The Internet Address Assignment and Aggregation
-              Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
-              2006, <https://www.rfc-editor.org/rfc/rfc4632>.
 
    [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
               Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
