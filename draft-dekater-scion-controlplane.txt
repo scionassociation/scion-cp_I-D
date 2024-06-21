@@ -549,7 +549,7 @@ Table of Contents
 
    In SCION, the following rules apply:
 
-   *  The :: zero-compression feature of IPv6 is NOT allowed.  The
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
       feature has very limited use in a 48-bit address space and would
       only add more complexity.
 
