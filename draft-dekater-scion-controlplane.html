@@ -1524,6 +1524,8 @@ Peering link can be used as "shortcuts" in such an up-core-down path. A path can
           </ul>
 <p id="section-1.4.1-3">So each path segment either ends at a core AS, or starts at a core AS, or both.<a href="#section-1.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-1.4.1-4">All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.<a href="#section-1.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.4.1-5">The cryptographic protection of PCBs / path segments is based on the Control-Plane PKI. The signatures are structured such that the entire message sequence constituting the path segment can be authenticated. The authenticity can be verified by anyone with access to this PKI.
+For fast validation of the path information carried in individual packets during packet forwarding, symmetric key cryptography is used instead. For this purpose, the hop fields contain a MAC. These MACs are structured to allow verifying the sequence of hops, reflecting the structure of the PCBs, but, in contrast to the PCBs, this can only be validated by the border routers of the respective AS.<a href="#section-1.4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2486,9 +2488,11 @@ associated_data(ps, i) = ps.segment_info ||
 +-------------+-------------+-------------------+----------+
 </pre><a href="#section-2.2.1.6-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.6-2">The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC).<a href="#section-2.2.1.6-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.6-3">The following code block defines the hop field component <code>HopField</code> in Protobuf message format:<a href="#section-2.2.1.6-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.1.6-4">
+<p id="section-2.2.1.6-2">The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.<a href="#section-2.2.1.6-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.6-3">The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+Control service and router implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.<a href="#section-2.2.1.6-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.6-4">The following code block defines the hop field component <code>HopField</code> in Protobuf message format:<a href="#section-2.2.1.6-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.1.6-5">
 <pre>
    message HopField {
        uint64 ingress = 1;
@@ -2496,23 +2500,23 @@ associated_data(ps, i) = ps.segment_info ||
        uint32 exp_time = 3;
        bytes mac = 4;
    }
-</pre><a href="#section-2.2.1.6-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.1.6-5" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-2.2.1.6-5.1">
-                <p id="section-2.2.1.6-5.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).<a href="#section-2.2.1.6-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.1.6-6.1">
+                <p id="section-2.2.1.6-6.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).<a href="#section-2.2.1.6-6.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.6-6"><strong>Note:</strong> For the AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST NOT</span> be specified. This initiating AS is a core AS.<a href="#section-2.2.1.6-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.6-7"><strong>Note:</strong> For the AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST NOT</span> be specified. This initiating AS is a core AS.<a href="#section-2.2.1.6-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.1.6-7.1">
-                <p id="section-2.2.1.6-7.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.1.6-7.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.1.6-8.1">
+                <p id="section-2.2.1.6-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.1.6-8.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.2.1.6-7.2">
-                <p id="section-2.2.1.6-7.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Therefore, the absolute expiration time of the hop field is the sum of these two values.<a href="#section-2.2.1.6-7.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.1.6-8.2">
+                <p id="section-2.2.1.6-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Therefore, the absolute expiration time of the hop field is the sum of these two values.<a href="#section-2.2.1.6-8.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.2.1.6-7.3">
-                <p id="section-2.2.1.6-7.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field.<a href="#section-2.2.1.6-7.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.1.6-8.3">
+                <p id="section-2.2.1.6-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field, as described in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.2.1.6-8.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
