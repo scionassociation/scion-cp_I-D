@@ -375,7 +375,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
-- Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup.
+- Path reversal: In SCION, every path is reversible—i.e., the receiver of a packet can reverse the path in the packet header to send back a reply packet without having to perform a path lookup and ensuring that the packet follows the same path symmetrically.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
 
@@ -1423,7 +1423,7 @@ An endpoint (source) that wants to start communication with another endpoint (de
   - a core AS in a remote ISD, if the destination AS is in another ISD, and
 - a down-path segment to reach the destination AS.
 
-**Note:** The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by {{I-D.scion-dp}}.
+The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by {{I-D.scion-dp}}.
 
 The process to look up and fetch path segments consists of the following steps:
 
@@ -1431,7 +1431,8 @@ The process to look up and fetch path segments consists of the following steps:
 2. If there are no appropriate core-segments and down-segments, the control service in the source AS queries the control services of the reachable core ASes in the source ISD, for core-path segments to core ASes in the destination ISD (which is either the own or a remote ISD). To reach the core control services, the control service of the source AS uses the locally stored up-path segments.
 3. Next, the control service of the source AS combines up-path segments with the newly retrieved core-path segments. The control service then queries the control services of the remote core ASes in the destination ISD, to fetch down-path segments to the destination AS. To reach the remote core ASes, the control service of the source AS uses the previously obtained and combined up- and core segments.
 4. Finally, the control service of the source AS returns all retrieved path segments to the source endpoint.
-5. Once it has obtained all path segments, the endpoint combines them into an end-to-end path in the data plane.
+5. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
+6. The destination endpoint, once it receives the first packet, may revert the path in the received packet to respond without needing to perform a further path lookup. This also ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which control service provides the source endpoint with which type of path segment.
 
