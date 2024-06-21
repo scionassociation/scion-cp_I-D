@@ -302,6 +302,8 @@ So each path segment either ends at a core AS, or starts at a core AS, or both.
 
 All path segments are invertible: A core-segment can be used bidirectionally, and an up-segment can be converted into a down-segment, or vice versa, depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
+The cryptographic protection of PCBs / path segments is based on the Control-Plane PKI. The signatures are structured such that the entire message sequence constituting the path segment can be authenticated. The authenticity can be verified by anyone with access to this PKI.
+For fast validation of the path information carried in individual packets during packet forwarding, symmetric key cryptography is used instead. For this purpose, the hop fields contain a MAC. These MACs are structured to allow verifying the sequence of hops, reflecting the structure of the PCBs, but, in contrast to the PCBs, this can only be validated by the border routers of the respective AS.
 
 ## Addressing {#numbering}
 
@@ -408,7 +410,6 @@ In SCION, the *control service* of each AS is responsible for the beaconing proc
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the control service of a core AS creates PCBs and sends them to the non-core child ASes (typically customer ASes). The control service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on. This procedure continues until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
 
 On its way, a PCB accumulates cryptographically protected path- and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces are added to the PCB.
-
 
 ### Peering Links
 
@@ -978,7 +979,10 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 +-------------+-------------+-------------------+----------+
 ~~~~
 
-The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC).
+The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.
+
+The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+Control service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
 
 The following code block defines the hop field component `HopField` in Protobuf message format:
 
@@ -997,8 +1001,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the hop field is the sum of these two values.
-- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field.
-
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field, as described in {{I-D.scion-dp}}.
 
 #### Peer Entry {#peerentry}
 
