@@ -479,6 +479,18 @@ Table of Contents
    path.  This means that all path segments can be used to send data
    traffic in both directions.
 
+   The cryptographic protection of PCBs / path segments is based on the
+   Control-Plane PKI.  The signatures are structured such that the
+   entire message sequence constituting the path segment can be
+   authenticated.  The authenticity can be verified by anyone with
+   access to this PKI.  For fast validation of the path information
+   carried in individual packets during packet forwarding, symmetric key
+   cryptography is used instead.  For this purpose, the hop fields
+   contain a MAC.  These MACs are structured to allow verifying the
+   sequence of hops, reflecting the structure of the PCBs, but, in
+   contrast to the PCBs, this can only be validated by the border
+   routers of the respective AS.
+
 1.5.  Addressing
 
    The inter-domain SCION routing is based on the <ISD, AS> tuple.
@@ -1420,7 +1432,17 @@ path segment 4 |             |     |             |     |             |
    directly in the data plane for packet forwarding: It specifies the
    incoming and outgoing interfaces of the ASes on the forwarding path.
    To prevent forgery, this information is authenticated with a message
-   authentication code (MAC).
+   authentication code (MAC), which will be checked by the SCION border
+   routers during packet forwarding.
+
+   The algorithm used to compute the hop field MAC is an AS-specific
+   choice.  The operator of an AS can freely choose a MAC algorithm
+   without outside coordination.  However, the control service and
+   routers of the AS do need to agree on the algorithm used.  Control
+   service and router implementations MUST support the Default Hop Field
+   MAC algorithm described in [I-D.scion-dp].  This document does not
+   specify any further mechanism to coordinate this choice between
+   control services and routers of one AS.
 
    The following code block defines the hop field component HopField in
    Protobuf message format:
@@ -1452,9 +1474,7 @@ path segment 4 |             |     |             |     |             |
       sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field.  [I-D.scion-dp] provides a detailed
-      description of the computation of the MAC and the verification of
-      the hop field.
+      to verify the hop field, as described in [I-D.scion-dp].
 
 2.2.1.7.  Peer Entry
 
