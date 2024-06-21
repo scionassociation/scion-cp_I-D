@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 22 December 2024</td>
+<td class="center">Expires 23 December 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-06-20" class="published">20 June 2024</time>
+<time datetime="2024-06-21" class="published">21 June 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-12-22">22 December 2024</time></dd>
+<dd class="expires"><time datetime="2024-12-23">23 December 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1104,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1348,9 +1348,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The SCION control plane is responsible for discovering path segments and making them available to endpoints. This process includes path exploration, registration, and lookup. This section explains the basic concepts of the control plane in SCION and introduces SCION's routing concept.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">As SCION is an <em>inter-domain</em> network architecture, it only deals with <em>inter</em>-domain routing. One feature of SCION is the decoupling of inter-domain routing from endpoint addressing. This Introduction section provides a description of the SCION addressing system in more detail.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3"><strong>Note:</strong> It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts <span>[<a href="#I-D.scion-overview" class="cite xref">I-D.scion-overview</a>]</span>, <span>[<a href="#I-D.scion-components" class="cite xref">I-D.scion-components</a>]</span>, <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>, and <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>, as well as in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>, especially Chapter 2. A short description of the SCION basic terms and elements can be found in <a href="#terms" class="auto internal xref">Section 1.1</a> below.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-1">SCION is a path-aware internetworking routing architecture as described in <span>[<a href="#RFC9217" class="cite xref">RFC9217</a>]</span>. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">SCION has been developed with the following goals:<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3"><em>Availability</em> - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4"><em>Security</em> - to provide higher levels of trust in routing information in order to prevent IP prefix hijacking/leaks, denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5"><em>Scalability</em> - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">SCION relies on three main components:<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7"><em>PKI</em> - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called <em>Isolation Domains (ISDs)</em>. All ASes in an ISD agree on a set of trust roots called the <em>Trust Root Configuration (TRC)</em> which is a collection of signed root certificates in X.509 v3 format <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>. The ISD is governed by a set of <em>core ASes</em> which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span><a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8"><em>Control Plane</em> - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-10">This document describes the SCION Control Plane component.<a href="#section-1-10" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1365,7 +1372,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-7"><strong>Forwarding Path</strong>: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).<a href="#section-1.1-7" class="pilcrow">¶</a></p>
 <p id="section-1.1-8"><strong>Hop Field (HF)</strong>: As they traverse the network, path-segment construction beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of hop fields. In the data plane, hop fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 <p id="section-1.1-9"><strong>Info Field (INF)</strong>: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
-<p id="section-1.1-10"><strong>Isolation Domain (ISD)</strong>: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (i.e., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
+<p id="section-1.1-10"><strong>Isolation Domain (ISD)</strong>: In SCION, Autonomous Systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (i.e., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
 <p id="section-1.1-11"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
 <p id="section-1.1-12"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
 <p id="section-1.1-13"><strong>Packet-Carried Forwarding State (PCFS)</strong>: Rather than relying on costly inter-domain forwarding tables, SCION data packets contain all the necessary path information. We refer to this property as packet-carried forwarding state or PCFS.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
@@ -3569,21 +3576,17 @@ For RPC methods exposed to other ASes, the control service implementation minimi
         <dd>
 <span class="refTitle">"gRPC, an open-source universal RPC framework"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://grpc.io/">https://grpc.io/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-components">[I-D.scion-components]</dt>
-        <dd>
-<span class="refAuthor">Rustignoli, N.</span> and <span class="refAuthor">C. de Kater</span>, <span class="refTitle">"SCION Components Analysis"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/">https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
         <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.scion-dp">[I-D.scion-dp]</dt>
+        <dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>
 <span class="refTitle">"Protocol Buffers Language Guide version 3"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://protobuf.dev/programming-guides/proto3/">https://protobuf.dev/programming-guides/proto3/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC1122">[RFC1122]</dt>
-        <dd>
-<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3592,6 +3595,10 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <dt id="RFC4632">[RFC4632]</dt>
         <dd>
 <span class="refAuthor">Fuller, V.</span> and <span class="refAuthor">T. Li</span>, <span class="refTitle">"Classless Inter-domain Routing (CIDR): The Internet Address Assignment and Aggregation Plan"</span>, <span class="seriesInfo">BCP 122</span>, <span class="seriesInfo">RFC 4632</span>, <span class="seriesInfo">DOI 10.17487/RFC4632</span>, <time datetime="2006-08" class="refDate">August 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4632">https://www.rfc-editor.org/rfc/rfc4632</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5280">[RFC5280]</dt>
+        <dd>
+<span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5952">[RFC5952]</dt>
         <dd>
@@ -3622,13 +3629,9 @@ For RPC methods exposed to other ASes, the control service implementation minimi
         <dd>
 <span class="refAuthor">Chuat, L.</span>, <span class="refAuthor">Legner, M.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Hausheer, D.</span>, <span class="refAuthor">Hitz, S.</span>, <span class="refAuthor">Mueller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"The Complete Guide to SCION"</span>, <span class="seriesInfo">ISBN 978-3-031-05287-3</span>, <time datetime="2022" class="refDate">2022</time>, <span>&lt;<a href="https://doi.org/10.1007/978-3-031-05288-0">https://doi.org/10.1007/978-3-031-05288-0</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-dp">[I-D.scion-dp]</dt>
+<dt id="RFC1122">[RFC1122]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.scion-overview">[I-D.scion-overview]</dt>
-        <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/">https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/</a>&gt;</span>. </dd>
+<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5398">[RFC5398]</dt>
         <dd>
@@ -3637,6 +3640,10 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <dt id="RFC6996">[RFC6996]</dt>
         <dd>
 <span class="refAuthor">Mitchell, J.</span>, <span class="refTitle">"Autonomous System (AS) Reservation for Private Use"</span>, <span class="seriesInfo">BCP 6</span>, <span class="seriesInfo">RFC 6996</span>, <span class="seriesInfo">DOI 10.17487/RFC6996</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6996">https://www.rfc-editor.org/rfc/rfc6996</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9217">[RFC9217]</dt>
+        <dd>
+<span class="refAuthor">Trammell, B.</span>, <span class="refTitle">"Current Open Questions in Path-Aware Networking"</span>, <span class="seriesInfo">RFC 9217</span>, <span class="seriesInfo">DOI 10.17487/RFC9217</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9217">https://www.rfc-editor.org/rfc/rfc9217</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9473">[RFC9473]</dt>
       <dd>
