@@ -68,6 +68,7 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  RFC4632:
   RFC5280:
   RFC5952:
   RFC9000:
@@ -122,7 +123,6 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
   RFC1122:
-  RFC4632:
   RFC5398:
   RFC6996:
   RFC9217:
