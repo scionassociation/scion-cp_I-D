@@ -34,19 +34,23 @@ author:
      email: hitz@anapaya.net
 
 normative:
-  I-D.scion-components:
-    title: SCION Components Analysis
+  I-D.scion-dp:
+    title: SCION Data Plane
     date: 2023
-    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
     author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
       -
         ins: N. Rustignoli
         name: Nicola Rustignoli
         org: SCION Association
       -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
   I-D.scion-cppki:
     title: SCION Control-Plane PKI
     date: 2023
@@ -67,6 +71,7 @@ normative:
   RFC1122:
   RFC2119:
   RFC4632:
+  RFC5280:
   RFC5952:
   RFC8174:
   RFC9000:
@@ -120,42 +125,9 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-overview:
-    title: SCION Overview
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
-  I-D.scion-dp:
-    title: SCION Data Plane
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
   RFC5398:
   RFC6996:
+  RFC9217:
   RFC9473:
 
 --- abstract
@@ -181,11 +153,11 @@ SCION has been developed with the following goals:
 
 SCION relies on three main components:
 
-*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.dekater-scion-pki}}
+*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.scion-cppki}}
 
 *Control Plane* - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.
 
-*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.dekater-scion-dataplane}}
+*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.scion-dp}}
 
 This document describes the SCION Control Plane component.
 
