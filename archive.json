@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-20T00:16:53.319733+00:00",
+  "timestamp": "2024-06-23T00:18:48.735033+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -285,7 +285,7 @@
       "id": "I_kwDOJx2-rs6I_TuN",
       "title": "Clarify PCB selection policies and how they meet endpoint's needs ",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/16",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -297,8 +297,8 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2024-05-31T14:53:56Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-21T16:49:36Z",
+      "closedAt": "2024-06-21T16:49:36Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -477,14 +477,14 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "knmeynell"
+        "nicorusti"
       ],
       "labels": [
         "question"
       ],
       "body": " think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help.\r\n \r\n  @nicorusti: a sentence to clarify this could be added in 1.6. at bullet point path reversal.",
       "createdAt": "2024-05-16T09:55:40Z",
-      "updatedAt": "2024-05-16T09:56:53Z",
+      "updatedAt": "2024-06-21T17:09:33Z",
       "closedAt": null,
       "comments": []
     },
@@ -493,7 +493,7 @@
       "id": "I_kwDOJx2-rs6JR5P1",
       "title": "Clarify selection of MAC algorithm",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/23",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -503,10 +503,10 @@
         "question",
         "Prio 2"
       ],
-      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n Two points should be clarified: \r\n- [ ] make it clearer also in the control plane draft that MAC algorithm is AS specific\r\n- [ ] Clarify vendor interoperability _within an AS_: e.g. mention one mandatory algorithm within an AS \r\n\r\n   \r\n\r\nIssue in DP: https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
+      "body": "> From Joel Halpern\r\n> I may have misread the text, but the description of the hop authentication algorithm seems to say \"use an algorithm that is consistent across the AS.  The problem with that answer is that an implementor needs to implement a specific algorithm.  I think there at least needs to be a mandatory to implement algorithm, so implementors can interoperate.\r\n\r\nMACs for hop fields are created and then verified always within an AS. This means that each AS can use a different MAC algorithm, while interoperating with other ASes. We mention this in the data plane draft: \r\n ```  only the control service and routers of the AS need\r\n   to agree on keys, algorithm, and input for the MAC.  However, note\r\n   that we do not provide nor specify any mechanism to coordinate AS-\r\n   specific choices between the routers and the control services of the\r\n   AS.\r\n```\r\n Two points should be clarified: \r\n- [x] make it clearer also in the control plane draft that MAC algorithm is AS specific\r\n- [x] Clarify vendor interoperability _within an AS_: e.g. mention one mandatory algorithm within an AS \r\n\r\n   \r\n\r\nIssue in DP: https://github.com/scionassociation/scion-dp_I-D/issues/7  \r\n\r\n",
       "createdAt": "2024-05-17T16:38:24Z",
-      "updatedAt": "2024-06-04T10:55:01Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-21T16:38:38Z",
+      "closedAt": "2024-06-21T16:38:38Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -514,6 +514,13 @@
           "body": "@matzf I was looking into Joel's emails, he provided some more hints: \r\n\r\n> <jmh>Yes, I get that each AS can in principle use a different algorithm.  Now look at it from the point of view of an implementor.  What algorithm shall I implement?  I am expecting to sell to multiple operators.  I am expecting to need to interoperate with solutions from other vendors.  I have no problem with allowing a range of choices.  But I need something that ensures interoperability.  The usual answer is to say that all implementations must implement and support X, and that operators can use anything they like that their devices support as long as all devices in the AS use the same thing. </jmh>\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> <jmh>If it depends upon the MAC that is used, then you need to tell operators enough to make an appropriate choice of MAC.  Still seems that XORing together th three \"xhorts\" from the MAC would always be stronger.  But I am not a security expert. </jmh> ",
           "createdAt": "2024-06-04T10:39:09Z",
           "updatedAt": "2024-06-04T10:39:09Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I think this is resolved by #34 ",
+          "createdAt": "2024-06-21T16:38:38Z",
+          "updatedAt": "2024-06-21T16:38:38Z"
         }
       ]
     },
@@ -542,7 +549,7 @@
       "id": "I_kwDOJx2-rs6KWwVP",
       "title": "High availability language",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/28",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -553,9 +560,17 @@
       ],
       "body": "This is a bit vague: \r\n```\r\nIn addition, the control services\r\n   are designed to be deployed on replicated instances so that requests\r\n   can be balanced.\r\n```\r\n\r\n@shitz proposes \r\n\"In addition, control services should be implemented in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a total failure of the control plane of a SCION AS.\"",
       "createdAt": "2024-05-28T14:25:20Z",
-      "updatedAt": "2024-05-28T14:26:36Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-06-21T16:53:07Z",
+      "closedAt": "2024-06-21T16:53:07Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This was handled in #27 ",
+          "createdAt": "2024-06-21T16:53:07Z",
+          "updatedAt": "2024-06-21T16:53:07Z"
+        }
+      ]
     },
     {
       "number": 30,
@@ -618,11 +633,26 @@
         "Prio 2",
         "editorial"
       ],
-      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [x] Check if other drafts affected",
+      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [x] Check if other drafts affected\r\n\r\nDP https://github.com/scionassociation/scion-dp_I-D/issues/25 \r\nPKI: https://github.com/scionassociation/scion-cppki_I-D/issues/32",
       "createdAt": "2024-06-17T08:16:14Z",
-      "updatedAt": "2024-06-19T11:22:57Z",
-      "closedAt": "2024-06-19T11:22:57Z",
-      "comments": []
+      "updatedAt": "2024-06-21T16:09:07Z",
+      "closedAt": "2024-06-21T16:09:07Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "```\r\n7.1.  Normative References\r\n\r\n   [I-D.scion-cp]\r\n              de Kater, C., Rustignoli, N., and S. Hitz, \"SCION Control\r\n              Plane\", 2024, <https://datatracker.ietf.org/doc/draft-\r\n              dekater-scion-controlplane/>.\r\n              \r\n```",
+          "createdAt": "2024-06-21T15:44:14Z",
+          "updatedAt": "2024-06-21T15:44:14Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "FIxed with #38 ",
+          "createdAt": "2024-06-21T16:09:07Z",
+          "updatedAt": "2024-06-21T16:09:07Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2373,24 +2403,26 @@
       "id": "PR_kwDOJx2-rs5xYzUn",
       "title": "Clarify PCB selection policies and endpoint's needs",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/33",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "matzf",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #16.\r\n\r\n> > From: Joel Halpern\r\n> > There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction. Of course, this AS doesn't know that. But the text ignores this distinction.\r\n> \r\n> Tis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n> >  how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ..\r\n\r\n---- \r\n\r\nVery good phrasing from reviewer, paraphrased in the text.\r\nTried to clarify the incentives by explaining it as a two stage process. First the AS removes anything that doesn't seem \"viable\";  among the remaining PCBs, the incentives of AS and endpoints are aligned. \r\n",
       "createdAt": "2024-06-04T07:36:33Z",
-      "updatedAt": "2024-06-07T07:13:28Z",
+      "updatedAt": "2024-06-21T16:49:38Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f6dbf5677ee5a2f1ed892277e2a4f6dda422c3d5",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "selection-policy-endpoint-needs",
       "headRefOid": "6e5257d631aa3e453a89b87b8d3f47f985e0905b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-06-21T16:49:35Z",
+      "mergedAt": "2024-06-21T16:49:35Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1eb85516903ff150f1a681db24d0438573faab3b"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2479,24 +2511,26 @@
       "id": "PR_kwDOJx2-rs5xZwY_",
       "title": "Clarify selection of MAC",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/34",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "matzf",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Refer to default hop field MAC algorithm in DP draft, which MUST be supported.\r\n\r\nContributes to #23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7:\r\n- Explain why there is both a \"chaining\" of signatures in PCBs, and chaining of MACs in hop fields.\r\n\r\nRefers to https://github.com/scionassociation/scion-dp_I-D/pull/26, and uses ~identical paragraph.",
       "createdAt": "2024-06-04T09:45:01Z",
-      "updatedAt": "2024-06-14T11:36:37Z",
+      "updatedAt": "2024-06-21T16:34:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f6dbf5677ee5a2f1ed892277e2a4f6dda422c3d5",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "default-mac-algo",
       "headRefOid": "3bc1d7c751c0755697e3e6a08d7a307755c841b5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-06-21T16:34:22Z",
+      "mergedAt": "2024-06-21T16:34:22Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "b5e097110b483e6922e235ef66657c2ffc2f9bd8"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2582,6 +2616,19 @@
           "body": "",
           "createdAt": "2024-06-14T11:36:37Z",
           "updatedAt": "2024-06-14T11:36:37Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_I3b6",
+          "commit": {
+            "abbreviatedOid": "3bc1d7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-06-21T16:34:10Z",
+          "updatedAt": "2024-06-21T16:34:10Z",
           "comments": []
         }
       ]
@@ -2669,24 +2716,26 @@
       "id": "PR_kwDOJx2-rs5x_BvJ",
       "title": "Added revised Introduction",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/38",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Introduction with problem statement and component overview",
       "createdAt": "2024-06-10T14:17:58Z",
-      "updatedAt": "2024-06-14T11:34:26Z",
+      "updatedAt": "2024-06-21T15:58:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
+      "baseRefOid": "b62872ddb8427555057b24ed3e877ded662e5b35",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "knmeynell-patch-1",
-      "headRefOid": "55ee565fd8792d5e80375acbbef737a5a6f2a1b1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "06ec2fa3595ff8e6c16abcf1d68c70617763991b",
+      "closedAt": "2024-06-21T15:58:53Z",
+      "mergedAt": "2024-06-21T15:58:53Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1ea4648c6b2cd87a656648e8c7398975fdaf483d"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2709,24 +2758,26 @@
       "id": "PR_kwDOJx2-rs5yYqb8",
       "title": "remove allowed",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/39",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves https://github.com/scionassociation/scion-dp_I-D/issues/11 ",
       "createdAt": "2024-06-13T16:15:33Z",
-      "updatedAt": "2024-06-13T16:47:14Z",
+      "updatedAt": "2024-06-21T16:07:52Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "4a0cc23314c8a1dcb94e97090d3f1df21fc10266",
+      "baseRefOid": "1ea4648c6b2cd87a656648e8c7398975fdaf483d",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "allowed",
-      "headRefOid": "cd401f8c1d4e84a3469c797e83aaa6c8a85edfa8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "37b18c033e63524b92f7aed92f0f50e30318ed5d",
+      "closedAt": "2024-06-21T16:07:49Z",
+      "mergedAt": "2024-06-21T16:07:49Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5d331d933acb221893b6bbfbf2309ef7805edd12"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2805,6 +2856,58 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 42,
+      "id": "PR_kwDOJx2-rs5zL3A4",
+      "title": "Scalability of path discovery",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/42",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Draft, some parts need to be converted from bullet points to prose.",
+      "createdAt": "2024-06-21T13:23:58Z",
+      "updatedAt": "2024-06-21T13:24:05Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "b62872ddb8427555057b24ed3e877ded662e5b35",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "scalability",
+      "headRefOid": "27428e75470539357bb1decce857c2f99c1250ea",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 43,
+      "id": "PR_kwDOJx2-rs5zNNZT",
+      "title": "clarify path reversibility",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/43",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Solves #22 ",
+      "createdAt": "2024-06-21T17:08:48Z",
+      "updatedAt": "2024-06-21T17:08:58Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "path_reversal",
+      "headRefOid": "376fdf0dbd974b79edc14023e7583d595c346373",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
