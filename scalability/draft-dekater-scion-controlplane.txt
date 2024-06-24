@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 December 2024                                        S. Hitz
+Expires: 26 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            21 June 2024
+                                                            24 June 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2024.
+   This Internet-Draft will expire on 26 December 2024.
 
 Copyright Notice
 
@@ -144,25 +144,59 @@ Table of Contents
 
 1.  Introduction
 
-   The SCION control plane is responsible for discovering path segments
-   and making them available to endpoints.  This process includes path
-   exploration, registration, and lookup.  This section explains the
-   basic concepts of the control plane in SCION and introduces SCION's
-   routing concept.
+   SCION is a path-aware internetworking routing architecture as
+   described in [RFC9217].  It allows endpoints and applications to
+   select paths across the network to use for traffic, based on
+   trustworthy path properties.  SCION is an inter-domain network
+   architecture and is therefore not concerned with intra-domain
+   forwarding.
 
-   As SCION is an _inter-domain_ network architecture, it only deals
-   with _inter_-domain routing.  One feature of SCION is the decoupling
-   of inter-domain routing from endpoint addressing.  This Introduction
-   section provides a description of the SCION addressing system in more
-   detail.
+   SCION has been developed with the following goals:
 
-   *Note:* It is assumed that readers of this draft are familiar with
-   the basic concepts of the SCION next-generation inter-domain network
-   architecture.  If not, please find more detailed information in the
-   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],
-   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],
-   especially Chapter 2.  A short description of the SCION basic terms
-   and elements can be found in Section 1.1 below.
+   _Availability_ - to provide highly available communication that can
+   send traffic over paths with optimal or required characteristics,
+   quickly handle inter-domain link or router failures (both on the last
+   hop or anywhere along the path) and provide continuity in the
+   presence of adversaries.
+
+   _Security_ - to provide higher levels of trust in routing information
+   in order to prevent IP prefix hijacking/leaks, denial-of-service and
+   other attacks.  Endpoints can decide the trust roots they wish to
+   rely on, routing information can be unambiguously attributed to an
+   AS, and packets are only forwarded along authorized path segments.  A
+   particular use case is to enable geofencing.
+
+   _Scalability_ - to improve the scalability of the inter-domain
+   control plane and data plane, avoiding existing limitations related
+   to convergence and forwarding table size.  The advertising of path
+   segments is separated into a beaconing process within each Isolation
+   Domain (ISD) and between ISDs which incurs minimal overhead and
+   resource requirements on routers.
+
+   SCION relies on three main components:
+
+   _PKI_ - To achieve scalability and trust, SCION organizes existing
+   ASes into logical groups of independent routing planes called
+   _Isolation Domains (ISDs)_. All ASes in an ISD agree on a set of
+   trust roots called the _Trust Root Configuration (TRC)_ which is a
+   collection of signed root certificates in X.509 v3 format [RFC5280].
+   The ISD is governed by a set of _core ASes_ which typically manage
+   the trust roots and provide connectivity to other ISDs.  This is the
+   basis of the public key infrastructure which the SCION control plane
+   relies upon for the authentication of messages that is used for the
+   SCION control plane.  See [I-D.scion-cppki]
+
+   _Control Plane_ - performs inter-domain routing by discovering and
+   securely disseminating path information between ASes.  The core ASes
+   use Path-segment Construction Beacons (PCBs) to explore intra-ISD
+   paths, or to explore paths across different ISDs.
+
+   _Data Plane_ - carries out secure packet forwarding between SCION-
+   enabled ASes over paths selected by endpoints.  A SCION border router
+   reuses existing intra-domain infrastructure to communicate to other
+   SCION routers or SCION endpoints within its AS.  See [I-D.scion-dp]
+
+   This document describes the SCION Control Plane component.
 
 1.1.  Terminology
 
@@ -215,7 +249,7 @@ Table of Contents
    the PCB.  Together with hop fields (HFs), info fields are used to
    create forwarding paths.
 
-   *Isolation Domain (ISD)*: In SCION, autonomous systems (ASes) are
+   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called isolation domains or ISDs.  Each
    ISD consists of ASes that span an area with a uniform trust
    environment (i.e., a common jurisdiction).  A possible model is for
@@ -448,6 +482,18 @@ Table of Contents
    path.  This means that all path segments can be used to send data
    traffic in both directions.
 
+   The cryptographic protection of PCBs / path segments is based on the
+   Control-Plane PKI.  The signatures are structured such that the
+   entire message sequence constituting the path segment can be
+   authenticated.  The authenticity can be verified by anyone with
+   access to this PKI.  For fast validation of the path information
+   carried in individual packets during packet forwarding, symmetric key
+   cryptography is used instead.  For this purpose, the hop fields
+   contain a MAC.  These MACs are structured to allow verifying the
+   sequence of hops, reflecting the structure of the PCBs, but, in
+   contrast to the PCBs, this can only be validated by the border
+   routers of the respective AS.
+
 1.5.  Addressing
 
    The inter-domain SCION routing is based on the <ISD, AS> tuple.
@@ -518,7 +564,7 @@ Table of Contents
 
    In SCION, the following rules apply:
 
-   *  The :: zero-compression feature of IPv6 is NOT allowed.  The
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
       feature has very limited use in a 48-bit address space and would
       only add more complexity.
 
@@ -1389,7 +1435,17 @@ path segment 4 |             |     |             |     |             |
    directly in the data plane for packet forwarding: It specifies the
    incoming and outgoing interfaces of the ASes on the forwarding path.
    To prevent forgery, this information is authenticated with a message
-   authentication code (MAC).
+   authentication code (MAC), which will be checked by the SCION border
+   routers during packet forwarding.
+
+   The algorithm used to compute the hop field MAC is an AS-specific
+   choice.  The operator of an AS can freely choose a MAC algorithm
+   without outside coordination.  However, the control service and
+   routers of the AS do need to agree on the algorithm used.  Control
+   service and router implementations MUST support the Default Hop Field
+   MAC algorithm described in [I-D.scion-dp].  This document does not
+   specify any further mechanism to coordinate this choice between
+   control services and routers of one AS.
 
    The following code block defines the hop field component HopField in
    Protobuf message format:
@@ -1421,9 +1477,7 @@ path segment 4 |             |     |             |     |             |
       sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field.  [I-D.scion-dp] provides a detailed
-      description of the computation of the MAC and the verification of
-      the hop field.
+      to verify the hop field, as described in [I-D.scion-dp].
 
 2.2.1.7.  Peer Entry
 
@@ -1568,16 +1622,24 @@ path segment 4 |             |     |             |     |             |
 2.3.1.  Selection of PCBs to Propagate
 
    As an AS receives a series of intra-ISD or core PCBs, it must select
-   the PCBs it will use to continue beaconing.  Each AS must specify a
-   local policy on the basis of which PCBs are evaluated, selected or
-   eliminated.  The selection process can be based on _path_ properties
-   (e.g., length, disjointness across different paths) as well as on
-   _PCB_ properties (e.g., age, expiration time) - each AS is free to
-   use those properties that suit the AS best.  The control service can
-   then compute the overall quality of each candidate PCB based on these
-   properties.  For this, the AS should use a selection algorithm or
-   metric that reflects its needs and requirements and identifies the
-   best PCBs or paths segments for this AS.
+   the PCBs it will use to continue beaconing.  Each AS specifies a
+   local policy on the basis of which PCBs are evaluated, selected, or
+   eliminated.  The selection process can inspect and compare the
+   properties of the candidate PCBs (e.g., length, disjointness across
+   different paths, age, expiration time) and/or take into account which
+   PCBs have been propagated in the past.
+
+   Naturally, an AS's policy selects PCBs corresponding to paths that
+   are commercially or otherwise operationally viable.  From these
+   viable PCBs, only a relatively small subset should be propagated, to
+   avoid excessive overhead of the path discovery system in bigger
+   networks.  The goal of the AS should be to propagate those candidate
+   PCBs with the highest probability of collectively meeting the needs
+   of the endpoints that will perform path construction.  As SCION does
+   not provide any in-band signal about the intentions of endpoints nor
+   about the policies of downstream ASes, the policy will typically
+   select a somewhat diverse set optimized for multiple, generic
+   parameters.
 
 2.3.1.1.  Storing and Selecting Candidate PCBs
 
@@ -2724,15 +2786,15 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.scion-components]
-              Rustignoli, N. and C. de Kater, "SCION Components
-              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
-              rustignoli-panrg-scion-components/>.
-
    [I-D.scion-cppki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
               Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-scion-pki/>.
+
+   [I-D.scion-dp]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
+              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-dataplane/>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
@@ -2746,6 +2808,12 @@ path segment 4 |             |     |             |     |             |
               (CIDR): The Internet Address Assignment and Aggregation
               Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
               2006, <https://www.rfc-editor.org/rfc/rfc4632>.
+
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/rfc/rfc5280>.
 
    [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
               Address Text Representation", RFC 5952,
@@ -2777,16 +2845,6 @@ path segment 4 |             |     |             |     |             |
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.scion-dp]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
-              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-dataplane/>.
-
-   [I-D.scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-panrg-scion-overview/>.
-
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -2799,6 +2857,10 @@ path segment 4 |             |     |             |     |             |
    [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
               Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
               2013, <https://www.rfc-editor.org/rfc/rfc6996>.
+
+   [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
+              Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9217>.
 
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
