@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-23T00:18:48.735033+00:00",
+  "timestamp": "2024-06-25T00:17:03.188261+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2869,19 +2869,203 @@
       "labels": [],
       "body": "Draft, some parts need to be converted from bullet points to prose.",
       "createdAt": "2024-06-21T13:23:58Z",
-      "updatedAt": "2024-06-21T13:24:05Z",
+      "updatedAt": "2024-06-24T15:59:29Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "b62872ddb8427555057b24ed3e877ded662e5b35",
+      "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scalability",
-      "headRefOid": "27428e75470539357bb1decce857c2f99c1250ea",
+      "headRefOid": "17ad81bffb96efa32ae86bcbb6246a6fbe775225",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs5_RqJa",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I won't make pronouncements on the math accuracy... I find it convincing enough. Regarding the breadth and depth, I think it's good. I imaging that this is what the reviewer was asking for.\r\n\r\nPossibly, we could add a summary, with a few key scaling estimates in O() form. Where e.g. PCB received per second: O(N^2) - Although, that'll be concerning in the mind of your average reviewer, btw. So may be no need to rub it in.",
+          "createdAt": "2024-06-24T10:10:26Z",
+          "updatedAt": "2024-06-24T10:10:26Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_SC_N",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T10:51:19Z",
+          "updatedAt": "2024-06-24T11:19:41Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "Remind the reader that only 50 PCBs per downlink are selected for propagation. ",
+              "createdAt": "2024-06-24T10:51:19Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            },
+            {
+              "originalPosition": 72,
+              "body": "Isn't that supposed to be 1000000/5 = 200K?... well, that's assuming a 5 seconds propagation interval, but you said it was slower than that. So, I don't know. 150K amounts to a propagation interval of 6 and 2/3 seconds...I don't believe that you'd use that deliberately :-)\r\n\r\n",
+              "createdAt": "2024-06-24T11:06:55Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            },
+            {
+              "originalPosition": 73,
+              "body": "Given your previous estimate of 250bytes per AS entry and core segments of ~10 ASes, I compute:\r\n200000 * 10 * 250 = 500M/s. Even using your 150K/s figure, I still get 375M/s. I missed something?\r\n",
+              "createdAt": "2024-06-24T11:06:57Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            },
+            {
+              "originalPosition": 64,
+              "body": "Remind the reader what the typical interval would be?",
+              "createdAt": "2024-06-24T11:09:19Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "Here I'd cite the Irwin-Hall distribution, may be?",
+              "createdAt": "2024-06-24T11:15:11Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            },
+            {
+              "originalPosition": 76,
+              "body": "Ok, so here you seem to be using a 30s mean delay, so an interval of 1m.\r\n",
+              "createdAt": "2024-06-24T11:18:52Z",
+              "updatedAt": "2024-06-24T11:19:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_UbSZ",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T14:57:52Z",
+          "updatedAt": "2024-06-24T14:57:52Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "I used propagation interval is 60s (should mention this explicitly). My calculation was:\r\n- number of PCBs received per propagation interval: 5 * N * num interfaces = 1'000'000\r\n- number of AS entries received (== number of signature validations) per propagation interval == ~10 * number of PCBs == 10'000'000\r\n- number of AS entries per second: number of AS entries per propagation interval / 60s == 10'000'000 / 60 == 166'666.\r\n\r\nI must have rounded pretty badly... ",
+              "createdAt": "2024-06-24T14:57:52Z",
+              "updatedAt": "2024-06-24T14:58:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_Ud0r",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T15:02:15Z",
+          "updatedAt": "2024-06-24T15:02:15Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "These numbers are per propagation interval (60 seconds). So:\r\n5 * 200 * 1000 * 10 * 250 / 60 = 41.6M/s",
+              "createdAt": "2024-06-24T15:02:15Z",
+              "updatedAt": "2024-06-24T15:02:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_UfXJ",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T15:04:59Z",
+          "updatedAt": "2024-06-24T15:04:59Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": ":+1: ",
+              "createdAt": "2024-06-24T15:04:59Z",
+              "updatedAt": "2024-06-24T15:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_U4Pa",
+          "commit": {
+            "abbreviatedOid": "760c0e2"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T15:48:07Z",
+          "updatedAt": "2024-06-24T15:48:08Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "Ack. I had missed something.\r\n",
+              "createdAt": "2024-06-24T15:48:07Z",
+              "updatedAt": "2024-06-24T15:48:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_U7Y2",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T15:53:53Z",
+          "updatedAt": "2024-06-24T15:53:53Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Ok. Works for me. I had missed the multiplication by path length and I had the wrong interval. ",
+              "createdAt": "2024-06-24T15:53:53Z",
+              "updatedAt": "2024-06-24T15:53:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_U75n",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T15:54:46Z",
+          "updatedAt": "2024-06-24T15:54:47Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "I've changed the numbers for the example; I noticed that length 10 is much longer than what we say above with the log n/loglog n average path length.\r\nFor 1000 ASes, the log n/loglog n is around 3.5. Because we say that we have paths that are longer than the shortest path, I use a generous 6 -- because this gives nice numbers.\r\nBecause the numbers coincidentally ended up confusingly similar to the intra-ISD case I've increased the number of core links from 200 to 300.\r\n\r\nSo:\r\n5 * 300 * 1000 = 1.5 million PCBs\r\n5 * 300 * 1000 * 6 / 60 = 150k AS entries per second\r\n5 * 300 * 1000 * 6 * 250 / 60 = 37.5MB/s\r\n",
+              "createdAt": "2024-06-24T15:54:46Z",
+              "updatedAt": "2024-06-24T15:54:47Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 43,
