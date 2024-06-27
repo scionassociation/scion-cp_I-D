@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-25T00:17:03.188261+00:00",
+  "timestamp": "2024-06-27T00:17:20.107340+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2867,9 +2867,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Draft, some parts need to be converted from bullet points to prose.",
+      "body": "Scalability of path discovery.\r\n- Explain quality/quantity vs resource overhead\r\n- Resource cost in terms of number and length of discovered paths\r\n- Exploration time in terms of path length / network diameter\r\n- Separate analysis for inter/intra ISD beaconing:\r\n  - Typical / expected properties of the network\r\n  - Example numbers to give impression for order of magnitude of overhead",
       "createdAt": "2024-06-21T13:23:58Z",
-      "updatedAt": "2024-06-24T15:59:29Z",
+      "updatedAt": "2024-06-25T13:22:25Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
@@ -3064,6 +3064,99 @@
               "updatedAt": "2024-06-24T15:54:47Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_a2fE",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-25T07:47:10Z",
+          "updatedAt": "2024-06-25T07:47:10Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "It seems Irwin-Hall was the wrong pointer after all. I had to relearn this:\r\nGenerally, the variance of the sum of independent random variables is just the sum of the variances;  the variance of the sum of n independent, _identically_ distributed variables is just n times the variance of a single variable.\r\nThe variance of continuously uniformly distributed random variables over interval [a,b] is (b-a)^/12. (!) -- in our case, this interval is [0,T] and so the variance for the individual random variables is T^2/12.\r\n\r\nEven if this was not something I knew directly, this seems too basic / too much textbook knowledge to add a citation or long explanation. What do you think.",
+              "createdAt": "2024-06-25T07:47:10Z",
+              "updatedAt": "2024-06-25T07:47:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_bU9h",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-25T08:27:50Z",
+          "updatedAt": "2024-06-25T08:27:50Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": ".. which means that we don't actual care about T^2 / 12, do we? Anyway, you're right. The stats heads will know and the others won't care or understand (you just demonstrated this on me: I didn't understand).",
+              "createdAt": "2024-06-25T08:27:50Z",
+              "updatedAt": "2024-06-25T08:27:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_bcRL",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-25T08:40:04Z",
+          "updatedAt": "2024-06-25T08:40:05Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "I see that has been done.\r\n",
+              "createdAt": "2024-06-25T08:40:04Z",
+              "updatedAt": "2024-06-25T08:40:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_eXqw",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-25T13:22:10Z",
+          "updatedAt": "2024-06-25T13:22:10Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "I still find it too easy to forget the \"at most 50 per child\" clause when reading \"If the same AS has 1000 child links...\". How about:\r\n\"If the same AS has 1000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link), that is ....\"?\r\n\r\nNot binding.\r\n",
+              "createdAt": "2024-06-25T13:22:10Z",
+              "updatedAt": "2024-06-25T13:22:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs5_eX14",
+          "commit": {
+            "abbreviatedOid": "17ad81b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-25T13:22:25Z",
+          "updatedAt": "2024-06-25T13:22:25Z",
+          "comments": []
         }
       ]
     },
