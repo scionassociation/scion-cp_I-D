@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-27T00:17:20.107340+00:00",
+  "timestamp": "2024-06-30T00:19:21.052935+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2867,9 +2867,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Scalability of path discovery.\r\n- Explain quality/quantity vs resource overhead\r\n- Resource cost in terms of number and length of discovered paths\r\n- Exploration time in terms of path length / network diameter\r\n- Separate analysis for inter/intra ISD beaconing:\r\n  - Typical / expected properties of the network\r\n  - Example numbers to give impression for order of magnitude of overhead",
+      "body": "Scalability of path discovery.\r\n- Explain quality/quantity vs resource overhead\r\n- Resource cost in terms of number and length of discovered paths\r\n- Exploration time in terms of path length / network diameter\r\n- Separate analysis for inter/intra ISD beaconing:\r\n  - Typical / expected properties of the network\r\n  - Example numbers to give impression for order of magnitude of overhead\r\n\r\nFixes #8 ",
       "createdAt": "2024-06-21T13:23:58Z",
-      "updatedAt": "2024-06-25T13:22:25Z",
+      "updatedAt": "2024-06-28T08:19:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
