@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 26 December 2024                                        S. Hitz
+Expires: 2 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                            24 June 2024
+                                                             1 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 December 2024.
+   This Internet-Draft will expire on 2 January 2025.
 
 Copyright Notice
 
@@ -2045,11 +2045,11 @@ path segment 4 |             |     |             |     |             |
    bandwidth of very roughtly 2.5MB/s, and, processing 10000 signature
    verifications per second.  If the same AS has 1000 child links, the
    propagation of the beacons will require signing one new AS entry for
-   each of the propagated PCBs for each link, that is at most 50000
-   signatures per propagation event.  The total bandwidth for the
-   propagation of these PCBs for all 1000 child links would, again very
-   roughly, be around 25MB/s.  All of these are managable with even
-   modest consumer hardware.
+   each of the propagated PCBs for each link (at most 50 per link), that
+   is at most 50000 signatures per propagation event.  The total
+   bandwidth for the propagation of these PCBs for all 1000 child links
+   would, again very roughly, be around 25MB/s.  All of these are
+   managable with even modest consumer hardware.
 
    On a cold start of the network, path segments to each AS are
    discovered after a number of propagation steps proportional to the
