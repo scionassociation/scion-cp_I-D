@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-30T00:19:21.052935+00:00",
+  "timestamp": "2024-07-02T00:17:30.287065+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2869,13 +2869,13 @@
       "labels": [],
       "body": "Scalability of path discovery.\r\n- Explain quality/quantity vs resource overhead\r\n- Resource cost in terms of number and length of discovered paths\r\n- Exploration time in terms of path length / network diameter\r\n- Separate analysis for inter/intra ISD beaconing:\r\n  - Typical / expected properties of the network\r\n  - Example numbers to give impression for order of magnitude of overhead\r\n\r\nFixes #8 ",
       "createdAt": "2024-06-21T13:23:58Z",
-      "updatedAt": "2024-06-28T08:19:13Z",
+      "updatedAt": "2024-07-01T06:28:24Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scalability",
-      "headRefOid": "17ad81bffb96efa32ae86bcbb6246a6fbe775225",
+      "headRefOid": "3d16011de5e8937ee44b854b5d934af7f002fa61",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3157,6 +3157,26 @@
           "createdAt": "2024-06-25T13:22:25Z",
           "updatedAt": "2024-06-25T13:22:25Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6ALmiD",
+          "commit": {
+            "abbreviatedOid": "4c7fc0d"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T06:28:24Z",
+          "updatedAt": "2024-07-01T06:28:24Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "Indeed, done. :+1: ",
+              "createdAt": "2024-07-01T06:28:24Z",
+              "updatedAt": "2024-07-01T06:28:24Z"
+            }
+          ]
         }
       ]
     },
