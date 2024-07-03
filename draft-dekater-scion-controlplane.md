@@ -1319,7 +1319,7 @@ All of these depend on the the number and length of the discovered path segments
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold boot", and the time until new link is usable.
 Generally, the time until a specific PCB is built depends on its length and the propagation interval.
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
-With a propagation interval T, the mean time until the PCB is propgated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
+With a propagation interval T, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, end points route around the failed link by switching to different paths in the data plane.
 
@@ -1332,12 +1332,12 @@ In the intra-ISD beaconing, PCBs are propagated top-down, along parent-child lin
 Typically, this directed, acyclic graph is narrow at the top, widens towards the leafs, and is relatively shallow; intermediate provider ASes have a large number of children, while they only have a small number of parents. The chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
 
 Each AS potentially receives PCBs for all down paths between core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the limit value of 50, ASes trim the set of PCBs propagated. As the choice is among different ways to transit the local AS, operators are well equipped to choose among this set of PCBs.
-Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs, and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily managable even for highly connected ASes.
+Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs, and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily manageable even for highly connected ASes.
 
-To illustrate this with some numbers, an AS with a rather large number of 100 parent links receives at most 5000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50000 AS entries. Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, and we'll assume an average of 250 bytes per AS entry. At the shortest, and thus chattiest, allowed propagation period of 5 seconds, this corresponds to a total bandwidth of very roughtly 2.5MB/s, and, processing 10000 signature verifications per second.
+To illustrate this with some numbers, an AS with a rather large number of 100 parent links receives at most 5000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50000 AS entries. Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, and we'll assume an average of 250 bytes per AS entry. At the shortest, and thus chattiest, allowed propagation period of 5 seconds, this corresponds to a total bandwidth of very roughly 2.5MB/s, and, processing 10000 signature verifications per second.
 If the same AS has 1000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link), that is at most 50000 signatures per propagation event.
 The total bandwidth for the propagation of these PCBs for all 1000 child links would, again very roughly, be around 25MB/s.
-All of these are managable with even modest consumer hardware.
+All of these are manageable with even modest consumer hardware.
 
 On a cold start of the network, path segments to each AS are discovered after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
 
@@ -1345,7 +1345,7 @@ When a new parent-child link is added to the network, the parent AS will propaga
 
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
-The number of distinct paths through the core network is typically very large. To keep the overhead managable, at most 5 path segments to every destination AS are discovered, and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
+The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered, and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
 Without making strong assumptions on the topology of the core network, we can assume that shortest paths through real world, internet-like networks are relatively short; for example, the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}}. The average distance scales in the same way.
 We cannot assume that the selected PCBs are strictly shortest paths through the network, but it's reasonable to assume that they will not be very much longer than the shortest paths either.
@@ -1356,7 +1356,7 @@ Assuming an average PCB length of 6 and the shortest propagation interval of 60 
 In terms of bandwidth, this corresponds to very roughly 38MB/s.
 
 
-On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughtly 3 minutes on average.
+On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
 When a new link is added to the network, it will be available to connect two ASes at distances from the link D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.
 
