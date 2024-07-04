@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 4 January 2025                                          S. Hitz
+Expires: 5 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             3 July 2024
+                                                             4 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2025.
+   This Internet-Draft will expire on 5 January 2025.
 
 Copyright Notice
 
@@ -1655,19 +1655,20 @@ path segment 4 |             |     |             |     |             |
    *  The _best PCBs set size_ SHOULD be at most "50" (PCBs) for intra-
       ISD beaconing and at most "5" (PCBs) for core beaconing.
 
-   *Note:* Depending on the selection criteria, it may be necessary to
-   keep more candidate PCBs than the _best PCBs set size_ in the beacon
-   store, to be able to determine the best set of PCBs.  If this is the
-   case, an AS should have a suitable pre-selection of candidate PCBs in
-   place, in order to keep the beacon store capacity limited.
+   Depending on the selection criteria, it may be necessary to keep more
+   candidate PCBs than the _best PCBs set size_ in the beacon store, to
+   be able to determine the best set of PCBs.  If this is the case, an
+   AS should have a suitable pre-selection of candidate PCBs in place,
+   in order to keep the beacon store capacity limited.
 
    *  The _propagation interval_ SHOULD be at least "5" (seconds) for
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
-   *Note:* Note that during bootstrapping and if the AS obtains a PCB
-   containing a previously unknown path, the AS SHOULD forward the PCB
-   immediately, to ensure quick connectivity establishment.
+   The scalability implications of such parameters are further discussed
+   in Section 2.4.  Note that during bootstrapping and if the AS obtains
+   a PCB containing a previously unknown path, the AS SHOULD forward the
+   PCB immediately, to ensure quick connectivity establishment.
 
 2.3.1.2.  Selection Policy Example
 
