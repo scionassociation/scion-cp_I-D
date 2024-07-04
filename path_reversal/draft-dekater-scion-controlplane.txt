@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 December 2024                                        S. Hitz
+Expires: 5 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                            21 June 2024
+                                                             4 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2024.
+   This Internet-Draft will expire on 5 January 2025.
 
 Copyright Notice
 
@@ -639,10 +639,11 @@ Table of Contents
       fetched from the local path storage, which is populated during the
       beaconing process.
 
-   *  Path reversal: In SCION, every path is reversible—i.e., the
-      receiver of a packet can reverse the path in the packet header to
-      send back a reply packet without having to perform a path lookup
-      and ensuring that the packet follows the same path symmetrically.
+   *  Path reversal: In SCION, every path is reversible.  That is, the
+      receiver of a packet can reverse the path in the packet header in
+      order to produce a reply packet without having to perform a path
+      lookup.  Such a packet follows the original packet's path
+      backwards.
 
    *  Availability of certificates: In SCION, every entity is required
       to be in possession of all cryptographic material (including the
@@ -2220,9 +2221,9 @@ path segment 4 |             |     |             |     |             |
        combines them into an end-to-end path in the data plane.
 
    6.  The destination endpoint, once it receives the first packet, may
-       revert the path in the received packet to respond without needing
-       to perform a further path lookup.  This also ensures that traffic
-       flows on the same path bidirectionally.
+       revert the path in the received packet in order to construct a
+       response.  This ensures that traffic flows on the same path
+       bidirectionally.
 
    Table 3 below shows which control service provides the source
    endpoint with which type of path segment.
