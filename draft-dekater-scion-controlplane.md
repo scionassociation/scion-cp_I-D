@@ -1135,11 +1135,11 @@ PCBs are propagated in batches to each connected downstream AS at a fixed freque
 
 - The *best PCBs set size* SHOULD be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing.
 
-**Note:** Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.
+Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-**Note:** Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
+The scalability implications of such parameters are further discussed in [](#scalability). Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
 
 
 #### Selection Policy Example
@@ -1309,7 +1309,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 
-## Path Discovery Time and Scalability
+## Path Discovery Time and Scalability {#scalability}
 
 The path discovery mechanism balances of the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
 
