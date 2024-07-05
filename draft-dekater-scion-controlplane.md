@@ -1352,8 +1352,9 @@ We cannot assume that the selected PCBs are strictly shortest paths through the 
 
 With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface.
 For highly connected ASes, the number of PCBs received thus becomes rather large. In a network of 1000 ASes, a highly connected AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
-Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150 thousand signature validations per second. This throughput can be achieved on a single core of a present day small server or desktop machine.
-In terms of bandwidth, this corresponds to very roughly 38MB/s.
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150 thousand signature validations per second. In terms of bandwidth, this corresponds to very roughly 38MB/s.
+All of these are managable on a present day small server or desktop machine.
+For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
 
 On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
