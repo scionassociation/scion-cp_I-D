@@ -1989,10 +1989,10 @@ path segment 4 |             |     |             |     |             |
    processed and propagated at the subsequent propagation event.  As
    propagation events are not synchronized between different ASes, a PCB
    arrives at a random point in time during the interval and is buffered
-   before potentially being propagated.  With a propagation interval T,
-   the mean time until the PCB is propagated in one AS therefore is T /
-   2 and the mean total time for the propagation steps of a PCB of
-   length L is L * T / 2 (with a variance of L * T^2 / 12).
+   before potentially being propagated.  With a propagation interval T
+   at each AS, the mean time until the PCB is propagated in one AS
+   therefore is T / 2 and the mean total time for the propagation steps
+   of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
 
    Note that link removal is not part of path discovery in SCION.  For
    scheduled removal of links, operators let path segments expire.  On
