@@ -1341,7 +1341,7 @@ All of these are manageable with even modest consumer hardware.
 
 On a cold start of the network, path segments to each AS are discovered after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
 
-When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation steps.
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation intervals.
 
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
