@@ -2064,7 +2064,7 @@ path segment 4 |             |     |             |     |             |
    the AS on the child side of the new link is a leaf AS, path discovery
    is thus complete after one single propagation interval.  Otherwise,
    child ASes at distance D below the new link, learn of the new link
-   after D further propagation steps.
+   after D further propagation intervals.
 
 2.4.2.  Inter-ISD Beaconing
 
