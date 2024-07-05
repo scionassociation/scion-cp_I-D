@@ -1666,9 +1666,11 @@ path segment 4 |             |     |             |     |             |
       beaconing.
 
    The scalability implications of such parameters are further discussed
-   in Section 2.4.  Note that during bootstrapping and if the AS obtains
-   a PCB containing a previously unknown path, the AS SHOULD forward the
-   PCB immediately, to ensure quick connectivity establishment.
+   in Section 2.4.
+
+   Note that during bootstrapping and if the AS obtains a PCB containing
+   a previously unknown path, the AS SHOULD forward the PCB immediately,
+   to ensure quick connectivity establishment.
 
 2.3.1.2.  Selection Policy Example
 
@@ -2094,10 +2096,12 @@ path segment 4 |             |     |             |     |             |
    300 core links receives up to 1.5 million PCBs per propagation
    interval.  Assuming an average PCB length of 6 and the shortest
    propagation interval of 60 seconds, this corresponds to roughly 150
-   thousand signature validations per second.  This throughput can be
-   achieved on a single core of a present day small server or desktop
-   machine.  In terms of bandwidth, this corresponds to very roughly
-   38MB/s.
+   thousand signature validations per second.  In terms of bandwidth,
+   this corresponds to very roughly 38MB/s.  All of these are managable
+   on a present day small server or desktop machine.  For much larger,
+   more highly connected ASes, the path-discovery tasks of the control
+   service can be distributed over many instances in order to increase
+   the PCB throughput.
 
    On a cold start of the network, full connectivity is obtained after a
    number of propagation steps corresponding to the diameter of the
