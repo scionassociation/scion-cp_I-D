@@ -2020,13 +2020,13 @@ path segment 4 |             |     |             |     |             |
    AS to a core AS is typically not long (e.g. local, regional, national
    provider, then core).
 
-   Each AS potentially receives PCBs for all down paths between core to
-   itself.  While the number of distinct provider chains to the core is
-   typically moderate, the multiplicity of links between provider ASes
-   has multiplicative effect on the number of PCBs.  Once this number
-   grows above the limit value of 50, ASes trim the set of PCBs
-   propagated.  As the choice is among different ways to transit the
-   local AS, operators are well equipped to choose among this set of
+   Each AS potentially receives PCBs for all down-path segments from the
+   core to itself.  While the number of distinct provider chains to the
+   core is typically moderate, the multiplicity of links between
+   provider ASes has multiplicative effect on the number of PCBs.  Once
+   this number grows above the limit value of 50, ASes trim the set of
+   PCBs propagated.  As the choice is among different ways to transit
+   the local AS, operators are well equipped to choose among this set of
    PCBs.  Ultimately, the number of PCBs received by an AS per
    propagation interval remains bounded by 50 for each parent link of an
    AS, and at most 50 PCBs per child link are propagated.  The length of
