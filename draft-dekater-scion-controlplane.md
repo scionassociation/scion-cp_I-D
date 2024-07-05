@@ -1139,7 +1139,9 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-The scalability implications of such parameters are further discussed in [](#scalability). Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
+The scalability implications of such parameters are further discussed in [](#scalability).
+
+Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
 
 
 #### Selection Policy Example
