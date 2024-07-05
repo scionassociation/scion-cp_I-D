@@ -1319,7 +1319,7 @@ All of these depend on the the number and length of the discovered path segments
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold boot", and the time until new link is usable.
 Generally, the time until a specific PCB is built depends on its length and the propagation interval.
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
-With a propagation interval T, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
+With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, end points route around the failed link by switching to different paths in the data plane.
 
