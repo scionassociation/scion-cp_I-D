@@ -1311,7 +1311,7 @@ Each administrator of a SCION control service is responsible for maintaining suf
 
 ## Path Discovery Time and Scalability {#scalability}
 
-The path discovery mechanism balances of the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
+The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
 
 The resource costs for path discovery are communication overhead, processing and storage. Communication is transmitting the PCBs and occasionally obtaining the required PKI material. Processing cost is validating the signatures of the AS entries, signing new AS entries, and, to a lesser extent, evaluating the beaconing policies. Storage is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.
