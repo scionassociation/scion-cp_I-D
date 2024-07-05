@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 January 2025</td>
+<td class="center">Expires 6 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-04" class="published">4 July 2024</time>
+<time datetime="2024-07-05" class="published">5 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-05">5 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-06">6 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2986,7 +2986,7 @@ The PCB contains the version numbers of the trust root configuration(s) (TRC) an
         <h3 id="name-path-discovery-time-and-sca">
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-path-discovery-time-and-sca" class="section-name selfRef">Path Discovery Time and Scalability</a>
         </h3>
-<p id="section-2.4-1">The path discovery mechanism balances of the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-1">The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">The resource costs for path discovery are communication overhead, processing and storage. Communication is transmitting the PCBs and occasionally obtaining the required PKI material. Processing cost is validating the signatures of the AS entries, signing new AS entries, and, to a lesser extent, evaluating the beaconing policies. Storage is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.4-3">Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold boot", and the time until new link is usable.

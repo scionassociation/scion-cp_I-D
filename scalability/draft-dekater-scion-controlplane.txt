@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 January 2025                                          S. Hitz
+Expires: 6 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             4 July 2024
+                                                             5 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 6 January 2025.
 
 Copyright Notice
 
@@ -1966,9 +1966,9 @@ path segment 4 |             |     |             |     |             |
 
 2.4.  Path Discovery Time and Scalability
 
-   The path discovery mechanism balances of the number of discovered
-   paths and the time it takes to discover them versus resource overhead
-   of the discovery.
+   The path discovery mechanism balances the number of discovered paths
+   and the time it takes to discover them versus resource overhead of
+   the discovery.
 
    The resource costs for path discovery are communication overhead,
    processing and storage.  Communication is transmitting the PCBs and
