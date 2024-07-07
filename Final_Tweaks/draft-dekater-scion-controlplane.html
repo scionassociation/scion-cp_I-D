@@ -1603,7 +1603,7 @@ For fast validation of the path information carried in individual packets during
                 <p id="section-1.5.2.1-3.2.1">A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges (<span>[<a href="#RFC4632" class="cite xref">RFC4632</a>]</span>). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as <code>0:0:0/16</code>.<a href="#section-1.5.2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-1.5.2.1-4">For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number <code>0:1:f</code>, it may display the number as "65551".<a href="#section-1.5.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.5.2.1-4">For historical reasons, SCION AS numbers in the lower 32 bit range <span class="bcp14">MAY</span> also be represented as decimal for human readability. For example, if a program receives the AS number <code>0:1:f</code>, it <span class="bcp14">MAY</span> display the number as "65551".<a href="#section-1.5.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="special-purpose-scion-as-numbers">
@@ -2133,7 +2133,7 @@ path segment 4 |             |     |             |     |             |
                 <p id="section-2.2.1.2-5.1.1"><code>timestamp</code>: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).<a href="#section-2.2.1.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.2-5.2">
-                <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is <span class="bcp14">REQUIRED</span> for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
@@ -2326,10 +2326,10 @@ path segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.1-7"><strong>Note:</strong> For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-8.1">
-                  <p id="section-2.2.1.4.1-8.1.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is optional.<a href="#section-2.2.1.4.1-8.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-8.1.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-8.2">
-                  <p id="section-2.2.1.4.1-8.2.1"><code>metadata</code>: Can be used to include arbitrary per-protocol metadata. This field is optional.<a href="#section-2.2.1.4.1-8.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-8.2.1"><code>metadata</code>: Can be used to include arbitrary per-protocol metadata. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-8.3">
                   <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
@@ -3213,7 +3213,7 @@ The PCB contains the version numbers of the trust root configuration(s) (TRC) an
             <p id="section-4.1-5.5.1">Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-4.1-5.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-5.6">
-            <p id="section-4.1-5.6.1">The destination endpoint, once it receives the first packet, may revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.<a href="#section-4.1-5.6.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-5.6.1">The destination endpoint, once it receives the first packet, <span class="bcp14">MAY</span> revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.<a href="#section-4.1-5.6.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-4.1-6"><a href="#_table-3" class="auto internal xref">Table 3</a> below shows which control service provides the source endpoint with which type of path segment.<a href="#section-4.1-6" class="pilcrow">¶</a></p>

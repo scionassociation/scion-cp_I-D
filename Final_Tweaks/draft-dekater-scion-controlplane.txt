@@ -571,8 +571,8 @@ Table of Contents
       represented as 0:0:0/16.
 
    For historical reasons, SCION AS numbers in the lower 32 bit range
-   may also be represented as decimal for human readability.  For
-   example, if a program receives the AS number 0:1:f, it may display
+   MAY also be represented as decimal for human readability.  For
+   example, if a program receives the AS number 0:1:f, it MAY display
    the number as "65551".
 
 1.5.2.2.  Special-Purpose SCION AS Numbers
@@ -1091,7 +1091,7 @@ path segment 4 |             |     |             |     |             |
       elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
    *  segment_id: The 16-bit identifier of this PCB and the
-      corresponding path segment.  The segment ID is required for the
+      corresponding path segment.  The segment ID is REQUIRED for the
       computation of the message authentication code (MAC) of an AS's
       hop field.  The MAC is used for hop field verification in the data
       plane.  The originating core AS MUST fill this field with a
@@ -1278,10 +1278,10 @@ path segment 4 |             |     |             |     |             |
    SCION Control-Plane PKI Specification [I-D.scion-cppki].
 
    *  timestamp: Defines the signature creation timestamp.  This field
-      is optional.
+      is OPTIONAL.
 
    *  metadata: Can be used to include arbitrary per-protocol metadata.
-      This field is optional.
+      This field is OPTIONAL.
 
    *  associated_data_length: Specifies the length of associated data
       that is covered by the signature, but is not included in the
@@ -2220,7 +2220,7 @@ path segment 4 |             |     |             |     |             |
    5.  Once it has obtained all path segments, the source endpoint
        combines them into an end-to-end path in the data plane.
 
-   6.  The destination endpoint, once it receives the first packet, may
+   6.  The destination endpoint, once it receives the first packet, MAY
        revert the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
