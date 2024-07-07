@@ -1141,7 +1141,6 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, to ensure quick connectivity establishment.
 
 
 #### Selection Policy Example
@@ -1323,7 +1322,7 @@ Generally, the time until a specific PCB is built depends on its length and the 
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
 With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
 
-Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, end points route around the failed link by switching to different paths in the data plane.
+Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
 
 For more specific observations, we distinguish between intra- and inter-ISD beaconing.
 As will become apparent, the inter-ISD beaconing results in excessive overhead with very large numbers of participating core ASes. The ideal topology for SCION is to keep the inter-ISD core network to a moderate size, to benefit from the divide-and-conquer partitioning of ASes into ISDs and the efficiency of the intra-ISD beaconing.
@@ -1355,7 +1354,7 @@ We cannot assume that the selected PCBs are strictly shortest paths through the 
 With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface.
 For highly connected ASes, the number of PCBs received thus becomes rather large. In a network of 1000 ASes, a highly connected AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150 thousand signature validations per second. In terms of bandwidth, this corresponds to very roughly 38MB/s.
-All of these are managable on a present day small server or desktop machine.
+All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
 
