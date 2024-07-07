@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 January 2025                                          S. Hitz
+Expires: 8 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             5 July 2024
+                                                             7 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2025.
+   This Internet-Draft will expire on 8 January 2025.
 
 Copyright Notice
 
@@ -1668,10 +1668,6 @@ path segment 4 |             |     |             |     |             |
    The scalability implications of such parameters are further discussed
    in Section 2.4.
 
-   Note that during bootstrapping and if the AS obtains a PCB containing
-   a previously unknown path, the AS SHOULD forward the PCB immediately,
-   to ensure quick connectivity establishment.
-
 2.3.1.2.  Selection Policy Example
 
    Figure 9 below illustrates the selection of path segments in three
@@ -1998,8 +1994,8 @@ path segment 4 |             |     |             |     |             |
 
    Note that link removal is not part of path discovery in SCION.  For
    scheduled removal of links, operators let path segments expire.  On
-   link failures, end points route around the failed link by switching
-   to different paths in the data plane.
+   link failures, endpoints route around the failed link by switching to
+   different paths in the data plane.
 
    For more specific observations, we distinguish between intra- and
    inter-ISD beaconing.  As will become apparent, the inter-ISD
@@ -2097,7 +2093,7 @@ path segment 4 |             |     |             |     |             |
    interval.  Assuming an average PCB length of 6 and the shortest
    propagation interval of 60 seconds, this corresponds to roughly 150
    thousand signature validations per second.  In terms of bandwidth,
-   this corresponds to very roughly 38MB/s.  All of these are managable
+   this corresponds to very roughly 38MB/s.  All of these are manageable
    on a present day small server or desktop machine.  For much larger,
    more highly connected ASes, the path-discovery tasks of the control
    service can be distributed over many instances in order to increase

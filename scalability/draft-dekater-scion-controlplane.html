@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 6 January 2025</td>
+<td class="center">Expires 8 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-05" class="published">5 July 2024</time>
+<time datetime="2024-07-07" class="published">7 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-06">6 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-08">8 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2713,7 +2713,6 @@ The goal of the AS should be to propagate those candidate PCBs with the highest 
 </li>
             </ul>
 <p id="section-2.3.1.1-6">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-7">Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS <span class="bcp14">SHOULD</span> forward the PCB immediately, to ensure quick connectivity establishment.<a href="#section-2.3.1.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="selection-policy-example">
@@ -2994,7 +2993,7 @@ All of these depend on the the number and length of the discovered path segments
 Generally, the time until a specific PCB is built depends on its length and the propagation interval.
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
 With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).<a href="#section-2.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.4-4">Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, end points route around the failed link by switching to different paths in the data plane.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.4-4">Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <p id="section-2.4-5">For more specific observations, we distinguish between intra- and inter-ISD beaconing.
 As will become apparent, the inter-ISD beaconing results in excessive overhead with very large numbers of participating core ASes. The ideal topology for SCION is to keep the inter-ISD core network to a moderate size, to benefit from the divide-and-conquer partitioning of ASes into ISDs and the efficiency of the intra-ISD beaconing.<a href="#section-2.4-5" class="pilcrow">¶</a></p>
 <div id="intra-isd-beaconing">
@@ -3026,7 +3025,7 @@ We cannot assume that the selected PCBs are strictly shortest paths through the 
 <p id="section-2.4.2-3">With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface.
 For highly connected ASes, the number of PCBs received thus becomes rather large. In a network of 1000 ASes, a highly connected AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150 thousand signature validations per second. In terms of bandwidth, this corresponds to very roughly 38MB/s.
-All of these are managable on a present day small server or desktop machine.
+All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.<a href="#section-2.4.2-3" class="pilcrow">¶</a></p>
 <p id="section-2.4.2-4">On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.<a href="#section-2.4.2-4" class="pilcrow">¶</a></p>
 <p id="section-2.4.2-5">When a new link is added to the network, it will be available to connect two ASes at distances from the link D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.<a href="#section-2.4.2-5" class="pilcrow">¶</a></p>
