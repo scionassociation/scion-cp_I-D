@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-04T00:17:27.399371+00:00",
+  "timestamp": "2024-07-07T00:19:26.579253+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -86,9 +86,9 @@
         "Prio 1",
         "Prio 2"
       ],
-      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [ ] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [ ] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [ ] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [ ] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [ ]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [x] #18\r\n- [ ] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [ ] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [ ] #19\r\n- [ ] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [ ] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\", handled in #8 \r\n- [ ] #22\r\n",
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft.\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [x] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [x] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [x] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [x]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [x] #18\r\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [x] #19\r\n- [x] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\n- [x] #22\r\n",
       "createdAt": "2024-01-08T12:56:27Z",
-      "updatedAt": "2024-06-19T20:32:19Z",
+      "updatedAt": "2024-07-04T10:37:50Z",
       "closedAt": null,
       "comments": []
     },
@@ -207,7 +207,7 @@
       ],
       "body": "Continue work done in #11: \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", if not needed\r\n      \r\n\r\netc.",
       "createdAt": "2024-02-23T18:42:28Z",
-      "updatedAt": "2024-05-16T09:10:56Z",
+      "updatedAt": "2024-07-04T10:45:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -216,6 +216,13 @@
           "body": "Let's fix the: \"Allowed\", review use of MAY, and then resolve this",
           "createdAt": "2024-05-16T09:10:56Z",
           "updatedAt": "2024-05-16T09:10:56Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "While we added words,  we need to look at capitalization of these words, this is still not right in all places:\r\n\r\nFrom rfc8174: \r\n> The words have the meanings specified herein only when they are in all capitals.\"\r\n\r\n\r\nKeywords are:  \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\",\r\n   \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and\r\n   \"OPTIONAL\" ",
+          "createdAt": "2024-07-04T10:44:18Z",
+          "updatedAt": "2024-07-04T10:45:54Z"
         }
       ]
     },
@@ -224,7 +231,7 @@
       "id": "I_kwDOJx2-rs6IwwiF",
       "title": "Extend introduction, add overview and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/14",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -238,15 +245,15 @@
       ],
       "body": ">   \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\nthe first two documents are not in my queue and I don't expect them.\r\n\r\n\r\nSame issue in other drafts: \r\n- DP https://github.com/scionassociation/scion-dp_I-D/issues/10\r\n- CPPKI https://github.com/scionassociation/scion-cppki_I-D/issues/29",
       "createdAt": "2024-05-14T05:57:55Z",
-      "updatedAt": "2024-06-06T08:20:24Z",
-      "closedAt": null,
+      "updatedAt": "2024-07-04T15:54:51Z",
+      "closedAt": "2024-07-04T15:54:51Z",
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "- [ ] on the ISD definition, change language on jurisdiction (i.e. --> e.g.) ",
+          "body": "- [x] on the ISD definition, change language on jurisdiction (i.e. --> e.g.) ",
           "createdAt": "2024-06-06T08:20:23Z",
-          "updatedAt": "2024-06-06T08:20:23Z"
+          "updatedAt": "2024-07-04T15:54:47Z"
         }
       ]
     },
@@ -473,7 +480,7 @@
       "id": "I_kwDOJx2-rs6JFfLE",
       "title": "Clarify path reversal for symmetric routing",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/22",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -484,8 +491,8 @@
       ],
       "body": " think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help.\r\n \r\n  @nicorusti: a sentence to clarify this could be added in 1.6. at bullet point path reversal.",
       "createdAt": "2024-05-16T09:55:40Z",
-      "updatedAt": "2024-06-21T17:09:33Z",
-      "closedAt": null,
+      "updatedAt": "2024-07-04T15:52:23Z",
+      "closedAt": "2024-07-04T15:52:23Z",
       "comments": []
     },
     {
@@ -2869,13 +2876,13 @@
       "labels": [],
       "body": "Scalability of path discovery.\r\n- Explain quality/quantity vs resource overhead\r\n- Resource cost in terms of number and length of discovered paths\r\n- Exploration time in terms of path length / network diameter\r\n- Separate analysis for inter/intra ISD beaconing:\r\n  - Typical / expected properties of the network\r\n  - Example numbers to give impression for order of magnitude of overhead\r\n\r\nFixes #8 ",
       "createdAt": "2024-06-21T13:23:58Z",
-      "updatedAt": "2024-07-03T17:40:05Z",
+      "updatedAt": "2024-07-05T15:39:09Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scalability",
-      "headRefOid": "011ef7c0e79e718c4eea4ba1580e19a547680dd7",
+      "headRefOid": "c6f8e1f922525d035e1a3bdbb9bde24013cd9874",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -2887,6 +2894,13 @@
           "body": "Thanks for fixing my typos, @nicorusti.",
           "createdAt": "2024-07-03T13:28:50Z",
           "updatedAt": "2024-07-03T13:28:50Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "body": "General Note: \r\n- The notes contain several references to \"immediate cold-start PCB forwarding\" which in turn refers to the section #selection where it says\r\nunder \"Storing and Selecting Candidate PCBs\":\r\n\"Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].\"\r\n- The notes contain several references to \"beacon origination interval\", i.e. the intervall at which new beacons are created. I couldn't find any description\r\n  of this interval, maybe I overlooked it? Is it the same as the propagation interval?\r\n\r\n\r\n# Some points I found could be useful to add to the doc:\r\n- I couldn't find a discussion of beacon origination interval (or the RegistrationInterval), see \"DefaultOriginationInterval\" (or the DefaultRegistrationInterval) in the code.\r\n  Maybe I overlooked it? \r\n- Load balancing? E.g. everybody picks the shortest paths, all other paths remain unused...? How is this handled?\r\n\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n### Effects of Clock Inaccuracy\r\n- `PCBs are propagated at a configurable interval (typically, one minute).`\r\n  - Unless they are new, then the interval is ignored, see \"immediate cold-start PCB forwarding\".\r\n  - Maybe rephrase: \"(typically, one minute)\" ---> \"immediately for new beacons, minimum 5secs for intra-ISD, minimum one minute for inter-ISD\"?\r\n  See #path-prop: \"The propagation interval SHOULD be at least \"5\" (seconds) for intra-ISD beaconing and at least \"60\" (seconds) for core beaconing.\".\r\n  - Also, AFAIK, the current configured real-world interval is more like 10-15 minutes...?  \r\n\r\n- `PCBs with N hops may be validated up to N intervals (so typically N minutes) after origination`\r\n  - I think the word \"typically\" is misleading here, it can be understood as \"PCBs [...] are validated typically after N minutes\", whereas it actually means that the _maximum_ is typically N minutes. \r\n    Rephrase to \"(maximally N minutes)\" or \"(amounting to N minutes, assuming the minimum inter-ISD propagation interval)\"\r\n\r\n- Rephrase `The norm is 6 hours.` to `... SHOULD be 6 hours` ? What does 'norm' mean?\r\n\r\n- `In comparison to these time scales, clock offsets in the order of minutes are immaterial.`  \r\n  - This relates only to the previous paragraph about certificates; I guess it should be attached to the previous paragraph?\r\n\r\n\r\n## Path Discovery Time and Scalability {#scalability}\r\n- ~`balances _OF_ the number of discovered paths` -> remove OF~ Already fixed\r\n\r\n- `Generally, the time until a specific PCB is built depends on its length and the propagation interval.`? \r\n   - I think in the context of \"cold boot\u00a8, the propagation delay is \"0\", see \"immediate cold-start PCB forwarding\".\r\n- `PCB arrives at a random point in time during the interval and is buffered before potentially being propagated`\r\n  - see \"immediate cold-start PCB forwarding\"\r\n  - Also, I think the calculation needs to take into account the \"beacon origination interval\".\r\n\r\n- `As will become apparent, the inter-ISD beaconing results in excessive overhead with very large numbers of participating core ASes.`\r\n  - Does this need to be in the IETF spec?\r\n- `The ideal topology for SCION is to keep the inter-ISD core network to a moderate size, to benefit from the divide-and-conquer partitioning of ASes into ISDs and the efficiency of the intra-ISD beaconing.`\r\n  - What is done to ensure this? What happens if the size is not moderate? What is \"moderate\"?\r\n\r\n\r\n### Intra-ISD Beaconing\r\n\r\n- `Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation steps`\r\n   - New path: \"immediate cold-start PCB forwarding\"\r\n\r\n\r\n### Inter-ISD Beaconing\r\n\r\n- `On a cold start of the network, [...]. With a 5 second propagation period [...]`\r\n   - Above it says that bootstrapping results in immediatede forwarding, see \"immediate cold-start PCB forwarding\".\r\n\r\n- `When a new link is added to the network, it will be available to connect two ASes at distances from the link D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.`\r\n  - Typo: duplicated \"from the link\";\r\n  - Also: see previous point about \"immediate cold-start PCB forwarding\"\r\n",
+          "createdAt": "2024-07-05T15:39:07Z",
+          "updatedAt": "2024-07-05T15:39:07Z"
         }
       ],
       "reviews": [
@@ -3265,6 +3279,246 @@
               "updatedAt": "2024-07-03T17:40:05Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6ApXIp",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T08:35:03Z",
+          "updatedAt": "2024-07-04T08:35:03Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "Maybe here we could summarize by saying that the overall message complexity for an AS is linear to the number of core ASes N.",
+              "createdAt": "2024-07-04T08:35:03Z",
+              "updatedAt": "2024-07-04T08:35:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AqsGk",
+          "commit": {
+            "abbreviatedOid": "5f7a89e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-04T11:10:57Z",
+          "updatedAt": "2024-07-04T11:11:37Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "New line missing before \"Note that...\" ?\r\n",
+              "createdAt": "2024-07-04T11:10:58Z",
+              "updatedAt": "2024-07-04T11:11:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Axjay",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T10:48:59Z",
+          "updatedAt": "2024-07-05T10:48:59Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "I disagree, this seems entirely out of place. We shouldn't randomly throw in normative behavior rules into informative, explanatory sections.",
+              "createdAt": "2024-07-05T10:48:59Z",
+              "updatedAt": "2024-07-05T10:49:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AxlFw",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T10:53:42Z",
+          "updatedAt": "2024-07-05T10:53:43Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Fixed, I made it \"down-path segment\" (and fixed the slightly broken sentence around it). FWIW, I think \"down path\" would not be hyphenated.",
+              "createdAt": "2024-07-05T10:53:43Z",
+              "updatedAt": "2024-07-05T10:53:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Axn7P",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:01:15Z",
+          "updatedAt": "2024-07-05T11:01:15Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "Accepting to keep things consistent, but I find this SHOULD there rather strange. That's the one parameter that must be controlled in order that receivers of beacons won't be overwhelmed. Maybe it could say something like \"MUST be less than 50 unless there is an out of band agreement\". Anyway, maybe something for another day.",
+              "createdAt": "2024-07-05T11:01:15Z",
+              "updatedAt": "2024-07-05T11:01:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Axr_m",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:12:52Z",
+          "updatedAt": "2024-07-05T11:12:52Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "> At one RTGWG session we got asked how SCION scales with the number of inter-AS links. It was someone working on Azure's backbone, they have ~30k + inter-AS links, so I feel 100 is not a rather large number\r\n\r\nThe 100 explicitly refer to links to (transit-)providers. I can't imagine that the Azure backbone has too many inter-AS links to transit providers.\r\nFeel free to suggest a different way to present this, but what I tried was to give an impression for the upper bound for the resource overhead seen by a typical AS; 100 provider links seems more than what a typical (SCION-)AS will have.",
+              "createdAt": "2024-07-05T11:12:52Z",
+              "updatedAt": "2024-07-05T11:12:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AxtAp",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:15:47Z",
+          "updatedAt": "2024-07-05T11:15:47Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "It's not making this assumption; in this scenario we received 50 * 100 == 5000 PCBs and forward only 50 of on each child link.",
+              "createdAt": "2024-07-05T11:15:47Z",
+              "updatedAt": "2024-07-05T11:15:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AxvyP",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:23:38Z",
+          "updatedAt": "2024-07-05T11:23:39Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "That's the weirdest note. How can we define required / recommended behavior in a note?\r\nAlso, this behavior doesn't exist in the implementation. The idea seems a bit naive and completely underspecified. It's at least not obvious that this does not break the normal beaconing protocol, which _relies_ on these intervals.\r\nI'd rather we just drop this note.",
+              "createdAt": "2024-07-05T11:23:38Z",
+              "updatedAt": "2024-07-05T11:23:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AxyTI",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:30:22Z",
+          "updatedAt": "2024-07-05T11:30:22Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "I've not committed your suggestion directly but rather introduced the number one line above.\r\n```diff\r\n-Once this number grows above the limit value of 50, ASes trim the set of PCBs propagated.\r\n+Once this number grows above the maximum recommended best PCBs set size of 50, ASes trim the set of PCBs propagated.\r\n```",
+              "createdAt": "2024-07-05T11:30:22Z",
+              "updatedAt": "2024-07-05T11:30:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Ax4VN",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:46:32Z",
+          "updatedAt": "2024-07-05T11:46:33Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "But it's not, it's N times the path length. That's the whole buildup of this section:\r\n\r\n- [Resource costs] depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.\r\n\r\n- Then we say that in core network, PCBs are roughly log(N) long.\r\n\r\n- With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface.\r\n",
+              "createdAt": "2024-07-05T11:46:33Z",
+              "updatedAt": "2024-07-05T11:46:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Ax4sl",
+          "commit": {
+            "abbreviatedOid": "011ef7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:47:32Z",
+          "updatedAt": "2024-07-05T11:47:32Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "The full bandwidth will be seen by the control service, both facing the network and for storage. This seems more relevant than the bandwidth across the individual links.\r\n\r\n> The overall CP load in an AS of such scale would be distributed on various instances\r\n\r\nI don't feel that this invalidates this calculations. The point was to illustrate that this is managable with modest resources.\r\n\r\nI'll throw in a sentence to say that control service tasks can be distributed to scale to even larger ASes (like this 30k inter-domain link backbone).\r\n",
+              "createdAt": "2024-07-05T11:47:32Z",
+              "updatedAt": "2024-07-05T11:54:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Ax8kN",
+          "commit": {
+            "abbreviatedOid": "5f7a89e"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-05T11:58:08Z",
+          "updatedAt": "2024-07-05T11:58:08Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Done.",
+              "createdAt": "2024-07-05T11:58:08Z",
+              "updatedAt": "2024-07-05T11:58:08Z"
+            }
+          ]
         }
       ]
     },
@@ -3273,20 +3527,128 @@
       "id": "PR_kwDOJx2-rs5zNNZT",
       "title": "clarify path reversibility",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/43",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Solves #22 ",
+      "body": "Resolves #22 ",
       "createdAt": "2024-06-21T17:08:48Z",
-      "updatedAt": "2024-06-21T17:08:58Z",
+      "updatedAt": "2024-07-04T15:52:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "path_reversal",
-      "headRefOid": "376fdf0dbd974b79edc14023e7583d595c346373",
+      "headRefOid": "a501045e2ce0cd5857db15ea472e0e20e68adaff",
+      "closedAt": "2024-07-04T15:52:22Z",
+      "mergedAt": "2024-07-04T15:52:22Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d275f5068aa9ed5dd11e9d803db416eacbe304c5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6AphN6",
+          "commit": {
+            "abbreviatedOid": "376fdf0"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T08:54:14Z",
+          "updatedAt": "2024-07-04T09:00:09Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "That sentence doesn't seem grammatically correct. I am not sure what is doing the \"ensuring\". How about:\"\r\n\r\n- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.\r\n\"\r\n",
+              "createdAt": "2024-07-04T08:54:14Z",
+              "updatedAt": "2024-07-04T09:00:09Z"
+            },
+            {
+              "originalPosition": 24,
+              "body": "Point 6: haven't we already explained that? May be we could be more laconic here:\r\n\r\n6. The destination endpoint, once it receives the first packet, has the option to revert the path in the received packet in order to construct a response.",
+              "createdAt": "2024-07-04T08:56:32Z",
+              "updatedAt": "2024-07-04T09:00:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AqShY",
+          "commit": {
+            "abbreviatedOid": "376fdf0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T10:19:05Z",
+          "updatedAt": "2024-07-04T10:19:05Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Thanks a lot, nice wording! ",
+              "createdAt": "2024-07-04T10:19:05Z",
+              "updatedAt": "2024-07-04T10:19:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6AqTld",
+          "commit": {
+            "abbreviatedOid": "376fdf0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T10:21:25Z",
+          "updatedAt": "2024-07-04T10:21:25Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "I was a b it redundant with wording because of the feedback we received: \r\n\r\n> think in the provider world it is expected that traffic between two endpoints uses bidirectionally the same path symmetrically. As each AS can select its own path to other AS's, it looks like SCION is not symmetrical. Maybe a comment around that could help. \r\n\r\nI'll use your proposal for more succinct wording, how about: \r\n`The destination endpoint, once it receives the first packet, may revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.`\r\n",
+              "createdAt": "2024-07-04T10:21:25Z",
+              "updatedAt": "2024-07-04T10:25:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Aqt5m",
+          "commit": {
+            "abbreviatedOid": "a501045"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-04T11:15:12Z",
+          "updatedAt": "2024-07-04T11:15:12Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "id": "PR_kwDOJx2-rs50bp1b",
+      "title": "Highlighted use of MUST, MUST NOT and SHOULD where appropriate.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/44",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Have not changed this in code references",
+      "createdAt": "2024-07-04T11:04:27Z",
+      "updatedAt": "2024-07-04T11:04:27Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1eb85516903ff150f1a681db24d0438573faab3b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Final_Tweaks",
+      "headRefOid": "aab6db68d99656d839c9a1ed9fa2cf01e0713e5b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
