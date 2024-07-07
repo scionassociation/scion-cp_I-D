@@ -1648,7 +1648,7 @@ enum SegmentType {
 
 
 // This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
-// control services on the "intra-protocol" network.
+// control services on the "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
