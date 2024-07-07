@@ -1323,7 +1323,7 @@ With a propagation interval T at each AS, the mean time until the PCB is propaga
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
 
-To achieve scalability in its routing process, SCION uses a divide-and-conquer approach, partitioning  ASes into ISDs. In order to benefit from this, an ideal topology SCION should keep the inter-ISD core network to a moderate size. For more specific observations, we distinguish between intra- and inter-ISD beaconing. 
+To achieve scalability in its routing process, SCION uses a divide-and-conquer approach, partitioning  ASes into ISDs. In order to benefit from this, an ideal topology SCION should keep the inter-ISD core network to a moderate size. For more specific observations, we distinguish between intra- and inter-ISD beaconing.
 
 ### Intra-ISD Beaconing
 In the intra-ISD beaconing, PCBs are propagated top-down, along parent-child links, from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
