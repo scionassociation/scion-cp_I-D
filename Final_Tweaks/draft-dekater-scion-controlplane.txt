@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 January 2025                                          S. Hitz
+Expires: 8 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             4 July 2024
+                                                             7 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 8 January 2025.
 
 Copyright Notice
 
@@ -639,9 +639,11 @@ Table of Contents
       fetched from the local path storage, which is populated during the
       beaconing process.
 
-   *  Path reversal: In SCION, every path is reversible—i.e., the
-      receiver of a packet can reverse the path in the packet header to
-      send back a reply packet without having to perform a path lookup.
+   *  Path reversal: In SCION, every path is reversible.  That is, the
+      receiver of a packet can reverse the path in the packet header in
+      order to produce a reply packet without having to perform a path
+      lookup.  Such a packet follows the original packet's path
+      backwards.
 
    *  Availability of certificates: In SCION, every entity is required
       to be in possession of all cryptographic material (including the
@@ -2181,10 +2183,10 @@ path segment 4 |             |     |             |     |             |
 
    *  a down-path segment to reach the destination AS.
 
-   *Note:* The actual number of required path segments depends on the
-   location of the destination AS as well as on the availability of
-   shortcuts and peering links.  More information on combining and
-   constructing paths is provided by [I-D.scion-dp].
+   The actual number of required path segments depends on the location
+   of the destination AS as well as on the availability of shortcuts and
+   peering links.  More information on combining and constructing paths
+   is provided by [I-D.scion-dp].
 
    The process to look up and fetch path segments consists of the
    following steps:
@@ -2215,8 +2217,13 @@ path segment 4 |             |     |             |     |             |
    4.  Finally, the control service of the source AS returns all
        retrieved path segments to the source endpoint.
 
-   5.  Once it has obtained all path segments, the endpoint combines
-       them into an end-to-end path in the data plane.
+   5.  Once it has obtained all path segments, the source endpoint
+       combines them into an end-to-end path in the data plane.
+
+   6.  The destination endpoint, once it receives the first packet, may
+       revert the path in the received packet in order to construct a
+       response.  This ensures that traffic flows on the same path
+       bidirectionally.
 
    Table 3 below shows which control service provides the source
    endpoint with which type of path segment.
