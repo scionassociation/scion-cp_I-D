@@ -345,7 +345,7 @@ In SCION, the following rules apply:
 - The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
-For historical reasons, SCION AS numbers in the lower 32 bit range may also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it may display the number as "65551".
+For historical reasons, SCION AS numbers in the lower 32 bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
 
 
 #### Special-Purpose SCION AS Numbers
@@ -719,7 +719,7 @@ In the Protobuf message format, the information component of a PCB is called the
 
 - `timestamp`: The 32-bit timestamp indicates the creation time of this PCB. It is set by the originating core AS. The expiration time of each hop field in the PCB is computed relative to this timestamp. The timestamp is encoded as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
-- `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is required for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
+- `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is REQUIRED for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
 
 **Note:** See [](#hopfield) for more information on the hop field message format. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
 
@@ -863,8 +863,8 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 **Note:** For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
 
-- `timestamp`: Defines the signature creation timestamp. This field is optional.
-- `metadata`: Can be used to include arbitrary per-protocol metadata. This field is optional.
+- `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
+- `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
 - `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
 
 
@@ -1432,7 +1432,7 @@ The process to look up and fetch path segments consists of the following steps:
 3. Next, the control service of the source AS combines up-path segments with the newly retrieved core-path segments. The control service then queries the control services of the remote core ASes in the destination ISD, to fetch down-path segments to the destination AS. To reach the remote core ASes, the control service of the source AS uses the previously obtained and combined up- and core segments.
 4. Finally, the control service of the source AS returns all retrieved path segments to the source endpoint.
 5. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
-6. The destination endpoint, once it receives the first packet, may revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
+6. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which control service provides the source endpoint with which type of path segment.
 
