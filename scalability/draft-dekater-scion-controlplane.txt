@@ -1941,22 +1941,20 @@ path segment 4 |             |     |             |     |             |
    This bias comes in addition to a structural delay: PCBs are
    propagated at a configurable interval (typically, one minute).  As a
    result of this and the way they are iteratively constructed, PCBs
-   with N hops may be validated up to N intervals (so typically N
+   with N hops may be validated up to N intervals (so maximally N
    minutes) after origination.  This creates a constraint on the
    expiration of hops.  Hops of the minimal expiration time (337.5
    seconds - see Section 2.2.1.6) would render useless any PCB
    describing a path longer than 5 hops.  For this reason, it is
-   unadvisable to create hops with a short expiration time.  The norm is
-   6 hours.
+   unadvisable to create hops with a short expiration time, that should
+   be around 6 hours.
 
    The control service and its clients authenticate each-other according
    to their respective AS's certificate.  Path segments are
    authenticated based on the certificates of the ASes that they refer
    to.  The expiration of a SCION AS certificate typically ranges from
-   3h to 5 years.
-
-   In comparison to these time scales, clock offsets in the order of
-   minutes are immaterial.
+   3h to 5 years.  In comparison to these time scales, clock offsets in
+   the order of minutes are immaterial.
 
    Each administrator of a SCION control service is responsible for
    maintaining sufficient clock accuracy.  No particular method is
@@ -1997,13 +1995,11 @@ path segment 4 |             |     |             |     |             |
    link failures, endpoints route around the failed link by switching to
    different paths in the data plane.
 
-   For more specific observations, we distinguish between intra- and
-   inter-ISD beaconing.  As will become apparent, the inter-ISD
-   beaconing results in excessive overhead with very large numbers of
-   participating core ASes.  The ideal topology for SCION is to keep the
-   inter-ISD core network to a moderate size, to benefit from the
-   divide-and-conquer partitioning of ASes into ISDs and the efficiency
-   of the intra-ISD beaconing.
+   To achieve scalability in its routing process, SCION uses a divide-
+   and-conquer approach, partitioning ASes into ISDs.  In order to
+   benefit from this, an ideal topology SCION should keep the inter-ISD
+   core network to a moderate size.  For more specific observations, we
+   distinguish between intra- and inter-ISD beaconing.
 
 2.4.1.  Intra-ISD Beaconing
 
@@ -2105,8 +2101,8 @@ path segment 4 |             |     |             |     |             |
    roughly 3 minutes on average.
 
    When a new link is added to the network, it will be available to
-   connect two ASes at distances from the link D1 and D2 from the link,
-   respectively, after a mean time (D1+D2)*T/2.
+   connect two ASes at distances D1 and D2 from the link, respectively,
+   after a mean time (D1+D2)*T/2.
 
 3.  Registration of Path Segments
 
