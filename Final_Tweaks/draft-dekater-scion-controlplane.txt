@@ -1835,7 +1835,7 @@ path segment 4 |             |     |             |     |             |
        *  The ISD_AS number of the next AS, in the signed body component
           of the AS entry.
 
-       *  If the AS has peering links, the control service SHOULD add
+       *  If the AS has peering links, the control service MAY add
           corresponding peer entry components to the signed body of the
           AS entry; one peer entry component for each peering link that
           the AS wants to advertise.  The hop field component of each
