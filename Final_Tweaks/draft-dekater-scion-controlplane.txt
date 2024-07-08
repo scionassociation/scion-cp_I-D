@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 8 January 2025                                          S. Hitz
+Expires: 9 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             7 July 2024
+                                                             8 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2025.
+   This Internet-Draft will expire on 9 January 2025.
 
 Copyright Notice
 
@@ -1364,11 +1364,11 @@ path segment 4 |             |     |             |     |             |
    ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )
 
    The signature metadata minimally contains the ISD-AS number of the
-   signing entity and the key identifier of the public key that SHOULD
-   be used to verify the message.  For more information on signing and
-   verifying control-plane messages, see the chapter "Signing and
-   Verifying Control-Plane Messages" of the SCION Control-Plane PKI
-   Specification [I-D.scion-cppki].
+   signing entity and the key identifier of the public key to be used to
+   verify the message.  For more information on signing and verifying
+   control-plane messages, see the chapter "Signing and Verifying
+   Control-Plane Messages" of the SCION Control-Plane PKI Specification
+   [I-D.scion-cppki].
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
