@@ -2145,7 +2145,7 @@ path segment 4 |             |     |             |     |             |
 
      message SegmentsRegistrationResponse {}
 
-   *  SegmentType: Specifies the type of the path segment that MUST be
+   *  SegmentType: Specifies the type of the path segment to be
       registered.  Currently, only the following type is used:
 
       -  SEGMENT_TYPE_DOWN: Specifies a down-segment.
