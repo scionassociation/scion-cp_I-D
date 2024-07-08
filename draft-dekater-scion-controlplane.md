@@ -1403,7 +1403,7 @@ The control service of a non-core AS has to register the newly created down-segm
    message SegmentsRegistrationResponse {}
 ~~~~
 
-- `SegmentType`: Specifies the type of the path segment that MUST be registered. Currently, only the following type is used:
+- `SegmentType`: Specifies the type of the path segment to be registered. Currently, only the following type is used:
   - `SEGMENT_TYPE_DOWN`: Specifies a down-segment.
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
 
