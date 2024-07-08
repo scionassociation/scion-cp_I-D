@@ -1230,7 +1230,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
    - The ingress interface to this AS, in the hop field component.
    - The egress interface to the neighboring AS, also in the hop field component.
    - The ISD_AS number of the next AS, in the signed body component of the AS entry.
-   - If the AS has peering links, the control service SHOULD add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry MUST have a specified egress interface.
+   - If the AS has peering links, the control service MAY add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The hop field component of each added peer entry MUST have a specified egress interface.
 3. The control service MUST now sign each selected, extended PCB and append the computed signature.
 4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring ASes (see also [](#prop-proto)).
 
