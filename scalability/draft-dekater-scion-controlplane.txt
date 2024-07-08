@@ -1941,9 +1941,9 @@ path segment 4 |             |     |             |     |             |
       expiration time in the past.
 
    This bias comes in addition to a structural delay: PCBs are
-   propagated at a configurable interval (typically, one minute).  As a
-   result of this and the way they are iteratively constructed, PCBs
-   with N hops may be validated up to N intervals (so maximally N
+   propagated at a configurable interval (typically, around one minute).
+   As a result of this and the way they are iteratively constructed,
+   PCBs with N hops may be validated up to N intervals (so maximally N
    minutes) after origination.  This creates a constraint on the
    expiration of hops.  Hops of the minimal expiration time (337.5
    seconds - see Section 2.2.1.6) would render useless any PCB
