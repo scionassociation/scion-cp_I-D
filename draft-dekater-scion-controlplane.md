@@ -1139,6 +1139,7 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
+Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB more frequently, to ensure quick connectivity establishment.
 The scalability implications of such parameters are further discussed in [](#scalability).
 
 
@@ -1301,7 +1302,7 @@ A PCB originated by a given control service is validated by all the control serv
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute), except at AS bootstrapping. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated at worst case up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
 
 The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
@@ -1356,7 +1357,7 @@ All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
 
-On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
+On a cold start of the network, full connectivity is obtained at worst after a number of propagation steps corresponding to the diameter of the network, unless ASes propagate beacons more frequently at bootstrapping. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
 When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.
 
