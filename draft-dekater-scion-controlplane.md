@@ -1325,7 +1325,7 @@ The control service of a non-core AS MUST perform the following steps to "termin
      - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
    - The egress interface in the hop field component MUST NOT be specified.
      - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
-2. If the AS has peering links, the control service SHOULD add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the hop field component of each added peer entry MUST NOT be specified.
+2. If the AS has peering links, the control service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the hop field component of each added peer entry MUST NOT be specified.
    - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
 3. As a last step, the control service MUST sign the modified PCB and append the computed signature.
 
