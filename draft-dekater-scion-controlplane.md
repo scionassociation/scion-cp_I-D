@@ -1139,7 +1139,12 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB more frequently, to ensure quick connectivity establishment.
+Note that under certain conditions, to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently:
+
+- if no beacon was successfully sent over the interface in the current propagation interval (e.g. because the corresponding RPC failed)
+
+- or if the AS receives a previously unknown path segment
+
 The scalability implications of such parameters are further discussed in [](#scalability).
 
 
@@ -1302,7 +1307,7 @@ A PCB originated by a given control service is validated by all the control serv
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute), except at AS bootstrapping. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated at worst case up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated at worst case up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
 
 The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
@@ -1317,7 +1322,7 @@ The path discovery mechanism balances the number of discovered paths and the tim
 The resource costs for path discovery are communication overhead, processing and storage. Communication is transmitting the PCBs and occasionally obtaining the required PKI material. Processing cost is validating the signatures of the AS entries, signing new AS entries, and, to a lesser extent, evaluating the beaconing policies. Storage is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.
 
-Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold boot", and the time until new link is usable.
+Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold start", and the time until new link is usable.
 Generally, the time until a specific PCB is built depends on its length and the propagation interval.
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
 With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
@@ -1339,7 +1344,7 @@ If the same AS has 1000 child links, the propagation of the beacons will require
 The total bandwidth for the propagation of these PCBs for all 1000 child links would, again very roughly, be around 25MB/s.
 All of these are manageable with even modest consumer hardware.
 
-On a cold start of the network, path segments to each AS are discovered after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
+On a cold start of the network, path segments to each AS are discovered at worst after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
 
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation intervals.
 
@@ -1357,7 +1362,7 @@ All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
 
-On a cold start of the network, full connectivity is obtained at worst after a number of propagation steps corresponding to the diameter of the network, unless ASes propagate beacons more frequently at bootstrapping. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
+On a cold start of the network, full connectivity is obtained at worst after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
 When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.
 
