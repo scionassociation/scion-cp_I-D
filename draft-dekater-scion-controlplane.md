@@ -1139,7 +1139,7 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-Note that under certain conditions, to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently:
+Note that under certain conditions, to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently ("fast recovery"):
 
 - if no beacon was successfully sent over the interface in the current propagation interval (e.g. because the corresponding RPC failed)
 
@@ -1323,9 +1323,9 @@ The resource costs for path discovery are communication overhead, processing and
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.
 
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold start", and the time until new link is usable.
-Generally, the time until a specific PCB is built depends on its length and the propagation interval.
-At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
-With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
+Generally, the time until a specific PCB is built depends on its length, the propagation interval, wether on-path ASes use "fast recovery".
+At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated.
+With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
 
@@ -1346,7 +1346,7 @@ All of these are manageable with even modest consumer hardware.
 
 On a cold start of the network, path segments to each AS are discovered at worst after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
 
-When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation intervals.
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs at latest in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, might learn of the new link at worst after D further propagation intervals, if on path ASes do not use "fast recovery".
 
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
@@ -1364,7 +1364,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
 
 On a cold start of the network, full connectivity is obtained at worst after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
-When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.
+When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, at worst after a mean time (D1+D2)*T/2.
 
 
 # Registration of Path Segments {#path-segment-reg}
