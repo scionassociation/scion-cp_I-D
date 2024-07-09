@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 9 January 2025                                          S. Hitz
+Expires: 10 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                             8 July 2024
+                                                             9 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 January 2025.
+   This Internet-Draft will expire on 10 January 2025.
 
 Copyright Notice
 
@@ -1667,11 +1667,17 @@ path segment 4 |             |     |             |     |             |
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
-   Note that during bootstrapping and if the AS obtains a PCB containing
-   a previously unknown path, the AS SHOULD forward the PCB more
-   frequently, to ensure quick connectivity establishment.  The
-   scalability implications of such parameters are further discussed in
-   Section 2.4.
+   Note that under certain conditions, to ensure quick connectivity
+   establishment, an AS MAY attempt to forward a PCB more frequently:
+
+   *  if no beacon was successfully sent over the interface in the
+      current propagation interval (e.g. because the corresponding RPC
+      failed)
+
+   *  or if the AS receives a previously unknown path segment
+
+   The scalability implications of such parameters are further discussed
+   in Section 2.4.
 
 2.3.1.2.  Selection Policy Example
 
@@ -1944,15 +1950,15 @@ path segment 4 |             |     |             |     |             |
       expiration time in the past.
 
    This bias comes in addition to a structural delay: PCBs are
-   propagated at a configurable interval (typically, around one minute),
-   except at AS bootstrapping.  As a result of this and the way they are
-   iteratively constructed, PCBs with N hops may be validated at worst
-   case up to N intervals (so maximally N minutes) after origination.
-   This creates a constraint on the expiration of hops.  Hops of the
-   minimal expiration time (337.5 seconds - see Section 2.2.1.6) would
-   render useless any PCB describing a path longer than 5 hops.  For
-   this reason, it is unadvisable to create hops with a short expiration
-   time, that should be around 6 hours.
+   propagated at a configurable interval (typically, around one minute).
+   As a result of this and the way they are iteratively constructed,
+   PCBs with N hops may be validated at worst case up to N intervals (so
+   maximally N minutes) after origination.  This creates a constraint on
+   the expiration of hops.  Hops of the minimal expiration time (337.5
+   seconds - see Section 2.2.1.6) would render useless any PCB
+   describing a path longer than 5 hops.  For this reason, it is
+   unadvisable to create hops with a short expiration time, that should
+   be around 6 hours.
 
    The control service and its clients authenticate each-other according
    to their respective AS's certificate.  Path segments are
@@ -1984,7 +1990,7 @@ path segment 4 |             |     |             |     |             |
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
-   after a "cold boot", and the time until new link is usable.
+   after a "cold start", and the time until new link is usable.
    Generally, the time until a specific PCB is built depends on its
    length and the propagation interval.  At each AS, the PCB will be
    processed and propagated at the subsequent propagation event.  As
@@ -2053,10 +2059,10 @@ path segment 4 |             |     |             |     |             |
    manageable with even modest consumer hardware.
 
    On a cold start of the network, path segments to each AS are
-   discovered after a number of propagation steps proportional to the
-   longest path.  As mentioned, the longest path is typically not long.
-   With a 5 second propagation period and a generous longest path of
-   length 10, all path segments are discovered after 25 seconds on
+   discovered at worst after a number of propagation steps proportional
+   to the longest path.  As mentioned, the longest path is typically not
+   long.  With a 5 second propagation period and a generous longest path
+   of length 10, all path segments are discovered after 25 seconds on
    average.
 
    When a new parent-child link is added to the network, the parent AS
@@ -2102,8 +2108,7 @@ path segment 4 |             |     |             |     |             |
 
    On a cold start of the network, full connectivity is obtained at
    worst after a number of propagation steps corresponding to the
-   diameter of the network, unless ASes propagate beacons more
-   frequently at bootstrapping.  Assuming a network diameter of 6, this
+   diameter of the network.  Assuming a network diameter of 6, this
    corresponds to roughly 3 minutes on average.
 
    When a new link is added to the network, it will be available to
