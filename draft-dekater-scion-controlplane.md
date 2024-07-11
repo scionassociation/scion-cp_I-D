@@ -1139,12 +1139,11 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-Note that under certain conditions, to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently ("fast recovery"):
+Note that to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:
 
-- if no beacon was successfully sent over the interface in the current propagation interval (e.g. because the corresponding RPC failed)
+- because the corresponding RPC failed
 
-- or if the AS receives a previously unknown path segment
-
+- or because no beacon was available to propagate
 The scalability implications of such parameters are further discussed in [](#scalability).
 
 
