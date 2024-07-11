@@ -1307,7 +1307,7 @@ A PCB originated by a given control service is validated by all the control serv
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated at worst case up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
 
 The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
@@ -1346,7 +1346,7 @@ All of these are manageable with even modest consumer hardware.
 
 On a cold start of the network, path segments to each AS are discovered at worst after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
 
-When a new parent-child link is added to the network, the parent AS will propagate the available PCBs at latest in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, might learn of the new link at worst after D further propagation intervals, if on path ASes do not use "fast recovery".
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs at the latest in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, might learn of the new link at worst after D further propagation intervals, if on path ASes do not use "fast recovery".
 
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
