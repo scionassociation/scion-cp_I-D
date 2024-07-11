@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 10 January 2025                                         S. Hitz
+Expires: 12 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                             9 July 2024
+                                                            11 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 January 2025.
+   This Internet-Draft will expire on 12 January 2025.
 
 Copyright Notice
 
@@ -1953,9 +1953,9 @@ path segment 4 |             |     |             |     |             |
    This bias comes in addition to a structural delay: PCBs are
    propagated at a configurable interval (typically, around one minute).
    As a result of this and the way they are iteratively constructed,
-   PCBs with N hops may be validated at worst case up to N intervals (so
-   maximally N minutes) after origination.  This creates a constraint on
-   the expiration of hops.  Hops of the minimal expiration time (337.5
+   PCBs with N hops may be validated up to N intervals (so maximally N
+   minutes) after origination.  This creates a constraint on the
+   expiration of hops.  Hops of the minimal expiration time (337.5
    seconds - see Section 2.2.1.6) would render useless any PCB
    describing a path longer than 5 hops.  For this reason, it is
    unadvisable to create hops with a short expiration time, that should
@@ -2068,9 +2068,9 @@ path segment 4 |             |     |             |     |             |
    average.
 
    When a new parent-child link is added to the network, the parent AS
-   will propagate the available PCBs at latest in the next propagation
-   event.  If the AS on the child side of the new link is a leaf AS,
-   path discovery is thus complete after one single propagation
+   will propagate the available PCBs at the latest in the next
+   propagation event.  If the AS on the child side of the new link is a
+   leaf AS, path discovery is thus complete after one single propagation
    interval.  Otherwise, child ASes at distance D below the new link,
    might learn of the new link at worst after D further propagation
    intervals, if on path ASes do not use "fast recovery".
