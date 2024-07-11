@@ -1322,7 +1322,7 @@ The resource costs for path discovery are communication overhead, processing and
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.
 
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold start", and the time until new link is usable.
-Generally, the time until a specific PCB is built depends on its length, the propagation interval, wether on-path ASes use "fast recovery".
+Generally, the time until a specific PCB is built depends on its length, the propagation interval, whether on-path ASes use "fast recovery".
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated.
 With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
 
@@ -1361,7 +1361,7 @@ All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
 
-On a cold start of the network, full connectivity is obtained at worst after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
+On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
 When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, at worst after a mean time (D1+D2)*T/2.
 
