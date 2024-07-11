@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-09T00:17:32.311757+00:00",
+  "timestamp": "2024-07-11T00:18:16.636101+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -701,10 +701,12 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Prio 3"
+      ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2024-07-08T20:14:56Z",
+      "updatedAt": "2024-07-09T14:47:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -720,6 +722,13 @@
           "body": "In the early skeleton of the deployment draft, we also got this content by @juagargi : \r\n\r\n> ## Beaconing Scalability\r\n> \r\n> The current beaconing system creates a large amount of beaconing traffic because every node multiplies the beacons by forwarding them to multiple other ASs. This is currently handled by rate-limiting identical beacons (with identical paths) to only be forwarded every some fixed propagation interval.  With larger networks, the beaconing traffic is expected to grow \u201csubstantially\u201d.\r\n> \r\n> * Risk: beaconing traffic grows with network size, especially with multiple links between pairs of ASes.\r\n>   * Large amount of beacon traffic.\r\n>   * Large amount of state on beacon servers.\r\n>   * Considerable amount of state on control services to store segments, and considerable data traffic for serving segments.\r\n> * The beacon interval in the SSFN has been considerably reduced to deal with beacon traffic. (?)\r\n>   * This affects the propagation time of newly available routes. [To be verified]\r\n>   * This can affect convergence time.\r\n\r\n@juagargi I have some concerns regarding this text: \r\n> >  The beacon interval in the SSFN has been considerably reduced to deal with beacon traffic. (?)\r\n\r\nBeacon traffic increases if the interval is reduced. Also, Dominik today mentioned they use 30s in general. We can perhaps clarify this and integrate this in the next release of the CP draft. If there are more researchy parts to this, we can add it to the research questions draft. \r\n\r\n\r\nI am moving this to here, as with #42 we added a section about beaconing scalability, and I feel this would belong there more than to the open research questions. \r\n",
           "createdAt": "2024-07-08T20:14:54Z",
           "updatedAt": "2024-07-08T20:14:54Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "body": "> > Shouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n> \r\n> That's exactly what it is, we just picked a generous value for the allowed inaccuracies. Picking a value that already had a meaning in SCION seemed _less_ arbitrary than making up another arbitrary value. There doesn't seem to be a non-arbitrary choice.\r\n\r\nI'm not sure I can follow this argument. If we want an \"arbitrary\" value, we could just say so. Picking the minimum hopfield expiration time requires not only more text + a (pointless) reference, I also found it really confusing, thinking I was lacking some obvious understanding why the minimum hopfield expiration is relevant here. Also, the value is not really arbitrary, it depends on what the acceptable/expected clock deviation is. Maybe we can just write that?\r\nI don't really see the benefit of picking a time interval that is defined somewhere else in the document in an unrelated context.",
+          "createdAt": "2024-07-09T14:41:36Z",
+          "updatedAt": "2024-07-09T14:41:36Z"
         }
       ]
     },
@@ -731,11 +740,37 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "matzf",
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1"
+      ],
       "body": "In #42 we discussed about  propagation interval in case of \"bootstrapping\"/\"cold-start\". Following clarifications in this [slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1720431398661119), it turns out that: \r\n> There is a fast recovery where we attempt to beacon a lot more frequently until we have beaconed successfully over the given interface\r\n\r\nThis is implemented in [here](https://github.com/scionproto/scion/blob/a1ed6246ecd6beae9c82544032de4f9fecab1058/control/beaconing/propagator.go#L324) in scionproto. There was just one note in the draft that got removed in #42. We should re-add this, together with some clarifications, especially in the _Effects of Clock Inaccuracy_ and _Path Discovery Time and Scalability_ sections.\r\n\r\nSome points to be addressed were reported by @tzaeschke [here](https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556): \r\n\r\n> ### Storing and Selecting Candidate PCBs\r\n>- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n>   - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n>   - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n>   - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n>     forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n>   - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n> ### Effects of Clock Inaccuracy\r\n> - `PCBs are propagated at a configurable interval (typically, one minute).`\r\n>   - Unless they are new, then the interval is ignored, see \"immediate cold-start PCB forwarding\".\r\n>   - Maybe rephrase: \"(typically, one minute)\" ---> \"immediately for new beacons, minimum 5secs for intra-ISD, minimum one minute for inter-ISD\"?\r\n\r\n> ### Path Discovery Time and Scalability {#scalability}\r\n> - `Generally, the time until a specific PCB is built depends on its length and the propagation interval.`? \r\n>   - I think in the context of \"cold boot\u00a8, the propagation delay is \"0\", see \"immediate cold-start PCB forwarding\".\r\n>- `PCB arrives at a random point in time during the interval and is buffered before potentially being propagated`\r\n>  - see \"immediate cold-start PCB forwarding\"\r\n>  - Also, I think the calculation needs to take into account the \"beacon origination interval\".\r\n\r\n>### Intra-ISD Beaconing\r\n\r\n>- `Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation steps`\r\n>   - New path: \"immediate cold-start PCB forwarding\"\r\n    \r\n\r\n>### Inter-ISD Beaconing\r\n\r\n>- `On a cold start of the network, [...]. With a 5 second propagation period [...]`\r\n>   - Above it says that bootstrapping results in immediatede forwarding, see \"immediate cold-start PCB forwarding\".\r\n\r\n>- `When a new link is added to the network, it will be available to connect two ASes at distances from the link D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.`\r\n>  - Also: see previous point about \"immediate cold-start PCB forwarding\"",
       "createdAt": "2024-07-08T16:09:42Z",
-      "updatedAt": "2024-07-08T16:13:12Z",
+      "updatedAt": "2024-07-09T10:14:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 50,
+      "id": "I_kwDOJx2-rs6O67LK",
+      "title": "Anapaya review -04",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/50",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "shitz"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\nIt would be great if you could look at this within a week. Thanks a lot!\r\n  \r\n\r\n",
+      "createdAt": "2024-07-09T10:31:37Z",
+      "updatedAt": "2024-07-09T10:33:02Z",
       "closedAt": null,
       "comments": []
     }
@@ -3968,19 +4003,204 @@
       "labels": [],
       "body": "Solves #48 ",
       "createdAt": "2024-07-08T16:16:47Z",
-      "updatedAt": "2024-07-08T16:17:55Z",
+      "updatedAt": "2024-07-10T09:44:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "70f77f07a11c0c92f2ce1da81ab192a44566b7fe",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "beaconing_fast_retry",
-      "headRefOid": "a6248df47c3b520146e60e4830e5fb1d3cef533d",
+      "headRefOid": "17d1c618e01967772bd8c4b442b1360ef7981e37",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6BHrLK",
+          "commit": {
+            "abbreviatedOid": "a6248df"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T13:06:31Z",
+          "updatedAt": "2024-07-09T13:08:03Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "I side with Matthias regarding the phrase \"bootstrapping\". This calls for a definition and such is hard to come by. Do we need to mention that at all?\r\n\r\nRegarding \"The AS SHOULD\". We just said that it \"SHOULD not\" in the paragraph above. So can't possibly express it like that. This may be one case where \"MAY\" is approriate, assuming we specify under which condition (since that derogates from the previous paragraph).\r\n\r\nRegarding when it MAY... I think that \"previously unknown\" segments, or \"previously unreachable destinations\" could qualify.\r\n",
+              "createdAt": "2024-07-09T13:06:31Z",
+              "updatedAt": "2024-07-09T13:08:41Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "Same consideration about boostrapping. What is bootstrapping.",
+              "createdAt": "2024-07-09T13:06:36Z",
+              "updatedAt": "2024-07-09T13:08:03Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "And again. Here I think it would be enough to mention the worst case and not bother with \"unless...\".\r\n",
+              "createdAt": "2024-07-09T13:07:57Z",
+              "updatedAt": "2024-07-09T13:08:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BIMrE",
+          "commit": {
+            "abbreviatedOid": "a6248df"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T13:56:57Z",
+          "updatedAt": "2024-07-09T13:56:57Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "\"Bootstrapping\" was a quick & dirty word, I'll replace it with a list of conditions when the propagation interval MAY not be respected. ",
+              "createdAt": "2024-07-09T13:56:57Z",
+              "updatedAt": "2024-07-09T13:56:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BIQER",
+          "commit": {
+            "abbreviatedOid": "a6248df"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T14:01:48Z",
+          "updatedAt": "2024-07-09T14:01:48Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Ok, I will remove all mentions of bootstrapping. However, I'd like that we discuss (maybe also with oncilla) if this fast retry mechanism should really be optional, or perhaps mandatory. \r\nIf it stays optional (using MAY in comment above), then we are ok to say here `at worst case`. If it becomes mandatory, then the structural delay here might become a lot better (however, I feel we still don't understand the full implications).\r\n\r\n",
+              "createdAt": "2024-07-09T14:01:48Z",
+              "updatedAt": "2024-07-09T14:01:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BIesg",
+          "commit": {
+            "abbreviatedOid": "a6248df"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T14:24:23Z",
+          "updatedAt": "2024-07-09T14:24:23Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "(fee free to resolve if you like my text, or to propose an alternative)",
+              "createdAt": "2024-07-09T14:24:23Z",
+              "updatedAt": "2024-07-09T14:24:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BIeui",
+          "commit": {
+            "abbreviatedOid": "a6248df"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T14:24:26Z",
+          "updatedAt": "2024-07-09T14:24:26Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "(fee free to resolve if you like my text, or to propose an alternative)",
+              "createdAt": "2024-07-09T14:24:26Z",
+              "updatedAt": "2024-07-09T14:24:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BIe7h",
+          "commit": {
+            "abbreviatedOid": "17d1c61"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T14:24:45Z",
+          "updatedAt": "2024-07-09T14:24:45Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "@jiceatscion @matzf @oncilla do these conditions sound reasonable? How would the AS check that it receives a previously unknown segment, shall we be more precise about this? \r\n\r\nON a similar note, @tzaeschke 's  comments were: \r\n>  Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths?\r\n\r\n> What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths coming in all the time that need to be forwarded immediately, or not?",
+              "createdAt": "2024-07-09T14:24:45Z",
+              "updatedAt": "2024-07-09T14:24:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BI2bw",
+          "commit": {
+            "abbreviatedOid": "17d1c61"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-09T14:59:03Z",
+          "updatedAt": "2024-07-09T14:59:03Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": ">  How would the AS check that it receives a previously unknown segment, shall we be more precise about this?\r\n\r\nI don't think this is accurate. We do not do fast recovery if we receive a previously unknown path segment in all cases.\r\n\r\nI think what it really boils down to is the following:\r\n\r\nIf we have not successfully distributed at least one beacon within the last beaconing interval, be it due to failing RPCs, or because no beacon was available to propagate, we enter the fast recovery mode.\r\n\r\n> Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths?\r\n\r\nThe questions are mute, because we do not immediately beacon if a new path segment is discovered.\r\n\r\n",
+              "createdAt": "2024-07-09T14:59:03Z",
+              "updatedAt": "2024-07-09T14:59:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6BQRbQ",
+          "commit": {
+            "abbreviatedOid": "17d1c61"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-10T09:16:51Z",
+          "updatedAt": "2024-07-10T09:44:13Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "\"be validated at worst case up to N intervals (so maximally N minutes)\". This is triply redundant:\r\n\r\n\"up to\" means \"<=\" means \"maximally\" means \"in the worst case\". I give you that the \"maximally\" phrase is about duration and not intervals, but still, that was more than clear enough as it was.\r\n",
+              "createdAt": "2024-07-10T09:16:51Z",
+              "updatedAt": "2024-07-10T09:44:13Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "Ok. so if we want to be both honest and minimalist, we should just give permission to the current implementation do do what it does, without mandating it (since I don't think we really know how good or bad it is). how about:\r\n\r\n\"\r\nNote that to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently (\"fast recovery\") if no attempt is know to have succeeded. Current practice is to increase the frequency of attempts if and only if no beacon has been successfully propagated during the last beaconing interval.\r\n\"\r\n?",
+              "createdAt": "2024-07-10T09:39:11Z",
+              "updatedAt": "2024-07-10T09:44:13Z"
+            },
+            {
+              "originalPosition": 45,
+              "body": "\"...propagate the available PCBs at latest in...\"\r\n\r\n\"...propagate the available PCBs at the latest in...\"",
+              "createdAt": "2024-07-10T09:43:27Z",
+              "updatedAt": "2024-07-10T09:44:13Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
