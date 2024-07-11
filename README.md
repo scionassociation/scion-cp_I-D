@@ -1,6 +1,6 @@
-# SCION Control Plane Specification
+# SCION Control Plane
 
-This is the working area for the individual Internet-Draft, "TODO - Your title".
+This is the working area for the individual Internet-Draft, "SCION Control Plane".
 
 * [Editor's Copy](https://scionassociation.github.io/scion-cp_I-D/#go.draft-dekater-scion-controlplane.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane)
