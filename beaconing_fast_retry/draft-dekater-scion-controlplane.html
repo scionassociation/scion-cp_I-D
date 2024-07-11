@@ -2712,16 +2712,16 @@ The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candi
                 <p id="section-2.3.1.1-5.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.1.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.3.1.1-6">Note that under certain conditions, to ensure quick connectivity establishment, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"):<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-6">Note that to ensure quick connectivity establishment, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.1-7.1">
-                <p id="section-2.3.1.1-7.1.1">if no beacon was successfully sent over the interface in the current propagation interval (e.g. because the corresponding RPC failed)<a href="#section-2.3.1.1-7.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.1.1-7.1.1">because the corresponding RPC failed<a href="#section-2.3.1.1-7.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.1.1-7.2">
-                <p id="section-2.3.1.1-7.2.1">or if the AS receives a previously unknown path segment<a href="#section-2.3.1.1-7.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.1.1-7.2.1">or because no beacon was available to propagate
+The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.1.1-7.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.3.1.1-8">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.1.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="selection-policy-example">
