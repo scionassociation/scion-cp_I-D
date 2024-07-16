@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 12 January 2025                                         S. Hitz
+Expires: 17 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            11 July 2024
+                                                            16 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 January 2025.
+   This Internet-Draft will expire on 17 January 2025.
 
 Copyright Notice
 
@@ -1667,8 +1667,17 @@ path segment 4 |             |     |             |     |             |
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
-   The scalability implications of such parameters are further discussed
-   in Section 2.4.
+   Note that to ensure quick connectivity establishment, an AS MAY
+   attempt to forward a PCB more frequently ("fast recovery").  Current
+   practice is to increase the frequency of attempts if no PCB
+   propagation is know to have succeeded within the last propagation
+   interval:
+
+   *  because the corresponding RPC failed
+
+   *  or because no beacon was available to propagate The scalability
+      implications of such parameters are further discussed in
+      Section 2.4.
 
 2.3.1.2.  Selection Policy Example
 
@@ -1981,16 +1990,17 @@ path segment 4 |             |     |             |     |             |
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
-   after a "cold boot", and the time until new link is usable.
+   after a "cold start", and the time until new link is usable.
    Generally, the time until a specific PCB is built depends on its
-   length and the propagation interval.  At each AS, the PCB will be
-   processed and propagated at the subsequent propagation event.  As
-   propagation events are not synchronized between different ASes, a PCB
-   arrives at a random point in time during the interval and is buffered
-   before potentially being propagated.  With a propagation interval T
-   at each AS, the mean time until the PCB is propagated in one AS
-   therefore is T / 2 and the mean total time for the propagation steps
-   of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
+   length, the propagation interval, whether on-path ASes use "fast
+   recovery".  At each AS, the PCB will be processed and propagated at
+   the subsequent propagation event.  As propagation events are not
+   synchronized between different ASes, a PCB arrives at a random point
+   in time during the interval and may be buffered before potentially
+   being propagated.  With a propagation interval T at each AS, the mean
+   time until the PCB is propagated in one AS therefore is T / 2 and the
+   mean total time for the propagation steps of a PCB of length L is at
+   worst L * T / 2 (with a variance of L * T^2 / 12).
 
    Note that link removal is not part of path discovery in SCION.  For
    scheduled removal of links, operators let path segments expire.  On
@@ -2050,18 +2060,20 @@ path segment 4 |             |     |             |     |             |
    manageable with even modest consumer hardware.
 
    On a cold start of the network, path segments to each AS are
-   discovered after a number of propagation steps proportional to the
-   longest path.  As mentioned, the longest path is typically not long.
-   With a 5 second propagation period and a generous longest path of
-   length 10, all path segments are discovered after 25 seconds on
-   average.
+   discovered within a number of propagation steps proportional to the
+   longest path.  With a 5 second propagation period and a generous
+   longest path of length 10, all path segments are discovered after 25
+   seconds on average.  When all ASes start propagation interval just
+   after they've received the first PCBs from any of their upstreams
+   (see 'fast recovery'), the construction of a first path to connect
+   each AS to the ISD core is accelerated.
 
    When a new parent-child link is added to the network, the parent AS
    will propagate the available PCBs in the next propagation event.  If
    the AS on the child side of the new link is a leaf AS, path discovery
-   is thus complete after one single propagation interval.  Otherwise,
+   is thus complete after at most one propagation interval.  Otherwise,
    child ASes at distance D below the new link, learn of the new link
-   after D further propagation intervals.
+   after at worst D further propagation intervals.
 
 2.4.2.  Inter-ISD Beaconing
 
@@ -2104,7 +2116,7 @@ path segment 4 |             |     |             |     |             |
 
    When a new link is added to the network, it will be available to
    connect two ASes at distances D1 and D2 from the link, respectively,
-   after a mean time (D1+D2)*T/2.
+   at worst after a mean time (D1+D2)*T/2.
 
 3.  Registration of Path Segments
 
