@@ -1343,7 +1343,8 @@ If the same AS has 1000 child links, the propagation of the beacons will require
 The total bandwidth for the propagation of these PCBs for all 1000 child links would, again very roughly, be around 25MB/s.
 All of these are manageable with even modest consumer hardware.
 
-On a cold start of the network, path segments to each AS are discovered at worst after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
+On a cold start of the network, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
+When all ASes start propagation interval just after they've received the first PCBs from any of their upstreams (see 'fast recovery'), the construction of a first path to connect each AS to the ISD core is accelerated.
 
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
