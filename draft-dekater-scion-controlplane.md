@@ -1139,6 +1139,11 @@ Depending on the selection criteria, it may be necessary to keep more candidate 
 
 - The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
+Note that to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:
+
+- because the corresponding RPC failed
+
+- or because no beacon was available to propagate
 The scalability implications of such parameters are further discussed in [](#scalability).
 
 
@@ -1316,10 +1321,10 @@ The path discovery mechanism balances the number of discovered paths and the tim
 The resource costs for path discovery are communication overhead, processing and storage. Communication is transmitting the PCBs and occasionally obtaining the required PKI material. Processing cost is validating the signatures of the AS entries, signing new AS entries, and, to a lesser extent, evaluating the beaconing policies. Storage is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 All of these depend on the the number and length of the discovered path segments, that is, on the total number of AS entries of the discovered path segments.
 
-Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold boot", and the time until new link is usable.
-Generally, the time until a specific PCB is built depends on its length and the propagation interval.
-At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and is buffered before potentially being propagated.
-With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is L * T / 2 (with a variance of L * T^2 / 12).
+Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a "cold start", and the time until new link is usable.
+Generally, the time until a specific PCB is built depends on its length, the propagation interval, whether on-path ASes use "fast recovery".
+At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated.
+With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
 
@@ -1338,9 +1343,10 @@ If the same AS has 1000 child links, the propagation of the beacons will require
 The total bandwidth for the propagation of these PCBs for all 1000 child links would, again very roughly, be around 25MB/s.
 All of these are manageable with even modest consumer hardware.
 
-On a cold start of the network, path segments to each AS are discovered after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
+On a cold start of the network, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.
+When all ASes start propagation interval just after they've received the first PCBs from any of their upstreams (see 'fast recovery'), the construction of a first path to connect each AS to the ISD core is accelerated.
 
-When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after D further propagation intervals.
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
@@ -1358,7 +1364,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
 
 On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
-When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, after a mean time (D1+D2)*T/2.
+When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, at worst after a mean time (D1+D2)*T/2.
 
 
 # Registration of Path Segments {#path-segment-reg}
