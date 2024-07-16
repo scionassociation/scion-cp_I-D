@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 12 January 2025</td>
+<td class="center">Expires 17 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-11" class="published">11 July 2024</time>
+<time datetime="2024-07-16" class="published">16 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-12">12 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-17">17 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3018,7 +3018,7 @@ If the same AS has 1000 child links, the propagation of the beacons will require
 The total bandwidth for the propagation of these PCBs for all 1000 child links would, again very roughly, be around 25MB/s.
 All of these are manageable with even modest consumer hardware.<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-5">On a cold start of the network, path segments to each AS are discovered at worst after a number of propagation steps proportional to the longest path. As mentioned, the longest path is typically not long. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average.<a href="#section-2.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-6">When a new parent-child link is added to the network, the parent AS will propagate the available PCBs at the latest in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after one single propagation interval. Otherwise, child ASes at distance D below the new link, might learn of the new link at worst after D further propagation intervals, if on path ASes do not use "fast recovery".<a href="#section-2.4.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-6">When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.<a href="#section-2.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="inter-isd-beaconing">
