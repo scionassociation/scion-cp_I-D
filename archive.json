@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-16T00:18:06.274469+00:00",
+  "timestamp": "2024-07-18T00:17:42.961813+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3996,25 +3996,35 @@
       "id": "PR_kwDOJx2-rs50t6zB",
       "title": "Clarify beaconing fast retry at bootstrapping",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/49",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Solves #48 ",
       "createdAt": "2024-07-08T16:16:47Z",
-      "updatedAt": "2024-07-11T15:33:27Z",
+      "updatedAt": "2024-07-16T16:29:25Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "70f77f07a11c0c92f2ce1da81ab192a44566b7fe",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "beaconing_fast_retry",
-      "headRefOid": "28bb00fd83435fe1ab8213819e934f351e779075",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "0863ace84c59f251fa995b699d7c819c7890d9a8",
+      "closedAt": "2024-07-16T16:29:24Z",
+      "mergedAt": "2024-07-16T16:29:24Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "0960054f97e054952821cd18b1421c2ae938aeef"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Disucssed with JC, looks good enough to merge.",
+          "createdAt": "2024-07-16T16:29:18Z",
+          "updatedAt": "2024-07-16T16:29:18Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs6BHrLK",
@@ -4337,6 +4347,26 @@
               "body": "right, I'll do",
               "createdAt": "2024-07-11T15:31:13Z",
               "updatedAt": "2024-07-11T15:31:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6B-48w",
+          "commit": {
+            "abbreviatedOid": "d10bf38"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-16T16:22:07Z",
+          "updatedAt": "2024-07-16T16:22:07Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Thanks, I added your wording there.",
+              "createdAt": "2024-07-16T16:22:07Z",
+              "updatedAt": "2024-07-16T16:22:07Z"
             }
           ]
         }
