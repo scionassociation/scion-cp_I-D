@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 December 2024                                        S. Hitz
+Expires: 19 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            17 June 2024
+                                                            18 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 December 2024.
+   This Internet-Draft will expire on 19 January 2025.
 
 Copyright Notice
 
@@ -105,6 +105,9 @@ Table of Contents
        2.3.1.  Selection of PCBs to Propagate
        2.3.2.  Propagation of Selected PCBs
        2.3.3.  Effects of Clock Inaccuracy
+     2.4.  Path Discovery Time and Scalability
+       2.4.1.  Intra-ISD Beaconing
+       2.4.2.  Inter-ISD Beaconing
    3.  Registration of Path Segments
      3.1.  Intra-ISD Path-Segment Registration
        3.1.1.  Terminating a PCB
@@ -141,25 +144,59 @@ Table of Contents
 
 1.  Introduction
 
-   The SCION control plane is responsible for discovering path segments
-   and making them available to endpoints.  This process includes path
-   exploration, registration, and lookup.  This section explains the
-   basic concepts of the control plane in SCION and introduces SCION's
-   routing concept.
+   SCION is a path-aware internetworking routing architecture as
+   described in [RFC9217].  It allows endpoints and applications to
+   select paths across the network to use for traffic, based on
+   trustworthy path properties.  SCION is an inter-domain network
+   architecture and is therefore not concerned with intra-domain
+   forwarding.
 
-   As SCION is an _inter-domain_ network architecture, it only deals
-   with _inter_-domain routing.  One feature of SCION is the decoupling
-   of inter-domain routing from endpoint addressing.  This Introduction
-   section provides a description of the SCION addressing system in more
-   detail.
+   SCION has been developed with the following goals:
 
-   *Note:* It is assumed that readers of this draft are familiar with
-   the basic concepts of the SCION next-generation inter-domain network
-   architecture.  If not, please find more detailed information in the
-   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],
-   [I-D.scion-dp], and [I-D.scion-cppki], as well as in [CHUAT22],
-   especially Chapter 2.  A short description of the SCION basic terms
-   and elements can be found in Section 1.1 below.
+   _Availability_ - to provide highly available communication that can
+   send traffic over paths with optimal or required characteristics,
+   quickly handle inter-domain link or router failures (both on the last
+   hop or anywhere along the path) and provide continuity in the
+   presence of adversaries.
+
+   _Security_ - to provide higher levels of trust in routing information
+   in order to prevent IP prefix hijacking/leaks, denial-of-service and
+   other attacks.  Endpoints can decide the trust roots they wish to
+   rely on, routing information can be unambiguously attributed to an
+   AS, and packets are only forwarded along authorized path segments.  A
+   particular use case is to enable geofencing.
+
+   _Scalability_ - to improve the scalability of the inter-domain
+   control plane and data plane, avoiding existing limitations related
+   to convergence and forwarding table size.  The advertising of path
+   segments is separated into a beaconing process within each Isolation
+   Domain (ISD) and between ISDs which incurs minimal overhead and
+   resource requirements on routers.
+
+   SCION relies on three main components:
+
+   _PKI_ - To achieve scalability and trust, SCION organizes existing
+   ASes into logical groups of independent routing planes called
+   _Isolation Domains (ISDs)_. All ASes in an ISD agree on a set of
+   trust roots called the _Trust Root Configuration (TRC)_ which is a
+   collection of signed root certificates in X.509 v3 format [RFC5280].
+   The ISD is governed by a set of _core ASes_ which typically manage
+   the trust roots and provide connectivity to other ISDs.  This is the
+   basis of the public key infrastructure which the SCION control plane
+   relies upon for the authentication of messages that is used for the
+   SCION control plane.  See [I-D.scion-cppki]
+
+   _Control Plane_ - performs inter-domain routing by discovering and
+   securely disseminating path information between ASes.  The core ASes
+   use Path-segment Construction Beacons (PCBs) to explore intra-ISD
+   paths, or to explore paths across different ISDs.
+
+   _Data Plane_ - carries out secure packet forwarding between SCION-
+   enabled ASes over paths selected by endpoints.  A SCION border router
+   reuses existing intra-domain infrastructure to communicate to other
+   SCION routers or SCION endpoints within its AS.  See [I-D.scion-dp]
+
+   This document describes the SCION Control Plane component.
 
 1.1.  Terminology
 
@@ -212,7 +249,7 @@ Table of Contents
    the PCB.  Together with hop fields (HFs), info fields are used to
    create forwarding paths.
 
-   *Isolation Domain (ISD)*: In SCION, autonomous systems (ASes) are
+   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called isolation domains or ISDs.  Each
    ISD consists of ASes that span an area with a uniform trust
    environment (i.e., a common jurisdiction).  A possible model is for
@@ -445,6 +482,18 @@ Table of Contents
    path.  This means that all path segments can be used to send data
    traffic in both directions.
 
+   The cryptographic protection of PCBs / path segments is based on the
+   Control-Plane PKI.  The signatures are structured such that the
+   entire message sequence constituting the path segment can be
+   authenticated.  The authenticity can be verified by anyone with
+   access to this PKI.  For fast validation of the path information
+   carried in individual packets during packet forwarding, symmetric key
+   cryptography is used instead.  For this purpose, the hop fields
+   contain a MAC.  These MACs are structured to allow verifying the
+   sequence of hops, reflecting the structure of the PCBs, but, in
+   contrast to the PCBs, this can only be validated by the border
+   routers of the respective AS.
+
 1.5.  Addressing
 
    The inter-domain SCION routing is based on the <ISD, AS> tuple.
@@ -515,7 +564,7 @@ Table of Contents
 
    In SCION, the following rules apply:
 
-   *  The :: zero-compression feature of IPv6 is NOT allowed.  The
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
       feature has very limited use in a 48-bit address space and would
       only add more complexity.
 
@@ -525,8 +574,8 @@ Table of Contents
       represented as 0:0:0/16.
 
    For historical reasons, SCION AS numbers in the lower 32 bit range
-   may also be represented as decimal for human readability.  For
-   example, if a program receives the AS number 0:1:f, it may display
+   MAY also be represented as decimal for human readability.  For
+   example, if a program receives the AS number 0:1:f, it MAY display
    the number as "65551".
 
 1.5.2.2.  Special-Purpose SCION AS Numbers
@@ -593,9 +642,11 @@ Table of Contents
       fetched from the local path storage, which is populated during the
       beaconing process.
 
-   *  Path reversal: In SCION, every path is reversible—i.e., the
-      receiver of a packet can reverse the path in the packet header to
-      send back a reply packet without having to perform a path lookup.
+   *  Path reversal: In SCION, every path is reversible.  That is, the
+      receiver of a packet can reverse the path in the packet header in
+      order to produce a reply packet without having to perform a path
+      lookup.  Such a packet follows the original packet's path
+      backwards.
 
    *  Availability of certificates: In SCION, every entity is required
       to be in possession of all cryptographic material (including the
@@ -1043,7 +1094,7 @@ path segment 4 |             |     |             |     |             |
       elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
 
    *  segment_id: The 16-bit identifier of this PCB and the
-      corresponding path segment.  The segment ID is required for the
+      corresponding path segment.  The segment ID is REQUIRED for the
       computation of the message authentication code (MAC) of an AS's
       hop field.  The MAC is used for hop field verification in the data
       plane.  The originating core AS MUST fill this field with a
@@ -1135,7 +1186,7 @@ path segment 4 |             |     |             |     |             |
 
    The following code block shows the low-level representation of the
    HeaderAndBodyInternal message used for signature computation input.
-   This message should not be used by external code.
+   This message SHOULD NOT be used by external code.
 
       message HeaderAndBodyInternal {
           // Encoded header suitable for signature computation.
@@ -1230,10 +1281,10 @@ path segment 4 |             |     |             |     |             |
    SCION Control-Plane PKI Specification [I-D.scion-cppki].
 
    *  timestamp: Defines the signature creation timestamp.  This field
-      is optional.
+      is OPTIONAL.
 
    *  metadata: Can be used to include arbitrary per-protocol metadata.
-      This field is optional.
+      This field is OPTIONAL.
 
    *  associated_data_length: Specifies the length of associated data
       that is covered by the signature, but is not included in the
@@ -1272,7 +1323,7 @@ path segment 4 |             |     |             |     |             |
    *  isd_as: The ISD-AS number of the AS that created this AS entry.
 
    *  next_isd_as: The ISD-AS number of the downstream AS to which the
-      PCB should be forwarded.
+      PCB SHOULD be forwarded.
 
    *  hop_entry: The hop entry (HopEntry) with the information required
       to forward this PCB through the current AS to the next AS.  This
@@ -1316,11 +1367,11 @@ path segment 4 |             |     |             |     |             |
    ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )
 
    The signature metadata minimally contains the ISD-AS number of the
-   signing entity and the key identifier of the public key that should
-   be used to verify the message.  For more information on signing and
-   verifying control-plane messages, see the chapter "Signing and
-   Verifying Control-Plane Messages" of the SCION Control-Plane PKI
-   Specification [I-D.scion-cppki].
+   signing entity and the key identifier of the public key to be used to
+   verify the message.  For more information on signing and verifying
+   control-plane messages, see the chapter "Signing and Verifying
+   Control-Plane Messages" of the SCION Control-Plane PKI Specification
+   [I-D.scion-cppki].
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
@@ -1386,7 +1437,17 @@ path segment 4 |             |     |             |     |             |
    directly in the data plane for packet forwarding: It specifies the
    incoming and outgoing interfaces of the ASes on the forwarding path.
    To prevent forgery, this information is authenticated with a message
-   authentication code (MAC).
+   authentication code (MAC), which will be checked by the SCION border
+   routers during packet forwarding.
+
+   The algorithm used to compute the hop field MAC is an AS-specific
+   choice.  The operator of an AS can freely choose a MAC algorithm
+   without outside coordination.  However, the control service and
+   routers of the AS do need to agree on the algorithm used.  Control
+   service and router implementations MUST support the Default Hop Field
+   MAC algorithm described in [I-D.scion-dp].  This document does not
+   specify any further mechanism to coordinate this choice between
+   control services and routers of one AS.
 
    The following code block defines the hop field component HopField in
    Protobuf message format:
@@ -1418,9 +1479,7 @@ path segment 4 |             |     |             |     |             |
       sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field.  [I-D.scion-dp] provides a detailed
-      description of the computation of the MAC and the verification of
-      the hop field.
+      to verify the hop field, as described in [I-D.scion-dp].
 
 2.2.1.7.  Peer Entry
 
@@ -1522,7 +1581,7 @@ path segment 4 |             |     |             |     |             |
 
 2.2.3.  PCB Validity
 
-   To be valid (that is, usable to construct a valid path), a PCB must:
+   To be valid (that is, usable to construct a valid path), a PCB MUST:
 
    *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
 
@@ -1542,10 +1601,10 @@ path segment 4 |             |     |             |     |             |
 2.2.4.  Configuration
 
    For the purpose of constructing and propagating path segments, an AS
-   control service must be configured with links to neighboring ASes.
+   control service MUST be configured with links to neighboring ASes.
    Such information may be conveyed to the control service in an out of
    band fashion (e.g in a configuration file).  For each link, these
-   values must be configured:
+   values MUST be configured:
 
    *  Local interface ID
 
@@ -1564,17 +1623,25 @@ path segment 4 |             |     |             |     |             |
 
 2.3.1.  Selection of PCBs to Propagate
 
-   As an AS receives a series of intra-ISD or core PCBs, it must select
-   the PCBs it will use to continue beaconing.  Each AS must specify a
-   local policy on the basis of which PCBs are evaluated, selected or
-   eliminated.  The selection process can be based on _path_ properties
-   (e.g., length, disjointness across different paths) as well as on
-   _PCB_ properties (e.g., age, expiration time) - each AS is free to
-   use those properties that suit the AS best.  The control service can
-   then compute the overall quality of each candidate PCB based on these
-   properties.  For this, the AS should use a selection algorithm or
-   metric that reflects its needs and requirements and identifies the
-   best PCBs or paths segments for this AS.
+   As an AS receives a series of intra-ISD or core PCBs, it MUST select
+   the PCBs it will use to continue beaconing.  Each AS specifies a
+   local policy on the basis of which PCBs are evaluated, selected, or
+   eliminated.  The selection process can inspect and compare the
+   properties of the candidate PCBs (e.g., length, disjointness across
+   different paths, age, expiration time) and/or take into account which
+   PCBs have been propagated in the past.
+
+   Naturally, an AS's policy selects PCBs corresponding to paths that
+   are commercially or otherwise operationally viable.  From these
+   viable PCBs, only a relatively small subset SHOULD be propagated, to
+   avoid excessive overhead of the path discovery system in bigger
+   networks.  The goal of the AS SHOULD be to propagate those candidate
+   PCBs with the highest probability of collectively meeting the needs
+   of the endpoints that will perform path construction.  As SCION does
+   not provide any in-band signal about the intentions of endpoints nor
+   about the policies of downstream ASes, the policy will typically
+   select a somewhat diverse set optimized for multiple, generic
+   parameters.
 
 2.3.1.1.  Storing and Selecting Candidate PCBs
 
@@ -1585,24 +1652,32 @@ path segment 4 |             |     |             |     |             |
    fixed frequency, the _propagation interval_. At each propagation
    event, each AS selects a set of the best PCBs from the candidates in
    the beacon store, according to the AS's selection policy.  This set
-   should have a fixed size, the _best PCBs set size_.
+   SHOULD have a fixed size, the _best PCBs set size_.
 
    *  The _best PCBs set size_ SHOULD be at most "50" (PCBs) for intra-
       ISD beaconing and at most "5" (PCBs) for core beaconing.
 
-   *Note:* Depending on the selection criteria, it may be necessary to
-   keep more candidate PCBs than the _best PCBs set size_ in the beacon
-   store, to be able to determine the best set of PCBs.  If this is the
-   case, an AS should have a suitable pre-selection of candidate PCBs in
-   place, in order to keep the beacon store capacity limited.
+   Depending on the selection criteria, it may be necessary to keep more
+   candidate PCBs than the _best PCBs set size_ in the beacon store, to
+   be able to determine the best set of PCBs.  If this is the case, an
+   AS SHOULD have a suitable pre-selection of candidate PCBs in place,
+   in order to keep the beacon store capacity limited.
 
    *  The _propagation interval_ SHOULD be at least "5" (seconds) for
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
-   *Note:* Note that during bootstrapping and if the AS obtains a PCB
-   containing a previously unknown path, the AS SHOULD forward the PCB
-   immediately, to ensure quick connectivity establishment.
+   Note that to ensure quick connectivity establishment, an AS MAY
+   attempt to forward a PCB more frequently ("fast recovery").  Current
+   practice is to increase the frequency of attempts if no PCB
+   propagation is know to have succeeded within the last propagation
+   interval:
+
+   *  because the corresponding RPC failed
+
+   *  or because no beacon was available to propagate The scalability
+      implications of such parameters are further discussed in
+      Section 2.4.
 
 2.3.1.2.  Selection Policy Example
 
@@ -1725,7 +1800,7 @@ path segment 4 |             |     |             |     |             |
    1.  Upon receiving a PCB, the control service of an AS verifies the
        validity of the PCB (see Section 2.2.3).  Invalid PCBs MUST be
        discarded.  The PCB contains the version numbers of the trust
-       root configuration(s) (TRC) and certificate(s) that must be used
+       root configuration(s) (TRC) and certificate(s) that MUST be used
        to verify its signatures.  This enables the control service to
        check whether it has the relevant TRC(s) and certificate(s); if
        not, they can be requested from the control service of the
@@ -1771,7 +1846,7 @@ path segment 4 |             |     |             |     |             |
        *  The ISD_AS number of the next AS, in the signed body component
           of the AS entry.
 
-       *  If the AS has peering links, the control service should add
+       *  If the AS has peering links, the control service MAY add
           corresponding peer entry components to the signed body of the
           AS entry; one peer entry component for each peering link that
           the AS wants to advertise.  The hop field component of each
@@ -1875,28 +1950,173 @@ path segment 4 |             |     |             |     |             |
       expiration time in the past.
 
    This bias comes in addition to a structural delay: PCBs are
-   propagated at a configurable interval (typically, one minute).  As a
-   result of this and the way they are iteratively constructed, PCBs
-   with N hops may be validated up to N intervals (so typically N
+   propagated at a configurable interval (typically, around one minute).
+   As a result of this and the way they are iteratively constructed,
+   PCBs with N hops may be validated up to N intervals (so maximally N
    minutes) after origination.  This creates a constraint on the
    expiration of hops.  Hops of the minimal expiration time (337.5
    seconds - see Section 2.2.1.6) would render useless any PCB
    describing a path longer than 5 hops.  For this reason, it is
-   unadvisable to create hops with a short expiration time.  The norm is
-   6 hours.
+   unadvisable to create hops with a short expiration time, that should
+   be around 6 hours.
 
    The control service and its clients authenticate each-other according
    to their respective AS's certificate.  Path segments are
    authenticated based on the certificates of the ASes that they refer
    to.  The expiration of a SCION AS certificate typically ranges from
-   3h to 5 years.
-
-   In comparison to these time scales, clock offsets in the order of
-   minutes are immaterial.
+   3h to 5 years.  In comparison to these time scales, clock offsets in
+   the order of minutes are immaterial.
 
    Each administrator of a SCION control service is responsible for
    maintaining sufficient clock accuracy.  No particular method is
    assumed by this specification.
+
+2.4.  Path Discovery Time and Scalability
+
+   The path discovery mechanism balances the number of discovered paths
+   and the time it takes to discover them versus resource overhead of
+   the discovery.
+
+   The resource costs for path discovery are communication overhead,
+   processing and storage.  Communication is transmitting the PCBs and
+   occasionally obtaining the required PKI material.  Processing cost is
+   validating the signatures of the AS entries, signing new AS entries,
+   and, to a lesser extent, evaluating the beaconing policies.  Storage
+   is both the temporary storage of PCBs before the next propagation
+   interval, and the storage of complete discovered path segments.  All
+   of these depend on the the number and length of the discovered path
+   segments, that is, on the total number of AS entries of the
+   discovered path segments.
+
+   Interesting metrics for scalability and speed of path discovery are
+   the time until all discoverable path segments have been discovered
+   after a "cold start", and the time until new link is usable.
+   Generally, the time until a specific PCB is built depends on its
+   length, the propagation interval, whether on-path ASes use "fast
+   recovery".  At each AS, the PCB will be processed and propagated at
+   the subsequent propagation event.  As propagation events are not
+   synchronized between different ASes, a PCB arrives at a random point
+   in time during the interval and may be buffered before potentially
+   being propagated.  With a propagation interval T at each AS, the mean
+   time until the PCB is propagated in one AS therefore is T / 2 and the
+   mean total time for the propagation steps of a PCB of length L is at
+   worst L * T / 2 (with a variance of L * T^2 / 12).
+
+   Note that link removal is not part of path discovery in SCION.  For
+   scheduled removal of links, operators let path segments expire.  On
+   link failures, endpoints route around the failed link by switching to
+   different paths in the data plane.
+
+   To achieve scalability in its routing process, SCION uses a divide-
+   and-conquer approach, partitioning ASes into ISDs.  In order to
+   benefit from this, an ideal topology SCION should keep the inter-ISD
+   core network to a moderate size.  For more specific observations, we
+   distinguish between intra- and inter-ISD beaconing.
+
+2.4.1.  Intra-ISD Beaconing
+
+   In the intra-ISD beaconing, PCBs are propagated top-down, along
+   parent-child links, from core to leaf ASes.  Each AS discovers path
+   segments from itself to the core ASes of its ISD.
+
+   Typically, this directed, acyclic graph is narrow at the top, widens
+   towards the leafs, and is relatively shallow; intermediate provider
+   ASes have a large number of children, while they only have a small
+   number of parents.  The chain of intermediate providers from a leaf
+   AS to a core AS is typically not long (e.g. local, regional, national
+   provider, then core).
+
+   Each AS potentially receives PCBs for all down-path segments from the
+   core to itself.  While the number of distinct provider chains to the
+   core is typically moderate, the multiplicity of links between
+   provider ASes has multiplicative effect on the number of PCBs.  Once
+   this number grows above the maximum recommended best PCBs set size of
+   50, ASes trim the set of PCBs propagated.  As the choice is among
+   different ways to transit the local AS, operators are well equipped
+   to choose among this set of PCBs.  Ultimately, the number of PCBs
+   received by an AS per propagation interval remains bounded by 50 for
+   each parent link of an AS, and at most 50 PCBs per child link are
+   propagated.  The length of these PCBs, and thus the number of AS
+   entries to be processed and stored, is expected to be moderate and
+   not grow considerably with network size.  The total resource overhead
+   for beacon propagation is easily manageable even for highly connected
+   ASes.
+
+   To illustrate this with some numbers, an AS with a rather large
+   number of 100 parent links receives at most 5000 PCBs during a
+   propagation interval.  Assuming a generous average length of 10 AS
+   entries for these PCBs, this corresponds to 50000 AS entries.  Due to
+   the variable length fields in AS entries, the sizes for storage and
+   transmission cannot be predicted exactly, and we'll assume an average
+   of 250 bytes per AS entry.  At the shortest, and thus chattiest,
+   recommended propagation interval of 5 seconds, this corresponds to an
+   average bandwidth of around 2.5MB/s, and processing 10000 signature
+   verifications per second.  If the same AS has 1000 child links, the
+   propagation of the beacons will require signing one new AS entry for
+   each of the propagated PCBs for each link (at most 50 per link), that
+   is at most 50000 signatures per propagation event.  The total
+   bandwidth for the propagation of these PCBs for all 1000 child links
+   would, again very roughly, be around 25MB/s.  All of these are
+   manageable with even modest consumer hardware.
+
+   On a cold start of the network, path segments to each AS are
+   discovered within a number of propagation steps proportional to the
+   longest path.  With a 5 second propagation period and a generous
+   longest path of length 10, all path segments are discovered after 25
+   seconds on average.  When all ASes start propagation interval just
+   after they've received the first PCBs from any of their upstreams
+   (see 'fast recovery'), the construction of a first path to connect
+   each AS to the ISD core is accelerated.
+
+   When a new parent-child link is added to the network, the parent AS
+   will propagate the available PCBs in the next propagation event.  If
+   the AS on the child side of the new link is a leaf AS, path discovery
+   is thus complete after at most one propagation interval.  Otherwise,
+   child ASes at distance D below the new link, learn of the new link
+   after at worst D further propagation intervals.
+
+2.4.2.  Inter-ISD Beaconing
+
+   In the inter-ISD core beaconing, PCBs are propagated
+   omnidirectionally along core links.  Each AS discovers path segments
+   from itself to any other core AS.  The number of distinct paths
+   through the core network is typically very large.  To keep the
+   overhead manageable, at most 5 path segments to every destination AS
+   are discovered, and the propagation frequency is slower than in the
+   intra-ISD beaconing (at least 60 seconds between propagation events).
+
+   Without making strong assumptions on the topology of the core
+   network, we can assume that shortest paths through real world,
+   internet-like networks are relatively short; for example, the
+   Barabási-Albert random graph model predicts a diameter of
+   log(N)/log(log(N)) for a network with N nodes [BollRio-2000].  The
+   average distance scales in the same way.  We cannot assume that the
+   selected PCBs are strictly shortest paths through the network, but
+   it's reasonable to assume that they will not be very much longer than
+   the shortest paths either.
+
+   With N the number of participating core ASes, an AS receives up to 5
+   * N PCBs per propagation interval per core link interface.  For
+   highly connected ASes, the number of PCBs received thus becomes
+   rather large.  In a network of 1000 ASes, a highly connected AS with
+   300 core links receives up to 1.5 million PCBs per propagation
+   interval.  Assuming an average PCB length of 6 and the shortest
+   propagation interval of 60 seconds, this corresponds to roughly 150
+   thousand signature validations per second.  In terms of bandwidth,
+   this corresponds to very roughly 38MB/s.  All of these are manageable
+   on a present day small server or desktop machine.  For much larger,
+   more highly connected ASes, the path-discovery tasks of the control
+   service can be distributed over many instances in order to increase
+   the PCB throughput.
+
+   On a cold start of the network, full connectivity is obtained after a
+   number of propagation steps corresponding to the diameter of the
+   network.  Assuming a network diameter of 6, this corresponds to
+   roughly 3 minutes on average.
+
+   When a new link is added to the network, it will be available to
+   connect two ASes at distances D1 and D2 from the link, respectively,
+   at worst after a mean time (D1+D2)*T/2.
 
 3.  Registration of Path Segments
 
@@ -1943,7 +2163,7 @@ path segment 4 |             |     |             |     |             |
    "terminates" the PCB for this AS ingress interface and at this moment
    in time.
 
-   The control service of a non-core AS must perform the following steps
+   The control service of a non-core AS MUST perform the following steps
    to "terminate" a PCB:
 
    1.  The control service adds a new AS entry to the PCB.  This new AS
@@ -1961,7 +2181,7 @@ path segment 4 |             |     |             |     |             |
           -  In Protobuf message format, this means that the value of
              the egress field in the HopField component MUST be "0".
 
-   2.  If the AS has peering links, the control service should add
+   2.  If the AS has peering links, the control service MAY add
        corresponding peer entry components to the signed body of the AS
        entry - one peer entry component for each peering link that the
        AS wants to advertise.  The egress interface ID in the hop field
@@ -2081,7 +2301,7 @@ path segment 4 |             |     |             |     |             |
 
      message SegmentsRegistrationResponse {}
 
-   *  SegmentType: Specifies the type of the path segment that must be
+   *  SegmentType: Specifies the type of the path segment to be
       registered.  Currently, only the following type is used:
 
       -  SEGMENT_TYPE_DOWN: Specifies a down-segment.
@@ -2119,10 +2339,10 @@ path segment 4 |             |     |             |     |             |
 
    *  a down-path segment to reach the destination AS.
 
-   *Note:* The actual number of required path segments depends on the
-   location of the destination AS as well as on the availability of
-   shortcuts and peering links.  More information on combining and
-   constructing paths is provided by [I-D.scion-dp].
+   The actual number of required path segments depends on the location
+   of the destination AS as well as on the availability of shortcuts and
+   peering links.  More information on combining and constructing paths
+   is provided by [I-D.scion-dp].
 
    The process to look up and fetch path segments consists of the
    following steps:
@@ -2153,8 +2373,13 @@ path segment 4 |             |     |             |     |             |
    4.  Finally, the control service of the source AS returns all
        retrieved path segments to the source endpoint.
 
-   5.  Once it has obtained all path segments, the endpoint combines
-       them into an end-to-end path in the data plane.
+   5.  Once it has obtained all path segments, the source endpoint
+       combines them into an end-to-end path in the data plane.
+
+   6.  The destination endpoint, once it receives the first packet, MAY
+       revert the path in the received packet in order to construct a
+       response.  This ensures that traffic flows on the same path
+       bidirectionally.
 
    Table 3 below shows which control service provides the source
    endpoint with which type of path segment.
@@ -2175,7 +2400,7 @@ path segment 4 |             |     |             |     |             |
 
 4.1.1.  Sequence of Lookup Requests
 
-   The overall sequence of requests to resolve a path should be as
+   The overall sequence of requests to resolve a path SHOULD be as
    follows:
 
    1.  Request up-segments for the source endpoint at the control
@@ -2193,13 +2418,13 @@ path segment 4 |             |     |             |     |             |
 4.1.2.  Caching
 
    For the sake of efficiency, the control service of the source AS
-   should cache each returned path segment request.  Caching ensures
+   SHOULD cache each returned path segment request.  Caching ensures
    that path lookups are fast for frequently used destinations.  The use
    of caching is also essential to ensure that the path-lookup process
    is scalable and can be performed with low latency.
 
    In general, to improve overall efficiency, the control services of
-   all ASes should do the following:
+   all ASes SHOULD do the following:
 
    *  Cache the returned path segments.
 
@@ -2222,7 +2447,7 @@ path segment 4 |             |     |             |     |             |
 4.2.1.  Use of Wildcard Addresses in the Lookup Process
 
    Endpoints can use wildcard addresses to designate any core AS in
-   path-segment requests.  The segment-request handlers must expand
+   path-segment requests.  The segment-request handlers MUST expand
    these wildcard addresses and translate them into one or more actual
    addresses.  Table 4 below shows who is responsible for what.
 
@@ -2311,9 +2536,9 @@ path segment 4 |             |     |             |     |             |
 
    1.  Validate the request:
 
-       *  The source of the path segment must be this core AS.
+       *  The source of the path segment MUST be this core AS.
 
-       *  The request must either be
+       *  The request MUST either be
 
           -  for a core-segment to a core AS in this ISD or another ISD,
              or
@@ -2403,7 +2628,7 @@ path segment 4 |             |     |             |     |             |
    field's MAC, which protects the hop field's integrity and chains it
    with the previous hop fields on the path.  The third type of attack
    generally cannot be prevented, however the alternate path would be
-   immediately visible to endpoints, as traffic must include hop fields
+   immediately visible to endpoints, as traffic MUST include hop fields
    from AS M.
 
 5.2.2.  Creation of Spurious ASes and ISDs
@@ -2521,7 +2746,8 @@ path segment 4 |             |     |             |     |             |
    To defend against this attack, methods to detect the wormhole attack
    are needed.  Per link or path latency measurements can help reveal
    the wormhole and render the fake peering link suspicious or
-   unattractive.  Without specific detection mechanisms these so-called
+   unattractive.  Proof of transit mechanisms can also reveal such
+   attack.  Without specific detection mechanisms these so-called
    wormhole attacks are unavoidable in routing.
 
 5.3.  Denial of Service Attacks
@@ -2563,12 +2789,12 @@ path segment 4 |             |     |             |     |             |
       than one can immediately be discarded.
 
    *  SegmentRegistrationService.SegmentsRegistration can only be called
-      from within the same ISD, thus the source address must match the
-      local ISD and the number of path segments must be 1.
+      from within the same ISD, thus the source address MUST match the
+      local ISD and the number of path segments MUST be 1.
 
    A combination of the mechanism above is used to prevent flooding
    attacks on the control service.  In addition, the control service
-   should be deployed in a distributed and replicated manner so that
+   SHOULD be deployed in a distributed and replicated manner so that
    requests can be balanced and a single instance failure does not
    result in a complete failure of the control plane of a SCION AS.
 
@@ -2593,15 +2819,15 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.scion-components]
-              Rustignoli, N. and C. de Kater, "SCION Components
-              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
-              rustignoli-panrg-scion-components/>.
-
    [I-D.scion-cppki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
               Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-scion-pki/>.
+
+   [I-D.scion-dp]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
+              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-dataplane/>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
@@ -2615,6 +2841,12 @@ path segment 4 |             |     |             |     |             |
               (CIDR): The Internet Address Assignment and Aggregation
               Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
               2006, <https://www.rfc-editor.org/rfc/rfc4632>.
+
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/rfc/rfc5280>.
 
    [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
               Address Text Representation", RFC 5952,
@@ -2635,20 +2867,16 @@ path segment 4 |             |     |             |     |             |
 
 7.2.  Informative References
 
+   [BollRio-2000]
+              Bollobás, B. and O. Riordan, "The diameter of a scale-free
+              random graph", n.d.,
+              <https://kam.mff.cuni.cz/~ksemweb/clanky/BollobasR-
+              scale_free_random.pdf>.
+
    [CHUAT22]  Chuat, L., Legner, M., Basin, D., Hausheer, D., Hitz, S.,
               Mueller, P., and A. Perrig, "The Complete Guide to SCION",
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
-
-   [I-D.scion-dp]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
-              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-dataplane/>.
-
-   [I-D.scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-panrg-scion-overview/>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
@@ -2662,6 +2890,10 @@ path segment 4 |             |     |             |     |             |
    [RFC6996]  Mitchell, J., "Autonomous System (AS) Reservation for
               Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
               2013, <https://www.rfc-editor.org/rfc/rfc6996>.
+
+   [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
+              Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9217>.
 
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
@@ -2698,7 +2930,7 @@ enum SegmentType {
 
 
 // This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
-// control services on the "intra-protocol" network.
+// control services on the "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
