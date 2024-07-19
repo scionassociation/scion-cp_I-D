@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 January 2025                                         S. Hitz
+Expires: 20 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            18 July 2024
+                                                            19 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 January 2025.
+   This Internet-Draft will expire on 20 January 2025.
 
 Copyright Notice
 
@@ -2746,9 +2746,10 @@ path segment 4 |             |     |             |     |             |
    To defend against this attack, methods to detect the wormhole attack
    are needed.  Per link or path latency measurements can help reveal
    the wormhole and render the fake peering link suspicious or
-   unattractive.  Proof of transit mechanisms can also reveal such
-   attack.  Without specific detection mechanisms these so-called
-   wormhole attacks are unavoidable in routing.
+   unattractive.  Proof of transit mechanisms can also instances of such
+   attack where traffic skips some of the intended ASes on-path because
+   of the wormhole path.  Without specific detection mechanisms these
+   so-called wormhole attacks are unavoidable in routing.
 
 5.3.  Denial of Service Attacks
 
