@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 January 2025                                         S. Hitz
+Expires: 22 January 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            16 July 2024
+                                                            21 July 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 January 2025.
+   This Internet-Draft will expire on 22 January 2025.
 
 Copyright Notice
 
@@ -184,7 +184,7 @@ Table of Contents
    the trust roots and provide connectivity to other ISDs.  This is the
    basis of the public key infrastructure which the SCION control plane
    relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.scion-cppki]
+   SCION control plane.  See [I-D.dekater-scion-pki]
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
@@ -194,7 +194,8 @@ Table of Contents
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
    reuses existing intra-domain infrastructure to communicate to other
-   SCION routers or SCION endpoints within its AS.  See [I-D.scion-dp]
+   SCION routers or SCION endpoints within its AS.  See
+   [I-D.dekater-scion-dataplane]
 
    This document describes the SCION Control Plane component.
 
@@ -364,9 +365,9 @@ Table of Contents
    Each link connecting SCION routers is bidirectional and identified by
    its corresponding egress and ingress interface IDs.  An interface ID
    consists of a 16-bit identifier that MUST be unique within each AS,
-   with the exception of value 0 (see [I-D.scion-dp]).  Therefore, they
-   can be chosen and encoded by each AS independently and without any
-   need for coordination between ASes.
+   with the exception of value 0 (see [I-D.dekater-scion-dataplane]).
+   Therefore, they can be chosen and encoded by each AS independently
+   and without any need for coordination between ASes.
 
 1.4.  Routing
 
@@ -633,7 +634,7 @@ Table of Contents
       hop path type, which does not rely on any path information.  SCION
       uses these _one-hop paths_ to propagate PCBs to neighboring ASes
       to which no forwarding path is available yet.  The One-Hop Path
-      Type is described in more detail in [I-D.scion-dp].
+      Type is described in more detail in [I-D.dekater-scion-dataplane].
 
    *  Path segment types: SCION uses different types of path segments to
       compose end-to-end paths.  Notably, a single path segment already
@@ -656,7 +657,7 @@ Table of Contents
       obtain all this necessary material by contacting the sender.
       *Note:* For a detailed description of a TRC and more information
       on the availability of certificates and TRCs, see the SCION
-      Control-Plane PKI Internet-Draft [I-D.scion-cppki].
+      Control-Plane PKI Internet-Draft [I-D.dekater-scion-pki].
 
 1.6.1.  Partition and Healing
 
@@ -687,12 +688,12 @@ Table of Contents
    [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
    layer.  In the case of SCION, UDP relies on the SCION data plane.
 
-   Appendix Appendix "Control Service gRPC API" provides the entire
-   control service API definition in protobuf format.
+   Appendix "Control Service gRPC API" provides the entire control
+   service API definition in protobuf format.
 
-   Appendix Appendix "SCION data plane use by the SCION control plane"
-   provides details about the establishment of the underlying QUIC
-   connections through the SCION data plane.
+   Appendix "SCION data plane use by the SCION control plane" provides
+   details about the establishment of the underlying QUIC connections
+   through the SCION data plane.
 
 2.  Path Exploration or Beaconing
 
@@ -1101,9 +1102,9 @@ path segment 4 |             |     |             |     |             |
       cryptographically random number.
 
    *Note:* See Section 2.2.1.6 for more information on the hop field
-   message format.  [I-D.scion-dp] provides a detailed description of
-   the computation of the MAC and the verification of the hop field in
-   the data plane.
+   message format.  [I-D.dekater-scion-dataplane] provides a detailed
+   description of the computation of the MAC and the verification of the
+   hop field in the data plane.
 
 2.2.1.3.  AS Entry
 
@@ -1276,9 +1277,9 @@ path segment 4 |             |     |             |     |             |
    *Note:* For more information on signing and verifying control-plane
    messages (such as PCBs), see the chapter Signing and Verifying
    Control-Plane Messages of the SCION Control-Plane PKI Specification
-   [I-D.scion-cppki].  For more information on the TRC base and serial
-   number, see the chapter Trust Root Configuration Specification of the
-   SCION Control-Plane PKI Specification [I-D.scion-cppki].
+   [I-D.dekater-scion-pki].  For more information on the TRC base and
+   serial number, see the chapter Trust Root Configuration Specification
+   of the SCION Control-Plane PKI Specification [I-D.dekater-scion-pki].
 
    *  timestamp: Defines the signature creation timestamp.  This field
       is OPTIONAL.
@@ -1371,7 +1372,7 @@ path segment 4 |             |     |             |     |             |
    verify the message.  For more information on signing and verifying
    control-plane messages, see the chapter "Signing and Verifying
    Control-Plane Messages" of the SCION Control-Plane PKI Specification
-   [I-D.scion-cppki].
+   [I-D.dekater-scion-pki].
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
@@ -1445,9 +1446,9 @@ path segment 4 |             |     |             |     |             |
    without outside coordination.  However, the control service and
    routers of the AS do need to agree on the algorithm used.  Control
    service and router implementations MUST support the Default Hop Field
-   MAC algorithm described in [I-D.scion-dp].  This document does not
-   specify any further mechanism to coordinate this choice between
-   control services and routers of one AS.
+   MAC algorithm described in [I-D.dekater-scion-dataplane].  This
+   document does not specify any further mechanism to coordinate this
+   choice between control services and routers of one AS.
 
    The following code block defines the hop field component HopField in
    Protobuf message format:
@@ -1479,7 +1480,8 @@ path segment 4 |             |     |             |     |             |
       sum of these two values.
 
    *  mac: The message authentication code (MAC) used in the data plane
-      to verify the hop field, as described in [I-D.scion-dp].
+      to verify the hop field, as described in
+      [I-D.dekater-scion-dataplane].
 
 2.2.1.7.  Peer Entry
 
@@ -1790,7 +1792,7 @@ path segment 4 |             |     |             |     |             |
    path may be available yet.  In fact, it is the task of beaconing to
    discover such forwarding paths.  The purpose of one-hop paths is thus
    to break this circular dependency.  The One-Hop Path Type is
-   described in more detail in [I-D.scion-dp].
+   described in more detail in [I-D.dekater-scion-dataplane].
 
 2.3.2.1.  Reception of PCBs
 
@@ -2342,7 +2344,7 @@ path segment 4 |             |     |             |     |             |
    The actual number of required path segments depends on the location
    of the destination AS as well as on the availability of shortcuts and
    peering links.  More information on combining and constructing paths
-   is provided by [I-D.scion-dp].
+   is provided by [I-D.dekater-scion-dataplane].
 
    The process to look up and fetch path segments consists of the
    following steps:
@@ -2818,15 +2820,19 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.scion-cppki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
-
-   [I-D.scion-dp]
+   [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
-              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-dataplane/>.
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-dataplane-02, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-dataplane-02>.
+
+   [I-D.dekater-scion-pki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
@@ -3149,7 +3155,7 @@ SCION data plane use by the SCION control plane
 
    *  Clients find the relevant control service endpoint by resolving a
       "service address" (that is an address where the DT/DL field of the
-      common header is set to 1/0 (see [I-D.scion-dp]).
+      common header is set to 1/0 (see [I-D.dekater-scion-dataplane]).
 
    The mechanics of service address resolution are the following:
 
