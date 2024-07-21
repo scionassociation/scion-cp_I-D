@@ -34,40 +34,8 @@ author:
      email: hitz@anapaya.net
 
 normative:
-  I-D.scion-dp:
-    title: SCION Data Plane
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
-  I-D.scion-cppki:
-    title: SCION Control-Plane PKI
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
+  I-D.dekater-scion-dataplane:
+  I-D.dekater-scion-pki:
   RFC4632:
   RFC5280:
   RFC5952:
@@ -163,11 +131,11 @@ SCION has been developed with the following goals:
 
 SCION relies on three main components:
 
-*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.scion-cppki}}
+*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.dekater-scion-pki}}
 
 *Control Plane* - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.
 
-*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.scion-dp}}
+*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.dekater-scion-dataplane}}
 
 This document describes the SCION Control Plane component.
 
@@ -254,7 +222,7 @@ The following figure shows the three types of links for one small ISD with the t
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD"}
 
-Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.scion-dp}}). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
+Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.
 
 
 ## Routing
@@ -385,11 +353,11 @@ SCION allows endpoints to use wildcard addresses in the control-plane routing, t
 
 A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
-- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
-**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.scion-cppki}}.
+**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.dekater-scion-pki}}.
 
 
 ### Partition and Healing
@@ -405,9 +373,9 @@ All communication between the control services in different ASes is expressed in
 
 The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
 
-Appendix {{app-a}} provides the entire control service API definition in protobuf format.
+{{app-a}} provides the entire control service API definition in protobuf format.
 
-Appendix {{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
+{{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
 
 # Path Exploration or Beaconing {#beaconing}
 
@@ -733,7 +701,7 @@ In the Protobuf message format, the information component of a PCB is called the
 
 - `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is REQUIRED for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS MUST fill this field with a cryptographically random number.
 
-**Note:** See [](#hopfield) for more information on the hop field message format. {{I-D.scion-dp}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
+**Note:** See [](#hopfield) for more information on the hop field message format. {{I-D.dekater-scion-dataplane}} provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.
 
 
 #### AS Entry {#ase-message}
@@ -873,7 +841,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
   - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-**Note:** For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
+**Note:** For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification {{I-D.dekater-scion-pki}}.
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
@@ -931,7 +899,7 @@ The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as 
 Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )
 
-The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification {{I-D.scion-cppki}}.
+The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification {{I-D.dekater-scion-pki}}.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
 
@@ -994,7 +962,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.
 
 The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
-Control service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.scion-dp}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
+Control service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.dekater-scion-dataplane}}. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
 
 The following code block defines the hop field component `HopField` in Protobuf message format:
 
@@ -1013,7 +981,7 @@ The following code block defines the hop field component `HopField` in Protobuf 
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the hop field is the sum of these two values.
-- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field, as described in {{I-D.scion-dp}}.
+- `mac`: The message authentication code (MAC) used in the data plane to verify the hop field, as described in {{I-D.dekater-scion-dataplane}}.
 
 #### Peer Entry {#peerentry}
 
@@ -1226,7 +1194,7 @@ The scalability implications of such parameters are further discussed in [](#sca
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
-To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.scion-dp}}.
+To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 
 
 #### Reception of PCBs
@@ -1493,7 +1461,7 @@ An endpoint (source) that wants to start communication with another endpoint (de
   - a core AS in a remote ISD, if the destination AS is in another ISD, and
 - a down-path segment to reach the destination AS.
 
-The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by {{I-D.scion-dp}}.
+The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by {{I-D.dekater-scion-dataplane}}.
 
 The process to look up and fetch path segments consists of the following steps:
 
@@ -1925,7 +1893,7 @@ The SCION control plane RPC APIs rely on QUIC connections carried by the SCION d
   registered.
 * Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local control service.
 * Control services respond to requests from remote ASes by reversing the path via which the request came.
-* Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.scion-dp}}).
+* Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.dekater-scion-dataplane}}).
 
 The mechanics of service address resolution are the following:
 
