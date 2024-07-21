@@ -1364,9 +1364,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-4"><em>Security</em> - to provide higher levels of trust in routing information in order to prevent IP prefix hijacking/leaks, denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5"><em>Scalability</em> - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">SCION relies on three main components:<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7"><em>PKI</em> - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called <em>Isolation Domains (ISDs)</em>. All ASes in an ISD agree on a set of trust roots called the <em>Trust Root Configuration (TRC)</em> which is a collection of signed root certificates in X.509 v3 format <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>. The ISD is governed by a set of <em>core ASes</em> which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span><a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-7"><em>PKI</em> - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called <em>Isolation Domains (ISDs)</em>. All ASes in an ISD agree on a set of trust roots called the <em>Trust Root Configuration (TRC)</em> which is a collection of signed root certificates in X.509 v3 format <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>. The ISD is governed by a set of <em>core ASes</em> which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span><a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8"><em>Control Plane</em> - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.<a href="#section-1-8" class="pilcrow">¶</a></p>
-<p id="section-1-9"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-9"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">This document describes the SCION Control Plane component.<a href="#section-1-10" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
@@ -1454,7 +1454,7 @@ Peering link can be used as "shortcuts" in such an up-core-down path. A path can
 <a href="#name-the-three-types-of-scion-li" class="selfRef">The three types of SCION links in one ISD</a>
           </figcaption></figure>
 </div>
-<p id="section-1.3-8">Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that <span class="bcp14">MUST</span> be unique within each AS, with the exception of value 0 (see <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.<a href="#section-1.3-8" class="pilcrow">¶</a></p>
+<p id="section-1.3-8">Each link connecting SCION routers is bidirectional and identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that <span class="bcp14">MUST</span> be unique within each AS, with the exception of value 0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>). Therefore, they can be chosen and encoded by each AS independently and without any need for coordination between ASes.<a href="#section-1.3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="routing">
@@ -1711,7 +1711,7 @@ For fast validation of the path information carried in individual packets during
 <p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
-            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type, which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.2">
             <p id="section-1.6-2.2.1">Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.<a href="#section-1.6-2.2.1" class="pilcrow">¶</a></p>
@@ -1721,7 +1721,7 @@ For fast validation of the path information carried in individual packets during
 </li>
           <li class="normal" id="section-1.6-2.4">
             <p id="section-1.6-2.4.1">Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
-              <strong>Note:</strong> For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-1.6-2.4.1" class="pilcrow">¶</a></p>
+              <strong>Note:</strong> For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-1.6-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <div id="partition-and-healing">
@@ -2147,7 +2147,7 @@ path segment 4 |             |     |             |     |             |
                 <p id="section-2.2.1.2-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is <span class="bcp14">REQUIRED</span> for the computation of the message authentication code (MAC) of an AS's hop field. The MAC is used for hop field verification in the data plane. The originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.2-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a> for more information on the hop field message format. <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> provides a detailed description of the computation of the MAC and the verification of the hop field in the data plane.<a href="#section-2.2.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-message">
@@ -2334,7 +2334,7 @@ path segment 4 |             |     |             |     |             |
                   </ul>
 </li>
               </ul>
-<p id="section-2.2.1.4.1-7"><strong>Note:</strong> For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.1-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-7"><strong>Note:</strong> For more information on signing and verifying control-plane messages (such as PCBs), see the chapter Signing and Verifying Control-Plane Messages of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-8.1">
                   <p id="section-2.2.1.4.1-8.1.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.1.1" class="pilcrow">¶</a></p>
@@ -2423,7 +2423,7 @@ path segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-3">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.1.4.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-4">Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-5">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>.<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-5">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control-plane messages, see the chapter "Signing and Verifying Control-Plane Messages" of the SCION Control-Plane PKI Specification <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-6">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-7">
 <pre>
@@ -2500,7 +2500,7 @@ associated_data(ps, i) = ps.segment_info ||
 </div>
 <p id="section-2.2.1.6-2">The hop field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding: It specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC), which will be checked by the SCION border routers during packet forwarding.<a href="#section-2.2.1.6-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.6-3">The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
-Control service and router implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.<a href="#section-2.2.1.6-3" class="pilcrow">¶</a></p>
+Control service and router implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.<a href="#section-2.2.1.6-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.6-4">The following code block defines the hop field component <code>HopField</code> in Protobuf message format:<a href="#section-2.2.1.6-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.6-5">
 <pre>
@@ -2526,7 +2526,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
                 <p id="section-2.2.1.6-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the hop field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>). Therefore, the absolute expiration time of the hop field is the sum of these two values.<a href="#section-2.2.1.6-8.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.6-8.3">
-                <p id="section-2.2.1.6-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field, as described in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.2.1.6-8.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.6-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the hop field, as described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.2.1.6-8.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2821,7 +2821,7 @@ The scalability implications of such parameters are further discussed in <a href
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
 <p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
 <div id="reception-of-pcbs">
 <section id="section-2.3.2.1">
             <h5 id="name-reception-of-pcbs">
@@ -3266,7 +3266,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
             <p id="section-4.1-2.3.1">a down-path segment to reach the destination AS.<a href="#section-4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.1-3">The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The actual number of required path segments depends on the location of the destination AS as well as on the availability of shortcuts and peering links. More information on combining and constructing paths is provided by <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">
@@ -3659,13 +3659,13 @@ For RPC methods exposed to other ASes, the control service implementation minimi
         <dd>
 <span class="refTitle">"gRPC, an open-source universal RPC framework"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://grpc.io/">https://grpc.io/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
+<dt id="I-D.dekater-scion-dataplane">[I-D.dekater-scion-dataplane]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-02</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-02">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-dp">[I-D.scion-dp]</dt>
+<dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-06</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-06">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>
@@ -3994,7 +3994,7 @@ registered.<a href="#appendix-C-2.2.1" class="pilcrow">¶</a></p>
           <p id="appendix-C-2.4.1">Control services respond to requests from remote ASes by reversing the path via which the request came.<a href="#appendix-C-2.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-2.5">
-          <p id="appendix-C-2.5.1">Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.scion-dp" class="cite xref">I-D.scion-dp</a>]</span>).<a href="#appendix-C-2.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-2.5.1">Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>).<a href="#appendix-C-2.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-3">The mechanics of service address resolution are the following:<a href="#appendix-C-3" class="pilcrow">¶</a></p>
