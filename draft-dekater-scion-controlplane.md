@@ -405,9 +405,9 @@ All communication between the control services in different ASes is expressed in
 
 The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
 
-Appendix {{app-a}} provides the entire control service API definition in protobuf format.
+{{app-a}} provides the entire control service API definition in protobuf format.
 
-Appendix {{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
+{{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
 
 # Path Exploration or Beaconing {#beaconing}
 
