@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-21T00:19:43.669726+00:00",
+  "timestamp": "2024-07-23T00:18:05.628934+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -704,11 +704,11 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "Prio 3"
+        "Prio 2"
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2024-07-11T08:30:03Z",
+      "updatedAt": "2024-07-22T21:10:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -780,7 +780,7 @@
       ],
       "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\nIt would be great if you could look at this within a week. Thanks a lot!\r\n  \r\n\r\n",
       "createdAt": "2024-07-09T10:31:37Z",
-      "updatedAt": "2024-07-09T10:33:02Z",
+      "updatedAt": "2024-07-22T21:06:29Z",
       "closedAt": null,
       "comments": []
     },
@@ -789,14 +789,60 @@
       "id": "I_kwDOJx2-rs6QF1Ae",
       "title": "Wormhole attack: mention proof of transit as a defense",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/52",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-07-18T21:24:58Z",
-      "updatedAt": "2024-07-18T21:24:58Z",
+      "updatedAt": "2024-07-21T00:59:45Z",
+      "closedAt": "2024-07-21T00:59:44Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "False alarm, we already discuss this in the data plane section `5.2.1.  Modification of the Path Header`",
+          "createdAt": "2024-07-21T00:59:44Z",
+          "updatedAt": "2024-07-21T00:59:44Z"
+        }
+      ]
+    },
+    {
+      "number": 55,
+      "id": "I_kwDOJx2-rs6Qd6_5",
+      "title": "Clarify handling failures & path revocation",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/55",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 1",
+        "needs-discussion"
+      ],
+      "body": "Path revocation is not clear:\r\n\r\n- [ ] #56\r\n- [ ] Clarify that endpoints are expected to handle failures (and why)\r\n- [ ] Clarify wether a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why\r\n\r\n\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
+      "createdAt": "2024-07-22T21:00:37Z",
+      "updatedAt": "2024-07-22T23:05:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 56,
+      "id": "I_kwDOJx2-rs6Qecyl",
+      "title": "Clarify how routers use BFD",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/56",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "needs-discussion"
+      ],
+      "body": "We currently mention BFD in [2.2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#section-2.2.3.1)[Empty Path Type](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#name-empty-path-type): \r\n> One use case of the Empty path type lies in the context of link-failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ([[RFC5880](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5880)] and [[RFC5881](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5881)]). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols. SCION uses the Empty path type, together with OneHopPath path type, to bootstrap BFD within SCION. (For more information on the OneHopPath path type, see [Section 2.2.3.3](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#onehop).)\r\n\r\nHowever, we don't say much about how it works.\r\n- How much should be in the draft? (is it necessary to add details, or could we leave it open)?\r\n- Why do routers have to use something like BFD? What do they do with signals from BFD?\r\n- How is BFD on top of SCION working? (currently described in https://docs.scion.org/en/latest/protocols/bfd.html )\r\n",
+      "createdAt": "2024-07-22T22:57:51Z",
+      "updatedAt": "2024-07-22T23:03:00Z",
       "closedAt": null,
       "comments": []
     }
@@ -4029,7 +4075,7 @@
       "labels": [],
       "body": "Solves #48 ",
       "createdAt": "2024-07-08T16:16:47Z",
-      "updatedAt": "2024-07-16T16:29:25Z",
+      "updatedAt": "2024-07-21T17:26:01Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "70f77f07a11c0c92f2ce1da81ab192a44566b7fe",
@@ -4431,25 +4477,33 @@
       "id": "PR_kwDOJx2-rs511Ni3",
       "title": "wormhole attack: mention proof of transit as detection mechansim",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/53",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #52 ",
       "createdAt": "2024-07-18T21:31:00Z",
-      "updatedAt": "2024-07-19T11:46:05Z",
+      "updatedAt": "2024-07-21T17:26:00Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "0960054f97e054952821cd18b1421c2ae938aeef",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "wormhole-pot",
       "headRefOid": "55bed7906485c5ea7df9b268218dde402a5db3fa",
-      "closedAt": null,
+      "closedAt": "2024-07-21T01:03:25Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "You\u2019re right, the scenario in the draft refers to wormhole in the control plane (where PCBs are used to advertise a wormholed path), and PoT is useless there. \r\n\r\nI was thinking about a wormhole in the data plane. IN this case, you are also right, this is a pretty useless attack, as it requires two malicious on-path ASes. Right now, we talk about this in the DP draft `5.2.1.  Modification of the Path Header` . I\u2019ll therefore discard this PR and open one in the DP: https://github.com/scionassociation/scion-dp_I-D/pull/34 ",
+          "createdAt": "2024-07-21T01:03:25Z",
+          "updatedAt": "2024-07-21T01:03:37Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs6CZnRN",
@@ -4492,6 +4546,34 @@
           ]
         }
       ]
+    },
+    {
+      "number": 54,
+      "id": "PR_kwDOJx2-rs52BSbt",
+      "title": "typo: appendix, use automatic references",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/54",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-21T17:25:38Z",
+      "updatedAt": "2024-07-21T17:31:49Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "0960054f97e054952821cd18b1421c2ae938aeef",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "typo",
+      "headRefOid": "bed84f2cbaf0d32203d9337ef3b9482f973c3959",
+      "closedAt": "2024-07-21T17:31:47Z",
+      "mergedAt": "2024-07-21T17:31:47Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2fea2e2ee6c8d57f9eb7d0d9ba71e43dc06edb8c"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
