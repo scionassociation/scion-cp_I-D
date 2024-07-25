@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-23T00:18:05.628934+00:00",
+  "timestamp": "2024-07-25T00:17:48.465288+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -809,40 +809,21 @@
       ]
     },
     {
-      "number": 55,
-      "id": "I_kwDOJx2-rs6Qd6_5",
-      "title": "Clarify handling failures & path revocation",
-      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/55",
-      "state": "OPEN",
-      "author": "nicorusti",
-      "authorAssociation": "MEMBER",
-      "assignees": [],
-      "labels": [
-        "Prio 1",
-        "needs-discussion"
-      ],
-      "body": "Path revocation is not clear:\r\n\r\n- [ ] #56\r\n- [ ] Clarify that endpoints are expected to handle failures (and why)\r\n- [ ] Clarify wether a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why\r\n\r\n\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
-      "createdAt": "2024-07-22T21:00:37Z",
-      "updatedAt": "2024-07-22T23:05:30Z",
-      "closedAt": null,
-      "comments": []
-    },
-    {
-      "number": 56,
-      "id": "I_kwDOJx2-rs6Qecyl",
-      "title": "Clarify how routers use BFD",
-      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/56",
+      "number": 57,
+      "id": "I_kwDOJx2-rs6Qjl2o",
+      "title": "MTU clarifications",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/57",
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
         "enhancement",
-        "needs-discussion"
+        "Prio 1"
       ],
-      "body": "We currently mention BFD in [2.2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#section-2.2.3.1)[Empty Path Type](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#name-empty-path-type): \r\n> One use case of the Empty path type lies in the context of link-failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ([[RFC5880](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5880)] and [[RFC5881](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5881)]). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols. SCION uses the Empty path type, together with OneHopPath path type, to bootstrap BFD within SCION. (For more information on the OneHopPath path type, see [Section 2.2.3.3](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#onehop).)\r\n\r\nHowever, we don't say much about how it works.\r\n- How much should be in the draft? (is it necessary to add details, or could we leave it open)?\r\n- Why do routers have to use something like BFD? What do they do with signals from BFD?\r\n- How is BFD on top of SCION working? (currently described in https://docs.scion.org/en/latest/protocols/bfd.html )\r\n",
-      "createdAt": "2024-07-22T22:57:51Z",
-      "updatedAt": "2024-07-22T23:03:00Z",
+      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
+      "createdAt": "2024-07-23T13:38:45Z",
+      "updatedAt": "2024-07-23T14:58:57Z",
       "closedAt": null,
       "comments": []
     }
