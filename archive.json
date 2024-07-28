@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-25T00:17:48.465288+00:00",
+  "timestamp": "2024-07-28T00:20:11.958819+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -424,7 +424,7 @@
       ],
       "body": " 2.1.2: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section\r\n ```\r\n   *  For the specification of one PCB, see Section 2.2\r\n\r\n   *  For more details on selecting PCBs, see Section 2.3.1\r\n\r\n   *  For more details on propagating PCBs, see Section 2.3.2\r\n ```\r\n\r\nFrom discussion with Eliot (28.08.23)",
       "createdAt": "2024-05-16T09:34:23Z",
-      "updatedAt": "2024-05-17T10:06:25Z",
+      "updatedAt": "2024-07-26T23:02:23Z",
       "closedAt": null,
       "comments": []
     },
@@ -443,9 +443,9 @@
         "enhancement",
         "Prio 3"
       ],
-      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\n",
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot\r\n",
       "createdAt": "2024-05-16T09:38:07Z",
-      "updatedAt": "2024-05-17T09:54:17Z",
+      "updatedAt": "2024-07-26T23:06:59Z",
       "closedAt": null,
       "comments": []
     },
@@ -671,11 +671,12 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
+        "Prio 3",
         "needs-discussion"
       ],
       "body": "We currently only mention propagation interval in the draft. However, there is a separate origination interval in the implementation. \r\n\r\n\r\nAs reported by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556 : \r\n\r\n> The notes contain several references to \"beacon origination interval\", i.e. the interval at which new beacons are created. I couldn't find any description of this interval, maybe I overlooked it? Is it the same as the propagation interval? \r\n> I couldn't find a discussion of beacon origination interval (or the RegistrationInterval), see \"[DefaultOriginationInterval](https://github.com/scionproto/scion/blob/a1ed6246ecd6beae9c82544032de4f9fecab1058/control/config/config.go#L37)\" (or the DefaultRegistrationInterval) in the code.\r\n\r\n> ### Partition and Healing\r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\n\r\n> ### Path Discovery Time and Scalability {#scalability} \r\n> Also, I think the calculation needs to take into account the \"beacon origination interval\".\r\n \r\n \r\n Does this distinction make sense? We might distinguish between interval for core beaconing and intra-ISD beaconing",
       "createdAt": "2024-07-07T19:07:10Z",
-      "updatedAt": "2024-07-18T21:23:48Z",
+      "updatedAt": "2024-07-26T23:02:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -824,6 +825,25 @@
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
       "updatedAt": "2024-07-23T14:58:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 58,
+      "id": "I_kwDOJx2-rs6RBb0Z",
+      "title": "General review - remove forward references",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/58",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": "\r\nTwin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n",
+      "createdAt": "2024-07-26T22:50:16Z",
+      "updatedAt": "2024-07-26T22:52:28Z",
       "closedAt": null,
       "comments": []
     }
