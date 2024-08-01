@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-30T00:18:25.105690+00:00",
+  "timestamp": "2024-08-01T00:20:16.439037+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -817,14 +817,16 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "jiceatscion"
+      ],
       "labels": [
         "enhancement",
         "Prio 1"
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2024-07-23T14:58:57Z",
+      "updatedAt": "2024-07-30T09:30:20Z",
       "closedAt": null,
       "comments": []
     },
