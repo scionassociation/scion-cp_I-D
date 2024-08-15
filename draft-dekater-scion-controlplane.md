@@ -213,7 +213,7 @@ As SCION is an *inter-domain* network architecture, it only deals with *inter*-d
 
 ## Overview
 
-SCION is a path-aware internetworking routing architecture as described in [RFC9217]. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is not concerned with intra-domain forwarding. 
+SCION is a path-aware internetworking routing architecture as described in [RFC9217]. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is not concerned with intra-domain forwarding.
 
 To achieve scalability and trust, SCION organizes existing Autonomous Systems (ASes) into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format [RFC5280]. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure [I-D.dekater-scion-pki] which the SCION control plane is reliant om for the authentication of messages that is used for the SCION control plane.
 
