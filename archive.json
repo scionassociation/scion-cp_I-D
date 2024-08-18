@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-15T00:17:54.723596+00:00",
+  "timestamp": "2024-08-18T00:20:01.334900+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -4575,6 +4575,32 @@
       "mergeCommit": {
         "oid": "2fea2e2ee6c8d57f9eb7d0d9ba71e43dc06edb8c"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDOJx2-rs54flrO",
+      "title": "Added reference about development",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/59",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-08-15T17:49:46Z",
+      "updatedAt": "2024-08-15T17:49:47Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "2fea2e2ee6c8d57f9eb7d0d9ba71e43dc06edb8c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "ietf-note",
+      "headRefOid": "d6926ef48ee14b717724c299789b3ecdf91abdef",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
