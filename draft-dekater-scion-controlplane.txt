@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 22 January 2025                                         S. Hitz
+Expires: 1 March 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                            21 July 2024
+                                                          28 August 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 January 2025.
+   This Internet-Draft will expire on 1 March 2025.
 
 Copyright Notice
 
@@ -198,6 +198,11 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
 
    This document describes the SCION Control Plane component.
+
+   The SCION architecture was initially developed outside of the IETF by
+   ETH Zurich with significant contributions from Anapaya Systems.  The
+   aim of this document is to describe existing implementations and
+   operational deployments.
 
 1.1.  Terminology
 
