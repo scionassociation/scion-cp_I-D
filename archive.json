@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-27T00:18:48.278917+00:00",
+  "timestamp": "2024-08-29T00:18:51.586388+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -845,9 +845,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [ ] update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
+      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [ ] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
       "createdAt": "2024-07-26T22:50:16Z",
-      "updatedAt": "2024-08-26T16:16:57Z",
+      "updatedAt": "2024-08-27T09:32:15Z",
       "closedAt": null,
       "comments": []
     }
@@ -4585,26 +4585,42 @@
       "id": "PR_kwDOJx2-rs54flrO",
       "title": "Added reference about development",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/59",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-08-15T17:49:46Z",
-      "updatedAt": "2024-08-15T17:49:47Z",
+      "updatedAt": "2024-08-28T15:14:58Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "2fea2e2ee6c8d57f9eb7d0d9ba71e43dc06edb8c",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "ietf-note",
       "headRefOid": "d6926ef48ee14b717724c299789b3ecdf91abdef",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-08-28T15:14:58Z",
+      "mergedAt": "2024-08-28T15:14:58Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "28653e087822932fbc1133ec67847f8a77344331"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6HGXON",
+          "commit": {
+            "abbreviatedOid": "d6926ef"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-28T15:14:47Z",
+          "updatedAt": "2024-08-28T15:14:47Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
