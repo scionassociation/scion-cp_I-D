@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-29T00:18:51.586388+00:00",
+  "timestamp": "2024-09-01T00:23:14.431033+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -4592,7 +4592,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-08-15T17:49:46Z",
-      "updatedAt": "2024-08-28T15:14:58Z",
+      "updatedAt": "2024-08-30T13:47:45Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "2fea2e2ee6c8d57f9eb7d0d9ba71e43dc06edb8c",
