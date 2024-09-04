@@ -1698,8 +1698,9 @@ enum SegmentType {
 }
 
 
-// This API is exposed by the Control Services of core ASes expose this on the SCION dataplane and also by all
-// Control Services on the "intra-domain protocol" network.
+// This API is exposed by the Control Services of core ASes expose
+// this on the SCION dataplane and also by all Control Services
+// on the "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -1724,7 +1725,8 @@ message SegmentsResponse {
     map<int32, Segments> segments = 1;
 }
 
-// This API is only exposed by core ASes and only on the SCION dataplane.
+// This API is only exposed by core ASes and only on the SCION
+// dataplane.
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
