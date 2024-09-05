@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-03T00:18:55.987783+00:00",
+  "timestamp": "2024-09-05T00:19:17.677574+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -4621,6 +4621,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOJx2-rs56SB5g",
+      "title": "General Edits",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/60",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.",
+      "createdAt": "2024-09-03T15:39:33Z",
+      "updatedAt": "2024-09-04T16:51:20Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "general-review",
+      "headRefOid": "bd41586991b7515c7fd4d8f172541a54875ef50c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
