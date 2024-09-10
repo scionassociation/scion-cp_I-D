@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-08T00:21:23.225103+00:00",
+  "timestamp": "2024-09-10T00:19:38.932843+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -848,6 +848,24 @@
       "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [ ] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
       "createdAt": "2024-07-26T22:50:16Z",
       "updatedAt": "2024-08-27T09:32:15Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 61,
+      "id": "I_kwDOJx2-rs6V3vv2",
+      "title": "beaconing: the grpc protobufs are described, but not the errors",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/61",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [],
+      "body": "Eventhough the Beacon() call does not admit any response, it can still return errors.\r\nA grpc call signatue is (in Go syntax) \"func Call(request) Response, error\". So we need to describe error.\r\nWe should probably check other APIs for the same oversight.\r\n",
+      "createdAt": "2024-09-09T16:38:09Z",
+      "updatedAt": "2024-09-09T16:38:19Z",
       "closedAt": null,
       "comments": []
     }
