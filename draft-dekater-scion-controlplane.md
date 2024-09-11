@@ -1266,8 +1266,7 @@ The propagation procedure includes the following elements:
    - `Beacon`: Specifies the method that calls the control service at the neighboring AS in order to propagate the extended PCB.
 - `BeaconRequest`: Specifies the request message sent by the `Beacon` method to the control service of the neighboring AS. It contains the following element:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
-- `BeaconResponse`: Specifies the response message from the neighboring AS.
-
+- `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
 ### Effects of Clock Inaccuracy
 
@@ -1446,7 +1445,7 @@ The control service of a non-core AS has to register the newly created down-segm
 - `SegmentType`: Specifies the type of the path segment to be registered. Currently, only the following type is used:
   - `SEGMENT_TYPE_DOWN`: Specifies a down-segment.
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
-
+- `SegmentRegistrationResponse`: an empty message returned as an acknowledgement upon success.
 
 # Path Lookup {#lookup}
 
@@ -1483,8 +1482,6 @@ The process to look up and fetch path segments consists of the following steps:
 | Down-segment      | Control service of core ASes in destination ISD (either the local ISD or a remote ISD)|
 {: #table-3 title="Control services responsible for different types of path segments"}
 
-
-
 ### Sequence of Lookup Requests
 
 The overall sequence of requests to resolve a path SHOULD be as follows:
@@ -1492,7 +1489,6 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 1. Request up-segments for the source endpoint at the control service of the source AS.
 2. Request core-segments, which start at the core ASes that are reachable with up-segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up-segment.
 3. Request down-segments starting at core ASes in the destination ISD.
-
 
 ### Caching
 
@@ -1884,6 +1880,7 @@ message VerificationKeyID {
 ~~~~
 {: #figure-11 title="Control Service gRPC API definition"}
 
+In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
 
 # SCION data plane use by the SCION control plane {#app-b}
 {:numbered="false"}
