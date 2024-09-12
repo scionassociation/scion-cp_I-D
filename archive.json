@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-10T00:19:38.932843+00:00",
+  "timestamp": "2024-09-12T00:19:38.687448+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -865,9 +865,17 @@
       "labels": [],
       "body": "Eventhough the Beacon() call does not admit any response, it can still return errors.\r\nA grpc call signatue is (in Go syntax) \"func Call(request) Response, error\". So we need to describe error.\r\nWe should probably check other APIs for the same oversight.\r\n",
       "createdAt": "2024-09-09T16:38:09Z",
-      "updatedAt": "2024-09-09T16:38:19Z",
+      "updatedAt": "2024-09-10T09:44:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Current text: \r\n```\r\n2.3.2.4.  Propagation of PCBs in Protobuf Message Format\r\n\r\n   The last step of the above described core and intra-ISD propagation\r\n   procedures is implemented as follows in Protobuf message format:\r\n\r\n      service SegmentCreationService {\r\n          rpc Beacon(BeaconRequest) returns (BeaconResponse) {}\r\n      }\r\n\r\n      message BeaconRequest {\r\n          PathSegment segment = 1;\r\n      }\r\n\r\n      message BeaconResponse {}\r\n\r\n   The propagation procedure includes the following elements:\r\n\r\n   *  SegmentCreationService: Specifies the service via which the\r\n      extended PCB is propagated to the control service of the\r\n      neighboring AS.\r\n\r\n      -  Beacon: Specifies the method that calls the control service at\r\n         the neighboring AS in order to propagate the extended PCB.\r\n\r\n   *  BeaconRequest: Specifies the request message sent by the Beacon\r\n      method to the control service of the neighboring AS.  It contains\r\n      the following element:\r\n\r\n      -  PathSegment: Specifies the path segment to propagate to the\r\n         neighboring AS.  For more information on the Protobuf message\r\n         type PathSegment, see Section 2.2.1.1.\r\n\r\n   *  BeaconResponse: Specifies the response message from the\r\n      neighboring AS.\r\n```\r\n\r\n\r\n\r\n>   BeaconResponse: Specifies the response message from the\r\n      neighboring AS. \r\n\r\nWe could say a bit more than this",
+          "createdAt": "2024-09-10T09:43:59Z",
+          "updatedAt": "2024-09-10T09:44:38Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -4652,13 +4660,108 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-09-04T16:51:20Z",
+      "updatedAt": "2024-09-11T12:14:06Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
       "headRefOid": "bd41586991b7515c7fd4d8f172541a54875ef50c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6I4n4V",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-11T11:29:52Z",
+          "updatedAt": "2024-09-11T12:14:06Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "echo in title",
+              "createdAt": "2024-09-11T11:29:52Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 50,
+              "body": "echo",
+              "createdAt": "2024-09-11T11:30:38Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 53,
+              "body": "echo\r\n",
+              "createdAt": "2024-09-11T11:30:53Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 494,
+              "body": "\"such a\" -> \"such as\"",
+              "createdAt": "2024-09-11T11:42:33Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 679,
+              "body": "\"they SHOULD be around 6 hours\"\r\n\r\nNot your own edit but I wonder if we have to be so prescriptive here. May be we should instead RECOMMEND \"Several hours\" and indicate that 6h is the most common choice.",
+              "createdAt": "2024-09-11T11:49:53Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 724,
+              "body": "\"an acyclic graph\"\r\n\r\nThe original \"a directed acyclic graph\", though pedantic, would be more accurate. We DO pay attention to the direction of the connections.\r\n",
+              "createdAt": "2024-09-11T11:56:25Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 730,
+              "body": "\"has multiplicative effect\" -> \"has a multiplicative effect\", no?",
+              "createdAt": "2024-09-11T11:57:35Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 777,
+              "body": "\"As mentioned previously, \"\r\n\r\nDo we need to apologize for it?",
+              "createdAt": "2024-09-11T12:02:23Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            },
+            {
+              "originalPosition": 796,
+              "body": "\"as AS may want to\" -> \"as an AS may want to\"",
+              "createdAt": "2024-09-11T12:05:11Z",
+              "updatedAt": "2024-09-11T12:14:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 62,
+      "id": "PR_kwDOJx2-rs57KXG8",
+      "title": "grpc: describe empty responses and mention the existence of gRPC errors",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/62",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #61 ",
+      "createdAt": "2024-09-11T13:19:28Z",
+      "updatedAt": "2024-09-11T13:19:29Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "beaconing_api_errors",
+      "headRefOid": "34bd2f3305dd0bc1eb673497696f139b6f7df268",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
