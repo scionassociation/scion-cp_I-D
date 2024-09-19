@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-17T00:16:40.153142+00:00",
+  "timestamp": "2024-09-19T00:19:38.476991+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -826,9 +826,17 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2024-07-30T09:30:20Z",
+      "updatedAt": "2024-09-18T14:35:50Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Regarding MTUs in the control plane, I would suggest the following:\r\n\r\nI would add a section 3.4.  Paths MTU, saying something like this. Here, I am creating new material. My only reference is the scion daemon which makes exactly these assumptions:\r\n\r\n> Paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, a path has an effective MTU which is the least of the MTUs of each link and ASes it traverses. The relevant MTUs for calculating a path's effective MTU are available from the segments used in its construction:\r\n> \r\n> - The MTU of the first and last ASes (represented by the mtu field of the corresponding AS Entries)\r\n> - The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each hop or the peer_mtu field of each Peer Entry used)\r\n> - The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers\r\n> \r\n> Regarding the later point: A scion host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, and the control service does not reduce the hop's MTU when that is the case. As a result, a scion host building a path must assume that all hops are constrained by the AS's internal network MTU.\r\n>\r\n> This could be optimized if the control service was required to make the hop's ingress_mtu field no greater than the MTU of the AS in case of a hop crossing the internal network. However existing implementations have not historically done this.\r\n\r\nIn section 2.2.1.4.2 AS Entry Signed Body, describe the mtu field as follows:\r\n\r\n> The maximum transmission unit (MTU) that is supported by all hosts within the AS being described. This is set by the control service adding the entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is do make it a configuration item.\r\n\r\nIn section 2.2.1.5 Hop Entry, describe the ingress_mtu field as follows:\r\n\r\n> Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. Packets traveling through the associated inter-AS link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n\r\n\r\nIn section 2.2.1.7 Peer Entry, describe the peer_mtu field as follows:\r\n> Specifies the maximum transmission unit (MTU) of the peering link being described. Packets traveling through this link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n",
+          "createdAt": "2024-09-18T10:06:58Z",
+          "updatedAt": "2024-09-18T14:35:50Z"
+        }
+      ]
     },
     {
       "number": 58,
