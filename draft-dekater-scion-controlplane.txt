@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 March 2025                                            S. Hitz
+Expires: 23 March 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                          28 August 2024
+                                                       19 September 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 March 2025.
+   This Internet-Draft will expire on 23 March 2025.
 
 Copyright Notice
 
@@ -1939,8 +1939,8 @@ path segment 4 |             |     |             |     |             |
          neighboring AS.  For more information on the Protobuf message
          type PathSegment, see Section 2.2.1.1.
 
-   *  BeaconResponse: Specifies the response message from the
-      neighboring AS.
+   *  BeaconResponse: An empty message returned as an acknowledgement
+      upon success.
 
 2.3.3.  Effects of Clock Inaccuracy
 
@@ -2316,6 +2316,9 @@ path segment 4 |             |     |             |     |             |
    *  map<int32, Segments> segments: Represents a separate list of
       segments for each path segment type.  The key is the integer
       representation of the corresponding SegmentType.
+
+   *  SegmentRegistrationResponse: an empty message returned as an
+      acknowledgement upon success.
 
 4.  Path Lookup
 
@@ -3134,6 +3137,10 @@ message VerificationKeyID {
 }
 
             Figure 10: Control Service gRPC API definition
+
+   In case of failure, gRPC calls return an error as specified by the
+   gRPC framework.  That is, a non-zero status code and an explanatory
+   string.
 
 SCION data plane use by the SCION control plane
 

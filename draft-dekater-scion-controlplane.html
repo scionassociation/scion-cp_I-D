@@ -12,18 +12,18 @@
        This document describes the control plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints. In fact, endpoints can choose between multiple path options, enabling the optimization of network paths. The SCION control plane is responsible for discovering these paths and making them available to the endpoints. 
        The main goal of SCION's control plane is to create and manage path segments, which can then be combined into forwarding paths to transmit packets in the data plane. This document first discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION autonomous system (AS) can register segments according to its own policy - it is free to specify which path properties and algorithm(s) to use in the selection procedure. The document then describes the path lookup process, where endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths. 
     " name="description">
-<meta content="xml2rfc 3.23.0" name="generator">
+<meta content="xml2rfc 3.23.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-controlplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.23.0
-    Python 3.12.3
+  xml2rfc 3.23.1
+    Python 3.12.6
     ConfigArgParse 1.7
-    google-i18n-address 3.1.0
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.4
     lxml 4.9.4
-    platformdirs 4.2.2
+    platformdirs 4.3.6
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
@@ -1027,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION CP</td>
-<td class="right">August 2024</td>
+<td class="right">September 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 1 March 2025</td>
+<td class="center">Expires 23 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-28" class="published">28 August 2024</time>
+<time datetime="2024-09-19" class="published">19 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-01">1 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-23">23 March 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2962,7 +2962,7 @@ The PCB contains the version numbers of the trust root configuration(s) (TRC) an
                 </ul>
 </li>
               <li class="normal" id="section-2.3.2.4-4.3">
-                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: Specifies the response message from the neighboring AS.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -3230,6 +3230,9 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
 </li>
           <li class="normal" id="section-3.3-3.2">
             <p id="section-3.3-3.2.1"><code>map&lt;int32, Segments&gt; segments</code>: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding <code>SegmentType</code>.<a href="#section-3.3-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.3-3.3">
+            <p id="section-3.3-3.3.1"><code>SegmentRegistrationResponse</code>: an empty message returned as an acknowledgement upon success.<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3972,6 +3975,7 @@ message VerificationKeyID {
 <a href="#name-control-service-grpc-api-de" class="selfRef">Control Service gRPC API definition</a>
         </figcaption></figure>
 </div>
+<p id="appendix-B-3">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
