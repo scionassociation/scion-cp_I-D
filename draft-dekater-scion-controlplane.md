@@ -884,7 +884,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB SHOULD be forwarded.
 - `hop_entry`: The hop entry (`HopEntry`) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see [](#hopentry).
 - `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
-- `mtu`: The size of the maximum transmission unit (MTU) within the current AS's network.
+- `mtu`: The maximum transmission unit (MTU) that is supported by all hosts within the AS being described. This is set by the control service adding the entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is do make it a configuration item.
 - `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
 
@@ -943,8 +943,9 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface of the current AS.
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. Packets traversing the associated inter-AS link in either direction cannot be larger than this size. As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 
+In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
 #### Hop Field {#hopfield}
 
@@ -1014,8 +1015,11 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 - `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
 - `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
-- `peer_mtu`: Specifies the maximum transmission unit MTU on the peering link.
+- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. Packets traversing this link in either direction cannot exceed this size. As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+
+In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
+
 
 ~~~~
    +-----------+
@@ -1447,6 +1451,18 @@ The control service of a non-core AS has to register the newly created down-segm
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
 - `SegmentRegistrationResponse`: an empty message returned as an acknowledgement upon success.
 
+## Path MTU {#path-mtu}
+
+Paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, a path has an effective MTU which is the least of the MTUs of each link and ASes it traverses. The relevant MTUs for calculating a path's effective MTU are available from the segments used in its construction:
+
+* The MTU of the first and last ASes (represented by the mtu field of the corresponding [AS Entries](#ase-sign))
+* The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
+* The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers
+
+Regarding the later point: A SCION host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, a SCION control plane implementation is NOT REQUIRED to account for this in the hop's ingress_mtu. As a result, a scion host building a path must assume that all hops are additionally constrained by the internal network MTU of each AS traversed.
+
+This could be optimized if the control plane implementations made the hop's ingress_mtu field no greater than the MTU of the path between the two border routers involved in that hop. However existing implementations have not historically done this.
+
 # Path Lookup {#lookup}
 
 The *path lookup* is a fundamental building block of SCION's path management, as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
@@ -1619,7 +1635,6 @@ In SCION, overall path selection is the result of three steps. First, each AS se
 
 These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
 
-
 **Announcing Large Numbers of Path Segments** <br>
 This attack is possible if the adversary controls multiple (at least two) ASes. The adversary can create a large number of links between the ASes under its control, which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes. This in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.
 
@@ -1683,8 +1698,9 @@ enum SegmentType {
 }
 
 
-// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
-// control services on the "intra-domain protocol" network.
+// This API is exposed by the control services of core ASes expose this
+// on the SCION dataplane and also by all control services on the
+// "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -1709,7 +1725,8 @@ message SegmentsResponse {
     map<int32, Segments> segments = 1;
 }
 
-// This API is only exposed by core ASes and only on the SCION dataplane.
+// This API is only exposed by core ASes and only on the SCION
+// dataplane.
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
