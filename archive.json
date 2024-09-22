@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-19T00:19:38.476991+00:00",
+  "timestamp": "2024-09-22T00:22:13.248239+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -676,7 +676,7 @@
       ],
       "body": "We currently only mention propagation interval in the draft. However, there is a separate origination interval in the implementation. \r\n\r\n\r\nAs reported by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556 : \r\n\r\n> The notes contain several references to \"beacon origination interval\", i.e. the interval at which new beacons are created. I couldn't find any description of this interval, maybe I overlooked it? Is it the same as the propagation interval? \r\n> I couldn't find a discussion of beacon origination interval (or the RegistrationInterval), see \"[DefaultOriginationInterval](https://github.com/scionproto/scion/blob/a1ed6246ecd6beae9c82544032de4f9fecab1058/control/config/config.go#L37)\" (or the DefaultRegistrationInterval) in the code.\r\n\r\n> ### Partition and Healing\r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\n\r\n> ### Path Discovery Time and Scalability {#scalability} \r\n> Also, I think the calculation needs to take into account the \"beacon origination interval\".\r\n \r\n \r\n Does this distinction make sense? We might distinguish between interval for core beaconing and intra-ISD beaconing",
       "createdAt": "2024-07-07T19:07:10Z",
-      "updatedAt": "2024-07-26T23:02:04Z",
+      "updatedAt": "2024-09-19T15:04:20Z",
       "closedAt": null,
       "comments": [
         {
@@ -826,7 +826,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2024-09-18T14:35:50Z",
+      "updatedAt": "2024-09-20T09:01:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -835,6 +835,20 @@
           "body": "Regarding MTUs in the control plane, I would suggest the following:\r\n\r\nI would add a section 3.4.  Paths MTU, saying something like this. Here, I am creating new material. My only reference is the scion daemon which makes exactly these assumptions:\r\n\r\n> Paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, a path has an effective MTU which is the least of the MTUs of each link and ASes it traverses. The relevant MTUs for calculating a path's effective MTU are available from the segments used in its construction:\r\n> \r\n> - The MTU of the first and last ASes (represented by the mtu field of the corresponding AS Entries)\r\n> - The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each hop or the peer_mtu field of each Peer Entry used)\r\n> - The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers\r\n> \r\n> Regarding the later point: A scion host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, and the control service does not reduce the hop's MTU when that is the case. As a result, a scion host building a path must assume that all hops are constrained by the AS's internal network MTU.\r\n>\r\n> This could be optimized if the control service was required to make the hop's ingress_mtu field no greater than the MTU of the AS in case of a hop crossing the internal network. However existing implementations have not historically done this.\r\n\r\nIn section 2.2.1.4.2 AS Entry Signed Body, describe the mtu field as follows:\r\n\r\n> The maximum transmission unit (MTU) that is supported by all hosts within the AS being described. This is set by the control service adding the entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is do make it a configuration item.\r\n\r\nIn section 2.2.1.5 Hop Entry, describe the ingress_mtu field as follows:\r\n\r\n> Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. Packets traveling through the associated inter-AS link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n\r\n\r\nIn section 2.2.1.7 Peer Entry, describe the peer_mtu field as follows:\r\n> Specifies the maximum transmission unit (MTU) of the peering link being described. Packets traveling through this link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n",
           "createdAt": "2024-09-18T10:06:58Z",
           "updatedAt": "2024-09-18T14:35:50Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Great description, feel free to open a PR, and then I'd just do a bit of a wording pass. \r\n\r\nIN section  3.4. Paths MTU maybe you could add references to the various MTU fields (in  2.2.1.4.2 AS Entry Signed Body,  2.2.1.5 Hop Entry,  2.2.1.7 Peer Entry)\r\n\r\n> the control service does not reduce the hop's MTU when that is the case. As a result, a scion host building a path must assume that all hops are constrained by the AS's internal network MTU. \r\n\r\nIn this section, I'd refer to to current implementations rather than control service.\r\n\r\n> not including the L2 header \r\n\r\nL2 --> Underlay/lower layer protocol\r\n\r\n",
+          "createdAt": "2024-09-19T15:57:21Z",
+          "updatedAt": "2024-09-19T15:57:31Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> L2 --> Underlay/lower layer protocol\r\n\r\nHmm, yes. We need to be clearer with this. The SCION network layer cannot know if any link on the path has a UDP/IP encapsulation, so the MTU described in segments should measure the payload of the encapsulated packet if encapsulated. => for raw L2: real L2 MTU; for V4 underlay: real L2 MTU - 28; for v6 underlay: real  L2 MTU - 48\r\n\r\nI'll try and clarify this concisely. Making a PR now.\r\n",
+          "createdAt": "2024-09-20T09:00:58Z",
+          "updatedAt": "2024-09-20T09:01:09Z"
         }
       ]
     },
@@ -864,7 +878,7 @@
       "id": "I_kwDOJx2-rs6V3vv2",
       "title": "beaconing: the grpc protobufs are described, but not the errors",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/61",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -873,8 +887,8 @@
       "labels": [],
       "body": "Eventhough the Beacon() call does not admit any response, it can still return errors.\r\nA grpc call signatue is (in Go syntax) \"func Call(request) Response, error\". So we need to describe error.\r\nWe should probably check other APIs for the same oversight.\r\n",
       "createdAt": "2024-09-09T16:38:09Z",
-      "updatedAt": "2024-09-10T09:44:38Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-19T17:33:24Z",
+      "closedAt": "2024-09-19T17:33:24Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -4756,20 +4770,62 @@
       "id": "PR_kwDOJx2-rs57KXG8",
       "title": "grpc: describe empty responses and mention the existence of gRPC errors",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/62",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #61 ",
       "createdAt": "2024-09-11T13:19:28Z",
-      "updatedAt": "2024-09-11T13:19:29Z",
+      "updatedAt": "2024-09-19T17:33:29Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "beaconing_api_errors",
       "headRefOid": "34bd2f3305dd0bc1eb673497696f139b6f7df268",
+      "closedAt": "2024-09-19T17:33:23Z",
+      "mergedAt": "2024-09-19T17:33:23Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6KCp1I",
+          "commit": {
+            "abbreviatedOid": "34bd2f3"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-09-19T15:49:39Z",
+          "updatedAt": "2024-09-19T15:49:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 63,
+      "id": "PR_kwDOJx2-rs58JkpE",
+      "title": "mtu: add clarifications.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/63",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #57 ",
+      "createdAt": "2024-09-20T10:33:09Z",
+      "updatedAt": "2024-09-20T10:33:10Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cp_mtu",
+      "headRefOid": "637ce5e22a0c19a5f9ddbf692a196b4f2df83bda",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
