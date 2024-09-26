@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-24T00:20:16.682919+00:00",
+  "timestamp": "2024-09-26T00:20:03.456859+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -666,7 +666,7 @@
       "id": "I_kwDOJx2-rs6OtERN",
       "title": "Clarify origination v.s. propagation interval",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -676,8 +676,8 @@
       ],
       "body": "We currently only mention propagation interval in the draft. However, there is a separate origination interval in the implementation. \r\n\r\n\r\nAs reported by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556 : \r\n\r\n> The notes contain several references to \"beacon origination interval\", i.e. the interval at which new beacons are created. I couldn't find any description of this interval, maybe I overlooked it? Is it the same as the propagation interval? \r\n> I couldn't find a discussion of beacon origination interval (or the RegistrationInterval), see \"[DefaultOriginationInterval](https://github.com/scionproto/scion/blob/a1ed6246ecd6beae9c82544032de4f9fecab1058/control/config/config.go#L37)\" (or the DefaultRegistrationInterval) in the code.\r\n\r\n> ### Partition and Healing\r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\n\r\n> ### Path Discovery Time and Scalability {#scalability} \r\n> Also, I think the calculation needs to take into account the \"beacon origination interval\".\r\n \r\n \r\n Does this distinction make sense? We might distinguish between interval for core beaconing and intra-ISD beaconing",
       "createdAt": "2024-07-07T19:07:10Z",
-      "updatedAt": "2024-09-19T15:04:20Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-24T15:08:48Z",
+      "closedAt": "2024-09-24T15:08:48Z",
       "comments": [
         {
           "author": "matzf",
@@ -692,6 +692,13 @@
           "body": "Also, for the records, these are the values in the prod network (as [confirmed](https://scionproto.slack.com/archives/C8ADA9CEP/p1720446254828389?thread_ts=1720431398.661119&cid=C8ADA9CEP) by @oncilla)\r\n```toml\r\n[beaconing]\r\norigination_interval = \"30s\"\r\npropagation_interval = \"30s\"\r\nregistration_interval = \"5s\"\r\n```",
           "createdAt": "2024-07-08T15:01:16Z",
           "updatedAt": "2024-07-08T15:01:16Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I agree with @matzf that there is no editing action needed on the draft because of this issue ",
+          "createdAt": "2024-09-24T15:08:48Z",
+          "updatedAt": "2024-09-24T15:08:48Z"
         }
       ]
     },
@@ -768,7 +775,7 @@
     {
       "number": 50,
       "id": "I_kwDOJx2-rs6O67LK",
-      "title": "Anapaya review -04",
+      "title": "Anapaya review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/50",
       "state": "OPEN",
       "author": "nicorusti",
@@ -779,9 +786,9 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\nIt would be great if you could look at this within a week. Thanks a lot!\r\n  \r\n\r\n",
+      "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n\r\nPlease review (sorted by urgency): \r\n- #63 \r\n- 2.3.3.  Effects of Clock Inaccuracy\r\n-  2.4.  Path Discovery Time and Scalability\r\n-  5.  Security Considerations\r\n- Control Service gRPC API (appendix)\r\n\r\n\r\nOther pointers:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\n  \r\n\r\n",
       "createdAt": "2024-07-09T10:31:37Z",
-      "updatedAt": "2024-07-22T21:06:29Z",
+      "updatedAt": "2024-09-24T16:05:31Z",
       "closedAt": null,
       "comments": []
     },
@@ -4680,9 +4687,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.",
+      "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-09-11T12:14:06Z",
+      "updatedAt": "2024-09-24T14:59:18Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
