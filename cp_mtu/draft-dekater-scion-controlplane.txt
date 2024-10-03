@@ -2351,13 +2351,13 @@ path segment 4 |             |     |             |     |             |
 
 3.4.  Path MTU
 
-   Paths represent a sequence of ASes and inter-AS links; each with
-   possibly different MTUs.  As a result, a path has an effective MTU
-   which is the least of the MTUs of each link and ASes it traverses.
-   The relevant MTUs for calculating a path's effective MTU are
-   available from the segments used in its construction:
+   SCION paths represent a sequence of ASes and inter-AS links; each
+   with possibly different MTUs.  As a result, the path MTU is the
+   minimum of the MTUs of each inter-AS link and intra-AS networks it
+   traverses.  Such MTU information is disseminated during path
+   construction:
 
-   *  The MTU of the first and last ASes (represented by the mtu field
+   *  The MTU of the first and last ASes (represented by the MTU field
       of the corresponding AS Entries (Section 2.2.1.4.2))
 
    *  The MTU of each inter-AS link or peering link (indicated by the
@@ -2366,6 +2366,9 @@ path segment 4 |             |     |             |     |             |
 
    *  The MTU of any intra-AS network traversed if the ingress and
       egress interfaces of a hop exist on two different border routers
+
+   It is then made available to endpoints during the path lookup
+   process.
 
    Regarding the later point: A SCION host using a path segment has no
    means of knowing whether a given hop implies traversing the
