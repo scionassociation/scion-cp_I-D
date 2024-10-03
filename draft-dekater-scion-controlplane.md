@@ -139,7 +139,9 @@ SCION relies on three main components:
 
 This document describes the SCION Control Plane component.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments, and to introduce new concepts that can potentially address particular problems with the current Internet architecture.
+
+Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
 ## Terminology {#terms}
