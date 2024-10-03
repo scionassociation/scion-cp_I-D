@@ -1454,11 +1454,13 @@ The control service of a non-core AS has to register the newly created down-segm
 
 ## Path MTU {#path-mtu}
 
-Paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, a path has an effective MTU which is the least of the MTUs of each link and ASes it traverses. The relevant MTUs for calculating a path's effective MTU are available from the segments used in its construction:
+SCION paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:
 
-* The MTU of the first and last ASes (represented by the mtu field of the corresponding [AS Entries](#ase-sign))
+* The MTU of the first and last ASes (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 * The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers
+
+It is then made available to endpoints during the path lookup process.
 
 Regarding the later point: A SCION host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, a SCION control plane implementation is NOT REQUIRED to account for this in the hop's ingress_mtu. As a result, a scion host building a path must assume that all hops are additionally constrained by the internal network MTU of each AS traversed.
 
