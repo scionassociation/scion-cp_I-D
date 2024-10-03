@@ -2138,4 +2138,3 @@ Changes from draft-dekater-scion-controlplane-05:
 - Addressed clock drift.
 - Add tentative description of Control Services API.
 - Added discussion on MTU & fragmentation enhancement.
-- 
