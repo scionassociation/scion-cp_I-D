@@ -1462,7 +1462,7 @@ SCION paths represent a sequence of ASes and inter-AS links; each with possibly 
 
 It is then made available to endpoints during the path lookup process.
 
-Regarding the later point: A SCION host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, a SCION control plane implementation is NOT REQUIRED to account for this in the hop's ingress_mtu. As a result, a scion host building a path must assume that all hops are additionally constrained by the internal network MTU of each AS traversed.
+Regarding the later point: A SCION endpoint using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, SCION control plane implementations are NOT REQUIRED to account for this in the hop's `ingress_mtu` field. As a result, a SCION endpoint looking up a path MUST assume that all hops are additionally constrained by the internal network MTU of each AS traversed.
 
 This could be optimized if the control plane implementations made the hop's ingress_mtu field no greater than the MTU of the path between the two border routers involved in that hop. However existing implementations have not historically done this.
 
