@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 8 March 2025                                            S. Hitz
+Expires: 6 April 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                        4 September 2024
+                                                          3 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 March 2025.
+   This Internet-Draft will expire on 6 April 2025.
 
 Copyright Notice
 
@@ -159,11 +159,11 @@ Table of Contents
    presence of adversaries.
 
    _Security_ - to provide higher levels of trust in routing information
-   in order to prevent IP prefix hijacking/leaks, denial-of-service and
-   other attacks.  Endpoints can decide the trust roots they wish to
-   rely on, routing information can be unambiguously attributed to an
-   AS, and packets are only forwarded along authorized path segments.  A
-   particular use case is to enable geofencing.
+   in order to prevent traffic hijacking, reduce potential for denial-
+   of-service and other attacks.  Endpoints can decide the trust roots
+   they wish to rely on, routing information can be unambiguously
+   attributed to an AS, and packets are only forwarded along authorized
+   path segments.  A particular use case is to enable geofencing.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
@@ -215,7 +215,7 @@ Table of Contents
 
    *Control Plane*: The SCION Control Plane is responsible for the
    propagation and discovery of network paths, i.e., for the exchange of
-   routing information between network nodes.  The Control Plane thus
+   routing information between SCION nodes.  The Control Plane thus
    determines where traffic can be sent and deals with questions such as
    how paths are discovered, which paths exist, what quality individual
    links offer, etc.  Within a SCION AS, such functionalities are
@@ -235,7 +235,7 @@ Table of Contents
    *Endpoint*: An endpoint is the start or the end of a SCION path.  For
    example, an endpoint can be a host as defined in [RFC1122] or a SCION
    IP gateway bridging a SCION and an IP domain.  This definition is
-   based on the definition in [RFC9473].
+   based on the endpoint definition in [RFC9473].
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
    between two SCION endpoints which is used to transmit packets in the
@@ -269,11 +269,6 @@ Table of Contents
    "Medium Access Control".  When "Medium Access Control address" is
    implied, the phrase "Link Layer Address" is used.
 
-   *Packet-Carried Forwarding State (PCFS)*: Rather than relying on
-   costly inter-domain forwarding tables, SCION data packets contain all
-   the necessary path information.  This property is referred to as
-   packet-carried forwarding state or PCFS.
-
    *Path Segment*: Path segments are derived from Path Segment
    Construction Beacons (PCBs).  A path segment can be (1) an up segment
    (i.e. a path between a non-core AS and a core AS in the same ISD),
@@ -286,7 +281,8 @@ Table of Contents
    generate PCBs to explore paths within their isolation domain (ISD)
    and among different ISDs.  ASes further propagate selected PCBs to
    their neighboring ASes.  As a PCB traverses the network, it carries
-   path segments, which can subsequently be used for traffic forwarding.
+   and accumulates path segments, which can subsequently be used for
+   traffic forwarding.
 
    *Trust Root Configuration (TRC)*: A Trust Root Configuration or TRC
    is a signed collection of certificates pertaining to an isolation
@@ -393,9 +389,8 @@ Table of Contents
    information at an AS level and store this information in the form of
    _Hop Fields_. Endpoints use information from these Hop Fields to
    create end-to-end forwarding paths for data packets that carry this
-   information in their headers.  This is known as _packet-carried
-   forwarding state_ and also supports multi-path communication among
-   endpoints.
+   information in their headers.  This also supports multi-path
+   communication among endpoints.
 
    The creation of an end-to-end forwarding path consists of the
    following processes:
