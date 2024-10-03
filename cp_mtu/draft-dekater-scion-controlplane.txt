@@ -1341,10 +1341,10 @@ path segment 4 |             |     |             |     |             |
       a specification of one peer entry, see Section 2.2.1.7.
 
    *  mtu: The maximum transmission unit (MTU) that is supported by all
-      hosts within the AS being described.  This is set by the control
-      service adding the entry to the beacon.  How the control service
-      obtains this information is implementation dependent.  Current
-      practice is do make it a configuration item.
+      intra-domain links within the current AS.  This value is set by
+      the control service when adding the AS entry to the beacon.  How
+      the control service obtains this information is implementation
+      dependent.  Current practice is to make it a configuration item.
 
    *  extensions: List of (signed) extensions (optional).  PCB
       extensions defined here are part of the signed AS entry.  This
