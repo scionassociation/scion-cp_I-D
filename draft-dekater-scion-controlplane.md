@@ -177,6 +177,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 **Trust Root Configuration (TRC)**: A trust root configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 
+
 ## Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -311,6 +312,21 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 
 
 Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
+| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
+| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments |
+| 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
+| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
+{: #table-1 title="ISD number allocations"}
+
+Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
+
+
+
+| 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
+| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
+{: #table-1 title="ISD number allocations"}
+
+Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
 
 
 ### SCION AS Numbers
@@ -359,12 +375,28 @@ A secure and reliable routing architecture has to be designed specifically to av
 - Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up-segment fetched from the local path storage, which is populated during the beaconing process.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's Trust Root Configuration TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this necessary material by contacting the sender.<br>
+
+A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
+
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one hop path type which does not rely on any path information. SCION uses these *one hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
+- Path segment types: SCION uses different types of path segments to compose end-to-end paths. Notably, a single path segment already enables intra-ISD communication. For example, a non-core AS can reach the core of the local ISD simply by using an up segment fetched from the local path storage which is populated during the beaconing process.
+- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
+- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender.<br>
+
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.dekater-scion-pki}}.
 
 
 ### Partition and Healing
 
 Besides inter-dependencies, another threat to the Internet is network partition. Partition occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen: During normal operation, the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required, as SCION-enabled ASes could always switch to otherwise unused links.
+- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender.<br>
+
+**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.dekater-scion-pki}}.
+
+Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
+
+Recovering (also called healing) from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.
+
 
 Recovering (also called healing) from a partitioned network is also seamless, as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.
 
@@ -376,8 +408,22 @@ All communication between the control services in different ASes is expressed in
 The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.
 
 {{app-a}} provides the entire control service API definition in protobuf format.
+All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see {{gRPC}}). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
+
+The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see {{RFC9114}})). HTTP3 traffic uses QUIC/UDP ({{RFC9000}}) as a transport layer. In the case of SCION, UDP relies on the data plane.
+
+{{app-a}} provides the entire Control Service API definition in protobuf format.
+
+{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
+
 
 {{app-b}} provides details about the establishment of the underlying QUIC connections through the SCION data plane.
+
+
+{{app-a}} provides the entire Control Service API definition in protobuf format.
+
+{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
+
 
 # Path Exploration or Beaconing {#beaconing}
 
@@ -643,6 +689,12 @@ This section provides a detailed specification of a single PCB and its message f
 {: #figure-5 title="Top-down composition of one PCB"}
 
 The following sections provide detailed specifications of the PCB messages, starting with the top-level message of one PCB, and then diving deeper into each of the PCB's message components.
+
++------------+-------------+-------------------+-----------+
+|  Ingress   |    Egress   |  Expiration Time  |   MAC     |
++------------+-------------+-------------------+-----------+
+~~~~
+{: #figure-5 title="Top-down composition of one PCB"}
 
 **Note:** For a full example of one PCB in the Protobuf message format, please see [](#app-a).
 
@@ -1114,8 +1166,21 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 - because the corresponding RPC failed
 
 - or because no beacon was available to propagate
+- The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
+
+Note that to ensure quick connectivity establishment, an AS MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:
+
+- because the corresponding RPC failed;
+- or because no beacon was available to propagate.
+
 The scalability implications of such parameters are further discussed in [](#scalability).
 
+
+
+- because the corresponding RPC failed;
+- or because no beacon was available to propagate.
+
+The scalability implications of such parameters are further discussed in [](#scalability).
 
 
 #### Selection Policy Example
@@ -1302,6 +1367,14 @@ To achieve scalability in its routing process, SCION uses a divide-and-conquer a
 ### Intra-ISD Beaconing
 In the intra-ISD beaconing, PCBs are propagated top-down, along parent-child links, from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
+At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
+
+Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
+
+To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and inter-ISD beaconing.
+
+### Intra-ISD Beaconing
+
 Typically, this directed, acyclic graph is narrow at the top, widens towards the leafs, and is relatively shallow; intermediate provider ASes have a large number of children, while they only have a small number of parents. The chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
 
 Each AS potentially receives PCBs for all down-path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCBs set size of 50, ASes trim the set of PCBs propagated. As the choice is among different ways to transit the local AS, operators are well equipped to choose among this set of PCBs.
@@ -1320,6 +1393,17 @@ When a new parent-child link is added to the network, the parent AS will propaga
 ### Inter-ISD Beaconing
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered, and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
+Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10000 signature verifications per second.
+
+If the same AS has 1000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link), i.e. at most 50000 signatures per propagation event. The total bandwidth for the propagation of these PCBs for all 1000 child links would, be roughly around 25 MB/s which is manageable with even modest consumer hardware.
+
+On a cold start of the network, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see 'fast recovery'), the construction of a first path to connect each AS to the ISD core is accelerated.
+
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
+
+### Inter-ISD Beaconing
+
+In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 
 Without making strong assumptions on the topology of the core network, we can assume that shortest paths through real world, internet-like networks are relatively short; for example, the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}}. The average distance scales in the same way.
 We cannot assume that the selected PCBs are strictly shortest paths through the network, but it's reasonable to assume that they will not be very much longer than the shortest paths either.
@@ -1346,6 +1430,13 @@ As mentioned previously, a non-core AS typically receives several PCBs represent
 ## Intra-ISD Path-Segment Registration {#intra-reg}
 
 Every *registration period* (determined by each AS), the AS's control service selects two sets of PCBs to transform into two types of path segments:
+
+As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
+
+The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called *intra-ISD path segment registration*. As a result, a core AS's Control Service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the *core segment registration* process.
+
+Both processes are described below.
+
 
 - Up-segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and
 - down-segments, which allow remote entities to reach this AS.
@@ -1397,6 +1488,16 @@ Every registration period, the control service of a non-core AS performs the fol
 2. The control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down-segments**.
 3. The control service now registers the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the control services of the relevant core ASes (see also [](#reg-proto)).
 
+
+
+### Transforming a PCB into a Down Segment
+
+Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:
+
+1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
+2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
+3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)).
+
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
 
@@ -1410,6 +1511,15 @@ In every registration period, the control service of a core AS performs the foll
 1. The core control service selects the best PCBs towards each core AS observed so far.
 2. The core control service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **core-segments**.
 3. As a final step, the control service adds the newly created core-segments to its own path database.
+
+
+The core beaconing process creates path segments from core AS to core AS. These core segments are then added to the Control Service path database of the core AS that created the segment, so that local and remote endpoints can obtain and use these core segments. In contrast to the intra-ISD registration procedure, there is no need to register core segments with other core ASes as each core AS will receive PCBs originated from every other core AS.
+
+In every registration period, the Control Service of a core AS performs the following operations:
+
+1. The core Control Service selects the best PCBs towards each core AS observed so far.
+2. The core Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **core segments**.
+3. The Control Service adds the newly created core segments to its own path database.
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
@@ -1446,6 +1556,14 @@ The control service of a non-core AS has to register the newly created down-segm
   - `SEGMENT_TYPE_DOWN`: Specifies a down-segment.
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
 - `SegmentRegistrationResponse`: an empty message returned as an acknowledgement upon success.
+   }
+
+   message SegmentsRegistrationResponse {}
+~~~~
+
+- `SegmentType`: Specifies the type of the path segment to be registered. Currently, only the following type is used:
+  - `SEGMENT_TYPE_DOWN`: Specifies a down segment.
+- `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
 
 # Path Lookup {#lookup}
 
@@ -1559,6 +1677,18 @@ When the segment-request handler of a *core AS* control service receives a path 
 
 
 
+
+1. Validate the request:
+   - The source of the path segment MUST be this core AS.
+   - The request MUST either be;
+     - for a core segment to a core AS in this ISD or another ISD, or;
+     - for a down segment to an AS in this ISD.
+2. If the destination is a core or wildcard address, then load matching core segments from the path database and return.
+3. Otherwise, load the matching down segments from the path database and return.
+
+[](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
+
+
 # Security Considerations
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
@@ -1580,6 +1710,27 @@ This section examines several possible approaches open to an "ordinary" non-core
 - Creation of spurious ASes and ISDs (see [](#fake-ases))
 - Peering link misuse (see [](#peer-link-misuse))
 - Manipulation of the path selection process (see [](#manipulate-selection))
+
+
+## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
+
+The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
+
+
+## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
+
+This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.
+
+
+
+## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
+
+The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
+
+
+## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
+
+This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.
 
 
 ### Path Hijacking through Interposition {#path-hijack}
@@ -1620,11 +1771,32 @@ In SCION, overall path selection is the result of three steps. First, each AS se
 These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
 
 
+Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack. Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.
+
+
+### Manipulation of the Path-Selection Process {#manipulate-selection}
+
+Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
+
+In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.
+
+These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
+
 **Announcing Large Numbers of Path Segments** <br>
 This attack is possible if the adversary controls multiple (at least two) ASes. The adversary can create a large number of links between the ASes under its control, which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes. This in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.
 
 In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.
 
+
+
+In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.
+
+These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
+
+**Announcing Large Numbers of Path Segments** <br>
+This attack is possible if the adversary controls at least two ASes. The adversary can create a large number of links between the ASes under its control which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes and in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.
+
+In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction as these relatively long paths have to compete with other shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.
 
 **Wormhole Attack** <br>
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another, non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.
@@ -1648,6 +1820,21 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 
 
 A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control service SHOULD be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
+The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.
+
+SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.
+
+Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet, e.g. filtering, geo-blocking or using cookies.
+
+Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.
+
+For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:
+
+- `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
+- `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address MUST match the local ISD and the number of path segments MUST be 1.
+
+A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service SHOULD be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
+
 
 # IANA Considerations
 
@@ -1881,6 +2068,22 @@ message VerificationKeyID {
 {: #figure-11 title="Control Service gRPC API definition"}
 
 In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
+    // Enocded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
+}
+
+message VerificationKeyID {
+    uint64 isd_as = 1;
+    bytes subject_key_id = 2;
+    uint64 trc_base = 3;
+    uint64 trc_serial = 4;
+}
+
+~~~~
+{: #figure-11 title="Control Service gRPC API definition"}
+
 
 # SCION data plane use by the SCION control plane {#app-b}
 {:numbered="false"}
@@ -2110,3 +2313,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G."}
 
+# Change Log
+{:numbered="false"}
+
+Changes from draft-dekater-scion-controlplane-05:
