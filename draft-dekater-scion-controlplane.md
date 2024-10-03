@@ -2112,3 +2112,30 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G."}
 
+
+# Change Log
+{:numbered="false"}
+
+Changes from draft-dekater-scion-controlplane-05:
+
+- Added overview of SCION components to Introduction section.
+- Added RFC2119 compliant terminology.
+- Added IANA Considerations.
+- Removed forward references.
+- General edits to make terminology consistent, remove duplication and rationalize text.
+- Added mention proof of transit as detection mechanism for wormhole attack to Security Considerations.
+- Added Denial-of-Service to Security Considerations.
+- Clarified beaconing at bootstrapping including fast retry.
+- Clarified path reversibility.
+- Added scalability of path discovery.
+- Clarified PCB propagation (flooding).
+- Minor wording change to Control Services API.
+- Clarified selection of MAC including default algorithm.
+- Clarified PCB selection policies and endpoint requirements.
+- Introduced motivation for link types and explained restrictions for peering links.
+- Added explanation regarding interface configuration.
+- Fixed private AS range typo.
+- Addressed clock drift.
+- Add tentative description of Control Services API.
+- Added discussion on MTU & fragmentation enhancement.
+- 
