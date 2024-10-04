@@ -1015,7 +1015,7 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 - `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
 - `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
-- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. Packets traversing this link in either direction cannot exceed this size. As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
+- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value.  How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
