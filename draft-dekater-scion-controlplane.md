@@ -1456,15 +1456,10 @@ The control service of a non-core AS has to register the newly created down-segm
 
 SCION paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:
 
-* The MTU of the first and last ASes (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
+* The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
-* The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers
 
-It is then made available to endpoints during the path lookup process.
-
-Regarding the later point: A SCION endpoint using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, SCION control plane implementations are NOT REQUIRED to account for this in the hop's `ingress_mtu` field. As a result, a SCION endpoint looking up a path MUST assume that all hops are additionally constrained by the internal network MTU of each AS traversed.
-
-This could be optimized if the control plane implementations made the hop's ingress_mtu field no greater than the MTU of the path between the two border routers involved in that hop. However existing implementations have not historically done this.
+Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes, therefore when looking up a path they MUST assume that all hops are constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
