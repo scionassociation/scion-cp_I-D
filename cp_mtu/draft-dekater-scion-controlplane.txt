@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 6 April 2025                                            S. Hitz
+Expires: 7 April 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                          3 October 2024
+                                                          4 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 April 2025.
+   This Internet-Draft will expire on 7 April 2025.
 
 Copyright Notice
 
@@ -1429,13 +1429,11 @@ path segment 4 |             |     |             |     |             |
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
       ingress interface (in beaconing direction) of the hop being
-      described.  Packets traversing the associated inter-AS link in
-      either direction cannot be larger than this size.  As a result, no
-      path segment constructed from the containing beacon can have an
-      MTU greater than this.  How the control service obtains the MTU of
-      an inter-AS link is implementation dependent.  It may be
-      discovered or configured.  Current practice to make it a
-      configuration item.
+      described.  The MTU of path segments constructed from the
+      containing beacon is necessarily less than or equal to this value.
+      How the control service obtains the MTU of an inter-AS link is
+      implementation dependent.  It may be discovered or configured.
+      Current practice to make it a configuration item.
 
    In this description, MTU and packet size are to be understood in the
    same sense as in [RFC1122].  That is, exclusive of any layer 2
