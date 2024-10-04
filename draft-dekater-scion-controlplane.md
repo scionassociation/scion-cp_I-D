@@ -1686,7 +1686,7 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 # Control Service gRPC API {#app-a}
 {:numbered="false"}
 
-The following code block provides, in protobuf format, the API by which control services interract.
+The following code block provides, in protobuf format, the API by which control services interact.
 
 ~~~~
 enum SegmentType {
