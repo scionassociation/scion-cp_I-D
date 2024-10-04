@@ -1429,9 +1429,9 @@ path segment 4 |             |     |             |     |             |
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
       ingress interface (in beaconing direction) of the hop being
-      described.  The MTU of path segments constructed from the
-      containing beacon is necessarily less than or equal to this value.
-      How the control service obtains the MTU of an inter-AS link is
+      described.  The MTU of paths constructed from the containing
+      beacon is necessarily less than or equal to this value.  How the
+      control service obtains the MTU of an inter-AS link is
       implementation dependent.  It may be discovered or configured.
       Current practice to make it a configuration item.
 
