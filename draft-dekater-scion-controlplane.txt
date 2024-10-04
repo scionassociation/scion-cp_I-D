@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 March 2025                                           S. Hitz
+Expires: 7 April 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                       19 September 2024
+                                                          4 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2025.
+   This Internet-Draft will expire on 7 April 2025.
 
 Copyright Notice
 
@@ -115,6 +115,7 @@ Table of Contents
        3.1.3.  Transforming a PCB into a Down-Segment
      3.2.  Core Path-Segment Registration
      3.3.  Path-Segment Registration on Code-Level
+     3.4.  Path MTU
    4.  Path Lookup
      4.1.  Lookup Process
        4.1.1.  Sequence of Lookup Requests
@@ -1339,8 +1340,11 @@ path segment 4 |             |     |             |     |             |
    *  peer_entries: The list of optional peer entries (PeerEntry).  For
       a specification of one peer entry, see Section 2.2.1.7.
 
-   *  mtu: The size of the maximum transmission unit (MTU) within the
-      current AS's network.
+   *  mtu: The maximum transmission unit (MTU) that is supported by all
+      intra-domain links within the current AS.  This value is set by
+      the control service when adding the AS entry to the beacon.  How
+      the control service obtains this information is implementation
+      dependent.  Current practice is to make it a configuration item.
 
    *  extensions: List of (signed) extensions (optional).  PCB
       extensions defined here are part of the signed AS entry.  This
@@ -1424,7 +1428,17 @@ path segment 4 |             |     |             |     |             |
       current AS.  For further specifications, see Section 2.2.1.6.
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
-      ingress interface of the current AS.
+      ingress interface (in beaconing direction) of the hop being
+      described.  The MTU of paths constructed from the containing
+      beacon is necessarily less than or equal to this value.  How the
+      control service obtains the MTU of an inter-AS link is
+      implementation dependent.  It may be discovered or configured.
+      Current practice to make it a configuration item.
+
+   In this description, MTU and packet size are to be understood in the
+   same sense as in [RFC1122].  That is, exclusive of any layer 2
+   framing or packet encapsulation (for links using an underlay
+   network).
 
 2.2.1.6.  Hop Field
 
@@ -1521,14 +1535,23 @@ path segment 4 |             |     |             |     |             |
       link on the peer AS side.  This identifier is used to match
       peering segments during path construction.
 
-   *  peer_mtu: Specifies the maximum transmission unit MTU on the
-      peering link.
+   *  peer_mtu: Specifies the maximum transmission unit (MTU) of the
+      peering link being described.  The MTU of paths via such link is
+      necessarily less than or equal to this value.  How the control
+      service obtains the MTU of an inter-AS link is implementation
+      dependent.  It may be discovered or configured.  Current practice
+      to make it a configuration item.
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
       peering link, in the direction of beaconing - see also Figure 8).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
+
+   In this description, MTU and packet size are to be understood in the
+   same sense as in [RFC1122].  That is, exclusive of any layer 2
+   framing or packet encapsulation (for links using an underlay
+   network).
 
       +-----------+
       |           |
@@ -1622,6 +1645,9 @@ path segment 4 |             |     |             |     |             |
    *  Neighbor ISD-AS number
 
    *  Neighbor interface underlay address
+
+   In addition, the maximum MTU supported by all intra-AS links MAY be
+   configured.
 
 2.3.  Propagation of PCBs
 
@@ -2320,6 +2346,27 @@ path segment 4 |             |     |             |     |             |
    *  SegmentRegistrationResponse: an empty message returned as an
       acknowledgement upon success.
 
+3.4.  Path MTU
+
+   SCION paths represent a sequence of ASes and inter-AS links; each
+   with possibly different MTUs.  As a result, the path MTU is the
+   minimum of the MTUs of each inter-AS link and intra-AS networks it
+   traverses.  Such MTU information is disseminated during path
+   construction:
+
+   *  The MTU of each intra-AS network traversed (represented by the MTU
+      field of the corresponding AS Entries (Section 2.2.1.4.2))
+
+   *  The MTU of each inter-AS link or peering link (indicated by the
+      ingress_mtu field of each Section 2.2.1.5 or the peer_mtu field of
+      each Section 2.2.1.7 used)
+
+   Such information is then made available to endpoints during the path
+   lookup process (See Section 4).  SCION endpoints are oblivious to the
+   topology of intermediate ASes, therefore when looking up a path they
+   MUST assume that all hops are constrained by the intra-AS MTU of each
+   AS traversed.
+
 4.  Path Lookup
 
    The _path lookup_ is a fundamental building block of SCION's path
@@ -2928,215 +2975,217 @@ Acknowledgments
 Control Service gRPC API
 
    The following code block provides, in protobuf format, the API by
-   which control services interract.
+   which control services interact.
 
-enum SegmentType {
-    // Unknown segemnt type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
+ enum SegmentType {
+     // Unknown segment type.
+     SEGMENT_TYPE_UNSPECIFIED = 0;
+     // Up segment.
+     SEGMENT_TYPE_UP = 1;
+     // Down segment.
+     SEGMENT_TYPE_DOWN = 2;
+     // Core segment.
+     SEGMENT_TYPE_CORE = 3;
+ }
 
 
-// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all
-// control services on the "intra-domain protocol" network.
-service SegmentLookupService {
-    // Segments returns all segments that match the request.
-    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
-}
+ // This API is exposed by the control services of core ASes expose this
+ // on the SCION dataplane and also by all control services on the
+ // "intra-domain protocol" network.
+ service SegmentLookupService {
+     // Segments returns all segments that match the request.
+     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+ }
 
-message SegmentsRequest {
-    // The source ISD-AS of the segment.
-    uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
-    uint64 dst_isd_as = 2;
-}
+ message SegmentsRequest {
+     // The source ISD-AS of the segment.
+     uint64 src_isd_as = 1;
+     // The destination ISD-AS of the segment.
+     uint64 dst_isd_as = 2;
+ }
 
-message SegmentsResponse {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
+ message SegmentsResponse {
+     message Segments {
+         // List of path segments.
+         repeated PathSegment segments = 1;
+     }
 
-    // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
+     // Mapping from path segment type to path segments.
+     // The key is the integer
+     // representation of the SegmentType enum.
+     map<int32, Segments> segments = 1;
+ }
 
-// This API is only exposed by core ASes and only on the SCION dataplane.
-service SegmentRegistrationService {
-    // SegmentsRegistration registers segments at the remote.
-    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-        SegmentsRegistrationResponse) {}
-}
+ // This API is only exposed by core ASes and only on the SCION
+ // dataplane.
+ service SegmentRegistrationService {
+     // SegmentsRegistration registers segments at the remote.
+     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+         SegmentsRegistrationResponse) {}
+ }
 
-message SegmentsRegistrationRequest {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
+ message SegmentsRegistrationRequest {
+     message Segments {
+         // List of path segments.
+         repeated PathSegment segments = 1;
+     }
 
-    // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
+     // Mapping from path segment type to path segments.
+     // The key is the integer
+     // representation of the SegmentType enum.
+     map<int32, Segments> segments = 1;
+ }
 
-message SegmentsRegistrationResponse {}
+ message SegmentsRegistrationResponse {}
 
-service SegmentCreationService {
-    // Beacon sends a beacon to the remote.
-    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
-}
+ service SegmentCreationService {
+     // Beacon sends a beacon to the remote.
+     rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+ }
 
-message BeaconRequest {
-    // Beacon in form of a partial path segment.
-    PathSegment segment = 1;
-}
+ message BeaconRequest {
+     // Beacon in form of a partial path segment.
+     PathSegment segment = 1;
+ }
 
-message BeaconResponse {}
+ message BeaconResponse {}
 
-message PathSegment {
-    // The encoded SegmentInformation. It is used for signature input.
-    bytes segment_info = 1;
-    // Entries of ASes on the path.
-    repeated ASEntry as_entries = 2;
-}
+ message PathSegment {
+     // The encoded SegmentInformation. It is used for signature input.
+     bytes segment_info = 1;
+     // Entries of ASes on the path.
+     repeated ASEntry as_entries = 2;
+ }
 
-message SegmentInformation {
-    // Segment creation time set by the originating AS. Segment
-    // expiration time is computed relative to this timestamp.
-    // The timestamp is encoded as the number of seconds elapsed
-    // since January 1, 1970 UTC.
-    int64 timestamp = 1;
-    // The 16-bit segment ID integer used for MAC computation.
-    uint32 segment_id = 2;
-}
+ message SegmentInformation {
+     // Segment creation time set by the originating AS. Segment
+     // expiration time is computed relative to this timestamp.
+     // The timestamp is encoded as the number of seconds elapsed
+     // since January 1, 1970 UTC.
+     int64 timestamp = 1;
+     // The 16-bit segment ID integer used for MAC computation.
+     uint32 segment_id = 2;
+ }
 
-message ASEntry {
-    // The signed part of the AS entry. The body of the SignedMessage
-    // is the serialized ASEntrySignedBody. The signature input is
-    // defined as follows:
-    //
-    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-    //
-    //  associated_data(ps, i) =
-    //          ps.segment_info ||
-    //          ps.as_entries[1].signed.header_and_body ||
-    //          ps.as_entries[1].signed.signature ||
-    //          ...
-    //          ps.as_entries[i-1].signed.header_and_body ||
-    //          ps.as_entries[i-1].signed.signature
-    //
-    proto.crypto.v1.SignedMessage signed = 1;
-    // The unsigned part of the AS entry.
-    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
-}
+ message ASEntry {
+     // The signed part of the AS entry. The body of the SignedMessage
+     // is the serialized ASEntrySignedBody. The signature input is
+     // defined as follows:
+     //
+     //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
+     //
+     //  associated_data(ps, i) =
+     //          ps.segment_info ||
+     //          ps.as_entries[1].signed.header_and_body ||
+     //          ps.as_entries[1].signed.signature ||
+     //          ...
+     //          ps.as_entries[i-1].signed.header_and_body ||
+     //          ps.as_entries[i-1].signed.signature
+     //
+     proto.crypto.v1.SignedMessage signed = 1;
+     // The unsigned part of the AS entry.
+     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
+ }
 
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
-}
+ message ASEntrySignedBody {
+     // ISD-AS of the AS that created this AS entry.
+     uint64 isd_as = 1;
+     // ISD-AS of the downstream AS.
+     uint64 next_isd_as = 2;
+     // The required regular hop entry.
+     HopEntry hop_entry = 3;
+     // Optional peer entries.
+     repeated PeerEntry peer_entries = 4;
+     // Intra AS MTU.
+     uint32 mtu = 5;
+     // Optional extensions.
+     proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+ }
 
-message HopEntry {
-    // Material to create the data-plane hop field.
-    HopField hop_field = 1;
-    // MTU on the ingress link.
-    uint32 ingress_mtu = 2;
-}
+ message HopEntry {
+     // Material to create the data-plane hop field.
+     HopField hop_field = 1;
+     // MTU on the ingress link.
+     uint32 ingress_mtu = 2;
+ }
 
-message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments during
-    // path construction.
-    uint64 peer_isd_as = 1;
-    // Remote peer interface identifier. This is used to match
-    // peering segments
-    // during path construction.
-    uint64 peer_interface = 2;
-    // MTU on the peering link.
-    uint32 peer_mtu = 3;
-    // Material to create the data-plane hop field
-    HopField hop_field = 4;
-}
+ message PeerEntry {
+     // ISD-AS of peer AS. This is used to match peering segments during
+     // path construction.
+     uint64 peer_isd_as = 1;
+     // Remote peer interface identifier. This is used to match
+     // peering segments
+     // during path construction.
+     uint64 peer_interface = 2;
+     // MTU on the peering link.
+     uint32 peer_mtu = 3;
+     // Material to create the data-plane hop field
+     HopField hop_field = 4;
+ }
 
-message HopField {
-    // Ingress interface identifier.
-    uint64 ingress = 1;
-    // Egress interface identifier.
-    uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment creation
-    // timestamp.
-    uint32 exp_time = 3;
-    // MAC used in the dataplane to verify the hop field.
-    bytes mac = 4;
-}
+ message HopField {
+     // Ingress interface identifier.
+     uint64 ingress = 1;
+     // Egress interface identifier.
+     uint64 egress = 2;
+     // 8-bit encoded expiration offset relative to the segment creation
+     // timestamp.
+     uint32 exp_time = 3;
+     // MAC used in the dataplane to verify the hop field.
+     bytes mac = 4;
+ }
 
-enum SignatureAlgorithm {
-    // Unspecified signature algorithm. This value is never valid.
-    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    // ECDS with SHA256.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    // ECDS with SHA384.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    // ECDS with SHA512.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-}
+ enum SignatureAlgorithm {
+     // Unspecified signature algorithm. This value is never valid.
+     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+     // ECDS with SHA256.
+     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+     // ECDS with SHA384.
+     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+     // ECDS with SHA512.
+     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+ }
 
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
-}
+ message SignedMessage {
+     // Encoded header and body.
+     bytes header_and_body = 1;
+     // Raw signature. The signature is computed over the concatenation
+     // of the header and body, and the optional associated data.
+     bytes signature = 2;
+ }
 
-message Header {
-    // Algorithm used to compute the signature.
-    SignatureAlgorithm signature_algorithm = 1;
-    // Optional arbitrary per-protocol key identifier.
-    bytes verification_key_id = 2;
-    // Optional signature creation timestamp.
-    google.protobuf.Timestamp timestamp = 3;
-    // Optional arbitrary per-protocol metadata.
-    bytes metadata = 4;
-    // Length of associated data that is covered by the signature, but
-    // is not included in the header and body. This is zero, if no
-    // associated data is covered by the signature.
-    int32 associated_data_length = 5;
-}
+ message Header {
+     // Algorithm used to compute the signature.
+     SignatureAlgorithm signature_algorithm = 1;
+     // Optional arbitrary per-protocol key identifier.
+     bytes verification_key_id = 2;
+     // Optional signature creation timestamp.
+     google.protobuf.Timestamp timestamp = 3;
+     // Optional arbitrary per-protocol metadata.
+     bytes metadata = 4;
+     // Length of associated data that is covered by the signature, but
+     // is not included in the header and body. This is zero, if no
+     // associated data is covered by the signature.
+     int32 associated_data_length = 5;
+ }
 
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Enocded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
-}
+ // Low-level representation of HeaderAndBody used for signature
+ // computation input. This should not be used by external code.
+ message HeaderAndBodyInternal {
+     // Encoded header suitable for signature computation.
+     bytes header = 1;
+     // Raw payload suitable for signature computation.
+     bytes body = 2;
+ }
 
-message VerificationKeyID {
-    uint64 isd_as = 1;
-    bytes subject_key_id = 2;
-    uint64 trc_base = 3;
-    uint64 trc_serial = 4;
-}
+ message VerificationKeyID {
+     uint64 isd_as = 1;
+     bytes subject_key_id = 2;
+     uint64 trc_base = 3;
+     uint64 trc_serial = 4;
+ }
 
-            Figure 10: Control Service gRPC API definition
+             Figure 10: Control Service gRPC API definition
 
    In case of failure, gRPC calls return an error as specified by the
    gRPC framework.  That is, a non-zero status code and an explanatory
@@ -3173,7 +3222,7 @@ SCION data plane use by the SCION control plane
 
    *  To resolve the address of the control service at a given AS, a
       client sends a ServiceResolutionRequest RPC (which has no
-      parameters) to an enpoint address constructed as follows:
+      parameters) to an endpoint address constructed as follows:
 
       -  Common Header:
 
@@ -3252,7 +3301,7 @@ Path-Lookup Examples
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e., there is no up-segment from A to C.
-   "CS" stands for controle service.
+   "CS" stands for control service.
 
    +----------------------------+     +----------------------------+
    |                            |     |                            |
