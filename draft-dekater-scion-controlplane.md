@@ -2116,7 +2116,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 # Change Log
 {:numbered="false"}
 
-Changes from draft-dekater-scion-controlplane-05:
+Changes to the current draft:
 
 - Added overview of SCION components to Introduction section.
 - Added RFC2119 compliant terminology.
