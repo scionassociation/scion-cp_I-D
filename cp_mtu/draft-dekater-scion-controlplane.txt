@@ -1536,12 +1536,11 @@ path segment 4 |             |     |             |     |             |
       peering segments during path construction.
 
    *  peer_mtu: Specifies the maximum transmission unit (MTU) of the
-      peering link being described.  Packets traversing this link in
-      either direction cannot exceed this size.  As a result, no path
-      segment constructed from the containing beacon can have an MTU
-      greater than this.  How the control service obtains the MTU of an
-      inter-AS link is implementation dependent.  It may be discovered
-      or configured.  Current practice to make it a configuration item.
+      peering link being described.  The MTU of paths via such link is
+      necessarily less than or equal to this value.  How the control
+      service obtains the MTU of an inter-AS link is implementation
+      dependent.  It may be discovered or configured.  Current practice
+      to make it a configuration item.
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
