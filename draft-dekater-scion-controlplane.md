@@ -1685,7 +1685,7 @@ The following code block provides, in protobuf format, the API by which control 
 
 ~~~~
 enum SegmentType {
-    // Unknown segemnt type.
+    // Unknown segment type.
     SEGMENT_TYPE_UNSPECIFIED = 0;
     // Up segment.
     SEGMENT_TYPE_UP = 1;
@@ -1879,7 +1879,7 @@ message Header {
 // Low-level representation of HeaderAndBody used for signature
 // computation input. This should not be used by external code.
 message HeaderAndBodyInternal {
-    // Enocded header suitable for signature computation.
+    // Encoded header suitable for signature computation.
     bytes header = 1;
     // Raw payload suitable for signature computation.
     bytes body = 2;
@@ -1911,7 +1911,7 @@ The SCION control plane RPC APIs rely on QUIC connections carried by the SCION d
 
 The mechanics of service address resolution are the following:
 
-* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an enpoint address constructed as follows:
+* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
   * Common Header:
     * Path type: SCION (0x01)
     * DT/DL: "Service" (0b0100)
@@ -1967,7 +1967,7 @@ message Transport {
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
-To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for controle service.
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.
 
 
 ~~~~
