@@ -2978,7 +2978,7 @@ Control Service gRPC API
    which control services interact.
 
  enum SegmentType {
-     // Unknown segemnt type.
+     // Unknown segment type.
      SEGMENT_TYPE_UNSPECIFIED = 0;
      // Up segment.
      SEGMENT_TYPE_UP = 1;
@@ -3172,7 +3172,7 @@ Control Service gRPC API
  // Low-level representation of HeaderAndBody used for signature
  // computation input. This should not be used by external code.
  message HeaderAndBodyInternal {
-     // Enocded header suitable for signature computation.
+     // Encoded header suitable for signature computation.
      bytes header = 1;
      // Raw payload suitable for signature computation.
      bytes body = 2;
@@ -3222,7 +3222,7 @@ SCION data plane use by the SCION control plane
 
    *  To resolve the address of the control service at a given AS, a
       client sends a ServiceResolutionRequest RPC (which has no
-      parameters) to an enpoint address constructed as follows:
+      parameters) to an endpoint address constructed as follows:
 
       -  Common Header:
 
@@ -3301,7 +3301,7 @@ Path-Lookup Examples
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e., there is no up-segment from A to C.
-   "CS" stands for controle service.
+   "CS" stands for control service.
 
    +----------------------------+     +----------------------------+
    |                            |     |                            |
