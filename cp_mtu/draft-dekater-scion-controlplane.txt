@@ -2975,7 +2975,7 @@ Acknowledgments
 Control Service gRPC API
 
    The following code block provides, in protobuf format, the API by
-   which control services interract.
+   which control services interact.
 
  enum SegmentType {
      // Unknown segemnt type.
