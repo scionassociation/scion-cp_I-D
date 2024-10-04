@@ -943,7 +943,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. Packets traversing the associated inter-AS link in either direction cannot be larger than this size. As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of path segments constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
