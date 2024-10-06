@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 6 April 2025</td>
+<td class="center">Expires 9 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-03" class="published">3 October 2024</time>
+<time datetime="2024-10-06" class="published">6 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-06">6 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-09">9 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1254,6 +1254,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-path-segment-registration-o" class="internal xref">Path Segment Registration on Code-Level</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-path-mtu" class="internal xref">Path MTU</a></p>
 </li>
             </ul>
 </li>
@@ -2386,7 +2389,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.2-5.4.1"><code>peer_entries</code>: The list of optional peer entries (<code>PeerEntry</code>). For a specification of one peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.1.7</a>.<a href="#section-2.2.1.4.2-5.4.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.5">
-                  <p id="section-2.2.1.4.2-5.5.1"><code>mtu</code>: The size of the maximum transmission unit (MTU) within the current AS's network.<a href="#section-2.2.1.4.2-5.5.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.2-5.5.1"><code>mtu</code>: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.<a href="#section-2.2.1.4.2-5.5.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.6">
                   <p id="section-2.2.1.4.2-5.6.1"><code>extensions</code>: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field <span class="bcp14">SHOULD</span> therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see <a href="#pcb-ext" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2.1.4.2-5.6.1" class="pilcrow">¶</a></p>
@@ -2466,9 +2469,10 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.5-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.5-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.5-5.2">
-                <p id="section-2.2.1.5-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface of the current AS.<a href="#section-2.2.1.5-5.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.5-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths  constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.<a href="#section-2.2.1.5-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.2.1.5-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.1.5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="hopfield">
@@ -2560,15 +2564,16 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.7-5.2.1"><code>peer_interface</code>: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.<a href="#section-2.2.1.7-5.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.7-5.3">
-                <p id="section-2.2.1.7-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit MTU on the peering link.<a href="#section-2.2.1.7-5.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.7-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value.  How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.1.7-5.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.7-5.4">
-                <p id="section-2.2.1.7-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 8</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.7-5.4.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.7-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 8</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.7-5.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.2.1.7-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.1.7-6" class="pilcrow">¶</a></p>
 <span id="name-peer-entry-information-in-t"></span><div id="_figure-6">
 <figure id="figure-8">
-              <div class="alignLeft art-text artwork" id="section-2.2.1.7-6.1">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.7-7.1">
 <pre>
    +-----------+
    |           |
@@ -2665,6 +2670,7 @@ associated_data(ps, i) = ps.segment_info ||
               <p id="section-2.2.4-2.4.1">Neighbor interface underlay address<a href="#section-2.2.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
+<p id="section-2.2.4-3">In addition, the maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> be configured.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2950,7 +2956,7 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
                 </ul>
 </li>
               <li class="normal" id="section-2.3.2.4-4.3">
-                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: Specifies the response message from the neighboring AS.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -3222,7 +3228,27 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
           <li class="normal" id="section-3.3-3.2">
             <p id="section-3.3-3.2.1"><code>map&lt;int32, Segments&gt; segments</code>: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding <code>SegmentType</code>.<a href="#section-3.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
+          <li class="normal" id="section-3.3-3.3">
+            <p id="section-3.3-3.3.1"><code>SegmentRegistrationResponse</code>: an empty message returned as an acknowledgement upon success.<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
+</li>
         </ul>
+</section>
+</div>
+<div id="path-mtu">
+<section id="section-3.4">
+        <h3 id="name-path-mtu">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-path-mtu" class="section-name selfRef">Path MTU</a>
+        </h3>
+<p id="section-3.4-1">SCION paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.4-2.1">
+            <p id="section-3.4-2.1.1">The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding <span><a href="#ase-sign" class="internal xref">AS Entries</a> (<a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>)</span>)<a href="#section-3.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-2.2">
+            <p id="section-3.4-2.2.1">The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each <a href="#hopentry" class="auto internal xref">Section 2.2.1.5</a> or the peer_mtu field of each <a href="#peerentry" class="auto internal xref">Section 2.2.1.7</a> used)<a href="#section-3.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.4-3">Such information is then made available to endpoints during the path lookup process (See <a href="#lookup" class="auto internal xref">Section 4</a>). SCION endpoints are oblivious to the topology of intermediate ASes, therefore when looking up a path they <span class="bcp14">MUST</span> assume that all hops are constrained by the intra-AS MTU of each AS traversed.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3746,13 +3772,13 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
       <h2 id="name-control-service-grpc-api">
 <a href="#name-control-service-grpc-api" class="section-name selfRef">Control Service gRPC API</a>
       </h2>
-<p id="appendix-B-1">The following code block provides, in protobuf format, the API by which Control Services interract.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">The following code block provides, in protobuf format, the API by which control services interact.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <span id="name-control-service-grpc-api-de"></span><div id="_figure-11">
 <figure id="figure-10">
         <div class="alignLeft art-text artwork" id="appendix-B-2.1">
 <pre>
 enum SegmentType {
-    // Unknown segemnt type.
+    // Unknown segment type.
     SEGMENT_TYPE_UNSPECIFIED = 0;
     // Up segment.
     SEGMENT_TYPE_UP = 1;
@@ -3762,10 +3788,10 @@ enum SegmentType {
     SEGMENT_TYPE_CORE = 3;
 }
 
-
 // This API is exposed by the Control Services of core ASes expose
 // this on the SCION dataplane and also by all Control Services
 // on the "intra-domain protocol" network.
+
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -3946,7 +3972,7 @@ message Header {
 // Low-level representation of HeaderAndBody used for signature
 // computation input. This should not be used by external code.
 message HeaderAndBodyInternal {
-    // Enocded header suitable for signature computation.
+    // Encoded header suitable for signature computation.
     bytes header = 1;
     // Raw payload suitable for signature computation.
     bytes body = 2;
@@ -3965,6 +3991,7 @@ message VerificationKeyID {
 <a href="#name-control-service-grpc-api-de" class="selfRef">Control Service gRPC API definition</a>
         </figcaption></figure>
 </div>
+<p id="appendix-B-3">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
@@ -3994,7 +4021,7 @@ registered.<a href="#appendix-C-2.2.1" class="pilcrow">¶</a></p>
 <p id="appendix-C-3">The mechanics of service address resolution are the following:<a href="#appendix-C-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-4.1">
-          <p id="appendix-C-4.1.1">To resolve the address of the Control Service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an enpoint address constructed as follows:<a href="#appendix-C-4.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-4.1.1">To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:<a href="#appendix-C-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-4.1.2.1">
               <p id="appendix-C-4.1.2.1.1">Common Header:<a href="#appendix-C-4.1.2.1.1" class="pilcrow">¶</a></p>
@@ -4088,7 +4115,7 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 12</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 13</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 14</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up segment from A to C. "CS" stands for controle service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 12</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 13</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 14</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
 <figure id="figure-12">
         <div class="alignLeft art-text artwork" id="appendix-D-2.1">
