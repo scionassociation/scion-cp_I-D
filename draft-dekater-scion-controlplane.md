@@ -888,7 +888,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB SHOULD be forwarded.
 - `hop_entry`: The hop entry (`HopEntry`) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see [](#hopentry).
 - `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
-- `mtu`: The size of the maximum transmission unit (MTU) within the current AS's network.
+- `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.
 - `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
 
@@ -949,8 +949,9 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface of the current AS.
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths  constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 
+In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
 #### Hop Field {#hopfield}
 
@@ -1019,8 +1020,11 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 - `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
 - `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
-- `peer_mtu`: Specifies the maximum transmission unit MTU on the peering link.
-- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value.  How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.
+- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+
+In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
+
 
 ~~~~
    +-----------+
@@ -1087,6 +1091,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
+In addition, the maximum MTU supported by all intra-AS links MAY be configured.
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1269,8 +1274,7 @@ The propagation procedure includes the following elements:
    - `Beacon`: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.
 - `BeaconRequest`: Specifies the request message sent by the `Beacon` method to the Control Service of the neighboring AS. It contains the following element:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
-- `BeaconResponse`: Specifies the response message from the neighboring AS.
-
+- `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
 ### Effects of Clock Inaccuracy
 
@@ -1452,7 +1456,16 @@ The Control Service of a non-core AS has to register the newly created down segm
 - `SegmentType`: Specifies the type of the path segment to be registered. Currently, only the following type is used:
   - `SEGMENT_TYPE_DOWN`: Specifies a down segment.
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
+- `SegmentRegistrationResponse`: an empty message returned as an acknowledgement upon success.
 
+## Path MTU {#path-mtu}
+
+SCION paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:
+
+* The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
+* The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
+
+Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes, therefore when looking up a path they MUST assume that all hops are constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
@@ -1489,8 +1502,6 @@ The process to look up and fetch path segments consists of the following steps:
 | Down-segment      | Control service of core ASes in destination ISD (either the local ISD or a remote ISD)|
 {: #table-3 title="Control services responsible for different types of path segments"}
 
-
-
 ### Sequence of Lookup Requests
 
 The overall sequence of requests to resolve a path SHOULD be as follows:
@@ -1498,7 +1509,6 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 1. Request up segments for the source endpoint at the Control Service of the source AS.
 2. Request core segments, which start at the core ASes that are reachable with up segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up segment.
 3. Request down segments starting at core ASes in the destination ISD.
-
 
 ### Caching
 
@@ -1681,11 +1691,11 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 # Control Service gRPC API {#app-a}
 {:numbered="false"}
 
-The following code block provides, in protobuf format, the API by which Control Services interract.
+The following code block provides, in protobuf format, the API by which control services interact.
 
 ~~~~
 enum SegmentType {
-    // Unknown segemnt type.
+    // Unknown segment type.
     SEGMENT_TYPE_UNSPECIFIED = 0;
     // Up segment.
     SEGMENT_TYPE_UP = 1;
@@ -1695,10 +1705,10 @@ enum SegmentType {
     SEGMENT_TYPE_CORE = 3;
 }
 
-
 // This API is exposed by the Control Services of core ASes expose
 // this on the SCION dataplane and also by all Control Services
 // on the "intra-domain protocol" network.
+
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -1879,7 +1889,7 @@ message Header {
 // Low-level representation of HeaderAndBody used for signature
 // computation input. This should not be used by external code.
 message HeaderAndBodyInternal {
-    // Enocded header suitable for signature computation.
+    // Encoded header suitable for signature computation.
     bytes header = 1;
     // Raw payload suitable for signature computation.
     bytes body = 2;
@@ -1895,6 +1905,7 @@ message VerificationKeyID {
 ~~~~
 {: #figure-11 title="Control Service gRPC API definition"}
 
+In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
 
 # SCION Data Plane use by the SCION Control Plane {#app-b}
 {:numbered="false"}
@@ -1910,7 +1921,7 @@ The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION d
 
 The mechanics of service address resolution are the following:
 
-* To resolve the address of the Control Service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an enpoint address constructed as follows:
+* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
   * Common Header:
     * Path type: SCION (0x01)
     * DT/DL: "Service" (0b0100)
@@ -1966,7 +1977,7 @@ message Transport {
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
-To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up segment from A to C. "CS" stands for controle service.
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
 
 
 ~~~~
