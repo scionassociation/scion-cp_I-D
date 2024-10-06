@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-03T00:20:19.834732+00:00",
+  "timestamp": "2024-10-06T00:22:19.209148+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -821,7 +821,7 @@
       "id": "I_kwDOJx2-rs6Qjl2o",
       "title": "MTU clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/57",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -833,8 +833,8 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2024-09-20T09:01:09Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-04T12:24:39Z",
+      "closedAt": "2024-10-04T12:24:38Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -903,6 +903,61 @@
           "body": "Current text: \r\n```\r\n2.3.2.4.  Propagation of PCBs in Protobuf Message Format\r\n\r\n   The last step of the above described core and intra-ISD propagation\r\n   procedures is implemented as follows in Protobuf message format:\r\n\r\n      service SegmentCreationService {\r\n          rpc Beacon(BeaconRequest) returns (BeaconResponse) {}\r\n      }\r\n\r\n      message BeaconRequest {\r\n          PathSegment segment = 1;\r\n      }\r\n\r\n      message BeaconResponse {}\r\n\r\n   The propagation procedure includes the following elements:\r\n\r\n   *  SegmentCreationService: Specifies the service via which the\r\n      extended PCB is propagated to the control service of the\r\n      neighboring AS.\r\n\r\n      -  Beacon: Specifies the method that calls the control service at\r\n         the neighboring AS in order to propagate the extended PCB.\r\n\r\n   *  BeaconRequest: Specifies the request message sent by the Beacon\r\n      method to the control service of the neighboring AS.  It contains\r\n      the following element:\r\n\r\n      -  PathSegment: Specifies the path segment to propagate to the\r\n         neighboring AS.  For more information on the Protobuf message\r\n         type PathSegment, see Section 2.2.1.1.\r\n\r\n   *  BeaconResponse: Specifies the response message from the\r\n      neighboring AS.\r\n```\r\n\r\n\r\n\r\n>   BeaconResponse: Specifies the response message from the\r\n      neighboring AS. \r\n\r\nWe could say a bit more than this",
           "createdAt": "2024-09-10T09:43:59Z",
           "updatedAt": "2024-09-10T09:44:38Z"
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "id": "I_kwDOJx2-rs6Y19go",
+      "title": "Add changelog in appendix",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/64",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "",
+      "createdAt": "2024-10-03T14:56:20Z",
+      "updatedAt": "2024-10-03T14:56:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 67,
+      "id": "I_kwDOJx2-rs6Y82gT",
+      "title": "gRPC API - remove duplicated definitions in appendix",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/67",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 2"
+      ],
+      "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
+      "createdAt": "2024-10-04T10:58:56Z",
+      "updatedAt": "2024-10-04T16:59:59Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I am not sure we should de-duplicated the APIs between text and index. The APIs in the text are for explanation purposes while the appendix is for reference. The appendix is there to make sure that we document the whole API. If we de-duplicate, then what do we name the appendix: \"Those bits and pieces that we haven't mentioned somewhere in the document already\"? That's not nice to future users of the spec.",
+          "createdAt": "2024-10-04T11:38:47Z",
+          "updatedAt": "2024-10-04T11:38:47Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I tried my best. Probably missed a spot or two.\r\nThere weren't many opportunities to reference the appendix. Most places had enough documentation in-line.\r\nI couldn't remember if there was anything missing from the appendix. Was there?",
+          "createdAt": "2024-10-04T16:59:58Z",
+          "updatedAt": "2024-10-04T16:59:58Z"
         }
       ]
     }
@@ -4689,13 +4744,13 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-09-24T14:59:18Z",
+      "updatedAt": "2024-10-03T09:17:58Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "bd41586991b7515c7fd4d8f172541a54875ef50c",
+      "headRefOid": "f27bab39f93f6c63690a9d4fea3ee78a574fbc16",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4819,20 +4874,416 @@
       "id": "PR_kwDOJx2-rs58JkpE",
       "title": "mtu: add clarifications.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/63",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #57 ",
       "createdAt": "2024-09-20T10:33:09Z",
-      "updatedAt": "2024-09-20T10:33:10Z",
+      "updatedAt": "2024-10-04T12:24:40Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cp_mtu",
-      "headRefOid": "637ce5e22a0c19a5f9ddbf692a196b4f2df83bda",
+      "headRefOid": "959ec246190151f0b98855c1bc4c54100f3c3f37",
+      "closedAt": "2024-10-04T12:24:37Z",
+      "mergedAt": "2024-10-04T12:24:37Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6LqJb3",
+          "commit": {
+            "abbreviatedOid": "0d37e42"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks a lot, looks good. I proposed rewording of some sections and added a note in the config section ",
+          "createdAt": "2024-10-02T14:13:23Z",
+          "updatedAt": "2024-10-03T09:38:44Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "```suggestion\r\nSCION paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:\r\n\r\n* The MTU of the first and last ASes (represented by the MTU field of the corresponding [AS Entries](#ase-sign))\r\n* The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)\r\n* The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers\r\n\r\nIt is then made available to endpoints during the path lookup process.\r\n```\r\n\r\nI assume that the MTU is also included in the information returned after a lookup. Right now, we don't say much about this. Could it be more explicit?",
+              "createdAt": "2024-10-02T14:13:23Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "```suggestion\r\nRegarding the later point: A SCION endpoint using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, nor whether a possibly larger MTU applies. In addition, SCION control plane implementations are NOT REQUIRED to account for this in the hop's `ingress_mtu` field. As a result, a SCION endpoint looking up a path MUST assume that all hops are additionally constrained by the internal network MTU of each AS traversed.\r\n```",
+              "createdAt": "2024-10-02T14:17:23Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n- `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.\r\n```\r\nI think it is better to refer to the intra-domain underlay rather than to hosts",
+              "createdAt": "2024-10-03T09:21:14Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\n- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of path segments constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.\r\n```",
+              "createdAt": "2024-10-03T09:25:57Z",
+              "updatedAt": "2024-10-04T09:18:20Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "Are you referring to a specific section of RFC1122? I skimmed through it and I did not find where you are referring to immediately. In the terminology section, it only says: \r\n```\r\n         MTU\r\n              The maximum transmission unit, i.e., the size of the\r\n              largest packet that can be transmitted.\r\n```",
+              "createdAt": "2024-10-03T09:30:32Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\n- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value.  How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.\r\n```",
+              "createdAt": "2024-10-03T09:31:27Z",
+              "updatedAt": "2024-10-04T09:21:29Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "```suggestion\r\nThis may be optimized if the control plane implementations made the hop's `ingress_mtu` field no greater than the MTU of the path between the two border routers involved in that hop. However existing implementations have not historically done this in favor of the more conservative approach to use the maximum AS MTU specified in [](#ase-sign).\r\n```",
+              "createdAt": "2024-10-03T09:36:25Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            },
+            {
+              "originalPosition": 38,
+              "body": "JFYI I've added this",
+              "createdAt": "2024-10-03T09:38:09Z",
+              "updatedAt": "2024-10-03T09:38:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6LyK_R",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:08:07Z",
+          "updatedAt": "2024-10-03T10:08:08Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "I think neither my nor your formulation are accurate. A path segment does not have an end-to-end MTU. Only a path does. In addition, we cannot say \"MUST\" or \"MUST NOT\" as no-one is setting any end-2-end MTU for a path at the protocol level. It is ony a property that results from the various MTU fields. How about:\r\n\r\n\"\r\n- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of path segments constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.\r\n\"\r\n",
+              "createdAt": "2024-10-03T10:08:07Z",
+              "updatedAt": "2024-10-03T10:08:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6LyNwd",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:12:29Z",
+          "updatedAt": "2024-10-03T10:12:30Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "A precise reference would be complicated. I was shocked to discover how poorly the term is defined. This is the closest I found to a definition and it is spread between the paragraph you quote and the text after it:\r\n\r\n> The terms frame, packet, datagram, message, and segment are\r\n>          illustrated by the following schematic diagrams:\r\n> \r\n>          A. Transmission on connected network:\r\n>            _______________________________________________\r\n>           | LL hdr | IP hdr |         (data)              |\r\n>           |________|________|_____________________________|\r\n> \r\n>            <---------- Frame ----------------------------->\r\n>                     <----------Packet -------------------->\r\n\r\nSo, the MTU is defined first as applying to a packet, and then a packet is defined as the portion of the Frame that follows the LL header.\r\n",
+              "createdAt": "2024-10-03T10:12:29Z",
+              "updatedAt": "2024-10-03T10:30:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6LyPLj",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:15:06Z",
+          "updatedAt": "2024-10-03T10:15:06Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Same response as before and same suggestion for a third brew of the text.\r\n",
+              "createdAt": "2024-10-03T10:15:06Z",
+              "updatedAt": "2024-10-03T10:15:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6LyUYP",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:26:31Z",
+          "updatedAt": "2024-10-03T10:26:31Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "No, that isn't quite true. The CS implementations do not conservatively use the AS's MTU as a limit on the ingress MTU. They let the endpoints do that. As a result, the endpoints *have* to do it. As a result, there's no point for the CS to offer the optimal MTU for a given hop.\r\n\r\nThe truth is that we'd need a migration strategy:\r\n* Phase 1: reduce the ingress MTU to that of the specific HOP (which has no effect on consumers of the HOP).\r\n* Phase 2: wait for all CS'es in the world to run running that modified code.\r\n* Phase 3: update the daemon and other segment consuming code to rely on the ingress MTU only and consider the AS's MTU of only the last HOP of the path.\r\n\r\nHow the heck do I summarize that in a normative doc? Yet, if we don't say it, someone will object and say the protocol is wasting a performance opportunity.\r\n",
+              "createdAt": "2024-10-03T10:26:31Z",
+              "updatedAt": "2024-10-03T10:26:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6LyU4K",
+          "commit": {
+            "abbreviatedOid": "0d37e42"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:27:38Z",
+          "updatedAt": "2024-10-03T10:27:38Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "ack.\r\n",
+              "createdAt": "2024-10-03T10:27:38Z",
+              "updatedAt": "2024-10-03T10:27:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L7P20",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:18:54Z",
+          "updatedAt": "2024-10-04T09:18:55Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "True, I added your formulation.",
+              "createdAt": "2024-10-04T09:18:54Z",
+              "updatedAt": "2024-10-04T09:18:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L7R7v",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:23:12Z",
+          "updatedAt": "2024-10-04T09:23:12Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "I updated my suggestion above. As this is a peering link, I think we cannot use the same wording as for regular links (we cannot refer to the MTU in a path segment, as the peering link intrinsically merges two distinct segments). Let me know wat you think about this wording: \r\n> The MTU of paths via such link is necessarily less than or equal to this value. \r\n",
+              "createdAt": "2024-10-04T09:23:12Z",
+              "updatedAt": "2024-10-04T09:23:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L7UF7",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:27:31Z",
+          "updatedAt": "2024-10-04T09:27:31Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "And I changed \"MTU of path segments\" to \"MTU of paths\", since we agreed that the MTU of a segment is undefined.",
+              "createdAt": "2024-10-04T09:27:31Z",
+              "updatedAt": "2024-10-04T09:27:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L7VXy",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:30:11Z",
+          "updatedAt": "2024-10-04T09:30:11Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Yes, that's what I would have done. I did apply the same change to the ingress MTU for a similar reason: there is no segment MTU; it all depends on which portion you use.",
+              "createdAt": "2024-10-04T09:30:11Z",
+              "updatedAt": "2024-10-04T09:30:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L7uyE",
+          "commit": {
+            "abbreviatedOid": "637ce5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T10:17:21Z",
+          "updatedAt": "2024-10-04T10:17:21Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "Thank you for the clarification, I see your point. Let me propose another wording (I have to open a new thread).",
+              "createdAt": "2024-10-04T10:17:21Z",
+              "updatedAt": "2024-10-04T10:17:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L8DSq",
+          "commit": {
+            "abbreviatedOid": "06e36e2"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T11:02:47Z",
+          "updatedAt": "2024-10-04T11:02:47Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Ok, then let's perhaps leave the reference as it is, I think the text is clear enough,",
+              "createdAt": "2024-10-04T11:02:47Z",
+              "updatedAt": "2024-10-04T11:02:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L8VV6",
+          "commit": {
+            "abbreviatedOid": "06e36e2"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T11:41:05Z",
+          "updatedAt": "2024-10-04T11:41:06Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "@jiceatscion how about this wording? In a nutshell: \r\n- I only mention MTU of each intra-AS network\r\n- I mention that endpoints are unaware of AS topologies, therefore they must assume intra-AS is traversed. This should be a strong enough justification for this approach (and we leave out ptential discussions for optimizations, that are not really of primary importance for this document)\r\n\r\n\r\n```suggestion\r\n* The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))\r\n* The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)\r\n\r\nSuch information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes, therefore when looking up a path they MUST assume that all hops are constrained by the intra-AS MTU of each AS traversed.\r\n```",
+              "createdAt": "2024-10-04T11:41:05Z",
+              "updatedAt": "2024-10-04T11:43:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6L8doK",
+          "commit": {
+            "abbreviatedOid": "dabe855"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-04T11:58:47Z",
+          "updatedAt": "2024-10-04T11:58:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 65,
+      "id": "PR_kwDOJx2-rs59iVAa",
+      "title": "Updated Intro and added Change Log",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/65",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-03T18:22:40Z",
+      "updatedAt": "2024-10-03T18:28:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Intro_update",
+      "headRefOid": "120627fa8ae3fe3c707dc71f0824ab3cb889e055",
+      "closedAt": "2024-10-03T18:28:39Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 66,
+      "id": "PR_kwDOJx2-rs59ia0w",
+      "title": "Updated Intro",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/66",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-03T18:33:23Z",
+      "updatedAt": "2024-10-04T11:14:28Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Intro_update",
+      "headRefOid": "82805238ab2d00bbdc5c9d3fc5e5adc6752c38b8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 68,
+      "id": "PR_kwDOJx2-rs59pP3J",
+      "title": "cleanup: Cleaned-up protobufs appendix and add some missing refs to it",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/68",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": " Also cleaned-up extraneous blank lines. Replaced phrases like \"on xyz-level\".\r\n\r\nFixes #67 ",
+      "createdAt": "2024-10-04T16:55:59Z",
+      "updatedAt": "2024-10-04T16:57:39Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "api",
+      "headRefOid": "519c3120f2bf469a1cf907cdc4667e711c1d7822",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
