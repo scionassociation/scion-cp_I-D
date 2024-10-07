@@ -2116,25 +2116,31 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 # Change Log
 {:numbered="false"}
 
-Changes to the current draft:
+Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-06
+
+Major changes:
 
 - Added overview of SCION components to Introduction section.
 - Added RFC2119 compliant terminology.
 - Added IANA Considerations.
-- Removed forward references.
-- General edits to make terminology consistent, remove duplication and rationalize text.
 - Added mention proof of transit as detection mechanism for wormhole attack to Security Considerations.
 - Added Denial-of-Service to Security Considerations.
+- Added scalability of path discovery.
+- Added description of Control Services API.
+- Added discussion on MTU & fragmentation enhancement.
+
+Minor changes:
+
+- General edits to make terminology consistent, remove duplication and rationalize text.
+- Removed forward references.
+- Fixed private AS range typo.
+- Addressed clock drift.
 - Clarified beaconing at bootstrapping including fast retry.
 - Clarified path reversibility.
-- Added scalability of path discovery.
 - Clarified PCB propagation (flooding).
-- Minor wording change to Control Services API.
 - Clarified selection of MAC including default algorithm.
 - Clarified PCB selection policies and endpoint requirements.
 - Introduced motivation for link types and explained restrictions for peering links.
 - Added explanation regarding interface configuration.
-- Fixed private AS range typo.
-- Addressed clock drift.
-- Add tentative description of Control Services API.
-- Added discussion on MTU & fragmentation enhancement.
