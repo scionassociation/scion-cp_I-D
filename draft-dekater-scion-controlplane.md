@@ -2119,6 +2119,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
 ## draft-dekater-scion-controlplane-06
+{:numbered="false"}
 
 Major changes:
 
