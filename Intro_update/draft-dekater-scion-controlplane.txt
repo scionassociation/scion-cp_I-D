@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 April 2025                                            S. Hitz
+Expires: 10 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                          4 October 2024
+                                                          7 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 April 2025.
+   This Internet-Draft will expire on 10 April 2025.
 
 Copyright Notice
 
@@ -141,6 +141,7 @@ Table of Contents
    SCION data plane use by the SCION control plane
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-06
    Authors' Addresses
 
 1.  Introduction
@@ -3423,7 +3424,12 @@ Path-Lookup Examples
 
 Change Log
 
-   Changes to the current draft:
+   Changes made to drafts since ISE submission.  This section is to be
+   removed before publication.
+
+draft-dekater-scion-controlplane-06
+
+   Major changes:
 
    *  Added overview of SCION components to Introduction section.
 
@@ -3431,25 +3437,33 @@ Change Log
 
    *  Added IANA Considerations.
 
-   *  Removed forward references.
-
-   *  General edits to make terminology consistent, remove duplication
-      and rationalize text.
-
    *  Added mention proof of transit as detection mechanism for wormhole
       attack to Security Considerations.
 
    *  Added Denial-of-Service to Security Considerations.
 
+   *  Added scalability of path discovery.
+
+   *  Added description of Control Services API.
+
+   *  Added discussion on MTU & fragmentation enhancement.
+
+   Minor changes:
+
+   *  General edits to make terminology consistent, remove duplication
+      and rationalize text.
+
+   *  Removed forward references.
+
+   *  Fixed private AS range typo.
+
+   *  Addressed clock drift.
+
    *  Clarified beaconing at bootstrapping including fast retry.
 
    *  Clarified path reversibility.
 
-   *  Added scalability of path discovery.
-
    *  Clarified PCB propagation (flooding).
-
-   *  Minor wording change to Control Services API.
 
    *  Clarified selection of MAC including default algorithm.
 
@@ -3459,14 +3473,6 @@ Change Log
       for peering links.
 
    *  Added explanation regarding interface configuration.
-
-   *  Fixed private AS range typo.
-
-   *  Addressed clock drift.
-
-   *  Add tentative description of Control Services API.
-
-   *  Added discussion on MTU & fragmentation enhancement.
 
 Authors' Addresses
 
