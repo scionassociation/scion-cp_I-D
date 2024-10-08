@@ -2979,8 +2979,6 @@ Full Control Service gRPC API
    The following code blocks provide, in protobuf format, the entire API
    by which control services interact.
 
-   // This API is exposed on the SCION dataplane by the control services
-   // of core ASes and exposed on the "intra-domain protocol" network.
    service SegmentLookupService {
        // Segments returns all segments that match the request.
        rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -3015,12 +3013,12 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-            Figure 10: Control Service gRPC API - Segment lookup
+      Figure 10: Control Service gRPC API - Segment lookup.  This API
+     is exposed on the SCION dataplane by the control services of core
+           ASes and exposed on the intra-domain protocol network.
 
 
 
-   // This API is only exposed by core ASes and only on the SCION
-   // dataplane.
    service SegmentRegistrationService {
        // SegmentsRegistration registers segments at the remote.
        rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
@@ -3040,7 +3038,8 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-         Figure 11: Control Service gRPC API - Segment registration
+     Figure 11: Control Service gRPC API - Segment registration.  This
+     API is only exposed by core ASes and only on the SCION dataplane.
 
 
 

@@ -3787,8 +3787,6 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <figure id="figure-10">
         <div class="alignLeft art-text artwork" id="appendix-B-2.1">
 <pre>
-// This API is exposed on the SCION dataplane by the control services
-// of core ASes and exposed on the "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -3825,7 +3823,7 @@ message SegmentsResponse {
 </pre>
 </div>
 <figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
-<a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup</a>
+<a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-B-3"><br></p>
@@ -3833,8 +3831,6 @@ message SegmentsResponse {
 <figure id="figure-11">
         <div class="alignLeft art-text artwork" id="appendix-B-4.1">
 <pre>
-// This API is only exposed by core ASes and only on the SCION
-// dataplane.
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
@@ -3856,7 +3852,7 @@ message SegmentsRegistrationResponse {}
 </pre>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
-<a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration</a>
+<a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-B-5"><br></p>
