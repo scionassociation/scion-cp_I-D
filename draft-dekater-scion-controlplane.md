@@ -139,7 +139,9 @@ SCION relies on three main components:
 
 This document describes the SCION Control Plane component.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments, and to introduce new concepts that can potentially address particular problems with the current Internet architecture.
+
+Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
 ## Terminology {#terms}
@@ -2078,3 +2080,36 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G."}
 
+
+# Change Log
+{:numbered="false"}
+
+Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-06
+{:numbered="false"}
+
+Major changes:
+
+- Added overview of SCION components to Introduction section.
+- Added RFC2119 compliant terminology.
+- Added IANA Considerations.
+- Added mention proof of transit as detection mechanism for wormhole attack to Security Considerations.
+- Added Denial-of-Service to Security Considerations.
+- Added scalability of path discovery.
+- Added description of Control Services API.
+- Added discussion on MTU & fragmentation enhancement.
+
+Minor changes:
+
+- General edits to make terminology consistent, remove duplication and rationalize text.
+- Removed forward references.
+- Fixed private AS range typo.
+- Addressed clock drift.
+- Clarified beaconing at bootstrapping including fast retry.
+- Clarified path reversibility.
+- Clarified PCB propagation (flooding).
+- Clarified selection of MAC including default algorithm.
+- Clarified PCB selection policies and endpoint requirements.
+- Introduced motivation for link types and explained restrictions for peering links.
+- Added explanation regarding interface configuration.
