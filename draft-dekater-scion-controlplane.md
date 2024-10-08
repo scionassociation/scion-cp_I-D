@@ -36,6 +36,7 @@ author:
 normative:
   I-D.dekater-scion-dataplane:
   I-D.dekater-scion-pki:
+  I-D.dekater-panrg-scion-overview
   RFC4632:
   RFC5280:
   RFC5952:
@@ -140,6 +141,8 @@ SCION relies on three main components:
 This document describes the SCION Control Plane component.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+
+Note - This document should also be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 
 ## Terminology {#terms}
