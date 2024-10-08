@@ -36,7 +36,7 @@ author:
 normative:
   I-D.dekater-scion-dataplane:
   I-D.dekater-scion-pki:
-  I-D.dekater-panrg-scion-overview
+  I-D.dekater-panrg-scion-overview:
   RFC4632:
   RFC5280:
   RFC5952:
