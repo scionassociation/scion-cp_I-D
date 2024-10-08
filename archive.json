@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-06T00:22:19.209148+00:00",
+  "timestamp": "2024-10-08T00:20:09.454156+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -788,9 +788,24 @@
       ],
       "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n\r\nPlease review (sorted by urgency): \r\n- #63 \r\n- 2.3.3.  Effects of Clock Inaccuracy\r\n-  2.4.  Path Discovery Time and Scalability\r\n-  5.  Security Considerations\r\n- Control Service gRPC API (appendix)\r\n\r\n\r\nOther pointers:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\n  \r\n\r\n",
       "createdAt": "2024-07-09T10:31:37Z",
-      "updatedAt": "2024-09-24T16:05:31Z",
+      "updatedAt": "2024-10-07T16:38:20Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "> The expiration of a SCION AS certificate typically ranges from\t\r\n \t   3h to 5 years.\r\n \t   \r\n \r\nWhere does this number come from. Most typically it is 3days, and in some very special cases we have 5 days.\r\nI have never seen 5 years outside of some private ISDs\r\n\r\n\r\n",
+          "createdAt": "2024-10-07T16:28:19Z",
+          "updatedAt": "2024-10-07T16:28:19Z"
+        },
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": ">  Once\t\r\n \t   this number grows above the maximum recommended best PCBs set size of\t\r\n \t   50, \r\n \t   \r\nWhere does this number come from? \r\nDefault is 20. AFAIK:\r\nhttps://github.com/scionproto/scion/blob/aa917bb458d6675efc55b4a23fda2c694094553e/control/beacon/policy.go#L43\r\n\r\n\r\n",
+          "createdAt": "2024-10-07T16:38:19Z",
+          "updatedAt": "2024-10-07T16:38:19Z"
+        }
+      ]
     },
     {
       "number": 52,
@@ -4744,13 +4759,13 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-10-03T09:17:58Z",
+      "updatedAt": "2024-10-06T17:35:21Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "28653e087822932fbc1133ec67847f8a77344331",
+      "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "f27bab39f93f6c63690a9d4fea3ee78a574fbc16",
+      "headRefOid": "393138eeea1c9e6dfe782daa28c5e4d31ec6b8d8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4822,6 +4837,186 @@
               "body": "\"as AS may want to\" -> \"as an AS may want to\"",
               "createdAt": "2024-09-11T12:05:11Z",
               "updatedAt": "2024-09-11T12:14:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuIR",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:23:13Z",
+          "updatedAt": "2024-10-06T17:23:14Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Typo in 'Path Segment Construction Beacons (PCBs)",
+              "createdAt": "2024-10-06T17:23:13Z",
+              "updatedAt": "2024-10-06T17:23:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuJx",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:24:00Z",
+          "updatedAt": "2024-10-06T17:24:01Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "Okay",
+              "createdAt": "2024-10-06T17:24:00Z",
+              "updatedAt": "2024-10-06T17:24:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuLa",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:24:52Z",
+          "updatedAt": "2024-10-06T17:24:52Z",
+          "comments": [
+            {
+              "originalPosition": 494,
+              "body": "> \"such a\" -> \"such as\"\r\n\r\nOkay",
+              "createdAt": "2024-10-06T17:24:52Z",
+              "updatedAt": "2024-10-06T17:24:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuMN",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:25:24Z",
+          "updatedAt": "2024-10-06T17:25:24Z",
+          "comments": [
+            {
+              "originalPosition": 679,
+              "body": "Fine with me.",
+              "createdAt": "2024-10-06T17:25:24Z",
+              "updatedAt": "2024-10-06T17:25:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuMy",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:25:41Z",
+          "updatedAt": "2024-10-06T17:25:41Z",
+          "comments": [
+            {
+              "originalPosition": 724,
+              "body": "Okay",
+              "createdAt": "2024-10-06T17:25:41Z",
+              "updatedAt": "2024-10-06T17:25:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuOt",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:26:38Z",
+          "updatedAt": "2024-10-06T17:26:38Z",
+          "comments": [
+            {
+              "originalPosition": 730,
+              "body": "Either is grammatically correct, although J.C's suggestion is probably better.",
+              "createdAt": "2024-10-06T17:26:38Z",
+              "updatedAt": "2024-10-06T17:26:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuPn",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:27:00Z",
+          "updatedAt": "2024-10-06T17:27:00Z",
+          "comments": [
+            {
+              "originalPosition": 777,
+              "body": "Okay",
+              "createdAt": "2024-10-06T17:27:00Z",
+              "updatedAt": "2024-10-06T17:27:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuQw",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:27:31Z",
+          "updatedAt": "2024-10-06T17:27:31Z",
+          "comments": [
+            {
+              "originalPosition": 796,
+              "body": "Okay",
+              "createdAt": "2024-10-06T17:27:31Z",
+              "updatedAt": "2024-10-06T17:27:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MGuhW",
+          "commit": {
+            "abbreviatedOid": "bd41586"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-06T17:35:20Z",
+          "updatedAt": "2024-10-06T17:35:21Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Okay",
+              "createdAt": "2024-10-06T17:35:20Z",
+              "updatedAt": "2024-10-06T17:35:21Z"
             }
           ]
         }
@@ -5251,13 +5446,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-10-03T18:33:23Z",
-      "updatedAt": "2024-10-04T11:14:28Z",
+      "updatedAt": "2024-10-07T18:30:56Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Intro_update",
-      "headRefOid": "82805238ab2d00bbdc5c9d3fc5e5adc6752c38b8",
+      "headRefOid": "90a67ba43378cdab2c5e6d8f1c61ba362f4e3f8c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -5277,7 +5472,7 @@
       "labels": [],
       "body": " Also cleaned-up extraneous blank lines. Replaced phrases like \"on xyz-level\".\r\n\r\nFixes #67 ",
       "createdAt": "2024-10-04T16:55:59Z",
-      "updatedAt": "2024-10-04T16:57:39Z",
+      "updatedAt": "2024-10-07T20:08:29Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
@@ -5289,7 +5484,46 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6MPJfq",
+          "commit": {
+            "abbreviatedOid": "519c312"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Thanks a lot! I left some minor comments/changes, the rest looks good! \r\n",
+          "createdAt": "2024-10-07T19:35:30Z",
+          "updatedAt": "2024-10-07T20:08:29Z",
+          "comments": [
+            {
+              "originalPosition": 319,
+              "body": "```suggestion\r\n1. First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments by sending a SegmentsRequest. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately in a SegmentsResponse.\r\n```",
+              "createdAt": "2024-10-07T19:35:30Z",
+              "updatedAt": "2024-10-07T20:08:29Z"
+            },
+            {
+              "originalPosition": 488,
+              "body": "Does this description apply to all messages beklow? If so, I'd put it in the main text or in the figure description rather than at the top of the figure. Right now, in the compiled draft, it looks sort of funny: \r\n```\r\nFull Control Service gRPC API\r\n\r\n   The following code blocks provide, in protobuf format, the entire API\r\n   by which control services interact.\r\n\r\n   // This API is exposed on the SCION dataplane by the control services\r\n   // of core ASes and exposed on the \"intra-domain protocol\" network.\r\n   service SegmentLookupService {\r\n       // Segments returns all segments that match the request.\r\n       rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}\r\n   }\r\n   ```\r\n\r\n\r\n```suggestion\r\n```",
+              "createdAt": "2024-10-07T19:51:43Z",
+              "updatedAt": "2024-10-07T20:08:29Z"
+            },
+            {
+              "originalPosition": 520,
+              "body": "```suggestion\r\n{: #figure-11 title=\"Control Service gRPC API - Segment lookup. This API is exposed on the SCION dataplane by the control services of core ASes and exposed on the \"intra-domain protocol\" network.\"}\r\n```",
+              "createdAt": "2024-10-07T20:03:20Z",
+              "updatedAt": "2024-10-07T20:08:29Z"
+            },
+            {
+              "originalPosition": 525,
+              "body": "Same as in comment above",
+              "createdAt": "2024-10-07T20:04:59Z",
+              "updatedAt": "2024-10-07T20:08:29Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
