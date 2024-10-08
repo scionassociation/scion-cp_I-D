@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 7 April 2025</td>
+<td class="center">Expires 11 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-04" class="published">4 October 2024</time>
+<time datetime="2024-10-08" class="published">8 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-07">7 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-11">11 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1258,7 +1258,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-core-path-segment-registrat" class="internal xref">Core Path-Segment Registration</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-path-segment-registration-o" class="internal xref">Path-Segment Registration on Code-Level</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-path-segment-registration-g" class="internal xref">Path-Segment Registration gRPC API</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
                 <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-path-mtu" class="internal xref">Path MTU</a></p>
@@ -1341,7 +1341,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-control-service-grpc-api" class="internal xref">Control Service gRPC API</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-full-control-service-grpc-a" class="internal xref">Full Control Service gRPC API</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION data plane use by the SCION control plane</a></p>
@@ -1746,7 +1746,7 @@ For fast validation of the path information carried in individual packets during
         </h3>
 <p id="section-1.7-1">All communication between the control services in different ASes is expressed in terms of gRPC remote procedure calls (for details, see <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span>). Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.7-1" class="pilcrow">¶</a></p>
 <p id="section-1.7-2">The RPC messages are transported via the <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s rpc protocol; a gRPC-like protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)). HTTP3 traffic uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. In the case of SCION, UDP relies on the SCION data plane.<a href="#section-1.7-2" class="pilcrow">¶</a></p>
-<p id="section-1.7-3"><a href="#app-a" class="auto internal xref">Appendix "Control Service gRPC API"</a> provides the entire control service API definition in protobuf format.<a href="#section-1.7-3" class="pilcrow">¶</a></p>
+<p id="section-1.7-3"><a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a> provides the entire control service API definition in protobuf format.<a href="#section-1.7-3" class="pilcrow">¶</a></p>
 <p id="section-1.7-4"><a href="#app-b" class="auto internal xref">Appendix "SCION data plane use by the SCION control plane"</a> provides details about the establishment of the underlying QUIC connections through the SCION data plane.<a href="#section-1.7-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2068,7 +2068,7 @@ path segment 4 |             |     |             |     |             |
             </figcaption></figure>
 </div>
 <p id="section-2.2.1-3">The following sections provide detailed specifications of the PCB messages, starting with the top-level message of one PCB, and then diving deeper into each of the PCB's message components.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.1-4"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Control Service gRPC API"</a>.<a href="#section-2.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-4"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a>, <a href="#_figure-14" class="auto internal xref">Figure 13</a>.<a href="#section-2.2.1-4" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2090,7 +2090,7 @@ path segment 4 |             |     |             |     |             |
                 <p id="section-2.2.1.1-3.2.1">Entries of all ASes on the path segment represented by this PCB.<a href="#section-2.2.1.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.1-4">The following code block defines the PCB on top level in Protobuf message format.<a href="#section-2.2.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.1-4">The following code block is the main PCB definition in Protobuf message format.<a href="#section-2.2.1.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.1-5">
 <pre>
    message PathSegment {
@@ -2627,7 +2627,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
 <a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-pcb-extensions" class="section-name selfRef">PCB Extensions</a>
           </h4>
 <p id="section-2.2.2-1">In addition to basic routing information like hop entries and peer entries, PCBs can be used to communicate additional metadata, in its extensions. Extensions can be signed and unsigned. Signed extensions are protected by the AS signature, whereas unsigned extensions are not.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">On code-level and in Protobuf message format, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-2">In Protobuf message format, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.2-3.1">
               <p id="section-2.2.2-3.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code> are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#ase-message" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
@@ -3196,8 +3196,8 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
 </div>
 <div id="reg-proto">
 <section id="section-3.3">
-        <h3 id="name-path-segment-registration-o">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-path-segment-registration-o" class="section-name selfRef">Path-Segment Registration on Code-Level</a>
+        <h3 id="name-path-segment-registration-g">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-path-segment-registration-g" class="section-name selfRef">Path-Segment Registration gRPC API</a>
         </h3>
 <p id="section-3.3-1">The control service of a non-core AS has to register the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This registration step is implemented as follows in Protobuf message format:<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3-2">
@@ -3297,7 +3297,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">
-            <p id="section-4.1-5.1.1">First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately.<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-5.1.1">First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments by sending a SegmentsRequest. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately in a SegmentsResponse.<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-5.2">
             <p id="section-4.1-5.2.1">If there are no appropriate core-segments and down-segments, the control service in the source AS queries the control services of the reachable core ASes in the source ISD, for core-path segments to core ASes in the destination ISD (which is either the own or a remote ISD). To reach the core control services, the control service of the source AS uses the locally stored up-path segments.<a href="#section-4.1-5.2.1" class="pilcrow">¶</a></p>
@@ -3361,6 +3361,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
               <p id="section-4.1.1-2.3.1">Request down-segments starting at core ASes in the destination ISD.<a href="#section-4.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
+<p id="section-4.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 10</a>.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="caching">
@@ -3534,7 +3535,7 @@ For much larger, more highly connected ASes, the path-discovery tasks of the con
               <p id="section-4.2.3-2.3.1">Otherwise, load the matching down-segments from the path database and return.<a href="#section-4.2.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.2.3-3"><a href="#app-c" class="auto internal xref">Appendix "Path-Lookup Examples"</a> shows by means of an illustration how the lookup of path segments in SCION works.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.3-3"><a href="#app-c" class="auto internal xref">Appendix "Path-Lookup Examples"</a> illustrates how the lookup of path segments in SCION works.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3773,34 +3774,19 @@ For RPC methods exposed to other ASes, the control service implementation minimi
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-a">
 <section id="appendix-B">
-      <h2 id="name-control-service-grpc-api">
-<a href="#name-control-service-grpc-api" class="section-name selfRef">Control Service gRPC API</a>
+      <h2 id="name-full-control-service-grpc-a">
+<a href="#name-full-control-service-grpc-a" class="section-name selfRef">Full Control Service gRPC API</a>
       </h2>
-<p id="appendix-B-1">The following code block provides, in protobuf format, the API by which control services interact.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<span id="name-control-service-grpc-api-de"></span><div id="_figure-11">
+<p id="appendix-B-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<span id="name-control-service-grpc-api-se"></span><div id="_figure-11">
 <figure id="figure-10">
         <div class="alignLeft art-text artwork" id="appendix-B-2.1">
 <pre>
-enum SegmentType {
-    // Unknown segment type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
-
-
-// This API is exposed by the control services of core ASes expose this
-// on the SCION dataplane and also by all control services on the
-// "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -3813,6 +3799,17 @@ message SegmentsRequest {
     uint64 dst_isd_as = 2;
 }
 
+enum SegmentType {
+    // Unknown segment type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+}
+
 message SegmentsResponse {
     message Segments {
         // List of path segments.
@@ -3820,13 +3817,20 @@ message SegmentsResponse {
     }
 
     // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
+    // The key is the integer representation of the SegmentType enum.
     map&lt;int32, Segments&gt; segments = 1;
 }
-
-// This API is only exposed by core ASes and only on the SCION
-// dataplane.
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-3"><br></p>
+<span id="name-control-service-grpc-api-seg"></span><div id="_figure-12">
+<figure id="figure-11">
+        <div class="alignLeft art-text artwork" id="appendix-B-4.1">
+<pre>
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
@@ -3840,15 +3844,24 @@ message SegmentsRegistrationRequest {
     }
 
     // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
+    // The key is the integer representation of the SegmentType enum.
     map&lt;int32, Segments&gt; segments = 1;
 }
 
 message SegmentsRegistrationResponse {}
-
+</pre>
+</div>
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-5"><br></p>
+<span id="name-control-service-grpc-api-segm"></span><div id="_figure-13">
+<figure id="figure-12">
+        <div class="alignLeft art-text artwork" id="appendix-B-6.1">
+<pre>
 service SegmentCreationService {
-    // Beacon sends a beacon to the remote.
+    // Beacon sends a beacon to the remote control service.
     rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
 }
 
@@ -3858,7 +3871,17 @@ message BeaconRequest {
 }
 
 message BeaconResponse {}
-
+</pre>
+</div>
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<a href="#name-control-service-grpc-api-segm" class="selfRef">Control Service gRPC API - Segment creation</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-7"><br></p>
+<span id="name-control-service-grpc-api-segme"></span><div id="_figure-14">
+<figure id="figure-13">
+        <div class="alignLeft art-text artwork" id="appendix-B-8.1">
+<pre>
 message PathSegment {
     // The encoded SegmentInformation. It is used for signature input.
     bytes segment_info = 1;
@@ -3896,19 +3919,12 @@ message ASEntry {
     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
 }
 
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+message SignedMessage {
+    // Encoded header and body.
+    bytes header_and_body = 1;
+    // Raw signature. The signature is computed over the concatenation
+    // of the header and body, and the optional associated data.
+    bytes signature = 2;
 }
 
 message HopEntry {
@@ -3919,8 +3935,8 @@ message HopEntry {
 }
 
 message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments during
-    // path construction.
+    // ISD-AS of peer AS. This is used to match peering segments
+        // during path construction.
     uint64 peer_isd_as = 1;
     // Remote peer interface identifier. This is used to match
     // peering segments
@@ -3937,13 +3953,23 @@ message HopField {
     uint64 ingress = 1;
     // Egress interface identifier.
     uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment creation
-    // timestamp.
+    // 8-bit encoded expiration offset relative to the segment
+        // creation timestamp.
     uint32 exp_time = 3;
     // MAC used in the dataplane to verify the hop field.
     bytes mac = 4;
 }
-
+</pre>
+</div>
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<a href="#name-control-service-grpc-api-segme" class="selfRef">Control Service gRPC API - Segment representation</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-9"><br></p>
+<span id="name-control-service-grpc-api-si"></span><div id="_figure-15">
+<figure id="figure-14">
+        <div class="alignLeft art-text artwork" id="appendix-B-10.1">
+<pre>
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
@@ -3955,12 +3981,13 @@ enum SignatureAlgorithm {
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
 }
 
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
+// Low-level representation of HeaderAndBody used for signature
+// computation input. This should not be used by external code.
+message HeaderAndBodyInternal {
+    // Encoded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
 }
 
 message Header {
@@ -3978,13 +4005,19 @@ message Header {
     int32 associated_data_length = 5;
 }
 
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Encoded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
 }
 
 message VerificationKeyID {
@@ -3993,14 +4026,14 @@ message VerificationKeyID {
     uint64 trc_base = 3;
     uint64 trc_serial = 4;
 }
-
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
-<a href="#name-control-service-grpc-api-de" class="selfRef">Control Service gRPC API definition</a>
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<a href="#name-control-service-grpc-api-si" class="selfRef">Control Service gRPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-3">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-11"><br></p>
+<p id="appendix-B-12">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-B-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
@@ -4075,8 +4108,8 @@ registered.<a href="#appendix-C-2.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
-<span id="name-service-resolution-grpc-api"></span><div id="_figure-12">
-<figure id="figure-11">
+<span id="name-service-resolution-grpc-api"></span><div id="_figure-16">
+<figure id="figure-15">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -4113,10 +4146,11 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-service-resolution-grpc-api" class="selfRef">Service Resolution gRPC API definition</a>
         </figcaption></figure>
 </div>
+<p id="appendix-C-7"><br></p>
 </section>
 </div>
 <div id="app-c">
@@ -4124,9 +4158,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 12</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 13</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 14</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 16</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 17</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 18</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
-<figure id="figure-12">
+<figure id="figure-16">
         <div class="alignLeft art-text artwork" id="appendix-D-2.1">
 <pre>
 +----------------------------+     +----------------------------+
@@ -4154,12 +4188,12 @@ message Transport {
 +----------------------------+     +----------------------------+
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-9">
-<figure id="figure-13">
+<figure id="figure-17">
         <div class="alignLeft art-text artwork" id="appendix-D-3.1">
 <pre>
 +---------+          +---------+          +---------+        +---------+
@@ -4219,12 +4253,12 @@ message Transport {
  +--------+           +--------+          +--------+          +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down-segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-10">
-<figure id="figure-14">
+<figure id="figure-18">
         <div class="alignLeft art-text artwork" id="appendix-D-4.1">
 <pre>
 +---------+     +---------+      +---------+   +---------+   +---------+
@@ -4293,7 +4327,7 @@ message Transport {
 +--------+       +--------+       +--------+    +--------+    +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
