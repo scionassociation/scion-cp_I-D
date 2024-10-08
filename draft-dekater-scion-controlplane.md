@@ -181,8 +181,6 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 {::boilerplate bcp14-tagged}
 
-
-
 ## Paths and Links {#paths-links}
 
 SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
@@ -261,7 +259,6 @@ All processes operate concurrently.
 ~~~~
 {: #figure-2 title="SCION routing processes and their relation to each other. All processes operate concurrently"}
 
-
 The **control service** is responsible for the path exploration and registration processes in the control plane. It is the main control-plane infrastructure component within each SCION AS. The control service of an AS has the following tasks:
 
 - Generating, receiving, and propagating PCBs. Periodically, the control service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy-compliant paths to discover multiple paths between any pair of core ASes.
@@ -309,9 +306,7 @@ An ISD number is the 16-bit global identifier for an ISD. It MUST be globally un
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-
 Currently, ISD numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
-
 
 ### SCION AS Numbers
 
@@ -344,7 +339,6 @@ For historical reasons, SCION AS numbers in the lower 32 bit range MAY also be r
 {: #table-2 title="AS number allocations"}
 
 The rest of the space is currently unallocated.
-
 
 ### Wildcard Addressing {#serv-disc}
 
@@ -417,7 +411,6 @@ For every selected PCB and egress interface combination, the AS extends the PCB 
 The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values.
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
-
 
 ~~~~
 
@@ -573,11 +566,9 @@ path segment 4 |             |     |             |     |             |
 ~~~~
 {: #figure-4 title="Possible up- or down-segments for AS Z"}
 
-
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
 This section provides a detailed specification of a single PCB and its message format.
-
 
 ### Components of a PCB in Message Format {#pcb-compos}
 
@@ -644,7 +635,7 @@ This section provides a detailed specification of a single PCB and its message f
 
 The following sections provide detailed specifications of the PCB messages, starting with the top-level message of one PCB, and then diving deeper into each of the PCB's message components.
 
-**Note:** For a full example of one PCB in the Protobuf message format, please see [](#app-a).
+**Note:** For a full example of one PCB in the Protobuf message format, please see [](#app-a), {{figure-14}}.
 
 #### PCB Top-Level Message Format {#segment}
 
@@ -659,7 +650,7 @@ Each PCB MUST consists of at least:
 - An information field with an identifier and a timestamp.
 - Entries of all ASes on the path segment represented by this PCB.
 
-The following code block defines the PCB on top level in Protobuf message format.
+The following code block is the main PCB definition in Protobuf message format.
 
 ~~~
    message PathSegment {
@@ -788,7 +779,6 @@ The following code block shows the low-level representation of the `HeaderAndBod
 - For the specification of the signed body, see [](#ase-sign).
 - For the specification of the `signature` field, see [](#sign).
 
-
 ##### AS Entry Signed Header {#ase-header}
 
 ~~~~
@@ -849,7 +839,6 @@ The following code block defines the signed header of an AS entry in Protobuf me
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
 - `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
 
-
 ##### AS Entry Signed Body {#ase-sign}
 
 ~~~~
@@ -887,7 +876,6 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.
 - `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
-
 ##### AS Entry Signature {#sign}
 
 Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period fully containing that of the segment being verified; regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component. This is the input for the computation of the signature:
@@ -915,7 +903,6 @@ associated_data(ps, i) = ps.segment_info ||
                          ps.as_entries[i-1].signed.header_and_body ||
                          ps.as_entries[i-1].signed.signature
 ~~~
-
 
 #### Hop Entry {#hopentry}
 
@@ -1020,7 +1007,6 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
-
 ~~~~
    +-----------+
    |           |
@@ -1051,18 +1037,16 @@ In this description, MTU and packet size are to be understood in the same sense 
 ~~~~
 {: #figure-6 title="Peer entry information, in the direction of beaconing"}
 
-
 ### PCB Extensions {#pcb-ext}
 
 In addition to basic routing information like hop entries and peer entries, PCBs can be used to communicate additional metadata, in its extensions. Extensions can be signed and unsigned. Signed extensions are protected by the AS signature, whereas unsigned extensions are not.
 
-On code-level and in Protobuf message format, extensions are specified as follows:
+In Protobuf message format, extensions are specified as follows:
 
 - Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#ase-message)).
 - Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension itself is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
-
 
 ### PCB Validity {#pcb-validity}
 
@@ -1075,7 +1059,6 @@ To be valid (that is, usable to construct a valid path), a PCB MUST:
 For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see [](#hopfield)).
 
 For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
-
 
 ### Configuration
 
@@ -1091,7 +1074,6 @@ In addition, the maximum MTU supported by all intra-AS links MAY be configured.
 ## Propagation of PCBs {#path-prop}
 
 This section describes how PCBs are selected and propagated in the path exploration process.
-
 
 ### Selection of PCBs to Propagate {#selection}
 
@@ -1121,8 +1103,6 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 - or because no beacon was available to propagate
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-
-
 #### Selection Policy Example
 
 {{figure-7}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.
@@ -1130,7 +1110,6 @@ The scalability implications of such parameters are further discussed in [](#sca
 - The network at the upper left considers the *path length*, which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency. Based on this criterion, the network will select the PCB representing path segment A-G (in direction of beaconing) to propagate.
 - The network at the upper right uses *peering links* as the selection criterion, that is, the number of different peering ASes from all non-core ASes on the PCB or path segment: A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this criterion, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.
 - The lower network selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS-disjoint or link-disjoint. AS-disjoint paths have no common upstream/core AS for the current AS, whereas link-disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS-disjointness allows path diversity in the event that an AS becomes unresponsive, and link-disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.
-
 
 ~~~~
  Selected path segment: #------# or *------*
@@ -1196,13 +1175,11 @@ The scalability implications of such parameters are further discussed in [](#sca
 ~~~~
 {: #figure-7 title="Example networks to illustrate path-segment selection based on different path properties."}
 
-
 ### Propagation of Selected PCBs {#path-segment-prop}
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes. This happens on the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
 To bootstrap the initial communication with a neighboring beacon service, ASes use so-called one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths. The purpose of one-hop paths is thus to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
-
 
 #### Reception of PCBs
 
@@ -1212,7 +1189,6 @@ The following first steps of the propagation procedure are the same for both int
 The PCB contains the version numbers of the trust root configuration(s) (TRC) and certificate(s) that MUST be used to verify its signatures. This enables the control service to check whether it has the relevant TRC(s) and certificate(s); if not, they can be requested from the control service of the sending AS.
 2. As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The control service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes could forbid, that is, not propagate, beacons containing path segments that traverse the same ISD more than once. **Note:** Where loops must always be avoided, it is a policy decision to forbid ISD double-crossing. It can be legitimate to cross the same ISD multiple times: For example, if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut. However, it is up to each core AS to decide whether it wants to allow this.
 3. If the PCB verification is successful, the control service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
-
 
 #### Propagation of PCBs in Intra-ISD Beaconing {#intra-prop}
 
@@ -1227,14 +1203,12 @@ The propagation process in intra-ISD beaconing includes the following steps:
 3. The control service MUST now sign each selected, extended PCB and append the computed signature.
 4. As a final step, the control service propagates each extended PCB to the correct neighboring ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring ASes (see also [](#prop-proto)).
 
-
 **Note:**
 
 - For more information on the signed body component of an AS entry, see [](#ase-sign).
 - For more information on a peer entry, see [](#peerentry).
 - For more information on the hop field component, see [](#hopfield).
 - For more information on signing an AS entry, see [](#sign).
-
 
 #### Propagation of PCBs in Core Beaconing
 
@@ -1246,8 +1220,6 @@ The propagation process in core beaconing includes the following steps:
    - The ISD_AS number of the neighboring core AS, in the signed body component of the AS entry.
 3. The core control service MUST now sign the extended PCBs and append the computed signature.
 4. As a final step, the service propagates the extended PCBs to the neighboring core ASes, by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the control services of the neighboring core ASes (see also [](#prop-proto)).
-
-
 
 #### Propagation of PCBs in Protobuf Message Format {#prop-proto}
 
@@ -1287,7 +1259,6 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 
 Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
-
 ## Path Discovery Time and Scalability {#scalability}
 
 The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
@@ -1305,6 +1276,7 @@ Note that link removal is not part of path discovery in SCION. For scheduled rem
 To achieve scalability in its routing process, SCION uses a divide-and-conquer approach, partitioning  ASes into ISDs. In order to benefit from this, an ideal topology SCION should keep the inter-ISD core network to a moderate size. For more specific observations, we distinguish between intra- and inter-ISD beaconing.
 
 ### Intra-ISD Beaconing
+
 In the intra-ISD beaconing, PCBs are propagated top-down, along parent-child links, from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
 Typically, this directed, acyclic graph is narrow at the top, widens towards the leafs, and is relatively shallow; intermediate provider ASes have a large number of children, while they only have a small number of parents. The chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
@@ -1323,6 +1295,7 @@ When all ASes start propagation interval just after they've received the first P
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
 ### Inter-ISD Beaconing
+
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered, and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
@@ -1335,18 +1308,15 @@ Assuming an average PCB length of 6 and the shortest propagation interval of 60 
 All of these are manageable on a present day small server or desktop machine.
 For much larger, more highly connected ASes, the path-discovery tasks of the control service can be distributed over many instances in order to increase the PCB throughput.
 
-
 On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average.
 
 When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, at worst after a mean time (D1+D2)*T/2.
-
 
 # Registration of Path Segments {#path-segment-reg}
 
 **Path registration** is the process where an AS transforms selected PCBs into path segments, and adds these segments to the relevant path databases, thus making them available to other ASes.
 
 As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down-path segments through which it wants to be reached, based on AS-specific selection criteria. The next step is to register the selected down-segments with the control service of the relevant core ASes, according to a process called *intra-ISD path-segment registration*. As a result, a core AS's control service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS control service also stores preferred core-path segments to other core ASes, in the *core-segment registration* process. Both processes are described below.
-
 
 ## Intra-ISD Path-Segment Registration {#intra-reg}
 
@@ -1356,7 +1326,6 @@ Every *registration period* (determined by each AS), the AS's control service se
 - down-segments, which allow remote entities to reach this AS.
 
 The up- and down-segments do not have to be equal. An AS may want to communicate with core ASes via one or more up-segments that differ from the down-segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up- and down-segment sets. Also, the processes of transforming a PCB in an up-segment or a down-segment differ slightly. Both processes are described below.
-
 
 ### Terminating a PCB {#term-pcb}
 
@@ -1380,8 +1349,6 @@ The control service of a non-core AS MUST perform the following steps to "termin
 - For more information on the hop field component, see [](#hopfield).
 - For more information on signing an AS entry, see [](#sign).
 
-
-
 ### Transforming a PCB into an Up-Segment
 
 Every registration period, the control service of a non-core AS performs the following steps to transform PCBs into up-segments:
@@ -1392,8 +1359,6 @@ Every registration period, the control service of a non-core AS performs the fol
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
-
-
 ### Transforming a PCB into a Down-Segment
 
 Every registration period, the control service of a non-core AS performs the following steps to transform PCBs into down-segments:
@@ -1403,8 +1368,6 @@ Every registration period, the control service of a non-core AS performs the fol
 3. The control service now registers the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the control services of the relevant core ASes (see also [](#reg-proto)).
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
-
-
 
 ## Core Path-Segment Registration
 
@@ -1418,8 +1381,7 @@ In every registration period, the control service of a core AS performs the foll
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
-
-## Path-Segment Registration on Code-Level {#reg-proto}
+## Path-Segment Registration gRPC API {#reg-proto}
 
 The control service of a non-core AS has to register the newly created down-segments with the control services of the core ASes that originated the corresponding PCBs. This registration step is implemented as follows in Protobuf message format:
 
@@ -1465,7 +1427,6 @@ Such information is then made available to endpoints during the path lookup proc
 
 The *path lookup* is a fundamental building block of SCION's path management, as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
 
-
 ## Lookup Process
 
 An endpoint (source) that wants to start communication with another endpoint (destination), requires up to three path segments:
@@ -1480,7 +1441,7 @@ The actual number of required path segments depends on the location of the desti
 
 The process to look up and fetch path segments consists of the following steps:
 
-1. First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately.
+1. First, the source endpoint queries the control service in its own AS (i.e., the source AS) for the required segments by sending a SegmentsRequest. The control service has up-path segments stored in its path database. Additionally, the control service checks if it has appropriate core- and down-path segments in store as well; in this case it returns them immediately in a SegmentsResponse.
 2. If there are no appropriate core-segments and down-segments, the control service in the source AS queries the control services of the reachable core ASes in the source ISD, for core-path segments to core ASes in the destination ISD (which is either the own or a remote ISD). To reach the core control services, the control service of the source AS uses the locally stored up-path segments.
 3. Next, the control service of the source AS combines up-path segments with the newly retrieved core-path segments. The control service then queries the control services of the remote core ASes in the destination ISD, to fetch down-path segments to the destination AS. To reach the remote core ASes, the control service of the source AS uses the previously obtained and combined up- and core segments.
 4. Finally, the control service of the source AS returns all retrieved path segments to the source endpoint.
@@ -1504,6 +1465,8 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 2. Request core-segments, which start at the core ASes that are reachable with up-segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up-segment.
 3. Request down-segments starting at core ASes in the destination ISD.
 
+The segment lookup API gRPC definition can be found in {{figure-11}}.
+
 ### Caching
 
 For the sake of efficiency, the control service of the source AS SHOULD cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations. The use of caching is also essential to ensure that the path-lookup process is scalable and can be performed with low latency.
@@ -1513,18 +1476,15 @@ In general, to improve overall efficiency, the control services of all ASes SHOU
 - Cache the returned path segments.
 - Send requests in parallel when requesting path segments from other control services.
 
-
 ## Behavior of Actors in the Lookup Process
 
 As described above, the source endpoint resolves paths with a sequence of segment requests to the control service of the source AS. The control service in the source AS answers directly, or forwards these requests to the responsible control services of core ASes. In SCION, the instances that handle these segment requests at the control services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively. This section specifies the behavior of the segment-request handlers in the lookup process. First, the use of wildcards in the lookup process is briefly addressed.
-
 
 ### Use of Wildcard Addresses in the Lookup Process {#wildcard}
 
 Endpoints can use wildcard addresses to designate any core AS in path-segment requests. The segment-request handlers MUST expand these wildcard addresses and translate them into one or more actual addresses. {{table-4}} below shows who is responsible for what.
 
 **Note:** For general information on the use of wildcard addresses in SCION, see [](#serv-disc).
-
 
 | Segment Request | Wildcard Represents                       | Expanded/Translated By                 | Translated Into            |
 |-----------------+-------------------------------------------|----------------------------------------|----------------------------|
@@ -1536,8 +1496,6 @@ Endpoints can use wildcard addresses to designate any core AS in path-segment re
 
 1) Includes all core ASes for which an up-segment from the source AS exists.<br>
 2) Includes all core ASes in destination ISD with a down-segment to destination AS.
-
-
 
 ### Segment-Request Handler of a Non-Core Source AS
 
@@ -1556,7 +1514,6 @@ When the segment-request handler of the control service of a *non-core* source A
      - If possible, return matching down-segments from cache;
      - otherwise, request the down-segment from the control services of the core ASes at the source (start) of the down-segment. Sending the request may require looking up core-segments to the source core AS of the down-segment. Add the retrieved down-segments to the cache.
 
-
 ### Segment-Request Handler of a Core AS
 
 When the segment-request handler of a *core AS* control service receives a path segment request, it MUST proceed as follows:
@@ -1569,22 +1526,17 @@ When the segment-request handler of a *core AS* control service receives a path 
 2. If the destination is a core or wildcard address, then load matching core-segments from the path database and return.
 3. Otherwise, load the matching down-segments from the path database and return.
 
-[](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
-
-
+[](#app-c) illustrates how the lookup of path segments in SCION works.
 
 # Security Considerations
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's control plane, that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption. These topics lie therefore outside the scope of this section.
 
-
 This section focuses on three kinds of security risks in the control plane. The first risk is when an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)). Also "ordinary" (non-core) adversaries that try to manipulate the beaconing process pose a risk to the control plane (see [](#manipulate-beaconing)). The third kind of security risks are Denial of Services (DoS) attacks, where attackers overload different parts of the infrastructure (see [](#dos-cp)).
-
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
 The first kind of risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths halts. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered (and still valid) paths remain usable for data-plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
-
 
 ## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
 
@@ -1594,7 +1546,6 @@ This section examines several possible approaches open to an "ordinary" non-core
 - Creation of spurious ASes and ISDs (see [](#fake-ases))
 - Peering link misuse (see [](#peer-link-misuse))
 - Manipulation of the path selection process (see [](#manipulate-selection))
-
 
 ### Path Hijacking through Interposition {#path-hijack}
 
@@ -1608,7 +1559,6 @@ The first type of attack is detectable and blocked by downstream ASes (e.g. B), 
 The second type of attack is made impossible by the hop field's MAC, which protects the hop field's integrity and chains it with the previous hop fields on the path.
 The third type of attack generally cannot be prevented, however the alternate path would be immediately visible to endpoints, as traffic MUST include hop fields from AS M.
 
-
 ### Creation of Spurious ASes and ISDs {#fake-ases}
 
 An alternative scenario is when an adversary tries to introduce and spoof a nonexistent ASes. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.
@@ -1617,13 +1567,11 @@ However, spoofing a new AS requires a registration of that AS with the ISD core 
 
 Similarly to creating a fake AS, an adversary could try to introduce a new, malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort, and may need the involvement of more than one malicious entity. Here, the "costs" of setting up the fake ISD may outweigh the benefits.
 
-
 ### Peering Link Misuse {#peer-link-misuse}
 
 The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors, AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary hop fields by querying a control service and extracting the hop fields from registered paths.
 
 Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack: Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.
-
 
 ### Manipulation of the Path-Selection Process {#manipulate-selection}
 
@@ -1638,14 +1586,12 @@ This attack is possible if the adversary controls multiple (at least two) ASes. 
 
 In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction, as these relatively long paths have to compete with other, shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.
 
-
 **Wormhole Attack** <br>
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another, non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.
 
 Similarly, a fake path can be announced through a fake peering link between two colluding ASes, even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Similarly, endpoints are more likely to choose short paths that make use of peering links. In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering hop fields with valid hop fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added hop fields with the fake peering link hop fields the sender inserted.
 
 To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
-
 
 ## Denial of Service Attacks {#dos-cp}
 
@@ -1659,7 +1605,6 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 - `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
 - `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address MUST match the local ISD and the number of path segments MUST be 1.
 
-
 A combination of the mechanism above is used to prevent flooding attacks on the control service. In addition, the control service SHOULD be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
 
 # IANA Considerations
@@ -1668,37 +1613,19 @@ This document has no IANA actions.
 
 The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
 
-
 --- back
 
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
-
-
-# Control Service gRPC API {#app-a}
+# Full Control Service gRPC API {#app-a}
 {:numbered="false"}
 
-The following code block provides, in protobuf format, the API by which control services interact.
+The following code blocks provide, in protobuf format, the entire API by which control services interact.
 
 ~~~~
-enum SegmentType {
-    // Unknown segment type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
-
-
-// This API is exposed by the control services of core ASes expose this
-// on the SCION dataplane and also by all control services on the
-// "intra-domain protocol" network.
 service SegmentLookupService {
     // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -1711,6 +1638,17 @@ message SegmentsRequest {
     uint64 dst_isd_as = 2;
 }
 
+enum SegmentType {
+    // Unknown segment type.
+    SEGMENT_TYPE_UNSPECIFIED = 0;
+    // Up segment.
+    SEGMENT_TYPE_UP = 1;
+    // Down segment.
+    SEGMENT_TYPE_DOWN = 2;
+    // Core segment.
+    SEGMENT_TYPE_CORE = 3;
+}
+
 message SegmentsResponse {
     message Segments {
         // List of path segments.
@@ -1718,13 +1656,17 @@ message SegmentsResponse {
     }
 
     // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
+    // The key is the integer representation of the SegmentType enum.
     map<int32, Segments> segments = 1;
 }
+~~~~
+{: #figure-11 title="Control Service gRPC API - Segment lookup.
+   This API is exposed on the SCION dataplane by the control
+   services of core ASes and exposed on the intra-domain protocol
+   network."}
+<br>
 
-// This API is only exposed by core ASes and only on the SCION
-// dataplane.
+~~~~
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
@@ -1738,15 +1680,20 @@ message SegmentsRegistrationRequest {
     }
 
     // Mapping from path segment type to path segments.
-    // The key is the integer
-    // representation of the SegmentType enum.
+    // The key is the integer representation of the SegmentType enum.
     map<int32, Segments> segments = 1;
 }
 
 message SegmentsRegistrationResponse {}
+~~~~
+{: #figure-12 title="Control Service gRPC API - Segment registration.
+   This API is only exposed by core ASes and only on the SCION
+   dataplane."}
+<br>
 
+~~~~
 service SegmentCreationService {
-    // Beacon sends a beacon to the remote.
+    // Beacon sends a beacon to the remote control service.
     rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
 }
 
@@ -1756,7 +1703,11 @@ message BeaconRequest {
 }
 
 message BeaconResponse {}
+~~~~
+{: #figure-13 title="Control Service gRPC API - Segment creation"}
+<br>
 
+~~~~
 message PathSegment {
     // The encoded SegmentInformation. It is used for signature input.
     bytes segment_info = 1;
@@ -1794,19 +1745,12 @@ message ASEntry {
     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
 }
 
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+message SignedMessage {
+    // Encoded header and body.
+    bytes header_and_body = 1;
+    // Raw signature. The signature is computed over the concatenation
+    // of the header and body, and the optional associated data.
+    bytes signature = 2;
 }
 
 message HopEntry {
@@ -1817,8 +1761,8 @@ message HopEntry {
 }
 
 message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments during
-    // path construction.
+    // ISD-AS of peer AS. This is used to match peering segments
+	// during path construction.
     uint64 peer_isd_as = 1;
     // Remote peer interface identifier. This is used to match
     // peering segments
@@ -1835,13 +1779,17 @@ message HopField {
     uint64 ingress = 1;
     // Egress interface identifier.
     uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment creation
-    // timestamp.
+    // 8-bit encoded expiration offset relative to the segment
+	// creation timestamp.
     uint32 exp_time = 3;
     // MAC used in the dataplane to verify the hop field.
     bytes mac = 4;
 }
+~~~~
+{: #figure-14 title="Control Service gRPC API - Segment representation"}
+<br>
 
+~~~~
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
@@ -1853,12 +1801,13 @@ enum SignatureAlgorithm {
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
 }
 
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
+// Low-level representation of HeaderAndBody used for signature
+// computation input. This should not be used by external code.
+message HeaderAndBodyInternal {
+    // Encoded header suitable for signature computation.
+    bytes header = 1;
+    // Raw payload suitable for signature computation.
+    bytes body = 2;
 }
 
 message Header {
@@ -1876,13 +1825,19 @@ message Header {
     int32 associated_data_length = 5;
 }
 
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Encoded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
+message ASEntrySignedBody {
+    // ISD-AS of the AS that created this AS entry.
+    uint64 isd_as = 1;
+    // ISD-AS of the downstream AS.
+    uint64 next_isd_as = 2;
+    // The required regular hop entry.
+    HopEntry hop_entry = 3;
+    // Optional peer entries.
+    repeated PeerEntry peer_entries = 4;
+    // Intra AS MTU.
+    uint32 mtu = 5;
+    // Optional extensions.
+    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
 }
 
 message VerificationKeyID {
@@ -1891,9 +1846,9 @@ message VerificationKeyID {
     uint64 trc_base = 3;
     uint64 trc_serial = 4;
 }
-
 ~~~~
-{: #figure-11 title="Control Service gRPC API definition"}
+{: #figure-15 title="Control Service gRPC API - Signed ASEntry representation"}
+<br>
 
 In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
 
@@ -1961,14 +1916,13 @@ message Transport {
 }
 
 ~~~~
-{: #figure-12 title="Service Resolution gRPC API definition"}
-
+{: #figure-16 title="Service Resolution gRPC API definition"}
+<br>
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.
-
 
 ~~~~
 +----------------------------+     +----------------------------+
@@ -1996,7 +1950,6 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 +----------------------------+     +----------------------------+
 ~~~~
 {: #figure-8 title="Topology used in the path lookup examples."}
-
 
 ~~~~
 +---------+          +---------+          +---------+        +---------+
