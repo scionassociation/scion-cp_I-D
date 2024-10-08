@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 April 2025                                            S. Hitz
+Expires: 11 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                          4 October 2024
+                                                          8 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 April 2025.
+   This Internet-Draft will expire on 11 April 2025.
 
 Copyright Notice
 
@@ -2404,11 +2404,12 @@ path segment 4 |             |     |             |     |             |
    following steps:
 
    1.  First, the source endpoint queries the control service in its own
-       AS (i.e., the source AS) for the required segments
-       (SegmentsRequest).  The control service has up-path segments
-       stored in its path database.  Additionally, the control service
-       checks if it has appropriate core- and down-path segments in
-       store as well; in this case it returns them immediately.
+       AS (i.e., the source AS) for the required segments by sending a
+       SegmentsRequest.  The control service has up-path segments stored
+       in its path database.  Additionally, the control service checks
+       if it has appropriate core- and down-path segments in store as
+       well; in this case it returns them immediately in a
+       SegmentsResponse.
 
    2.  If there are no appropriate core-segments and down-segments, the
        control service in the source AS queries the control services of
