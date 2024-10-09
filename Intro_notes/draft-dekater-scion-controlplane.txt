@@ -138,6 +138,7 @@ Table of Contents
      7.1.  Normative References
      7.2.  Informative References
    Acknowledgments
+   Deployment Testing: SCIONLab
    Full Control Service gRPC API
    SCION data plane use by the SCION control plane
    Path-Lookup Examples
@@ -2988,6 +2989,15 @@ Acknowledgments
    documentation about the SCION Control Plane, as well as to the
    authors of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
+
+Deployment Testing: SCIONLab
+
+   SCIONLab is a global research network to test the SCION Internet
+   architecture.  You can create and use your ASes using your own
+   computation resources which allows you to gain real-world experience
+   of deploying and managing a SCION network.
+
+   More information can be found at [https://www.scionlab.org]
 
 Full Control Service gRPC API
 

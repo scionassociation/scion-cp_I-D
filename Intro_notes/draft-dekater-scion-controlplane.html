@@ -1341,16 +1341,19 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-full-control-service-grpc-a" class="internal xref">Full Control Service gRPC API</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-deployment-testing-scionlab" class="internal xref">Deployment Testing: SCIONLab</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION data plane use by the SCION control plane</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-full-control-service-grpc-a" class="internal xref">Full Control Service gRPC API</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION data plane use by the SCION control plane</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -3783,15 +3786,24 @@ For RPC methods exposed to other ASes, the control service implementation minimi
 <p id="appendix-A-1">Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="app-a">
+<div id="deployment-testing-scionlab">
 <section id="appendix-B">
+      <h2 id="name-deployment-testing-scionlab">
+<a href="#name-deployment-testing-scionlab" class="section-name selfRef">Deployment Testing: SCIONLab</a>
+      </h2>
+<p id="appendix-B-1">SCIONLab is a global research network to test the SCION Internet architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">More information can be found at [https://www.scionlab.org]<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="app-a">
+<section id="appendix-C">
       <h2 id="name-full-control-service-grpc-a">
 <a href="#name-full-control-service-grpc-a" class="section-name selfRef">Full Control Service gRPC API</a>
       </h2>
-<p id="appendix-B-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <span id="name-control-service-grpc-api-se"></span><div id="_figure-11">
 <figure id="figure-10">
-        <div class="alignLeft art-text artwork" id="appendix-B-2.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 service SegmentLookupService {
     // Segments returns all segments that match the request.
@@ -3832,10 +3844,10 @@ message SegmentsResponse {
 <a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-3"><br></p>
+<p id="appendix-C-3"><br></p>
 <span id="name-control-service-grpc-api-seg"></span><div id="_figure-12">
 <figure id="figure-11">
-        <div class="alignLeft art-text artwork" id="appendix-B-4.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service SegmentRegistrationService {
     // SegmentsRegistration registers segments at the remote.
@@ -3861,10 +3873,10 @@ message SegmentsRegistrationResponse {}
 <a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-5"><br></p>
+<p id="appendix-C-5"><br></p>
 <span id="name-control-service-grpc-api-segm"></span><div id="_figure-13">
 <figure id="figure-12">
-        <div class="alignLeft art-text artwork" id="appendix-B-6.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service SegmentCreationService {
     // Beacon sends a beacon to the remote control service.
@@ -3883,10 +3895,10 @@ message BeaconResponse {}
 <a href="#name-control-service-grpc-api-segm" class="selfRef">Control Service gRPC API - Segment creation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-7"><br></p>
+<p id="appendix-C-7"><br></p>
 <span id="name-control-service-grpc-api-segme"></span><div id="_figure-14">
 <figure id="figure-13">
-        <div class="alignLeft art-text artwork" id="appendix-B-8.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 message PathSegment {
     // The encoded SegmentInformation. It is used for signature input.
@@ -3971,10 +3983,10 @@ message HopField {
 <a href="#name-control-service-grpc-api-segme" class="selfRef">Control Service gRPC API - Segment representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-9"><br></p>
+<p id="appendix-C-9"><br></p>
 <span id="name-control-service-grpc-api-si"></span><div id="_figure-15">
 <figure id="figure-14">
-        <div class="alignLeft art-text artwork" id="appendix-B-10.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-10.1">
 <pre>
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
@@ -4038,85 +4050,85 @@ message VerificationKeyID {
 <a href="#name-control-service-grpc-api-si" class="selfRef">Control Service gRPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-11"><br></p>
-<p id="appendix-B-12">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-B-12" class="pilcrow">¶</a></p>
+<p id="appendix-C-11"><br></p>
+<p id="appendix-C-12">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
-<section id="appendix-C">
+<section id="appendix-D">
       <h2 id="name-scion-data-plane-use-by-the">
 <a href="#name-scion-data-plane-use-by-the" class="section-name selfRef">SCION data plane use by the SCION control plane</a>
       </h2>
-<p id="appendix-C-1">The SCION control plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the control service is itself the source of path segment information, the following bootstraping strategies apply:<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">The SCION control plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the control service is itself the source of path segment information, the following bootstraping strategies apply:<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-2.1">
-          <p id="appendix-C-2.1.1">Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.<a href="#appendix-C-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-2.1">
+          <p id="appendix-D-2.1.1">Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.<a href="#appendix-D-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-2.2">
-          <p id="appendix-C-2.2.1">Constructed multihop paths are registered with the control service at the origin core AS. The path to that AS is the very path being
-registered.<a href="#appendix-C-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-2.2">
+          <p id="appendix-D-2.2.1">Constructed multihop paths are registered with the control service at the origin core AS. The path to that AS is the very path being
+registered.<a href="#appendix-D-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-2.3">
-          <p id="appendix-C-2.3.1">Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local control service.<a href="#appendix-C-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-2.3">
+          <p id="appendix-D-2.3.1">Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local control service.<a href="#appendix-D-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-2.4">
-          <p id="appendix-C-2.4.1">Control services respond to requests from remote ASes by reversing the path via which the request came.<a href="#appendix-C-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-2.4">
+          <p id="appendix-D-2.4.1">Control services respond to requests from remote ASes by reversing the path via which the request came.<a href="#appendix-D-2.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-2.5">
-          <p id="appendix-C-2.5.1">Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>).<a href="#appendix-C-2.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-2.5">
+          <p id="appendix-D-2.5.1">Clients find the relevant control service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>).<a href="#appendix-D-2.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-3">The mechanics of service address resolution are the following:<a href="#appendix-C-3" class="pilcrow">¶</a></p>
+<p id="appendix-D-3">The mechanics of service address resolution are the following:<a href="#appendix-D-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-4.1">
-          <p id="appendix-C-4.1.1">To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:<a href="#appendix-C-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-4.1">
+          <p id="appendix-D-4.1.1">To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:<a href="#appendix-D-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-4.1.2.1">
-              <p id="appendix-C-4.1.2.1.1">Common Header:<a href="#appendix-C-4.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-4.1.2.1">
+              <p id="appendix-D-4.1.2.1.1">Common Header:<a href="#appendix-D-4.1.2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-4.1.2.1.2.1">
-                  <p id="appendix-C-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#appendix-C-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-4.1.2.1.2.1">
+                  <p id="appendix-D-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#appendix-D-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="appendix-C-4.1.2.1.2.2">
-                  <p id="appendix-C-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#appendix-C-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-            <li class="normal" id="appendix-C-4.1.2.2">
-              <p id="appendix-C-4.1.2.2.1">Address Header:<a href="#appendix-C-4.1.2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C-4.1.2.2.2.1">
-                  <p id="appendix-C-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#appendix-C-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="appendix-D-4.1.2.1.2.2">
+                  <p id="appendix-D-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#appendix-D-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li class="normal" id="appendix-C-4.1.2.3">
-              <p id="appendix-C-4.1.2.3.1">UDP Header:<a href="#appendix-C-4.1.2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-D-4.1.2.2">
+              <p id="appendix-D-4.1.2.2.1">Address Header:<a href="#appendix-D-4.1.2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-4.1.2.3.2.1">
-                  <p id="appendix-C-4.1.2.3.2.1.1">DstPort: 0<a href="#appendix-C-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-4.1.2.2.2.1">
+                  <p id="appendix-D-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#appendix-D-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+            <li class="normal" id="appendix-D-4.1.2.3">
+              <p id="appendix-D-4.1.2.3.1">UDP Header:<a href="#appendix-D-4.1.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-D-4.1.2.3.2.1">
+                  <p id="appendix-D-4.1.2.3.2.1.1">DstPort: 0<a href="#appendix-D-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
           </ul>
 </li>
-        <li class="normal" id="appendix-C-4.2">
-          <p id="appendix-C-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#appendix-C-4.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-4.2">
+          <p id="appendix-D-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#appendix-D-4.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-4.3">
-          <p id="appendix-C-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#appendix-C-4.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-4.3">
+          <p id="appendix-D-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#appendix-D-4.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-4.4">
-          <p id="appendix-C-4.4.1">The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.<a href="#appendix-C-4.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-4.4">
+          <p id="appendix-D-4.4.1">The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.<a href="#appendix-D-4.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-4.5">
-          <p id="appendix-C-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#appendix-C-4.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-4.5">
+          <p id="appendix-D-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#appendix-D-4.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
+<p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-grpc-api"></span><div id="_figure-16">
 <figure id="figure-15">
-        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
+        <div class="alignLeft art-text artwork" id="appendix-D-6.1">
 <pre>
 package proto.control_plane.v1;
 
@@ -4156,18 +4168,18 @@ message Transport {
 <a href="#name-service-resolution-grpc-api" class="selfRef">Service Resolution gRPC API definition</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-7"><br></p>
+<p id="appendix-D-7"><br></p>
 </section>
 </div>
 <div id="app-c">
-<section id="appendix-D">
+<section id="appendix-E">
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 16</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 17</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 18</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 16</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 17</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 18</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e., there is no up-segment from A to C. "CS" stands for control service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
 <figure id="figure-16">
-        <div class="alignLeft art-text artwork" id="appendix-D-2.1">
+        <div class="alignLeft art-text artwork" id="appendix-E-2.1">
 <pre>
 +----------------------------+     +----------------------------+
 |                            |     |                            |
@@ -4200,7 +4212,7 @@ message Transport {
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-9">
 <figure id="figure-17">
-        <div class="alignLeft art-text artwork" id="appendix-D-3.1">
+        <div class="alignLeft art-text artwork" id="appendix-E-3.1">
 <pre>
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -4265,7 +4277,7 @@ message Transport {
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-10">
 <figure id="figure-18">
-        <div class="alignLeft art-text artwork" id="appendix-D-4.1">
+        <div class="alignLeft art-text artwork" id="appendix-E-4.1">
 <pre>
 +---------+     +---------+      +---------+   +---------+   +---------+
 |Endpoint |     |Source AS|      | Core AS |   | Core AS |   | Core AS |
@@ -4340,7 +4352,7 @@ message Transport {
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-E">
+<section id="appendix-F">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
