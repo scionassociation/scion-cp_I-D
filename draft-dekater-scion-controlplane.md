@@ -139,7 +139,7 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-      
+
 --- abstract
 
 This document describes the control plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints. In fact, endpoints can choose between multiple path options, enabling the optimization of network paths. The SCION control plane is responsible for discovering these paths and making them available to the endpoints.
