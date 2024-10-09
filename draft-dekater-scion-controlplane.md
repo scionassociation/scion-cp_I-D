@@ -115,7 +115,7 @@ informative:
          ins: J. Kown
          name: Jonghoon Kwon
          org: ETH Zuerich
-		-
+        -
          ins: J. García-Pardo
          name: Juan A. García-Pardo
          org: ETH Zuerich
@@ -135,11 +135,10 @@ informative:
          ins: D. Hausheer
          name: David Hausheer
          org: Otto von Guericke University Magdeburg
-	    -
+        -
          ins: A. Perrig
          name: Adrian Perrig
          org: ETH Zuerich
- 
       
 --- abstract
 
@@ -1663,7 +1662,7 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 
 SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
-More information can be found at [https://www.scionlab.org] and in the {{SCIONLAB}} paper.
+More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
 
 
 # Full Control Service gRPC API {#app-a}
