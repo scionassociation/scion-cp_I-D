@@ -1629,7 +1629,7 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 # Deployment Testing: SCIONLab
 {:numbered="false"}
 
-SCIONLab is a global research network to test the SCION Internet architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network. 
+SCIONLab is a global research network to test the SCION Internet architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
 More information can be found at [https://www.scionlab.org]
 
