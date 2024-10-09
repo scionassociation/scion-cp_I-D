@@ -106,9 +106,9 @@ informative:
       -
         ins: O. Riordan
         name: Oliver Riordan
-SCIONLab:
-  title: SCIONLAB: A Next-Generation Internet Testbed
-  target: https://ieeexplore.ieee.org/abstract/document/9259355
+  SCIONLab:
+    title: SCIONLAB: A Next-Generation Internet Testbed
+    target: https://ieeexplore.ieee.org/abstract/document/9259355
  
       
 --- abstract
