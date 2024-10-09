@@ -175,7 +175,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}. 
+Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 
 ## Terminology {#terms}
