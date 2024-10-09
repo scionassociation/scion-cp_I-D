@@ -1625,6 +1625,15 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 
 Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
+
+# Deployment Testing: SCIONLab
+{:numbered="false"}
+
+SCIONLab is a global research network to test the SCION Internet architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network. 
+
+More information can be found at [https://www.scionlab.org]
+
+
 # Full Control Service gRPC API {#app-a}
 {:numbered="false"}
 
