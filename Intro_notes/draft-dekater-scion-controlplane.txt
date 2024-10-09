@@ -2886,6 +2886,20 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
+   [I-D.dekater-scion-dataplane]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-dataplane-02, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-dataplane-02>.
+
+   [I-D.dekater-scion-pki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
+
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
 
@@ -2941,20 +2955,6 @@ path segment 4 |             |     |             |     |             |
               dekater-panrg-scion-overview-06, 7 May 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               panrg-scion-overview-06>.
-
-   [I-D.dekater-scion-dataplane]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
-              Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-dataplane-02, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-02>.
-
-   [I-D.dekater-scion-pki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-06, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-06>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
