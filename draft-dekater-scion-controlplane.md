@@ -106,9 +106,40 @@ informative:
       -
         ins: O. Riordan
         name: Oliver Riordan
+SCIONLab:
+  title: SCIONLAB: A Next-Generation Internet Testbed
+  target: https://ieeexplore.ieee.org/abstract/document/9259355
+  author:
+    -
+    	ins: J. Kwon
+     	name: Jonghoon Kwon
+      	org: ETH Zuerich
+    -
+    	ins: J. García-Pardo
+     	name: Juan A. García-Pardo
+      	org: ETH Zuerich
+    -
+	ins: M. Legner
+ 	name: Markus Legner
+  	org: ETH Zuerich
+    -
+    	ins: F. Wirz
+     	name: François Wirz
+      	org: ETH Zuerich
+    -
+    	ins: M. Frei
+     	name: Matthias Frei
+      	org: ETH Zuerich
+    - 
+	ins: D. Hausheer
+ 	name: David Hausheer
+  	org: Otto von Guericke University Magdeburg
+    -
+    	ins: A. Perrig
+     	name: Adrian Perrig
+      	org: ETH Zuerich
 
-
-
+      
 --- abstract
 
 This document describes the control plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints. In fact, endpoints can choose between multiple path options, enabling the optimization of network paths. The SCION control plane is responsible for discovering these paths and making them available to the endpoints.
@@ -1629,9 +1660,9 @@ Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Assoc
 # Deployment Testing: SCIONLab
 {:numbered="false"}
 
-SCIONLab is a global research network to test the SCION Internet architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
+SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
-More information can be found at [https://www.scionlab.org]
+More information can be found at [https://www.scionlab.org] and in the {{SCIONLab}} paper.
 
 
 # Full Control Service gRPC API {#app-a}
