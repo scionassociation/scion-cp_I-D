@@ -34,9 +34,6 @@ author:
      email: hitz@anapaya.net
 
 normative:
-  I-D.dekater-scion-dataplane:
-  I-D.dekater-scion-pki:
-  I-D.dekater-panrg-scion-overview:
   RFC4632:
   RFC5280:
   RFC5952:
@@ -56,6 +53,9 @@ normative:
     target: https://connectrpc.com/docs/protocol/
 
 informative:
+  I-D.dekater-scion-dataplane:
+  I-D.dekater-scion-pki:
+  I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -138,9 +138,13 @@ SCION relies on three main components:
 
 *Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.dekater-scion-dataplane}}
 
-This document describes the SCION Control Plane component. It should be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
+This document describes the SCION Control Plane component.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+
+The following text is to be removed before publication.
+
+This document should be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 
 ## Terminology {#terms}
