@@ -34,6 +34,8 @@ author:
      email: hitz@anapaya.net
 
 normative:
+  I-D.dekater-scion-pki:
+  I-D.dekater-scion-dataplane:
   RFC4632:
   RFC5280:
   RFC5952:
@@ -53,8 +55,6 @@ normative:
     target: https://connectrpc.com/docs/protocol/
 
 informative:
-  I-D.dekater-scion-dataplane:
-  I-D.dekater-scion-pki:
   I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
