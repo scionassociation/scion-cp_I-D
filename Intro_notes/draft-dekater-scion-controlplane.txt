@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 11 April 2025                                           S. Hitz
+Expires: 12 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                          8 October 2024
+                                                          9 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 April 2025.
+   This Internet-Draft will expire on 12 April 2025.
 
 Copyright Notice
 
@@ -198,15 +198,18 @@ Table of Contents
    SCION routers or SCION endpoints within its AS.  See
    [I-D.dekater-scion-dataplane]
 
-   This document describes the SCION Control Plane component.  It should
-   be read in conjunction with [I-D.dekater-scion-pki] and
-   [I-D.dekater-scion-dataplane] and deprecates
-   [I-D.dekater-panrg-scion-overview].
+   This document describes the SCION Control Plane component.
 
    The SCION architecture was initially developed outside of the IETF by
    ETH Zurich with significant contributions from Anapaya Systems.  The
    aim of this document is to describe existing implementations and
    operational deployments.
+
+   The following text is to be removed before publication.
+
+   This document should be read in conjunction with
+   [I-D.dekater-scion-pki] and [I-D.dekater-scion-dataplane] and
+   deprecates [I-D.dekater-panrg-scion-overview].
 
 1.1.  Terminology
 
@@ -2880,27 +2883,6 @@ path segment 4 |             |     |             |     |             |
    [gRPC]     "gRPC, an open-source universal RPC framework", 2023,
               <https://grpc.io/>.
 
-   [I-D.dekater-panrg-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", Work in Progress, Internet-Draft, draft-
-              dekater-panrg-scion-overview-06, 7 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              panrg-scion-overview-06>.
-
-   [I-D.dekater-scion-dataplane]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
-              Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-dataplane-02, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-02>.
-
-   [I-D.dekater-scion-pki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-06, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-06>.
-
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
 
@@ -2949,6 +2931,27 @@ path segment 4 |             |     |             |     |             |
               Mueller, P., and A. Perrig, "The Complete Guide to SCION",
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
+
+   [I-D.dekater-panrg-scion-overview]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", Work in Progress, Internet-Draft, draft-
+              dekater-panrg-scion-overview-06, 7 May 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              panrg-scion-overview-06>.
+
+   [I-D.dekater-scion-dataplane]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Data
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-dataplane-02, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-dataplane-02>.
+
+   [I-D.dekater-scion-pki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
