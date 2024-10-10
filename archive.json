@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-08T00:20:09.454156+00:00",
+  "timestamp": "2024-10-10T00:20:05.183201+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -86,9 +86,9 @@
         "Prio 1",
         "Prio 2"
       ],
-      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft before January 2024. New feedback is in dedicated issues\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [x] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [x] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [x] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [x]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [x] #18\r\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [x] #19\r\n- [x] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\nSee https://github.com/scionassociation/scion-deployment_I-D/issues/1 \r\n- [x] #22\r\n",
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft before January 2024. New feedback is in dedicated issues\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [x] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [x] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [x] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [x]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [x] #18\r\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [x] #19\r\n- [x] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] ~Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\nSee~ https://github.com/scionassociation/scion-deployment_I-D/issues/1 \r\n- [x] #22\r\n",
       "createdAt": "2024-01-08T12:56:27Z",
-      "updatedAt": "2024-08-26T15:59:54Z",
+      "updatedAt": "2024-10-09T07:08:07Z",
       "closedAt": null,
       "comments": []
     },
@@ -431,23 +431,32 @@
     {
       "number": 20,
       "id": "I_kwDOJx2-rs6JFU0C",
-      "title": "Manageability: what must an AS keep track of (paths, links, certificates, \u2026)",
+      "title": "Manageability: what must an AS keep track of (paths, links, certificates, \u2026) and reference to deployment",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/20",
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "nicorusti"
+        "nicorusti",
+        "knmeynell"
       ],
       "labels": [
         "enhancement",
-        "Prio 3"
+        "Prio 2"
       ],
-      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot\r\n",
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot. \r\n\r\n- [ ] short paragraph in the appendix (and pointer to SCIONLab)\r\n- [ ] Mention it in changelog\r\n- [ ] add in other drafts\r\n",
       "createdAt": "2024-05-16T09:38:07Z",
-      "updatedAt": "2024-07-26T23:06:59Z",
+      "updatedAt": "2024-10-08T09:11:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Meeting Eliot Oct 2024: \r\n\r\n> Show fully flashed out config of how to have SCION nodes, a device in the middle, they did this with M-BONE. And the 6 bone to play with IPv6. If you have someone who wants to build an implementation, how can they test that it works and that they can interoperate. \r\nWhat do you have to do if you want to want to add a GW. Show a reference to what you can do (guide how to participate) e.g. to SCIONLab, not docs.scion.org. Goal; meet interop requirement. No Anapaya docs (but could be). Beginning as vendor implementation, intent is to offer to community for further improvement and potential standardization later on.\r\n",
+          "createdAt": "2024-10-08T09:06:50Z",
+          "updatedAt": "2024-10-08T09:06:50Z"
+        }
+      ]
     },
     {
       "number": 21,
@@ -712,11 +721,11 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "Prio 2"
+        "Prio 3"
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2024-07-22T21:10:11Z",
+      "updatedAt": "2024-10-08T09:02:57Z",
       "closedAt": null,
       "comments": [
         {
@@ -788,7 +797,7 @@
       ],
       "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n\r\nPlease review (sorted by urgency): \r\n- #63 \r\n- 2.3.3.  Effects of Clock Inaccuracy\r\n-  2.4.  Path Discovery Time and Scalability\r\n-  5.  Security Considerations\r\n- Control Service gRPC API (appendix)\r\n\r\n\r\nOther pointers:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\n  \r\n\r\n",
       "createdAt": "2024-07-09T10:31:37Z",
-      "updatedAt": "2024-10-07T16:38:20Z",
+      "updatedAt": "2024-10-08T12:44:36Z",
       "closedAt": null,
       "comments": [
         {
@@ -804,6 +813,41 @@
           "body": ">  Once\t\r\n \t   this number grows above the maximum recommended best PCBs set size of\t\r\n \t   50, \r\n \t   \r\nWhere does this number come from? \r\nDefault is 20. AFAIK:\r\nhttps://github.com/scionproto/scion/blob/aa917bb458d6675efc55b4a23fda2c694094553e/control/beacon/policy.go#L43\r\n\r\n\r\n",
           "createdAt": "2024-10-07T16:38:19Z",
           "updatedAt": "2024-10-07T16:38:19Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> > The expiration of a SCION AS certificate typically ranges from\r\n> > 3h to 5 years.\r\n> \r\n> Where does this number come from. Most typically it is 3days, and in some very special cases we have 5 days. I have never seen 5 years outside of some private ISDs\r\n\r\nThis comes from https://github.com/scionassociation/scion-cp_I-D/commit/297e8d2c828228e22542cd27c6b708f29586a440  @jiceatscion do you have more background?\r\n\r\n@oncilla you're right, in the PKI draft we write `The RECOMMENDED maximum validity period of a CP AS certificate is: 3 days.` I don't think, however, we set an upper bound to the validity. \r\n\r\nI see two action items: \r\n\r\n- [ ] Correct CP draft to say \"3h to 5 _days_\".\r\n- [ ] Shall we set an upper bound for validity in the PKI draft? Or alternatively say that validity may be up to 5 days instead of 3? ",
+          "createdAt": "2024-10-08T07:51:36Z",
+          "updatedAt": "2024-10-08T07:51:36Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "The comes from the first version of the draft: https://github.com/scionassociation/scion-cp_I-D/commit/b652927759ca8f6c8767cc9e3ef44a71b0702f23\r\n\r\n> > Once\r\n> > this number grows above the maximum recommended best PCBs set size of\r\n> > 50,\r\n> \r\n> Where does this number come from? Default is 20. AFAIK: https://github.com/scionproto/scion/blob/aa917bb458d6675efc55b4a23fda2c694094553e/control/beacon/policy.go#L43\r\n\r\nIt comes from the initial version of the draft: \r\nhttps://github.com/scionassociation/scion-cp_I-D/commit/b652927759ca8f6c8767cc9e3ef44a71b0702f23\r\nI could not find where this comes from \r\n\r\n@jiceatscion I'd skim through #46 that has some considerations from ETH on beaconing ",
+          "createdAt": "2024-10-08T08:12:11Z",
+          "updatedAt": "2024-10-08T09:04:44Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > Once\r\n> > this number grows above the maximum recommended best PCBs set size of\r\n> > 50,\r\n> \r\n> Where does this number come from? Default is 20. AFAIK: https://github.com/scionproto/scion/blob/aa917bb458d6675efc55b4a23fda2c694094553e/control/beacon/policy.go#L43\r\n\r\nThese numbers aren't described as recommended values, but as recommended maxima. It came from some back-of-the-envelope calculations made by Matthias and used as worst-case examples in the scalability/Intra-ISD Beaconing section.\r\n\r\nThe code says the default is 20, but then, that isn't a recommended value, just a mechanical place holder: it is 20 even for a core AS (if I managed to follow the code), which, wouldn't be such a good idea, would it?\r\n\r\nI'll try and clarify that notion in the text.\r\n",
+          "createdAt": "2024-10-08T11:41:53Z",
+          "updatedAt": "2024-10-08T12:28:56Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > The expiration of a SCION AS certificate typically ranges from\r\n> > 3h to 5 years.\r\n> \r\n> Where does this number come from. Most typically it is 3days, and in some very special cases we have 5 days. I have never seen 5 years outside of some private ISDs\r\n\r\nI have no recollection. In all likeliness I was looking for the maximum range ever used and someone must have mentioned the existence the 5y case. If that is such an outlier, I can change the text to emphasize what the reasonable range is.",
+          "createdAt": "2024-10-08T12:39:16Z",
+          "updatedAt": "2024-10-08T12:39:16Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > > The expiration of a SCION AS certificate typically ranges from\r\n> > > 3h to 5 years.\r\n> > \r\n> > \r\n> > Where does this number come from. Most typically it is 3days, and in some very special cases we have 5 days. I have never seen 5 years outside of some private ISDs\r\n> \r\n> This comes from [297e8d2](https://github.com/scionassociation/scion-cp_I-D/commit/297e8d2c828228e22542cd27c6b708f29586a440) @jiceatscion do you have more background?\r\n> \r\n> @oncilla you're right, in the PKI draft we write `The RECOMMENDED maximum validity period of a CP AS certificate is: 3 days.` I don't think, however, we set an upper bound to the validity.\r\n> \r\n> I see two action items:\r\n> \r\n>     * [ ]  Correct CP draft to say \"3h to 5 _days_\".\r\n> \r\n>     * [ ]  Shall we set an upper bound for validity in the PKI draft? Or alternatively say that validity may be up to 5 days instead of 3?\r\n\r\nAs usual, I can take a Jesuitic approach and make a distinction between common and recommended. That way we leave the pki draft and its recommendation of 3 days alone. In the cp draft I will made the same recommendation and mention 5 days as an outlier. Let's forget the 5y.\r\n",
+          "createdAt": "2024-10-08T12:44:35Z",
+          "updatedAt": "2024-10-08T12:44:35Z"
         }
       ]
     },
@@ -946,7 +990,7 @@
       "id": "I_kwDOJx2-rs6Y82gT",
       "title": "gRPC API - remove duplicated definitions in appendix",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/67",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -957,8 +1001,8 @@
       ],
       "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2024-10-04T16:59:59Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-08T08:29:56Z",
+      "closedAt": "2024-10-08T08:29:56Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -4759,13 +4803,13 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-10-06T17:35:21Z",
+      "updatedAt": "2024-10-09T18:15:35Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "393138eeea1c9e6dfe782daa28c5e4d31ec6b8d8",
+      "headRefOid": "ee8313e8b1cbf05fd7daed2978d99e7dc15578ed",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -5437,7 +5481,7 @@
     {
       "number": 66,
       "id": "PR_kwDOJx2-rs59ia0w",
-      "title": "Updated Intro",
+      "title": "Updated Intro and add changelog",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/66",
       "state": "OPEN",
       "author": "knmeynell",
@@ -5446,7 +5490,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-10-03T18:33:23Z",
-      "updatedAt": "2024-10-07T18:30:56Z",
+      "updatedAt": "2024-10-08T09:01:54Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
@@ -5465,24 +5509,26 @@
       "id": "PR_kwDOJx2-rs59pP3J",
       "title": "cleanup: Cleaned-up protobufs appendix and add some missing refs to it",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/68",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": " Also cleaned-up extraneous blank lines. Replaced phrases like \"on xyz-level\".\r\n\r\nFixes #67 ",
       "createdAt": "2024-10-04T16:55:59Z",
-      "updatedAt": "2024-10-07T20:08:29Z",
+      "updatedAt": "2024-10-08T08:29:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "api",
-      "headRefOid": "519c3120f2bf469a1cf907cdc4667e711c1d7822",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c82117d711d20a243e7ca4a0fcbfa278fdee91d1",
+      "closedAt": "2024-10-08T08:29:55Z",
+      "mergedAt": "2024-10-08T08:29:55Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "59edc75fc902a83734ad852bc88795d253889ec2"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5522,6 +5568,112 @@
               "updatedAt": "2024-10-07T20:08:29Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MS9IP",
+          "commit": {
+            "abbreviatedOid": "519c312"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-08T08:29:11Z",
+          "updatedAt": "2024-10-08T08:29:11Z",
+          "comments": [
+            {
+              "originalPosition": 488,
+              "body": "done",
+              "createdAt": "2024-10-08T08:29:11Z",
+              "updatedAt": "2024-10-08T08:29:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6MS9Pb",
+          "commit": {
+            "abbreviatedOid": "519c312"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-08T08:29:22Z",
+          "updatedAt": "2024-10-08T08:29:22Z",
+          "comments": [
+            {
+              "originalPosition": 520,
+              "body": "done",
+              "createdAt": "2024-10-08T08:29:22Z",
+              "updatedAt": "2024-10-08T08:29:22Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 69,
+      "id": "PR_kwDOJx2-rs598qM_",
+      "title": "dp_draft: fix recommended/typical values for best PCB set size and AS cert TTL",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/69",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #50 ",
+      "createdAt": "2024-10-08T13:00:39Z",
+      "updatedAt": "2024-10-08T13:00:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "59edc75fc902a83734ad852bc88795d253889ec2",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "anapaya_review",
+      "headRefOid": "d49ae7ed7dfb237ae61bb2b3fa03fd3f4c253f34",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 70,
+      "id": "PR_kwDOJx2-rs59-G-G",
+      "title": "Deprecates draft-dekater-panrg-scion-overview",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/70",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-08T15:52:15Z",
+      "updatedAt": "2024-10-09T18:28:08Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "59edc75fc902a83734ad852bc88795d253889ec2",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Intro_notes",
+      "headRefOid": "90933af049c32bc4398f80042f94cc217709b7b3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6Midh_",
+          "commit": {
+            "abbreviatedOid": "f0cb977"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Can you make wording in the intro in par with DP? ",
+          "createdAt": "2024-10-09T18:04:49Z",
+          "updatedAt": "2024-10-09T18:04:49Z",
+          "comments": []
         }
       ]
     }
