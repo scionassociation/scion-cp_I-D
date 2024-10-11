@@ -2134,25 +2134,46 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
-- Added overview of SCION components to Introduction section.
-- Added RFC2119 compliant terminology.
-- Added IANA Considerations.
-- Added mention proof of transit as detection mechanism for wormhole attack to Security Considerations.
-- Added Denial-of-Service to Security Considerations.
-- Added scalability of path discovery.
-- Added description of Control Services API.
-- Added discussion on MTU & fragmentation enhancement.
+- New section: Path MTU
+- Completed description of Control Services gRPC API in appendix
 
 Minor changes:
 
-- General edits to make terminology consistent, remove duplication and rationalize text.
-- Removed forward references.
-- Fixed private AS range typo.
-- Addressed clock drift.
-- Clarified beaconing at bootstrapping including fast retry.
-- Clarified path reversibility.
-- Clarified PCB propagation (flooding).
-- Clarified selection of MAC including default algorithm.
-- Clarified PCB selection policies and endpoint requirements.
-- Introduced motivation for link types and explained restrictions for peering links.
-- Added explanation regarding interface configuration.
+- General rewording
+- Added reference to SCIONLab as a testbed for implementors
+- Introduced this change log
+
+## draft-dekater-scion-controlplane-05
+{:numbered="false"}
+
+Minor changes:
+
+- Clarify beaconing fast retry at bootstrapping
+
+
+## draft-dekater-scion-controlplane-04
+{:numbered="false"}
+
+Major changes:
+
+- Clarified selection of MAC including a default algorithm
+- New section: PCB validity
+- New section: configuration
+- New section: Path Discovery Time and Scalability
+- New section: Effects of Clock Inaccuracy
+- New appendix: Control Service gRPC API
+
+
+
+Minor changes:
+
+- Introduction: Added overview of SCION components
+- Clarified path reversibility, link types, interface IDs
+- Fixed private AS range typo
+- Clarified PCB selection policies and endpoint requirements
+- Clarified PCB propagation
+- General edits to make terminology consistent, remove duplication and rationalize text
+- Removed forward references
+- Added RFC2119 compliant terminology
+
+
