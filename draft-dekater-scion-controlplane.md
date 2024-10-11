@@ -194,7 +194,7 @@ This document provides an extensive description of how the SCION Data Plane is i
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
-**Hop Field (HF)**: Hop Field (HF): As they traverse the network, Path Segment Construction Neacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.
+**Hop Field (HF)**: Hop Field (HF): As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.
 
 **Info Field (INF)**: Info Field (INF): Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
@@ -303,7 +303,7 @@ The **Control Service** is responsible for the path exploration and registration
 - Selecting and registering the set of path segments via which the AS wants to be reached.
 - Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB.
 
-**Note:** The Control Service of an AS must not be confused with a border router. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
+**Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
 
 ### Path Segments
@@ -1944,7 +1944,7 @@ In case of failure, gRPC calls return an error as specified by the gRPC framewor
 # SCION Data Plane use by the SCION Control Plane {#app-b}
 {:numbered="false"}
 
-The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstraping strategies apply:
+The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping strategies apply:
 
 * Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.
 * Constructed multihop paths are registered with the Control Service at the origin core AS. The path to that AS is the very path being
