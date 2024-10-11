@@ -142,6 +142,10 @@ Table of Contents
    Full Control Service gRPC API
    SCION data plane use by the SCION control plane
    Path-Lookup Examples
+   Change Log
+     draft-dekater-scion-controlplane-06
+     draft-dekater-scion-controlplane-05
+     draft-dekater-scion-controlplane-04
    Authors' Addresses
 
 1.  Introduction
@@ -224,7 +228,11 @@ Table of Contents
    Note (to be removed before publication): this document, together with
    the other components [I-D.dekater-scion-pki] and
    [I-D.dekater-scion-dataplane], deprecates
-   [I-D.dekater-panrg-scion-overview].
+   [I-D.dekater-panrg-scion-overview].  This document provides an
+   extensive description of how the SCION Data Plane is implemented in
+   order to facilitate understanding, but could potentially be split
+   into separate documents if considered suitable for submission to the
+   Internet Standards Process.
 
 1.1.  Terminology
 
@@ -3519,6 +3527,68 @@ Path-Lookup Examples
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down-
        segments between any core AS in ISD 2 and destination G.
+
+Change Log
+
+   Changes made to drafts since ISE submission.  This section is to be
+   removed before publication.
+
+draft-dekater-scion-controlplane-06
+
+   Major changes:
+
+   *  New section: Path MTU
+
+   *  Completed description of Control Services gRPC API in appendix
+
+   Minor changes:
+
+   *  General rewording
+
+   *  Added reference to SCIONLab as a testbed for implementors
+
+   *  Introduced this change log
+
+draft-dekater-scion-controlplane-05
+
+   Minor changes:
+
+   *  Clarify beaconing fast retry at bootstrapping
+
+draft-dekater-scion-controlplane-04
+
+   Major changes:
+
+   *  Clarified selection of MAC including a default algorithm
+
+   *  New section: PCB validity
+
+   *  New section: configuration
+
+   *  New section: Path Discovery Time and Scalability
+
+   *  New section: Effects of Clock Inaccuracy
+
+   *  New appendix: Control Service gRPC API
+
+   Minor changes:
+
+   *  Introduction: Added overview of SCION components
+
+   *  Clarified path reversibility, link types, interface IDs
+
+   *  Fixed private AS range typo
+
+   *  Clarified PCB selection policies and endpoint requirements
+
+   *  Clarified PCB propagation
+
+   *  General edits to make terminology consistent, remove duplication
+      and rationalize text
+
+   *  Removed forward references
+
+   *  Added RFC2119 compliant terminology
 
 Authors' Addresses
 

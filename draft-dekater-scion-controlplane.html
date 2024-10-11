@@ -1353,7 +1353,21 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.12.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-F.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
+                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-G" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1376,7 +1390,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-10">This document describes the SCION Control Plane component. It should be read in conjunction with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1-10" class="pilcrow">¶</a></p>
 <p id="section-1-11">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.<a href="#section-1-11" class="pilcrow">¶</a></p>
 <p id="section-1-12">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.<a href="#section-1-12" class="pilcrow">¶</a></p>
-<p id="section-1-13">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>.<a href="#section-1-13" class="pilcrow">¶</a></p>
+<p id="section-1-13">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>.
+This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.<a href="#section-1-13" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -4355,8 +4370,112 @@ message Transport {
 </div>
 </section>
 </div>
-<div id="authors-addresses">
+<div id="change-log">
 <section id="appendix-F">
+      <h2 id="name-change-log">
+<a href="#name-change-log" class="section-name selfRef">Change Log</a>
+      </h2>
+<p id="appendix-F-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-F-1" class="pilcrow">¶</a></p>
+<div id="draft-dekater-scion-controlplane-06">
+<section id="appendix-F.1">
+        <h3 id="name-draft-dekater-scion-control">
+<a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
+        </h3>
+<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-2.1">
+            <p id="appendix-F.1-2.1.1">New section: Path MTU<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-2.2">
+            <p id="appendix-F.1-2.2.1">Completed description of Control Services gRPC API in appendix<a href="#appendix-F.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-4.1">
+            <p id="appendix-F.1-4.1.1">General rewording<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-4.2">
+            <p id="appendix-F.1-4.2.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-4.3">
+            <p id="appendix-F.1-4.3.1">Introduced this change log<a href="#appendix-F.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="draft-dekater-scion-controlplane-05">
+<section id="appendix-F.2">
+        <h3 id="name-draft-dekater-scion-controlp">
+<a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
+        </h3>
+<p id="appendix-F.2-1">Minor changes:<a href="#appendix-F.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.2-2.1">
+            <p id="appendix-F.2-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="draft-dekater-scion-controlplane-04">
+<section id="appendix-F.3">
+        <h3 id="name-draft-dekater-scion-controlpl">
+<a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
+        </h3>
+<p id="appendix-F.3-1">Major changes:<a href="#appendix-F.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.3-2.1">
+            <p id="appendix-F.3-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-2.2">
+            <p id="appendix-F.3-2.2.1">New section: PCB validity<a href="#appendix-F.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-2.3">
+            <p id="appendix-F.3-2.3.1">New section: configuration<a href="#appendix-F.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-2.4">
+            <p id="appendix-F.3-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-2.5">
+            <p id="appendix-F.3-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-2.6">
+            <p id="appendix-F.3-2.6.1">New appendix: Control Service gRPC API<a href="#appendix-F.3-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-F.3-3">Minor changes:<a href="#appendix-F.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.3-4.1">
+            <p id="appendix-F.3-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.2">
+            <p id="appendix-F.3-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.3">
+            <p id="appendix-F.3-4.3.1">Fixed private AS range typo<a href="#appendix-F.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.4">
+            <p id="appendix-F.3-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.5">
+            <p id="appendix-F.3-4.5.1">Clarified PCB propagation<a href="#appendix-F.3-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.6">
+            <p id="appendix-F.3-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.3-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.7">
+            <p id="appendix-F.3-4.7.1">Removed forward references<a href="#appendix-F.3-4.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.3-4.8">
+            <p id="appendix-F.3-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.3-4.8.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-G">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
