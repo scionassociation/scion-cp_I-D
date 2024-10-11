@@ -34,8 +34,8 @@ author:
      email: hitz@anapaya.net
 
 normative:
-  I-D.dekater-scion-pki:
   I-D.dekater-scion-dataplane:
+  I-D.dekater-scion-pki:
   RFC4632:
   RFC5280:
   RFC5952:
