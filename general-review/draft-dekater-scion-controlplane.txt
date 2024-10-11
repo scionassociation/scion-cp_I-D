@@ -273,7 +273,7 @@ Table of Contents
    segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: Hop Field (HF): As they traverse the network, Path
-   Segment Construction Neacons (PCBs) accumulate cryptographically
+   Segment Construction Beacons (PCBs) accumulate cryptographically
    protected AS-level path information in the form of Hop Fields.  In
    the data plane, Hop Fields are used for packet forwarding: they
    contain the incoming and outgoing interface IDs of the ASes on the
@@ -485,12 +485,12 @@ Table of Contents
       certificate, it can query the Control Service of the neighboring
       AS that sent the PCB.
 
-   *Note:* The Control Service of an AS must not be confused with a
-   border router.  The Control Service of a specific AS is part of the
-   Control Plane, is responsible for _finding and registering suitable
-   paths_, and can be deployed anywhere inside the AS.  Border routers
-   are deployed at the edge of an AS and their main tasks are to
-   _forward data packets_.
+   *Note:* The Control Service of an AS is decoupled from SCION border
+   routers.  The Control Service of a specific AS is part of the Control
+   Plane, is responsible for _finding and registering suitable paths_,
+   and can be deployed anywhere inside the AS.  Border routers are
+   deployed at the edge of an AS and their main tasks are to _forward
+   data packets_.
 
 1.4.1.  Path Segments
 
@@ -3246,7 +3246,7 @@ SCION Data Plane use by the SCION Control Plane
    UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection
    initiator to identify the relevant peer (service resolution) and to
    select a path to it.  Since the Control Service is itself the source
-   of path segment information, the following bootstraping strategies
+   of path segment information, the following bootstrapping strategies
    apply:
 
    *  Neighboring ASes craft one-hop-paths directly.  This allows
