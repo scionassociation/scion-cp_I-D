@@ -55,6 +55,7 @@ normative:
     target: https://connectrpc.com/docs/protocol/
 
 informative:
+  I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -105,8 +106,39 @@ informative:
       -
         ins: O. Riordan
         name: Oliver Riordan
-
-
+  SCIONLAB:
+    title: SCIONLAB - A Next-Generation Internet Testbed
+    date: 2020
+    target: https://ieeexplore.ieee.org/abstract/document/9259355
+    author:
+      -
+        ins: J. Kown
+        name: Jonghoon Kwon
+        org: ETH Zuerich
+      -
+        ins: J. García-Pardo
+        name: Juan A. García-Pardo
+        org: ETH Zuerich
+      -
+        ins: M. Legner
+        name: Markus Legner
+        org: ETH Zuerich
+      -
+        ins: F. Wirz
+        name: François Wirz
+        org: ETH Zuerich
+      -
+        ins: M. Frei
+        name: Matthias Frei
+        org: ETH Zuerich
+      -
+        ins: D. Hausheer
+        name: David Hausheer
+        org: Otto von Guericke University Magdeburg
+      -
+        ins: A. Perrig
+        name: Adrian Perrig
+        org: ETH Zuerich
 
 --- abstract
 
@@ -137,9 +169,13 @@ SCION relies on three main components:
 
 *Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.dekater-scion-dataplane}}
 
-This document describes the SCION Control Plane component.
+This document describes the SCION Control Plane component. It should be read in conjunction with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
+
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
+
+Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 
 ## Terminology {#terms}
@@ -383,9 +419,9 @@ The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like
 In SCION, the *control service* of each AS is responsible for the beaconing process. The control service generates, receives, and propagates so-called *path-segment construction beacons (PCBs)* on a regular basis, to iteratively construct path segments. PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the control service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy-compliant paths to discover multiple paths between any pair of core ASes.
-- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the control service of a core AS creates PCBs and sends them to the non-core child ASes (typically customer ASes). The control service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on. This procedure continues until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
+- *Intra-ISD beaconing is the process of constructing path segments between ASes in the same ISD. Every core AS originates PCBs at regular intervals and sends these to all egress interfaces that have connections to neighbor ASes. A PCB sent to a neighboring core AS initiates a core segment, whereas a PCB sent to a child AS initiates an up/down segment.
 
-On its way, a PCB accumulates cryptographically protected path- and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces are added to the PCB.
+On its way, a PCB accumulates cryptographically protected path information and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces are added to the PCB.
 
 ### Peering Links
 
@@ -1619,6 +1655,15 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 {:numbered="false"}
 
 Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+
+
+# Deployment Testing: SCIONLab
+{:numbered="false"}
+
+SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
+
+More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
+
 
 # Full Control Service gRPC API {#app-a}
 {:numbered="false"}
