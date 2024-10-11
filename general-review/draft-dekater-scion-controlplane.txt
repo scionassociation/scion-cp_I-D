@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 12 April 2025                                           S. Hitz
+Expires: 14 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                          9 October 2024
+                                                         11 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2025.
+   This Internet-Draft will expire on 14 April 2025.
 
 Copyright Notice
 
@@ -137,7 +137,8 @@ Table of Contents
      7.1.  Normative References
      7.2.  Informative References
    Acknowledgments
-   Control Service gRPC API
+   Deployment Testing: SCIONLab
+   Full Control Service gRPC API
    SCION Data Plane use by the SCION Control Plane
    Path-Lookup Examples
    Authors' Addresses
@@ -197,12 +198,36 @@ Table of Contents
    SCION routers or SCION endpoints within its AS.  See
    [I-D.dekater-scion-dataplane]
 
-   This document describes the SCION Control Plane component.
+   This document describes the SCION Control Plane component.  It should
+   be read in conjunction with the other components
+   [I-D.dekater-scion-pki] and [I-D.dekater-scion-dataplane].
 
    The SCION architecture was initially developed outside of the IETF by
-   ETH Zurich with significant contributions from Anapaya Systems.  The
-   aim of this document is to describe existing implementations and
-   operational deployments.
+   ETH Zurich with significant contributions from Anapaya Systems.  It
+   is deployed in the Swiss finance sector to provide resilient
+   connectivity between financial institutions.  The aim of this
+   document is to document the existing protocol specification as
+   deployed, and to introduce new concepts that can potentially be
+   further improved to address particular problems with the current
+   Internet architecture.
+
+   The SCION architecture was initially developed outside of the IETF by
+   ETH Zurich with significant contributions from Anapaya Systems.  It
+   is deployed in the Swiss finance sector to provide resilient
+   connectivity between financial institutions.  The aim of this
+   document is to document the existing protocol specification as
+   deployed, and to introduce new concepts that can potentially be
+   further improved to address particular problems with the current
+   Internet architecture.
+
+   Note (to be removed before publication): this document, together with
+   the other components [I-D.dekater-scion-pki] and
+   [I-D.dekater-scion-dataplane], deprecates
+   [I-D.dekater-panrg-scion-overview].  This document provides an
+   extensive description of how the SCION Data Plane is implemented in
+   order to facilitate understanding, but could potentially be split
+   into separate documents if considered suitable for submission to the
+   Internet Standards Process.
 
 1.1.  Terminology
 
@@ -218,10 +243,10 @@ Table of Contents
    propagation and discovery of network paths, i.e., for the exchange of
    routing information between SCION nodes.  The Control Plane thus
    determines where traffic can be sent and deals with questions such as
-   how paths are discovered, which paths exist, what quality individual
-   links offer, etc.  Within a SCION AS, such functionalities are
-   carried out by the Control Service whereas packet forwarding is a
-   task carried out by the data plane.
+   how paths are discovered, which paths exist, how they are
+   disseminated to endpoints, etc.  Within a SCION AS, such
+   functionalities are carried out by the Control Service whereas packet
+   forwarding is a task carried out by the data plane.
 
    *Control Service*: The Control Service is the main control plane
    infrastructure component within a SCION AS.  It is responsible for
@@ -688,7 +713,7 @@ Table of Contents
    [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
    layer.  In the case of SCION, UDP relies on the data plane.
 
-   Appendix "Control Service gRPC API" provides the entire Control
+   Appendix "Full Control Service gRPC API" provides the entire Control
    Service API definition in protobuf format.
 
    Appendix "SCION Data Plane use by the SCION Control Plane" provides
@@ -1021,7 +1046,7 @@ path segment 4 |             |     |             |     |             |
               Figure 7: Top-down composition of one PCB
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "Control Service gRPC API".
+   please see Appendix "Full Control Service gRPC API", Figure 13.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -2468,6 +2493,8 @@ path segment 4 |             |     |             |     |             |
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
+   The segment lookup API gRPC definition can be found in Figure 10.
+
 4.1.2.  Caching
 
    For the sake of efficiency, the Control Service of the source AS
@@ -2786,18 +2813,11 @@ path segment 4 |             |     |             |     |             |
    are also more likely to choose short paths that make use of peering
    links.
 
-   In the data plane, whenever the adversary receives a packet
-   containing a fake peering link, it can transparently exchange the
-   fake peering Hop Fields with valid Hop Fields to the colluding AS.
-   To avoid detection of the path alteration by the receiver, the
-   colluding AS can replace the added Hop Fields with the fake peering
-   link Hop Fields the sender inserted.
-
    To defend against this attack, methods to detect the wormhole attack
    are needed.  Per link or path latency measurements can help reveal
    the wormhole and render the fake peering link suspicious or
-   unattractive.  Without specific detection mechanisms these wormhole
-   attacks are unavoidable in routing.
+   unattractive.  Without specific detection mechanisms these so-called
+   wormhole attacks are unavoidable in routing.
 
 5.3.  Denial of Service Attacks
 
@@ -2842,12 +2862,6 @@ path segment 4 |             |     |             |     |             |
    *  SegmentRegistrationService.SegmentsRegistration can only be called
       from within the same ISD, thus the source address MUST match the
       local ISD and the number of path segments MUST be 1.
-
-   A combination of the mechanism above is used to prevent flooding
-   attacks on the Control Service.  In addition, the Control Service
-   SHOULD be deployed in a distributed and replicated manner so that
-   requests can be balanced and a single instance failure does not
-   result in a complete failure of the control plane of a SCION AS.
 
 6.  IANA Considerations
 
@@ -2933,6 +2947,13 @@ path segment 4 |             |     |             |     |             |
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
+   [I-D.dekater-panrg-scion-overview]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", Work in Progress, Internet-Draft, draft-
+              dekater-panrg-scion-overview-06, 7 May 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              panrg-scion-overview-06>.
+
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -2954,96 +2975,118 @@ path segment 4 |             |     |             |     |             |
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
+   [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
+              M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
+              Generation Internet Testbed", 2020,
+              <https://ieeexplore.ieee.org/abstract/document/9259355>.
+
 Acknowledgments
 
    Many thanks go to William Boye (Swiss National Bank), Matthias Frei
    (SCION Association), Kevin Meynell (SCION Association), Juan A.
    Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for
    reviewing this document.  We are also very grateful to Adrian Perrig
-   (ETH Zurich), for providing guidance and feedback about each aspect
+   (ETH Zurich), for providing guidance and feedback about every aspect
    of SCION.  Finally, we are indebted to the SCION development teams of
    Anapaya and ETH Zurich, for their practical knowledge and for the
    documentation about the SCION Control Plane, as well as to the
    authors of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
 
-Control Service gRPC API
+Deployment Testing: SCIONLab
 
-   The following code block provides, in protobuf format, the API by
-   which control services interact.
+   SCIONLab is a global research network that is available to test the
+   SCION architecture.  You can create and use your ASes using your own
+   computation resources which allows you to gain real-world experience
+   of deploying and managing a SCION network.
 
- enum SegmentType {
-     // Unknown segment type.
-     SEGMENT_TYPE_UNSPECIFIED = 0;
-     // Up segment.
-     SEGMENT_TYPE_UP = 1;
-     // Down segment.
-     SEGMENT_TYPE_DOWN = 2;
-     // Core segment.
-     SEGMENT_TYPE_CORE = 3;
- }
+   More information can be found on the SCIONLab website and in the
+   [SCIONLAB] paper.
 
- // This API is exposed by the Control Services of core ASes expose
- // this on the SCION dataplane and also by all Control Services
- // on the "intra-domain protocol" network.
+Full Control Service gRPC API
 
- service SegmentLookupService {
-     // Segments returns all segments that match the request.
-     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
- }
+   The following code blocks provide, in protobuf format, the entire API
+   by which control services interact.
 
- message SegmentsRequest {
-     // The source ISD-AS of the segment.
-     uint64 src_isd_as = 1;
-     // The destination ISD-AS of the segment.
-     uint64 dst_isd_as = 2;
- }
+   service SegmentLookupService {
+       // Segments returns all segments that match the request.
+       rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+   }
 
- message SegmentsResponse {
-     message Segments {
-         // List of path segments.
-         repeated PathSegment segments = 1;
-     }
+   message SegmentsRequest {
+       // The source ISD-AS of the segment.
+       uint64 src_isd_as = 1;
+       // The destination ISD-AS of the segment.
+       uint64 dst_isd_as = 2;
+   }
 
-     // Mapping from path segment type to path segments.
-     // The key is the integer
-     // representation of the SegmentType enum.
-     map<int32, Segments> segments = 1;
- }
+   enum SegmentType {
+       // Unknown segment type.
+       SEGMENT_TYPE_UNSPECIFIED = 0;
+       // Up segment.
+       SEGMENT_TYPE_UP = 1;
+       // Down segment.
+       SEGMENT_TYPE_DOWN = 2;
+       // Core segment.
+       SEGMENT_TYPE_CORE = 3;
+   }
 
- // This API is only exposed by core ASes and only on the SCION
- // dataplane.
- service SegmentRegistrationService {
-     // SegmentsRegistration registers segments at the remote.
-     rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-         SegmentsRegistrationResponse) {}
- }
+   message SegmentsResponse {
+       message Segments {
+           // List of path segments.
+           repeated PathSegment segments = 1;
+       }
 
- message SegmentsRegistrationRequest {
-     message Segments {
-         // List of path segments.
-         repeated PathSegment segments = 1;
-     }
+       // Mapping from path segment type to path segments.
+       // The key is the integer representation of the SegmentType enum.
+       map<int32, Segments> segments = 1;
+   }
 
-     // Mapping from path segment type to path segments.
-     // The key is the integer
-     // representation of the SegmentType enum.
-     map<int32, Segments> segments = 1;
- }
+      Figure 10: Control Service gRPC API - Segment lookup.  This API
+     is exposed on the SCION dataplane by the control services of core
+           ASes and exposed on the intra-domain protocol network.
 
- message SegmentsRegistrationResponse {}
 
- service SegmentCreationService {
-     // Beacon sends a beacon to the remote.
-     rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
- }
 
- message BeaconRequest {
-     // Beacon in form of a partial path segment.
-     PathSegment segment = 1;
- }
+   service SegmentRegistrationService {
+       // SegmentsRegistration registers segments at the remote.
+       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
+           SegmentsRegistrationResponse) {}
+   }
 
- message BeaconResponse {}
+   message SegmentsRegistrationRequest {
+       message Segments {
+           // List of path segments.
+           repeated PathSegment segments = 1;
+       }
+
+       // Mapping from path segment type to path segments.
+       // The key is the integer representation of the SegmentType enum.
+       map<int32, Segments> segments = 1;
+   }
+
+   message SegmentsRegistrationResponse {}
+
+     Figure 11: Control Service gRPC API - Segment registration.  This
+     API is only exposed by core ASes and only on the SCION dataplane.
+
+
+
+   service SegmentCreationService {
+       // Beacon sends a beacon to the remote control service.
+       rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
+   }
+
+   message BeaconRequest {
+       // Beacon in form of a partial path segment.
+       PathSegment segment = 1;
+   }
+
+   message BeaconResponse {}
+
+           Figure 12: Control Service gRPC API - Segment creation
+
+
 
  message PathSegment {
      // The encoded SegmentInformation. It is used for signature input.
@@ -3082,19 +3125,12 @@ Control Service gRPC API
      proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
  }
 
- message ASEntrySignedBody {
-     // ISD-AS of the AS that created this AS entry.
-     uint64 isd_as = 1;
-     // ISD-AS of the downstream AS.
-     uint64 next_isd_as = 2;
-     // The required regular hop entry.
-     HopEntry hop_entry = 3;
-     // Optional peer entries.
-     repeated PeerEntry peer_entries = 4;
-     // Intra AS MTU.
-     uint32 mtu = 5;
-     // Optional extensions.
-     proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+ message SignedMessage {
+     // Encoded header and body.
+     bytes header_and_body = 1;
+     // Raw signature. The signature is computed over the concatenation
+     // of the header and body, and the optional associated data.
+     bytes signature = 2;
  }
 
  message HopEntry {
@@ -3105,8 +3141,8 @@ Control Service gRPC API
  }
 
  message PeerEntry {
-     // ISD-AS of peer AS. This is used to match peering segments during
-     // path construction.
+     // ISD-AS of peer AS. This is used to match peering segments
+         // during path construction.
      uint64 peer_isd_as = 1;
      // Remote peer interface identifier. This is used to match
      // peering segments
@@ -3123,64 +3159,77 @@ Control Service gRPC API
      uint64 ingress = 1;
      // Egress interface identifier.
      uint64 egress = 2;
-     // 8-bit encoded expiration offset relative to the segment creation
-     // timestamp.
+     // 8-bit encoded expiration offset relative to the segment
+         // creation timestamp.
      uint32 exp_time = 3;
      // MAC used in the dataplane to verify the Hop Field.
      bytes mac = 4;
  }
 
- enum SignatureAlgorithm {
-     // Unspecified signature algorithm. This value is never valid.
-     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-     // ECDS with SHA256.
-     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-     // ECDS with SHA384.
-     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-     // ECDS with SHA512.
-     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
- }
+      Figure 13: Control Service gRPC API - Segment representation
 
- message SignedMessage {
-     // Encoded header and body.
-     bytes header_and_body = 1;
-     // Raw signature. The signature is computed over the concatenation
-     // of the header and body, and the optional associated data.
-     bytes signature = 2;
- }
 
- message Header {
-     // Algorithm used to compute the signature.
-     SignatureAlgorithm signature_algorithm = 1;
-     // Optional arbitrary per-protocol key identifier.
-     bytes verification_key_id = 2;
-     // Optional signature creation timestamp.
-     google.protobuf.Timestamp timestamp = 3;
-     // Optional arbitrary per-protocol metadata.
-     bytes metadata = 4;
-     // Length of associated data that is covered by the signature, but
-     // is not included in the header and body. This is zero, if no
-     // associated data is covered by the signature.
-     int32 associated_data_length = 5;
- }
 
- // Low-level representation of HeaderAndBody used for signature
- // computation input. This should not be used by external code.
- message HeaderAndBodyInternal {
-     // Encoded header suitable for signature computation.
-     bytes header = 1;
-     // Raw payload suitable for signature computation.
-     bytes body = 2;
- }
+  enum SignatureAlgorithm {
+      // Unspecified signature algorithm. This value is never valid.
+      SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+      // ECDS with SHA256.
+      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+      // ECDS with SHA384.
+      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+      // ECDS with SHA512.
+      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+  }
 
- message VerificationKeyID {
-     uint64 isd_as = 1;
-     bytes subject_key_id = 2;
-     uint64 trc_base = 3;
-     uint64 trc_serial = 4;
- }
+  // Low-level representation of HeaderAndBody used for signature
+  // computation input. This should not be used by external code.
+  message HeaderAndBodyInternal {
+      // Encoded header suitable for signature computation.
+      bytes header = 1;
+      // Raw payload suitable for signature computation.
+      bytes body = 2;
+  }
 
-             Figure 10: Control Service gRPC API definition
+  message Header {
+      // Algorithm used to compute the signature.
+      SignatureAlgorithm signature_algorithm = 1;
+      // Optional arbitrary per-protocol key identifier.
+      bytes verification_key_id = 2;
+      // Optional signature creation timestamp.
+      google.protobuf.Timestamp timestamp = 3;
+      // Optional arbitrary per-protocol metadata.
+      bytes metadata = 4;
+      // Length of associated data that is covered by the signature, but
+      // is not included in the header and body. This is zero, if no
+      // associated data is covered by the signature.
+      int32 associated_data_length = 5;
+  }
+
+  message ASEntrySignedBody {
+      // ISD-AS of the AS that created this AS entry.
+      uint64 isd_as = 1;
+      // ISD-AS of the downstream AS.
+      uint64 next_isd_as = 2;
+      // The required regular hop entry.
+      HopEntry hop_entry = 3;
+      // Optional peer entries.
+      repeated PeerEntry peer_entries = 4;
+      // Intra AS MTU.
+      uint32 mtu = 5;
+      // Optional extensions.
+      proto.control_plane.v1.PathSegmentExtensions extensions = 6;
+  }
+
+  message VerificationKeyID {
+      uint64 isd_as = 1;
+      bytes subject_key_id = 2;
+      uint64 trc_base = 3;
+      uint64 trc_serial = 4;
+  }
+
+   Figure 14: Control Service gRPC API - Signed ASEntry representation
+
+
 
    In case of failure, gRPC calls return an error as specified by the
    gRPC framework.  That is, a non-zero status code and an explanatory
@@ -3283,16 +3332,18 @@ message Transport {
     string address = 1;
 }
 
-          Figure 11: Service Resolution gRPC API definition
+          Figure 15: Service Resolution gRPC API definition
+
+
 
 Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 12 below.  In both examples, the source
-   endpoint is in AS A.  Figure 13 shows the sequence diagram for the
+   is represented in Figure 16 below.  In both examples, the source
+   endpoint is in AS A.  Figure 17 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 14 shows the path lookup sequence diagram if the destination
+   Figure 18 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3322,7 +3373,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 12: Topology used in the path lookup examples.
+           Figure 16: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -3380,7 +3431,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 13: Sequence diagram illustrating a path lookup for a
+     Figure 17: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3451,7 +3502,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 14: Sequence diagram illustrating a path lookup for a
+     Figure 18: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
