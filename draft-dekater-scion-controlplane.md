@@ -176,7 +176,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
 Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
-
+This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 ## Terminology {#terms}
 
@@ -2122,4 +2122,58 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 +--------+       +--------+       +--------+    +--------+    +--------+
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down-segments between any core AS in ISD 2 and destination G."}
+
+
+# Change Log
+{:numbered="false"}
+
+Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-06
+{:numbered="false"}
+
+Major changes:
+
+- New section: Path MTU
+- Completed description of Control Services gRPC API in appendix
+
+Minor changes:
+
+- General rewording
+- Added reference to SCIONLab as a testbed for implementors
+- Introduced this change log
+
+## draft-dekater-scion-controlplane-05
+{:numbered="false"}
+
+Minor changes:
+
+- Clarify beaconing fast retry at bootstrapping
+
+
+## draft-dekater-scion-controlplane-04
+{:numbered="false"}
+
+Major changes:
+
+- Clarified selection of MAC including a default algorithm
+- New section: PCB validity
+- New section: configuration
+- New section: Path Discovery Time and Scalability
+- New section: Effects of Clock Inaccuracy
+- New appendix: Control Service gRPC API
+
+
+
+Minor changes:
+
+- Introduction: Added overview of SCION components
+- Clarified path reversibility, link types, interface IDs
+- Fixed private AS range typo
+- Clarified PCB selection policies and endpoint requirements
+- Clarified PCB propagation
+- General edits to make terminology consistent, remove duplication and rationalize text
+- Removed forward references
+- Added RFC2119 compliant terminology
+
 
