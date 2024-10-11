@@ -1444,7 +1444,7 @@ In every registration period, the Control Service of a core AS performs the foll
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
 
-## Path Segment Registration on Code-Level {#reg-proto}
+## Path Segment Registration gRPC API {#reg-proto}
 
 The Control Service of a non-core AS has to register the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This registration step is implemented as follows in Protobuf message format:
 
@@ -2168,3 +2168,55 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
 
+
+# Change Log
+{:numbered="false"}
+
+Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-06
+{:numbered="false"}
+
+Major changes:
+
+- New section: Path MTU
+- Completed description of Control Services gRPC API in appendix
+
+Minor changes:
+
+- General rewording
+- Added reference to SCIONLab as a testbed for implementors
+- Introduced this change log
+
+## draft-dekater-scion-controlplane-05
+{:numbered="false"}
+
+Minor changes:
+
+- Clarify beaconing fast retry at bootstrapping
+
+
+## draft-dekater-scion-controlplane-04
+{:numbered="false"}
+
+Major changes:
+
+- Clarified selection of MAC including a default algorithm
+- New section: PCB validity
+- New section: configuration
+- New section: Path Discovery Time and Scalability
+- New section: Effects of Clock Inaccuracy
+- New appendix: Control Service gRPC API
+
+
+
+Minor changes:
+
+- Introduction: Added overview of SCION components
+- Clarified path reversibility, link types, interface IDs
+- Fixed private AS range typo
+- Clarified PCB selection policies and endpoint requirements
+- Clarified PCB propagation
+- General edits to make terminology consistent, remove duplication and rationalize text
+- Removed forward references
+- Added RFC2119 compliant terminology
