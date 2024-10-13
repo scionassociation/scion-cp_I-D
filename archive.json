@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-10T00:20:05.183201+00:00",
+  "timestamp": "2024-10-13T00:22:33.164109+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -933,9 +933,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [ ] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
+      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [x] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
       "createdAt": "2024-07-26T22:50:16Z",
-      "updatedAt": "2024-08-27T09:32:15Z",
+      "updatedAt": "2024-10-11T13:49:54Z",
       "closedAt": null,
       "comments": []
     },
@@ -970,7 +970,7 @@
       "id": "I_kwDOJx2-rs6Y19go",
       "title": "Add changelog in appendix",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/64",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -981,8 +981,8 @@
       ],
       "body": "",
       "createdAt": "2024-10-03T14:56:20Z",
-      "updatedAt": "2024-10-03T14:56:21Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-11T14:43:40Z",
+      "closedAt": "2024-10-11T14:43:40Z",
       "comments": []
     },
     {
@@ -4803,13 +4803,13 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-10-09T18:15:35Z",
+      "updatedAt": "2024-10-11T16:27:22Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
+      "baseRefOid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "ee8313e8b1cbf05fd7daed2978d99e7dc15578ed",
+      "headRefOid": "3e884f101a12df812017a15d71c314efd18d22a8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -5061,6 +5061,38 @@
               "body": "Okay",
               "createdAt": "2024-10-06T17:35:20Z",
               "updatedAt": "2024-10-06T17:35:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6H8hoC",
+          "commit": {
+            "abbreviatedOid": "e30ed3c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Commenting just to resolve some conversations.. I am reviewing ",
+          "createdAt": "2024-09-04T17:00:54Z",
+          "updatedAt": "2024-10-11T15:25:49Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\n**Control Plane**: The SCION Control Plane is responsible for the propagation and discovery of network paths, i.e., for the exchange of routing information between network nodes. The Control Plane thus determines where traffic can be sent and deals with questions such as how paths are discovered, which paths exist, etc. Within a SCION AS, such functionalities are carried out by the Control Service whereas packet forwarding is a task carried out by the data plane.\r\n```\r\nlink quality is not addressed by the CP\r\n",
+              "createdAt": "2024-09-04T17:00:54Z",
+              "updatedAt": "2024-10-11T15:25:49Z"
+            },
+            {
+              "originalPosition": 96,
+              "body": "```suggestion\r\nA path MUST contain at most one peering link shortcut which means they can only be used in paths between ASes within the \"customer cone\" of the ASes connected by the peering link.\r\n```\r\n@jiceatscion can we use two peering links in a path? As far as I know no, therefore here we could use MUST",
+              "createdAt": "2024-09-04T17:06:09Z",
+              "updatedAt": "2024-10-11T15:25:49Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "Changed to:\r\n>  The Control Plane thus determines where traffic can be sent and deals with questions such as how paths are discovered, which paths exist, how they are disseminated to endpoints, etc. ",
+              "createdAt": "2024-10-11T14:45:32Z",
+              "updatedAt": "2024-10-11T15:25:49Z"
             }
           ]
         }
@@ -5483,26 +5515,42 @@
       "id": "PR_kwDOJx2-rs59ia0w",
       "title": "Updated Intro and add changelog",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/66",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Resolves #64 ",
       "createdAt": "2024-10-03T18:33:23Z",
-      "updatedAt": "2024-10-08T09:01:54Z",
+      "updatedAt": "2024-10-11T14:43:41Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "833acf74eb6bcccb1974bc883ee8c623b1bafc9f",
+      "baseRefOid": "401b12cb34dbcfbd813d6e1c064f42530e2c6a7d",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Intro_update",
-      "headRefOid": "90a67ba43378cdab2c5e6d8f1c61ba362f4e3f8c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "48116d0826bffb782bced133e1d0f3acc633cbdd",
+      "closedAt": "2024-10-11T14:43:39Z",
+      "mergedAt": "2024-10-11T14:43:39Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6M2EL6",
+          "commit": {
+            "abbreviatedOid": "1858906"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I edited a bit the change log, looks good!",
+          "createdAt": "2024-10-11T14:43:34Z",
+          "updatedAt": "2024-10-11T14:43:34Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 68,
@@ -5642,24 +5690,26 @@
       "id": "PR_kwDOJx2-rs59-G-G",
       "title": "Deprecates draft-dekater-panrg-scion-overview",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/70",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-10-08T15:52:15Z",
-      "updatedAt": "2024-10-09T18:28:08Z",
+      "updatedAt": "2024-10-11T13:57:57Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "59edc75fc902a83734ad852bc88795d253889ec2",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Intro_notes",
-      "headRefOid": "90933af049c32bc4398f80042f94cc217709b7b3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f43f0a68ff1a36671a98318146fc6bdd9f97c0d7",
+      "closedAt": "2024-10-11T13:57:54Z",
+      "mergedAt": "2024-10-11T13:57:54Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "401b12cb34dbcfbd813d6e1c064f42530e2c6a7d"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5673,6 +5723,19 @@
           "body": "Can you make wording in the intro in par with DP? ",
           "createdAt": "2024-10-09T18:04:49Z",
           "updatedAt": "2024-10-09T18:04:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6M1q65",
+          "commit": {
+            "abbreviatedOid": "f43f0a6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-10-11T13:57:10Z",
+          "updatedAt": "2024-10-11T13:57:10Z",
           "comments": []
         }
       ]
