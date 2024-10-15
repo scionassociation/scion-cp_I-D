@@ -2139,6 +2139,7 @@ Major changes:
 
 Minor changes:
 
+- Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.
 - General rewording
 - Added reference to SCIONLab as a testbed for implementors
 - Introduced this change log
