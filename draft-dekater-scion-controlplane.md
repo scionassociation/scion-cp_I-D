@@ -190,7 +190,7 @@ This document provides an extensive description of how the SCION Data Plane is i
 
 **Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").
 
-**Endpoint**: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}} or a SCION IP gateway bridging a SCION and an IP domain. This definition is based on the endpoint definition in {{RFC9473}}.
+**Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
