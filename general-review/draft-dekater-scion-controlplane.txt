@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 April 2025                                           S. Hitz
+Expires: 19 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                         11 October 2024
+                                                         16 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 April 2025.
+   This Internet-Draft will expire on 19 April 2025.
 
 Copyright Notice
 
@@ -262,10 +262,8 @@ Table of Contents
    responsible for initiating the path-discovery and -construction
    process (in SCION called "beaconing").
 
-   *Endpoint*: An endpoint is the start or the end of a SCION path.  For
-   example, an endpoint can be a host as defined in [RFC1122] or a SCION
-   IP gateway bridging a SCION and an IP domain.  This definition is
-   based on the endpoint definition in [RFC9473].
+   *Endpoint*: An endpoint is the start or the end of a SCION path, as
+   defined in [RFC9473].
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
    between two SCION endpoints which is used to transmit packets in the
