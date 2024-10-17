@@ -1192,7 +1192,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-path-segment-construction-b" class="internal xref">Path-Segment Construction Beacons (PCBs)</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.1">
-                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="auto internal xref">2.2.1</a>.  <a href="#name-components-of-a-pcb-in-mess" class="internal xref">Components of a PCB in Message Format</a></p>
+                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="auto internal xref">2.2.1</a>.  <a href="#name-pcb-message-format" class="internal xref">PCB Message Format</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.2">
                     <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="auto internal xref">2.2.2</a>.  <a href="#name-pcb-extensions" class="internal xref">PCB Extensions</a></p>
@@ -1740,7 +1740,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.6-2.3.1">Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.<a href="#section-1.6-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.4">
-            <p id="section-1.6-2.4.1">Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender.<br><a href="#section-1.6-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.4.1">Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender.<br><a href="#section-1.6-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.6-3"><strong>Note:</strong> For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-1.6-3" class="pilcrow">¶</a></p>
@@ -1779,7 +1779,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-2.1-4.1.1"><em>Inter-ISD or core beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
-            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Service of a core AS creates PCBs and sends them to the non-core child ASes (typically customer ASes). The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.1-5">On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
@@ -2006,11 +2006,10 @@ path segment 4 |             |     |             |     |             |
         <h3 id="name-path-segment-construction-b">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-segment-construction-b" class="section-name selfRef">Path-Segment Construction Beacons (PCBs)</a>
         </h3>
-<p id="section-2.2-1">This section provides a detailed specification of a single PCB and its message format.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <div id="pcb-compos">
 <section id="section-2.2.1">
-          <h4 id="name-components-of-a-pcb-in-mess">
-<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-components-of-a-pcb-in-mess" class="section-name selfRef">Components of a PCB in Message Format</a>
+          <h4 id="name-pcb-message-format">
+<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-pcb-message-format" class="section-name selfRef">PCB Message Format</a>
           </h4>
 <p id="section-2.2.1-1"><a href="#_figure-5" class="auto internal xref">Figure 7</a> graphically represents the PCB message format:<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-top-down-composition-of-one"></span><div id="_figure-5">
@@ -2636,7 +2635,7 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-pcb-extensions" class="section-name selfRef">PCB Extensions</a>
           </h4>
 <p id="section-2.2.2-1">In addition to basic routing information such a hop entries and peer entries, PCBs can be used to communicate additional metadata in extensions. Extensions can be signed and unsigned: signed extensions are protected by the AS signature, whereas unsigned extensions are not.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">At a code level and in Protobuf message format, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-2">In Protobuf, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.2-3.1">
               <p id="section-2.2.2-3.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code> are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#ase-message" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
@@ -2716,7 +2715,7 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 <a href="#section-2.3.1.1" class="section-number selfRef">2.3.1.1. </a><a href="#name-storing-and-selecting-candi" class="section-name selfRef">Storing and Selecting Candidate PCBs</a>
             </h5>
 <p id="section-2.3.1.1-1">When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs called the <em>Beacon Store</em>.<a href="#section-2.3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected downstream AS at a fixed frequency known as the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected AS at a fixed frequency known as the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.1-3.1">
                 <p id="section-2.3.1.1-3.1.1">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing (i.e. propagation between all core ASes). These are <span class="bcp14">RECOMMENDED</span> maxima; in current practice the intra-ISD set size is typically 20.<a href="#section-2.3.1.1-3.1.1" class="pilcrow">¶</a></p>
@@ -3309,7 +3308,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-4.1-4">The process to look up and fetch path segments consists of the following steps:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.1-5">
 <li id="section-4.1-5.1">
-            <p id="section-4.1-5.1.1">The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments. The Control Service has up segments stored in its path database and additionally checks if it has appropriate core segments and down segments stored as well - in this case it returns them immediately.<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-5.1.1">The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending a SegmentsRequest. The Control Service has up segments stored in its path database and additionally checks if it has appropriate core segments and down segments stored as well - in this case it returns them immediately in a SegmentsResponse.<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-5.2">
             <p id="section-4.1-5.2.1">If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.<a href="#section-4.1-5.2.1" class="pilcrow">¶</a></p>
@@ -3641,7 +3640,8 @@ This attack is possible if the adversary controls at least two ASes. The adversa
 <p id="section-5.2.4-5">In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction as these relatively long paths have to compete with other shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.<a href="#section-5.2.4-5" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-6"><strong>Wormhole Attack</strong> <br>
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.<a href="#section-5.2.4-6" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.<a href="#section-5.2.4-7" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
+In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-5.2.4-7" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-8">To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-5.2.4-8" class="pilcrow">¶</a></p>
 </section>
 </div>
