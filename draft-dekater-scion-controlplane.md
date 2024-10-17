@@ -237,7 +237,7 @@ The SCION paths are always valley free, and consist of at most three segments: a
 
 A path can contain at most one peering link shortcut which means they can only be used in paths between ASes within the "customer cone" of the ASes connected by the peering link.
 
-The following figure shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
+{{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
 ~~~~
 +-------------------------+
@@ -260,7 +260,7 @@ The following figure shows the three types of links for one small ISD with two c
   (  G  )         (  F  )
    `---'           `---'
 ~~~~
-{: #figure-1 title="The three types of SCION links in one ISD"}
+{: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
 Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
 
@@ -281,25 +281,6 @@ The creation of an end-to-end forwarding path consists of the following processe
 
 All processes operate concurrently.
 
-{{figure-2}} below shows the SCION routing processes and their relationship to each other:
-
-~~~~
-+-------------------------+       +-------------------------+
-| Exploration (Beaconing) |------>|      Registration       |
-+-------------------------+       +-----------+-------------+
-                                              |
-                              +---------------+
-                              |
-     +------------------------v------------------------+
-     |                 Path Resolution                 |
-     |                                                 |
-     |   +----------------+       +----------------+   |
-     |   |     Lookup     +------>|  Combination   |   |
-     |   |                |       |    (Data Plane)|   |
-     |   +----------------+       +----------------+   |
-     +-------------------------------------------------+
-~~~~
-{: #figure-2 title="SCION routing processes and their relation to each other. All processes operate concurrently"}
 
 The **Control Service** is responsible for the path exploration and registration processes in the Control Plane. It is the main control plane infrastructure component within each SCION AS and has the following tasks:
 
