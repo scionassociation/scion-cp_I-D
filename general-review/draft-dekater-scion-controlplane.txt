@@ -758,7 +758,8 @@ Table of Contents
    On its way, a PCB accumulates cryptographically protected path and
    forwarding information per traversed AS.  At every AS, metadata as
    well as information about the AS's ingress and egress interfaces is
-   added to the PCB.
+   added to the PCB.  The full PCB message format is described in
+   Section 2.2.
 
 2.1.1.  Peering Links
 
@@ -774,22 +775,17 @@ Table of Contents
    Service:
 
    *  selects the best combinations of PCBs and interfaces connecting to
-      a neighboring AS (i.e. a child AS or a core AS), and;
+      a neighboring AS (i.e. a child AS or a core AS).  This is
+      described in Section 2.3.1.
 
-   *  sends each selected PCB to the selected egress interface(s)
-      associated with it.
+   *  propagates each selected PCB to the selected egress interface(s)
+      associated with it.  This is described in Section 2.3.2.
 
    For every selected PCB and egress interface combination, the AS
    extends the PCB by adding an _AS entry_ to the selected PCB.  This
    includes a Hop Field that specifies the ingress and egress interface
    for the packet forwarding through this AS, in the beaconing
    direction.  The AS entry can also contain peer entries.
-
-   *  For the specification of a PCB, see Section 2.2
-
-   *  For more details on selecting PCBs, see Section 2.3.1
-
-   *  For more details on propagating PCBs, see Section 2.3.2
 
 2.1.3.  PCB Propagation - Illustrated Examples
 
