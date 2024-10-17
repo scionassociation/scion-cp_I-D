@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-15T00:20:39.497945+00:00",
+  "timestamp": "2024-10-17T00:20:26.375388+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -88,7 +88,7 @@
       ],
       "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft before January 2024. New feedback is in dedicated issues\r\n\r\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\r\n\r\n\r\n**General points:**\r\n- [x] #7 \r\n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \r\n- [x] Make sure the references are correct: \r\n       - #14 \r\n       - #15 \r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n-  #12 \r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n- [x] ~~If time allows, add related work (not too academical, just overview)~~\r\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\r\n- [x] #8\r\n- [x] Improve the definition of \"endpoint\"\r\n- [ ] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\r\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\r\n\r\n**ISE Feedback:**\r\n- [x]  #17 \r\n- [x] #21\r\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \r\n\u201cISD\u201d should be defined on first use.\r\nSame goes for PCB \r\n- [x] #18\r\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\r\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\r\n- [x] #19\r\n- [x] #20\r\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\r\n\r\n**Decision TC Standardisation**\r\n- [x]  #9\r\n\r\n**Eliot Lear (ISE IETF):**\r\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\r\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\r\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\r\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\r\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\r\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\r\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\r\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \r\n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\r\n\r\n**Juan Garcia-Pardo:**\r\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\r\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\r\n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \r\n\r\n**Roger Lapuh:**\r\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \r\n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\r\n- [ ] ~Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\r\nSee~ https://github.com/scionassociation/scion-deployment_I-D/issues/1 \r\n- [x] #22\r\n",
       "createdAt": "2024-01-08T12:56:27Z",
-      "updatedAt": "2024-10-09T07:08:07Z",
+      "updatedAt": "2024-10-15T08:50:21Z",
       "closedAt": null,
       "comments": []
     },
@@ -431,7 +431,7 @@
     {
       "number": 20,
       "id": "I_kwDOJx2-rs6JFU0C",
-      "title": "Manageability: what must an AS keep track of (paths, links, certificates, \u2026) and reference to deployment",
+      "title": "Manageability: what must an AS monitor (paths, links, certificates, \u2026) and reference to deployment",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/20",
       "state": "OPEN",
       "author": "nicorusti",
@@ -442,11 +442,12 @@
       ],
       "labels": [
         "enhancement",
-        "Prio 2"
+        "Prio 2",
+        "needs-discussion"
       ],
-      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot. \r\n\r\n- [ ] short paragraph in the appendix (and pointer to SCIONLab)\r\n- [ ] Mention it in changelog\r\n- [ ] add in other drafts\r\n",
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot. \r\n\r\n- [x] short paragraph in the appendix (and pointer to SCIONLab)\r\n- [ ] Mention it in changelog\r\n- [ ] add in other drafts\r\n\r\n",
       "createdAt": "2024-05-16T09:38:07Z",
-      "updatedAt": "2024-10-08T09:11:38Z",
+      "updatedAt": "2024-10-15T10:10:44Z",
       "closedAt": null,
       "comments": [
         {
@@ -455,6 +456,13 @@
           "body": "Meeting Eliot Oct 2024: \r\n\r\n> Show fully flashed out config of how to have SCION nodes, a device in the middle, they did this with M-BONE. And the 6 bone to play with IPv6. If you have someone who wants to build an implementation, how can they test that it works and that they can interoperate. \r\nWhat do you have to do if you want to want to add a GW. Show a reference to what you can do (guide how to participate) e.g. to SCIONLab, not docs.scion.org. Goal; meet interop requirement. No Anapaya docs (but could be). Beginning as vendor implementation, intent is to offer to community for further improvement and potential standardization later on.\r\n",
           "createdAt": "2024-10-08T09:06:50Z",
           "updatedAt": "2024-10-08T09:06:50Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We discussed this, we are not sure this really belongs to this draft as this would potentially be many pages. This is more ops/SRE considerations rather than protocol specification.\r\n\r\nThings that come to my mind: \r\n* Availability of paths\r\n* Having valid certificates\r\n* Be sending and receiving beacons\r\n* Be serving path lookups and registrations\r\n* Have functioning links \r\n\r\nMetrics monitored by Anapaya's implementation are mentioned in https://docs.anapaya.net/en/latest/gate/operations/telemetry/ \r\n\r\n",
+          "createdAt": "2024-10-15T10:10:43Z",
+          "updatedAt": "2024-10-15T10:10:43Z"
         }
       ]
     },
@@ -4803,13 +4811,13 @@
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-10-11T16:27:22Z",
+      "updatedAt": "2024-10-16T20:46:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "3e884f101a12df812017a15d71c314efd18d22a8",
+      "headRefOid": "e3f42eff265722ec56eeaa77992b6953217dd2c0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -5662,7 +5670,7 @@
     {
       "number": 69,
       "id": "PR_kwDOJx2-rs598qM_",
-      "title": "dp_draft: fix recommended/typical values for best PCB set size and AS cert TTL",
+      "title": "cp_draft: fix recommended/typical values for best PCB set size and AS cert TTL",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/69",
       "state": "OPEN",
       "author": "jiceatscion",
@@ -5671,18 +5679,33 @@
       "labels": [],
       "body": "Addresses #50 ",
       "createdAt": "2024-10-08T13:00:39Z",
-      "updatedAt": "2024-10-08T13:00:40Z",
+      "updatedAt": "2024-10-15T16:30:17Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "59edc75fc902a83734ad852bc88795d253889ec2",
+      "baseRefOid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "anapaya_review",
-      "headRefOid": "d49ae7ed7dfb237ae61bb2b3fa03fd3f4c253f34",
+      "headRefOid": "b2e89074d83d56aff3ea035ae2b406e9a348629c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Can you add one line to the change log?",
+          "createdAt": "2024-10-15T09:50:00Z",
+          "updatedAt": "2024-10-15T09:50:00Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If you update the branch from main, there'll be a change log to update.",
+          "createdAt": "2024-10-15T14:48:43Z",
+          "updatedAt": "2024-10-15T14:48:43Z"
+        }
+      ],
       "reviews": []
     },
     {
