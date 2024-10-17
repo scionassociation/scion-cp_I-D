@@ -293,7 +293,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 ### Path Segments
 
-As described previously, the main goal of SCION's Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets by its data plane. SCION distinguishes the following types of path segments:
+SCION distinguishes the following types of path segments:
 
 - A path segment from a non-core AS to a core AS is an *up segment*.
 - A path segment from a core AS to a non-core AS is a *down segment*.
@@ -309,7 +309,7 @@ For fast validation of the path information carried in individual packets during
 
 ## Addressing {#numbering}
 
-Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
+Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address is of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
 
 The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. `4-ff00:1:f`.
 
@@ -332,7 +332,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
+Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
 
 
 ### SCION AS Numbers
@@ -369,7 +369,7 @@ The rest of the space is currently unallocated.
 
 ### Wildcard Addressing {#serv-disc}
 
-SCION allows endpoints to use wildcard addresses in the control plane routing to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I and here "0" is the wildcard for the AS. For more information, see [](#wildcard).
+SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
 
 ## Avoiding Circular Dependencies and Partitioning
@@ -385,7 +385,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
 
-Recovering (also called healing) from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.
+Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes impact of time synchronization.
 
 
 ## Communication Protocol
@@ -1269,7 +1269,7 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
-### Effects of Clock Inaccuracy
+### Effects of Clock Inaccuracy {#clock-inaccuracy}
 
 A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
 
