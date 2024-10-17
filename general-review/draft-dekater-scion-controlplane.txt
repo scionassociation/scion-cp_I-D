@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 April 2025                                           S. Hitz
+Expires: 20 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                         16 October 2024
+                                                         17 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2025.
+   This Internet-Draft will expire on 20 April 2025.
 
 Copyright Notice
 
@@ -1673,12 +1673,12 @@ path segment 4 |             |     |             |     |             |
 2.3.1.  Selection of PCBs to Propagate
 
    As an AS receives a series of intra-ISD or core PCBs, it MUST select
-   the PCBs it will use to continue beaconing in accordance with a
-   specified local policy that determines whether they are evaluated,
-   selected, or eliminated.  The selection process can inspect and
-   compare the properties of the candidate PCBs (e.g. length,
-   disjointness across different paths, age, expiration time) and/or
-   take into account which PCBs have been propagated in the past.
+   the PCBs that it will propagate further.  Each AS specifies a local
+   policy on the basis of which PCBs are evaluated, selected, or
+   eliminated.  The selection process can inspect and compare the
+   properties of the candidate PCBs (e.g., length, disjointness across
+   different paths, age, expiration time) and/or take into account which
+   PCBs have been propagated in the past.
 
    Naturally, an AS's policy selects PCBs corresponding to paths that
    are commercially or otherwise operationally viable.  From these
@@ -1706,7 +1706,9 @@ path segment 4 |             |     |             |     |             |
    policy.  This set SHOULD have a fixed size, the _best PCBs set size_.
 
    *  The _best PCBs set size_ SHOULD be at most "50" (PCBs) for intra-
-      ISD beaconing and at most "5" (PCBs) for core beaconing.
+      ISD beaconing and at most "5" (PCBs) for core beaconing (i.e.
+      propagation between all core ASes).  These are RECOMMENDED maxima;
+      in current practice the intra-ISD set size is typically 20.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store, to
@@ -2008,12 +2010,13 @@ path segment 4 |             |     |             |     |             |
    unadvisable to create hops with a short expiration time - they SHOULD
    be around 6 hours.
 
-   The Control Service and its clients authenticate each other according
-   to their respective AS's certificate, with path segments
+   The Control Service and its clients authenticate each-other according
+   to their respective AS's certificate.  Path segments are
    authenticated based on the certificates of the ASes that they refer
-   to.  The expiration of a SCION AS certificate typically ranges from
-   3h to 5 years and in comparison to these time scales, clock offsets
-   in the order of minutes are immaterial.
+   to.  The RECOMMENDED expiration time of a SCION AS certificate is
+   between 3h and 3 days.  Some deployments use up to 5 days.  In
+   comparison to these time scales, clock offsets in the order of
+   minutes are immaterial.
 
    Each administrator of a SCION Control Service is responsible for
    maintaining sufficient clock accuracy.  No particular method is
@@ -3524,6 +3527,9 @@ draft-dekater-scion-controlplane-06
    *  Completed description of Control Services gRPC API in appendix
 
    Minor changes:
+
+   *  Clarify typical vs recommended-limits values for best PCB set size
+      and for certificate validity duration.
 
    *  General rewording
 
