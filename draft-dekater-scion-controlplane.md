@@ -1113,7 +1113,7 @@ This section describes how PCBs are selected and propagated in the path explorat
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it MUST select the PCBs it will use to continue beaconing. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+As an AS receives a series of intra-ISD or core PCBs, it MUST select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.
 
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
@@ -1124,9 +1124,9 @@ The goal of the AS SHOULD be to propagate those candidate PCBs with the highest 
 
 When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs, called the *beacon store*.
 
-PCBs are propagated in batches to each connected downstream AS at a fixed frequency, the *propagation interval*. At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store, according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each connected AS at a fixed frequency, the *propagation interval*. At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store, according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
 
-- The *best PCBs set size* SHOULD be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing.
+- The *best PCBs set size* SHOULD be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing (i.e. propagation between all core ASes). These are RECOMMENDED maxima; in current practice the intra-ISD set size is typically 20.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS SHOULD have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.
 
@@ -1290,7 +1290,7 @@ A PCB originated by a given control service is validated by all the control serv
 
 This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.
 
-The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
+The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
 Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
@@ -2139,6 +2139,7 @@ Major changes:
 
 Minor changes:
 
+- Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.
 - General rewording
 - Added reference to SCIONLab as a testbed for implementors
 - Introduced this change log
