@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 14 April 2025</td>
+<td class="center">Expires 20 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-11" class="published">11 October 2024</time>
+<time datetime="2024-10-17" class="published">17 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-14">14 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-20">20 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2716,7 +2716,7 @@ Control service and router implementations <span class="bcp14">MUST</span> suppo
           <h4 id="name-selection-of-pcbs-to-propag">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it <span class="bcp14">MUST</span> select the PCBs it will use to continue beaconing. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it <span class="bcp14">MUST</span> select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-2">Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 From these viable PCBs, only a relatively small subset <span class="bcp14">SHOULD</span> be propagated, to avoid excessive overhead of the path discovery system in bigger networks.
@@ -2727,10 +2727,10 @@ The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candi
 <a href="#section-2.3.1.1" class="section-number selfRef">2.3.1.1. </a><a href="#name-storing-and-selecting-candi" class="section-name selfRef">Storing and Selecting Candidate PCBs</a>
             </h5>
 <p id="section-2.3.1.1-1">When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs, called the <em>beacon store</em>.<a href="#section-2.3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected downstream AS at a fixed frequency, the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected AS at a fixed frequency, the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.1-3.1">
-                <p id="section-2.3.1.1-3.1.1">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing.<a href="#section-2.3.1.1-3.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.1.1-3.1.1">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing (i.e. propagation between all core ASes). These are <span class="bcp14">RECOMMENDED</span> maxima; in current practice the intra-ISD set size is typically 20.<a href="#section-2.3.1.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-2.3.1.1-4">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the beacon store, to be able to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place, in order to keep the beacon store capacity limited.<a href="#section-2.3.1.1-4" class="pilcrow">¶</a></p>
@@ -3010,7 +3010,7 @@ The PCB contains the version numbers of the trust root configuration(s) (TRC) an
 </li>
           </ul>
 <p id="section-2.3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, around one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) would render useless any PCB describing a path longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, that should be around 6 hours.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-4">The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The expiration of a SCION AS certificate typically ranges from 3h to 5 years.
+<p id="section-2.3.3-4">The control service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.3.3-5">Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
 </section>
@@ -4393,13 +4393,16 @@ message Transport {
 <p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-F.1-4.1">
-            <p id="appendix-F.1-4.1.1">General rewording<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-F.1-4.1.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.1-4.2">
-            <p id="appendix-F.1-4.2.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-F.1-4.2.1">General rewording<a href="#appendix-F.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.1-4.3">
-            <p id="appendix-F.1-4.3.1">Introduced this change log<a href="#appendix-F.1-4.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-F.1-4.3.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-4.4">
+            <p id="appendix-F.1-4.4.1">Introduced this change log<a href="#appendix-F.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
