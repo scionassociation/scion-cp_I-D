@@ -365,8 +365,8 @@ Table of Contents
    can only be used in paths between ASes within the "customer cone" of
    the ASes connected by the peering link.
 
-   The following figure shows the three types of links for one small ISD
-   with two core ASes A and C, and four non-core ASes D,E,F, and G.
+   Figure 1 shows the three types of links for one small ISD with two
+   core ASes A and C, and four non-core ASes D,E,F, and G.
 
    +-------------------------+
    |                         |       #
@@ -388,7 +388,8 @@ Table of Contents
      (  G  )         (  F  )
       `---'           `---'
 
-            Figure 1: The three types of SCION links in one ISD
+      Figure 1: The three types of SCION links in one ISD.  Each node
+                        in the figure is a SCION AS.
 
    Each link connecting SCION routers is bi-directional and is
    identified by its corresponding egress and ingress interface IDs.  An
@@ -440,27 +441,6 @@ Table of Contents
        takes place in the data plane.  See also Section 4.
 
    All processes operate concurrently.
-
-   Figure 2 below shows the SCION routing processes and their
-   relationship to each other:
-
-   +-------------------------+       +-------------------------+
-   | Exploration (Beaconing) |------>|      Registration       |
-   +-------------------------+       +-----------+-------------+
-                                                 |
-                                 +---------------+
-                                 |
-        +------------------------v------------------------+
-        |                 Path Resolution                 |
-        |                                                 |
-        |   +----------------+       +----------------+   |
-        |   |     Lookup     +------>|  Combination   |   |
-        |   |                |       |    (Data Plane)|   |
-        |   +----------------+       +----------------+   |
-        +-------------------------------------------------+
-
-        Figure 2: SCION routing processes and their relation to each
-                 other.  All processes operate concurrently
 
    The *Control Service* is responsible for the path exploration and
    registration processes in the Control Plane.  It is the main control
@@ -794,7 +774,7 @@ Table of Contents
    each AS are numbered with integer values while ASes are described
    with an upper case letter for the sake of illustration.
 
-   In Figure 3 below, core AS X sends the two different PCBs "a" and "b"
+   In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
    via two different links to child AS Y: PCB "a" leaves core AS X via
    egress interface "2", whereas PCB "b" is sent over egress interface
    "1".  Core AS X adds the respective egress information to the PCBs
@@ -816,11 +796,11 @@ Table of Contents
                                +----#---#----+
                                |     AS Y    |
 
-       Figure 3: Intra-ISD PCB propagation from the ISD core to child
+       Figure 2: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
 
    AS Y receives the two PCBs "a" and "b" through two different
-   (ingress) interfaces, namely "2" and "3", respectively (see Figure 4
+   (ingress) interfaces, namely "2" and "3", respectively (see Figure 3
    below).  Additionally, AS Y forwards to AS Z four PCBs that were
    previously sent by core AS X.  For this, AS Y uses the two different
    (egress) links "5" and "6".  AS Y appends the corresponding ingress
@@ -864,7 +844,7 @@ Table of Contents
                               +----#---#----+
                               |    AS Z     |
 
-       Figure 4: Intra-ISD PCB propagation from the ISD core to child
+       Figure 3: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 2
 
    The following figure shows how the four PCBs "c", "d", "e", and "f",
@@ -912,7 +892,7 @@ Table of Contents
                                v     |     v
                                      v
 
-       Figure 5: Intra-ISD PCB propagation from the ISD core to child
+       Figure 4: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 3
 
    Based on the figures above, one could say that a PCB represents a
@@ -921,9 +901,9 @@ Table of Contents
    path segment" that accumulates AS entries when traversing the
    Internet.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
-   particular AS A.  This is illustrated by Figure 6.  This figure shows
+   particular AS A.  This is illustrated by Figure 5.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
-   "h", "i", and "j" from Figure 5 above.  It is up to AS Z to use all
+   "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use all
    of these path segments or just a selection of them.
 
                 AS Entry Core         AS Entry Y          AS Entry Z
@@ -970,13 +950,13 @@ path segment 4 |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
 
-           Figure 6: Possible up- or down segments for AS Z
+           Figure 5: Possible up- or down segments for AS Z
 
 2.2.  Path-Segment Construction Beacons (PCBs)
 
 2.2.1.  PCB Message Format
 
-   Figure 7 graphically represents the PCB message format:
+   Figure 6 graphically represents the PCB message format:
 
                               PCB / PATH SEGMENT
 
@@ -1033,10 +1013,10 @@ path segment 4 |             |     |             |     |             |
 |  Ingress   |    Egress   |  Expiration Time  |   MAC     |
 +------------+-------------+-------------------+-----------+
 
-              Figure 7: Top-down composition of one PCB
+              Figure 6: Top-down composition of one PCB
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "Full Control Service gRPC API", Figure 13.
+   please see Appendix "Full Control Service gRPC API", Figure 12.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1544,7 +1524,7 @@ path segment 4 |             |     |             |     |             |
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 8).
+      peering link, in the direction of beaconing - see also Figure 7).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
 
@@ -1580,7 +1560,7 @@ path segment 4 |             |     |             |     |             |
        |           |
        +-----------+
 
-      Figure 8: Peer entry information, in the direction of beaconing
+      Figure 7: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -1718,7 +1698,7 @@ path segment 4 |             |     |             |     |             |
 
 2.3.1.2.  Selection Policy Example
 
-   Figure 9 below illustrates the selection of path segments in three
+   Figure 8 below illustrates the selection of path segments in three
    networks.  Each network uses a different path property to select path
    segments.
 
@@ -1811,7 +1791,7 @@ path segment 4 |             |     |             |     |             |
        *------*  J  #-------#
                `---'
 
-     Figure 9: Example networks to illustrate path segment selection
+     Figure 8: Example networks to illustrate path segment selection
                    based on different path properties.
 
 2.3.2.  Propagation of Selected PCBs
@@ -2468,7 +2448,7 @@ path segment 4 |             |     |             |     |             |
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 10.
+   The segment lookup API gRPC definition can be found in Figure 9.
 
 4.1.2.  Caching
 
@@ -3032,8 +3012,8 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 10: Control Service gRPC API - Segment lookup.  This API
-     is exposed on the SCION dataplane by the control services of core
+     Figure 9: Control Service gRPC API - Segment lookup.  This API is
+       exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
 
@@ -3057,7 +3037,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 11: Control Service gRPC API - Segment registration.  This
+     Figure 10: Control Service gRPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3074,7 +3054,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 12: Control Service gRPC API - Segment creation
+           Figure 11: Control Service gRPC API - Segment creation
 
 
 
@@ -3156,7 +3136,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 13: Control Service gRPC API - Segment representation
+      Figure 12: Control Service gRPC API - Segment representation
 
 
 
@@ -3217,7 +3197,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 14: Control Service gRPC API - Signed ASEntry representation
+   Figure 13: Control Service gRPC API - Signed ASEntry representation
 
 
 
@@ -3322,7 +3302,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 15: Service Resolution gRPC API definition
+          Figure 14: Service Resolution gRPC API definition
 
 
 
@@ -3330,10 +3310,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 16 below.  In both examples, the source
-   endpoint is in AS A.  Figure 17 shows the sequence diagram for the
+   is represented in Figure 15 below.  In both examples, the source
+   endpoint is in AS A.  Figure 16 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 18 shows the path lookup sequence diagram if the destination
+   Figure 17 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3363,7 +3343,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 16: Topology used in the path lookup examples.
+           Figure 15: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -3421,7 +3401,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 17: Sequence diagram illustrating a path lookup for a
+     Figure 16: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3492,7 +3472,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 18: Sequence diagram illustrating a path lookup for a
+     Figure 17: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
