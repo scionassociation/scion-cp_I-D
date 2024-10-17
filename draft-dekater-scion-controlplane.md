@@ -432,7 +432,7 @@ PCBs contain topology and authentication information, and can also include addit
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
 
-On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB.
+On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs).
 
 ### Peering Links
 
@@ -443,14 +443,10 @@ PCBs do not traverse peering links. Instead, peering links are announced along w
 
 Every propagation period (as configured by the AS), the Control Service:
 
-- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS), and;
-- sends each selected PCB to the selected egress interface(s) associated with it.
+- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
+- propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
 
 For every selected PCB and egress interface combination, the AS extends the PCB by adding an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
-
-- For the specification of a PCB, see [](#pcbs)
-- For more details on selecting PCBs, see [](#selection)
-- For more details on propagating PCBs, see [](#path-segment-prop)
 
 
 ### PCB Propagation - Illustrated Examples
