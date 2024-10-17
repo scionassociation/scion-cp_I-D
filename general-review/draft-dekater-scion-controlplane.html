@@ -1566,8 +1566,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </h3>
 <p id="section-1.5-1">Inter-domain SCION routing is based on an &lt;ISD, AS&gt; tuple. Although a complete SCION address is composed of the &lt;ISD, AS, endpoint address&gt; 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.<a href="#section-1.5-1" class="pilcrow">¶</a></p>
 <p id="section-1.5-2">The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. <code>4-ff00:1:f</code>.<a href="#section-1.5-2" class="pilcrow">¶</a></p>
-<p id="section-1.5-3">This section provides more details about the numbering scheme for SCION ISD and AS numbers.<a href="#section-1.5-3" class="pilcrow">¶</a></p>
-<p id="section-1.5-4"><strong>Note:</strong> As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.<a href="#section-1.5-4" class="pilcrow">¶</a></p>
+<p id="section-1.5-3"><strong>Note:</strong> As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.<a href="#section-1.5-3" class="pilcrow">¶</a></p>
 <div id="isd-numbers">
 <section id="section-1.5.1">
           <h4 id="name-isd-numbers">
@@ -1611,7 +1610,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </tbody>
           </table>
 </div>
-<p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>).<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scion-as-numbers">
@@ -3676,7 +3675,7 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-6-1">This document has no IANA actions.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -3758,6 +3757,10 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
 <dt id="I-D.dekater-panrg-scion-overview">[I-D.dekater-panrg-scion-overview]</dt>
         <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-panrg-scion-overview-06</span>, <time datetime="2024-05-07" class="refDate">7 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06">https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ISD-AS-assignments">[ISD-AS-assignments]</dt>
+        <dd>
+<span class="refTitle">"SCION ISD and AS Assignments"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">https://docs.anapaya.net/en/latest/resources/isd-as-assignments/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC1122">[RFC1122]</dt>
         <dd>

@@ -537,9 +537,6 @@ Table of Contents
    the AS.  The text representation uses a dash separator between the
    ISD and AS numbers, e.g. 4-ff00:1:f.
 
-   This section provides more details about the numbering scheme for
-   SCION ISD and AS numbers.
-
    *Note:* As a consequence of the fact that SCION relies on existing
    routing protocols (e.g.  IS-IS, OSPF, SR) and communication fabric
    (e.g.  IP, MPLS) for intra-domain forwarding, existing internal
@@ -573,8 +570,7 @@ Table of Contents
 
    Currently, ISD numbers are allocated by Anapaya, a Swiss-based
    provider of SCION-based networking software and solutions (see
-   Anapaya ISD AS assignments
-   (https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
+   [ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -2874,9 +2870,8 @@ path segment 4 |             |     |             |     |             |
 
    The ISD and SCION AS number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see Anapaya ISD AS assignments
-   (https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
-   This task is currently being transitioned from Anapaya to the SCION
+   networking software and solutions (see [ISD-AS-assignments]).  This
+   task is currently being transitioned from Anapaya to the SCION
    Association.
 
 7.  References
@@ -2958,6 +2953,11 @@ path segment 4 |             |     |             |     |             |
               dekater-panrg-scion-overview-06, 7 May 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               panrg-scion-overview-06>.
+
+   [ISD-AS-assignments]
+              "SCION ISD and AS Assignments", 2024,
+              <https://docs.anapaya.net/en/latest/resources/isd-as-
+              assignments/>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
