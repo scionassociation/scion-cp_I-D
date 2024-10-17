@@ -1181,7 +1181,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="auto internal xref">2.1.1</a>.  <a href="#name-peering-links" class="internal xref">Peering Links</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.2">
-                    <p id="section-toc.1-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="auto internal xref">2.1.2</a>.  <a href="#name-extending-a-pcb" class="internal xref">Extending a PCB</a></p>
+                    <p id="section-toc.1-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="auto internal xref">2.1.2</a>.  <a href="#name-appending-entries-to-a-pcb" class="internal xref">Appending Entries to a PCB</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.3">
                     <p id="section-toc.1-1.2.2.1.2.3.1"><a href="#section-2.1.3" class="auto internal xref">2.1.3</a>.  <a href="#name-pcb-propagation-illustrated" class="internal xref">PCB Propagation - Illustrated Examples</a></p>
@@ -1776,7 +1776,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.1-3">PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where <em>inter-ISD</em> or core beaconing is based on the (selective) sending of PCBs without a defined direction, and <em>intra-ISD</em> beaconing on top-to-bottom propagation.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-4.1">
-            <p id="section-2.1-4.1.1"><em>Inter-ISD or core beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.1.1"><em>Inter-ISD or core beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
             <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
@@ -1791,10 +1791,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.1.1-1">PCBs do not traverse peering links. Instead, peering links are announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this peering link during segment combination to create the end-to-end path.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="extending-a-pcb">
+<div id="appending-entries-to-a-pcb">
 <section id="section-2.1.2">
-          <h4 id="name-extending-a-pcb">
-<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-extending-a-pcb" class="section-name selfRef">Extending a PCB</a>
+          <h4 id="name-appending-entries-to-a-pcb">
+<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-appending-entries-to-a-pcb" class="section-name selfRef">Appending Entries to a PCB</a>
           </h4>
 <p id="section-2.1.2-1">Every propagation period (as configured by the AS), the Control Service:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1805,7 +1805,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <p id="section-2.1.2-2.2.1">propagates each selected PCB to the selected egress interface(s) associated with it. This is described in <a href="#path-segment-prop" class="auto internal xref">Section 2.3.2</a>.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.1.2-3">For every selected PCB and egress interface combination, the AS extends the PCB by adding an <em>AS entry</em> to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-3">For every selected PCB and egress interface combination, the AS appends an <em>AS entry</em> to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pcb-propagation-illustrated-examples">
@@ -1813,7 +1813,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-pcb-propagation-illustrated">
 <a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-pcb-propagation-illustrated" class="section-name selfRef">PCB Propagation - Illustrated Examples</a>
           </h4>
-<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.1.3-2">In <a href="#_figure-3a" class="auto internal xref">Figure 3</a> below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "<em>Core - Out:2</em>" and "<em>Core - Out:1</em>", respectively).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-f"></span><div id="_figure-3a">
 <figure id="figure-3">
@@ -1839,7 +1839,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#name-intra-isd-pcb-propagation-f" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 1</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-4">AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see <a href="#_figure-3b" class="auto internal xref">Figure 4</a> below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y extends the four PCBs with the corresponding ingress and egress interface information. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-4">AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see <a href="#_figure-3b" class="auto internal xref">Figure 4</a> below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-fr"></span><div id="_figure-3b">
 <figure id="figure-4">
             <div class="alignLeft art-text artwork" id="section-2.1.3-5.1">
@@ -1849,14 +1849,14 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                         +-----+ |   | +-----+
                            |    |   |    |
                            v    |   |    v
-                                v   v
-                           +----#---#----+
-                 .---.     |    2   3    |
-                (  V  )- --# 1           |
-                 `---'     |     AS Y    |     .---.
-                           |           4 #- --(  W  )
-                           |             |     `---'
-                           |    6   5    |
+        +-------------+         v   v
+        |             |    +----#---#----+    +-------------+
+        |             |    |    2   3    |    |             |
+        |    AS V     #- --# 1           |    |             |
+        |             |    |     AS Y    |    |    AS W     |
+        |             |    |           4 #- --#             |
+        +-------------+    |             |    |             |
+                           |    6   5    |    +-------------+
             +--------+     +----#---#----+     +--------+
             |PCB     |          |   |          |PCB     |
             |========|          |   |          |========|
@@ -2171,7 +2171,7 @@ path segment 4 |             |     |             |     |             |
 +-----------------------+------------------------------------------+
 </pre><a href="#section-2.2.1.3-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.3-2">Beside the basic information component, each PCB <span class="bcp14">MUST</span> also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS <span class="bcp14">MUST</span> add its AS entry to each PCB it creates, and each traversed AS <span class="bcp14">MUST</span> attach its AS entry to the PCB.<a href="#section-2.2.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.3-2">Each PCB <span class="bcp14">MUST</span> also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS <span class="bcp14">MUST</span> add its AS entry to each PCB it creates, and each traversed AS <span class="bcp14">MUST</span> attach its AS entry to the PCB.<a href="#section-2.2.1.3-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.3-3">One AS entry contains the complete hop information for this specific AS in this specific path segment. It consists of a signed and an unsigned component.<a href="#section-2.2.1.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.3-4">The code block below defines an AS entry <code>ASEntry</code> in Protobuf message format.<a href="#section-2.2.1.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.3-5">
@@ -2212,7 +2212,7 @@ path segment 4 |             |     |             |     |             |
 +--------------------+-----------------+------------------------------+
 </pre><a href="#section-2.2.1.4-1" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4-2">Each AS entry of a PCB <span class="bcp14">MUST</span> include a signed component as well as a signature computed over the signed component. Each AS entry <span class="bcp14">MUST</span> be signed with a private key that corresponds to the public key certified by the AS's certificate.<a href="#section-2.2.1.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4-2">Each AS entry of a PCB <span class="bcp14">MUST</span> include a signed component as well as a signature computed over the signed component. Each AS entry <span class="bcp14">MUST</span> be signed with the Control Plane AS Certificate (See <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>).<a href="#section-2.2.1.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4-3">The signed component of an AS entry <span class="bcp14">MUST</span> include the following elements:<a href="#section-2.2.1.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4-4.1">
@@ -2286,7 +2286,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.1-3.1.1">The algorithm to compute the signature<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-3.2">
-                  <p id="section-2.2.1.4.1-3.2.1">The identifier of the public key used to verify the signature (i.e., the public key certified by the AS's certificate)<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-3.2.1">The subjectKeyIdentifier of the public key to be used to verify the signature (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>)<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-3.3">
                   <p id="section-2.2.1.4.1-3.3.1">The ISD-AS number of the AS<a href="#section-2.2.1.4.1-3.3.1" class="pilcrow">¶</a></p>
@@ -2318,7 +2318,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.1-6.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature.<a href="#section-2.2.1.4.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-6.2">
-                  <p id="section-2.2.1.4.1-6.2.1"><code>verification_key_id</code>: Holds the serialized data defined by the <code>VerificationKeyID</code> message type. The <code>VerificationKeyID</code> message contains more information that is relevant to signing and verifying PCBs and other control-plane messages. The <code>VerificationKeyID</code> message type includes the following fields (see also the above code block):<a href="#section-2.2.1.4.1-6.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-6.2.1"><code>verification_key_id</code>: Contains information that is relevant to signing and verifying PCBs and other control-plane messages. It includes the following fields (see also the above code block):<a href="#section-2.2.1.4.1-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-6.2.2.1">
                       <p id="section-2.2.1.4.1-6.2.2.1.1"><code>isd_as</code>: The ISD-AS number of the current AS.<a href="#section-2.2.1.4.1-6.2.2.1.1" class="pilcrow">¶</a></p>
@@ -2473,7 +2473,7 @@ associated_data(ps, i) = ps.segment_info ||
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.5-5.1">
-                <p id="section-2.2.1.5-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.5-5.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.5-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.5-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.5-5.2">
                 <p id="section-2.2.1.5-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths  constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.<a href="#section-2.2.1.5-5.2.1" class="pilcrow">¶</a></p>
@@ -2519,7 +2519,7 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.6-6.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).<a href="#section-2.2.1.6-6.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.1.6-7"><strong>Note:</strong> For the AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST NOT</span> be specified. This initiating AS is a core AS.<a href="#section-2.2.1.6-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.6-7"><strong>Note:</strong> For the core AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST NOT</span> be specified. This initiating AS is a core AS.<a href="#section-2.2.1.6-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.6-8.1">
                 <p id="section-2.2.1.6-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.1.6-8.1.1" class="pilcrow">¶</a></p>
@@ -2879,21 +2879,6 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
                 <p id="section-2.3.2.2-2.4.1">As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.2.4</a>).<a href="#section-2.3.2.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
-<p id="section-2.3.2.2-3"><strong>Note:</strong><a href="#section-2.3.2.2-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.2.2-4.1">
-                <p id="section-2.3.2.2-4.1.1">For more information on the signed body component of an AS entry, see <a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>.<a href="#section-2.3.2.2-4.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.2.2-4.2">
-                <p id="section-2.3.2.2-4.2.1">For more information on a peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.1.7</a>.<a href="#section-2.3.2.2-4.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.2.2-4.3">
-                <p id="section-2.3.2.2-4.3.1">For more information on the Hop Field component, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.3.2.2-4.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.2.2-4.4">
-                <p id="section-2.3.2.2-4.4.1">For more information on signing an AS entry, see <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>.<a href="#section-2.3.2.2-4.4.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
 </section>
 </div>
 <div id="propagation-of-pcbs-in-core-beaconing">
@@ -2985,7 +2970,7 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
               <p id="section-2.3.3-2.2.1">A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.<a href="#section-2.3.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) would render useless any PCB describing a path longer than 5 hops and for this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.3.3-4">The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.3.3-5">Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
