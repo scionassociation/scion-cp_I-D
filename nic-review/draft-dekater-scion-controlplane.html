@@ -1514,7 +1514,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-path-segments">
 <a href="#section-1.4.1" class="section-number selfRef">1.4.1. </a><a href="#name-path-segments" class="section-name selfRef">Path Segments</a>
           </h4>
-<p id="section-1.4.1-1">As described previously, the main goal of SCION's Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets by its data plane. SCION distinguishes the following types of path segments:<a href="#section-1.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.4.1-1">SCION distinguishes the following types of path segments:<a href="#section-1.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4.1-2.1">
               <p id="section-1.4.1-2.1.1">A path segment from a non-core AS to a core AS is an <em>up segment</em>.<a href="#section-1.4.1-2.1.1" class="pilcrow">¶</a></p>
@@ -1539,7 +1539,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-addressing">
 <a href="#section-1.5" class="section-number selfRef">1.5. </a><a href="#name-addressing" class="section-name selfRef">Addressing</a>
         </h3>
-<p id="section-1.5-1">Inter-domain SCION routing is based on an &lt;ISD, AS&gt; tuple. Although a complete SCION address is composed of the &lt;ISD, AS, endpoint address&gt; 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.<a href="#section-1.5-1" class="pilcrow">¶</a></p>
+<p id="section-1.5-1">Inter-domain SCION routing is based on an &lt;ISD, AS&gt; tuple. Although a complete SCION address is composed of the &lt;ISD, AS, endpoint address&gt; 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address is of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.<a href="#section-1.5-1" class="pilcrow">¶</a></p>
 <p id="section-1.5-2">The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. <code>4-ff00:1:f</code>.<a href="#section-1.5-2" class="pilcrow">¶</a></p>
 <p id="section-1.5-3"><strong>Note:</strong> As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.<a href="#section-1.5-3" class="pilcrow">¶</a></p>
 <div id="isd-numbers">
@@ -1585,7 +1585,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </tbody>
           </table>
 </div>
-<p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.5.1-4">Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-1.5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scion-as-numbers">
@@ -1693,7 +1693,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-wildcard-addressing">
 <a href="#section-1.5.3" class="section-number selfRef">1.5.3. </a><a href="#name-wildcard-addressing" class="section-name selfRef">Wildcard Addressing</a>
           </h4>
-<p id="section-1.5.3-1">SCION allows endpoints to use wildcard addresses in the control plane routing to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I and here "0" is the wildcard for the AS. For more information, see <a href="#wildcard" class="auto internal xref">Section 4.2.1</a>.<a href="#section-1.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.3-1">SCION endpoints use wildcard AS <code>0:0:0</code> to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see <a href="#wildcard" class="auto internal xref">Section 4.2.1</a>.<a href="#section-1.5.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1720,7 +1720,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </ul>
 <p id="section-1.6-3"><strong>Note:</strong> For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-1.6-3" class="pilcrow">¶</a></p>
 <p id="section-1.6-4">Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.<a href="#section-1.6-4" class="pilcrow">¶</a></p>
-<p id="section-1.6-5">Recovering (also called healing) from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.<a href="#section-1.6-5" class="pilcrow">¶</a></p>
+<p id="section-1.6-5">Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. <a href="#clock-inaccuracy" class="auto internal xref">Section 2.3.3</a> further describes impact of time synchronization.<a href="#section-1.6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="communication-protocol">
@@ -2931,7 +2931,7 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 </div>
 </section>
 </div>
-<div id="effects-of-clock-inaccuracy">
+<div id="clock-inaccuracy">
 <section id="section-2.3.3">
           <h4 id="name-effects-of-clock-inaccuracy">
 <a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>

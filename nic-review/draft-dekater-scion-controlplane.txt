@@ -472,10 +472,7 @@ Table of Contents
 
 1.4.1.  Path Segments
 
-   As described previously, the main goal of SCION's Control Plane is to
-   create and manage path segments which can then be combined into
-   forwarding paths to transmit packets by its data plane.  SCION
-   distinguishes the following types of path segments:
+   SCION distinguishes the following types of path segments:
 
    *  A path segment from a non-core AS to a core AS is an _up segment_.
 
@@ -508,9 +505,9 @@ Table of Contents
    Inter-domain SCION routing is based on an <ISD, AS> tuple.  Although
    a complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple, the endpoint address is not used for inter-domain
-   routing or forwarding.  The endpoint address can be of variable
-   length, does not need to be globally unique, and can thus be an IPv4,
-   IPv6, or link layer address.
+   routing or forwarding.  The endpoint address is of variable length,
+   does not need to be globally unique, and can thus be an IPv4, IPv6,
+   or link layer address.
 
    The ISD-AS number is a SCION-specific number consisting of 64 bits:
    the top 16 bits indicating the ISD, and the bottom 48 bits indicating
@@ -548,9 +545,8 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   Currently, ISD numbers are allocated by Anapaya, a Swiss-based
-   provider of SCION-based networking software and solutions (see
-   [ISD-AS-assignments]).
+   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-
+   based networking software and solutions (see [ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -615,12 +611,10 @@ Table of Contents
 
 1.5.3.  Wildcard Addressing
 
-   SCION allows endpoints to use wildcard addresses in the control plane
-   routing to designate any core AS, e.g. to place requests for core
-   segments or down segments during path lookup.  These wildcard
-   addresses are of the form I-0, to designate any AS in ISD I and here
-   "0" is the wildcard for the AS.  For more information, see
-   Section 4.2.1.
+   SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
+   to place requests for core segments or down segments during path
+   lookup.  These wildcard addresses are of the form I-0, to designate
+   any AS in ISD I.  For more information, see Section 4.2.1.
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
@@ -673,10 +667,11 @@ Table of Contents
    ASes.  Even during failures there is no special failure mode required
    as SCION-enabled ASes can always switch to otherwise unused links.
 
-   Recovering (also called healing) from a partitioned network is also
-   seamless as only coarse time synchronization between the partitions
-   is required to resume normal operation and move forward with updates
-   of the cryptographic material.
+   Recovering from a partitioned network is also seamless as only coarse
+   time synchronization between the partitions is required to resume
+   normal operation and move forward with updates of the cryptographic
+   material.  Section 2.3.3 further describes impact of time
+   synchronization.
 
 1.7.  Communication Protocol
 
