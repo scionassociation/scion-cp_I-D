@@ -56,6 +56,10 @@ normative:
 
 informative:
   I-D.dekater-panrg-scion-overview:
+  ISD-AS-assignments:
+    title: "SCION ISD and AS Assignments"
+    date: 2024
+    target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -328,7 +332,6 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. `4-ff00:1:f`.
 
-This section provides more details about the numbering scheme for SCION ISD and AS numbers.
 
 **Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
@@ -348,7 +351,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
+Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
 
 
 ### SCION AS Numbers
@@ -1693,7 +1696,7 @@ For RPC methods exposed to other ASes, the Control Service implementation minimi
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
 
 --- back
 
