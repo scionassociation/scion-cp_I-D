@@ -3665,6 +3665,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
             <p id="section-5.3-6.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address <span class="bcp14">MUST</span> match the local ISD and the number of path segments <span class="bcp14">MUST</span> be 1.<a href="#section-5.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-5.3-7">A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service <span class="bcp14">SHOULD</span> be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
