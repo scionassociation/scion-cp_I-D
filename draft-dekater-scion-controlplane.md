@@ -1280,14 +1280,11 @@ The propagation procedure includes the following elements:
 
 In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
 
-- For routers (to enable correlation with link states):
-  - Fraction of configured core links that are up.
-  - Fraction of configured child links that are up.
-  - Fraction of configured parent links that are up (may be just 0/non-0).
+- For routers (to enable correlation with link states): state of configured links (core, child, parent)
 
 - For any control service:
   - Fraction of path lookups served successfully (see [](#lookup))
-  - Time synchronization offset with other ASes in relation to credible RTT (see [](#clock-inaccuracy))
+  - Time synchronization offset with other ASes (see [](#clock-inaccuracy))
   - Fraction of ASes found in non-expired segments for which a non-expired certificate exists
 
 - For a core AS:
@@ -1297,7 +1294,7 @@ In order to maintain service availability, an AS SHOULD monitor the following as
 
 - For a non-core AS:
   - Number of up segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
-  - Fraction of up segments that were successfully registred as down segments (see [](#path-segment-reg)).
+  - Fraction of up segments that were successfully registered as down segments (see [](#path-segment-reg)).
   - Fraction of children ASes (preferably only those to which the link is up) whereto a beacon was propagated during the last propagation interval
 
 ## Effects of Clock Inaccuracy {#clock-inaccuracy}
