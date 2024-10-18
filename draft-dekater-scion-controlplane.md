@@ -237,7 +237,7 @@ The SCION paths are always valley free, and consist of at most three segments: a
 
 A path can contain at most one peering link shortcut which means they can only be used in paths between ASes within the "customer cone" of the ASes connected by the peering link.
 
-The following figure shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
+{{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
 ~~~~
 +-------------------------+
@@ -260,7 +260,7 @@ The following figure shows the three types of links for one small ISD with two c
   (  G  )         (  F  )
    `---'           `---'
 ~~~~
-{: #figure-1 title="The three types of SCION links in one ISD"}
+{: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
 Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
 
@@ -281,25 +281,6 @@ The creation of an end-to-end forwarding path consists of the following processe
 
 All processes operate concurrently.
 
-{{figure-2}} below shows the SCION routing processes and their relationship to each other:
-
-~~~~
-+-------------------------+       +-------------------------+
-| Exploration (Beaconing) |------>|      Registration       |
-+-------------------------+       +-----------+-------------+
-                                              |
-                              +---------------+
-                              |
-     +------------------------v------------------------+
-     |                 Path Resolution                 |
-     |                                                 |
-     |   +----------------+       +----------------+   |
-     |   |     Lookup     +------>|  Combination   |   |
-     |   |                |       |    (Data Plane)|   |
-     |   +----------------+       +----------------+   |
-     +-------------------------------------------------+
-~~~~
-{: #figure-2 title="SCION routing processes and their relation to each other. All processes operate concurrently"}
 
 The **Control Service** is responsible for the path exploration and registration processes in the Control Plane. It is the main control plane infrastructure component within each SCION AS and has the following tasks:
 
@@ -312,7 +293,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 ### Path Segments
 
-As described previously, the main goal of SCION's Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets by its data plane. SCION distinguishes the following types of path segments:
+SCION distinguishes the following types of path segments:
 
 - A path segment from a non-core AS to a core AS is an *up segment*.
 - A path segment from a core AS to a non-core AS is a *down segment*.
@@ -328,7 +309,7 @@ For fast validation of the path information carried in individual packets during
 
 ## Addressing {#numbering}
 
-Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address can be of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
+Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address is of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
 
 The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. `4-ff00:1:f`.
 
@@ -351,7 +332,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-Currently, ISD numbers are allocated by Anapaya, a Swiss-based provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
+Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
 
 
 ### SCION AS Numbers
@@ -388,7 +369,7 @@ The rest of the space is currently unallocated.
 
 ### Wildcard Addressing {#serv-disc}
 
-SCION allows endpoints to use wildcard addresses in the control plane routing to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I and here "0" is the wildcard for the AS. For more information, see [](#wildcard).
+SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
 
 ## Avoiding Circular Dependencies and Partitioning
@@ -404,7 +385,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
 
-Recovering (also called healing) from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material.
+Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.
 
 
 ## Communication Protocol
@@ -429,33 +410,29 @@ In SCION, the *Control Service* of each AS is responsible for the beaconing proc
 
 PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
 
-- *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. Core beaconing is periodic; PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
+- *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
 
-On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB.
+On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs).
 
 ### Peering Links
 
 PCBs do not traverse peering links. Instead, peering links are announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this peering link during segment combination to create the end-to-end path.
 
 
-### Extending a PCB
+### Appending Entries to a PCB
 
 Every propagation period (as configured by the AS), the Control Service:
 
-- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS), and;
-- sends each selected PCB to the selected egress interface(s) associated with it.
+- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
+- propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
 
-For every selected PCB and egress interface combination, the AS extends the PCB by adding an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
-
-- For the specification of a PCB, see [](#pcbs)
-- For more details on selecting PCBs, see [](#selection)
-- For more details on propagating PCBs, see [](#path-segment-prop)
+For every selected PCB and egress interface combination, the AS appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
 
 
 ### PCB Propagation - Illustrated Examples
 
-The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. For the sake of illustration, the interfaces of each AS are numbered with integer values.
+The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
@@ -478,7 +455,7 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
 ~~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
-AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y extends the four PCBs with the corresponding ingress and egress interface information. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
+AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
 ~~~~
 
@@ -487,14 +464,14 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                         +-----+ |   | +-----+
                            |    |   |    |
                            v    |   |    v
-                                v   v
-                           +----#---#----+
-                 .---.     |    2   3    |
-                (  V  )- --# 1           |
-                 `---'     |     AS Y    |     .---.
-                           |           4 #- --(  W  )
-                           |             |     `---'
-                           |    6   5    |
+        +-------------+         v   v
+        |             |    +----#---#----+    +-------------+
+        |             |    |    2   3    |    |             |
+        |    AS V     #- --# 1           |    |             |
+        |             |    |     AS Y    |    |    AS W     |
+        |             |    |           4 #- --#             |
+        +-------------+    |             |    |             |
+                           |    6   5    |    +-------------+
             +--------+     +----#---#----+     +--------+
             |PCB     |          |   |          |PCB     |
             |========|          |   |          |========|
@@ -757,7 +734,7 @@ In the Protobuf message format, the information component of a PCB is called the
 +-----------------------+------------------------------------------+
 ~~~~
 
-Beside the basic information component, each PCB MUST also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS MUST add its AS entry to each PCB it creates, and each traversed AS MUST attach its AS entry to the PCB.
+Each PCB MUST also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS MUST add its AS entry to each PCB it creates, and each traversed AS MUST attach its AS entry to the PCB.
 
 One AS entry contains the complete hop information for this specific AS in this specific path segment. It consists of a signed and an unsigned component.
 
@@ -791,7 +768,7 @@ It includes the following components:
 +--------------------+-----------------+------------------------------+
 ~~~~
 
-Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with a private key that corresponds to the public key certified by the AS's certificate.
+Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (See {{I-D.dekater-scion-pki}}).
 
 The signed component of an AS entry MUST include the following elements:
 
@@ -846,7 +823,7 @@ The following code block shows the low level representation of the `HeaderAndBod
 The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
 
 - The algorithm to compute the signature
-- The identifier of the public key used to verify the signature (i.e., the public key certified by the AS's certificate)
+- The subjectKeyIdentifier of the public key to be used to verify the signature (see {{I-D.dekater-scion-pki}})
 - The ISD-AS number of the AS
 
 The following code block defines the signed header of an AS entry in Protobuf message format (called the `Header` message).
@@ -871,7 +848,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 ~~~~
 
 - `signature_algorithm`: Specifies the algorithm to compute the signature.
-- `verification_key_id`: Holds the serialized data defined by the `VerificationKeyID` message type. The `VerificationKeyID` message contains more information that is relevant to signing and verifying PCBs and other control-plane messages. The `VerificationKeyID` message type includes the following fields (see also the above code block):
+- `verification_key_id`: Contains information that is relevant to signing and verifying PCBs and other control-plane messages. It includes the following fields (see also the above code block):
   - `isd_as`: The ISD-AS number of the current AS.
   - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
@@ -975,7 +952,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
    }
 ~~~~
 
-- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+- `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
 - `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths  constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
@@ -1012,7 +989,7 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
 
-**Note:** For the AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
+**Note:** For the core AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the Hop Field is the sum of these two values.
@@ -1255,13 +1232,6 @@ The propagation process in intra-ISD beaconing includes the following steps:
 4. As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
 
 
-**Note:**
-
-- For more information on the signed body component of an AS entry, see [](#ase-sign).
-- For more information on a peer entry, see [](#peerentry).
-- For more information on the Hop Field component, see [](#hopfield).
-- For more information on signing an AS entry, see [](#sign).
-
 #### Propagation of PCBs in Core Beaconing
 
 The propagation process in core beaconing includes the following steps:
@@ -1299,14 +1269,14 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
-### Effects of Clock Inaccuracy
+### Effects of Clock Inaccuracy {#clock-inaccuracy}
 
 A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
 
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would render useless any PCB describing a path longer than 5 hops and for this reason it is unadvisable to create hops with a short expiration time - they SHOULD be around 6 hours.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they SHOULD be around 6 hours.
 
 The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
