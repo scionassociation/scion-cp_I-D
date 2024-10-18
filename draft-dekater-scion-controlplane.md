@@ -358,11 +358,11 @@ SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place 
 
 ### Text Representation
 
-##### ISD number
+#### ISD numbers
 
 The text representation of SCION ISD numbers MUST be its decimal ASCII representation.
 
-#### AS number
+#### AS numbers
 
 The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}}) but not identical. It MUST be as follows:
 
@@ -371,7 +371,7 @@ The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}})
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 - For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
 
-####  <ISD, AS> tuple
+####  <ISD, AS> tuples
 
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the litteral ASCII character 0x2D.
 
