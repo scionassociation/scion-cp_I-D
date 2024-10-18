@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 20 April 2025                                           S. Hitz
+Expires: 21 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                         17 October 2024
+                                                         18 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2025.
+   This Internet-Draft will expire on 21 April 2025.
 
 Copyright Notice
 
@@ -93,7 +93,7 @@ Table of Contents
    2.  Path Exploration or Beaconing
      2.1.  Introduction and Overview
        2.1.1.  Peering Links
-       2.1.2.  Extending a PCB
+       2.1.2.  Appending Entries to a PCB
        2.1.3.  PCB Propagation - Illustrated Examples
      2.2.  Path-Segment Construction Beacons (PCBs)
        2.2.1.  PCB Message Format
@@ -365,8 +365,8 @@ Table of Contents
    can only be used in paths between ASes within the "customer cone" of
    the ASes connected by the peering link.
 
-   The following figure shows the three types of links for one small ISD
-   with two core ASes A and C, and four non-core ASes D,E,F, and G.
+   Figure 1 shows the three types of links for one small ISD with two
+   core ASes A and C, and four non-core ASes D,E,F, and G.
 
    +-------------------------+
    |                         |       #
@@ -388,7 +388,8 @@ Table of Contents
      (  G  )         (  F  )
       `---'           `---'
 
-            Figure 1: The three types of SCION links in one ISD
+      Figure 1: The three types of SCION links in one ISD.  Each node
+                        in the figure is a SCION AS.
 
    Each link connecting SCION routers is bi-directional and is
    identified by its corresponding egress and ingress interface IDs.  An
@@ -441,27 +442,6 @@ Table of Contents
 
    All processes operate concurrently.
 
-   Figure 2 below shows the SCION routing processes and their
-   relationship to each other:
-
-   +-------------------------+       +-------------------------+
-   | Exploration (Beaconing) |------>|      Registration       |
-   +-------------------------+       +-----------+-------------+
-                                                 |
-                                 +---------------+
-                                 |
-        +------------------------v------------------------+
-        |                 Path Resolution                 |
-        |                                                 |
-        |   +----------------+       +----------------+   |
-        |   |     Lookup     +------>|  Combination   |   |
-        |   |                |       |    (Data Plane)|   |
-        |   +----------------+       +----------------+   |
-        +-------------------------------------------------+
-
-        Figure 2: SCION routing processes and their relation to each
-                 other.  All processes operate concurrently
-
    The *Control Service* is responsible for the path exploration and
    registration processes in the Control Plane.  It is the main control
    plane infrastructure component within each SCION AS and has the
@@ -492,10 +472,7 @@ Table of Contents
 
 1.4.1.  Path Segments
 
-   As described previously, the main goal of SCION's Control Plane is to
-   create and manage path segments which can then be combined into
-   forwarding paths to transmit packets by its data plane.  SCION
-   distinguishes the following types of path segments:
+   SCION distinguishes the following types of path segments:
 
    *  A path segment from a non-core AS to a core AS is an _up segment_.
 
@@ -528,9 +505,9 @@ Table of Contents
    Inter-domain SCION routing is based on an <ISD, AS> tuple.  Although
    a complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple, the endpoint address is not used for inter-domain
-   routing or forwarding.  The endpoint address can be of variable
-   length, does not need to be globally unique, and can thus be an IPv4,
-   IPv6, or link layer address.
+   routing or forwarding.  The endpoint address is of variable length,
+   does not need to be globally unique, and can thus be an IPv4, IPv6,
+   or link layer address.
 
    The ISD-AS number is a SCION-specific number consisting of 64 bits:
    the top 16 bits indicating the ISD, and the bottom 48 bits indicating
@@ -568,9 +545,8 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   Currently, ISD numbers are allocated by Anapaya, a Swiss-based
-   provider of SCION-based networking software and solutions (see
-   [ISD-AS-assignments]).
+   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-
+   based networking software and solutions (see [ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -635,12 +611,10 @@ Table of Contents
 
 1.5.3.  Wildcard Addressing
 
-   SCION allows endpoints to use wildcard addresses in the control plane
-   routing to designate any core AS, e.g. to place requests for core
-   segments or down segments during path lookup.  These wildcard
-   addresses are of the form I-0, to designate any AS in ISD I and here
-   "0" is the wildcard for the AS.  For more information, see
-   Section 4.2.1.
+   SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
+   to place requests for core segments or down segments during path
+   lookup.  These wildcard addresses are of the form I-0, to designate
+   any AS in ISD I.  For more information, see Section 4.2.1.
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
@@ -693,10 +667,11 @@ Table of Contents
    ASes.  Even during failures there is no special failure mode required
    as SCION-enabled ASes can always switch to otherwise unused links.
 
-   Recovering (also called healing) from a partitioned network is also
-   seamless as only coarse time synchronization between the partitions
-   is required to resume normal operation and move forward with updates
-   of the cryptographic material.
+   Recovering from a partitioned network is also seamless as only coarse
+   time synchronization between the partitions is required to resume
+   normal operation and move forward with updates of the cryptographic
+   material.  Section 2.3.3 further describes the impact of time
+   synchronization.
 
 1.7.  Communication Protocol
 
@@ -742,9 +717,9 @@ Table of Contents
       segments between core ASes in the same or in different ISDs.
       During core beaconing, the Control Service of a core AS either
       initiates PCBs or propagates PCBs received from neighboring core
-      ASes to other neighboring core ASes.  Core beaconing is periodic;
-      PCBs are sent over policy compliant paths to discover multiple
-      paths between any pair of core ASes.
+      ASes to other neighboring core ASes.  PCBs are periodically sent
+      over policy compliant paths to discover multiple paths between any
+      pair of core ASes.
 
    *  _Intra-ISD beaconing_ creates path segments from core ASes to non-
       core ASes.  For this, the Control Services of core ASes create
@@ -758,7 +733,8 @@ Table of Contents
    On its way, a PCB accumulates cryptographically protected path and
    forwarding information per traversed AS.  At every AS, metadata as
    well as information about the AS's ingress and egress interfaces is
-   added to the PCB.
+   added to the PCB.  The full PCB message format is described in
+   Section 2.2.
 
 2.1.1.  Peering Links
 
@@ -768,37 +744,32 @@ Table of Contents
    specific peering link, then it is possible to use this peering link
    during segment combination to create the end-to-end path.
 
-2.1.2.  Extending a PCB
+2.1.2.  Appending Entries to a PCB
 
    Every propagation period (as configured by the AS), the Control
    Service:
 
    *  selects the best combinations of PCBs and interfaces connecting to
-      a neighboring AS (i.e. a child AS or a core AS), and;
+      a neighboring AS (i.e. a child AS or a core AS).  This is
+      described in Section 2.3.1.
 
-   *  sends each selected PCB to the selected egress interface(s)
-      associated with it.
+   *  propagates each selected PCB to the selected egress interface(s)
+      associated with it.  This is described in Section 2.3.2.
 
    For every selected PCB and egress interface combination, the AS
-   extends the PCB by adding an _AS entry_ to the selected PCB.  This
-   includes a Hop Field that specifies the ingress and egress interface
-   for the packet forwarding through this AS, in the beaconing
-   direction.  The AS entry can also contain peer entries.
-
-   *  For the specification of a PCB, see Section 2.2
-
-   *  For more details on selecting PCBs, see Section 2.3.1
-
-   *  For more details on propagating PCBs, see Section 2.3.2
+   appends an _AS entry_ to the selected PCB.  This includes a Hop Field
+   that specifies the ingress and egress interface for the packet
+   forwarding through this AS, in the beaconing direction.  The AS entry
+   can also contain peer entries.
 
 2.1.3.  PCB Propagation - Illustrated Examples
 
    The following three figures show how intra-ISD PCB propagation works,
-   from the ISD's core AS down to child ASes.  For the sake of
-   illustration, the interfaces of each AS are numbered with integer
-   values.
+   from the ISD's core AS down to child ASes.  Interface identifiers of
+   each AS are numbered with integer values while ASes are described
+   with an upper case letter for the sake of illustration.
 
-   In Figure 3 below, core AS X sends the two different PCBs "a" and "b"
+   In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
    via two different links to child AS Y: PCB "a" leaves core AS X via
    egress interface "2", whereas PCB "b" is sent over egress interface
    "1".  Core AS X adds the respective egress information to the PCBs
@@ -820,34 +791,33 @@ Table of Contents
                                +----#---#----+
                                |     AS Y    |
 
-       Figure 3: Intra-ISD PCB propagation from the ISD core to child
+       Figure 2: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
 
    AS Y receives the two PCBs "a" and "b" through two different
-   (ingress) interfaces, namely "2" and "3", respectively (see Figure 4
+   (ingress) interfaces, namely "2" and "3", respectively (see Figure 3
    below).  Additionally, AS Y forwards to AS Z four PCBs that were
    previously sent by core AS X.  For this, AS Y uses the two different
-   (egress) links "5" and "6".  AS Y extends the four PCBs with the
-   corresponding ingress and egress interface information.  As can be
-   seen in the figure, AS Y also has two peering links to its
-   neighboring peers V and W, through the interfaces "1" and "4",
-   respectively - AS Y includes this information in the PCBs, as well.
-   Thus, each forwarded PCB cumulates path information on its way "down"
-   from core AS X.
+   (egress) links "5" and "6".  AS Y appends the corresponding ingress
+   and egress interface information to the four PCBs.  As can be seen in
+   the figure, AS Y also has two peering links to its neighboring peers
+   V and W, through the interfaces "1" and "4", respectively - AS Y
+   includes this information in the PCBs, as well.  Thus, each forwarded
+   PCB cumulates path information on its way "down" from core AS X.
 
                            +-----+ |   | +-----+
                            |PCB a| |   | |PCB b|
                            +-----+ |   | +-----+
                               |    |   |    |
                               v    |   |    v
-                                   v   v
-                              +----#---#----+
-                    .---.     |    2   3    |
-                   (  V  )- --# 1           |
-                    `---'     |     AS Y    |     .---.
-                              |           4 #- --(  W  )
-                              |             |     `---'
-                              |    6   5    |
+           +-------------+         v   v
+           |             |    +----#---#----+    +-------------+
+           |             |    |    2   3    |    |             |
+           |    AS V     #- --# 1           |    |             |
+           |             |    |     AS Y    |    |    AS W     |
+           |             |    |           4 #- --#             |
+           +-------------+    |             |    |             |
+                              |    6   5    |    +-------------+
                +--------+     +----#---#----+     +--------+
                |PCB     |          |   |          |PCB     |
                |========|          |   |          |========|
@@ -869,7 +839,7 @@ Table of Contents
                               +----#---#----+
                               |    AS Z     |
 
-       Figure 4: Intra-ISD PCB propagation from the ISD core to child
+       Figure 3: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 2
 
    The following figure shows how the four PCBs "c", "d", "e", and "f",
@@ -917,7 +887,7 @@ Table of Contents
                                v     |     v
                                      v
 
-       Figure 5: Intra-ISD PCB propagation from the ISD core to child
+       Figure 4: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 3
 
    Based on the figures above, one could say that a PCB represents a
@@ -926,9 +896,9 @@ Table of Contents
    path segment" that accumulates AS entries when traversing the
    Internet.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
-   particular AS A.  This is illustrated by Figure 6.  This figure shows
+   particular AS A.  This is illustrated by Figure 5.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
-   "h", "i", and "j" from Figure 5 above.  It is up to AS Z to use all
+   "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use all
    of these path segments or just a selection of them.
 
                 AS Entry Core         AS Entry Y          AS Entry Z
@@ -975,13 +945,13 @@ path segment 4 |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
 
-           Figure 6: Possible up- or down segments for AS Z
+           Figure 5: Possible up- or down segments for AS Z
 
 2.2.  Path-Segment Construction Beacons (PCBs)
 
 2.2.1.  PCB Message Format
 
-   Figure 7 graphically represents the PCB message format:
+   Figure 6 graphically represents the PCB message format:
 
                               PCB / PATH SEGMENT
 
@@ -1038,10 +1008,10 @@ path segment 4 |             |     |             |     |             |
 |  Ingress   |    Egress   |  Expiration Time  |   MAC     |
 +------------+-------------+-------------------+-----------+
 
-              Figure 7: Top-down composition of one PCB
+              Figure 6: Top-down composition of one PCB
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "Full Control Service gRPC API", Figure 13.
+   please see Appendix "Full Control Service gRPC API", Figure 12.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1135,11 +1105,10 @@ path segment 4 |             |     |             |     |             |
    |    Unsigned Ext.      |          Signed AS Entry                 |
    +-----------------------+------------------------------------------+
 
-   Beside the basic information component, each PCB MUST also contain
-   the entries of all ASes included in the corresponding path segment.
-   This means that the originating core AS MUST add its AS entry to each
-   PCB it creates, and each traversed AS MUST attach its AS entry to the
-   PCB.
+   Each PCB MUST also contain the entries of all ASes included in the
+   corresponding path segment.  This means that the originating core AS
+   MUST add its AS entry to each PCB it creates, and each traversed AS
+   MUST attach its AS entry to the PCB.
 
    One AS entry contains the complete hop information for this specific
    AS in this specific path segment.  It consists of a signed and an
@@ -1178,8 +1147,8 @@ path segment 4 |             |     |             |     |             |
 
    Each AS entry of a PCB MUST include a signed component as well as a
    signature computed over the signed component.  Each AS entry MUST be
-   signed with a private key that corresponds to the public key
-   certified by the AS's certificate.
+   signed with the Control Plane AS Certificate (See
+   [I-D.dekater-scion-pki]).
 
    The signed component of an AS entry MUST include the following
    elements:
@@ -1242,8 +1211,8 @@ path segment 4 |             |     |             |     |             |
 
    *  The algorithm to compute the signature
 
-   *  The identifier of the public key used to verify the signature
-      (i.e., the public key certified by the AS's certificate)
+   *  The subjectKeyIdentifier of the public key to be used to verify
+      the signature (see [I-D.dekater-scion-pki])
 
    *  The ISD-AS number of the AS
 
@@ -1270,12 +1239,9 @@ path segment 4 |             |     |             |     |             |
    *  signature_algorithm: Specifies the algorithm to compute the
       signature.
 
-   *  verification_key_id: Holds the serialized data defined by the
-      VerificationKeyID message type.  The VerificationKeyID message
-      contains more information that is relevant to signing and
-      verifying PCBs and other control-plane messages.  The
-      VerificationKeyID message type includes the following fields (see
-      also the above code block):
+   *  verification_key_id: Contains information that is relevant to
+      signing and verifying PCBs and other control-plane messages.  It
+      includes the following fields (see also the above code block):
 
       -  isd_as: The ISD-AS number of the current AS.
 
@@ -1432,8 +1398,8 @@ path segment 4 |             |     |             |     |             |
       }
 
    *  hop_field: Contains the authenticated information about the
-      ingress and egress interfaces in the direction of beaconing.  The
-      data plane needs this information to forward packets through the
+      ingress and egress interfaces in the direction of beaconing.
+      Routers need this information to forward packets through the
       current AS.  For further specifications, see Section 2.2.1.6.
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
@@ -1492,7 +1458,7 @@ path segment 4 |             |     |             |     |             |
       of the path construction, that is, in the direction of beaconing
       through the current AS).
 
-   *Note:* For the AS that initiates the PCB, the ingress interface
+   *Note:* For the core AS that initiates the PCB, the ingress interface
    identifier MUST NOT be specified.  This initiating AS is a core AS.
 
    *  egress: The 16-bit egress interface identifier (in the direction
@@ -1553,7 +1519,7 @@ path segment 4 |             |     |             |     |             |
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 8).
+      peering link, in the direction of beaconing - see also Figure 7).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
 
@@ -1589,7 +1555,7 @@ path segment 4 |             |     |             |     |             |
        |           |
        +-----------+
 
-      Figure 8: Peer entry information, in the direction of beaconing
+      Figure 7: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -1727,7 +1693,7 @@ path segment 4 |             |     |             |     |             |
 
 2.3.1.2.  Selection Policy Example
 
-   Figure 9 below illustrates the selection of path segments in three
+   Figure 8 below illustrates the selection of path segments in three
    networks.  Each network uses a different path property to select path
    segments.
 
@@ -1820,7 +1786,7 @@ path segment 4 |             |     |             |     |             |
        *------*  J  #-------#
                `---'
 
-     Figure 9: Example networks to illustrate path segment selection
+     Figure 8: Example networks to illustrate path segment selection
                    based on different path properties.
 
 2.3.2.  Propagation of Selected PCBs
@@ -1903,19 +1869,6 @@ path segment 4 |             |     |             |     |             |
        Control Services of the neighboring ASes (see also
        Section 2.3.2.4).
 
-   *Note:*
-
-   *  For more information on the signed body component of an AS entry,
-      see Section 2.2.1.4.2.
-
-   *  For more information on a peer entry, see Section 2.2.1.7.
-
-   *  For more information on the Hop Field component, see
-      Section 2.2.1.6.
-
-   *  For more information on signing an AS entry, see
-      Section 2.2.1.4.3.
-
 2.3.2.3.  Propagation of PCBs in Core Beaconing
 
    The propagation process in core beaconing includes the following
@@ -1997,10 +1950,10 @@ path segment 4 |             |     |             |     |             |
    PCBs with N hops may be validated up to N intervals (so maximally N
    minutes) after origination which creates a constraint on the
    expiration of hops.  Hops of the minimal expiration time (337.5
-   seconds - see Section 2.2.1.6) would render useless any PCB
-   describing a path longer than 5 hops and for this reason it is
-   unadvisable to create hops with a short expiration time - they SHOULD
-   be around 6 hours.
+   seconds - see Section 2.2.1.6) would make any PCB describing a path
+   longer than 5 hops expire.  For this reason it is unadvisable to
+   create hops with a short expiration time - they SHOULD be around 6
+   hours.
 
    The Control Service and its clients authenticate each-other according
    to their respective AS's certificate.  Path segments are
@@ -2490,7 +2443,7 @@ path segment 4 |             |     |             |     |             |
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 10.
+   The segment lookup API gRPC definition can be found in Figure 9.
 
 4.1.2.  Caching
 
@@ -3054,8 +3007,8 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 10: Control Service gRPC API - Segment lookup.  This API
-     is exposed on the SCION dataplane by the control services of core
+     Figure 9: Control Service gRPC API - Segment lookup.  This API is
+       exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
 
@@ -3079,7 +3032,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 11: Control Service gRPC API - Segment registration.  This
+     Figure 10: Control Service gRPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3096,7 +3049,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 12: Control Service gRPC API - Segment creation
+           Figure 11: Control Service gRPC API - Segment creation
 
 
 
@@ -3178,7 +3131,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 13: Control Service gRPC API - Segment representation
+      Figure 12: Control Service gRPC API - Segment representation
 
 
 
@@ -3239,7 +3192,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 14: Control Service gRPC API - Signed ASEntry representation
+   Figure 13: Control Service gRPC API - Signed ASEntry representation
 
 
 
@@ -3344,7 +3297,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 15: Service Resolution gRPC API definition
+          Figure 14: Service Resolution gRPC API definition
 
 
 
@@ -3352,10 +3305,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 16 below.  In both examples, the source
-   endpoint is in AS A.  Figure 17 shows the sequence diagram for the
+   is represented in Figure 15 below.  In both examples, the source
+   endpoint is in AS A.  Figure 16 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 18 shows the path lookup sequence diagram if the destination
+   Figure 17 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3385,7 +3338,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 16: Topology used in the path lookup examples.
+           Figure 15: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -3443,7 +3396,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 17: Sequence diagram illustrating a path lookup for a
+     Figure 16: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3514,7 +3467,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 18: Sequence diagram illustrating a path lookup for a
+     Figure 17: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
