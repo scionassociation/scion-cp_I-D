@@ -1952,21 +1952,14 @@ path segment 4 |             |     |             |     |             |
    In order to maintain service availability, an AS SHOULD monitor the
    following aspects when deploying the SCION control plane:
 
-   *  For routers (to enable correlation with link states):
-
-      -  Fraction of configured core links that are up.
-
-      -  Fraction of configured child links that are up.
-
-      -  Fraction of configured parent links that are up (may be just 0/
-         non-0).
+   *  For routers (to enable correlation with link states): state of
+      configured links (core, child, parent)
 
    *  For any control service:
 
       -  Fraction of path lookups served successfully (see Section 5)
 
-      -  Time synchronization offset with other ASes in relation to
-         credible RTT (see Section 3.2)
+      -  Time synchronization offset with other ASes (see Section 3.2)
 
       -  Fraction of ASes found in non-expired segments for which a non-
          expired certificate exists
@@ -1988,7 +1981,7 @@ path segment 4 |             |     |             |     |             |
       -  Number of up segments available (may be just 0/non-0) younger
          than the propagation interval (or some multiple thereof).
 
-      -  Fraction of up segments that were successfully registred as
+      -  Fraction of up segments that were successfully registered as
          down segments (see Section 4).
 
       -  Fraction of children ASes (preferably only those to which the
