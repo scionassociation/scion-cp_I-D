@@ -1952,14 +1952,16 @@ path segment 4 |             |     |             |     |             |
    In order to maintain service availability, an AS SHOULD monitor the
    following aspects when deploying the SCION control plane:
 
-   *  For any control service:
+   *  For routers (to enable correlation with link states):
 
-      -  Fraction of configured CORE links that are UP.
+      -  Fraction of configured core links that are up.
 
-      -  Fraction of configured CHILD links that are UP.
+      -  Fraction of configured child links that are up.
 
-      -  Fraction of configured PARENT links that are UP (may be just 0/
+      -  Fraction of configured parent links that are up (may be just 0/
          non-0).
+
+   *  For any control service:
 
       -  Fraction of path lookups served successfully (see Section 5)
 
@@ -1969,28 +1971,29 @@ path segment 4 |             |     |             |     |             |
       -  Fraction of ASes found in non-expired segments for which a non-
          expired certificate exists
 
-   *  For a CORE AS:
+   *  For a core AS:
 
-      -  Fraction of CORE ASes (to which the link is UP) that can be
-         found in non-expired CORE segments
+      -  Fraction of core ASes (preferably only those to which the link
+         is up) that can be found in non-expired core segments
 
-      -  Fraction of ASes, CORE or CHILDREN, (to which the link is UP)
-         whereto a BEACON was initiated during the last propagation
-         interval
+      -  Fraction of ASes, core or children, (preferably only those to
+         which the link is up) whereto a beacon was initiated during the
+         last propagation interval
 
       -  Fraction of freshly propagated beacons for which at least one
-         corresponding DOWN segment has been registered (see Section 4)
+         corresponding down segment has been registered (see Section 4)
 
-   *  For a non-CORE AS:
+   *  For a non-core AS:
 
-      -  Number of UP segments available (may be just 0/non-0) younger
+      -  Number of up segments available (may be just 0/non-0) younger
          than the propagation interval (or some multiple thereof).
 
-      -  Fraction of UP segments that were successfully registred as
+      -  Fraction of up segments that were successfully registred as
          down segments (see Section 4).
 
-      -  Fraction of CHILDREN ASes (to which the link is UP) whereto a
-         BEACON was propagated during the last propagation interval
+      -  Fraction of children ASes (preferably only those to which the
+         link is up) whereto a beacon was propagated during the last
+         propagation interval
 
 3.2.  Effects of Clock Inaccuracy
 
