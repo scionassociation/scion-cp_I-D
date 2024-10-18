@@ -2986,53 +2986,47 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 <p id="section-3.1-1">In order to maintain service availability, an AS <span class="bcp14">SHOULD</span> monitor the following aspects when deploying the SCION control plane:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1-2.1">
-            <p id="section-3.1-2.1.1">For any control service:<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.1-2.1.2.1">
-                <p id="section-3.1-2.1.2.1.1">Fraction of configured CORE links that are UP.<a href="#section-3.1-2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1-2.1.2.2">
-                <p id="section-3.1-2.1.2.2.1">Fraction of configured CHILD links that are UP.<a href="#section-3.1-2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1-2.1.2.3">
-                <p id="section-3.1-2.1.2.3.1">Fraction of configured PARENT links that are UP (may be just 0/non-0).<a href="#section-3.1-2.1.2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1-2.1.2.4">
-                <p id="section-3.1-2.1.2.4.1">Fraction of path lookups served successfully (see <a href="#lookup" class="auto internal xref">Section 5</a>)<a href="#section-3.1-2.1.2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1-2.1.2.5">
-                <p id="section-3.1-2.1.2.5.1">Time synchronization offset with other ASes in relation to credible RTT (see <a href="#clock-inaccuracy" class="auto internal xref">Section 3.2</a>)<a href="#section-3.1-2.1.2.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1-2.1.2.6">
-                <p id="section-3.1-2.1.2.6.1">Fraction of ASes found in non-expired segments for which a non-expired certificate exists<a href="#section-3.1-2.1.2.6.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
+            <p id="section-3.1-2.1.1">For routers (to enable correlation with link states): state of configured links (core, child, parent)<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1">For a CORE AS:<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.2.1">For any control service:<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1-2.2.2.1">
-                <p id="section-3.1-2.2.2.1.1">Fraction of CORE ASes (to which the link is UP) that can be found in non-expired CORE segments<a href="#section-3.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.2.2.1.1">Fraction of path lookups served successfully (see <a href="#lookup" class="auto internal xref">Section 5</a>)<a href="#section-3.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.1-2.2.2.2">
-                <p id="section-3.1-2.2.2.2.1">Fraction of ASes, CORE or CHILDREN, (to which the link is UP) whereto a BEACON was initiated during the last propagation interval<a href="#section-3.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.2.2.2.1">Time synchronization offset with other ASes (see <a href="#clock-inaccuracy" class="auto internal xref">Section 3.2</a>)<a href="#section-3.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.1-2.2.2.3">
-                <p id="section-3.1-2.2.2.3.1">Fraction of freshly propagated beacons for which at least one corresponding DOWN segment has been registered (see <a href="#path-segment-reg" class="auto internal xref">Section 4</a>)<a href="#section-3.1-2.2.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.2.2.3.1">Fraction of ASes found in non-expired segments for which a non-expired certificate exists<a href="#section-3.1-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
           <li class="normal" id="section-3.1-2.3">
-            <p id="section-3.1-2.3.1">For a non-CORE AS:<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-2.3.1">For a core AS:<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1-2.3.2.1">
-                <p id="section-3.1-2.3.2.1.1">Number of UP segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).<a href="#section-3.1-2.3.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.3.2.1.1">Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments<a href="#section-3.1-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.1-2.3.2.2">
-                <p id="section-3.1-2.3.2.2.1">Fraction of UP segments that were successfully registred as down segments (see <a href="#path-segment-reg" class="auto internal xref">Section 4</a>).<a href="#section-3.1-2.3.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.3.2.2.1">Fraction of ASes, core or children, (preferably only those to which the link is up) whereto a beacon was initiated during the last propagation interval<a href="#section-3.1-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.1-2.3.2.3">
-                <p id="section-3.1-2.3.2.3.1">Fraction of CHILDREN ASes (to which the link is UP) whereto a BEACON was propagated during the last propagation interval<a href="#section-3.1-2.3.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1-2.3.2.3.1">Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see <a href="#path-segment-reg" class="auto internal xref">Section 4</a>)<a href="#section-3.1-2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-3.1-2.4">
+            <p id="section-3.1-2.4.1">For a non-core AS:<a href="#section-3.1-2.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1-2.4.2.1">
+                <p id="section-3.1-2.4.2.1.1">Number of up segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).<a href="#section-3.1-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1-2.4.2.2">
+                <p id="section-3.1-2.4.2.2.1">Fraction of up segments that were successfully registered as down segments (see <a href="#path-segment-reg" class="auto internal xref">Section 4</a>).<a href="#section-3.1-2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1-2.4.2.3">
+                <p id="section-3.1-2.4.2.3.1">Fraction of children ASes (preferably only those to which the link is up) whereto a beacon was propagated during the last propagation interval<a href="#section-3.1-2.4.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
