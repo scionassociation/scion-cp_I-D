@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 20 April 2025                                           S. Hitz
+Expires: 21 April 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                         17 October 2024
+                                                         18 October 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2025.
+   This Internet-Draft will expire on 21 April 2025.
 
 Copyright Notice
 
@@ -670,7 +670,7 @@ Table of Contents
    Recovering from a partitioned network is also seamless as only coarse
    time synchronization between the partitions is required to resume
    normal operation and move forward with updates of the cryptographic
-   material.  Section 2.3.3 further describes impact of time
+   material.  Section 2.3.3 further describes the impact of time
    synchronization.
 
 1.7.  Communication Protocol
