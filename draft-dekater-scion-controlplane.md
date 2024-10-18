@@ -1274,7 +1274,21 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
-### Effects of Clock Inaccuracy {#clock-inaccuracy}
+# Deployment Considerations
+
+## Monitoring Considerations
+
+In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
+
+- The total number of PCBs propagated and received should continuously increase.
+- At least some path segments should be registered every registration period (see [](#path-segment-reg)).
+- The AS path storage should contain some paths
+- AS certificates must be within their validity period
+- The control plane must be continuously service path lookups (see [](#lookup))
+- The components should keep sufficient (loose) time synchronization with other ASes (see [](#clock-inaccuracy))
+
+
+## Effects of Clock Inaccuracy {#clock-inaccuracy}
 
 A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
 
@@ -2160,6 +2174,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 Major changes:
 
 - New section: Path MTU
+-New section: Monitoring Considerations
 - Completed description of Control Services gRPC API in appendix
 
 Minor changes:
