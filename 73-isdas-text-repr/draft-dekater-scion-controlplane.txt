@@ -592,12 +592,12 @@ Table of Contents
 
 1.5.4.  Text Representation
 
-1.5.4.1.  ISD number
+1.5.4.1.  ISD numbers
 
    The text representation of SCION ISD numbers MUST be its decimal
    ASCII representation.
 
-1.5.4.2.  AS number
+1.5.4.2.  AS numbers
 
    The text representation of SCION AS numbers is similar to IPv6 (see
    [RFC5952]) but not identical.  It MUST be as follows:
@@ -619,7 +619,7 @@ Table of Contents
       example, if a program receives the AS number 0:1:f, it MAY display
       the number as "65551".
 
-1.5.4.3.  <ISD, AS> tuple
+1.5.4.3.  <ISD, AS> tuples
 
    The text representation of SCION addresses MUST be <ISD>-<AS>, where
    <ISD> is the text representation of the ISD number, <AS> is the text
