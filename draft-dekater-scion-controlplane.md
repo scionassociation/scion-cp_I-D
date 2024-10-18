@@ -2164,7 +2164,9 @@ Major changes:
 
 Minor changes:
 
+- Introduction: clarify goal of the document
 - Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.
+- Clarify text representation of ISD-AS
 - General rewording
 - Added reference to SCIONLab as a testbed for implementors
 - Introduced this change log
