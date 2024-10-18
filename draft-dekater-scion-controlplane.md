@@ -1280,13 +1280,23 @@ The propagation procedure includes the following elements:
 
 In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
 
-- The total number of PCBs propagated and received should continuously increase.
-- At least some path segments should be registered every registration period (see [](#path-segment-reg)).
-- The AS path storage should contain some paths
-- AS certificates must be within their validity period
-- The control plane must be continuously service path lookups (see [](#lookup))
-- The components should keep sufficient (loose) time synchronization with other ASes (see [](#clock-inaccuracy))
+- For any control service:
+  - Fraction of configured CORE links that are UP.
+  - Fraction of configured CHILD links that are UP.
+  - Fraction of configured PARENT links that are UP (may be just 0/non-0).
+  - Fraction of path lookups served successfully (see [](#lookup))
+  - Time synchronization offset with other ASes in relation to credible RTT (see [](#clock-inaccuracy))
+  - Fraction of ASes found in non-expired segments for which a non-expired certificate exists
 
+- For a core AS:
+  - Fraction of CORE ASes (to which the link is UP) that can be found in non-expired CORE segments
+  - Fraction of ASes, CORE or CHILDREN, (to which the link is UP) whereto a BEACON was initiated during the last propagation interval
+  - Fraction of freshly propagated beacons for which at least one corresponding DOWN segment has been registered (see [](#path-segment-reg))
+
+- For a non-core AS:
+  - Number of UP segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
+  - Fraction of UP segments that were successfully registred as down segments (see [](#path-segment-reg)).
+  - Fraction of children ASes (to which the link is UP) whereto a BEACON was propagated during the last propagation interval
 
 ## Effects of Clock Inaccuracy {#clock-inaccuracy}
 
