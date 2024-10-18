@@ -311,9 +311,6 @@ For fast validation of the path information carried in individual packets during
 
 Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address is of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
 
-The ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. `4-ff00:1:f`.
-
-
 **Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
 
@@ -340,18 +337,6 @@ Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based netwo
 A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
 
 
-#### Text Representation
-
-The default text representation for SCION AS numbers is very similar to IPv6 (see {{RFC5952}}). It uses a 16-bit colon-separated lower-case hex encoding with leading 0's omitted: `0:0:0` to `ffff:ffff:ffff`.
-
-In SCION, the following rules apply:
-
-- The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
-
-For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
-
-
 #### Special-Purpose SCION AS Numbers
 
 | AS               | Size        | Description                                                                 |
@@ -371,6 +356,26 @@ The rest of the space is currently unallocated.
 
 SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
+### Text Representation
+
+#### ISD numbers
+
+The text representation of SCION ISD numbers MUST be its decimal ASCII representation.
+
+#### AS numbers
+
+The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}}) but not identical. It MUST be as follows:
+
+- It uses a 16-bit colon-separated lower-case hex encoding with leading 0s omitted: `0:0:0` to `ffff:ffff:ffff`.
+- The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
+- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
+- For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
+
+####  <ISD, AS> tuples
+
+The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the litteral ASCII character 0x2D.
+
+For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
 
 ## Avoiding Circular Dependencies and Partitioning
 
@@ -2159,7 +2164,9 @@ Major changes:
 
 Minor changes:
 
+- Introduction: clarify goal of the document
 - Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.
+- Clarify text representation of ISD-AS
 - General rewording
 - Added reference to SCIONLab as a testbed for implementors
 - Introduced this change log
