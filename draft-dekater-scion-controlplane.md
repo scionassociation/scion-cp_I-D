@@ -385,7 +385,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
 
-Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes impact of time synchronization.
+Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.
 
 
 ## Communication Protocol
