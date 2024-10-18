@@ -1288,15 +1288,15 @@ In order to maintain service availability, an AS SHOULD monitor the following as
   - Time synchronization offset with other ASes in relation to credible RTT (see [](#clock-inaccuracy))
   - Fraction of ASes found in non-expired segments for which a non-expired certificate exists
 
-- For a core AS:
+- For a CORE AS:
   - Fraction of CORE ASes (to which the link is UP) that can be found in non-expired CORE segments
   - Fraction of ASes, CORE or CHILDREN, (to which the link is UP) whereto a BEACON was initiated during the last propagation interval
   - Fraction of freshly propagated beacons for which at least one corresponding DOWN segment has been registered (see [](#path-segment-reg))
 
-- For a non-core AS:
+- For a non-CORE AS:
   - Number of UP segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
   - Fraction of UP segments that were successfully registred as down segments (see [](#path-segment-reg)).
-  - Fraction of children ASes (to which the link is UP) whereto a BEACON was propagated during the last propagation interval
+  - Fraction of CHILDREN ASes (to which the link is UP) whereto a BEACON was propagated during the last propagation interval
 
 ## Effects of Clock Inaccuracy {#clock-inaccuracy}
 
