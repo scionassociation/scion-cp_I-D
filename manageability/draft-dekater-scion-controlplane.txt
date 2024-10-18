@@ -1952,21 +1952,45 @@ path segment 4 |             |     |             |     |             |
    In order to maintain service availability, an AS SHOULD monitor the
    following aspects when deploying the SCION control plane:
 
-   *  The total number of PCBs propagated and received should
-      continuously increase.
+   *  For any control service:
 
-   *  At least some path segments should be registered every
-      registration period (see Section 4).
+      -  Fraction of configured CORE links that are UP.
 
-   *  The AS path storage should contain some paths
+      -  Fraction of configured CHILD links that are UP.
 
-   *  AS certificates must be within their validity period
+      -  Fraction of configured PARENT links that are UP (may be just 0/
+         non-0).
 
-   *  The control plane must be continuously service path lookups (see
-      Section 5)
+      -  Fraction of path lookups served successfully (see Section 5)
 
-   *  The components should keep sufficient (loose) time synchronization
-      with other ASes (see Section 3.2)
+      -  Time synchronization offset with other ASes in relation to
+         credible RTT (see Section 3.2)
+
+      -  Fraction of ASes found in non-expired segments for which a non-
+         expired certificate exists
+
+   *  For a core AS:
+
+      -  Fraction of CORE ASes (to which the link is UP) that can be
+         found in non-expired CORE segments
+
+      -  Fraction of ASes, CORE or CHILDREN, (to which the link is UP)
+         whereto a BEACON was initiated during the last propagation
+         interval
+
+      -  Fraction of freshly propagated beacons for which at least one
+         corresponding DOWN segment has been registered (see Section 4)
+
+   *  For a non-core AS:
+
+      -  Number of UP segments available (may be just 0/non-0) younger
+         than the propagation interval (or some multiple thereof).
+
+      -  Fraction of UP segments that were successfully registred as
+         down segments (see Section 4).
+
+      -  Fraction of children ASes (to which the link is UP) whereto a
+         BEACON was propagated during the last propagation interval
 
 3.2.  Effects of Clock Inaccuracy
 
