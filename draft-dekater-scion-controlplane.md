@@ -1280,23 +1280,22 @@ The propagation procedure includes the following elements:
 
 In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
 
+- For routers (to enable correlation with link states): state of configured links (core, child, parent)
+
 - For any control service:
-  - Fraction of configured CORE links that are UP.
-  - Fraction of configured CHILD links that are UP.
-  - Fraction of configured PARENT links that are UP (may be just 0/non-0).
   - Fraction of path lookups served successfully (see [](#lookup))
-  - Time synchronization offset with other ASes in relation to credible RTT (see [](#clock-inaccuracy))
+  - Time synchronization offset with other ASes (see [](#clock-inaccuracy))
   - Fraction of ASes found in non-expired segments for which a non-expired certificate exists
 
-- For a CORE AS:
-  - Fraction of CORE ASes (to which the link is UP) that can be found in non-expired CORE segments
-  - Fraction of ASes, CORE or CHILDREN, (to which the link is UP) whereto a BEACON was initiated during the last propagation interval
-  - Fraction of freshly propagated beacons for which at least one corresponding DOWN segment has been registered (see [](#path-segment-reg))
+- For a core AS:
+  - Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments
+  - Fraction of ASes, core or children, (preferably only those to which the link is up) whereto a beacon was initiated during the last propagation interval
+  - Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see [](#path-segment-reg))
 
-- For a non-CORE AS:
-  - Number of UP segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
-  - Fraction of UP segments that were successfully registred as down segments (see [](#path-segment-reg)).
-  - Fraction of CHILDREN ASes (to which the link is UP) whereto a BEACON was propagated during the last propagation interval
+- For a non-core AS:
+  - Number of up segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
+  - Fraction of up segments that were successfully registered as down segments (see [](#path-segment-reg)).
+  - Fraction of children ASes (preferably only those to which the link is up) whereto a beacon was propagated during the last propagation interval
 
 ## Effects of Clock Inaccuracy {#clock-inaccuracy}
 
