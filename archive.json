@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-17T00:20:26.375388+00:00",
+  "timestamp": "2024-10-20T00:22:43.028718+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -413,7 +413,7 @@
       "id": "I_kwDOJx2-rs6JFS5N",
       "title": "Add context to bullet points in 2.1.2 (Extending a PCB) ",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/19",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -424,8 +424,8 @@
       ],
       "body": " 2.1.2: in the bullet point where we have references, we should expand this sentences and add some short context (5/6 words) before the pointer to the other section\r\n ```\r\n   *  For the specification of one PCB, see Section 2.2\r\n\r\n   *  For more details on selecting PCBs, see Section 2.3.1\r\n\r\n   *  For more details on propagating PCBs, see Section 2.3.2\r\n ```\r\n\r\nFrom discussion with Eliot (28.08.23)",
       "createdAt": "2024-05-16T09:34:23Z",
-      "updatedAt": "2024-07-26T23:02:23Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-18T10:04:32Z",
+      "closedAt": "2024-10-18T10:04:32Z",
       "comments": []
     },
     {
@@ -433,7 +433,7 @@
       "id": "I_kwDOJx2-rs6JFU0C",
       "title": "Manageability: what must an AS monitor (paths, links, certificates, \u2026) and reference to deployment",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/20",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -445,10 +445,10 @@
         "Prio 2",
         "needs-discussion"
       ],
-      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [ ] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot. \r\n\r\n- [x] short paragraph in the appendix (and pointer to SCIONLab)\r\n- [ ] Mention it in changelog\r\n- [ ] add in other drafts\r\n\r\n",
+      "body": "Manageability: small discussion of things that must be tracked in order to maintain service: PCB entries on devices, paths, links, certificates, \u2026\r\n\r\n- [x] Check if this is not clear from the draft and if some text has to be adapted\r\n\r\nThis input comes from Eliot. \r\n\r\n- [x] short paragraph in the appendix (and pointer to SCIONLab)\r\n- [x] Mention it in changelog\r\n- [ ] add in other drafts\r\n\r\n",
       "createdAt": "2024-05-16T09:38:07Z",
-      "updatedAt": "2024-10-15T10:10:44Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-18T15:07:50Z",
+      "closedAt": "2024-10-18T14:26:13Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -733,7 +733,7 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2024-10-08T09:02:57Z",
+      "updatedAt": "2024-10-18T11:29:19Z",
       "closedAt": null,
       "comments": [
         {
@@ -756,6 +756,13 @@
           "body": "> > Shouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n> \r\n> That's exactly what it is, we just picked a generous value for the allowed inaccuracies. Picking a value that already had a meaning in SCION seemed _less_ arbitrary than making up another arbitrary value. There doesn't seem to be a non-arbitrary choice.\r\n\r\nI'm not sure I can follow this argument. If we want an \"arbitrary\" value, we could just say so. Picking the minimum hopfield expiration time requires not only more text + a (pointless) reference, I also found it really confusing, thinking I was lacking some obvious understanding why the minimum hopfield expiration is relevant here. Also, the value is not really arbitrary, it depends on what the acceptable/expected clock deviation is. Maybe we can just write that?\r\nI don't really see the benefit of picking a time interval that is defined somewhere else in the document in an unrelated context.",
           "createdAt": "2024-07-09T14:41:36Z",
           "updatedAt": "2024-07-09T14:41:36Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I read through the draft, I also agree that Avoiding Circular Dependencies and Partitioning needs some review, this section is more some design considerations..",
+          "createdAt": "2024-10-17T19:09:23Z",
+          "updatedAt": "2024-10-17T19:09:23Z"
         }
       ]
     },
@@ -794,7 +801,7 @@
       "id": "I_kwDOJx2-rs6O67LK",
       "title": "Anapaya review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/50",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -805,8 +812,8 @@
       ],
       "body": "Following the first wave of ISE feedback, we did quite some work, especially on the control plane draft:\r\n\r\nPlease review (sorted by urgency): \r\n- #63 \r\n- 2.3.3.  Effects of Clock Inaccuracy\r\n-  2.4.  Path Discovery Time and Scalability\r\n-  5.  Security Considerations\r\n- Control Service gRPC API (appendix)\r\n\r\n\r\nOther pointers:\r\n- [Changelog](https://github.com/scionassociation/scion-cp_I-D/releases/tag/draft-dekater-scion-controlplane-04)\r\n- [Datatracker diff v-03 to main](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt) \r\n\r\n@shitz @oncilla @sgmonroy could one of you have a look at the overall changes and provide some feedback? If you feel, you can  directly open a PR.  We are planning to have a new submission when datatracker reopens\u00a0on 21.07, before our panrg session to address #48 , and it would be great if we could also incorporate some of your feedback.\r\n\r\n  \r\n\r\n",
       "createdAt": "2024-07-09T10:31:37Z",
-      "updatedAt": "2024-10-08T12:44:36Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-18T11:27:15Z",
+      "closedAt": "2024-10-18T11:27:15Z",
       "comments": [
         {
           "author": "oncilla",
@@ -931,7 +938,7 @@
       "id": "I_kwDOJx2-rs6RBb0Z",
       "title": "General review - remove forward references",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/58",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -941,10 +948,10 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [x] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [ ] @nicorusti general re-read through the draft",
+      "body": "Twin issues: \r\n- https://github.com/scionassociation/scion-dp_I-D/issues/45\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36\r\n\r\n\r\n- [x] @knmeynell update terminology and de-hyphenate as in https://github.com/scionassociation/scion-dp_I-D/pull/51\r\n- [x] @nicorusti general re-read through the draft",
       "createdAt": "2024-07-26T22:50:16Z",
-      "updatedAt": "2024-10-11T13:49:54Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-17T17:32:37Z",
+      "closedAt": "2024-10-17T17:32:37Z",
       "comments": []
     },
     {
@@ -1025,6 +1032,61 @@
           "body": "I tried my best. Probably missed a spot or two.\r\nThere weren't many opportunities to reference the appendix. Most places had enough documentation in-line.\r\nI couldn't remember if there was anything missing from the appendix. Was there?",
           "createdAt": "2024-10-04T16:59:58Z",
           "updatedAt": "2024-10-04T16:59:58Z"
+        }
+      ]
+    },
+    {
+      "number": 72,
+      "id": "I_kwDOJx2-rs6atI-r",
+      "title": "2.3.1.2.  Selection Policy Example needs review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/72",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "Prio 3"
+      ],
+      "body": "This section IMHO does not clarify how an AS makes a choice, and why it does not pick A-D-F-H-J or C-E-G-I-J in the example. \r\nSee [comments nico (PDF)](https://github.com/user-attachments/files/17421282/scan-2.pdf)\r\n",
+      "createdAt": "2024-10-17T19:07:44Z",
+      "updatedAt": "2024-10-17T19:07:44Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 73,
+      "id": "I_kwDOJx2-rs6azdki",
+      "title": "Make text representation of AS numbers more precise",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/73",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": "We now have: \r\n```\r\nThe ISD-AS number is a SCION-specific number consisting of 64 bits: the top 16 bits indicating the ISD, and the bottom 48 bits indicating the AS. The text representation uses a dash separator between the ISD and AS numbers, e.g. `4-ff00:1:f`.\r\n```\r\n\r\nThis should be integrated with details from  https://github.com/scionproto/scion/wiki/ISD-and-AS-numbering . We need this to be precise as this is referenced by the PKI draft in section \"`ISD-AS number` Attribute\", and it must coincide with the way the field is \"printed\" in the cert. \r\n\r\n\r\n\r\n",
+      "createdAt": "2024-10-18T10:46:26Z",
+      "updatedAt": "2024-10-18T12:13:47Z",
+      "closedAt": "2024-10-18T12:13:47Z",
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What do you mean by \"should be integrated\"? Isn't the draft supposed to be authoritative? Both docs say the same thing, with the exception of how the decimal representation is supported: the draft says that the decimal representation is allowed for human consumption. The wiki says that programs always use it when talking to humans. Is that what the problem could be for PKI?\r\n ",
+          "createdAt": "2024-10-18T11:04:20Z",
+          "updatedAt": "2024-10-18T11:04:20Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "FOr the records, this is the text that I removed from the PKI draft ([PR](https://github.com/scionassociation/scion-cppki_I-D/pull/47)) to be replaced with a reference to the CP draft: \r\n```\r\n- The canonical string representation uses a dash separator between the ISD and AS numbers.\r\n- The ISD numbers are formatted as decimal.\r\n- The canonical string formatting of AS numbers in the BGP AS range (0, 2<sup>32-1</sup>) is the decimal form. Larger AS numbers, i.e., from 2<sup>32</sup> to 2<sup>48-1</sup>, use a 16-bit, colon-separated, lower-case, hex encoding with leading zeros omitted: `1:0:0` to `ffff:ffff:ffff`.\r\n\r\n**Example:** AS `ff00:0:110` in ISD `1` is formatted as `1-ff00:0:110`.\r\n```\r\n",
+          "createdAt": "2024-10-18T11:21:40Z",
+          "updatedAt": "2024-10-18T11:22:00Z"
         }
       ]
     }
@@ -4804,24 +4866,26 @@
       "id": "PR_kwDOJx2-rs56SB5g",
       "title": "General Edits",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/60",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "General edits to improve consistency, readability and to rationalise superfluous text. Also fixed some unclear or confusing text.\r\n\r\nResolves #58 ",
       "createdAt": "2024-09-03T15:39:33Z",
-      "updatedAt": "2024-10-16T20:46:14Z",
+      "updatedAt": "2024-10-17T17:32:36Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3",
+      "baseRefOid": "8ad3175185d3a4a40e89ab2ec005dc12417b80eb",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "general-review",
-      "headRefOid": "e3f42eff265722ec56eeaa77992b6953217dd2c0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "a57e998b3224b98b0ddb905cd7a278cdbad8b72f",
+      "closedAt": "2024-10-17T17:32:36Z",
+      "mergedAt": "2024-10-17T17:32:36Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "b4d0b3a4cea2e9331b1cc8de1dbadfc3a8699d3d"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5103,6 +5167,19 @@
               "updatedAt": "2024-10-11T15:25:49Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6NnLgH",
+          "commit": {
+            "abbreviatedOid": "a57e998"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-17T17:32:13Z",
+          "updatedAt": "2024-10-17T17:32:13Z",
+          "comments": []
         }
       ]
     },
@@ -5572,7 +5649,7 @@
       "labels": [],
       "body": " Also cleaned-up extraneous blank lines. Replaced phrases like \"on xyz-level\".\r\n\r\nFixes #67 ",
       "createdAt": "2024-10-04T16:55:59Z",
-      "updatedAt": "2024-10-08T08:29:55Z",
+      "updatedAt": "2024-10-18T14:28:46Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "93ab0da2eb6b55dbdb5f3bdc5e4155f84fcdccf1",
@@ -5672,24 +5749,26 @@
       "id": "PR_kwDOJx2-rs598qM_",
       "title": "cp_draft: fix recommended/typical values for best PCB set size and AS cert TTL",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/69",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses #50 ",
       "createdAt": "2024-10-08T13:00:39Z",
-      "updatedAt": "2024-10-15T16:30:17Z",
+      "updatedAt": "2024-10-17T13:05:19Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5189e4d239f924e82de6afd9bf75d7bc89ee3fd3",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "anapaya_review",
       "headRefOid": "b2e89074d83d56aff3ea035ae2b406e9a348629c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-17T13:05:15Z",
+      "mergedAt": "2024-10-17T13:05:15Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "8ad3175185d3a4a40e89ab2ec005dc12417b80eb"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -5706,7 +5785,21 @@
           "updatedAt": "2024-10-15T14:48:43Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6NkmtJ",
+          "commit": {
+            "abbreviatedOid": "b2e8907"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-17T13:04:46Z",
+          "updatedAt": "2024-10-17T13:04:46Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 70,
@@ -5759,6 +5852,240 @@
           "body": "LGTM",
           "createdAt": "2024-10-11T13:57:10Z",
           "updatedAt": "2024-10-11T13:57:10Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 71,
+      "id": "PR_kwDOJx2-rs5_AFEh",
+      "title": "General review - nico",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/71",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #19 \r\nContributes to #58",
+      "createdAt": "2024-10-17T17:55:09Z",
+      "updatedAt": "2024-10-18T10:04:38Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "b4d0b3a4cea2e9331b1cc8de1dbadfc3a8699d3d",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "nic-review",
+      "headRefOid": "e7b08a324728a360a0dd6808de190b21fd84d506",
+      "closedAt": "2024-10-18T10:04:31Z",
+      "mergedAt": "2024-10-18T10:04:31Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "7f28a8f08af3490638a62138694bfaa4b481c29e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6Ns3_n",
+          "commit": {
+            "abbreviatedOid": "6f17135"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T08:11:05Z",
+          "updatedAt": "2024-10-18T08:11:31Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "describes impact -> describes the impact",
+              "createdAt": "2024-10-18T08:11:05Z",
+              "updatedAt": "2024-10-18T08:11:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6NtDp_",
+          "commit": {
+            "abbreviatedOid": "6f17135"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-18T08:30:45Z",
+          "updatedAt": "2024-10-18T08:30:46Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "```suggestion\r\nRecovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.\r\n```",
+              "createdAt": "2024-10-18T08:30:45Z",
+              "updatedAt": "2024-10-18T08:30:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6NtSnL",
+          "commit": {
+            "abbreviatedOid": "e7b08a3"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T08:55:21Z",
+          "updatedAt": "2024-10-18T08:55:21Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Nt90j",
+          "commit": {
+            "abbreviatedOid": "e7b08a3"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good to me",
+          "createdAt": "2024-10-18T10:04:16Z",
+          "updatedAt": "2024-10-18T10:04:16Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 74,
+      "id": "PR_kwDOJx2-rs5_GDVt",
+      "title": "addressing: clarify text representation",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/74",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "contributes to #73 ",
+      "createdAt": "2024-10-18T11:56:57Z",
+      "updatedAt": "2024-10-18T12:13:52Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "7f28a8f08af3490638a62138694bfaa4b481c29e",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "73-isdas-text-repr",
+      "headRefOid": "68f392db347c9efd52b6fc1fb0cae188b0c7b591",
+      "closedAt": "2024-10-18T12:13:46Z",
+      "mergedAt": "2024-10-18T12:13:46Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "fb51d27709ffc752093158a1989b28cd87fe7646"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6NvBlY",
+          "commit": {
+            "abbreviatedOid": "68f392d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T12:13:35Z",
+          "updatedAt": "2024-10-18T12:13:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 75,
+      "id": "PR_kwDOJx2-rs5_GgNP",
+      "title": "add section about monitoring the CP",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/75",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #20",
+      "createdAt": "2024-10-18T13:02:53Z",
+      "updatedAt": "2024-10-18T14:28:02Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "fb51d27709ffc752093158a1989b28cd87fe7646",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "manageability",
+      "headRefOid": "f13368a7c7a1356207c3b9392bc5e8343f47794a",
+      "closedAt": "2024-10-18T14:26:12Z",
+      "mergedAt": "2024-10-18T14:26:12Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "eae432ed9cee1e13c30ce3a8623f9594f86ef4bd"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6NwcSm",
+          "commit": {
+            "abbreviatedOid": "f13368a"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks fine to me.",
+          "createdAt": "2024-10-18T14:26:00Z",
+          "updatedAt": "2024-10-18T14:26:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "id": "PR_kwDOJx2-rs5_HRSf",
+      "title": "add section about monitoring the CP (continued)",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/76",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Continues #75 \r\nResolves #20 ",
+      "createdAt": "2024-10-18T14:32:18Z",
+      "updatedAt": "2024-10-18T15:10:56Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "eae432ed9cee1e13c30ce3a8623f9594f86ef4bd",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "manageability",
+      "headRefOid": "09d31e48bdfba2047465f22240d38dfb5e19e9bb",
+      "closedAt": "2024-10-18T15:10:50Z",
+      "mergedAt": "2024-10-18T15:10:50Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "ec4e9044cd576d94a2576d7f9b204bad474245c0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6Nw0fg",
+          "commit": {
+            "abbreviatedOid": "09d31e4"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-10-18T15:07:35Z",
+          "updatedAt": "2024-10-18T15:07:35Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6Nw2El",
+          "commit": {
+            "abbreviatedOid": "09d31e4"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-18T15:10:40Z",
+          "updatedAt": "2024-10-18T15:10:40Z",
           "comments": []
         }
       ]
