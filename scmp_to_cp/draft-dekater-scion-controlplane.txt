@@ -332,7 +332,7 @@ Table of Contents
    traffic forwarding.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
-   Message Protocol (ICMP).  SCMP is described in Section 6.
+   Message Protocol (ICMP).  This is described in Section 6.
 
    *Trust Root Configuration (TRC)*: A Trust Root Configuration or TRC
    is a signed collection of certificates pertaining to an isolation
@@ -3135,7 +3135,7 @@ path segment 4 |             |     |             |     |             |
 6.7.  SCMP Authentication
 
    Authentication of SCMP packets is not specified here.  In current
-   deployments it is still experimental.  Endpoints should therefore
+   deployments it is still experimental so Endpoints should therefore
    validate link down messages (External Interface Down (Section 6.5.2)
    and Internal Connectivity Down (Section 6.5.3)) with additional
    signals for reliable operations.
