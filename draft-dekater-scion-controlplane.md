@@ -229,7 +229,7 @@ This document provides an extensive description of how the SCION Data Plane is i
 
 **Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries and accumulates path segments, which can subsequently be used for traffic forwarding.
 
-**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). SCMP is described in [](#scmp).
+**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
 **Trust Root Configuration (TRC)**: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
@@ -1945,7 +1945,7 @@ The identifier is set to the identifier value from the [Traceroute Request messa
 
 ## SCMP Authentication
 
-Authentication of SCMP packets is not specified here. In current deployments it is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
+Authentication of SCMP packets is not specified here. In current deployments it is still experimental so Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
 # Security Considerations
 
