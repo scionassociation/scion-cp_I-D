@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-12T00:19:59.299476+00:00",
+  "timestamp": "2024-11-14T00:20:29.315204+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6089,6 +6089,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 78,
+      "id": "PR_kwDOJx2-rs6BojUp",
+      "title": "scmp: import SCMP from dataplane draft",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/78",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Also in passing:\r\n* added a missing RFC reference\r\n* removed many superfluous blank lines\r\n* untabified\r\n* extended the \"~\" lines around some code blocks, because it seems to help my editor not get confused (hopefully it won't increase the confusion of other editors).\r\n\r\nContributes to: https://github.com/scionassociation/scion-dp_I-D/issues/84",
+      "createdAt": "2024-11-12T13:24:12Z",
+      "updatedAt": "2024-11-13T09:08:32Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ec4e9044cd576d94a2576d7f9b204bad474245c0",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "scmp_to_cp",
+      "headRefOid": "668fd8bea29d35d957b972f6e68cfce6757010cd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
