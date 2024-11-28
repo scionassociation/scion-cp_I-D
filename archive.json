@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-26T00:22:00.083078+00:00",
+  "timestamp": "2024-11-28T00:22:19.752951+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6115,6 +6115,66 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 79,
+      "id": "PR_kwDOJx2-rs6DK8IG",
+      "title": "Clarifies aim of document",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/79",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Also corrects erroneous reference to Data Plane.",
+      "createdAt": "2024-11-26T11:06:37Z",
+      "updatedAt": "2024-11-27T09:08:27Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ec4e9044cd576d94a2576d7f9b204bad474245c0",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "this-is-not-a-standard",
+      "headRefOid": "610b2780fe1ee5e810a259fbf24bccfd33c52f91",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6S428t",
+          "commit": {
+            "abbreviatedOid": "4a5744a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-11-27T09:05:54Z",
+          "updatedAt": "2024-11-27T09:05:55Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nThe SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture. This is not intended for publication as an Internet Standard.\r\n```",
+              "createdAt": "2024-11-27T09:05:54Z",
+              "updatedAt": "2024-11-27T09:05:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6S449R",
+          "commit": {
+            "abbreviatedOid": "610b278"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-11-27T09:08:27Z",
+          "updatedAt": "2024-11-27T09:08:27Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
