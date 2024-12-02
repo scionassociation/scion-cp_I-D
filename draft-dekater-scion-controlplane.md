@@ -2514,7 +2514,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
- - Moved SCMP specification from draft-dekater-scion-dataplane-03
+ - Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document
 
 ## draft-dekater-scion-controlplane-06
 {:numbered="false"}
