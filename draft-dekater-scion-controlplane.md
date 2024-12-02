@@ -113,20 +113,17 @@ informative:
         name: Oliver Riordan
   SCMP:
     title: SCMP Documentation
-    date: 2023
+    date: 2024
     target: https://docs.scion.org/en/latest/protocols/scmp.html
     author:
       -
         ins: Anapaya
-        name: Anapaya Systems
         org: Anapaya Systems
       -
         ins: ETH
-        name: ETH Zuerich
         org: ETH Zuerich
       -
         ins: SCION
-        name: SCION Association
         org: SCION Association
   SCIONLAB:
     title: SCIONLAB - A Next-Generation Internet Testbed
@@ -2517,7 +2514,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
- - Moved SCMP scpecification from the data-plane draft
+ - Moved SCMP specification from draft-dekater-scion-dataplane-03
 
 ## draft-dekater-scion-controlplane-06
 {:numbered="false"}
