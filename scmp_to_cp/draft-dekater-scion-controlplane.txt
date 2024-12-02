@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 May 2025                                             S. Hitz
+Expires: 5 June 2025                                             S. Hitz
                                                          Anapaya Systems
-                                                        13 November 2024
+                                                         2 December 2024
 
 
                           SCION Control Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 May 2025.
+   This Internet-Draft will expire on 5 June 2025.
 
 Copyright Notice
 
@@ -3508,7 +3508,7 @@ path segment 4 |             |     |             |     |             |
               Generation Internet Testbed", 2020,
               <https://ieeexplore.ieee.org/abstract/document/9259355>.
 
-   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
+   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2024,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
 Acknowledgments
@@ -4046,7 +4046,7 @@ Change Log
 
 draft-dekater-scion-controlplane-07
 
-   *  Moved SCMP scpecification from the data-plane draft
+   *  Moved SCMP specification from draft-dekater-scion-dataplane-03
 
 draft-dekater-scion-controlplane-06
 
