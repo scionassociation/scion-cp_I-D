@@ -96,6 +96,7 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
   RFC1122:
+  RFC4893:
   RFC5398:
   RFC6996:
   RFC9217:
@@ -110,6 +111,20 @@ informative:
       -
         ins: O. Riordan
         name: Oliver Riordan
+  SCMP:
+    title: SCMP Documentation
+    date: 2024
+    target: https://docs.scion.org/en/latest/protocols/scmp.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
   SCIONLAB:
     title: SCIONLAB - A Next-Generation Internet Testbed
     date: 2020
@@ -149,7 +164,6 @@ informative:
 This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.
 
 The main goal of the SCION Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets in the data plane. This document discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION Autonomous System (AS) can register segments according to its own policy and can specify which path properties and algorithm(s) to use in the selection procedure. The document also describes the path lookup process whereby endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.
-
 
 --- middle
 
@@ -212,8 +226,9 @@ This document provides an extensive description of how the SCION Data Plane is i
 
 **Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries and accumulates path segments, which can subsequently be used for traffic forwarding.
 
-**Trust Root Configuration (TRC)**: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
+**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
+**Trust Root Configuration (TRC)**: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
 ## Conventions and Definitions
 
@@ -264,7 +279,6 @@ A path can contain at most one peering link shortcut which means they can only b
 
 Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
 
-
 ## Routing
 
 SCION provides path-aware inter-domain routing between ASes across the Internet. The SCION Control Plane is responsible for discovering these inter-domain paths and making them available to the endpoints within the ASes.
@@ -290,7 +304,6 @@ The **Control Service** is responsible for the path exploration and registration
 
 **Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
-
 ### Path Segments
 
 SCION distinguishes the following types of path segments:
@@ -313,7 +326,6 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 **Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
-
 ### ISD Numbers
 
 An ISD number is the 16-bit global identifier for an ISD and MUST be globally unique.
@@ -331,11 +343,9 @@ The following table gives an overview of the ISD number allocation:
 
 Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
 
-
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
-
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4893}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
 
 #### Special-Purpose SCION AS Numbers
 
@@ -391,7 +401,6 @@ A secure and reliable routing architecture has to be designed specifically to av
 Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
 
 Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.
-
 
 ## Communication Protocol
 
@@ -457,6 +466,7 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                                  v   v
                             +----#---#----+
                             |     AS Y    |
+
 ~~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
@@ -546,7 +556,7 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
-~~~~
+~~~~~
 
                 AS Entry Core         AS Entry Y          AS Entry Z
 
@@ -592,9 +602,8 @@ path segment 4 |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                  egress 1       ingress 3 - egress 5      ingress 1
 
-~~~~
+~~~~~
 {: #figure-4 title="Possible up- or down segments for AS Z"}
-
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
@@ -603,7 +612,6 @@ path segment 4 |             |     |             |     |             |
 {{figure-5}} graphically represents the PCB message format:
 
 ~~~~
-
                               PCB / PATH SEGMENT
 
 +-------------+------------+------------+--------+--------------------+
@@ -721,7 +729,6 @@ In the Protobuf message format, the information component of a PCB is called the
 - `segment_id`: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is REQUIRED for the computation of the message authentication code (MAC) of an AS's Hop Field. The MAC is used for Hop Field verification in the data plane and the originating core AS MUST fill this field with a cryptographically random number.
 
 **Note:** See [](#hopfield) for more information on the Hop Field message format. {{I-D.dekater-scion-dataplane}} provides a detailed description of the computation of the MAC and the verification of the Hop Field in the data plane.
-
 
 #### AS Entry {#ase-message}
 
@@ -1075,7 +1082,6 @@ In Protobuf, extensions are specified as follows:
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
 
-
 ### PCB Validity {#pcb-validity}
 
 To be valid (that is, usable to construct a valid path), a PCB MUST:
@@ -1132,7 +1138,6 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-
 #### Selection Policy Example
 
 {{figure-7}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.
@@ -1141,9 +1146,8 @@ The scalability implications of such parameters are further discussed in [](#sca
 - The network at the upper right uses *peering links* as the selection criterion. That is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.
 - The lower network selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.
 
-
 ~~~~
- Selected path segment: #------# or *------*
+Selected path segment: #------# or *------*
  Peering Link: PL
 
    ISD A: Path Length                 ISD B: Peering Links
@@ -1206,13 +1210,11 @@ The scalability implications of such parameters are further discussed in [](#sca
 ~~~~
 {: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
 
-
 ### Propagation of Selected PCBs {#path-segment-prop}
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
 To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
-
 
 #### Reception of PCBs
 
@@ -1221,7 +1223,6 @@ The following first steps of the propagation procedure are the same for both int
 1. Upon receiving a PCB, the Control Service of an AS verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS.
 2. As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The Control Service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes, and if so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
 3. If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
-
 
 #### Propagation of PCBs in Intra-ISD Beaconing {#intra-prop}
 
@@ -1236,7 +1237,6 @@ The propagation process in intra-ISD beaconing includes the following steps:
 3. The Control Service MUST now sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
 
-
 #### Propagation of PCBs in Core Beaconing
 
 The propagation process in core beaconing includes the following steps:
@@ -1247,8 +1247,6 @@ The propagation process in core beaconing includes the following steps:
    - The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.
 3. The core Control Service MUST sign the extended PCBs and append the computed signature.
 4. As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also [](#prop-proto)).
-
-
 
 #### Propagation of PCBs in Protobuf Message Format {#prop-proto}
 
@@ -1311,7 +1309,6 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 
 Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
-
 ## Path Discovery Time and Scalability {#scalability}
 
 The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
@@ -1366,7 +1363,6 @@ Assuming an average PCB length of 6 and the shortest propagation interval of 60 
 
 On a cold start of the network, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link, respectively, at worst after a mean time (D1+D2)*T/2.
 
-
 # Registration of Path Segments {#path-segment-reg}
 
 **Path registration** is the process where an AS transforms selected PCBs into path segments, and adding these segments to the relevant path databases thereby making them available to other ASes.
@@ -1377,7 +1373,6 @@ The next step is to register the selected down segments with the Control Service
 
 Both processes are described below.
 
-
 ## Intra-ISD Path Segment Registration {#intra-reg}
 
 Every *registration period* (determined by each AS), the AS's Control Service selects two sets of PCBs to transform into two types of path segments:
@@ -1386,7 +1381,6 @@ Every *registration period* (determined by each AS), the AS's Control Service se
 - Down segments, which allow remote entities to reach this AS.
 
 The up segments and down segments do not have to be equal as AS may want to communicate with core ASes via one or more up segments that differ from the down segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up segment and down segment sets. In addition, the processes of transforming a PCB in an up segment or a down segment differ slightly.
-
 
 ### Terminating a PCB {#term-pcb}
 
@@ -1420,7 +1414,6 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
-
 ### Transforming a PCB into a Down Segment
 
 Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:
@@ -1430,7 +1423,6 @@ Every registration period, the Control Service of a non-core AS performs the fol
 3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)).
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
-
 
 ## Core Path Segment Registration
 
@@ -1491,7 +1483,6 @@ Such information is then made available to endpoints during the path lookup proc
 
 The *path lookup* is a fundamental building block of SCION's path management as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
 
-
 ## Lookup Process
 
 An endpoint (source) that wants to start communication with another endpoint (destination) requires up to three path segments:
@@ -1541,7 +1532,6 @@ In general, to improve overall efficiency, the Control Services of all ASes SHOU
 - Cache the returned path segments.
 - Send requests in parallel when requesting path segments from other Control Services.
 
-
 ## Behavior of Actors in the Lookup Process
 
 As described above, the source endpoint resolves paths with a sequence of segment requests to the Control Service of the source AS. The Control Service in the source AS either answers directly or forwards these requests to the responsible Control Services of core ASes. In SCION, the instances that handle these segment requests at the Control Services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively.
@@ -1564,8 +1554,6 @@ Endpoints can use wildcard addresses to designate any core AS in path segment re
 
 1) Includes all core ASes for which an up segment from the source AS exists.<br>
 2) Includes all core ASes in destination ISD with a down segment to destination AS.
-
-
 
 ### Segment-Request Handler of a Non-Core Source AS
 
@@ -1598,6 +1586,363 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 [](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
 
+# SCMP {#scmp}
+
+The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
+
+This document specifies only messages RECOMMENDED for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
+
+## General Format
+
+Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a `NextHdr` value of `202` in the immediately preceding header.
+
+The messages have the following general format:
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |           Checksum            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                       Type-dependent Block                    |
+    +                                                               +
+    |                         (variable length)                     |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-scmp-format title="SCMP message format"}
+
+- `Type`: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.
+
+- `Code`: it provides additional granularity to the SCMP type.
+
+- `Checksum`: it is used to detect data corruption.
+
+- `Type-dependent Block`: optional field of variable length which format is dependent on the message type.
+
+## Message Types
+
+SCMP messages are grouped into two classes: error messages and informational messages. Error messages are identified by a zero in the high-order bit of the type value. I.e., error messages have a type value in the range of 0-127. Informational messages have type values in the range of 128-255.
+
+This specification defines the message formats for the following SCMP messages:
+
+|Type | Meaning                                                   |
+|-----+-----------------------------------------------------------|
+|1    | Reserved for future use                                   |
+|2    | [Packet Too Big](#packet-too-big)                         |
+|3    | Reserved for future use                                   |
+|4    | Reserved for future use                                   |
+|5    | [External Interface Down](#external-interface-down)       |
+|6    | [Internal Connectivity Down](#internal-connectivity-down) |
+|     |                                                           |
+|100  | Private Experimentation                                   |
+|101  | Private Experimentation                                   |
+|     |                                                           |
+|127  | Reserved for expansion of SCMP error messages             |
+{: title="error messages types"}
+
+
+| Type | Meaning                                                  |
+|------+----------------------------------------------------------|
+| 128  | [Echo Request](#echo-request)                            |
+| 129  | [Echo Reply](#echo-reply)                                |
+| 130  | [Traceroute Request](#traceroute-request)                |
+| 131  | [Traceroute Reply](#traceroute-reply)                    |
+| 200  | Private Experimentation                                  |
+| 201  | Private Experimentation                                  |
+|      |                                                          |
+| 255  | Reserved for expansion of SCMP informational messages    |
+{: title="informational messages types"}
+
+Type values 100, 101, 200, and 201 are reserved for private experimentation.
+
+All other values are reserved for future use.
+
+## Checksum Calculation
+
+The checksum is the 16-bit one's complement of the one's complement sum of the
+entire SCMP message, starting with the SCMP message type field, and prepended
+with a "pseudo-header" consisting of the SCION address header and the Layer 4
+protocol type as defined in {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".
+
+## Processing Rules
+
+Implementations MUST respect the following rules when processing SCMP messages:
+
+   - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
+   - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
+   - Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
+   - In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
+   - An SCMP error message MUST NOT be originated in response to any of the following:
+     - An SCMP error message.
+     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
+
+The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.
+
+## Error Messages {#scmp-notification}
+
+### Packet Too Big {#packet-too-big}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            reserved           |             MTU               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{:figure-21 title="Packet-too-big format"}
+
+| Name         | Value                                               |
+|--------------+-----------------------------------------------------|
+| Type         | 2                                                   |
+| Code         | 0                                                   |
+| MTU          | The Maximum Transmission Unit of the next-hop link. |
+{: title="field values"}
+
+A **Packet Too Big** message SHOULD be originated by a router in response to a
+packet that cannot be forwarded because the packet is larger than the MTU of the
+outgoing link. The MTU value is set to the maximum size a SCION packet can have
+to still fit on the next-hop link, as the sender has no knowledge of the
+underlay.
+
+### External Interface Down {#external-interface-down}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                        Interface ID                           +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-22 title="External-interface-down format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 5                                                             |
+| Code         | 0                                                             |
+| ISD          | The 16-bit ISD identifier of the SCMP originator              |
+| AS           | The 48-bit AS identifier of the SCMP originator               |
+| Interface ID | The interface ID of the external link with connectivity issue.|
+{: title="field values"}
+
+A **External Interface Down** message SHOULD be originated by a router in response
+to a packet that cannot be forwarded because the link to an external AS is broken.
+The ISD and AS identifier are set to the ISD-AS of the originating router.
+The interface ID identifies the link of the originating AS that is down.
+
+Recipients can use this information to route around broken data-plane links.
+
+### Internal Connectivity Down {#internal-connectivity-down}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Ingress Interface ID                        +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Egress Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-23 title="Internal-connectivity-down format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 6                                                             |
+| Code         | 0                                                             |
+| ISD          | The 16-bit ISD identifier of the SCMP originator              |
+| AS           | The 48-bit AS identifier of the SCMP originator               |
+| Ingress ID   | The interface ID of the ingress link.                         |
+| Egress ID    | The interface ID of the egress link.                          |
+{: title="field values"}
+
+A **Internal Connectivity Down** message SHOULD be originated by a router in
+response to a packet that cannot be forwarded inside the AS because because the
+connectivity between the ingress and egress routers is broken. The ISD and AS
+identifier are set to the ISD-AS of the originating router. The ingress
+interface ID identifies the interface on which the packet enters the AS. The
+egress interface ID identifies the interface on which the packet is destined to
+leave the AS, but the connection is broken to.
+
+Recipients can use this information to route around a broken data plane inside an
+AS.
+
+## Informational Messages {#scmp-information}
+
+### Echo Request {#echo-request}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+~~~~
+{: #figure-26 title="Echo-request format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 128                                                           |
+| Code         | 0                                                             |
+| Identifier   | A 16-bit identifier to aid matching replies with requests     |
+| Sequence Nr. | A 16-bit sequence number to aid matching replies with requests|
+| Data         | Variable length of arbitrary data                             |
+{: title="field values"}
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+### Echo Reply {#echo-reply}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-27 title="Echo-reply format"}
+
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 129                                                           |
+| Code         | 0                                                             |
+| Identifier   | The identifier of the Echo Request                            |
+| Sequence Nr. | The sequence number of the Echo Request                       |
+| Data         | The data of the Echo Request                                  |
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+The data received in the SCMP Echo Request message MUST be returned entirely and unmodified in the SCMP Echo Reply message.
+
+### Traceroute Request {#traceroute-request}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-24 title="Traceroute-request format"}
+
+Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 130                                                           |
+| Code         | 0                                                             |
+| Identifier   | A 16-bit identifier to aid matching replies with requests     |
+| Sequence Nr. | A 16-bit sequence number to aid matching replies with request |
+| ISD          | Place holder set to zero by SCMP sender                       |
+| AS           | Place holder set to zero by SCMP sender                       |
+| Interface ID | Place holder set to zero by SCMP sender                       |
+{: title="field values"}
+
+A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (see {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Path Header/SCION Path Type/Hop Field"). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
+
+### Traceroute Reply {#traceroute-reply}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-25 title="Traceroute-reply format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 131                                                           |
+| Code         | 0                                                             |
+| Identifier   | The identifier set in the Traceroute Request                  |
+| Sequence Nr. | The sequence number of the Tracroute Request                  |
+| ISD          | The 16-bit ISD identifier of the SCMP originator              |
+| AS           | The 48-bit AS identifier of the SCMP originator               |
+| Interface ID | The interface ID of the SCMP originating router               |
+{: title="field values"}
+
+The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
+
+## SCMP Authentication
+
+Authentication of SCMP packets is not specified here. In current deployments it is still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
 # Security Considerations
 
@@ -1609,16 +1954,13 @@ This section focuses on three kinds of security risks in the control plane:
 2. When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see [](#manipulate-beaconing)).
 3. Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see [](#dos-cp)).
 
-
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
 The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
 
-
 ## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
 
 This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.
-
 
 ### Path Hijacking through Interposition {#path-hijack}
 
@@ -1634,7 +1976,6 @@ The second type of attack is made impossible by the Hop Field's MAC which protec
 
 The third type of attack generally cannot be prevented. However the alternate path would be immediately visible to endpoints as traffic MUST include Hop Fields from AS M.
 
-
 ### Creation of Spurious ASes and ISDs {#fake-ases}
 
 An alternative scenario is when an adversary tries to introduce and spoof a non-existent AS. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.
@@ -1643,13 +1984,11 @@ However, spoofing a new AS requires a registration of that AS with the ISD core 
 
 Similarly to creating a fake AS, an adversary could try to introduce a new malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort and may need the involvement of more than one malicious entity. Here the "costs" of setting up the fake ISD may outweigh the benefits.
 
-
 ### Peering Link Misuse {#peer-link-misuse}
 
 The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary Hop Fields by querying a Control Service and extracting the Hop Fields from registered paths.
 
 Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack. Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.
-
 
 ### Manipulation of the Path-Selection Process {#manipulate-selection}
 
@@ -1671,7 +2010,6 @@ Similarly, a fake path can be announced through a fake peering link between two 
 In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.
 
 To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
-
 
 ## Denial of Service Attacks {#dos-cp}
 
@@ -1703,14 +2041,12 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 
 Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
-
 # Deployment Testing: SCIONLab
 {:numbered="false"}
 
 SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
 More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
-
 
 # Full Control Service gRPC API {#app-a}
 {:numbered="false"}
@@ -1799,7 +2135,7 @@ message BeaconResponse {}
 {: #figure-13 title="Control Service gRPC API - Segment creation"}
 <br>
 
-~~~~
+~~~~~
 message PathSegment {
     // The encoded SegmentInformation. It is used for signature input.
     bytes segment_info = 1;
@@ -1854,7 +2190,7 @@ message HopEntry {
 
 message PeerEntry {
     // ISD-AS of peer AS. This is used to match peering segments
-	// during path construction.
+    // during path construction.
     uint64 peer_isd_as = 1;
     // Remote peer interface identifier. This is used to match
     // peering segments
@@ -1872,16 +2208,16 @@ message HopField {
     // Egress interface identifier.
     uint64 egress = 2;
     // 8-bit encoded expiration offset relative to the segment
-	// creation timestamp.
+    // creation timestamp.
     uint32 exp_time = 3;
     // MAC used in the dataplane to verify the Hop Field.
     bytes mac = 4;
 }
-~~~~
+~~~~~
 {: #figure-14 title="Control Service gRPC API - Segment representation"}
 <br>
 
-~~~~
+~~~~~
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
@@ -1938,7 +2274,7 @@ message VerificationKeyID {
     uint64 trc_base = 3;
     uint64 trc_serial = 4;
 }
-~~~~
+~~~~~
 {: #figure-15 title="Control Service gRPC API - Signed ASEntry representation"}
 <br>
 
@@ -1973,7 +2309,7 @@ The mechanics of service address resolution are the following:
 
 The following code block provides the full service resolution API in the Protobuf message format.
 
-~~~~
+~~~~~
 
 package proto.control_plane.v1;
 
@@ -2007,7 +2343,7 @@ message Transport {
     string address = 1;
 }
 
-~~~~
+~~~~~
 {: #figure-16 title="Service Resolution gRPC API definition"}
 <br>
 
@@ -2171,11 +2507,14 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 ~~~~
 {: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
 
-
 # Change Log
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-07
+{:numbered="false"}
+ - Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document
 
 ## draft-dekater-scion-controlplane-06
 {:numbered="false"}
@@ -2202,7 +2541,6 @@ Minor changes:
 
 - Clarify beaconing fast retry at bootstrapping
 
-
 ## draft-dekater-scion-controlplane-04
 {:numbered="false"}
 
@@ -2214,8 +2552,6 @@ Major changes:
 - New section: Path Discovery Time and Scalability
 - New section: Effects of Clock Inaccuracy
 - New appendix: Control Service gRPC API
-
-
 
 Minor changes:
 
