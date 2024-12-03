@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-01T00:26:52.352070+00:00",
+  "timestamp": "2024-12-03T00:23:27.876322+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6095,26 +6095,42 @@
       "id": "PR_kwDOJx2-rs6BojUp",
       "title": "scmp: import SCMP from dataplane draft",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/78",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Also in passing:\r\n* added a missing RFC reference\r\n* removed many superfluous blank lines\r\n* untabified\r\n* extended the \"~\" lines around some code blocks, because it seems to help my editor not get confused (hopefully it won't increase the confusion of other editors).\r\n\r\nContributes to: https://github.com/scionassociation/scion-dp_I-D/issues/84",
       "createdAt": "2024-11-12T13:24:12Z",
-      "updatedAt": "2024-11-13T09:08:32Z",
+      "updatedAt": "2024-12-02T17:09:33Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ec4e9044cd576d94a2576d7f9b204bad474245c0",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scmp_to_cp",
-      "headRefOid": "668fd8bea29d35d957b972f6e68cfce6757010cd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "111346fa924187c3f54df82d14b65b8aa5de63ec",
+      "closedAt": "2024-12-02T17:09:29Z",
+      "mergedAt": "2024-12-02T17:09:29Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "66e4d967c527147d16f906ccede908163c8a761e"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6TbIjA",
+          "commit": {
+            "abbreviatedOid": "2d0b89a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-02T17:08:55Z",
+          "updatedAt": "2024-12-02T17:08:55Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 79,
