@@ -161,7 +161,7 @@ SCION has been developed with the following goals:
 
 *Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
 
-*Security* - to provide higher levels of trust in routing information in order to prevent traffic hijacking, reduce potential for denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trust in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
 
 *Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
 
