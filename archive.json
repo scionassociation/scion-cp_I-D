@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-10T00:23:02.340719+00:00",
+  "timestamp": "2024-12-12T00:22:46.064759+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6144,13 +6144,13 @@
       "labels": [],
       "body": "Also corrects erroneous reference to Data Plane.",
       "createdAt": "2024-11-26T11:06:37Z",
-      "updatedAt": "2024-11-27T09:08:27Z",
+      "updatedAt": "2024-12-11T15:03:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ec4e9044cd576d94a2576d7f9b204bad474245c0",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "this-is-not-a-standard",
-      "headRefOid": "610b2780fe1ee5e810a259fbf24bccfd33c52f91",
+      "headRefOid": "d80eba5de366010bceb3e9816713b67f5b8852a7",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
