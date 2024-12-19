@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-17T00:22:29.662857+00:00",
+  "timestamp": "2024-12-19T00:22:03.761024+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -727,13 +727,16 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
       "labels": [
         "Prio 3"
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2024-10-18T11:29:19Z",
+      "updatedAt": "2024-12-17T10:32:10Z",
       "closedAt": null,
       "comments": [
         {
