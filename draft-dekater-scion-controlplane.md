@@ -385,7 +385,7 @@ The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` i
 
 For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
 
-## Avoiding Circular Dependencies and Partitioning
+## Bootstrapping ablity
 
 A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
@@ -396,7 +396,9 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI Internet-Draft {{I-D.dekater-scion-pki}}.
 
-Besides inter-dependencies, another threat to the Internet is network partition which occurs when one network is split into two because of a link failure. However, partition of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to otherwise unused links.
+## Resistance to partitioning
+
+Besides inter-dependencies, another threat to the Internet is network partitionig which occurs when one network is split into two because of a link failure. Partitioning of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to already known paths that use other links.
 
 Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.
 
@@ -423,9 +425,11 @@ In SCION, the *Control Service* of each AS is responsible for the beaconing proc
 PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
-- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
+- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
 
 On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs).
+
+The process of using PCBs to construct segments is described in details in [](#path-segment-reg)
 
 ### Peering Links
 
@@ -1088,7 +1092,7 @@ To be valid (that is, usable to construct a valid path), a PCB MUST:
 * Have a timestamp ([](#seginfo)) that is not in the future.
 * Contain only unexpired hops ([](#hopfield)).
 
-For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus the minimum expiration time of a Hop Field (337.5 seconds, see [](#hopfield)).
+For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between local and origination clock. As an allowance, it is suggested to the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).
 
 For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
 
@@ -1119,11 +1123,16 @@ The goal of the AS SHOULD be to propagate those candidate PCBs with the highest 
 
 #### Storing and Selecting Candidate PCBs
 
-When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs called the *Beacon Store*.
+When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs called the *Beacon Store*. The management of this storage is implementation defined. Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
 
 PCBs are propagated in batches to each connected AS at a fixed frequency known as the *propagation interval*. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
 
-- The *best PCBs set size* SHOULD be at most "50" (PCBs) for intra-ISD beaconing and at most "5" (PCBs) for core beaconing (i.e. propagation between all core ASes). These are RECOMMENDED maxima; in current practice the intra-ISD set size is typically 20.
+The *best PCBs set size* SHOULD be:
+  - For intra-AS beaconing (i.e. propgating to children ASes): at most 50.
+  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. (Current
+    practice is that each set of 5 is chosen among the BCPs received from each neighbor).
+
+These are RECOMMENDED maxima; in current practice the intra-ISD set size is typically 20.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store, to be able to determine the best set of PCBs. If this is the case, an AS SHOULD have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
@@ -2510,9 +2519,17 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-controlplane-08
+{:numbered="false"}
+
+- Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
+- Added some details about PCBs propagation and storage.
+- Qualified better the choice of time allowance in the definition of "segment from the future".
+
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
- - Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document
+
+- Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document
 
 ## draft-dekater-scion-controlplane-06
 {:numbered="false"}
@@ -2520,7 +2537,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 Major changes:
 
 - New section: Path MTU
--New section: Monitoring Considerations
+- New section: Monitoring Considerations
 - Completed description of Control Services gRPC API in appendix
 
 Minor changes:
