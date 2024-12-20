@@ -1092,7 +1092,7 @@ To be valid (that is, usable to construct a valid path), a PCB MUST:
 * Have a timestamp ([](#seginfo)) that is not in the future.
 * Contain only unexpired hops ([](#hopfield)).
 
-For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between local and origination clock. As an allowance, it is suggested to the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).
+For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between local and origination clock. As an allowance, it is suggested to use the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).
 
 For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
 
