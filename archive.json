@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-19T00:22:03.761024+00:00",
+  "timestamp": "2024-12-22T00:22:57.023619+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6140,24 +6140,26 @@
       "id": "PR_kwDOJx2-rs6DK8IG",
       "title": "Clarifies aim of document",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/79",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Also corrects erroneous reference to Data Plane.",
       "createdAt": "2024-11-26T11:06:37Z",
-      "updatedAt": "2024-12-11T15:03:26Z",
+      "updatedAt": "2024-12-20T07:17:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ec4e9044cd576d94a2576d7f9b204bad474245c0",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "this-is-not-a-standard",
-      "headRefOid": "d80eba5de366010bceb3e9816713b67f5b8852a7",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "44d3c69e33205f52228f4c3a0f897e09780dc0b8",
+      "closedAt": "2024-12-20T07:17:16Z",
+      "mergedAt": "2024-12-20T07:17:16Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf"
+      },
       "comments": [],
       "reviews": [
         {
@@ -6192,8 +6194,47 @@
           "createdAt": "2024-11-27T09:08:27Z",
           "updatedAt": "2024-11-27T09:08:27Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6WBR8o",
+          "commit": {
+            "abbreviatedOid": "44d3c69"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-20T07:17:06Z",
+          "updatedAt": "2024-12-20T07:17:06Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 80,
+      "id": "PR_kwDOJx2-rs6F7CCk",
+      "title": "Address Til's comments.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/80",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #46",
+      "createdAt": "2024-12-20T14:51:34Z",
+      "updatedAt": "2024-12-20T14:59:41Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "til_feedback",
+      "headRefOid": "e1f3f2d44ae0a571bab65e50c4c4cd27fb8d7e4e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
