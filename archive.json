@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-24T00:21:00.171181+00:00",
+  "timestamp": "2024-12-26T00:20:36.719286+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6222,7 +6222,7 @@
       "labels": [],
       "body": "Fixes #46",
       "createdAt": "2024-12-20T14:51:34Z",
-      "updatedAt": "2024-12-20T14:59:41Z",
+      "updatedAt": "2024-12-24T12:37:35Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf",
@@ -6233,6 +6233,68 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot, I'll review after holidays! ",
+          "createdAt": "2024-12-24T12:37:35Z",
+          "updatedAt": "2024-12-24T12:37:35Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 81,
+      "id": "PR_kwDOJx2-rs6GKnaC",
+      "title": "Intro wording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/81",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-12-24T12:33:33Z",
+      "updatedAt": "2024-12-24T12:34:10Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "this-is-not-a-standard",
+      "headRefOid": "44d3c69e33205f52228f4c3a0f897e09780dc0b8",
+      "closedAt": "2024-12-24T12:34:10Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 82,
+      "id": "PR_kwDOJx2-rs6GKoBf",
+      "title": "update intro wording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/82",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-12-24T12:36:12Z",
+      "updatedAt": "2024-12-24T12:36:43Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "intro-nic",
+      "headRefOid": "3fa3ea2e90acf5c2feaadcb222b821050da42376",
+      "closedAt": "2024-12-24T12:36:40Z",
+      "mergedAt": "2024-12-24T12:36:40Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "e081b945f998fbec64cdf255f6728007473c7a5d"
+      },
       "comments": [],
       "reviews": []
     }
