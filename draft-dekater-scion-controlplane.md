@@ -385,7 +385,7 @@ The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` i
 
 For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
 
-## Bootstrapping ablity
+## Bootstrapping ability
 
 A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal of SCION is that the Internet can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.
 
