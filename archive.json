@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-07T00:21:24.323442+00:00",
+  "timestamp": "2025-01-09T00:20:59.754861+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6222,13 +6222,13 @@
       "labels": [],
       "body": "Fixes #46",
       "createdAt": "2024-12-20T14:51:34Z",
-      "updatedAt": "2024-12-24T12:37:35Z",
+      "updatedAt": "2025-01-07T16:11:18Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1e63d9984d5ca94f84c4a134e20cb7b4dc8bd0cf",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "til_feedback",
-      "headRefOid": "e1f3f2d44ae0a571bab65e50c4c4cd27fb8d7e4e",
+      "headRefOid": "da9073d26c960f0fd6c7698ab6c352bc2a10af87",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
