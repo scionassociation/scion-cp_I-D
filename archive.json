@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-09T00:20:59.754861+00:00",
+  "timestamp": "2025-01-12T00:23:22.801903+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1092,6 +1092,24 @@
           "updatedAt": "2024-10-18T11:22:00Z"
         }
       ]
+    },
+    {
+      "number": 83,
+      "id": "I_kwDOJx2-rs6lgWSF",
+      "title": "Abstract - rework ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/83",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "Include: \r\n> This document contains new approaches to secure path aware networking.  However, it is not an Internet Standard, nor has it received any formal review of the IETF, nor was the work developed through the rough  consensus process.  The approaches offered in this work are offered to the community for its consideration in further evolution of the Internet.\r\n",
+      "createdAt": "2025-01-09T02:51:00Z",
+      "updatedAt": "2025-01-09T02:51:09Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
