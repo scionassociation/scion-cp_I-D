@@ -11,6 +11,7 @@
 <meta content="
        This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints. 
        The main goal of the SCION Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets in the data plane. This document discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION Autonomous System (AS) can register segments according to its own policy and can specify which path properties and algorithm(s) to use in the selection procedure. The document also describes the path lookup process whereby endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths. 
+       This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
 <meta content="xml2rfc 3.25.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
@@ -21,7 +22,7 @@
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.4
+    Jinja2 3.1.5
     lxml 5.3.0
     platformdirs 4.3.6
     pycountry 24.6.1
@@ -1047,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION CP</td>
-<td class="right">December 2024</td>
+<td class="right">January 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 22 June 2025</td>
+<td class="center">Expires 19 July 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-12-19" class="published">19 December 2024</time>
+<time datetime="2025-01-15" class="published">15 January 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-06-22">22 June 2025</time></dd>
+<dd class="expires"><time datetime="2025-07-19">19 July 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,6 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The main goal of the SCION Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets in the data plane. This document discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION Autonomous System (AS) can register segments according to its own policy and can specify which path properties and algorithm(s) to use in the selection procedure. The document also describes the path lookup process whereby endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1123,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1132,7 +1134,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2024 IETF Trust and the persons identified as the
+            Copyright (c) 2025 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1414,9 +1416,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-8"><em>Control Plane</em> - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">This document describes the SCION Control Plane component. It should be read in conjunction with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1-10" class="pilcrow">¶</a></p>
-<p id="section-1-11">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture. This is not intended for publication as an Internet Standard.<a href="#section-1-11" class="pilcrow">¶</a></p>
-<p id="section-1-12">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>.
-This document provides an extensive description of how the SCION Control Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.<a href="#section-1-12" class="pilcrow">¶</a></p>
+<p id="section-1-11">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.<a href="#section-1-11" class="pilcrow">¶</a></p>
+<p id="section-1-12">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>. This document provides an extensive description of how the SCION Control Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -3768,11 +3769,11 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-dataplane">[I-D.dekater-scion-dataplane]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-03</span>, <time datetime="2024-10-19" class="refDate">19 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-03">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-03</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-04</span>, <time datetime="2024-12-24" class="refDate">24 December 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-04">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-07</span>, <time datetime="2024-10-19" class="refDate">19 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-07">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-07</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-08</span>, <time datetime="2024-12-30" class="refDate">30 December 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-08">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-08</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>

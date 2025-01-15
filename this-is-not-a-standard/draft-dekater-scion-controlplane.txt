@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 22 June 2025                                            S. Hitz
+Expires: 19 July 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                        19 December 2024
+                                                         15 January 2025
 
 
                           SCION Control Plane
@@ -34,6 +34,13 @@ Abstract
    The document also describes the path lookup process whereby endpoints
    obtain path segments - a fundamental building block for the
    construction of end-to-end paths.
+
+   This document contains new approaches to secure path aware
+   networking.  It is not an Internet Standard, has not received any
+   formal review of the IETF, nor was the work developed through the
+   rough consensus process.  The approaches offered in this work are
+   offered to the community for its consideration in the further
+   evolution of the Internet.
 
 About This Document
 
@@ -63,11 +70,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 June 2025.
+   This Internet-Draft will expire on 19 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -219,7 +226,6 @@ Table of Contents
    deployed, to encourage interoperability among implementations, and to
    introduce new concepts that can potentially be further improved to
    address particular problems with the current Internet architecture.
-   This is not intended for publication as an Internet Standard.
 
    Note (to be removed before publication): this document, together with
    the other components [I-D.dekater-scion-pki] and
@@ -2899,16 +2905,16 @@ path segment 4 |             |     |             |     |             |
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-03, 19 October 2024,
+              draft-dekater-scion-dataplane-04, 24 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-03>.
+              scion-dataplane-04>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-07, 19 October 2024,
+              dekater-scion-pki-08, 30 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-07>.
+              scion-pki-08>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
