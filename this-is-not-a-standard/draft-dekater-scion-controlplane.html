@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 19 July 2025</td>
+<td class="center">Expires 22 July 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-15" class="published">15 January 2025</time>
+<time datetime="2025-01-18" class="published">18 January 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-19">19 July 2025</time></dd>
+<dd class="expires"><time datetime="2025-07-22">22 July 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1324,78 +1324,132 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-scmp" class="internal xref">SCMP</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-manipulation-of-the-beaconi" class="internal xref">Manipulation of the Beaconing Process by a Core Adversary</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-general-format" class="internal xref">General Format</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-manipulation-of-the-beaconin" class="internal xref">Manipulation of the Beaconing Process by a Non-Core Adversary</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-message-types" class="internal xref">Message Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-checksum-calculation" class="internal xref">Checksum Calculation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-processing-rules" class="internal xref">Processing Rules</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-error-messages" class="internal xref">Error Messages</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
-                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-path-hijacking-through-inte" class="internal xref">Path Hijacking through Interposition</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.1">
+                    <p id="section-toc.1-1.6.2.5.2.1.1"><a href="#section-6.5.1" class="auto internal xref">6.5.1</a>.  <a href="#name-packet-too-big" class="internal xref">Packet Too Big</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.2">
-                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-creation-of-spurious-ases-a" class="internal xref">Creation of Spurious ASes and ISDs</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.2">
+                    <p id="section-toc.1-1.6.2.5.2.2.1"><a href="#section-6.5.2" class="auto internal xref">6.5.2</a>.  <a href="#name-external-interface-down" class="internal xref">External Interface Down</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.3">
-                    <p id="section-toc.1-1.6.2.2.2.3.1"><a href="#section-6.2.3" class="auto internal xref">6.2.3</a>.  <a href="#name-peering-link-misuse" class="internal xref">Peering Link Misuse</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.4">
-                    <p id="section-toc.1-1.6.2.2.2.4.1"><a href="#section-6.2.4" class="auto internal xref">6.2.4</a>.  <a href="#name-manipulation-of-the-path-se" class="internal xref">Manipulation of the Path-Selection Process</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5.2.3">
+                    <p id="section-toc.1-1.6.2.5.2.3.1"><a href="#section-6.5.3" class="auto internal xref">6.5.3</a>.  <a href="#name-internal-connectivity-down" class="internal xref">Internal Connectivity Down</a></p>
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
-                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-denial-of-service-attacks" class="internal xref">Denial of Service Attacks</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6">
+                <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="auto internal xref">6.6</a>.  <a href="#name-informational-messages" class="internal xref">Informational Messages</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6.2.1">
+                    <p id="section-toc.1-1.6.2.6.2.1.1"><a href="#section-6.6.1" class="auto internal xref">6.6.1</a>.  <a href="#name-echo-request" class="internal xref">Echo Request</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6.2.2">
+                    <p id="section-toc.1-1.6.2.6.2.2.1"><a href="#section-6.6.2" class="auto internal xref">6.6.2</a>.  <a href="#name-echo-reply" class="internal xref">Echo Reply</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6.2.3">
+                    <p id="section-toc.1-1.6.2.6.2.3.1"><a href="#section-6.6.3" class="auto internal xref">6.6.3</a>.  <a href="#name-traceroute-request" class="internal xref">Traceroute Request</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6.2.4">
+                    <p id="section-toc.1-1.6.2.6.2.4.1"><a href="#section-6.6.4" class="auto internal xref">6.6.4</a>.  <a href="#name-traceroute-reply" class="internal xref">Traceroute Reply</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.7">
+                <p id="section-toc.1-1.6.2.7.1"><a href="#section-6.7" class="auto internal xref">6.7</a>.  <a href="#name-scmp-authentication" class="internal xref">SCMP Authentication</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-manipulation-of-the-beaconi" class="internal xref">Manipulation of the Beaconing Process by a Core Adversary</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-manipulation-of-the-beaconin" class="internal xref">Manipulation of the Beaconing Process by a Non-Core Adversary</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-path-hijacking-through-inte" class="internal xref">Path Hijacking through Interposition</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-creation-of-spurious-ases-a" class="internal xref">Creation of Spurious ASes and ISDs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.3">
+                    <p id="section-toc.1-1.7.2.2.2.3.1"><a href="#section-7.2.3" class="auto internal xref">7.2.3</a>.  <a href="#name-peering-link-misuse" class="internal xref">Peering Link Misuse</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.4">
+                    <p id="section-toc.1-1.7.2.2.2.4.1"><a href="#section-7.2.4" class="auto internal xref">7.2.4</a>.  <a href="#name-manipulation-of-the-path-se" class="internal xref">Manipulation of the Path-Selection Process</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-denial-of-service-attacks" class="internal xref">Denial of Service Attacks</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-deployment-testing-scionlab" class="internal xref">Deployment Testing: SCIONLab</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-full-control-service-grpc-a" class="internal xref">Full Control Service gRPC API</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION Data Plane use by the SCION Control Plane</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#appendix-F.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
-                <p id="section-toc.1-1.14.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.3">
-                <p id="section-toc.1-1.14.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-deployment-testing-scionlab" class="internal xref">Deployment Testing: SCIONLab</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-full-control-service-grpc-a" class="internal xref">Full Control Service gRPC API</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-scion-data-plane-use-by-the" class="internal xref">SCION Data Plane use by the SCION Control Plane</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-G" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-F.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-07</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
+                <p id="section-toc.1-1.15.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.4">
+                <p id="section-toc.1-1.15.2.4.1"><a href="#appendix-F.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpla" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-G" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1416,8 +1470,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-8"><em>Control Plane</em> - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">This document describes the SCION Control Plane component. It should be read in conjunction with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1-10" class="pilcrow">¶</a></p>
-<p id="section-1-11">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.<a href="#section-1-11" class="pilcrow">¶</a></p>
-<p id="section-1-12">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>. This document provides an extensive description of how the SCION Control Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.<a href="#section-1-12" class="pilcrow">¶</a></p>
+<p id="section-1-11">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture. This document is not an Internet Standards Track specification; it does not have IETF consensus and it is published for informational purposes.<a href="#section-1-11" class="pilcrow">¶</a></p>
+<p id="section-1-12">Note (to be removed before publication): this document, together with the other components <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span> and <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>, deprecates <span>[<a href="#I-D.dekater-panrg-scion-overview" class="cite xref">I-D.dekater-panrg-scion-overview</a>]</span>.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1437,7 +1491,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-12"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
 <p id="section-1.1-13"><strong>Path Segment</strong>: Path segments are derived from Path Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
 <p id="section-1.1-14"><strong>Path Segment Construction Beacon (PCB)</strong>: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries and accumulates path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
-<p id="section-1.1-15"><strong>Trust Root Configuration (TRC)</strong>: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<p id="section-1.1-15"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in <a href="#scmp" class="auto internal xref">Section 6</a>.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<p id="section-1.1-16"><strong>Trust Root Configuration (TRC)</strong>: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1623,7 +1678,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-scion-as-numbers">
 <a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-scion-as-numbers" class="section-name selfRef">SCION AS Numbers</a>
           </h4>
-<p id="section-1.5.2-1">A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by RFC4893. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.2-1">A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by <span>[<a href="#RFC4893" class="cite xref">RFC4893</a>]</span>. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
 <div id="special-purpose-scion-as-numbers">
 <section id="section-1.5.2.1">
             <h5 id="name-special-purpose-scion-as-nu">
@@ -1866,6 +1921,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                                  v   v
                             +----#---#----+
                             |     AS Y    |
+
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
@@ -2098,7 +2154,7 @@ path segment 4 |             |     |             |     |             |
 <a href="#name-top-down-composition-of-one" class="selfRef">Top-down composition of one PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-3"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a>, <a href="#_figure-14" class="auto internal xref">Figure 12</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-3"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a>, <a href="#_figure-14" class="auto internal xref">Figure 20</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2782,7 +2838,7 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 <figure id="figure-8">
               <div class="alignLeft art-text artwork" id="section-2.3.1.2-3.1">
 <pre>
- Selected path segment: #------# or *------*
+Selected path segment: #------# or *------*
  Peering Link: PL
 
    ISD A: Path Length                 ISD B: Peering Links
@@ -3441,7 +3497,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-5.1.1-2.3.1">Request down segments starting at core ASes in the destination ISD.<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 9</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 17</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="caching">
@@ -3623,140 +3679,882 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 </div>
 </section>
 </div>
-<div id="security-considerations">
+<div id="scmp">
 <section id="section-6">
-      <h2 id="name-security-considerations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-scmp">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-scmp" class="section-name selfRef">SCMP</a>
       </h2>
-<p id="section-6-1">As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's Control Plane that focuses on <em>inter</em>-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption so these topics lie outside the scope of this section.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">This section focuses on three kinds of security risks in the control plane:<a href="#section-6-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6-3">
-<li id="section-6-3.1">
-          <p id="section-6-3.1.1">When an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see <a href="#topdown-manipulate" class="auto internal xref">Section 6.1</a>).<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-6-1">The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">This document specifies only messages <span class="bcp14">RECOMMENDED</span> for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<div id="general-format">
+<section id="section-6.1">
+        <h3 id="name-general-format">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-general-format" class="section-name selfRef">General Format</a>
+        </h3>
+<p id="section-6.1-1">Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<span id="name-scmp-message-format"></span><div id="_figure-scmp-format">
+<figure id="figure-9">
+          <div class="alignLeft art-text artwork" id="section-6.1-3.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |           Checksum            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                       Type-dependent Block                    |
+    +                                                               +
+    |                         (variable length)                     |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="section-6.1-4.1">
+            <p id="section-6.1-4.1.1"><code>Type</code>: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.<a href="#section-6.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li id="section-6-3.2">
-          <p id="section-6-3.2.1">When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see <a href="#manipulate-beaconing" class="auto internal xref">Section 6.2</a>).<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.1-4.2">
+            <p id="section-6.1-4.2.1"><code>Code</code>: it provides additional granularity to the SCMP type.<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li id="section-6-3.3">
-          <p id="section-6-3.3.1">Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 6.3</a>).<a href="#section-6-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.1-4.3">
+            <p id="section-6.1-4.3.1"><code>Checksum</code>: it is used to detect data corruption.<a href="#section-6.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-4.4">
+            <p id="section-6.1-4.4.1"><code>Type-dependent Block</code>: optional field of variable length which format is dependent on the message type.<a href="#section-6.1-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="message-types">
+<section id="section-6.2">
+        <h3 id="name-message-types">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-message-types" class="section-name selfRef">Message Types</a>
+        </h3>
+<p id="section-6.2-1">SCMP messages are grouped into two classes: error messages and informational messages. Error messages are identified by a zero in the high-order bit of the type value. I.e., error messages have a type value in the range of 0-127. Informational messages have type values in the range of 128-255.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">This specification defines the message formats for the following SCMP messages:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<span id="name-error-messages-types"></span><table class="center" id="table-5">
+          <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-error-messages-types" class="selfRef">error messages types</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">2</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#packet-too-big" class="internal xref">Packet Too Big</a> (<a href="#packet-too-big" class="auto internal xref">Section 6.5.1</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">3</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">4</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">5</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">6</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">100</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">101</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">127</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for expansion of SCMP error messages</td>
+            </tr>
+          </tbody>
+        </table>
+<span id="name-informational-messages-type"></span><table class="center" id="table-6">
+          <caption>
+<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#name-informational-messages-type" class="selfRef">informational messages types</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">128</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#echo-request" class="internal xref">Echo Request</a> (<a href="#echo-request" class="auto internal xref">Section 6.6.1</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">129</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#echo-reply" class="internal xref">Echo Reply</a> (<a href="#echo-reply" class="auto internal xref">Section 6.6.2</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">130</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#traceroute-request" class="internal xref">Traceroute Request</a> (<a href="#traceroute-request" class="auto internal xref">Section 6.6.3</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">131</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply</a> (<a href="#traceroute-reply" class="auto internal xref">Section 6.6.4</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">200</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">201</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">255</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for expansion of SCMP informational messages</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-6.2-5">Type values 100, 101, 200, and 201 are reserved for private experimentation.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-6">All other values are reserved for future use.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="checksum-calculation">
+<section id="section-6.3">
+        <h3 id="name-checksum-calculation">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-checksum-calculation" class="section-name selfRef">Checksum Calculation</a>
+        </h3>
+<p id="section-6.3-1">The checksum is the 16-bit one's complement of the one's complement sum of the
+entire SCMP message, starting with the SCMP message type field, and prepended
+with a "pseudo-header" consisting of the SCION address header and the Layer 4
+protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="processing-rules">
+<section id="section-6.4">
+        <h3 id="name-processing-rules">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
+        </h3>
+<p id="section-6.4-1">Implementations <span class="bcp14">MUST</span> respect the following rules when processing SCMP messages:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4-2.1">
+            <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received at its destination, it <span class="bcp14">MUST</span> be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.2">
+            <p id="section-6.4-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.3">
+            <p id="section-6.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Deployment Considerations/MTU").<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.4">
+            <p id="section-6.4-2.4.1">In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.5">
+            <p id="section-6.4-2.5.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4-2.5.2.1">
+                <p id="section-6.4-2.5.2.1.1">An SCMP error message.<a href="#section-6.4-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.4-2.5.2.2">
+                <p id="section-6.4-2.5.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+        </ul>
+<p id="section-6.4-3">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="scmp-notification">
+<section id="section-6.5">
+        <h3 id="name-error-messages">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-error-messages" class="section-name selfRef">Error Messages</a>
+        </h3>
+<div id="packet-too-big">
+<section id="section-6.5.1">
+          <h4 id="name-packet-too-big">
+<a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
+          </h4>
+<span id="name-packet-too-big-format"></span><figure id="figure-10">
+            <div class="alignLeft art-text artwork" id="section-6.5.1-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            reserved           |             MTU               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-packet-too-big-format" class="selfRef">Packet-too-big format</a>
+            </figcaption></figure>
+<span id="name-field-values"></span><table class="center" id="table-7">
+            <caption>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-field-values" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">MTU</td>
+                <td class="text-left" rowspan="1" colspan="1">The Maximum Transmission Unit of the next-hop link.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.5.1-3">A <strong>Packet Too Big</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response to a
+packet that cannot be forwarded because the packet is larger than the MTU of the
+outgoing link. The MTU value is set to the maximum size a SCION packet can have
+to still fit on the next-hop link, as the sender has no knowledge of the
+underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="external-interface-down">
+<section id="section-6.5.2">
+          <h4 id="name-external-interface-down">
+<a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
+          </h4>
+<span id="name-external-interface-down-for"></span><div id="_figure-22">
+<figure id="figure-11">
+            <div class="alignLeft art-text artwork" id="section-6.5.2-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                        Interface ID                           +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<a href="#name-external-interface-down-for" class="selfRef">External-interface-down format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-2"></span><table class="center" id="table-8">
+            <caption>
+<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#name-field-values-2" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">5</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the external link with connectivity issue.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.5.2-3">A <strong>External Interface Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response
+to a packet that cannot be forwarded because the link to an external AS is broken.
+The ISD and AS identifier are set to the ISD-AS of the originating router.
+The interface ID identifies the link of the originating AS that is down.<a href="#section-6.5.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.5.2-4">Recipients can use this information to route around broken data-plane links.<a href="#section-6.5.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="internal-connectivity-down">
+<section id="section-6.5.3">
+          <h4 id="name-internal-connectivity-down">
+<a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
+          </h4>
+<span id="name-internal-connectivity-down-"></span><div id="_figure-23">
+<figure id="figure-12">
+            <div class="alignLeft art-text artwork" id="section-6.5.3-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Ingress Interface ID                        +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Egress Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<a href="#name-internal-connectivity-down-" class="selfRef">Internal-connectivity-down format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-3"></span><table class="center" id="table-9">
+            <caption>
+<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#name-field-values-3" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">6</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Ingress ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the ingress link.</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Egress ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the egress link.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.5.3-3">A <strong>Internal Connectivity Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in
+response to a packet that cannot be forwarded inside the AS because because the
+connectivity between the ingress and egress routers is broken. The ISD and AS
+identifier are set to the ISD-AS of the originating router. The ingress
+interface ID identifies the interface on which the packet enters the AS. The
+egress interface ID identifies the interface on which the packet is destined to
+leave the AS, but the connection is broken to.<a href="#section-6.5.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.5.3-4">Recipients can use this information to route around a broken data plane inside an
+AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="scmp-information">
+<section id="section-6.6">
+        <h3 id="name-informational-messages">
+<a href="#section-6.6" class="section-number selfRef">6.6. </a><a href="#name-informational-messages" class="section-name selfRef">Informational Messages</a>
+        </h3>
+<div id="echo-request">
+<section id="section-6.6.1">
+          <h4 id="name-echo-request">
+<a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
+          </h4>
+<span id="name-echo-request-format"></span><div id="_figure-26">
+<figure id="figure-13">
+            <div class="alignLeft art-text artwork" id="section-6.6.1-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+</pre>
+</div>
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<a href="#name-echo-request-format" class="selfRef">Echo-request format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-4"></span><table class="center" id="table-10">
+            <caption>
+<a href="#table-10" class="selfRef">Table 10</a>:
+<a href="#name-field-values-4" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">128</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit identifier to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit sequence number to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Data</td>
+                <td class="text-left" rowspan="1" colspan="1">Variable length of arbitrary data</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.6.1-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.<a href="#section-6.6.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="echo-reply">
+<section id="section-6.6.2">
+          <h4 id="name-echo-reply">
+<a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
+          </h4>
+<span id="name-echo-reply-format"></span><div id="_figure-27">
+<figure id="figure-14">
+            <div class="alignLeft art-text artwork" id="section-6.6.2-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<a href="#name-echo-reply-format" class="selfRef">Echo-reply format</a>
+            </figcaption></figure>
+</div>
+<table class="center" id="table-11">
+            <caption><a href="#table-11" class="selfRef">Table 11</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">129</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">The identifier of the Echo Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">The sequence number of the Echo Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Data</td>
+                <td class="text-left" rowspan="1" colspan="1">The data of the Echo Request</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.6.2-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.<a href="#section-6.6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.6.2-4">The data received in the SCMP Echo Request message <span class="bcp14">MUST</span> be returned entirely and unmodified in the SCMP Echo Reply message.<a href="#section-6.6.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="traceroute-request">
+<section id="section-6.6.3">
+          <h4 id="name-traceroute-request">
+<a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
+          </h4>
+<span id="name-traceroute-request-format"></span><div id="_figure-24">
+<figure id="figure-15">
+            <div class="alignLeft art-text artwork" id="section-6.6.3-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<a href="#name-traceroute-request-format" class="selfRef">Traceroute-request format</a>
+            </figcaption></figure>
+</div>
+<p id="section-6.6.3-2">Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.<a href="#section-6.6.3-2" class="pilcrow">¶</a></p>
+<span id="name-field-values-5"></span><table class="center" id="table-12">
+            <caption>
+<a href="#table-12" class="selfRef">Table 12</a>:
+<a href="#name-field-values-5" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">130</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit identifier to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit sequence number to aid matching replies with request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.6.3-4">A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification/Path Header/SCION Path Type/Hop Field"). When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 6.6.4</a>)</span>.<a href="#section-6.6.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="traceroute-reply">
+<section id="section-6.6.4">
+          <h4 id="name-traceroute-reply">
+<a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
+          </h4>
+<span id="name-traceroute-reply-format"></span><div id="_figure-25">
+<figure id="figure-16">
+            <div class="alignLeft art-text artwork" id="section-6.6.4-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<a href="#name-traceroute-reply-format" class="selfRef">Traceroute-reply format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-6"></span><table class="center" id="table-13">
+            <caption>
+<a href="#table-13" class="selfRef">Table 13</a>:
+<a href="#name-field-values-6" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">131</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">The identifier set in the Traceroute Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">The sequence number of the Tracroute Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the SCMP originating router</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-6.6.4-3">The identifier is set to the identifier value from the <span><a href="#traceroute-request" class="internal xref">Traceroute Request message</a> (<a href="#traceroute-request" class="auto internal xref">Section 6.6.3</a>)</span>. The ISD and AS identifiers are set to the ISD-AS of the originating border router.<a href="#section-6.6.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="scmp-authentication">
+<section id="section-6.7">
+        <h3 id="name-scmp-authentication">
+<a href="#section-6.7" class="section-number selfRef">6.7. </a><a href="#name-scmp-authentication" class="section-name selfRef">SCMP Authentication</a>
+        </h3>
+<p id="section-6.7-1">Authentication of SCMP packets is not specified here. In current deployments it is still experimental so endpoints should validate link down messages (<span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>)</span>) with additional signals for reliable operations.<a href="#section-6.7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's Control Plane that focuses on <em>inter</em>-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption so these topics lie outside the scope of this section.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">This section focuses on three kinds of security risks in the control plane:<a href="#section-7-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7-3">
+<li id="section-7-3.1">
+          <p id="section-7-3.1.1">When an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see <a href="#topdown-manipulate" class="auto internal xref">Section 7.1</a>).<a href="#section-7-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-7-3.2">
+          <p id="section-7-3.2.1">When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see <a href="#manipulate-beaconing" class="auto internal xref">Section 7.2</a>).<a href="#section-7-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-7-3.3">
+          <p id="section-7-3.3.1">Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 7.3</a>).<a href="#section-7-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <div id="topdown-manipulate">
-<section id="section-6.1">
+<section id="section-7.1">
         <h3 id="name-manipulation-of-the-beaconi">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Core Adversary</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Core Adversary</a>
         </h3>
-<p id="section-6.1-1">The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manipulate-beaconing">
-<section id="section-6.2">
+<section id="section-7.2">
         <h3 id="name-manipulation-of-the-beaconin">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-manipulation-of-the-beaconin" class="section-name selfRef">Manipulation of the Beaconing Process by a Non-Core Adversary</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-manipulation-of-the-beaconin" class="section-name selfRef">Manipulation of the Beaconing Process by a Non-Core Adversary</a>
         </h3>
-<p id="section-6.2-1">This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <div id="path-hijack">
-<section id="section-6.2.1">
+<section id="section-7.2.1">
           <h4 id="name-path-hijacking-through-inte">
-<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-path-hijacking-through-inte" class="section-name selfRef">Path Hijacking through Interposition</a>
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-path-hijacking-through-inte" class="section-name selfRef">Path Hijacking through Interposition</a>
           </h4>
-<p id="section-6.2.1-1">A malicious AS M might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via M. If M can interpose itself on the path between A and B, then it could attempt several potential attacks:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-1">A malicious AS M might try to manipulate the beaconing process between two neighbor ASes A and B, with the goal to hijack traffic to flow via M. If M can interpose itself on the path between A and B, then it could attempt several potential attacks:<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.1-2.1">
-              <p id="section-6.2.1-2.1.1">The adversary M could intercept and disseminate a PCB on its way from A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.<a href="#section-6.2.1-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2.1-2.1">
+              <p id="section-7.2.1-2.1.1">The adversary M could intercept and disseminate a PCB on its way from A to the neighboring AS B, and inject its own AS entry into the PCB toward downstream ASes.<a href="#section-7.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.2.1-2.2">
-              <p id="section-6.2.1-2.2.1">The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.<a href="#section-6.2.1-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.2.1-2.2">
+              <p id="section-7.2.1-2.2.1">The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.<a href="#section-7.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.2.1-2.3">
-              <p id="section-6.2.1-2.3.1">The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.<a href="#section-6.2.1-2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.2.1-2.3">
+              <p id="section-7.2.1-2.3.1">The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.<a href="#section-7.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.2.1-3">The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-4">The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">The third type of attack generally cannot be prevented. However the alternate path would be immediately visible to endpoints as traffic <span class="bcp14">MUST</span> include Hop Fields from AS M.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-3">The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-4">The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-5">The third type of attack generally cannot be prevented. However the alternate path would be immediately visible to endpoints as traffic <span class="bcp14">MUST</span> include Hop Fields from AS M.<a href="#section-7.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fake-ases">
-<section id="section-6.2.2">
+<section id="section-7.2.2">
           <h4 id="name-creation-of-spurious-ases-a">
-<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-creation-of-spurious-ases-a" class="section-name selfRef">Creation of Spurious ASes and ISDs</a>
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-creation-of-spurious-ases-a" class="section-name selfRef">Creation of Spurious ASes and ISDs</a>
           </h4>
-<p id="section-6.2.2-1">An alternative scenario is when an adversary tries to introduce and spoof a non-existent AS. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2-2">However, spoofing a new AS requires a registration of that AS with the ISD core to obtain a valid AS certificate, otherwise the adversary cannot construct valid PCBs. As this registration should include a thorough check and authentication by a CA, this cannot be done stealthily which defeats the original purpose.<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.2-3">Similarly to creating a fake AS, an adversary could try to introduce a new malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort and may need the involvement of more than one malicious entity. Here the "costs" of setting up the fake ISD may outweigh the benefits.<a href="#section-6.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-1">An alternative scenario is when an adversary tries to introduce and spoof a non-existent AS. This would enable the adversary to send traffic with the spoofed AS as a source, allowing the adversary to complicate the detection of its attack and to plausibly deny the misbehavior.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-2">However, spoofing a new AS requires a registration of that AS with the ISD core to obtain a valid AS certificate, otherwise the adversary cannot construct valid PCBs. As this registration should include a thorough check and authentication by a CA, this cannot be done stealthily which defeats the original purpose.<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-3">Similarly to creating a fake AS, an adversary could try to introduce a new malicious ISD. This involves the generation of its own TRC, finding core ASes to peer with, and convincing other ISDs of its legitimacy to accept the new TRC. Although this setup is not entirely impossible, it requires substantial time and effort and may need the involvement of more than one malicious entity. Here the "costs" of setting up the fake ISD may outweigh the benefits.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="peer-link-misuse">
-<section id="section-6.2.3">
+<section id="section-7.2.3">
           <h4 id="name-peering-link-misuse">
-<a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-peering-link-misuse" class="section-name selfRef">Peering Link Misuse</a>
+<a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-peering-link-misuse" class="section-name selfRef">Peering Link Misuse</a>
           </h4>
-<p id="section-6.2.3-1">The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary Hop Fields by querying a Control Service and extracting the Hop Fields from registered paths.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.3-2">Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack. Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.<a href="#section-6.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-1">The misuse of a peering link by an adversary represents another type of attack. Consider the case where AS A wants to share its peering link only with one of its downstream neighbors AS B, and therefore selectively includes the peering link only in PCBs sent to B. An adversary may now try to gain access to this peering link by prepending the relevant PCBs to its own path. For this, the adversary needs to be able to (1) eavesdrop on the link from A to B, and (2) obtain the necessary Hop Fields by querying a Control Service and extracting the Hop Fields from registered paths.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-2">Even if an adversary succeeds in misusing a peering link as described above, SCION is able to mitigate this kind of attack. Each AS includes an egress interface as well as specific “next hop” information to the PCB before disseminating it further downstream. If a malicious entity tries to misuse a stolen PCB by adding it to its own segments, verification will fail upstream as the egress interface mismatches. Therefore, the peering link can only be used by the intended AS.<a href="#section-7.2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manipulate-selection">
-<section id="section-6.2.4">
+<section id="section-7.2.4">
           <h4 id="name-manipulation-of-the-path-se">
-<a href="#section-6.2.4" class="section-number selfRef">6.2.4. </a><a href="#name-manipulation-of-the-path-se" class="section-name selfRef">Manipulation of the Path-Selection Process</a>
+<a href="#section-7.2.4" class="section-number selfRef">7.2.4. </a><a href="#name-manipulation-of-the-path-se" class="section-name selfRef">Manipulation of the Path-Selection Process</a>
           </h4>
-<p id="section-6.2.4-1">Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.<a href="#section-6.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-2">In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.<a href="#section-6.2.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-3">These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.<a href="#section-6.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-4"><strong>Announcing Large Numbers of Path Segments</strong> <br>
-This attack is possible if the adversary controls at least two ASes. The adversary can create a large number of links between the ASes under its control which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes and in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.<a href="#section-6.2.4-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-5">In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction as these relatively long paths have to compete with other shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.<a href="#section-6.2.4-5" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-6"><strong>Wormhole Attack</strong> <br>
-A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.<a href="#section-6.2.4-6" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
-In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-6.2.4-7" class="pilcrow">¶</a></p>
-<p id="section-6.2.4-8">To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-6.2.4-8" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-1">Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.<a href="#section-7.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-2">In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.<a href="#section-7.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-3">These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.<a href="#section-7.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-4"><strong>Announcing Large Numbers of Path Segments</strong> <br>
+This attack is possible if the adversary controls at least two ASes. The adversary can create a large number of links between the ASes under its control which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes and in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.<a href="#section-7.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-5">In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction as these relatively long paths have to compete with other shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.<a href="#section-7.2.4-5" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-6"><strong>Wormhole Attack</strong> <br>
+A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.<a href="#section-7.2.4-6" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
+In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-7.2.4-7" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-8">To defend against this attack, methods to detect the wormhole attack are needed.  Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-7.2.4-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="dos-cp">
-<section id="section-6.3">
+<section id="section-7.3">
         <h3 id="name-denial-of-service-attacks">
-<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
         </h3>
-<p id="section-6.3-1">The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3-3">Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet, e.g. filtering, geo-blocking or using cookies.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
-<p id="section-6.3-4">Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.<a href="#section-6.3-4" class="pilcrow">¶</a></p>
-<p id="section-6.3-5">For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:<a href="#section-6.3-5" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet, e.g. filtering, geo-blocking or using cookies.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-5">For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:<a href="#section-7.3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-6.1">
-            <p id="section-6.3-6.1.1"><code>SegmentCreationService.Beacon</code> can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.<a href="#section-6.3-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.3-6.1">
+            <p id="section-7.3-6.1.1"><code>SegmentCreationService.Beacon</code> can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.<a href="#section-7.3-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.3-6.2">
-            <p id="section-6.3-6.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address <span class="bcp14">MUST</span> match the local ISD and the number of path segments <span class="bcp14">MUST</span> be 1.<a href="#section-6.3-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-6.2">
+            <p id="section-7.3-6.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address <span class="bcp14">MUST</span> match the local ISD and the number of path segments <span class="bcp14">MUST</span> be 1.<a href="#section-7.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.3-7">A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service <span class="bcp14">SHOULD</span> be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
+<p id="section-7.3-7">A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service <span class="bcp14">SHOULD</span> be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-7.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-iana-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-8-1">This document has no IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-8.1">
+<section id="section-9.1">
         <h3 id="name-normative-references">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="Connect">[Connect]</dt>
@@ -3811,9 +4609,9 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-8.2">
+<section id="section-9.2">
         <h3 id="name-informative-references">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="BollRio-2000">[BollRio-2000]</dt>
@@ -3836,6 +4634,10 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
         <dd>
 <span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4893">[RFC4893]</dt>
+        <dd>
+<span class="refAuthor">Vohra, Q.</span> and <span class="refAuthor">E. Chen</span>, <span class="refTitle">"BGP Support for Four-octet AS Number Space"</span>, <span class="seriesInfo">RFC 4893</span>, <span class="seriesInfo">DOI 10.17487/RFC4893</span>, <time datetime="2007-05" class="refDate">May 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4893">https://www.rfc-editor.org/rfc/rfc4893</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5398">[RFC5398]</dt>
         <dd>
 <span class="refAuthor">Huston, G.</span>, <span class="refTitle">"Autonomous System (AS) Number Reservation for Documentation Use"</span>, <span class="seriesInfo">RFC 5398</span>, <span class="seriesInfo">DOI 10.17487/RFC5398</span>, <time datetime="2008-12" class="refDate">December 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5398">https://www.rfc-editor.org/rfc/rfc5398</a>&gt;</span>. </dd>
@@ -3853,8 +4655,12 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCIONLAB">[SCIONLAB]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Kown, J.</span>, <span class="refAuthor">García-Pardo, J.</span>, <span class="refAuthor">Legner, M.</span>, <span class="refAuthor">Wirz, F.</span>, <span class="refAuthor">Frei, M.</span>, <span class="refAuthor">Hausheer, D.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCIONLAB - A Next-Generation Internet Testbed"</span>, <time datetime="2020" class="refDate">2020</time>, <span>&lt;<a href="https://ieeexplore.ieee.org/abstract/document/9259355">https://ieeexplore.ieee.org/abstract/document/9259355</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCMP">[SCMP]</dt>
+      <dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3885,7 +4691,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
       </h2>
 <p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <span id="name-control-service-grpc-api-se"></span><div id="_figure-11">
-<figure id="figure-9">
+<figure id="figure-17">
         <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 service SegmentLookupService {
@@ -3923,13 +4729,13 @@ message SegmentsResponse {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
 <span id="name-control-service-grpc-api-seg"></span><div id="_figure-12">
-<figure id="figure-10">
+<figure id="figure-18">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service SegmentRegistrationService {
@@ -3952,13 +4758,13 @@ message SegmentsRegistrationRequest {
 message SegmentsRegistrationResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-5"><br></p>
 <span id="name-control-service-grpc-api-segm"></span><div id="_figure-13">
-<figure id="figure-11">
+<figure id="figure-19">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service SegmentCreationService {
@@ -3974,13 +4780,13 @@ message BeaconRequest {
 message BeaconResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-control-service-grpc-api-segm" class="selfRef">Control Service gRPC API - Segment creation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-7"><br></p>
 <span id="name-control-service-grpc-api-segme"></span><div id="_figure-14">
-<figure id="figure-12">
+<figure id="figure-20">
         <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 message PathSegment {
@@ -4037,7 +4843,7 @@ message HopEntry {
 
 message PeerEntry {
     // ISD-AS of peer AS. This is used to match peering segments
-        // during path construction.
+    // during path construction.
     uint64 peer_isd_as = 1;
     // Remote peer interface identifier. This is used to match
     // peering segments
@@ -4055,20 +4861,20 @@ message HopField {
     // Egress interface identifier.
     uint64 egress = 2;
     // 8-bit encoded expiration offset relative to the segment
-        // creation timestamp.
+    // creation timestamp.
     uint32 exp_time = 3;
     // MAC used in the dataplane to verify the Hop Field.
     bytes mac = 4;
 }
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-control-service-grpc-api-segme" class="selfRef">Control Service gRPC API - Segment representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-9"><br></p>
 <span id="name-control-service-grpc-api-si"></span><div id="_figure-15">
-<figure id="figure-13">
+<figure id="figure-21">
         <div class="alignLeft art-text artwork" id="appendix-C-10.1">
 <pre>
 enum SignatureAlgorithm {
@@ -4129,7 +4935,7 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-control-service-grpc-api-si" class="selfRef">Control Service gRPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
@@ -4210,7 +5016,7 @@ registered.<a href="#appendix-D-2.2.1" class="pilcrow">¶</a></p>
       </ul>
 <p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-grpc-api"></span><div id="_figure-16">
-<figure id="figure-14">
+<figure id="figure-22">
         <div class="alignLeft art-text artwork" id="appendix-D-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -4247,7 +5053,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-service-resolution-grpc-api" class="selfRef">Service Resolution gRPC API definition</a>
         </figcaption></figure>
 </div>
@@ -4259,9 +5065,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 15</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 16</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 17</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
+<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 23</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 24</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 25</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
-<figure id="figure-15">
+<figure id="figure-23">
         <div class="alignLeft art-text artwork" id="appendix-E-2.1">
 <pre>
 +----------------------------+     +----------------------------+
@@ -4289,12 +5095,12 @@ message Transport {
 +----------------------------+     +----------------------------+
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-9">
-<figure id="figure-16">
+<figure id="figure-24">
         <div class="alignLeft art-text artwork" id="appendix-E-3.1">
 <pre>
 +---------+          +---------+          +---------+        +---------+
@@ -4354,12 +5160,12 @@ message Transport {
  +--------+           +--------+          +--------+          +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-10">
-<figure id="figure-17">
+<figure id="figure-25">
         <div class="alignLeft art-text artwork" id="appendix-E-4.1">
 <pre>
 +---------+     +---------+      +---------+   +---------+   +---------+
@@ -4428,7 +5234,7 @@ message Transport {
 +--------+       +--------+       +--------+    +--------+    +--------+
 </pre>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
@@ -4440,108 +5246,120 @@ message Transport {
 <a href="#name-change-log" class="section-name selfRef">Change Log</a>
       </h2>
 <p id="appendix-F-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-F-1" class="pilcrow">¶</a></p>
-<div id="draft-dekater-scion-controlplane-06">
+<div id="draft-dekater-scion-controlplane-07">
 <section id="appendix-F.1">
         <h3 id="name-draft-dekater-scion-control">
-<a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
+<a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-07</a>
         </h3>
-<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.1-2.1">
-            <p id="appendix-F.1-2.1.1">New section: Path MTU
--New section: Monitoring Considerations<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-F.1-2.2">
-            <p id="appendix-F.1-2.2.1">Completed description of Control Services gRPC API in appendix<a href="#appendix-F.1-2.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.1-1.1">
+            <p id="appendix-F.1-1.1.1">Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document<a href="#appendix-F.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="draft-dekater-scion-controlplane-06">
+<section id="appendix-F.2">
+        <h3 id="name-draft-dekater-scion-controlp">
+<a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
+        </h3>
+<p id="appendix-F.2-1">Major changes:<a href="#appendix-F.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.1-4.1">
-            <p id="appendix-F.1-4.1.1">Introduction: clarify goal of the document<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.2-2.1">
+            <p id="appendix-F.2-2.1.1">New section: Path MTU
+-New section: Monitoring Considerations<a href="#appendix-F.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-4.2">
-            <p id="appendix-F.1-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.1-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.2-2.2">
+            <p id="appendix-F.2-2.2.1">Completed description of Control Services gRPC API in appendix<a href="#appendix-F.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-4.3">
-            <p id="appendix-F.1-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-F.1-4.3.1" class="pilcrow">¶</a></p>
+        </ul>
+<p id="appendix-F.2-3">Minor changes:<a href="#appendix-F.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.2-4.1">
+            <p id="appendix-F.2-4.1.1">Introduction: clarify goal of the document<a href="#appendix-F.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-4.4">
-            <p id="appendix-F.1-4.4.1">General rewording<a href="#appendix-F.1-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.2-4.2">
+            <p id="appendix-F.2-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-4.5">
-            <p id="appendix-F.1-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.1-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.2-4.3">
+            <p id="appendix-F.2-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-F.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-4.6">
-            <p id="appendix-F.1-4.6.1">Introduced this change log<a href="#appendix-F.1-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.2-4.4">
+            <p id="appendix-F.2-4.4.1">General rewording<a href="#appendix-F.2-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.2-4.5">
+            <p id="appendix-F.2-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.2-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.2-4.6">
+            <p id="appendix-F.2-4.6.1">Introduced this change log<a href="#appendix-F.2-4.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-05">
-<section id="appendix-F.2">
-        <h3 id="name-draft-dekater-scion-controlp">
-<a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
+<section id="appendix-F.3">
+        <h3 id="name-draft-dekater-scion-controlpl">
+<a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
         </h3>
-<p id="appendix-F.2-1">Minor changes:<a href="#appendix-F.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-F.3-1">Minor changes:<a href="#appendix-F.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.2-2.1">
-            <p id="appendix-F.2-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.3-2.1">
+            <p id="appendix-F.3-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-04">
-<section id="appendix-F.3">
-        <h3 id="name-draft-dekater-scion-controlpl">
-<a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
+<section id="appendix-F.4">
+        <h3 id="name-draft-dekater-scion-controlpla">
+<a href="#name-draft-dekater-scion-controlpla" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
         </h3>
-<p id="appendix-F.3-1">Major changes:<a href="#appendix-F.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-F.4-1">Major changes:<a href="#appendix-F.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-2.1">
-            <p id="appendix-F.3-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.4-2.1">
+            <p id="appendix-F.4-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.2">
-            <p id="appendix-F.3-2.2.1">New section: PCB validity<a href="#appendix-F.3-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-2.2">
+            <p id="appendix-F.4-2.2.1">New section: PCB validity<a href="#appendix-F.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.3">
-            <p id="appendix-F.3-2.3.1">New section: configuration<a href="#appendix-F.3-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-2.3">
+            <p id="appendix-F.4-2.3.1">New section: configuration<a href="#appendix-F.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.4">
-            <p id="appendix-F.3-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.3-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-2.4">
+            <p id="appendix-F.4-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.5">
-            <p id="appendix-F.3-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.3-2.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-2.5">
+            <p id="appendix-F.4-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.4-2.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.6">
-            <p id="appendix-F.3-2.6.1">New appendix: Control Service gRPC API<a href="#appendix-F.3-2.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-2.6">
+            <p id="appendix-F.4-2.6.1">New appendix: Control Service gRPC API<a href="#appendix-F.4-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.3-3">Minor changes:<a href="#appendix-F.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-F.4-3">Minor changes:<a href="#appendix-F.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-4.1">
-            <p id="appendix-F.3-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.3-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.4-4.1">
+            <p id="appendix-F.4-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.4-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.2">
-            <p id="appendix-F.3-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.3-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.2">
+            <p id="appendix-F.4-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.4-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.3">
-            <p id="appendix-F.3-4.3.1">Fixed private AS range typo<a href="#appendix-F.3-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.3">
+            <p id="appendix-F.4-4.3.1">Fixed private AS range typo<a href="#appendix-F.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.4">
-            <p id="appendix-F.3-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.3-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.4">
+            <p id="appendix-F.4-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.4-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.5">
-            <p id="appendix-F.3-4.5.1">Clarified PCB propagation<a href="#appendix-F.3-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.5">
+            <p id="appendix-F.4-4.5.1">Clarified PCB propagation<a href="#appendix-F.4-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.6">
-            <p id="appendix-F.3-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.3-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.6">
+            <p id="appendix-F.4-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.4-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.7">
-            <p id="appendix-F.3-4.7.1">Removed forward references<a href="#appendix-F.3-4.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.7">
+            <p id="appendix-F.4-4.7.1">Removed forward references<a href="#appendix-F.4-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.8">
-            <p id="appendix-F.3-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.3-4.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.4-4.8">
+            <p id="appendix-F.4-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.4-4.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
