@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-16T00:20:31.994437+00:00",
+  "timestamp": "2025-01-19T00:22:17.388042+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6326,20 +6326,28 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Resolves #83 ",
       "createdAt": "2025-01-15T12:48:32Z",
-      "updatedAt": "2025-01-15T12:48:32Z",
+      "updatedAt": "2025-01-18T21:50:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e081b945f998fbec64cdf255f6728007473c7a5d",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "this-is-not-a-standard",
-      "headRefOid": "f48156a2f4ab58c8ae971492cd8c82c76c578d9a",
+      "headRefOid": "2bcfb3210392ead72d8820908cbce583c99e0de2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "How do you feel about the abstract? I'm not entirely fond of the current text, perhaps it could be shortened.. something like: \r\n\r\n> This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. \r\nThe Control Plane is responsible for securely discovering these paths and making them available to the endpoints. This document elucidates the mechanisms of path exploration through beaconing, path registration, and lookup, and introduces SCION's routing concepts, providing a comprehensive understanding of the control plane's role in establishing and managing path segments, that are used by the data plane for forwarding.\r\n\r\n",
+          "createdAt": "2025-01-18T21:45:29Z",
+          "updatedAt": "2025-01-18T21:50:16Z"
+        }
+      ],
       "reviews": []
     }
   ]
