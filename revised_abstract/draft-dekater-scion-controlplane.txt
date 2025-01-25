@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 27 June 2025                                            S. Hitz
+Expires: 29 July 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                        24 December 2024
+                                                         25 January 2025
 
 
                           SCION Control Plane
@@ -17,23 +17,28 @@ Abstract
 
    This document describes the Control Plane of the path-aware, inter-
    domain network architecture SCION (Scalability, Control, and
-   Isolation On Next-generation networks).  One of the basic
-   characteristics of SCION is that it gives path control to SCION-
-   capable endpoints that can choose between multiple path options,
-   enabling the optimization of network paths.  The Control Plane is
-   responsible for discovering these paths and making them available to
-   the endpoints.
+   Isolation On Next-generation networks).  A fundamental characteristic
+   of SCION is that it gives path control to SCION-capable endpoints
+   that can choose between multiple path options, thereby enabling the
+   optimization of network paths.  The Control Plane is responsible for
+   discovering these paths and making them available to the endpoints.
 
-   The main goal of the SCION Control Plane is to create and manage path
-   segments which can then be combined into forwarding paths to transmit
-   packets in the data plane.  This document discusses how path
-   exploration is realized through beaconing and how path segments are
-   created and registered.  Each SCION Autonomous System (AS) can
-   register segments according to its own policy and can specify which
-   path properties and algorithm(s) to use in the selection procedure.
-   The document also describes the path lookup process whereby endpoints
-   obtain path segments - a fundamental building block for the
-   construction of end-to-end paths.
+   The SCION Control Plane creates and manages path segments between
+   SCION Autonomous Systems (AS) which can then be combined into
+   forwarding paths to transmit packets in the data plane.  Path
+   exploration is undertaken through a beaconing process which allows
+   each AS to register segments according to its own policy and can
+   specify which path properties and algorithms to use when selecting
+   paths to a destination.  Endpoints may then construct end-to-end
+   paths from a set of possible path segments returned by returned by a
+   path lookup process.
+
+   This document contains new approaches to secure path aware
+   networking.  It is not an Internet Standard, has not received any
+   formal review of the IETF, nor was the work developed through the
+   rough consensus process.  The approaches offered in this work are
+   offered to the community for its consideration in the further
+   evolution of the Internet.
 
 About This Document
 
@@ -63,11 +68,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 June 2025.
+   This Internet-Draft will expire on 29 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -3398,16 +3403,16 @@ path segment 4 |             |     |             |     |             |
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-03, 19 October 2024,
+              draft-dekater-scion-dataplane-04, 24 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-03>.
+              scion-dataplane-04>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-07, 19 October 2024,
+              dekater-scion-pki-08, 30 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-07>.
+              scion-pki-08>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
