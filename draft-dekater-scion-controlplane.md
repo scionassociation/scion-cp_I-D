@@ -161,9 +161,12 @@ informative:
 
 --- abstract
 
-This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.
+This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.
 
-The main goal of the SCION Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets in the data plane. This document discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION Autonomous System (AS) can register segments according to its own policy and can specify which path properties and algorithm(s) to use in the selection procedure. The document also describes the path lookup process whereby endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.
+The SCION Control Plane creates and manages path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. Path exploration is undertaken through a beaconing process which allows each AS to register segments according to its own policy and can specify which path properties and algorithms to use when selecting paths to a destination. Endpoints may then construct end-to-end paths from a set of possible path segments returned by returned by a path lookup process.
+
+This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
+
 
 --- middle
 
