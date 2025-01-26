@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 29 July 2025</td>
+<td class="center">Expires 30 July 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-25" class="published">25 January 2025</time>
+<time datetime="2025-01-26" class="published">26 January 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-29">29 July 2025</time></dd>
+<dd class="expires"><time datetime="2025-07-30">30 July 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 30 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1867,7 +1867,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-2.1-4.1.1"><em>Inter-ISD or core beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
-            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> is the process whereby the Control Service of a core AS initiates PCBs and sends them at regular intervals to non-core child ASes (typically customer ASes) within the same ISD. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments that enable them to reach the core ASes within the same ISD.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.1-5">On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in <a href="#pcbs" class="auto internal xref">Section 2.2</a>.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
