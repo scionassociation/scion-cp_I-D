@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-23T00:20:19.588703+00:00",
+  "timestamp": "2025-01-26T00:20:38.209501+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6355,6 +6355,32 @@
           "updatedAt": "2025-01-21T16:09:56Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 85,
+      "id": "PR_kwDOJx2-rs6I-vSM",
+      "title": "Revised abstract",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/85",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-25T13:28:31Z",
+      "updatedAt": "2025-01-25T13:28:32Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e081b945f998fbec64cdf255f6728007473c7a5d",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "revised_abstract",
+      "headRefOid": "8d7770e5db197566b13f40d30f35b024d3999215",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
