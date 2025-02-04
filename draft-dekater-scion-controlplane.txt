@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 27 June 2025                                            S. Hitz
+Expires: 8 August 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                        24 December 2024
+                                                         4 February 2025
 
 
                           SCION Control Plane
@@ -63,11 +63,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 June 2025.
+   This Internet-Draft will expire on 8 August 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -524,8 +524,8 @@ Table of Contents
    or link layer address.
 
    *Note:* As a consequence of the fact that SCION relies on existing
-   routing protocols (e.g.  IS-IS, OSPF, SR) and communication fabric
-   (e.g.  IP, MPLS) for intra-domain forwarding, existing internal
+   routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric
+   (e.g. IP, MPLS) for intra-domain forwarding, existing internal
    routers do not need to be changed to support SCION.
 
 1.5.1.  ISD Numbers
@@ -3193,8 +3193,8 @@ path segment 4 |             |     |             |     |             |
       includes its own AS.
 
    The first type of attack is detectable and blocked by downstream ASes
-   (e.g.  B) because a PCB disseminated by AS A towards AS B contains
-   the "Next ISD AS" field in the entry of AS A, pointing to AS B, and
+   (e.g. B) because a PCB disseminated by AS A towards AS B contains the
+   "Next ISD AS" field in the entry of AS A, pointing to AS B, and
    protected by A's signature.  If M manipulates the PCB while in flight
    from A to B, then verification of the manipulated inbound PCBs will
    fail at AS B, as the adversary's PCBs cannot contain A's correct
@@ -3398,16 +3398,16 @@ path segment 4 |             |     |             |     |             |
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-03, 19 October 2024,
+              draft-dekater-scion-dataplane-04, 24 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-03>.
+              scion-dataplane-04>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-07, 19 October 2024,
+              dekater-scion-pki-08, 30 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-07>.
+              scion-pki-08>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
