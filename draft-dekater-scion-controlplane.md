@@ -161,9 +161,12 @@ informative:
 
 --- abstract
 
-This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.
+This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths. The Control Plane is responsible for discovering these paths and making them available to the endpoints.
 
-The main goal of the SCION Control Plane is to create and manage path segments which can then be combined into forwarding paths to transmit packets in the data plane. This document discusses how path exploration is realized through beaconing and how path segments are created and registered. Each SCION Autonomous System (AS) can register segments according to its own policy and can specify which path properties and algorithm(s) to use in the selection procedure. The document also describes the path lookup process whereby endpoints obtain path segments - a fundamental building block for the construction of end-to-end paths.
+The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how  Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process.
+
+This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
+
 
 --- middle
 
@@ -422,7 +425,8 @@ In SCION, the *Control Service* of each AS is responsible for the beaconing proc
 PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
-- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD.
+
+- *Intra-ISD beaconing* is the process whereby the Control Service of a core AS initiates PCBs and sends them at regular intervals to non-core child ASes (typically customer ASes) within the same ISD. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any customer (leaf AS). As a result, all ASes within an ISD receive path segments that enable them to reach the core ASes within the same ISD.
 
 On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs).
 
