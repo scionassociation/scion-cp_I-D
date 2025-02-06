@@ -145,18 +145,19 @@ Table of Contents
        6.6.4.  Traceroute Reply
      6.7.  SCMP Authentication
    7.  Security Considerations
-     7.1.  Manipulation of the Beaconing Process by a Core Adversary
-     7.2.  Manipulation of the Beaconing Process by a Non-Core
+   8.  Security Assumptions
+     8.1.  Manipulation of the Beaconing Process by a Core Adversary
+     8.2.  Manipulation of the Beaconing Process by a Non-Core
            Adversary
-       7.2.1.  Path Hijacking through Interposition
-       7.2.2.  Creation of Spurious ASes and ISDs
-       7.2.3.   Peering Link Misuse
-       7.2.4.  Manipulation of the Path-Selection Process
-     7.3.  Denial of Service Attacks
-   8.  IANA Considerations
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+       8.2.1.  Path Hijacking through Interposition
+       8.2.2.  Creation of Spurious ASes and ISDs
+       8.2.3.   Peering Link Misuse
+       8.2.4.  Manipulation of the Path-Selection Process
+     8.3.  Denial of Service Attacks
+   9.  IANA Considerations
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
    Full Control Service gRPC API
@@ -3150,18 +3151,20 @@ path segment 4 |             |     |             |     |             |
 
    1.  When an adversary controls one or all core ASes of an ISD and
        tries to manipulate the beaconing process from the top down (see
-       Section 7.1).
+       Section 8.1).
 
    2.  When "ordinary" (non-core) adversaries try to manipulate the
-       beaconing process (see Section 7.2).
+       beaconing process (see Section 8.2).
 
    3.  Denial of Services (DoS) attacks where attackers overload
-       different parts of the infrastructure (see Section 7.3).
+       different parts of the infrastructure (see Section 8.3).
+
+8.  Security Assumptions
 
    These security considerations make assumptions about the formal model
-   of the SCION implementation as follows:
+   of SCION implementation as follows:
 
-   1.  Every ISD has at least one core AS.
+   1.  Every ISD contains at least one core AS.
 
    2.  The physical links within an ISD are not partitioned and each AS
        can reach every other AS in the same ISD.
@@ -3169,7 +3172,36 @@ path segment 4 |             |     |             |     |             |
    3.  Customer-Provider relationships and their related links form a
        unidirectional hierarchical topology with cyclic relationships.
 
-7.1.  Manipulation of the Beaconing Process by a Core Adversary
+   An AS is described as 'honest' if its long-term keys are unknown to
+   the attacker and it uses a unique interface identifier for each link.
+   An honest path is one that only traverses honest ASes as follows:
+
+   *  Connectivity - For every pair of honest ASes X and Y, X will
+      eventually register enough segments to build at least one path (of
+      any length) leading to Y.
+
+   *  Path Consistency - For every honest segment registered in any AS,
+      its sequence of AS entries corresponds to a continuous path in the
+      network of physical links and the network topology remains
+      unchanged since the segment was first generated.
+
+   *  Loop Freedom - For every honest segment registered in any AS, its
+      sequence of AS entries contains no duplicates, including current
+      and next ISD-AS and interfaces.
+
+   *  Beacon Authorization - For every honest segment registered in any
+      AS and any AS X appearing on that segment (except for the previous
+      one), AS X propagated a PCB corresponding to the segment prefix
+      ending in its own entry to its successor AS on the segment.
+
+   *  Path Discoverability - For every directed honest path in the
+      network of physical links, where all traversed ASes permit
+      forwarding there exists at least one protocol execution that
+      registers a segment containing or exactly matching this path,
+      provided the involved physical links remain stable throughout the
+      protocol execution.
+
+8.1.  Manipulation of the Beaconing Process by a Core Adversary
 
    The first risk to the beaconing process comes from an adversary
    controlling one or more core ASes in an ISD.  If the adversary stops
@@ -3180,7 +3212,7 @@ path segment 4 |             |     |             |     |             |
    they expire.  This is an unlikely scenario, as it would require
    compromise of all core ASes within an ISD.
 
-7.2.  Manipulation of the Beaconing Process by a Non-Core Adversary
+8.2.  Manipulation of the Beaconing Process by a Non-Core Adversary
 
    This section examines several possible approaches that could be taken
    by an "ordinary" non-core adversary to manipulate the beaconing
@@ -3188,7 +3220,7 @@ path segment 4 |             |     |             |     |             |
    extent SCION's design can prevent the corresponding attack or help
    mitigate it.
 
-7.2.1.  Path Hijacking through Interposition
+8.2.1.  Path Hijacking through Interposition
 
    A malicious AS M might try to manipulate the beaconing process
    between two neighbor ASes A and B, with the goal to hijack traffic to
@@ -3222,7 +3254,7 @@ path segment 4 |             |     |             |     |             |
    alternate path would be immediately visible to endpoints as traffic
    MUST include Hop Fields from AS M.
 
-7.2.2.  Creation of Spurious ASes and ISDs
+8.2.2.  Creation of Spurious ASes and ISDs
 
    An alternative scenario is when an adversary tries to introduce and
    spoof a non-existent AS.  This would enable the adversary to send
@@ -3244,7 +3276,7 @@ path segment 4 |             |     |             |     |             |
    need the involvement of more than one malicious entity.  Here the
    "costs" of setting up the fake ISD may outweigh the benefits.
 
-7.2.3.   Peering Link Misuse
+8.2.3.   Peering Link Misuse
 
    The misuse of a peering link by an adversary represents another type
    of attack.  Consider the case where AS A wants to share its peering
@@ -3265,7 +3297,7 @@ path segment 4 |             |     |             |     |             |
    interface mismatches.  Therefore, the peering link can only be used
    by the intended AS.
 
-7.2.4.  Manipulation of the Path-Selection Process
+8.2.4.  Manipulation of the Path-Selection Process
 
    Endpoint path control is one of the main benefits of SCION compared
    to the current Internet as SCION endpoints can select inter-domain
@@ -3339,7 +3371,7 @@ path segment 4 |             |     |             |     |             |
    unattractive.  Without specific detection mechanisms these so-called
    wormhole attacks are unavoidable in routing.
 
-7.3.  Denial of Service Attacks
+8.3.  Denial of Service Attacks
 
    The beaconing process in the SCION Control Plane relies on control
    plane communication.  ASes exchange control plane messages within
@@ -3389,7 +3421,7 @@ path segment 4 |             |     |             |     |             |
    requests can be balanced and a single instance failure does not
    result in a complete failure of the control plane of a SCION AS.
 
-8.  IANA Considerations
+9.  IANA Considerations
 
    This document has no IANA actions.
 
@@ -3399,9 +3431,9 @@ path segment 4 |             |     |             |     |             |
    task is currently being transitioned from Anapaya to the SCION
    Association.
 
-9.  References
+10.  References
 
-9.1.  Normative References
+10.1.  Normative References
 
    [Connect]  "Connect Protocol Reference", 2024,
               <https://connectrpc.com/docs/protocol/>.
@@ -3459,7 +3491,7 @@ path segment 4 |             |     |             |     |             |
    [RFC9114]  Bishop, M., Ed., "HTTP/3", RFC 9114, DOI 10.17487/RFC9114,
               June 2022, <https://www.rfc-editor.org/rfc/rfc9114>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [BollRio-2000]
               Bollobás, B. and O. Riordan, "The diameter of a scale-free
