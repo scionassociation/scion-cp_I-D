@@ -1955,6 +1955,13 @@ This section focuses on three kinds of security risks in the control plane:
 2. When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see [](#manipulate-beaconing)).
 3. Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see [](#dos-cp)).
 
+These security considerations make assumptions about the formal model of the SCION implementation as follows:
+
+1. Every ISD has at least one core AS.
+2. The physical links within an ISD are not partitioned and each AS can reach every other AS in the same ISD.
+3. Customer-Provider relationships and their related links form a unidirectional hierarchical topology with cyclic relationships.
+
+
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
 The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. If the adversary stops all core AS(es) within an ISD from propagating PCBs, the discovery of new paths will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely scenario, as it would require compromise of all core ASes within an ISD.
