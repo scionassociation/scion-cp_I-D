@@ -1211,6 +1211,16 @@ Selected path segment: #------# or *------*
 ~~~~
 {: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
 
+Some examples of path selection policies include:
+
+- BestSetSize - the recommended number of segments to propagate or register.
+- CandidateSetSize - the maximum number of segments to consider for selection.
+- MaxExpTime - the maximum value for the expiration time when extending the segment.
+- MaxHopsLength - the maximum number of hops a segment can have.
+- ASBlackList - the ASes that may not appear in a segment.
+- IsdBlackList - the ISDs that may not appear in segment.
+- AllowIsdLoop - indicates whether ISD loops should not be filtered.
+
 ### Propagation of Selected PCBs {#path-segment-prop}
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
