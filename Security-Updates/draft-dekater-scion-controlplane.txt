@@ -1819,6 +1819,25 @@ path segment 4 |             |     |             |     |             |
      Figure 8: Example networks to illustrate path segment selection
                    based on different path properties.
 
+   Some examples of path selection policies include:
+
+   *  BestSetSize - the recommended number of segments to propagate or
+      register.
+
+   *  CandidateSetSize - the maximum number of segments to consider for
+      selection.
+
+   *  MaxExpTime - the maximum value for the expiration time when
+      extending the segment.
+
+   *  MaxHopsLength - the maximum number of hops a segment can have.
+
+   *  ASBlackList - the ASes that may not appear in a segment.
+
+   *  IsdBlackList - the ISDs that may not appear in segment.
+
+   *  AllowIsdLoop - indicates whether ISD loops should not be filtered.
+
 2.3.2.  Propagation of Selected PCBs
 
    As mentioned above, once per _propagation period_ (determined by each
