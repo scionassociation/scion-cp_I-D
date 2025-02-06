@@ -1211,6 +1211,16 @@ Selected path segment: #------# or *------*
 ~~~~
 {: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
 
+Some examples of path selection policies include:
+
+- BestSetSize - the recommended number of segments to propagate or register.
+- CandidateSetSize - the maximum number of segments to consider for selection.
+- MaxExpTime - the maximum value for the expiration time when extending the segment.
+- MaxHopsLength - the maximum number of hops a segment can have.
+- ASBlackList - the ASes that may not appear in a segment.
+- IsdBlackList - the ISDs that may not appear in segment.
+- AllowIsdLoop - indicates whether ISD loops should not be filtered.
+
 ### Propagation of Selected PCBs {#path-segment-prop}
 
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
@@ -1954,6 +1964,22 @@ This section focuses on three kinds of security risks in the control plane:
 1. When an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)).
 2. When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see [](#manipulate-beaconing)).
 3. Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see [](#dos-cp)).
+
+# Security Assumptions
+
+These security considerations make assumptions about the formal model of SCION implementation as follows:
+
+1. Every ISD contains at least one core AS.
+2. The physical links within an ISD are not partitioned and each AS can reach every other AS in the same ISD.
+3. Customer-Provider relationships and their related links form a unidirectional hierarchical topology with cyclic relationships.
+
+An AS is described as 'honest' if its long-term keys are unknown to the attacker and it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes as follows:
+
+- Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
+- Path Consistency - For every honest segment registered in any AS, its sequence of AS entries corresponds to a continuous path in the network of physical links and the network topology remains unchanged since the segment was first generated.
+- Loop Freedom - For every honest segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interfaces.
+- Beacon Authorization - For every honest segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment prefix ending in its own entry to its successor AS on the segment.
+- Path Discoverability - For every directed honest path in the network of physical links, where all traversed ASes permit forwarding there exists at least one protocol execution that registers a segment containing or exactly matching this path, provided the involved physical links remain stable throughout the protocol execution.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
