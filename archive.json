@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-06T00:20:56.118987+00:00",
+  "timestamp": "2025-02-09T00:22:25.053939+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1083,7 +1083,9 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [
         "enhancement",
         "Prio 1",
@@ -1092,9 +1094,17 @@
       ],
       "body": "This section IMHO does not clarify how an AS makes a choice, and why it does not pick A-D-F-H-J or C-E-G-I-J in the example. \r\nSee [comments nico (PDF)](https://github.com/user-attachments/files/17421282/scan-2.pdf)\r\n",
       "createdAt": "2024-10-17T19:07:44Z",
-      "updatedAt": "2025-02-05T09:29:44Z",
+      "updatedAt": "2025-02-06T10:09:07Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've added the following to \"Selection Policy Example\":\n\nSome examples of path selection policies include:\n\n- BestSetSize - the recommended number of segments to propagate or register.\n- CandidateSetSize - the maximum number of segments to consider for selection.\n- MaxExpTime - the maximum value for the expiration time when extending the segment.\n- MaxHopsLength - the maximum number of hops a segment can have.\n- ASBlackList - the ASes that may not appear in a segment.\n- IsdBlackList - the ISDs that may not appear in segment.\n- AllowIsdLoop - indicates whether ISD loops should not be filtered.\n\nDiscuss...",
+          "createdAt": "2025-02-06T10:09:06Z",
+          "updatedAt": "2025-02-06T10:09:06Z"
+        }
+      ]
     },
     {
       "number": 73,
@@ -1201,9 +1211,9 @@
       "labels": [
         "enhancement"
       ],
-      "body": "- [ ] Subsection 2.2.4. \"Configuration\u201d should also mention that interface identifiers must be unique within an AS\n- [ ] Clarify that an ISD MUST have at least one Core AS (e.g. in 2.1.  Introduction and Overview )\n- [ ] Clarify if loop avoidance needs some editing (what David calls \"cyclic relationships\")\n\nAdd a new subsection (6.1) in security considerations: \n- [ ] Assumptions (briefly summarize points in 1 below)\n- [ ] \"Intended Security properties\" (based on points in 2 below, then add a reference in the intro)\n\n--- \nBase on feedback received from David Galan:\n\n1. We propose that assumptions about the network and the behaviour of honest ASes are made more explicit. We would be happy to help with a specific list of assumptions:\n\n- In our formal model, we assume that the network of physical links is such that no ISD is internally partitioned (i.e., each AS in an ISD can reach every other AS in the same ISD), --> See #46 \n- every ISD has at least one core AS, and\n- customer-provider relationships (and related links) form a unidirectional hierarchical topology without cyclic relationships (i.e., they form a directed acyclic graph).\n\nAn AS is called honest if its long-term keys are unknown to the attacker and it uses a unique interface identifier for each link. Let an honest path (resp., segment) be a path (resp., segment) which only traverses honest ASes.\n\nEven though this is explicitly stated elsewhere in the draft, perhaps Subsection 2.2.4. \"Configuration\u201d should also mention that interface identifiers must be unique within an AS.\n\n\n2.   Regarding correctness and security properties, we suggest inserting a new Subsection 6.1 \"Correctness and Security Properties\" in Section 6 \"Security Considerations\" containing precise descriptions in English prose that faithfully capture all the required details and avoid ambiguities.\n\nWe would be happy to contribute a list of candidate properties and their descriptions. These properties should be understood as carefully considered design goals.  Within our formal model, the properties considered so far are:\n- (Connectivity) For every pair of distinct honest ASes X and Y, such that there is at least one honest path in the network of physical links from X to Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.\n- (Path Consistency) For every honest segment registered in any AS, its sequence of AS entries corresponds to a continuous path in the network of physical links. This property holds only if the network topology remains unchanged since the segment was first generated.\n- (Loop Freedom) For every honest segment registered in any AS, its sequence of AS entries (including current and next ISD-AS, as well as interfaces) contains no duplicates.\n- (Beacon Authorization) For every honest segment registered in any AS and any AS X appearing on that segment - - (except for the last one), AS X propagated a PCB corresponding to the segment prefix ending in its own entry to its successor AS on the segment.\n- (Path Discoverability) For every directed honest path in the network of physical links, where all traversed ASes permit forwarding, there exists at least one protocol execution that registers a segment containing or exactly matching this path. This property holds only when the involved physical links remain stable throughout the protocol execution.\n\nWe can offer formal expressions of the properties in Linear Temporal Logic (LTL), which is part of the IEEE 1850 Standard for Property Specification Language (PSL), as well as other formal artifacts such as a labeled transition system that describes the protocol behaviors. This may be a good fit for future work (e.g. in UFMRG).",
+      "body": "- [x] Subsection 2.2.4. \"Configuration\u201d should also mention that interface identifiers must be unique within an AS\n- [x] Clarify that an ISD MUST have at least one Core AS (e.g. in 2.1.  Introduction and Overview )\n- [ ] Clarify if loop avoidance needs some editing (what David calls \"cyclic relationships\")\n\nAdd a new subsection (6.1) in security considerations: \n- [x] Assumptions (briefly summarize points in 1 below)\n- [x] \"Intended Security properties\" (based on points in 2 below, then add a reference in the intro)\n\n--- \nBase on feedback received from David Galan:\n\n1. We propose that assumptions about the network and the behaviour of honest ASes are made more explicit. We would be happy to help with a specific list of assumptions:\n\n- In our formal model, we assume that the network of physical links is such that no ISD is internally partitioned (i.e., each AS in an ISD can reach every other AS in the same ISD), --> See #46 \n- every ISD has at least one core AS, and\n- customer-provider relationships (and related links) form a unidirectional hierarchical topology without cyclic relationships (i.e., they form a directed acyclic graph).\n\nAn AS is called honest if its long-term keys are unknown to the attacker and it uses a unique interface identifier for each link. Let an honest path (resp., segment) be a path (resp., segment) which only traverses honest ASes.\n\nEven though this is explicitly stated elsewhere in the draft, perhaps Subsection 2.2.4. \"Configuration\u201d should also mention that interface identifiers must be unique within an AS.\n\n\n2.   Regarding correctness and security properties, we suggest inserting a new Subsection 6.1 \"Correctness and Security Properties\" in Section 6 \"Security Considerations\" containing precise descriptions in English prose that faithfully capture all the required details and avoid ambiguities.\n\nWe would be happy to contribute a list of candidate properties and their descriptions. These properties should be understood as carefully considered design goals.  Within our formal model, the properties considered so far are:\n- (Connectivity) For every pair of distinct honest ASes X and Y, such that there is at least one honest path in the network of physical links from X to Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.\n- (Path Consistency) For every honest segment registered in any AS, its sequence of AS entries corresponds to a continuous path in the network of physical links. This property holds only if the network topology remains unchanged since the segment was first generated.\n- (Loop Freedom) For every honest segment registered in any AS, its sequence of AS entries (including current and next ISD-AS, as well as interfaces) contains no duplicates.\n- (Beacon Authorization) For every honest segment registered in any AS and any AS X appearing on that segment - - (except for the last one), AS X propagated a PCB corresponding to the segment prefix ending in its own entry to its successor AS on the segment.\n- (Path Discoverability) For every directed honest path in the network of physical links, where all traversed ASes permit forwarding, there exists at least one protocol execution that registers a segment containing or exactly matching this path. This property holds only when the involved physical links remain stable throughout the protocol execution.\n\nWe can offer formal expressions of the properties in Linear Temporal Logic (LTL), which is part of the IEEE 1850 Standard for Property Specification Language (PSL), as well as other formal artifacts such as a labeled transition system that describes the protocol behaviors. This may be a good fit for future work (e.g. in UFMRG).",
       "createdAt": "2025-02-04T16:56:24Z",
-      "updatedAt": "2025-02-05T09:26:14Z",
+      "updatedAt": "2025-02-06T09:48:10Z",
       "closedAt": null,
       "comments": []
     },
@@ -6603,6 +6613,58 @@
       "mergeCommit": {
         "oid": "671bab3389dbe9c8ac68d6c383f57dcf6044dcb2"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 91,
+      "id": "PR_kwDOJx2-rs6KP5x7",
+      "title": "Updated Security Considerations",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/91",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-06T09:21:21Z",
+      "updatedAt": "2025-02-06T09:21:22Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "revised_abstract",
+      "headRefOid": "c2435cfbaea19721c8a2aed2737be8834cbe1770",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 92,
+      "id": "PR_kwDOJx2-rs6KQBjR",
+      "title": "Updated Security Considerations",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/92",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-06T09:37:15Z",
+      "updatedAt": "2025-02-06T10:09:26Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Security-Updates",
+      "headRefOid": "c8649cf353f04af730725dfb7e5d1ae6eb536201",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
