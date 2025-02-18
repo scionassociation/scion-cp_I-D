@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 30 July 2025                                            S. Hitz
+Expires: 22 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                         26 January 2025
+                                                        18 February 2025
 
 
                           SCION Control Plane
@@ -23,15 +23,13 @@ Abstract
    optimization of network paths.  The Control Plane is responsible for
    discovering these paths and making them available to the endpoints.
 
-   The SCION Control Plane creates and manages path segments between
-   SCION Autonomous Systems (AS) which can then be combined into
-   forwarding paths to transmit packets in the data plane.  Path
-   exploration is undertaken through a beaconing process which allows
-   each AS to register segments according to its own policy and can
-   specify which path properties and algorithms to use when selecting
-   paths to a destination.  Endpoints may then construct end-to-end
-   paths from a set of possible path segments returned by returned by a
-   path lookup process.
+   The SCION Control Plane creates and securely disseminates path
+   segments between SCION Autonomous Systems (AS) which can then be
+   combined into forwarding paths to transmit packets in the data plane.
+   This document describes mechanisms of path exploration through
+   beaconing and path registration.  In addition, it describes how
+   Endpoints construct end-to-end paths from a set of possible path
+   segments through a path lookup process.
 
    This document contains new approaches to secure path aware
    networking.  It is not an Internet Standard, has not received any
@@ -68,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 July 2025.
+   This Internet-Draft will expire on 22 August 2025.
 
 Copyright Notice
 
@@ -274,9 +272,10 @@ Table of Contents
    within the Control Plane.
 
    *Core AS*: Each Isolation Domain (ISD) is administered by a set of
-   distinguished autonomous systems (ASes) called core ASes, which are
+   distinguished autonomous systems (ASes) called Core ASes, which are
    responsible for initiating the path-discovery and -construction
-   process (in SCION called "beaconing").
+   process (in SCION called "beaconing").  Each ISD MUST have at least
+   one Core AS.
 
    *Endpoint*: An endpoint is the start or the end of a SCION path, as
    defined in [RFC9473].
@@ -529,8 +528,8 @@ Table of Contents
    or link layer address.
 
    *Note:* As a consequence of the fact that SCION relies on existing
-   routing protocols (e.g.  IS-IS, OSPF, SR) and communication fabric
-   (e.g.  IP, MPLS) for intra-domain forwarding, existing internal
+   routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric
+   (e.g. IP, MPLS) for intra-domain forwarding, existing internal
    routers do not need to be changed to support SCION.
 
 1.5.1.  ISD Numbers
@@ -742,7 +741,9 @@ Table of Contents
    selection.  The beaconing process itself is divided into routing
    processes on two levels, where _inter-ISD_ or core beaconing is based
    on the (selective) sending of PCBs without a defined direction, and
-   _intra-ISD_ beaconing on top-to-bottom propagation.
+   _intra-ISD_ beaconing on top-to-bottom propagation.  Core ASes have a
+   specific role in the beaconing process and there MUST be at least one
+   in each ISD.
 
    *  _Inter-ISD or core beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
@@ -1641,7 +1642,7 @@ path segment 4 |             |     |             |     |             |
    band fashion (e.g in a configuration file).  For each link, these
    values MUST be configured:
 
-   *  Local interface ID
+   *  Local interface ID.  This must be unique within each AS.
 
    *  Neighbor type (core, parent, child, peer), depending on link type
       (see Section 1.3).  Link type depends on mutual agreements between
@@ -3198,8 +3199,8 @@ path segment 4 |             |     |             |     |             |
       includes its own AS.
 
    The first type of attack is detectable and blocked by downstream ASes
-   (e.g.  B) because a PCB disseminated by AS A towards AS B contains
-   the "Next ISD AS" field in the entry of AS A, pointing to AS B, and
+   (e.g. B) because a PCB disseminated by AS A towards AS B contains the
+   "Next ISD AS" field in the entry of AS A, pointing to AS B, and
    protected by A's signature.  If M manipulates the PCB while in flight
    from A to B, then verification of the manipulated inbound PCBs will
    fail at AS B, as the adversary's PCBs cannot contain A's correct
