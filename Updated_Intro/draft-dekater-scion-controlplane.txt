@@ -321,9 +321,8 @@ Table of Contents
    *Path Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
    and among different ISDs.  ASes further propagate selected PCBs to
-   their neighboring ASes.  As a PCB traverses the network, it carries
-   and accumulates path segments, which can subsequently be used for
-   traffic forwarding.
+   their neighboring ASes.  These PCBs traverse the network accumulating
+   path segments which can subsequently be used for traffic forwarding.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
    Message Protocol (ICMP).  This is described in Section 6.
@@ -452,9 +451,9 @@ Table of Contents
    3.  _Path resolution_: This is the process of actually creating an
        end-to-end forwarding path from the source endpoint to the
        destination.  For this, an endpoint performs (a) a path lookup
-       step to obtain path segments, and (b) a path combination step to
-       combine the forwarding path from the segments.  This last step
-       takes place in the data plane.  See also Section 5.
+       step to obtain , and (b) a path combination step to combine the
+       forwarding path from the segments.  This last step takes place in
+       the data plane.  See also Section 5.
 
    All processes operate concurrently.
 
