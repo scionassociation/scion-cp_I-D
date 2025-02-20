@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-18T00:20:48.705962+00:00",
+  "timestamp": "2025-02-20T00:21:10.294688+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1084,7 +1084,9 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "knmeynell"
+        "nicorusti",
+        "knmeynell",
+        "jiceatscion"
       ],
       "labels": [
         "enhancement",
@@ -1094,7 +1096,7 @@
       ],
       "body": "This section IMHO does not clarify how an AS makes a choice, and why it does not pick A-D-F-H-J or C-E-G-I-J in the example. \r\nSee [comments nico (PDF)](https://github.com/user-attachments/files/17421282/scan-2.pdf)\r\n",
       "createdAt": "2024-10-17T19:07:44Z",
-      "updatedAt": "2025-02-06T10:09:07Z",
+      "updatedAt": "2025-02-18T10:21:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -1103,6 +1105,13 @@
           "body": "I've added the following to \"Selection Policy Example\":\n\nSome examples of path selection policies include:\n\n- BestSetSize - the recommended number of segments to propagate or register.\n- CandidateSetSize - the maximum number of segments to consider for selection.\n- MaxExpTime - the maximum value for the expiration time when extending the segment.\n- MaxHopsLength - the maximum number of hops a segment can have.\n- ASBlackList - the ASes that may not appear in a segment.\n- IsdBlackList - the ISDs that may not appear in segment.\n- AllowIsdLoop - indicates whether ISD loops should not be filtered.\n\nDiscuss...",
           "createdAt": "2025-02-06T10:09:06Z",
           "updatedAt": "2025-02-06T10:09:06Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@jiceatscion can you check how the OS handles disjointness?",
+          "createdAt": "2025-02-18T10:21:21Z",
+          "updatedAt": "2025-02-18T10:21:21Z"
         }
       ]
     },
@@ -1190,11 +1199,33 @@
       "labels": [
         "enhancement"
       ],
-      "body": "Base on feedback received from David Galan:\n\nIn the introduction, However, the intended security properties could be made clearer. We propose some minor changes to the introduction:\n## Language and Terminology:\n- [ ] Change \"higher levels of trust\" ([in \"Security\" paragraph](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-4)) to \"higher levels of trustworthiness\".\n\n## Structural Issues:\n- [x] Remove duplicate paragraphs ([paragraph 11](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-11)) about SCION architecture's initial development.\n- [ ] In \"This document provides an extensive [\u2026]\" ([para. 13](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-13)), replace \"This document\" with \"That document\" to distinguish references to the Data Plane and the Control Plane I-Ds.\nTechnical Precision:\nReplace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\".\n- [ ] In the \"valley free paths\" description ([\u00a71.3 para. 5](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.3-5)), clarify that a valley free path is one that does not carry transit traffic from a parent AS to another parent AS. The current phrasing may be incorrectly interpreted to mean that traffic flowing normally from parents to children also forms a valley.\n- [ ] From \"All path segments may be inverted\" ([\u00a71.4.1 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.4.1-4)) onwards, replace occurrences of \"inverted\" with \"reversed\" consistently.\n\n## Organizational Suggestion:\n- [ ] Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used.\n\n- [ ] Furthermore, as detailed in question B, we identify a need for more comprehensive discussion security and correctness properties of the Control Plane. While the current introduction briefly mentions security aspects and mentions valley freedom, we suggest that it also mentions the properties proposed in this review. --> Add a reference to a new security properties section after #89  is solved",
+      "body": "Base on feedback received from David Galan:\n\nIn the introduction, However, the intended security properties could be made clearer. We propose some minor changes to the introduction:\n## Language and Terminology:\n- [x] Change \"higher levels of trust\" ([in \"Security\" paragraph](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-4)) to \"higher levels of trustworthiness\".\n\n## Structural Issues:\n- [x] Remove duplicate paragraphs ([paragraph 11](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-11)) about SCION architecture's initial development.\n- [x] In \"This document provides an extensive [\u2026]\" ([para. 13](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-13)), replace \"This document\" with \"That document\" to distinguish references to the Data Plane and the Control Plane I-Ds.\nTechnical Precision:\nReplace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\".\n- [x] In the \"valley free paths\" description ([\u00a71.3 para. 5](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.3-5)), clarify that a valley free path is one that does not carry transit traffic from a parent AS to another parent AS. The current phrasing may be incorrectly interpreted to mean that traffic flowing normally from parents to children also forms a valley.\n- [x] From \"All path segments may be inverted\" ([\u00a71.4.1 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.4.1-4)) onwards, replace occurrences of \"inverted\" with \"reversed\" consistently.\n\n## Organizational Suggestion:\n- [x] Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used.\n\n- [ ] Furthermore, as detailed in question B, we identify a need for more comprehensive discussion security and correctness properties of the Control Plane. While the current introduction briefly mentions security aspects and mentions valley freedom, we suggest that it also mentions the properties proposed in this review. --> Add a reference to a new security properties section after #89  is solved",
       "createdAt": "2025-02-04T15:18:10Z",
-      "updatedAt": "2025-02-05T09:20:44Z",
+      "updatedAt": "2025-02-19T09:35:48Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "_In \"This document provides an extensive [\u2026]\" ([para. 13](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-13)), replace \"This document\" with \"That document\" to distinguish references to the Data Plane and the Control Plane I-Ds._\n\nNot sure that I understand this. The usage of 'this document' seems correct throughout. ",
+          "createdAt": "2025-02-18T10:33:35Z",
+          "updatedAt": "2025-02-18T10:33:35Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "_Replace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\"._\n\nDoes a PCB add path segments as it traverses a network, or just adds one path segment each time? If the former, then the current wording would seem correct.",
+          "createdAt": "2025-02-18T10:35:49Z",
+          "updatedAt": "2025-02-18T10:35:49Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "_Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used._\n\nShould the whole 'Text Representation' section be moved to after the SCION AS number introduction, and before 'Special Purpose AS numbers'?",
+          "createdAt": "2025-02-18T10:46:48Z",
+          "updatedAt": "2025-02-18T10:46:48Z"
+        }
+      ]
     },
     {
       "number": 89,
@@ -6619,27 +6650,35 @@
     {
       "number": 91,
       "id": "PR_kwDOJx2-rs6KP5x7",
-      "title": "Updated Security Considerations",
+      "title": "Revised abstract?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/91",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Addresses some points in #89 ",
       "createdAt": "2025-02-06T09:21:21Z",
-      "updatedAt": "2025-02-06T09:21:22Z",
+      "updatedAt": "2025-02-18T10:06:54Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "revised_abstract",
-      "headRefOid": "c2435cfbaea19721c8a2aed2737be8834cbe1770",
+      "headRefOid": "f9305f04ea20bd02154efb1076ed9d54be0d3da5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "How does this relate to #83 ? ",
+          "createdAt": "2025-02-18T09:22:21Z",
+          "updatedAt": "2025-02-18T09:22:21Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -6652,15 +6691,41 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Addresses #89 ",
       "createdAt": "2025-02-06T09:37:15Z",
-      "updatedAt": "2025-02-06T10:09:26Z",
+      "updatedAt": "2025-02-18T10:03:46Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Security-Updates",
       "headRefOid": "c8649cf353f04af730725dfb7e5d1ae6eb536201",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOJx2-rs6Lk0cQ",
+      "title": "Updated_Intro",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/93",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #88 ",
+      "createdAt": "2025-02-18T10:48:38Z",
+      "updatedAt": "2025-02-19T09:41:15Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Updated_Intro",
+      "headRefOid": "f4a63823e877c02329adfd905cbc852309c7d112",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
