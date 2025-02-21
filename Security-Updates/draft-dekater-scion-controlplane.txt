@@ -197,7 +197,8 @@ Table of Contents
    to decide where their data travels based on routing information that
    can be unambiguously attributed to an AS, ensuring that packets are
    only forwarded along authorized path segments.  A particular use case
-   is to enable geofencing.
+   is to enable geofencing.  Security properties are further discussed
+   in Section 7.2.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
