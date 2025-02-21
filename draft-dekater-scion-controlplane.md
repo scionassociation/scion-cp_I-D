@@ -1131,9 +1131,10 @@ When receiving a PCB, an AS first stores the PCB in a temporary storage for cand
 PCBs are propagated in batches to each connected AS at a fixed frequency known as the *propagation interval*. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
 
 The *best PCBs set size* SHOULD be:
-  - For intra-AS beaconing (i.e. propgating to children ASes): at most 50.
-  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. (Current
-    practice is that each set of 5 is chosen among the BCPs received from each neighbor).
+
+  - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
+
+  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.
 
 These are RECOMMENDED maxima; in current practice the intra-ISD set size is typically 20.
 
