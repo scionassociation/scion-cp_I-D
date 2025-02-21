@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 August 2025                                          S. Hitz
+Expires: 25 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        19 February 2025
+                                                        21 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2025.
+   This Internet-Draft will expire on 25 August 2025.
 
 Copyright Notice
 
@@ -90,7 +90,10 @@ Table of Contents
      1.5.  Addressing
        1.5.1.  ISD Numbers
        1.5.2.  SCION AS Numbers
-       1.5.3.  <ISD, AS> tuples
+       1.5.3.  Text Representation
+       1.5.4.  Wildcard Addressing
+       1.5.5.  Special-Purpose SCION AS Numbers
+       1.5.6.  <ISD, AS> tuples
      1.6.  Avoiding Circular Dependencies and Partitioning
      1.7.  Communication Protocol
    2.  Path Exploration or Beaconing
@@ -451,9 +454,9 @@ Table of Contents
    3.  _Path resolution_: This is the process of actually creating an
        end-to-end forwarding path from the source endpoint to the
        destination.  For this, an endpoint performs (a) a path lookup
-       step to obtain , and (b) a path combination step to combine the
-       forwarding path from the segments.  This last step takes place in
-       the data plane.  See also Section 5.
+       step to obtain path segments, and (b) a path combination step to
+       combine the forwarding path from the segments.  This last step
+       takes place in the data plane.  See also Section 5.
 
    All processes operate concurrently.
 
@@ -570,6 +573,8 @@ Table of Contents
    16 bits are 0 and the remaining 32 bits are identical to their BGP
    ASN, but there is no technical requirement for this.
 
+1.5.3.  Text Representation
+
    The text representation of SCION AS numbers is similar to IPv6 (see
    [RFC5952]) but not identical.  It MUST be as follows:
 
@@ -590,14 +595,14 @@ Table of Contents
       example, if a program receives the AS number 0:1:f, it MAY display
       the number as "65551".
 
-1.5.2.1.  Wildcard Addressing
+1.5.4.  Wildcard Addressing
 
    SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
    to place requests for core segments or down segments during path
    lookup.  These wildcard addresses are of the form I-0, to designate
    any AS in ISD I.  For more information, see Section 5.2.1.
 
-1.5.2.2.  Special-Purpose SCION AS Numbers
+1.5.5.  Special-Purpose SCION AS Numbers
 
     +===================+=============+===============================+
     | AS                | Size        | Description                   |
@@ -627,7 +632,7 @@ Table of Contents
 
    The rest of the space is currently unallocated.
 
-1.5.3.  <ISD, AS> tuples
+1.5.6.  <ISD, AS> tuples
 
    The text representation of SCION addresses MUST be <ISD>-<AS>, where
    <ISD> is the text representation of the ISD number, <AS> is the text
@@ -2546,7 +2551,7 @@ path segment 4 |             |     |             |     |             |
    addresses.  Table 4 below shows who is responsible for what.
 
    *Note:* For general information on the use of wildcard addresses in
-   SCION, see Section 1.5.2.1.
+   SCION, see Section 1.5.4.
 
    +=========+===================+=================+==================+
    | Segment | Wildcard          | Expanded/       | Translated Into  |
