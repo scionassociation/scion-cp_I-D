@@ -1095,7 +1095,7 @@ For the purpose of validation, a timestamp is considered "future" if it is later
 
 For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
 
-### Configuration
+### Configuration {#configuration}
 
 For the purpose of constructing and propagating path segments, an AS Control Service MUST be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
@@ -1210,7 +1210,6 @@ Selected path segment: #------# or *------*
              `---'
 ~~~~
 {: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
-
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
@@ -1950,27 +1949,31 @@ Authentication of SCMP packets is not specified here. In current deployments it 
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's Control Plane that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption so these topics lie outside the scope of this section.
 
-This section focuses on three kinds of security risks in the control plane:
+This section discusses three kinds threats to the control plane:
 
 1. When an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)).
 2. When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see [](#manipulate-beaconing)).
 3. Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see [](#dos-cp)).
 
-# Security Assumptions
 
-These security considerations make assumptions about the formal model of SCION implementation as follows:
+## Assumptions
+
+The following assumptions relate to these security considerations. It is assumed that:
 
 1. Every ISD contains at least one core AS.
-2. The physical links within an ISD are not partitioned and each AS can reach every other AS in the same ISD.
-3. Customer-Provider relationships and their related links form a unidirectional hierarchical topology with cyclic relationships.
+2. ISDs are not internally partitioned, so that each AS can reach every other AS within its ISD.
+3. Parent-Child links form a unidirectional hierarchical topology without cyclic relationships.
+4. An AS is described as 'honest' if its private keys are unknown to the attacker and it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
 
-An AS is described as 'honest' if its long-term keys are unknown to the attacker and it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes as follows:
+## Security Properties
+
+The properties to be provided by the SCION control plane are:
 
 - Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
-- Path Consistency - For every honest segment registered in any AS, its sequence of AS entries corresponds to a continuous path in the network of physical links and the network topology remains unchanged since the segment was first generated.
+- Path Consistency - For every honest segment registered in any AS, its sequence of AS entries corresponds to a continuous path in the network of inter-domain links and the inter-domain network topology remains unchanged since the segment was first generated.
 - Loop Freedom - For every honest segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interfaces.
-- Beacon Authorization - For every honest segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment prefix ending in its own entry to its successor AS on the segment.
-- Path Discoverability - For every directed honest path in the network of physical links, where all traversed ASes permit forwarding there exists at least one protocol execution that registers a segment containing or exactly matching this path, provided the involved physical links remain stable throughout the protocol execution.
+- Path Authorization - For every honest segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
+- Path Discoverability - For every directed honest path in the network of inter-domain links, where all traversed ASes permit forwarding there exists at least one protocol execution that registers a segment containing or exactly matching this path, provided the involved links remain stable throughout the protocol execution.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
@@ -2057,7 +2060,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Pascual Galán and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2529,6 +2532,10 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-08
+{:numbered="false"}
+ - Security considerations: clarify assumptions
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
