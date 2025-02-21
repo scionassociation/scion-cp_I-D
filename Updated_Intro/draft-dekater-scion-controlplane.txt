@@ -93,7 +93,6 @@ Table of Contents
        1.5.3.  Text Representation
        1.5.4.  Wildcard Addressing
        1.5.5.  Special-Purpose SCION AS Numbers
-       1.5.6.  <ISD, AS> tuples
      1.6.  Avoiding Circular Dependencies and Partitioning
      1.7.  Communication Protocol
    2.  Path Exploration or Beaconing
@@ -537,9 +536,6 @@ Table of Contents
    An ISD number is the 16-bit global identifier for an ISD and MUST be
    globally unique.
 
-   The text representation of SCION ISD numbers MUST be its decimal
-   ASCII representation.
-
    The following table gives an overview of the ISD number allocation:
 
      +==============+================================================+
@@ -575,6 +571,13 @@ Table of Contents
 
 1.5.3.  Text Representation
 
+1.5.3.1.  ISD numbers
+
+   The text representation of SCION ISD numbers MUST be its decimal
+   ASCII representation.
+
+1.5.3.2.  AS numbers
+
    The text representation of SCION AS numbers is similar to IPv6 (see
    [RFC5952]) but not identical.  It MUST be as follows:
 
@@ -594,6 +597,16 @@ Table of Contents
       MAY also be represented as decimal for human readability.  For
       example, if a program receives the AS number 0:1:f, it MAY display
       the number as "65551".
+
+1.5.3.3.  <ISD, AS> tuples
+
+   The text representation of SCION addresses MUST be <ISD>-<AS>, where
+   <ISD> is the text representation of the ISD number, <AS> is the text
+   representation of the AS number, and - is the litteral ASCII
+   character 0x2D.
+
+   For example, the text representation of AS number 65551 (0x1000f) in
+   ISD number 4 is 4-0000:1:f.
 
 1.5.4.  Wildcard Addressing
 
@@ -631,16 +644,6 @@ Table of Contents
                        Table 2: AS number allocations
 
    The rest of the space is currently unallocated.
-
-1.5.6.  <ISD, AS> tuples
-
-   The text representation of SCION addresses MUST be <ISD>-<AS>, where
-   <ISD> is the text representation of the ISD number, <AS> is the text
-   representation of the AS number, and - is the litteral ASCII
-   character 0x2D.
-
-   For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0000:1:f.
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
