@@ -206,7 +206,7 @@ Note (to be removed before publication): this document, together with the other 
 
 **Control Service**: The Control Service is the main control plane infrastructure component within a SCION AS. It is responsible for the path exploration and registration processes that take place within the Control Plane.
 
-**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called Core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing"). Each ISD MUST have at least one Core AS.
+**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing"). Each ISD MUST have at least one Core AS.
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
@@ -422,7 +422,7 @@ The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like
 
 In SCION, the *Control Service* of each AS is responsible for the beaconing process. The Control Service generates, receives, and propagates the *Path Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
-PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. The beaconing process is initiated by core ASes, therefore each ISD MUST have at least one core AS.
+PCBs contain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 
@@ -1211,15 +1211,6 @@ Selected path segment: #------# or *------*
 ~~~~
 {: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
 
-Some examples of path selection policies include:
-
-- BestSetSize - the recommended number of segments to propagate or register.
-- CandidateSetSize - the maximum number of segments to consider for selection.
-- MaxExpTime - the maximum value for the expiration time when extending the segment.
-- MaxHopsLength - the maximum number of hops a segment can have.
-- ASBlackList - the ASes that may not appear in a segment.
-- IsdBlackList - the ISDs that may not appear in segment.
-- AllowIsdLoop - indicates whether ISD loops should not be filtered.
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
