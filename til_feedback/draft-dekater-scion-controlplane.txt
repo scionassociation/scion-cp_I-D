@@ -1707,11 +1707,14 @@ path segment 4 |             |     |             |     |             |
    the Beacon Store, according to the AS's selection policy.  This set
    SHOULD have a fixed size, the _best PCBs set size_.
 
-   The _best PCBs set size_ SHOULD be: - For intra-AS beaconing (i.e.
-   propgating to children ASes): at most 50.  - For core beaconing (i.e.
-   propagation between core ASes): at most 5 per immediate neighbor core
-   AS.  (Current practice is that each set of 5 is chosen among the BCPs
-   received from each neighbor).
+   The _best PCBs set size_ SHOULD be:
+
+   *  For intra-AS beaconing (i.e. propagating to children ASes): at
+      most 50.
+
+   *  For core beaconing (i.e. propagation between core ASes): at most 5
+      per immediate neighbor core AS.  Current practice is that each set
+      of 5 is chosen among the PCBs received from each neighbor.
 
    These are RECOMMENDED maxima; in current practice the intra-ISD set
    size is typically 20.
