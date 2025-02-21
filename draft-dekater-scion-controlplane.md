@@ -178,7 +178,7 @@ SCION has been developed with the following goals:
 
 *Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
 
-*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing. Security properties are further discussed in [](#security-properties).
 
 *Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
 
@@ -1964,7 +1964,7 @@ The following assumptions relate to these security considerations. It is assumed
 3. Parent-Child links form a unidirectional hierarchical topology without cyclic relationships.
 4. An AS is described as 'honest' if its private keys are unknown to the attacker and it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
 
-## Security Properties
+## Security Properties {#security-properties}
 
 The properties to be provided by the SCION control plane are:
 
