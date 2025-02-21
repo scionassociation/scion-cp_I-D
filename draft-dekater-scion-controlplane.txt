@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 8 August 2025                                           S. Hitz
+Expires: 25 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                         4 February 2025
+                                                        21 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2025.
+   This Internet-Draft will expire on 25 August 2025.
 
 Copyright Notice
 
@@ -90,8 +90,9 @@ Table of Contents
      1.5.  Addressing
        1.5.1.  ISD Numbers
        1.5.2.  SCION AS Numbers
-       1.5.3.  Wildcard Addressing
-       1.5.4.  Text Representation
+       1.5.3.  Text Representation
+       1.5.4.  Wildcard Addressing
+       1.5.5.  Special-Purpose SCION AS Numbers
      1.6.  Avoiding Circular Dependencies and Partitioning
      1.7.  Communication Protocol
    2.  Path Exploration or Beaconing
@@ -188,12 +189,12 @@ Table of Contents
 
    _Security_ - to introduce a new approach to inter-domain path
    security that leverages path awareness in combination with a unique
-   trust model.  The goal is to provide higher levels of trust in
-   routing information to prevent traffic hijacking, and enable users to
-   decide where their data travels based on routing information that can
-   be unambiguously attributed to an AS, ensuring that packets are only
-   forwarded along authorized path segments.  A particular use case is
-   to enable geofencing.
+   trust model.  The goal is to provide higher levels of trustworthiness
+   in routing information to prevent traffic hijacking, and enable users
+   to decide where their data travels based on routing information that
+   can be unambiguously attributed to an AS, ensuring that packets are
+   only forwarded along authorized path segments.  A particular use case
+   is to enable geofencing.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
@@ -322,9 +323,8 @@ Table of Contents
    *Path Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
    and among different ISDs.  ASes further propagate selected PCBs to
-   their neighboring ASes.  As a PCB traverses the network, it carries
-   and accumulates path segments, which can subsequently be used for
-   traffic forwarding.
+   their neighboring ASes.  These PCBs traverse the network accumulating
+   path segments which can subsequently be used for traffic forwarding.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
    Message Protocol (ICMP).  This is described in Section 6.
@@ -370,7 +370,7 @@ Table of Contents
 
    These link types form the basis of the notion of "valley free" paths.
    Valley free paths means that a child AS does not carry transit
-   traffic from a parent AS.
+   traffic from a parent AS to another parent AS.
 
    The SCION paths are always valley free, and consist of at most three
    segments: an up segment, traversing links from child to parent, then
@@ -500,7 +500,7 @@ Table of Contents
 
    Each path segment starts and/or ends at a core AS.
 
-   All path segments may be inverted: a core segment can be used
+   All path segments may be reversed: a core segment can be used
    bidirectionally, an up segment can be converted into a down segment,
    and a down segment can be converted into an up segment depending on
    the direction of the end-to-end path.  This means that all path
@@ -569,7 +569,53 @@ Table of Contents
    16 bits are 0 and the remaining 32 bits are identical to their BGP
    ASN, but there is no technical requirement for this.
 
-1.5.2.1.  Special-Purpose SCION AS Numbers
+1.5.3.  Text Representation
+
+1.5.3.1.  ISD numbers
+
+   The text representation of SCION ISD numbers MUST be its decimal
+   ASCII representation.
+
+1.5.3.2.  AS numbers
+
+   The text representation of SCION AS numbers is similar to IPv6 (see
+   [RFC5952]) but not identical.  It MUST be as follows:
+
+   *  It uses a 16-bit colon-separated lower-case hex encoding with
+      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.
+
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
+      feature has very limited use in a 48-bit address space and would
+      only add more complexity.
+
+   *  A range of AS numbers can be shortened with a notation similar to
+      the one used for CIDR IP ranges ([RFC4632]).  For example, the
+      range of the lowest 32-bit AS numbers (0-4294967295) can be
+      represented as 0:0:0/16.
+
+   *  For historical reasons, SCION AS numbers in the lower 32-bit range
+      MAY also be represented as decimal for human readability.  For
+      example, if a program receives the AS number 0:1:f, it MAY display
+      the number as "65551".
+
+1.5.3.3.  <ISD, AS> tuples
+
+   The text representation of SCION addresses MUST be <ISD>-<AS>, where
+   <ISD> is the text representation of the ISD number, <AS> is the text
+   representation of the AS number, and - is the litteral ASCII
+   character 0x2D.
+
+   For example, the text representation of AS number 65551 (0x1000f) in
+   ISD number 4 is 4-0000:1:f.
+
+1.5.4.  Wildcard Addressing
+
+   SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
+   to place requests for core segments or down segments during path
+   lookup.  These wildcard addresses are of the form I-0, to designate
+   any AS in ISD I.  For more information, see Section 5.2.1.
+
+1.5.5.  Special-Purpose SCION AS Numbers
 
     +===================+=============+===============================+
     | AS                | Size        | Description                   |
@@ -598,52 +644,6 @@ Table of Contents
                        Table 2: AS number allocations
 
    The rest of the space is currently unallocated.
-
-1.5.3.  Wildcard Addressing
-
-   SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
-   to place requests for core segments or down segments during path
-   lookup.  These wildcard addresses are of the form I-0, to designate
-   any AS in ISD I.  For more information, see Section 5.2.1.
-
-1.5.4.  Text Representation
-
-1.5.4.1.  ISD numbers
-
-   The text representation of SCION ISD numbers MUST be its decimal
-   ASCII representation.
-
-1.5.4.2.  AS numbers
-
-   The text representation of SCION AS numbers is similar to IPv6 (see
-   [RFC5952]) but not identical.  It MUST be as follows:
-
-   *  It uses a 16-bit colon-separated lower-case hex encoding with
-      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.
-
-   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
-      feature has very limited use in a 48-bit address space and would
-      only add more complexity.
-
-   *  A range of AS numbers can be shortened with a notation similar to
-      the one used for CIDR IP ranges ([RFC4632]).  For example, the
-      range of the lowest 32-bit AS numbers (0-4294967295) can be
-      represented as 0:0:0/16.
-
-   *  For historical reasons, SCION AS numbers in the lower 32-bit range
-      MAY also be represented as decimal for human readability.  For
-      example, if a program receives the AS number 0:1:f, it MAY display
-      the number as "65551".
-
-1.5.4.3.  <ISD, AS> tuples
-
-   The text representation of SCION addresses MUST be <ISD>-<AS>, where
-   <ISD> is the text representation of the ISD number, <AS> is the text
-   representation of the AS number, and - is the litteral ASCII
-   character 0x2D.
-
-   For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0000:1:f.
 
 1.6.  Avoiding Circular Dependencies and Partitioning
 
@@ -2554,7 +2554,7 @@ path segment 4 |             |     |             |     |             |
    addresses.  Table 4 below shows who is responsible for what.
 
    *Note:* For general information on the use of wildcard addresses in
-   SCION, see Section 1.5.3.
+   SCION, see Section 1.5.4.
 
    +=========+===================+=================+==================+
    | Segment | Wildcard          | Expanded/       | Translated Into  |
