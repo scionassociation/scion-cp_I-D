@@ -323,8 +323,9 @@ Table of Contents
    *Path Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
    and among different ISDs.  ASes further propagate selected PCBs to
-   their neighboring ASes.  These PCBs traverse the network accumulating
-   path segments which can subsequently be used for traffic forwarding.
+   their neighboring ASes.  These PCBs traverse each AS accumulating
+   information, including Hop Fields (HFs) which can subsequently be
+   used for traffic forwarding.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
    Message Protocol (ICMP).  This is described in Section 6.
