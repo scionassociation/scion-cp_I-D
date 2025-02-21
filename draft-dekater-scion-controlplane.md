@@ -178,7 +178,7 @@ SCION has been developed with the following goals:
 
 *Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
 
-*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trust in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
 
 *Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
 
@@ -224,7 +224,7 @@ Note (to be removed before publication): this document, together with the other 
 
 **Path Segment**: Path segments are derived from Path Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.
 
-**Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries and accumulates path segments, which can subsequently be used for traffic forwarding.
+**Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse the network accumulating path segments which can subsequently be used for traffic forwarding.
 
 **SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
@@ -246,7 +246,7 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. They can be established between any two ASes (core or non-core) and can cross ISD boundaries.
 
-These link types form the basis of the notion of "valley free" paths. Valley free paths means that a child AS does not carry transit traffic from a parent AS.
+These link types form the basis of the notion of "valley free" paths. Valley free paths means that a child AS does not carry transit traffic from a parent AS to another parent AS.
 
 The SCION paths are always valley free, and consist of at most three segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Peering links can be used as "shortcuts" in an up-core-down path.
 
@@ -295,7 +295,6 @@ The creation of an end-to-end forwarding path consists of the following processe
 
 All processes operate concurrently.
 
-
 The **Control Service** is responsible for the path exploration and registration processes in the Control Plane. It is the main control plane infrastructure component within each SCION AS and has the following tasks:
 
 - Generating, receiving, and propagating PCBs. Periodically, the Control Service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
@@ -314,7 +313,7 @@ SCION distinguishes the following types of path segments:
 
 Each path segment starts and/or ends at a core AS.
 
-All path segments may be inverted: a core segment can be used bidirectionally, an up segment can be converted into a down segment, and a down segment can be converted into an up segment depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
+All path segments may be reversed: a core segment can be used bidirectionally, an up segment can be converted into a down segment, and a down segment can be converted into an up segment depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
 The cryptographic protection of PCBs and path segments is based on the Control Plane PKI. The signatures are structured such that the entire message sequence constituting the path segment can be authenticated by anyone with access to this PKI.
 
@@ -347,25 +346,6 @@ Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based netwo
 
 A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4893}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
 
-#### Special-Purpose SCION AS Numbers
-
-| AS               | Size        | Description                                                                 |
-|------------------+-------------+-----------------------------------------------------------------------------|
-| `0:0:0`          | 1           | The wildcard AS                                                             |
-| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
-| `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
-| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
-| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
-{: #table-2 title="AS number allocations"}
-
-The rest of the space is currently unallocated.
-
-### Wildcard Addressing {#serv-disc}
-
-SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
-
 ### Text Representation
 
 #### ISD numbers
@@ -386,6 +366,25 @@ The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}})
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the litteral ASCII character 0x2D.
 
 For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
+
+### Wildcard Addressing {#serv-disc}
+
+SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
+
+### Special-Purpose SCION AS Numbers
+
+| AS               | Size        | Description                                                                 |
+|------------------+-------------+-----------------------------------------------------------------------------|
+| `0:0:0`          | 1           | The wildcard AS                                                             |
+| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
+| `1:0:0`          | 1           | Reserved                                                                    |
+| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
+| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
+| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
+{: #table-2 title="AS number allocations"}
+
+The rest of the space is currently unallocated.
 
 ## Avoiding Circular Dependencies and Partitioning
 
