@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-20T00:21:10.294688+00:00",
+  "timestamp": "2025-02-23T00:22:59.029711+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -752,7 +752,7 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-02-04T17:00:27Z",
+      "updatedAt": "2025-02-21T15:22:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -803,6 +803,13 @@
           "body": "@tzaeschke we received feedback from the formal methods group, this relates to #88, #89, I'm currently opening a few issues to address feedback received ",
           "createdAt": "2025-02-04T17:00:15Z",
           "updatedAt": "2025-02-04T17:00:27Z"
+        },
+        {
+          "author": "dgalan7",
+          "authorAssociation": "NONE",
+          "body": "> To be addressed from David Galan's review:\n> \n> > In our formal model, we assume that the network of physical links is such that no ISD is internally partitioned (i.e., each AS in an ISD can reach every other AS in the same ISD),\n> \n\n\nCopied from our email for your convenience:\n\nWhen we stated that ISDs are not internally partitioned, we intended to convey what @tzaeschke refers to as \"indirect reachability (leaving AS allowed).\" This means that any two ASes within the same ISD can be connected through a sequence of one or more physical links (not beacons or segments). Currently, our model can handle paths that leave and re-enter the ISD. However, we are concerned that this topology might compromise certain strong notions of ISD isolation, potentially allowing external agents to influence the internal connectivity of an ISD. This is an area we plan to explore further in future work.",
+          "createdAt": "2025-02-21T15:22:35Z",
+          "updatedAt": "2025-02-21T15:22:35Z"
         }
       ]
     },
@@ -1096,7 +1103,7 @@
       ],
       "body": "This section IMHO does not clarify how an AS makes a choice, and why it does not pick A-D-F-H-J or C-E-G-I-J in the example. \r\nSee [comments nico (PDF)](https://github.com/user-attachments/files/17421282/scan-2.pdf)\r\n",
       "createdAt": "2024-10-17T19:07:44Z",
-      "updatedAt": "2025-02-18T10:21:24Z",
+      "updatedAt": "2025-02-21T11:58:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -1112,6 +1119,13 @@
           "body": "@jiceatscion can you check how the OS handles disjointness?",
           "createdAt": "2025-02-18T10:21:21Z",
           "updatedAt": "2025-02-18T10:21:21Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The propagator choses what N beacons to propagate out of those in store. The criteria are:\n\n* Certificates available to verify\n* Length\n* Diversity\n\nIn that order.\n\nOnce we have only verifiable beacons, we single out the N shortest and then replace the last one with a diversity choice. Diversity is a comparative metric: beacon A has a diversity score over beacon B (and that's not commutative). The score is the number of links in A that don't appear in B. Our diversity choice is the beacon not among the shortest that is the most diverse (so, basically most different) from the very shortest one. If there is no better than what is already in the set, then the shortest of the not yet selected ones is chosen instead (so, the last one from the original best stays in the set after all). Btw, the implementation of the diversity computation is plainly quadratic.\n\nSource: https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beacon/selection_algo.go#L41\n",
+          "createdAt": "2025-02-21T11:54:25Z",
+          "updatedAt": "2025-02-21T11:58:32Z"
         }
       ]
     },
@@ -1187,9 +1201,9 @@
     {
       "number": 88,
       "id": "I_kwDOJx2-rs6otxL3",
-      "title": "Introduction: better wording and mention security properties",
+      "title": "Introduction: clarify wording and mention security properties",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/88",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1199,10 +1213,10 @@
       "labels": [
         "enhancement"
       ],
-      "body": "Base on feedback received from David Galan:\n\nIn the introduction, However, the intended security properties could be made clearer. We propose some minor changes to the introduction:\n## Language and Terminology:\n- [x] Change \"higher levels of trust\" ([in \"Security\" paragraph](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-4)) to \"higher levels of trustworthiness\".\n\n## Structural Issues:\n- [x] Remove duplicate paragraphs ([paragraph 11](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-11)) about SCION architecture's initial development.\n- [x] In \"This document provides an extensive [\u2026]\" ([para. 13](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-13)), replace \"This document\" with \"That document\" to distinguish references to the Data Plane and the Control Plane I-Ds.\nTechnical Precision:\nReplace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\".\n- [x] In the \"valley free paths\" description ([\u00a71.3 para. 5](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.3-5)), clarify that a valley free path is one that does not carry transit traffic from a parent AS to another parent AS. The current phrasing may be incorrectly interpreted to mean that traffic flowing normally from parents to children also forms a valley.\n- [x] From \"All path segments may be inverted\" ([\u00a71.4.1 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.4.1-4)) onwards, replace occurrences of \"inverted\" with \"reversed\" consistently.\n\n## Organizational Suggestion:\n- [x] Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used.\n\n- [ ] Furthermore, as detailed in question B, we identify a need for more comprehensive discussion security and correctness properties of the Control Plane. While the current introduction briefly mentions security aspects and mentions valley freedom, we suggest that it also mentions the properties proposed in this review. --> Add a reference to a new security properties section after #89  is solved",
+      "body": "Base on feedback received from David Galan:\n\nIn the introduction, However, the intended security properties could be made clearer. We propose some minor changes to the introduction:\n## Language and Terminology:\n- [x] Change \"higher levels of trust\" ([in \"Security\" paragraph](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-4)) to \"higher levels of trustworthiness\".\n\n## Structural Issues:\n- [x] Remove duplicate paragraphs ([paragraph 11](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-11)) about SCION architecture's initial development.\n- [x] In \"This document provides an extensive [\u2026]\" ([para. 13](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1-13)), replace \"This document\" with \"That document\" to distinguish references to the Data Plane and the Control Plane I-Ds.\nTechnical Precision:\nReplace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\".\n- [x] In the \"valley free paths\" description ([\u00a71.3 para. 5](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.3-5)), clarify that a valley free path is one that does not carry transit traffic from a parent AS to another parent AS. The current phrasing may be incorrectly interpreted to mean that traffic flowing normally from parents to children also forms a valley.\n- [x] From \"All path segments may be inverted\" ([\u00a71.4.1 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.4.1-4)) onwards, replace occurrences of \"inverted\" with \"reversed\" consistently.\n\n## Organizational Suggestion:\n- [x] Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used.\n\n- [x] Furthermore, as detailed in question B, we identify a need for more comprehensive discussion security and correctness properties of the Control Plane. While the current introduction briefly mentions security aspects and mentions valley freedom, we suggest that it also mentions the properties proposed in this review. --> Add a reference to a new security properties section after #89  is solved",
       "createdAt": "2025-02-04T15:18:10Z",
-      "updatedAt": "2025-02-19T09:35:48Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-21T17:07:44Z",
+      "closedAt": "2025-02-21T17:07:44Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -1224,6 +1238,13 @@
           "body": "_Move the explanation \u201cA range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ([RFC4632])\" ([\u00a71.5.4.2 para. 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.5.4.2-2.3.1)) so that it appears before [Table 2](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#table-2), where this notation is used._\n\nShould the whole 'Text Representation' section be moved to after the SCION AS number introduction, and before 'Special Purpose AS numbers'?",
           "createdAt": "2025-02-18T10:46:48Z",
           "updatedAt": "2025-02-18T10:46:48Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> _Replace \"accumulates path segments\" ([\u00a71.1 para. 14](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-06.html#section-1.1-14)) to \"accumulates a path segment\"._\n> \n> Does a PCB add path segments as it traverses a network, or just adds one path segment each time? If the former, then the current wording would seem correct.\n\nRight, a PCB actually accumulates Hop Fields, not segments. I reworded into: \n\"These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.\"",
+          "createdAt": "2025-02-21T15:56:05Z",
+          "updatedAt": "2025-02-21T15:57:01Z"
         }
       ]
     },
@@ -1264,11 +1285,19 @@
         "enhancement",
         "needs-discussion"
       ],
-      "body": "- [ ] Check if these checks are implemented @jiceatscion \n- [ ] Do changes proposed in draft\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
+      "body": "- [x] Check if these checks are implemented @jiceatscion \n- [ ] Do changes proposed in draft\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-02-05T09:22:19Z",
+      "updatedAt": "2025-02-21T15:04:34Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "\n>     * (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n>       \n>       * (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n\nNo. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n\n>       * (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n\nYes. This is implemented. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L55, https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L105)\n\n>       * (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\nYes. This is implemented at pretty low level. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#L100 -> https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#173)\n\n>     * (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).\n\nNo. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n\n\n",
+          "createdAt": "2025-02-21T15:03:30Z",
+          "updatedAt": "2025-02-21T15:03:30Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -6397,15 +6426,15 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Fixes #46",
+      "body": "Fixes #46\r\nDraft [diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/til_feedback/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2024-12-20T14:51:34Z",
-      "updatedAt": "2025-02-04T15:16:52Z",
+      "updatedAt": "2025-02-21T18:51:47Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "baseRefOid": "f21011278eca93379b66067f33c7feb09b4b67f2",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "til_feedback",
-      "headRefOid": "e7e81b62efe651f2f818a52e7481103cd6954b05",
+      "headRefOid": "c84995274bd97d85e7a32a44a2b9b9301643658b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -6437,6 +6466,68 @@
               "body": "without any customer -> without any children",
               "createdAt": "2025-02-04T15:16:22Z",
               "updatedAt": "2025-02-04T15:16:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6cVur6",
+          "commit": {
+            "abbreviatedOid": "0b2a66d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "@jiceatscion I left a few comments, can you have a look? W can then discuss\r\n\r\n@tzaeschke , feel free to also have a look , we are trying to address your remaining points from #46 \r\n",
+          "createdAt": "2025-02-18T09:31:55Z",
+          "updatedAt": "2025-02-21T18:51:47Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nA secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network initialization. One goal is that the SCION network can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies.\r\n```",
+              "createdAt": "2025-02-18T09:31:56Z",
+              "updatedAt": "2025-02-21T18:51:47Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nPCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.\r\n```",
+              "createdAt": "2025-02-18T09:52:17Z",
+              "updatedAt": "2025-02-21T18:51:47Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "How about we call this something like \"PKI-network circular dependencies\" and then do some changes in the bullet points below as I propose?\r\n\r\nAlso, Til commented: \r\n> Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n ",
+              "createdAt": "2025-02-18T09:54:09Z",
+              "updatedAt": "2025-02-21T18:51:47Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\nPartitioning occurs when a network splits into two because of link failures.  Partitioning of the global SCION inter-domain network is much less likely to happen, thanks to its path awareness that exposes multiple paths between SCION ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to already known paths that use other links.\r\n```\r\n",
+              "createdAt": "2025-02-18T10:01:19Z",
+              "updatedAt": "2025-02-21T18:51:47Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "Til mentioned: \r\n> However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\nI think this paragraph needs some work:\r\n\r\n- [ ] `In order to participate in this process, an AS only needs to be aware of its direct neighbors. ` Is it true? AFAIK an AS needs to be aware of it neighbors AND have an AS path to a core AS, so that it can receive beacons. We also say that in `7.1.  Manipulation of the Beaconing Process by a Core Adversary`\r\n- [ ] `a single path segment already enables intra-ISD communication` ok but how does this help with circular dependencies or bootstrapping? Also, to achieve any to any intra-ISD communication, you need an up and down segment\r\n- [x] `Availability of certificates` here we could mention that this avoids circular dependencies between the PKI and certificates (this is important, as it distinguishes SCION from RPKI). I alredy added some wording on this.",
+              "createdAt": "2025-02-21T17:57:12Z",
+              "updatedAt": "2025-02-21T18:51:47Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "I think referencing this section would address Til's comment: \r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\nAs I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops1/210min= 25minutes for 5 hops.\r\n\r\n```suggestion\r\nRecovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization and [](#clock-inaccuracy) the impact of path discovery time.\r\n```\r\n\r\nAlso, we don't set an upper bound to propagation interval. Shall we?",
+              "createdAt": "2025-02-21T18:09:43Z",
+              "updatedAt": "2025-02-21T18:51:48Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nOn its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs). PCBs are used to construct path segments. ASes register them to make them available to other ASes, as described in [](#path-segment-reg).\r\n```",
+              "createdAt": "2025-02-21T18:26:57Z",
+              "updatedAt": "2025-02-21T18:51:48Z"
+            },
+            {
+              "originalPosition": 47,
+              "body": "```suggestion\r\nFor the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus an allowance for differences between the validator's and originator's clock. As an allowance, it is recommended to use the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).\r\n```",
+              "createdAt": "2025-02-21T18:29:57Z",
+              "updatedAt": "2025-02-21T18:51:48Z"
             }
           ]
         }
@@ -6650,26 +6741,28 @@
     {
       "number": 91,
       "id": "PR_kwDOJx2-rs6KP5x7",
-      "title": "Revised abstract?",
+      "title": "Small clarifications: at least one core AS, unique interface IDs",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/91",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses some points in #89 ",
       "createdAt": "2025-02-06T09:21:21Z",
-      "updatedAt": "2025-02-18T10:06:54Z",
+      "updatedAt": "2025-02-21T12:33:33Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
-      "baseRefName": "main",
-      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "baseRefName": "Security-Updates",
+      "baseRefOid": "c8649cf353f04af730725dfb7e5d1ae6eb536201",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "revised_abstract",
-      "headRefOid": "f9305f04ea20bd02154efb1076ed9d54be0d3da5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c758041d7179607dcc9d74ee122bc71cd242727b",
+      "closedAt": "2025-02-21T12:33:31Z",
+      "mergedAt": "2025-02-21T12:33:31Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "55e13b456a17daf5cd4cf796b74f88b36025dc6c"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -6684,22 +6777,211 @@
     {
       "number": 92,
       "id": "PR_kwDOJx2-rs6KQBjR",
-      "title": "Updated Security Considerations",
+      "title": "Security considerations: clarify assumptions and security properties",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/92",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Addresses #89 ",
+      "body": "Fixes #89 \r\nDraft [diff to main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Security-Updates/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-02-06T09:37:15Z",
-      "updatedAt": "2025-02-18T10:03:46Z",
+      "updatedAt": "2025-02-21T18:44:56Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "fa046df659041cd77013aa13290d3ef50a6308b5",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Security-Updates",
+      "headRefOid": "50218655cfe44ecb02b2bd3b0c1283bf4341c927",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6c88M7",
+          "commit": {
+            "abbreviatedOid": "1ce235a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I did some rewording, and I'd like to hear back about loop avoidance and on general feedback from @dgalan7 before merging. ",
+          "createdAt": "2025-02-21T14:33:54Z",
+          "updatedAt": "2025-02-21T14:58:23Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "To be discussed with @dgalan7 (in email thread). I don't think we need this assumption",
+              "createdAt": "2025-02-21T14:33:54Z",
+              "updatedAt": "2025-02-21T14:58:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c9hQy",
+          "commit": {
+            "abbreviatedOid": "0173f75"
+          },
+          "author": "dgalan7",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-21T15:18:00Z",
+          "updatedAt": "2025-02-21T15:18:01Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "What a coincidence, I just received this comment's notification as I sent you an email. The email explains why this assumption isn't necessary for loop avoidance - rather, it ensures connectivity by allowing each AS to find a progressively higher-tier ASes until reaching tier 1. We can continue this discussion here or by email.",
+              "createdAt": "2025-02-21T15:18:01Z",
+              "updatedAt": "2025-02-21T15:18:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-L4h",
+          "commit": {
+            "abbreviatedOid": "0173f75"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-21T16:08:27Z",
+          "updatedAt": "2025-02-21T16:08:28Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Absolutely a coincidence, I was writing you an email about this at the very same time, but you were faster. Thank you, your email clarified this. I'll leave the text there (albeit a bit corrected):\r\n\r\n> 3. Parent-Child links form a unidirectional hierarchical topology without cyclic relationships.\r\n",
+              "createdAt": "2025-02-21T16:08:28Z",
+              "updatedAt": "2025-02-21T16:10:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-0VL",
+          "commit": {
+            "abbreviatedOid": "0173f75"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-21T17:01:23Z",
+          "updatedAt": "2025-02-21T17:01:23Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "I'm still not convinced on this, I will chime in the email thread ",
+              "createdAt": "2025-02-21T17:01:23Z",
+              "updatedAt": "2025-02-21T17:01:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c_sts",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-21T18:43:35Z",
+          "updatedAt": "2025-02-21T18:43:35Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "We need to review this assumption. See @tzaeschke 's [comment](https://github.com/scionassociation/scion-cp_I-D/issues/46#issuecomment-2634412040) in another issue ",
+              "createdAt": "2025-02-21T18:43:35Z",
+              "updatedAt": "2025-02-21T18:43:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c_tf4",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-21T18:44:55Z",
+          "updatedAt": "2025-02-21T18:44:56Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Maybe like this: \r\n```suggestion\r\n2. ISDs are not partitioned, so that each AS can reach every other AS within its ISD.\r\n```",
+              "createdAt": "2025-02-21T18:44:56Z",
+              "updatedAt": "2025-02-21T18:44:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOJx2-rs6Lk0cQ",
+      "title": "Intro: precise wording (feedback D. Galan)",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/93",
+      "state": "MERGED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #88 ",
+      "createdAt": "2025-02-18T10:48:38Z",
+      "updatedAt": "2025-02-21T15:42:09Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
       "headRepository": "scionassociation/scion-cp_I-D",
-      "headRefName": "Security-Updates",
-      "headRefOid": "c8649cf353f04af730725dfb7e5d1ae6eb536201",
+      "headRefName": "Updated_Intro",
+      "headRefOid": "ff659bb5187aa2b17be654c3bad06c43ae632712",
+      "closedAt": "2025-02-21T15:42:03Z",
+      "mergedAt": "2025-02-21T15:42:03Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "fa046df659041cd77013aa13290d3ef50a6308b5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6c9yWS",
+          "commit": {
+            "abbreviatedOid": "e9093b5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-21T15:41:57Z",
+          "updatedAt": "2025-02-21T15:41:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 94,
+      "id": "PR_kwDOJx2-rs6MDD2W",
+      "title": "Path selection policies - clarify text",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/94",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves \r\n- #16\r\n-  #72 ",
+      "createdAt": "2025-02-21T13:10:36Z",
+      "updatedAt": "2025-02-21T18:53:44Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "path_policies",
+      "headRefOid": "8c4ac46b4240a06b6663eb515c7fb9621cfda296",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -6708,30 +6990,119 @@
       "reviews": []
     },
     {
-      "number": 93,
-      "id": "PR_kwDOJx2-rs6Lk0cQ",
-      "title": "Updated_Intro",
-      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/93",
-      "state": "OPEN",
-      "author": "knmeynell",
-      "authorAssociation": "CONTRIBUTOR",
+      "number": 95,
+      "id": "PR_kwDOJx2-rs6MEhFn",
+      "title": "Terminology: PCB wording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/95",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Addresses #88 ",
-      "createdAt": "2025-02-18T10:48:38Z",
-      "updatedAt": "2025-02-19T09:41:15Z",
+      "body": "Resolves #88 (one last point)",
+      "createdAt": "2025-02-21T16:00:36Z",
+      "updatedAt": "2025-02-22T15:05:38Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "bbbf1dd7b429dce911f5aa85c55298b1e1141f42",
+      "baseRefOid": "fa046df659041cd77013aa13290d3ef50a6308b5",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Updated_Intro",
-      "headRefOid": "f4a63823e877c02329adfd905cbc852309c7d112",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "5831b4e22c9350a7ce678d1f96c7814e3d3f2f1c",
+      "closedAt": "2025-02-21T17:07:43Z",
+      "mergedAt": "2025-02-21T17:07:43Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "f21011278eca93379b66067f33c7feb09b4b67f2"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> Is there something missing after 'step to obtain' under 'Path Resolution'?\r\n\r\nYou probably deleted \"path segments\" by mistake [here](https://github.com/scionassociation/scion-cp_I-D/commit/f4a63823e877c02329adfd905cbc852309c7d112), I added it back already in another PR.",
+          "createdAt": "2025-02-21T17:07:21Z",
+          "updatedAt": "2025-02-21T17:07:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6c-DzE",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes, this seems like a better wording.",
+          "createdAt": "2025-02-21T16:03:05Z",
+          "updatedAt": "2025-02-21T16:03:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-GM6",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-21T16:04:30Z",
+          "updatedAt": "2025-02-21T16:04:30Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-IOb",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-21T16:05:47Z",
+          "updatedAt": "2025-02-21T16:05:47Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-LFr",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Is there something missing after 'step to obtain' under 'Path Resolution'?",
+          "createdAt": "2025-02-21T16:07:49Z",
+          "updatedAt": "2025-02-21T16:07:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6c-Lyt",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-21T16:08:23Z",
+          "updatedAt": "2025-02-21T16:08:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dDNb7",
+          "commit": {
+            "abbreviatedOid": "5831b4e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Looks good",
+          "createdAt": "2025-02-22T15:05:06Z",
+          "updatedAt": "2025-02-22T15:05:06Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
