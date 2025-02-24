@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 25 August 2025                                          S. Hitz
+Expires: 28 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        21 February 2025
+                                                        24 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 August 2025.
+   This Internet-Draft will expire on 28 August 2025.
 
 Copyright Notice
 
@@ -652,10 +652,10 @@ Table of Contents
 
    A secure and reliable routing architecture has to be designed
    specifically to avoid circular dependencies during network
-   initialization.  One goal of SCION is that the Internet can start up
-   even after large outages or attacks, in addition to avoiding cascades
-   of outages caused by fragile interdependencies.  This section lists
-   the concepts SCION uses to prevent circular dependencies.
+   initialization.  One goal is that the SCION network can start up even
+   after large outages or attacks, in addition to avoiding cascades of
+   outages caused by fragile interdependencies.  This section lists the
+   concepts SCION uses to prevent circular dependencies.
 
    *  Neighbor-based path discovery: Path discovery in SCION is
       performed by the beaconing mechanism.  In order to participate in
