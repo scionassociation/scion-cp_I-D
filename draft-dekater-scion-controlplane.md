@@ -401,7 +401,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 
 ## Resistance to partitioning
 
-Besides inter-dependencies, another threat to the Internet is network partitionig which occurs when one network is split into two because of a link failure. Partitioning of the global SCION inter-domain network is much less likely to happen as during normal operation the full network fabric is available, offering multiple paths between all ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to already known paths that use other links.
+Partitioning occurs when a network splits into two because of link failures.  Partitioning of the global SCION inter-domain network is much less likely to happen, thanks to its path awareness that exposes multiple paths between SCION ASes. Even during failures there is no special failure mode required as SCION-enabled ASes can always switch to already known paths that use other links.
 
 Recovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization.
 
