@@ -705,7 +705,7 @@ Table of Contents
    time synchronization between the partitions is required to resume
    normal operation and move forward with updates of the cryptographic
    material.  Section 3.2 further describes the impact of time
-   synchronization.
+   synchronization and path discovery time.
 
 1.8.  Communication Protocol
 
