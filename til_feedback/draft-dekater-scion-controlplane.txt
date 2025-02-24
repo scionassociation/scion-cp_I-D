@@ -770,10 +770,9 @@ Table of Contents
    forwarding information per traversed AS.  At every AS, metadata as
    well as information about the AS's ingress and egress interfaces is
    added to the PCB.  The full PCB message format is described in
-   Section 2.2.
-
-   The process of using PCBs to construct segments is described in
-   details in Section 4
+   Section 2.2.  PCBs are used to construct path segments.  ASes
+   register them to make them available to other ASes, as described in
+   Section 4.
 
 2.1.1.  Peering Links
 
