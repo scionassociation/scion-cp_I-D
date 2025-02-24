@@ -2758,7 +2758,7 @@ associated_data(ps, i) = ps.segment_info ||
               <p id="section-2.2.3-2.3.1">Contain only unexpired hops (<a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.3-3">For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between local and origination clock. As an allowance, it is suggested to use the granularity of the hopfield expiration time (that is 337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-3">For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between the validator's and originator's clock. As an allowance, it is recommended to use the granularity of the hopfield expiration time (that is 337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>).<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.3-4">For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>, is later than the current time at the point of validation.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
