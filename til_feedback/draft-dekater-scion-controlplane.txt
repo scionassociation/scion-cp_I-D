@@ -742,12 +742,13 @@ Table of Contents
    propagates the _Path Segment Construction Beacons (PCBs)_ on a
    regular basis, to iteratively construct path segments.
 
-   PCBs contain topology and authentication information, and can also
-   include additional metadata that helps with path management and
-   selection.  The beaconing process itself is divided into routing
-   processes on two levels, where _inter-ISD_ or core beaconing is based
-   on the (selective) sending of PCBs without a defined direction, and
-   _intra-ISD_ beaconing on top-to-bottom propagation.
+   PCBs contain inter-domain topology and authentication information,
+   and can also include additional metadata that helps with path
+   management and selection.  The beaconing process itself is divided
+   into routing processes on two levels, where _inter-ISD_ or core
+   beaconing is based on the (selective) sending of PCBs without a
+   defined direction, and _intra-ISD_ beaconing on top-to-bottom
+   propagation.
 
    *  _Inter-ISD or core beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
