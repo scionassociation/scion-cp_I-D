@@ -3191,10 +3191,13 @@ path segment 4 |             |     |             |     |             |
       any length) leading to Y.
 
    *  Forwarding Path Consistency - For every honest path segment
-      registered in any AS, its sequence of AS entries corresponds to a
-      continuous SCION forwarding path in the network of inter-domain
-      links and the inter-domain network topology remains unchanged
-      since the segment was first generated.
+      registered in any AS
+
+      -  its sequence of AS entries corresponds to a continuous SCION
+         forwarding path in the network of inter-domain links
+
+      -  the inter-domain network topology remains unchanged since the
+         segment was first generated.
 
    *  Loop Freedom - For every honest path segment registered in any AS,
       its sequence of AS entries contains no duplicates, including
