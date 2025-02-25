@@ -903,7 +903,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 ~~~~
 
 - `isd_as`: The ISD-AS number of the AS that created this AS entry.
-- `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB SHOULD be forwarded.
+- `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB SHOULD be forwarded. The presence of this field prevents path hijacking attacks, as further discussed in [](#path-hijack).
 - `hop_entry`: The hop entry (`HopEntry`) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see [](#hopentry).
 - `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
 - `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.
