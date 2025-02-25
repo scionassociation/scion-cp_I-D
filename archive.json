@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-23T00:22:59.029711+00:00",
+  "timestamp": "2025-02-25T00:22:39.458345+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -6428,13 +6428,13 @@
       "labels": [],
       "body": "Fixes #46\r\nDraft [diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/til_feedback/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2024-12-20T14:51:34Z",
-      "updatedAt": "2025-02-21T18:51:47Z",
+      "updatedAt": "2025-02-24T14:35:54Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f21011278eca93379b66067f33c7feb09b4b67f2",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "til_feedback",
-      "headRefOid": "c84995274bd97d85e7a32a44a2b9b9301643658b",
+      "headRefOid": "9ac8aee57fb00015cb8b9be95d938d52f3ce4ec1",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -6513,9 +6513,9 @@
             },
             {
               "originalPosition": 25,
-              "body": "I think referencing this section would address Til's comment: \r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\nAs I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops1/210min= 25minutes for 5 hops.\r\n\r\n```suggestion\r\nRecovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization and [](#clock-inaccuracy) the impact of path discovery time.\r\n```\r\n\r\nAlso, we don't set an upper bound to propagation interval. Shall we?",
+              "body": "I think referencing this section would address Til's comment: \r\n> Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the propagation interval and the origination interval.\r\nAs I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops1/210min= 25minutes for 5 hops.\r\n\r\n```suggestion\r\nRecovering from a partitioned network is also seamless as only coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization and path discovery time.\r\n```\r\n\r\nAlso, we don't set an upper bound to propagation interval. Shall we?",
               "createdAt": "2025-02-21T18:09:43Z",
-              "updatedAt": "2025-02-21T18:51:48Z"
+              "updatedAt": "2025-02-24T12:47:38Z"
             },
             {
               "originalPosition": 37,
@@ -6528,6 +6528,90 @@
               "body": "```suggestion\r\nFor the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus an allowance for differences between the validator's and originator's clock. As an allowance, it is recommended to use the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).\r\n```",
               "createdAt": "2025-02-21T18:29:57Z",
               "updatedAt": "2025-02-21T18:51:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dKdo1",
+          "commit": {
+            "abbreviatedOid": "91dfbde"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-24T11:23:03Z",
+          "updatedAt": "2025-02-24T11:38:34Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "Explaining bootstraping flows is always hard...\r\nThe statement about knowing only immediate neighbors is absolutely true.\r\nThe path to a core AS comes from beaconing; which is enabled by having connectivity with only the immediate parent and children ASes. One-hop paths can be crafted without any prior communication. If beaconing works, then all ASes learn paths to core ASes; which they can then query to obtain segments to construct all other paths.",
+              "createdAt": "2025-02-24T11:23:03Z",
+              "updatedAt": "2025-02-24T11:38:34Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "Did you refer to the same clock-inaccuracy sectoin twice in a row, in your suggestion? ",
+              "createdAt": "2025-02-24T11:29:06Z",
+              "updatedAt": "2025-02-24T11:38:34Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "Do you mean to replace the title \"Bootstrapping\" with \"PKI-network circular dependency\"? Why? Certificates aren't the only objects involved in the bootstrapping process. Also I suggest avoiding the phrase \"circular dependencies\" in section titles. It gives the impression that it's a feature. The feature is the opposite: the ability to bootstrap (or \"cold-start\" if that's the term we prefer).\r\n",
+              "createdAt": "2025-02-24T11:35:00Z",
+              "updatedAt": "2025-02-24T11:38:34Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "As for propagation intervals; no I don't think so. Do I need to double check? Should we have a limit to reduce healing time? It is true that paths may take a long time to become known. That's a problem if they break often.",
+              "createdAt": "2025-02-24T11:37:58Z",
+              "updatedAt": "2025-02-24T11:38:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dLPcF",
+          "commit": {
+            "abbreviatedOid": "e7e81b6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-24T12:43:27Z",
+          "updatedAt": "2025-02-24T12:43:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "ok let's call it cold-start or bootstrapping (whichever we use in the rest of the text). I think right now it is both.. ",
+              "createdAt": "2025-02-24T12:43:27Z",
+              "updatedAt": "2025-02-24T12:43:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dMLCd",
+          "commit": {
+            "abbreviatedOid": "9ac8aee"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-24T14:07:56Z",
+          "updatedAt": "2025-02-24T14:35:54Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Last sentence, remove duplicate space: \r\n`reach the core ASes of their ISD ____ and register reciprocal segments` ",
+              "createdAt": "2025-02-24T14:07:57Z",
+              "updatedAt": "2025-02-24T14:35:54Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "To clarify, my suggestion was to either use only one term (not both) or, otherwise explicitly state that they mean the name thing.\r\nJust using them both without saying that they are the same is probably confusing. I think the least confusing thing would be to have only one term. This may also come up with reviewers.",
+              "createdAt": "2025-02-24T14:17:15Z",
+              "updatedAt": "2025-02-24T14:35:54Z"
             }
           ]
         }
@@ -6786,7 +6870,7 @@
       "labels": [],
       "body": "Fixes #89 \r\nDraft [diff to main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Security-Updates/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-02-06T09:37:15Z",
-      "updatedAt": "2025-02-21T18:44:56Z",
+      "updatedAt": "2025-02-24T13:50:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "fa046df659041cd77013aa13290d3ef50a6308b5",
@@ -6916,6 +7000,50 @@
               "body": "Maybe like this: \r\n```suggestion\r\n2. ISDs are not partitioned, so that each AS can reach every other AS within its ISD.\r\n```",
               "createdAt": "2025-02-21T18:44:56Z",
               "updatedAt": "2025-02-21T18:44:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dL0KK",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-24T13:36:29Z",
+          "updatedAt": "2025-02-24T13:50:14Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "kinds _of_ threats",
+              "createdAt": "2025-02-24T13:36:29Z",
+              "updatedAt": "2025-02-24T13:50:14Z"
+            },
+            {
+              "originalPosition": 70,
+              "body": "I am not sure this is true. PCB forwarding is subject to strict deterministic constraints/limits. I think there are definitely valid _potential_ segments that will never be actualized...? \r\n\r\nAlso, I find the terminology slightly confusing. Usually a \"path\" is the result of stitching up to 3 segments together. Here, it seems that a \"path\" is something more abstract, i.e. the precursor of one or more segments....?",
+              "createdAt": "2025-02-24T13:44:11Z",
+              "updatedAt": "2025-02-24T13:50:14Z"
+            },
+            {
+              "originalPosition": 67,
+              "body": "I think the sentence is a bit confusing/unclear to me.\r\nI assume there is a split is as follows?\r\n\r\n```\r\nFor every honest segment registered in any AS:\r\n  - its sequence of AS entries corresponds to a continuous path in the network of inter-domain links\r\n  - the inter-domain network topology remains unchanged since the segment was first generated.\r\n```\r\nMaybe insert a comma or semicolon after \"inter-domain links\"?",
+              "createdAt": "2025-02-24T13:47:41Z",
+              "updatedAt": "2025-02-24T13:50:14Z"
+            },
+            {
+              "originalPosition": 80,
+              "body": "`ETH Zurich _and_ _the_ SCION Association`?",
+              "createdAt": "2025-02-24T13:48:26Z",
+              "updatedAt": "2025-02-24T13:50:14Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "Just out of curiosity, so the plan is to disallow partitioned ISDs?",
+              "createdAt": "2025-02-24T13:49:34Z",
+              "updatedAt": "2025-02-24T13:50:14Z"
             }
           ]
         }
