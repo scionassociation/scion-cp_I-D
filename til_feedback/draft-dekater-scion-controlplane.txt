@@ -652,10 +652,10 @@ Table of Contents
 
    A secure and reliable routing architecture has to be designed
    specifically to avoid circular dependencies during network
-   initialization.  One goal is that the SCION network can start up even
+   bootstrapping.  One goal is that the SCION network can start up even
    after large outages or attacks, in addition to avoiding cascades of
    outages caused by fragile interdependencies.  This section lists the
-   concepts SCION uses to prevent circular dependencies.
+   concepts SCION uses to prevent circular dependencies:
 
    *  Neighbor-based path discovery: Path discovery in SCION is
       performed by the beaconing mechanism.  In order to participate in
