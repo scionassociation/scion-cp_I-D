@@ -1969,7 +1969,9 @@ The following assumptions relate to these security considerations. It is assumed
 The properties to be provided by the SCION control plane are:
 
 - Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
-- Forwarding Path Consistency - For every honest path segment registered in any AS, its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links and the inter-domain network topology remains unchanged since the segment was first generated.
+- Forwarding Path Consistency - For every honest path segment registered in any AS
+    - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
+    - the inter-domain network topology remains unchanged since the segment was first generated.
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 - Path Discoverability - For every directed honest forwarding path in the network of inter-domain links, where all traversed ASes permit forwarding there exists at least one protocol execution that registers a segment containing or exactly matching this path, provided the involved links remain stable throughout the protocol execution.
