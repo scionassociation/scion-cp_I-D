@@ -667,13 +667,6 @@ Table of Contents
       to which no forwarding path is available yet.  The One Hop Path
       Type is described in more detail in [I-D.dekater-scion-dataplane].
 
-   *  Path segment types: SCION uses different types of path segments to
-      compose end-to-end paths.  Notably, a single path segment already
-      enables intra-ISD communication.  For example, a non-core AS can
-      reach the core of the local ISD simply by using an up segment
-      fetched from the local path storage which is populated during the
-      beaconing process.
-
    *  Path reversal: In SCION, every path is reversible.  That is, the
       receiver of a packet can reverse the path in the packet header in
       order to produce a reply packet without having to perform a path
