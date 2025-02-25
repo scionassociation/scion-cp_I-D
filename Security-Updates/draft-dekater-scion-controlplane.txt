@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 25 August 2025                                          S. Hitz
+Expires: 29 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        21 February 2025
+                                                        25 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 August 2025.
+   This Internet-Draft will expire on 29 August 2025.
 
 Copyright Notice
 
@@ -3152,7 +3152,7 @@ path segment 4 |             |     |             |     |             |
    payload encryption so these topics lie outside the scope of this
    section.
 
-   This section discusses three kinds threats to the control plane:
+   This section discusses three kinds of threats to the control plane:
 
    1.  When an adversary controls one or all core ASes of an ISD and
        tries to manipulate the beaconing process from the top down (see
@@ -3190,24 +3190,26 @@ path segment 4 |             |     |             |     |             |
       eventually register enough segments to build at least one path (of
       any length) leading to Y.
 
-   *  Path Consistency - For every honest segment registered in any AS,
-      its sequence of AS entries corresponds to a continuous path in the
-      network of inter-domain links and the inter-domain network
-      topology remains unchanged since the segment was first generated.
+   *  Forwarding Path Consistency - For every honest path segment
+      registered in any AS, its sequence of AS entries corresponds to a
+      continuous SCION forwarding path in the network of inter-domain
+      links and the inter-domain network topology remains unchanged
+      since the segment was first generated.
 
-   *  Loop Freedom - For every honest segment registered in any AS, its
-      sequence of AS entries contains no duplicates, including current
-      and next ISD-AS and interfaces.
+   *  Loop Freedom - For every honest path segment registered in any AS,
+      its sequence of AS entries contains no duplicates, including
+      current and next ISD-AS and interface IDs.
 
-   *  Path Authorization - For every honest segment registered in any AS
-      and any AS X appearing on that segment (except for the previous
-      one), AS X propagated a PCB corresponding to the segment portion
-      ending in its own entry to its successor AS on the segment.
+   *  Path Authorization - For every honest path segment registered in
+      any AS and any AS X appearing on that segment (except for the
+      previous one), AS X propagated a PCB corresponding to the segment
+      portion ending in its own entry to its successor AS on the
+      segment.
 
-   *  Path Discoverability - For every directed honest path in the
-      network of inter-domain links, where all traversed ASes permit
-      forwarding there exists at least one protocol execution that
-      registers a segment containing or exactly matching this path,
+   *  Path Discoverability - For every directed honest forwarding path
+      in the network of inter-domain links, where all traversed ASes
+      permit forwarding there exists at least one protocol execution
+      that registers a segment containing or exactly matching this path,
       provided the involved links remain stable throughout the protocol
       execution.
 
@@ -3570,10 +3572,10 @@ Acknowledgments
    We are also very grateful to Adrian Perrig (ETH Zurich), for
    providing guidance and feedback about every aspect of SCION.
    Finally, we are indebted to the SCION development teams of Anapaya,
-   ETH Zurich, SCION Association for their practical knowledge and for
-   the documentation about the SCION Control Plane, as well as to the
-   authors of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.
+   ETH Zurich, and the SCION Association for their practical knowledge
+   and for the documentation about the SCION Control Plane, as well as
+   to the authors of [CHUAT22] - the book is an important source of
+   input and inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
