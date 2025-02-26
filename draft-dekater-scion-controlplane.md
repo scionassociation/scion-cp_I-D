@@ -2286,6 +2286,71 @@ message VerificationKeyID {
 {: #figure-15 title="Control Service gRPC API - Signed ASEntry representation"}
 <br>
 
+~~~~~
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+// VerificationKeyID is used to identify certificates that authenticate the
+// verification key used to verify signatures.
+message VerificationKeyID {
+    // ISD-AS of the subject.
+    uint64 isd_as = 1;
+    // SubjectKeyID referenced in the certificate.
+    bytes subject_key_id = 2;
+    // Base number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_base = 3;
+    // Serial number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_serial = 4;
+}
+~~~~~
+{: #figure-17 title="Trust Material Service gRPC API definition"}
+<br>
+
 In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
 
 # SCION Data Plane use by the SCION Control Plane {#app-b}
