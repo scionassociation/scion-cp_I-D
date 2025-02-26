@@ -2489,7 +2489,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.2-5.1.1"><code>isd_as</code>: The ISD-AS number of the AS that created this AS entry.<a href="#section-2.2.1.4.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.2">
-                  <p id="section-2.2.1.4.2-5.2.1"><code>next_isd_as</code>: The ISD-AS number of the downstream AS to which the PCB <span class="bcp14">SHOULD</span> be forwarded.<a href="#section-2.2.1.4.2-5.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.2-5.2.1"><code>next_isd_as</code>: The ISD-AS number of the downstream AS to which the PCB <span class="bcp14">SHOULD</span> be forwarded. The presence of this field prevents path hijacking attacks, as further discussed in <a href="#path-hijack" class="auto internal xref">Section 7.2.1</a>.<a href="#section-2.2.1.4.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.3">
                   <p id="section-2.2.1.4.2-5.3.1"><code>hop_entry</code>: The hop entry (<code>HopEntry</code>) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see <a href="#hopentry" class="auto internal xref">Section 2.2.1.5</a>.<a href="#section-2.2.1.4.2-5.3.1" class="pilcrow">¶</a></p>
