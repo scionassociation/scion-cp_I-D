@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 29 August 2025                                          S. Hitz
+Expires: 30 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        25 February 2025
+                                                        26 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2025.
+   This Internet-Draft will expire on 30 August 2025.
 
 Copyright Notice
 
@@ -93,8 +93,9 @@ Table of Contents
        1.5.3.  Text Representation
        1.5.4.  Wildcard Addressing
        1.5.5.  Special-Purpose SCION AS Numbers
-     1.6.  Avoiding Circular Dependencies and Partitioning
-     1.7.  Communication Protocol
+     1.6.  Bootstrapping ability
+     1.7.  Resistance to partitioning
+     1.8.  Communication Protocol
    2.  Path Exploration or Beaconing
      2.1.  Introduction and Overview
        2.1.1.  Peering Links
@@ -166,6 +167,7 @@ Table of Contents
    SCION Data Plane use by the SCION Control Plane
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-07
      draft-dekater-scion-controlplane-06
@@ -328,8 +330,9 @@ Table of Contents
    *Path Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
    and among different ISDs.  ASes further propagate selected PCBs to
-   their neighboring ASes.  These PCBs traverse the network accumulating
-   path segments which can subsequently be used for traffic forwarding.
+   their neighboring ASes.  These PCBs traverse each AS accumulating
+   information, including Hop Fields (HFs) which can subsequently be
+   used for traffic forwarding.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
    Message Protocol (ICMP).  This is described in Section 6.
@@ -650,14 +653,14 @@ Table of Contents
 
    The rest of the space is currently unallocated.
 
-1.6.  Avoiding Circular Dependencies and Partitioning
+1.6.  Bootstrapping ability
 
    A secure and reliable routing architecture has to be designed
    specifically to avoid circular dependencies during network
-   initialization.  One goal of SCION is that the Internet can start up
-   even after large outages or attacks, in addition to avoiding cascades
-   of outages caused by fragile interdependencies.  This section lists
-   the concepts SCION uses to prevent circular dependencies.
+   bootstrapping.  One goal is that the SCION network can start up even
+   after large outages or attacks, in addition to avoiding cascades of
+   outages caused by fragile interdependencies.  This section lists the
+   concepts SCION uses to prevent circular dependencies:
 
    *  Neighbor-based path discovery: Path discovery in SCION is
       performed by the beaconing mechanism.  In order to participate in
@@ -668,13 +671,6 @@ Table of Contents
       uses these _one hop paths_ to propagate PCBs to neighboring ASes
       to which no forwarding path is available yet.  The One Hop Path
       Type is described in more detail in [I-D.dekater-scion-dataplane].
-
-   *  Path segment types: SCION uses different types of path segments to
-      compose end-to-end paths.  Notably, a single path segment already
-      enables intra-ISD communication.  For example, a non-core AS can
-      reach the core of the local ISD simply by using an up segment
-      fetched from the local path storage which is populated during the
-      beaconing process.
 
    *  Path reversal: In SCION, every path is reversible.  That is, the
       receiver of a packet can reverse the path in the packet header in
@@ -687,27 +683,29 @@ Table of Contents
       ISD's TRC and certificates) that is needed to verify any message
       it sends.  This (together with the path reversal) means that the
       receiver of a message can always obtain all this material by
-      contacting the sender.
+      contacting the sender.  This avoids circular dependencies between
+      the PKI and connectivity.
 
    *Note:* For a detailed description of a TRC and more information on
    the availability of certificates and TRCs, see the SCION Control-
-   Plane PKI Internet-Draft [I-D.dekater-scion-pki].
+   Plane PKI [I-D.dekater-scion-pki].
 
-   Besides inter-dependencies, another threat to the Internet is network
-   partition which occurs when one network is split into two because of
-   a link failure.  However, partition of the global SCION inter-domain
-   network is much less likely to happen as during normal operation the
-   full network fabric is available, offering multiple paths between all
-   ASes.  Even during failures there is no special failure mode required
-   as SCION-enabled ASes can always switch to otherwise unused links.
+1.7.  Resistance to partitioning
+
+   Partitioning occurs when a network splits into two because of link
+   failures.  Partitioning of the global SCION inter-domain network is
+   much less likely to happen, thanks to its path awareness that exposes
+   multiple paths between SCION ASes.  Even during failures there is no
+   special failure mode required as SCION-enabled ASes can always switch
+   to already known paths that use other links.
 
    Recovering from a partitioned network is also seamless as only coarse
    time synchronization between the partitions is required to resume
    normal operation and move forward with updates of the cryptographic
    material.  Section 3.2 further describes the impact of time
-   synchronization.
+   synchronization and path discovery time.
 
-1.7.  Communication Protocol
+1.8.  Communication Protocol
 
    All communication between the Control Services in different ASes is
    expressed in terms of gRPC remote procedure calls (for details, see
@@ -740,14 +738,14 @@ Table of Contents
    propagates the _Path Segment Construction Beacons (PCBs)_ on a
    regular basis, to iteratively construct path segments.
 
-   PCBs contain topology and authentication information, and can also
-   include additional metadata that helps with path management and
-   selection.  The beaconing process itself is divided into routing
-   processes on two levels, where _inter-ISD_ or core beaconing is based
-   on the (selective) sending of PCBs without a defined direction, and
-   _intra-ISD_ beaconing on top-to-bottom propagation.  Beaconing is
-   initiated by core ASes, therefore each ISD MUST have at least one
-   core AS.
+   PCBs contain inter-domain topology and authentication information,
+   and can also include additional metadata that helps with path
+   management and selection.  The beaconing process itself is divided
+   into routing processes on two levels, where _inter-ISD_ or core
+   beaconing is based on the (selective) sending of PCBs without a
+   defined direction, and _intra-ISD_ beaconing on top-to-bottom
+   propagation.  Beaconing is initiated by core ASes, therefore each ISD
+   MUST have at least one core AS.
 
    *  _Inter-ISD or core beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
@@ -757,20 +755,23 @@ Table of Contents
       over policy compliant paths to discover multiple paths between any
       pair of core ASes.
 
-   *  _Intra-ISD beaconing_ is the process whereby the Control Service
-      of a core AS initiates PCBs and sends them at regular intervals to
-      non-core child ASes (typically customer ASes) within the same ISD.
-      The Control Service of a non-core child AS receives these PCBs and
-      forwards them to its child ASes, and so on until the PCB reaches
-      an AS without any customer (leaf AS).  As a result, all ASes
-      within an ISD receive path segments that enable them to reach the
-      core ASes within the same ISD.
+   *  _Intra-ISD beaconing_ creates path segments from core ASes to non-
+      core ASes.  For this, the Control Services of core ASes create
+      PCBs and sends them to the non-core child ASes (typically customer
+      ASes) at regular intervals.  The Control Service of a non-core
+      child AS receives these PCBs and forwards them to its child ASes,
+      and so on until the PCB reaches an AS without any children (leaf
+      AS).  As a result, all ASes within an ISD receive path segments to
+      reach the core ASes of their ISD and register reciprocal segments
+      with the Control Service of the associated core ASes.
 
    On its way, a PCB accumulates cryptographically protected path and
    forwarding information per traversed AS.  At every AS, metadata as
    well as information about the AS's ingress and egress interfaces is
    added to the PCB.  The full PCB message format is described in
-   Section 2.2.
+   Section 2.2.  PCBs are used to construct path segments.  ASes
+   register them to make them available to other ASes, as described in
+   Section 4.
 
 2.1.1.  Peering Links
 
@@ -1630,8 +1631,10 @@ path segment 4 |             |     |             |     |             |
    *  Contain only unexpired hops (Section 2.2.1.6).
 
    For the purpose of validation, a timestamp is considered "future" if
-   it is later than the current time at the point of validation plus the
-   minimum expiration time of a Hop Field (337.5 seconds, see
+   it is later than the current time at the point of validation plus an
+   allowance for differences between the validator's and originator's
+   clock.  As an allowance, it is recommended to use the granularity of
+   the hopfield expiration time (that is 337.5 seconds, see
    Section 2.2.1.6).
 
    For the purpose of validation, a hop is considered expired if its
@@ -1691,7 +1694,10 @@ path segment 4 |             |     |             |     |             |
 2.3.1.1.  Storing and Selecting Candidate PCBs
 
    When receiving a PCB, an AS first stores the PCB in a temporary
-   storage for candidate PCBs called the _Beacon Store_.
+   storage for candidate PCBs called the _Beacon Store_. The management
+   of this storage is implementation defined.  Current practice is to
+   retain all PCBs until expired or replaced by one describing the same
+   path with a later origination time.
 
    PCBs are propagated in batches to each connected AS at a fixed
    frequency known as the _propagation interval_. At each propagation
@@ -1699,10 +1705,17 @@ path segment 4 |             |     |             |     |             |
    the Beacon Store, according to the AS's selection policy.  This set
    SHOULD have a fixed size, the _best PCBs set size_.
 
-   *  The _best PCBs set size_ SHOULD be at most "50" (PCBs) for intra-
-      ISD beaconing and at most "5" (PCBs) for core beaconing (i.e.
-      propagation between all core ASes).  These are RECOMMENDED maxima;
-      in current practice the intra-ISD set size is typically 20.
+   The _best PCBs set size_ SHOULD be:
+
+   *  For intra-AS beaconing (i.e. propagating to children ASes): at
+      most 50.
+
+   *  For core beaconing (i.e. propagation between core ASes): at most 5
+      per immediate neighbor core AS.  Current practice is that each set
+      of 5 is chosen among the PCBs received from each neighbor.
+
+   These are RECOMMENDED maxima; in current practice the intra-ISD set
+   size is typically 20.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store, to
@@ -2071,7 +2084,7 @@ path segment 4 |             |     |             |     |             |
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
-   after a "cold start", and the time until new link is usable.  In
+   after a network bootstrap, and the time until new link is usable.  In
    general, the time until a specific PCB is built depends on its
    length, the propagation interval, and whether on-path ASes use "fast
    recovery".
@@ -2142,14 +2155,14 @@ path segment 4 |             |     |             |     |             |
    these PCBs for all 1000 child links would, be roughly around 25 MB/s
    which is manageable with even modest consumer hardware.
 
-   On a cold start of the network, path segments to each AS are
-   discovered within a number of propagation steps proportional to the
-   longest path.  With a 5 second propagation period and a generous
-   longest path of length 10, all path segments are discovered after 25
-   seconds on average.  When all ASes start propagation just after
-   they've received the first PCBs from any of their upstreams (see
-   'fast recovery'), the construction of a first path to connect each AS
-   to the ISD core is accelerated.
+   On a network bootstrap, path segments to each AS are discovered
+   within a number of propagation steps proportional to the longest
+   path.  With a 5 second propagation period and a generous longest path
+   of length 10, all path segments are discovered after 25 seconds on
+   average.  When all ASes start propagation just after they've received
+   the first PCBs from any of their upstreams (see 'fast recovery'), the
+   construction of a first path to connect each AS to the ISD core is
+   accelerated.
 
    When a new parent-child link is added to the network, the parent AS
    will propagate the available PCBs in the next propagation event.  If
@@ -2192,13 +2205,12 @@ path segment 4 |             |     |             |     |             |
    Control Service can be distributed over many instances in order to
    increase the PCB throughput.
 
-   On a cold start of the network, full connectivity is obtained after a
-   number of propagation steps corresponding to the diameter of the
-   network.  Assuming a network diameter of 6, this corresponds to
-   roughly 3 minutes on average.  When a new link is added to the
-   network, it will be available to connect two ASes at distances D1 and
-   D2 from the link, respectively, at worst after a mean time
-   (D1+D2)*T/2.
+   On a network bootstrap, full connectivity is obtained after a number
+   of propagation steps corresponding to the diameter of the network.
+   Assuming a network diameter of 6, this corresponds to roughly 3
+   minutes on average.  When a new link is added to the network, it will
+   be available to connect two ASes at distances D1 and D2 from the
+   link, respectively, at worst after a mean time (D1+D2)*T/2.
 
 4.  Registration of Path Segments
 
@@ -4102,6 +4114,24 @@ Change Log
 
 draft-dekater-scion-controlplane-08
 
+   *  Split "Circular dependencies and partitioning" into two sections:
+      bootstrapping and partitioning.
+
+   *  Added some details about PCBs propagation and storage.
+
+   *  Qualified better the choice of time allowance in the definition of
+      "segment from the future".
+
+draft-dekater-scion-controlplane-08
+
+   *  Split "Circular dependencies and partitioning" into two sections:
+      bootstrapping and partitioning.
+
+   *  Added some details about PCBs propagation and storage.
+
+   *  Qualified better the choice of time allowance in the definition of
+      "segment from the future".
+
    *  Security considerations: clarify assumptions
 
 draft-dekater-scion-controlplane-07
@@ -4113,7 +4143,9 @@ draft-dekater-scion-controlplane-06
 
    Major changes:
 
-   *  New section: Path MTU -New section: Monitoring Considerations
+   *  New section: Path MTU
+
+   *  New section: Monitoring Considerations
 
    *  Completed description of Control Services gRPC API in appendix
 
