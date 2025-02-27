@@ -2835,37 +2835,33 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 <p id="section-2.3.1.1-10">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.1.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="selection-policy-example">
+<div id="selection-criteria">
 <section id="section-2.3.1.2">
-            <h5 id="name-selection-policy-example">
-<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policy-example" class="section-name selfRef">Selection Policy Example</a>
+            <h5 id="name-selection-criteria">
+<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-criteria" class="section-name selfRef">Selection Criteria</a>
             </h5>
-<p id="section-2.3.1.2-1">PCB may be selected on various criteria, such as:
-- AS path length: from the originator core AS to the child (non-core) AS.
-- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
-- Disjointness: The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.2-2">Some examples of path selection policies include:<a href="#section-2.3.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.2-1">An AS <span class="bcp14">MUST</span> select the best PCBs set to be further propagated. Selection may be based on criteria such as:<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.1.2-3.1">
-                <p id="section-2.3.1.2-3.1.1">BestSetSize - the recommended number of segments to propagate or register.<a href="#section-2.3.1.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.1.2-2.1">
+                <p id="section-2.3.1.2-2.1.1">AS path length: from the originator core AS to the child (non-core) AS.<a href="#section-2.3.1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.2">
-                <p id="section-2.3.1.2-3.2.1">CandidateSetSize - the maximum number of segments to consider for selection.<a href="#section-2.3.1.2-3.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.2">
+                <p id="section-2.3.1.2-2.2.1">Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.<a href="#section-2.3.1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.3">
-                <p id="section-2.3.1.2-3.3.1">MaxExpTime - the maximum value for the expiration time when extending the segment.<a href="#section-2.3.1.2-3.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.3">
+                <p id="section-2.3.1.2-2.3.1">Path disjointness: the disjointness of a PCB may be calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.<a href="#section-2.3.1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.4">
-                <p id="section-2.3.1.2-3.4.1">MaxHopsLength - the maximum number of hops a segment can have.<a href="#section-2.3.1.2-3.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.4">
+                <p id="section-2.3.1.2-2.4.1">Diversity: it is a comparative metric: beacon A has a diversity score over beacon B (and that's not commutative). The score is the number of links in A that don't appear in B. Our diversity choice is the beacon not among the shortest that is the most diverse (so, basically most different) from the very shortest one. If there is no better than what is already in the set, then the shortest of the not yet selected ones is chosen instead (so, the last one from the original best stays in the set after all). Btw, the implementation of the diversity computation is plainly quadratic.<a href="#section-2.3.1.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.5">
-                <p id="section-2.3.1.2-3.5.1">ASBlackList - the ASes that may not appear in a segment.<a href="#section-2.3.1.2-3.5.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.5">
+                <p id="section-2.3.1.2-2.5.1">Expiration time:  the maximum value for the expiration time when extending the segment.<a href="#section-2.3.1.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.6">
-                <p id="section-2.3.1.2-3.6.1">IsdBlackList - the ISDs that may not appear in segment.<a href="#section-2.3.1.2-3.6.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.6">
+                <p id="section-2.3.1.2-2.6.1">ISD or AS blacklists - certain ASes or ISD that may not appear in a segment<a href="#section-2.3.1.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.2-3.7">
-                <p id="section-2.3.1.2-3.7.1">AllowIsdLoop - indicates whether ISD loops should not be filtered.<a href="#section-2.3.1.2-3.7.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.1.2-2.7">
+                <p id="section-2.3.1.2-2.7.1">ISD loops: indicates whether ISD loops should not be filtered.<a href="#section-2.3.1.2-2.7.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -5223,6 +5219,9 @@ message Transport {
 </li>
           <li class="normal" id="appendix-F.1-1.3">
             <p id="appendix-F.1-1.3.1">Qualified better the choice of time allowance in the definition of "segment from the future".<a href="#appendix-F.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-1.4">
+            <p id="appendix-F.1-1.4.1">PCB selection: clarified criteria and removed superfluous image<a href="#appendix-F.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
