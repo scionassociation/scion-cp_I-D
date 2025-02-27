@@ -1109,14 +1109,13 @@ In addition, the maximum MTU supported by all intra-AS links MAY be configured.
 
 ## Propagation of PCBs {#path-prop}
 
-This section describes how PCBs are selected and propagated in the path exploration process.
+This section describes how PCBs are received, selected and propagated in the path exploration process.
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it MUST select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+As an AS receives PCBs, it MUST select which ones to propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.
 
-Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 From these viable PCBs, only a relatively small subset SHOULD be propagated to avoid excessive overhead of the path discovery system in bigger networks.
 
 The goal of the AS SHOULD be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.
@@ -1146,7 +1145,7 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-#### Selection Policies
+#### Selection Policy Example
 
 An AS MUST select the best PCBs set to be further propagated. Selection may be based on criteria such as:
 
@@ -1155,8 +1154,10 @@ An AS MUST select the best PCBs set to be further propagated. Selection may be b
 - Path disjointness: Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.
 The disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. A disjointness choice falls on the beacon not among the shortest that is the most disjoint from the very shortest one. If there is no better than what is already in the set, then the shortest of the not yet selected ones is chosen instead (so, the last one from the original best stays in the set after all).
 - Expiration time:  the maximum value for the expiration time when extending the segment.
-- ISD or AS blacklists - certain ASes or ISD that may not appear in a segment.
+- ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.
 - ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.
+
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
