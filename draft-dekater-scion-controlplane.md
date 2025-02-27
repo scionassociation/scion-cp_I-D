@@ -1146,22 +1146,17 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-#### Selection Policy Example
+#### Selection Criteria
 
-PCB may be selected on various criteria, such as:
+An AS MUST select the best PCBs set to be further propagated. Selection may be based on criteria such as:
+
 - AS path length: from the originator core AS to the child (non-core) AS.
-- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
-- Disjointness: The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.
-
-Some examples of path selection policies include:
-
-- BestSetSize - the recommended number of segments to propagate or register.
-- CandidateSetSize - the maximum number of segments to consider for selection.
-- MaxExpTime - the maximum value for the expiration time when extending the segment.
-- MaxHopsLength - the maximum number of hops a segment can have.
-- ASBlackList - the ASes that may not appear in a segment.
-- IsdBlackList - the ISDs that may not appear in segment.
-- AllowIsdLoop - indicates whether ISD loops should not be filtered.
+- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
+- Path disjointness: the disjointness of a PCB may be calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.
+- Diversity: it is a comparative metric: beacon A has a diversity score over beacon B (and that's not commutative). The score is the number of links in A that don't appear in B. Our diversity choice is the beacon not among the shortest that is the most diverse (so, basically most different) from the very shortest one. If there is no better than what is already in the set, then the shortest of the not yet selected ones is chosen instead (so, the last one from the original best stays in the set after all). Btw, the implementation of the diversity computation is plainly quadratic.
+- Expiration time:  the maximum value for the expiration time when extending the segment.
+- ISD or AS blacklists - certain ASes or ISD that may not appear in a segment
+- ISD loops: indicates whether ISD loops should not be filtered.
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
@@ -2470,6 +2465,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
 - Added some details about PCBs propagation and storage.
 - Qualified better the choice of time allowance in the definition of "segment from the future".
+- PCB selection: clarified criteria and removed superfluous image
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
