@@ -299,7 +299,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 - Generating, receiving, and propagating PCBs. Periodically, the Control Service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - Selecting and registering the set of path segments via which the AS wants to be reached.
-- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB.
+- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in {{#figure-17}}.
 
 **Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
@@ -1228,7 +1228,7 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 
 The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:
 
-1. Upon receiving a PCB, the Control Service of an AS verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS.
+1. Upon receiving a PCB, the Control Service of an AS verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-17}}.
 2. As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The Control Service of core ASes MUST therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes, and if so, the PCB MUST be discarded in order to avoid loops. Additionally, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
 3. If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
 
@@ -2286,6 +2286,71 @@ message VerificationKeyID {
 {: #figure-15 title="Control Service gRPC API - Signed ASEntry representation"}
 <br>
 
+~~~~~
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+// VerificationKeyID is used to identify certificates that authenticate the
+// verification key used to verify signatures.
+message VerificationKeyID {
+    // ISD-AS of the subject.
+    uint64 isd_as = 1;
+    // SubjectKeyID referenced in the certificate.
+    bytes subject_key_id = 2;
+    // Base number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_base = 3;
+    // Serial number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_serial = 4;
+}
+~~~~~
+{: #figure-17 title="Control Service gRPC API - Trust Material representation"}
+<br>
+
 In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
 
 # SCION Data Plane use by the SCION Control Plane {#app-b}
@@ -2525,6 +2590,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
 - Added some details about PCBs propagation and storage.
 - Qualified better the choice of time allowance in the definition of "segment from the future".
+- Control Service gRPC API - add Trust Material definitions
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
