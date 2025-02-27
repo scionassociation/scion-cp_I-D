@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-25T00:22:39.458345+00:00",
+  "timestamp": "2025-02-27T00:21:22.769576+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -75,7 +75,7 @@
       "id": "I_kwDOJx2-rs57Z9-D",
       "title": "Unaddressed Feedback from Reviews",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -86,10 +86,10 @@
         "Prio 1",
         "Prio 2"
       ],
-      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft before January 2024. New feedback is in dedicated issues\n\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\n\n\n**General points:**\n- [x] #7 \n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \n- [x] Make sure the references are correct: \n       - #14 \n       - #15 \n       - Normative references: Needed for the specification; specification is based on it.\n       - Informative references: Provide background/additional information\n-  #12 \n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \n- [x] ~~If time allows, add related work (not too academical, just overview)~~\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\n- [x] #8\n- [x] Improve the definition of \"endpoint\"\n- [x] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\n\n**ISE Feedback:**\n- [x]  #17 \n- [x] #21\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \n\u201cISD\u201d should be defined on first use.\nSame goes for PCB \n- [x] #18\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\n- [x] #19\n- [x] #20\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\n\n**Decision TC Standardisation**\n- [x]  #9\n\n**Eliot Lear (ISE IETF):**\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\n\n**Juan Garcia-Pardo:**\n- [ ] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\".\n- [ ] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".\n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \n\n**Roger Lapuh:**\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\n- [ ] ~Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\nSee~ https://github.com/scionassociation/scion-deployment_I-D/issues/1 \n- [x] #22\n",
+      "body": "This issues lists all unaddressed feedback from reviews of the Control Plane draft before January 2024. New feedback is in dedicated issues\n\n(Aggregated from https://github.com/scionassociation/standards/issues/79 and https://github.com/scionassociation/standards/issues/90)\n\n\n**General points:**\n- [x] #7 \n- [x] Add Security Considerations (see also [RFC 3552](https://www.rfc-editor.org/info/rfc3552.html)) \n- [x] Make sure the references are correct: \n       - #14 \n       - #15 \n       - Normative references: Needed for the specification; specification is based on it.\n       - Informative references: Provide background/additional information\n-  #12 \n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \n- [x] ~~If time allows, add related work (not too academical, just overview)~~\n- [x] Complete IPR disclosure process with Anapaya. See also: https://github.com/scionassociation/standards/issues/101\n- [x] #8\n- [x] Improve the definition of \"endpoint\"\n- [x] section 2.1: \"Intra-ISD beaconing creates path segments from core ASes to non-\ncore ASes.\" sounds a bit vague. We could rephrase with something like this text, that Matthias wrote for the documentation: \"Every core AS originates PCBs at regular intervals, and sends these to all egress interfaces to connected neighbor ASes. An originated PCB sent to a neighboring core ASes initiates an inter-ISD beacon, ultimately resulting in a core-segment. An originated PCB sent to a child AS initiates the intra-ISD beacon creating an up/down segment.\"\n\n**ISE Feedback:**\n- [x]  #17 \n- [x] #21\n- [x] **Remind reader about critical terminology** , as we introduce quite a lot of new acronyms.  For some critical ones, we should remind reader what they mean along the document, so reader is reminded. THis especially for: \n\u201cISD\u201d should be defined on first use.\nSame goes for PCB \n- [x] #18\n- [x] ~~**Interoperability**: we should add something especially for data and CP. There could even be one separate document for the ISE on the topic.~~ --> TO be handled in separate future documents\n- [x] ~~**Deployment**: add what is needed to run SCION, we can leave a reference to scion.org, scion Association~~ --> We are working on a separate draft for PANRG\n- [x] #19\n- [x] #20\n- [x] **Get some third party review**: do I have enough information to build SCION from the draft? Ask someone who is building SCION to check if the drafts are enough to build a SCION implementation.. Do they spot inconsistencies?  Example: they are building a Bluetooth ALG, and the coders realized that there are some small divergencies..\n\n**Decision TC Standardisation**\n- [x]  #9\n\n**Eliot Lear (ISE IETF):**\n- [x] Section 1.3 would benefit from a one or more simple diagrams that demonstrates an ISD, ASes, and the various types of links.  Please keep the diagrams small.  **--> CdK: Added one relatively small figure of an ISD with all link types to section 1.3.**\n- [x] I would like you to spend a bit more time on loop detection.  In particular, I would like you to explain how loops are averted within richly connected cores. **--> CdK: Added some additional text about avoiding loops to section 2.3.2.1.**\n- [x] Along those same lines, classic routing geeks will look for two words in this draft and not find them: partition and healing. Partition occurs when one network is split into two because of a link failure.  Healing is the process of recovery from partition.\n- [x] I find Section 1.5.2.1 confusing.  You seem to be saying that for values greater than 232-1, you should represent them in colon-separated lower-case hex, but then you go on to say, \u201cprograms SHOULD always use the decimal representation for display.\u201d  I would say: pick a way you want things displayed and stick to it. **--> CdK: Adapted the sentence about this in section 1.5.2.1 \"Formatting\" to make it more clear.**\n- [x] In Section 1.6, please create normative references for both GRPC and protobufs. **--> CdK: Done**\n- [x] I hope this doesn't come as a shock to you, but Figure 2 in Section 2.1.4 is quite busy, and requires a more detail, flow-based explanation.  Please give that some thought. **--> CdK: Done**\n- [x] The text below Figure 2 and above Figure 3 could be simplified to say that a PCB consists of one or more path segments at a given time T from the vantage point of a particular AS F.  Also, I think there's an editorial error in that diagram, unless I'm confused.  You label two segments \"path segment 2\" (the 2nd and the last).  I am further confused by the terminology, given the diagram, in that the diagram seems to infer a link-state database. **--> CdK: Done**\n- [x] I think for 2.2.1, it helps to show a full example message, or otherwise link to one in the Appendix. **--> CdK: Added an Appendix with a full example of one PCB in Protobuf message format.**  \n- [x] Section 2.2.1.4.3 is underspecified.  It must be crystal clear how to sign a message and how to verify it.  Now I think your intent is to have a separate document for that.  If so, leave a forward reference for now. **--> CdK: Added a mathematical formula and a reference to the relevant section in the SCION CP-PKI Internet-Draft.**\n\n**Juan Garcia-Pardo:**\n- [x] Can one ingress or egress be part of two different links? Refers to section 1.3 \"Introduction > Paths and Links\". --> we clarified over time that IF IDs MUST be unique, therefore they cannot be part of more than one ingress/egress\n- [x] Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\". #97 \n- [x] Where do the suggested values for set size and propagation time of PCBs in section 2.3.1.1. \"Storing and Selecting Candidate PCBs\" come from? Do they depend on the network topology? Explain. --> This relates to scalability concerns, handled in #8 \n\n**Roger Lapuh:**\n- [x] Add an overview picture to section 2.2.1 \"Paths and Links\". \n- [x] Networking is very sensitive to flooding. So reading this as network engineer causes some concerns. In order to remove concerns the flooding terminology should always be supported with a statement along which path flooding is used and how flooding loops are prevented. _CdK: I have replaced the term \"flooded\" with \"sent\"._\n- [ ] ~Explain why why 4030 ISDs is enough for public addressing. Refers to section 2.2.3 \"Addressing > ISD Numbers\"\nSee~ https://github.com/scionassociation/scion-deployment_I-D/issues/1 \n- [x] #22\n",
       "createdAt": "2024-01-08T12:56:27Z",
-      "updatedAt": "2025-01-26T16:00:36Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-26T17:32:35Z",
+      "closedAt": "2025-02-26T17:32:35Z",
       "comments": []
     },
     {
@@ -738,9 +738,9 @@
     {
       "number": 46,
       "id": "I_kwDOJx2-rs6OtOg6",
-      "title": "Clarifications in introduction and beaconing",
+      "title": "Clarifications in introduction and beaconing (Til's feedback)",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/46",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -752,8 +752,8 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-02-21T15:22:37Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-26T09:20:11Z",
+      "closedAt": "2025-02-26T09:20:10Z",
       "comments": [
         {
           "author": "matzf",
@@ -1285,9 +1285,9 @@
         "enhancement",
         "needs-discussion"
       ],
-      "body": "- [x] Check if these checks are implemented @jiceatscion \n- [ ] Do changes proposed in draft\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
+      "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [ ] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-02-21T15:04:34Z",
+      "updatedAt": "2025-02-26T17:29:57Z",
       "closedAt": null,
       "comments": [
         {
@@ -1296,8 +1296,50 @@
           "body": "\n>     * (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n>       \n>       * (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n\nNo. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n\n>       * (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n\nYes. This is implemented. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L55, https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L105)\n\n>       * (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\nYes. This is implemented at pretty low level. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#L100 -> https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#173)\n\n>     * (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).\n\nNo. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n\n\n",
           "createdAt": "2025-02-21T15:03:30Z",
           "updatedAt": "2025-02-21T15:03:30Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> No. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n\nI think it makes sense that a core AS should never receive a beacon  from a non-core AS on a core link. It could check this, as core ASes are in the TRC. I think we could add this as a SHOULD, what do you think?\n\n\n> No. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n\nI think this is necessary to guarantee what we call path authorization. So I think this should be checked somewhere.",
+          "createdAt": "2025-02-25T16:51:40Z",
+          "updatedAt": "2025-02-25T16:51:40Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > No. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n> \n> I think it makes sense that a core AS should never receive a beacon from a non-core AS on a core link. It could check this, as core ASes are in the TRC. I think we could add this as a SHOULD, what do you think?\n\nSHOULD is good. It might not be so easy: yes, a collection of accurately implemented and honest ASes will automatically prevent a non-core AS from beaconing a core segment. However when receiving a beacon from a properly core AS neighbor, it is not obvious that all ASes earlier in the beacon are all properly core ASes.\n\n> > No. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n> \n> I think this is necessary to guarantee what we call path authorization. So I think this should be checked somewhere.\n\nAh, ok. I didn't realize that it added security. After all the whole segment's validity can be verified independently from how it was obtained, is it not? How does the fact that a segment is only served by its legitimate originator add any guarantee?\nI can imagine a CS not wanting to devote resources to storing segments that it has no business serving, but can't it?\n\nThat said, I take your word for it. Under that assumption, your writing is fine and I have approved the PR. I am only curious.\n",
+          "createdAt": "2025-02-26T16:41:21Z",
+          "updatedAt": "2025-02-26T16:43:58Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "\n> However when receiving a beacon from a properly core AS neighbor, it is not obvious that all ASes earlier in the beacon are all properly core ASes.\n\nWhy is it not obvious? The receiving CS could simply look at the ISD-AS entries in the AS entries of the PCB. Then it could compare them with a list of core ASes that it can easily get out of the TRCs. If it didn't have the TRC,  it would anyways not be able to verify the beacons. \nIn any case, I worded it `Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS.` and I see you approved the PR already :) \n\n\n \n> Ah, ok. I didn't realize that it added security. After all the whole segment's validity can be verified independently from how it was obtained, is it not? How does the fact that a segment is only served by its legitimate originator add any guarantee? I can imagine a CS not wanting to devote resources to storing segments that it has no business serving, but can't it?\n> \n> That said, I take your word for it. Under that assumption, your writing is fine and I have approved the PR. I am only curious.\n\nYou are right, this does not add much as the segments would anyways not work in the data plane (which is what we discuss as path authorization in the DP draft). Maybe we could change the line to SHOULD.\n\n\n",
+          "createdAt": "2025-02-26T17:28:35Z",
+          "updatedAt": "2025-02-26T17:28:35Z"
         }
       ]
+    },
+    {
+      "number": 96,
+      "id": "I_kwDOJx2-rs6rl7tK",
+      "title": "The PKI gRPC API should be specified",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/96",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "design"
+      ],
+      "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
+      "createdAt": "2025-02-25T15:53:49Z",
+      "updatedAt": "2025-02-25T16:30:53Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -6421,24 +6463,26 @@
       "id": "PR_kwDOJx2-rs6F7CCk",
       "title": "Address Til's comments.",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/80",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #46\r\nDraft [diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/til_feedback/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2024-12-20T14:51:34Z",
-      "updatedAt": "2025-02-24T14:35:54Z",
+      "updatedAt": "2025-02-26T09:20:12Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f21011278eca93379b66067f33c7feb09b4b67f2",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "til_feedback",
-      "headRefOid": "9ac8aee57fb00015cb8b9be95d938d52f3ce4ec1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f2bd5e8295aacb0fe97ece518a785defec50c3b9",
+      "closedAt": "2025-02-26T09:20:09Z",
+      "mergedAt": "2025-02-26T09:20:09Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d0182d28fb0e84c56d43aaa021d29a77907b9e0d"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -6446,6 +6490,13 @@
           "body": "Thanks a lot, I'll review after holidays! ",
           "createdAt": "2024-12-24T12:37:35Z",
           "updatedAt": "2024-12-24T12:37:35Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke with this one we tried to address your comments in #46 . For me, it can be merged. I think you already had a look in the past, let me know if you agree that we can merge. \r\n\r\nIf something pops up later, we can always address it, but I'd like to start mergint to avoid having too many branches at the same time",
+          "createdAt": "2025-02-25T15:57:11Z",
+          "updatedAt": "2025-02-25T15:57:11Z"
         }
       ],
       "reviews": [
@@ -6614,6 +6665,192 @@
               "updatedAt": "2025-02-24T14:35:54Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dX7iB",
+          "commit": {
+            "abbreviatedOid": "e7e81b6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:30:28Z",
+          "updatedAt": "2025-02-25T09:30:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Indeed, I meant that we choose one and stick to it everywhere. Which one? Let me analyze current drafts: \r\n\r\nIn the current draft version, these are the uses: \r\nBootstrap\r\n* Bootstrapping ability (this chapter)\r\n* To bootstrap the initial communication with a neighboring beacon service,\r\n* the following bootstrapping strategies apply:\r\n* In the changelog (irrelevant)\r\n\r\n\r\n\r\nCold start: \r\n* Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a \"**cold start**\", and the time until new link is usable. \r\n* On a **cold start** of the network, path segments to each AS are discovered within a numbe\r\n* On a **cold start** of the network, full connectivity is obtained after a number of propagation steps\r\n\r\nPlus:\r\n*  In the PKI draft we talk about bootstrapping of trust\r\n* In the DP we talk about one-hop path types  \"The OneHopPath path type (PathType=2) is currently used to bootstrap\" \r\n\r\nBootstrap wins, i will change instances of cold start",
+              "createdAt": "2025-02-25T09:30:28Z",
+              "updatedAt": "2025-02-25T09:31:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dYGHW",
+          "commit": {
+            "abbreviatedOid": "e7e81b6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:40:39Z",
+          "updatedAt": "2025-02-25T09:40:39Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Done, resolving",
+              "createdAt": "2025-02-25T09:40:39Z",
+              "updatedAt": "2025-02-25T09:40:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dZT_x",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T11:12:10Z",
+          "updatedAt": "2025-02-25T11:12:10Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "@jiceatscion do you think this point is relevant to bootstrapping? I don't feel it is that much, so I think it could be removed:\r\n```suggestion\r\n```",
+              "createdAt": "2025-02-25T11:12:10Z",
+              "updatedAt": "2025-02-25T11:12:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dZUf7",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T11:13:02Z",
+          "updatedAt": "2025-02-25T11:13:03Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "@jiceatscion how are certificates requested? Right now we reference the PKI draft, but I could not find where requesting certs is described. Could we add a better and more precise reference?\r\n\r\nI tried to search in the CP and PKI, and in many places it says that the relaying party can request certificates, but then I did not find any spec of such request.. Should it be somewhere in the gRPC API? I could not find it",
+              "createdAt": "2025-02-25T11:13:02Z",
+              "updatedAt": "2025-02-25T11:21:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dZaKa",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T11:23:25Z",
+          "updatedAt": "2025-02-25T11:23:25Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "I guess this might be what I am referring to: https://docs.scion.org/en/latest/cryptography/interactions.html",
+              "createdAt": "2025-02-25T11:23:25Z",
+              "updatedAt": "2025-02-25T11:23:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dcW2e",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T15:12:31Z",
+          "updatedAt": "2025-02-25T15:12:32Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Far as I know, what you want is here: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55\r\nI do not know if we described the full pki rpc API anywhere. I wasn't much involved in the cppki draft.\r\n",
+              "createdAt": "2025-02-25T15:12:31Z",
+              "updatedAt": "2025-02-25T15:12:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dcX4e",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T15:13:54Z",
+          "updatedAt": "2025-02-25T15:13:54Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Indeed, https://docs.scion.org/en/latest/cryptography/interactions.html#messages seems to be as much doc as we have.\r\n",
+              "createdAt": "2025-02-25T15:13:54Z",
+              "updatedAt": "2025-02-25T15:13:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dc7AC",
+          "commit": {
+            "abbreviatedOid": "f5c64ab"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T15:53:56Z",
+          "updatedAt": "2025-02-25T15:53:56Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "https://github.com/scionassociation/scion-cp_I-D/issues/96 ",
+              "createdAt": "2025-02-25T15:53:56Z",
+              "updatedAt": "2025-02-25T15:53:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dc8uu",
+          "commit": {
+            "abbreviatedOid": "f2bd5e8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-25T15:55:24Z",
+          "updatedAt": "2025-02-25T15:55:24Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dlCBQ",
+          "commit": {
+            "abbreviatedOid": "f2bd5e8"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-26T09:18:56Z",
+          "updatedAt": "2025-02-26T09:18:56Z",
+          "comments": []
         }
       ]
     },
@@ -6870,13 +7107,13 @@
       "labels": [],
       "body": "Fixes #89 \r\nDraft [diff to main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Security-Updates/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-02-06T09:37:15Z",
-      "updatedAt": "2025-02-24T13:50:14Z",
+      "updatedAt": "2025-02-26T16:45:11Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "fa046df659041cd77013aa13290d3ef50a6308b5",
+      "baseRefOid": "d0182d28fb0e84c56d43aaa021d29a77907b9e0d",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Security-Updates",
-      "headRefOid": "50218655cfe44ecb02b2bd3b0c1283bf4341c927",
+      "headRefOid": "5db3bea92925c853f78dbd067a55a97527aaff95",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7044,6 +7281,326 @@
               "body": "Just out of curiosity, so the plan is to disallow partitioned ISDs?",
               "createdAt": "2025-02-24T13:49:34Z",
               "updatedAt": "2025-02-24T13:50:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dXhYZ",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:02:53Z",
+          "updatedAt": "2025-02-25T09:02:53Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "No, these are assumptions that @dgalan7 suggested, as they use them within their formal model",
+              "createdAt": "2025-02-25T09:02:53Z",
+              "updatedAt": "2025-02-25T09:02:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dXoGg",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:12:13Z",
+          "updatedAt": "2025-02-25T09:12:14Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "> I am not sure this is true. PCB forwarding is subject to strict deterministic constraints/limits. I think there are definitely valid _potential_ segments that will never be actualized...?\r\n\r\nWhich property are you referring to? Path Discoverability?  If so, do you mean that some paths may never be discovered (e.g. due to limits in the number of propagated PCBs?  I think the keyword here is _where all traversed ASes permit forwarding _\r\n\r\n> Also, I find the terminology slightly confusing. Usually a \"path\" is the result of stitching up to 3 segments together. Here, it seems that a \"path\" is something more abstract, i.e. the precursor of one or more segments....? \r\n\r\nI updated wording to follow the terminology in the draft (\"path segment\", \"forwarding path\"). Is it better?\r\n\r\n",
+              "createdAt": "2025-02-25T09:12:13Z",
+              "updatedAt": "2025-02-25T09:18:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dXxfA",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:22:38Z",
+          "updatedAt": "2025-02-25T09:22:39Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "Adopted your suggestion",
+              "createdAt": "2025-02-25T09:22:39Z",
+              "updatedAt": "2025-02-25T09:22:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dYOxP",
+          "commit": {
+            "abbreviatedOid": "fc60e17"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T09:51:10Z",
+          "updatedAt": "2025-02-25T09:51:10Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Apologies if I don't quite understand. If the assumptions do not match the actual specified system, why are we discussing them in the RFC?\r\n- Are they indicative of future changes to the spec?\r\n- Are they recommendations for users? E.g. \"if you want a certain security property, do not partition your ISD\"?\r\n\r\nIt may be worth clarifying this to any readers, explicitly stating that the assumptions do not apply to the system (unless you put additional restrictions on the system such as not partitioning your ISD). Otherwise readers may get really confused...? \r\n\r\nAlso, is it a valid attack vector if someone somehow moves their AS outside of the ISD, effectively creating a partition?\r\n\r\nAgain, apologies if I miss the point here...",
+              "createdAt": "2025-02-25T09:51:10Z",
+              "updatedAt": "2025-02-25T09:51:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dY3kB",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T10:30:30Z",
+          "updatedAt": "2025-02-25T10:30:30Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "Yes, I tried to attach the comment to \"path discoverability\" apparently that didn't work.\r\n>  I think the keyword here is _where all traversed ASes permit forwarding _\r\n\r\nThe problem is that ASes forward only 5 segments per round. Yes, they may be multiple rounds, but at some point the segments expire. Once segments expire, they should forward them again (assuming they are superior to other segments which may have not been forwarded yet). With an expiration time of, say, 1 hour and forwarding every 60 seconds, we get a maximum of 60*5 = 300 segments. If we have more than 300 segments, then we will never forward all of them. \r\n\r\nIf we permitted forwarding _all_ segments, that may overload the network (the number of paths growths exponentially). So we cannot physically forward all segments because that would be an attack in itself.\r\n\r\nIf \"permit\" is more liberal here then previously specified, maybe rephrase to \"where all traversed ASes permit _unlimited_ forwarding\"?\r\nOtherwise I think a reader would interpreted \"permit\" as specified in the section \"Selection of PCBs to Propagate\".\r\nAgain, similar to the point I made earlier, I am not sure why we list assumptions here that, as I understand, do not apply to the specified system. It may help to have an more explicit statement that explains that some assumptions do not apply and why we list them anyway...?\r\nI feel I am missing something important here.\r\n\r\n> I updated wording to follow the terminology in the draft (\"path segment\", \"forwarding path\"). Is it better?\r\n\r\nThanks, yes :)",
+              "createdAt": "2025-02-25T10:30:30Z",
+              "updatedAt": "2025-02-25T10:30:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dZqsq",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T11:48:34Z",
+          "updatedAt": "2025-02-25T11:48:34Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "Sorry, I just realized that this is a \"property\" not an \"assumption\". I think my argument still holds though.",
+              "createdAt": "2025-02-25T11:48:34Z",
+              "updatedAt": "2025-02-25T11:48:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dZseu",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T11:50:49Z",
+          "updatedAt": "2025-02-25T11:50:49Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I just talked to the team here, and apparently consensus is that ISD should indeed be disallowed.\r\nIf that is the case, then the assumption would be correct, but the spec may need updating, I don't think it says anywhere that ISD partitions are not allowed?",
+              "createdAt": "2025-02-25T11:50:49Z",
+              "updatedAt": "2025-02-25T11:50:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6db0Et",
+          "commit": {
+            "abbreviatedOid": "0173f75"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T14:33:45Z",
+          "updatedAt": "2025-02-25T14:33:45Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "@dgalan7 let me know what you think about what I wrote in the email thread",
+              "createdAt": "2025-02-25T14:33:45Z",
+              "updatedAt": "2025-02-25T14:33:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dcrrV",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T15:37:30Z",
+          "updatedAt": "2025-02-25T15:37:31Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "> Apologies if I don't quite understand. If the assumptions do not match the actual specified system, why are we discussing them in the RFC?\r\n\r\n Because, based on the review we received by the formal methods group, they clearly recommend clarify assumptions and security properties, I forwarded you what we received. \r\n \r\n How about we reword the assumptions section in general?  We now have: \r\n ```\r\nThe following assumptions relate to these security considerations. It is assumed that:\r\n\r\n1. Every ISD contains at least one core AS.\r\n2. ISDs are not internally partitioned, so that each AS can reach every other AS within its ISD.\r\n3. Parent-Child links form a unidirectional hierarchical topology without cyclic relationships.\r\n4. An AS is described as 'honest' if its private keys are unknown to the attacker and it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.\r\n```\r\n\r\nI think for these assumptions: \r\n\r\n1. We don't need it as we already say in the draft that an ISD MUST contain a core AS. \r\n2. We could reword it, saying that for the security properties to hold, an ISD SHOULD not be internally partitioned. \r\n3. I don't think we need this one. The beaconing algorithm stops re-propagating beacons if there is a loop, handling this and making the topology acyclic. Therefore, every AS then finds its way to the core through the acyclic graph.  I tried hard to think of an example where a loop would isolate an AS, and I couldn\u2019t. (Unless I\u2019m missing something)\r\n4. THis is not really an assumption, rather a definition of how we sue \"honest\"\r\n\r\nBased on my thought above, we could rewrite the assumption paragraph like this: \r\n\r\n> For the following security properties to hold, ISDs should not be internally partitioned, so that each AS can reach every other AS within its ISD. In addition,  an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.\r\n\r\n@tzaeschke What do you think? THis way we are also not too prescriptive about wether an ISD should be partitioned or not.\r\n\r\n \r\n ",
+              "createdAt": "2025-02-25T15:37:30Z",
+              "updatedAt": "2025-02-25T15:37:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dc2iO",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-25T15:50:19Z",
+          "updatedAt": "2025-02-25T15:50:19Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "> If we permitted forwarding all segments, that may overload the network (the number of paths growths exponentially). So we cannot physically forward all segments because that would be an attack in itself.\r\n\r\n@tzaeschke you're right, if the number of beacons is limited as we recommend int the draft, I think there might be edge cases where Discoverability is not guaranteed. \r\n\r\nI think we have two options: \r\n* as you suggest, mention \"where all traversed ASes permit unlimited forwarding\"\r\n* We remove the property\r\n\r\n@dgalan7 what do you think?  How do you model this?",
+              "createdAt": "2025-02-25T15:50:19Z",
+              "updatedAt": "2025-02-25T15:50:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dlUyJ",
+          "commit": {
+            "abbreviatedOid": "fc60e17"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T09:41:01Z",
+          "updatedAt": "2025-02-26T09:41:02Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Yes, I think that sounds good.\r\nI have one more nitpick though: I assume for the security properties to hold, ISDs **must not** (or even MUST NOT) be internally partitioned? Usually assumptions either must hold or they don't matter?\r\nMaybe @dgalan7 can comment on this?",
+              "createdAt": "2025-02-26T09:41:01Z",
+              "updatedAt": "2025-02-26T09:41:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dmuE1",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "dgalan7",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T11:40:42Z",
+          "updatedAt": "2025-02-26T11:40:42Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "From my email:\r\n\r\n> Some time ago we had a technical discussion with Adrian Perrig, and we agreed that real SCION deployments would probably want to disallow partitioned ISDs altogether, regardless of our model and properties. We have noted this assumption to remind you in case it is missing. If however the consensus is that partitioned ISDs are to be allowed in the real world, it looks sensible to choose a \"should not\" (or perhaps even a \"SHOULD NOT\") instead and explicitly link it to the properties, as you suggest. Specifically, proving the Connectivity property needs this assumption.",
+              "createdAt": "2025-02-26T11:40:42Z",
+              "updatedAt": "2025-02-26T11:40:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dmvzi",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "dgalan7",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T11:43:18Z",
+          "updatedAt": "2025-02-26T11:43:18Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "From my email:\r\n\r\n> We are aware of the limits, including the quantity limit in beacon stores, the quantity limit on selection sizes (best PCB set size), and the time limits due to fixed propagation/registration periods. So far, none of these limits are present in our model, and as Tilmann (@tzaeschke) notes, the properties would hold when considering an unlimited context with no limits. We plan to model limits as future work, especially since we agree with Adrian Perrig that they can become attack vectors. For this Internet-Draft, I guess the best that can be done is to either fix specific numbers as limit recommendations\u00a0(like you are already doing) or to abstractly say that limits should not be unreasonably strict.",
+              "createdAt": "2025-02-26T11:43:18Z",
+              "updatedAt": "2025-02-26T11:43:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6doa4O",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T14:03:17Z",
+          "updatedAt": "2025-02-26T14:03:17Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "@dgalan7 Great, I updated the text to use SHOULD NOT.\r\n\r\n> I have one more nitpick though: I assume for the security properties to hold, ISDs must not (or even MUST NOT) be internally partitioned? Usually assumptions either must hold or they don't matter?\r\n\r\n@tzaeschke to address your concern, how about we add some wording on the impact of partitioning? I'm thinking something like: \r\n\"For such properties to hold, ISDs SHOULD NOT be internally partitioned, so that each AS can reach every other AS within its ISD. **In case an AS gets partitioned from its ISD, if it is non-core, then it won't be able to reach other ASes within the ISD. If it is core, it may reach other ASes while transiting via other ISDs if permitted by its policies. In such case, transiting via another ISD may potentially allow external agents to influence the internal connectivity of an ISD.** \r\n\r\nThis was a quick and dirty wording, I'd need to think a bit more about it\r\n",
+              "createdAt": "2025-02-26T14:03:17Z",
+              "updatedAt": "2025-02-26T14:03:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6doma9",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T14:16:03Z",
+          "updatedAt": "2025-02-26T14:16:04Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "> the properties would hold when considering an unlimited context with no limits.\r\n\r\nWe recommend limits (and have to, as the goal of this draft is to document existing deployments, where there are limits). Because of that, I think we should remove this property. Do you see other options? \r\n\r\n ",
+              "createdAt": "2025-02-26T14:16:04Z",
+              "updatedAt": "2025-02-26T14:16:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dqe9E",
+          "commit": {
+            "abbreviatedOid": "5021865"
+          },
+          "author": "dgalan7",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T16:45:10Z",
+          "updatedAt": "2025-02-26T16:45:11Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "The risk of removing this property is that there could be a mistake in the protocol's description that makes it impossible to discover some links under some situations (even when limits and policies would otherwise allow it), and there would be nothing in this I-D strongly stating that this is unintended behavior. Depending on how acceptable that is, it could be removed or rephrased to something that is weaker, but hints that in principle the protocol should not \"miss\" links with the limits or the policies explicitly causing this behavior.",
+              "createdAt": "2025-02-26T16:45:11Z",
+              "updatedAt": "2025-02-26T16:46:18Z"
             }
           ]
         }
@@ -7231,6 +7788,174 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 97,
+      "id": "PR_kwDOJx2-rs6Mf9Zv",
+      "title": "Explain why there is a next_isd_as in PCBs",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/97",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #6 \r\n\r\n(One two last forgotten point): \r\n- Explain why there is a \"next_isd_as\" field in the signed component of an AS body element (PCB). Refers to section 2.4.2 \"PCB > AS Entry Signed Component\".",
+      "createdAt": "2025-02-25T16:20:33Z",
+      "updatedAt": "2025-02-26T17:32:38Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f21011278eca93379b66067f33c7feb09b4b67f2",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "next_isd_as",
+      "headRefOid": "3bbb7d74fe4febe65e603a6c2e280a68a5724278",
+      "closedAt": "2025-02-26T17:32:34Z",
+      "mergedAt": "2025-02-26T17:32:34Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "46e84294f813b168ff3d001a9609c95331568373"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6dqS_F",
+          "commit": {
+            "abbreviatedOid": "3bbb7d7"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yup. Perfect. I had asked myself that question too. The section referenced does indeed answer the question clearly enough.",
+          "createdAt": "2025-02-26T16:26:13Z",
+          "updatedAt": "2025-02-26T16:26:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 98,
+      "id": "PR_kwDOJx2-rs6Mgmpy",
+      "title": "Clarify beaconing ckecks",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/98",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "FIxes #90\r\n\r\nI'm not decided on wether the check on registration and the first check at reception is necessary, as discussed in the issue. @jiceatscion can you help me sort it out? \r\n\r\nAnd @knmeynell can you check the language a bit? Some concepts were not easy to express, and I tried to simplify David's text ",
+      "createdAt": "2025-02-25T17:32:21Z",
+      "updatedAt": "2025-02-26T17:37:46Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f21011278eca93379b66067f33c7feb09b4b67f2",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "beaconing-checks",
+      "headRefOid": "edc275ba17c4c5e65c0643873e4cf03f8e0f83d1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6dqdf9",
+          "commit": {
+            "abbreviatedOid": "edc275b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-26T16:42:48Z",
+          "updatedAt": "2025-02-26T16:42:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6dq989",
+          "commit": {
+            "abbreviatedOid": "edc275b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T17:29:06Z",
+          "updatedAt": "2025-02-26T17:29:06Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "As being discussed in #90, @jiceatscion and I are not sure this check is necessary. As JC writes, \r\n> After all the whole segment's validity can be verified independently from how it was obtained, is it not? How does the fact that a segment is only served by its legitimate originator add any guarantee?\r\n\r\nSo this control does not add much. Maybe it could be changed to SHOULD?\r\n\r\n```suggestion\r\n3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.\r\n```",
+              "createdAt": "2025-02-26T17:29:06Z",
+              "updatedAt": "2025-02-26T17:29:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6drCxa",
+          "commit": {
+            "abbreviatedOid": "edc275b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T17:37:31Z",
+          "updatedAt": "2025-02-26T17:37:31Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "\"If not, the core AS MUST reject the segment\"  -> \"If not, the core AS SHOULD reject the segment. For consistency?\r\n",
+              "createdAt": "2025-02-26T17:37:31Z",
+              "updatedAt": "2025-02-26T17:37:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6drC53",
+          "commit": {
+            "abbreviatedOid": "edc275b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T17:37:46Z",
+          "updatedAt": "2025-02-26T17:37:46Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "Other than that. LGTM.\r\n",
+              "createdAt": "2025-02-26T17:37:46Z",
+              "updatedAt": "2025-02-26T17:37:46Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 99,
+      "id": "PR_kwDOJx2-rs6Mqngs",
+      "title": "api: add the trust metrials API",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/99",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "fixes: #96 ",
+      "createdAt": "2025-02-26T15:32:20Z",
+      "updatedAt": "2025-02-26T15:33:30Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d0182d28fb0e84c56d43aaa021d29a77907b9e0d",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "pki_api",
+      "headRefOid": "f6c071ebc8102602fd2674932017ca31373639c5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
