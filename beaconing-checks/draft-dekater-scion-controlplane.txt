@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 29 August 2025                                          S. Hitz
+Expires: 31 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        25 February 2025
+                                                        27 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2025.
+   This Internet-Draft will expire on 31 August 2025.
 
 Copyright Notice
 
@@ -2331,8 +2331,8 @@ path segment 4 |             |     |             |     |             |
        SegmentRegistrationService.SegmentsRegistration remote procedure
        call (RPC) in the Control Services of the relevant core ASes (see
        also Section 4.3).  The first ISD-AS entry of the path segment
-       MUST be equal to the core ISD-AS where the segment is being
-       registered.  If not, the core AS MUST reject the segment.
+       SHOULD be equal to the core ISD-AS where the segment is being
+       registered.  If not, the core AS SHOULD reject the segment.
 
    *Note:* For more information on possible selection strategies of
    PCBs, see Section 2.3.1.
