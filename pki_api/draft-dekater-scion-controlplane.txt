@@ -481,7 +481,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB.
+      AS that sent the PCB through the API described in Figure 22.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1859,7 +1859,8 @@ path segment 4 |             |     |             |     |             |
        and certificate(s) that MUST be used to verify its signatures
        which enables the Control Service to check whether it has the
        relevant TRC(s) and certificate(s).  If not, they can be
-       requested from the Control Service of the sending AS.
+       requested from the Control Service of the sending AS through the
+       API described in Figure 22.
 
    2.  As core beaconing is based on propagating PCBs to all AS
        neighbors, it is necessary to avoid loops during path creation.
@@ -3832,7 +3833,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
-        Figure 22: Trust Material Service gRPC API definition
+ Figure 22: Control Service gRPC API - Trust Material representation
 
 
 
@@ -4127,6 +4128,8 @@ draft-dekater-scion-controlplane-08
 
    *  Qualified better the choice of time allowance in the definition of
       "segment from the future".
+
+   *  Control Service gRPC API - add Trust Material definitions
 
 draft-dekater-scion-controlplane-07
 
