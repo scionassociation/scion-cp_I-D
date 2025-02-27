@@ -1148,75 +1148,10 @@ The scalability implications of such parameters are further discussed in [](#sca
 
 #### Selection Policy Example
 
-{{figure-7}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.
-
-- The network at the upper left considers the *path length* which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency and based this, the network will select the PCB representing path segment A-G (in direction of beaconing) to propagate.
-- The network at the upper right uses *peering links* as the selection criterion. That is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.
-- The lower network selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.
-
-~~~~
-Selected path segment: #------# or *------*
- Peering Link: PL
-
-   ISD A: Path Length                 ISD B: Peering Links
-+----------------------+          +---------------------------+
-|      ISD Core        |          |        ISD Core           |
-| .---.         .---.  |          |  .---.             .---.  |
-|(  A  ) - - - (  C  ) |          | (  A  ) - - - - - (  C  ) |
-| `-#-'         `---'  |       + --- `---'             `---'  |
-|   ||   .---.   | |   |          |      |  .---. - - - - -   |
-|   | - (  B  ) -      |       |  |    |  -(  B  )            |
-|   |    `-+-'     |   |          |         `-#-||            |
-+---|--------------|---+       |  |    |      |   - - - - - - - - +
-    |      |       |           |  |           | |             |
-    |                          |  +----|------|-|-------------+   |
-    |      |     .-+-.                        | + - - - - +
-    |    .-+-.  (  E  )        |       |      |                   |
-    |   (  D  )  `---'                        |           |
-    |    `-+-'     |         .-+-.     |    .-#-.       .-+-.     |
-    |            .-+-.      (  D  )-PL-----(  E  )--PL-(  F  )
-    |      |    (  F  )      `---'     |    `-#-'       `-+-'   .-+-.
-  .-#-.          `-+-'                        |                (  G  )
- (  G  ) - +       |               - - +      |           |     `-+-'
-  `---- - - - - - -               |           |
-                                .---.       .-#-.       .-+-.     |
-                               (  H  )-PL--(  I  )--PL-(  J  )
-                                `---'       `-#-'       `---'   .-+-.
-                                              |           |    (  K  )
-       ISD C: Disjointness                    |                 `---'
-  +---------------------------+             .-#-.         |       |
-  |          ISD Core         |            (  L  ) - - - -
-  |                           |             `---' - - - - - - - - +
-  | .---.               .---. |
-  |(  A  ) - - - - - - (  C  )|
-  | `-*-'               `-#-' |
-  |   | |     .---.     | |   |
-  |   |  - - (  B  ) - -  |   |
-  |   |       `---'       |   |
-  +---|-------------------|---+
-      |                   |
- .----*.                .-#---.
-(   D   )              (   E   )
- `----*'                `-#---'
- |    |                   |   |
-    #---------------------#
- |  | |                       |
-    | *------------------*
- |  |                    |    |
- .--#--.                .*----.
-(   F   #-------#      (   G   )
- `-----'        |       `*----|
- |          *------------*
-            |   |             |
- |-----.    |   |       .-----.
-(   H  *----*   #------#   I   )
- `---*-'                `-#---'
-     |                    |
-     |       .---.        |
-     *------*  J  #-------#
-             `---'
-~~~~
-{: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
+PCB may be selected on various criteria, such as:
+- AS path length: from the originator core AS to the child (non-core) AS.
+- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
+- Disjointness: The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure.
 
 Some examples of path selection policies include:
 
