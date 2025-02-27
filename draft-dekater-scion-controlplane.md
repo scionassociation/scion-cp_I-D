@@ -1133,7 +1133,9 @@ The *best PCBs set size* SHOULD be:
 
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.
 
-These are RECOMMENDED maxima; in current practice the intra-ISD set size is typically 20.
+Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
+Values above are RECOMMENDED maxima which represent a tradeoff between scalability and amount of paths discovered.
+In current practice the intra-ISD set size is typically 20.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store, to be able to determine the best set of PCBs. If this is the case, an AS SHOULD have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
@@ -1975,7 +1977,6 @@ Security properties are:
     - the inter-domain network topology remains unchanged since the segment was first generated.
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
-- Path Discoverability - For every directed honest forwarding path in the network of inter-domain links, where all traversed ASes permit forwarding there exists at least one protocol execution that registers a segment containing or exactly matching this path, provided the involved links remain stable throughout the protocol execution.
 
 To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
 A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
