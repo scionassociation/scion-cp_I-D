@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 30 August 2025                                          S. Hitz
+Expires: 31 August 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                        26 February 2025
+                                                        27 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2025.
+   This Internet-Draft will expire on 31 August 2025.
 
 Copyright Notice
 
@@ -1336,7 +1336,8 @@ path segment 4 |             |     |             |     |             |
    *  isd_as: The ISD-AS number of the AS that created this AS entry.
 
    *  next_isd_as: The ISD-AS number of the downstream AS to which the
-      PCB SHOULD be forwarded.
+      PCB SHOULD be forwarded.  The presence of this field prevents path
+      hijacking attacks, as further discussed in Section 7.2.1.
 
    *  hop_entry: The hop entry (HopEntry) with the information required
       to forward this PCB through the current AS to the next AS.  This
