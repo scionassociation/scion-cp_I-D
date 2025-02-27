@@ -1713,8 +1713,11 @@ path segment 4 |             |     |             |     |             |
       per immediate neighbor core AS.  Current practice is that each set
       of 5 is chosen among the PCBs received from each neighbor.
 
-   These are RECOMMENDED maxima; in current practice the intra-ISD set
-   size is typically 20.
+   Note that the PCBs set size should not be too low, in order to make
+   sure that beaconing can discover a wide amount of paths.  Values
+   above are RECOMMENDED maxima which represent a tradeoff between
+   scalability and amount of paths discovered.  In current practice the
+   intra-ISD set size is typically 20.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store, to
@@ -3196,13 +3199,7 @@ path segment 4 |             |     |             |     |             |
    Authorization - For every honest path segment registered in any AS
    and any AS X appearing on that segment (except for the previous one),
    AS X propagated a PCB corresponding to the segment portion ending in
-   its own entry to its successor AS on the segment. - Path
-   Discoverability - For every directed honest forwarding path in the
-   network of inter-domain links, where all traversed ASes permit
-   forwarding there exists at least one protocol execution that
-   registers a segment containing or exactly matching this path,
-   provided the involved links remain stable throughout the protocol
-   execution.
+   its own entry to its successor AS on the segment.
 
    To ensure that the properties hold across the overall SCION network,
    all core ASes should be able to reach each other with some sequence
