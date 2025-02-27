@@ -1659,24 +1659,21 @@ path segment 4 |             |     |             |     |             |
 
 2.3.  Propagation of PCBs
 
-   This section describes how PCBs are selected and propagated in the
-   path exploration process.
+   This section describes how PCBs are received, selected and propagated
+   in the path exploration process.
 
 2.3.1.  Selection of PCBs to Propagate
 
-   As an AS receives a series of intra-ISD or core PCBs, it MUST select
-   the PCBs that it will propagate further.  Each AS specifies a local
-   policy on the basis of which PCBs are evaluated, selected, or
-   eliminated.  The selection process can inspect and compare the
-   properties of the candidate PCBs (e.g., length, disjointness across
-   different paths, age, expiration time) and/or take into account which
-   PCBs have been propagated in the past.
+   As an AS receives PCBs, it MUST select which ones to propagate
+   further.  Each AS specifies a local policy on the basis of which PCBs
+   are evaluated, selected, or eliminated.  The selection process can
+   inspect and compare the properties of the candidate PCBs (e.g.,
+   length, disjointness across different paths, age, expiration time)
+   and/or take into account which PCBs have been propagated in the past.
 
-   Naturally, an AS's policy selects PCBs corresponding to paths that
-   are commercially or otherwise operationally viable.  From these
-   viable PCBs, only a relatively small subset SHOULD be propagated to
-   avoid excessive overhead of the path discovery system in bigger
-   networks.
+   From these viable PCBs, only a relatively small subset SHOULD be
+   propagated to avoid excessive overhead of the path discovery system
+   in bigger networks.
 
    The goal of the AS SHOULD be to propagate those candidate PCBs with
    the highest probability of collectively meeting the needs of the
@@ -1735,7 +1732,7 @@ path segment 4 |             |     |             |     |             |
    The scalability implications of such parameters are further discussed
    in Section 3.3.
 
-2.3.1.2.  Selection Policies
+2.3.1.2.  Selection Policy Example
 
    An AS MUST select the best PCBs set to be further propagated.
    Selection may be based on criteria such as:
@@ -1766,11 +1763,14 @@ path segment 4 |             |     |             |     |             |
    *  Expiration time: the maximum value for the expiration time when
       extending the segment.
 
-   *  ISD or AS blacklists - certain ASes or ISD that may not appear in
-      a segment.
+   *  ISD or AS blacklists: certain ASes or ISD that may not appear in a
+      segment.
 
    *  ISD loops: if permitted, they allow core AS to reach other core
       ASes in the same ISD via a third party ISDs.
+
+   Naturally, an AS's policy selects PCBs corresponding to paths that
+   are commercially or otherwise operationally viable.
 
 2.3.2.  Propagation of Selected PCBs
 

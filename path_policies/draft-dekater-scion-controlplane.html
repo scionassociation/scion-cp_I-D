@@ -2789,16 +2789,15 @@ associated_data(ps, i) = ps.segment_info ||
         <h3 id="name-propagation-of-pcbs">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-propagation-of-pcbs" class="section-name selfRef">Propagation of PCBs</a>
         </h3>
-<p id="section-2.3-1">This section describes how PCBs are selected and propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">This section describes how PCBs are received, selected and propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <div id="selection">
 <section id="section-2.3.1">
           <h4 id="name-selection-of-pcbs-to-propag">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it <span class="bcp14">MUST</span> select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+<p id="section-2.3.1-1">As an AS receives PCBs, it <span class="bcp14">MUST</span> select which ones to propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-2">Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
-From these viable PCBs, only a relatively small subset <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2">From these viable PCBs, only a relatively small subset <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-3">The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
 <div id="storing-and-selecting-candidate-pcbs">
 <section id="section-2.3.1.1">
@@ -2835,10 +2834,10 @@ From these viable PCBs, only a relatively small subset <span class="bcp14">SHOUL
 <p id="section-2.3.1.1-10">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.1.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="selection-policies">
+<div id="selection-policy-example">
 <section id="section-2.3.1.2">
-            <h5 id="name-selection-policies">
-<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policies" class="section-name selfRef">Selection Policies</a>
+            <h5 id="name-selection-policy-example">
+<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policy-example" class="section-name selfRef">Selection Policy Example</a>
             </h5>
 <p id="section-2.3.1.2-1">An AS <span class="bcp14">MUST</span> select the best PCBs set to be further propagated. Selection may be based on criteria such as:<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2856,12 +2855,13 @@ The disjointness of two PCBs A and B may be calculated by assigning a disjointne
                 <p id="section-2.3.1.2-2.4.1">Expiration time:  the maximum value for the expiration time when extending the segment.<a href="#section-2.3.1.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.1.2-2.5">
-                <p id="section-2.3.1.2-2.5.1">ISD or AS blacklists - certain ASes or ISD that may not appear in a segment.<a href="#section-2.3.1.2-2.5.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.1.2-2.5.1">ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.<a href="#section-2.3.1.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.1.2-2.6">
                 <p id="section-2.3.1.2-2.6.1">ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.<a href="#section-2.3.1.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.3.1.2-3">Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.<a href="#section-2.3.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
