@@ -1655,7 +1655,11 @@ path segment 4 |             |     |             |     |             |
    *  Neighbor interface underlay address
 
    In addition, the maximum MTU supported by all intra-AS links MAY be
-   configured.
+   configured.  Last, the AS SHOULD adopt a PCB selection policy that it
+   does not accidentally isolate the AS from the network, i.e., such
+   that it does not block connectivity to parent providers and that
+   ensures downstream connectivity for children.  For more details, see
+   Section 2.3.1.2.
 
 2.3.  Propagation of PCBs
 
@@ -1734,8 +1738,12 @@ path segment 4 |             |     |             |     |             |
 
 2.3.1.2.  Selection Policy Example
 
-   An AS MUST select the best PCBs set to be further propagated.
-   Selection may be based on criteria such as:
+   An AS MUST select the best PCBs set to be further propagated.  A PCB
+   Selection Policy can be expressed as a stateful filter of paths,
+   i.e., a function which indicates whether to accept or deny a given
+   path.  This filter is stateful in that it can be updated each time
+   its AS registers a new segment.  Selection may be based on criteria
+   such as:
 
    *  AS path length: from the originator core AS to the child (non-
       core) AS.
