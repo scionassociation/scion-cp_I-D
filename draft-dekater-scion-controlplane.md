@@ -1106,6 +1106,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor interface underlay address
 
 In addition, the maximum MTU supported by all intra-AS links MAY be configured.
+Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally isolate the AS from the network, i.e., such that it does not block connectivity to parent providers and that ensures downstream connectivity for children. For more details, see [](#selection-policy-example).
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1145,9 +1146,10 @@ Note that to ensure quick connectivity establishment, an AS MAY attempt to forwa
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-#### Selection Policy Example
+#### Selection Policy Example {#selection-policy-example}
 
-An AS MUST select the best PCBs set to be further propagated. Selection may be based on criteria such as:
+An AS MUST select the best PCBs set to be further propagated.
+A PCB Selection Policy can be expressed as a stateful filter of paths, i.e., a function which indicates whether to accept or deny a given path. This filter is stateful in that it can be updated each time its AS registers a new segment. Selection may be based on criteria such as:
 
 - AS path length: from the originator core AS to the child (non-core) AS.
 - Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
