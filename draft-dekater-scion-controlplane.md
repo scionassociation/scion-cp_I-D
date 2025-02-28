@@ -1149,7 +1149,7 @@ The scalability implications of such parameters are further discussed in [](#sca
 #### Selection Policy Example {#selection-policy-example}
 
 An AS MUST select the best PCBs set to be further propagated.
-A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given path. This filter is stateful in that it can be updated each time its AS registers a new segment. Selection may be based on criteria such as:
+A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment. Selection may be based on criteria such as:
 
 - AS path length: from the originator core AS to the child (non-core) AS.
 - Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
