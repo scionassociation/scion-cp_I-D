@@ -1109,14 +1109,13 @@ In addition, the maximum MTU supported by all intra-AS links MAY be configured.
 
 ## Propagation of PCBs {#path-prop}
 
-This section describes how PCBs are selected and propagated in the path exploration process.
+This section describes how PCBs are received, selected and propagated in the path exploration process.
 
 ### Selection of PCBs to Propagate {#selection}
 
-As an AS receives a series of intra-ISD or core PCBs, it MUST select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
+As an AS receives PCBs, it MUST select which ones to propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
 The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.
 
-Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 From these viable PCBs, only a relatively small subset SHOULD be propagated to avoid excessive overhead of the path discovery system in bigger networks.
 
 The goal of the AS SHOULD be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.
@@ -1148,75 +1147,17 @@ The scalability implications of such parameters are further discussed in [](#sca
 
 #### Selection Policy Example
 
-{{figure-7}} below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.
+An AS MUST select the best PCBs set to be further propagated. Selection may be based on criteria such as:
 
-- The network at the upper left considers the *path length* which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency and based this, the network will select the PCB representing path segment A-G (in direction of beaconing) to propagate.
-- The network at the upper right uses *peering links* as the selection criterion. That is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.
-- The lower network selects PCBs based on *disjointness*. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.
+- AS path length: from the originator core AS to the child (non-core) AS.
+- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
+- Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
+The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path SHOULD be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected SHOULD be chosen instead.
+- Expiration time:  the maximum value for the expiration time when extending the segment.
+- ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.
+- ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.
 
-~~~~
-Selected path segment: #------# or *------*
- Peering Link: PL
-
-   ISD A: Path Length                 ISD B: Peering Links
-+----------------------+          +---------------------------+
-|      ISD Core        |          |        ISD Core           |
-| .---.         .---.  |          |  .---.             .---.  |
-|(  A  ) - - - (  C  ) |          | (  A  ) - - - - - (  C  ) |
-| `-#-'         `---'  |       + --- `---'             `---'  |
-|   ||   .---.   | |   |          |      |  .---. - - - - -   |
-|   | - (  B  ) -      |       |  |    |  -(  B  )            |
-|   |    `-+-'     |   |          |         `-#-||            |
-+---|--------------|---+       |  |    |      |   - - - - - - - - +
-    |      |       |           |  |           | |             |
-    |                          |  +----|------|-|-------------+   |
-    |      |     .-+-.                        | + - - - - +
-    |    .-+-.  (  E  )        |       |      |                   |
-    |   (  D  )  `---'                        |           |
-    |    `-+-'     |         .-+-.     |    .-#-.       .-+-.     |
-    |            .-+-.      (  D  )-PL-----(  E  )--PL-(  F  )
-    |      |    (  F  )      `---'     |    `-#-'       `-+-'   .-+-.
-  .-#-.          `-+-'                        |                (  G  )
- (  G  ) - +       |               - - +      |           |     `-+-'
-  `---- - - - - - -               |           |
-                                .---.       .-#-.       .-+-.     |
-                               (  H  )-PL--(  I  )--PL-(  J  )
-                                `---'       `-#-'       `---'   .-+-.
-                                              |           |    (  K  )
-       ISD C: Disjointness                    |                 `---'
-  +---------------------------+             .-#-.         |       |
-  |          ISD Core         |            (  L  ) - - - -
-  |                           |             `---' - - - - - - - - +
-  | .---.               .---. |
-  |(  A  ) - - - - - - (  C  )|
-  | `-*-'               `-#-' |
-  |   | |     .---.     | |   |
-  |   |  - - (  B  ) - -  |   |
-  |   |       `---'       |   |
-  +---|-------------------|---+
-      |                   |
- .----*.                .-#---.
-(   D   )              (   E   )
- `----*'                `-#---'
- |    |                   |   |
-    #---------------------#
- |  | |                       |
-    | *------------------*
- |  |                    |    |
- .--#--.                .*----.
-(   F   #-------#      (   G   )
- `-----'        |       `*----|
- |          *------------*
-            |   |             |
- |-----.    |   |       .-----.
-(   H  *----*   #------#   I   )
- `---*-'                `-#---'
-     |                    |
-     |       .---.        |
-     *------*  J  #-------#
-             `---'
-~~~~
-{: #figure-7 title="Example networks to illustrate path segment selection based on different path properties."}
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
@@ -2590,6 +2531,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
 - Added some details about PCBs propagation and storage.
 - Qualified better the choice of time allowance in the definition of "segment from the future".
+- PCB selection: clarified criteria and removed superfluous image
 - Control Service gRPC API - add Trust Material definitions
 
 ## draft-dekater-scion-controlplane-07
