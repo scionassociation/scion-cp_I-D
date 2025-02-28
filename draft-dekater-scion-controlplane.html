@@ -2779,7 +2779,8 @@ associated_data(ps, i) = ps.segment_info ||
               <p id="section-2.2.4-2.4.1">Neighbor interface underlay address<a href="#section-2.2.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.4-3">In addition, the maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> be configured.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.4-3">In addition, the maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> be configured.
+Last, the AS <span class="bcp14">SHOULD</span> adopt a PCB selection policy that it does not accidentally isolate the AS from the network, i.e., such that it does not block connectivity to parent providers and that ensures downstream connectivity for children. For more details, see <a href="#selection-policy-example" class="auto internal xref">Section 2.3.1.2</a>.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2839,7 +2840,8 @@ The selection process can inspect and compare the properties of the candidate PC
             <h5 id="name-selection-policy-example">
 <a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policy-example" class="section-name selfRef">Selection Policy Example</a>
             </h5>
-<p id="section-2.3.1.2-1">An AS <span class="bcp14">MUST</span> select the best PCBs set to be further propagated. Selection may be based on criteria such as:<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.2-1">An AS <span class="bcp14">MUST</span> select the best PCBs set to be further propagated.
+A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment. Selection may be based on criteria such as:<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.2-2.1">
                 <p id="section-2.3.1.2-2.1.1">AS path length: from the originator core AS to the child (non-core) AS.<a href="#section-2.3.1.2-2.1.1" class="pilcrow">¶</a></p>
