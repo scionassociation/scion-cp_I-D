@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 31 August 2025                                          S. Hitz
+Expires: 1 September 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2025
+                                                        28 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
@@ -481,7 +481,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB.
+      AS that sent the PCB through the API described in Figure 21.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1798,7 +1798,8 @@ path segment 4 |             |     |             |     |             |
        and certificate(s) that MUST be used to verify its signatures
        which enables the Control Service to check whether it has the
        relevant TRC(s) and certificate(s).  If not, they can be
-       requested from the Control Service of the sending AS.
+       requested from the Control Service of the sending AS through the
+       API described in Figure 21.
 
    2.  As core beaconing is based on propagating PCBs to all AS
        neighbors, it is necessary to avoid loops during path creation.
@@ -3710,6 +3711,71 @@ Full Control Service gRPC API
 
 
 
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+// VerificationKeyID is used to identify certificates that authenticate the
+// verification key used to verify signatures.
+message VerificationKeyID {
+    // ISD-AS of the subject.
+    uint64 isd_as = 1;
+    // SubjectKeyID referenced in the certificate.
+    bytes subject_key_id = 2;
+    // Base number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_base = 3;
+    // Serial number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_serial = 4;
+}
+
+ Figure 21: Control Service gRPC API - Trust Material representation
+
+
+
    In case of failure, gRPC calls return an error as specified by the
    gRPC framework.  That is, a non-zero status code and an explanatory
    string.
@@ -3811,7 +3877,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 21: Service Resolution gRPC API definition
+          Figure 22: Service Resolution gRPC API definition
 
 
 
@@ -3819,10 +3885,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 22 below.  In both examples, the source
-   endpoint is in AS A.  Figure 23 shows the sequence diagram for the
+   is represented in Figure 23 below.  In both examples, the source
+   endpoint is in AS A.  Figure 24 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 24 shows the path lookup sequence diagram if the destination
+   Figure 25 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3852,7 +3918,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 22: Topology used in the path lookup examples.
+           Figure 23: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -3910,7 +3976,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 23: Sequence diagram illustrating a path lookup for a
+     Figure 24: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3981,7 +4047,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 24: Sequence diagram illustrating a path lookup for a
+     Figure 25: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
@@ -4003,6 +4069,8 @@ draft-dekater-scion-controlplane-08
       "segment from the future".
 
    *  PCB selection: clarified criteria and removed superfluous image
+
+   *  Control Service gRPC API - add Trust Material definitions
 
 draft-dekater-scion-controlplane-07
 
