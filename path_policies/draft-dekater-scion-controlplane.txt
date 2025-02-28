@@ -1739,7 +1739,7 @@ path segment 4 |             |     |             |     |             |
 2.3.1.2.  Selection Policy Example
 
    An AS MUST select the best PCBs set to be further propagated.  A PCB
-   Selection Policy can be expressed as a stateful filter of paths,
+   Selection Policy can be expressed as a stateful filter of segments,
    i.e., a function which indicates whether to accept or deny a given
    path.  This filter is stateful in that it can be updated each time
    its AS registers a new segment.  Selection may be based on criteria
