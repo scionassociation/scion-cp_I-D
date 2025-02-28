@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 31 August 2025                                          S. Hitz
+Expires: 1 September 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2025
+                                                        28 February 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
@@ -481,7 +481,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 22.
+      AS that sent the PCB through the API described in Figure 21.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1042,7 +1042,7 @@ path segment 4 |             |     |             |     |             |
               Figure 6: Top-down composition of one PCB
 
    *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "Full Control Service gRPC API", Figure 20.
+   please see Appendix "Full Control Service gRPC API", Figure 19.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1659,24 +1659,21 @@ path segment 4 |             |     |             |     |             |
 
 2.3.  Propagation of PCBs
 
-   This section describes how PCBs are selected and propagated in the
-   path exploration process.
+   This section describes how PCBs are received, selected and propagated
+   in the path exploration process.
 
 2.3.1.  Selection of PCBs to Propagate
 
-   As an AS receives a series of intra-ISD or core PCBs, it MUST select
-   the PCBs that it will propagate further.  Each AS specifies a local
-   policy on the basis of which PCBs are evaluated, selected, or
-   eliminated.  The selection process can inspect and compare the
-   properties of the candidate PCBs (e.g., length, disjointness across
-   different paths, age, expiration time) and/or take into account which
-   PCBs have been propagated in the past.
+   As an AS receives PCBs, it MUST select which ones to propagate
+   further.  Each AS specifies a local policy on the basis of which PCBs
+   are evaluated, selected, or eliminated.  The selection process can
+   inspect and compare the properties of the candidate PCBs (e.g.,
+   length, disjointness across different paths, age, expiration time)
+   and/or take into account which PCBs have been propagated in the past.
 
-   Naturally, an AS's policy selects PCBs corresponding to paths that
-   are commercially or otherwise operationally viable.  From these
-   viable PCBs, only a relatively small subset SHOULD be propagated to
-   avoid excessive overhead of the path discovery system in bigger
-   networks.
+   From these viable PCBs, only a relatively small subset SHOULD be
+   propagated to avoid excessive overhead of the path discovery system
+   in bigger networks.
 
    The goal of the AS SHOULD be to propagate those candidate PCBs with
    the highest probability of collectively meeting the needs of the
@@ -1737,101 +1734,42 @@ path segment 4 |             |     |             |     |             |
 
 2.3.1.2.  Selection Policy Example
 
-   Figure 8 below illustrates the selection of path segments in three
-   networks.  Each network uses a different path property to select path
-   segments.
+   An AS MUST select the best PCBs set to be further propagated.
+   Selection may be based on criteria such as:
 
-   *  The network at the upper left considers the _path length_ which is
-      here defined as the number of hops from the originator core AS to
-      the local AS.  This number can give an indication of the path's
-      latency and based this, the network will select the PCB
-      representing path segment A-G (in direction of beaconing) to
-      propagate.
+   *  AS path length: from the originator core AS to the child (non-
+      core) AS.
 
-   *  The network at the upper right uses _peering links_ as the
-      selection criterion.  That is the number of different peering ASes
-      from all non-core ASes on the PCB or path segment: a greater
-      number of peering ASes increases the likelihood of finding a
-      shortcut on the path segment.  Based on this, the network will
-      select the PCB representing path segment B-E-I-L (in direction of
-      beaconing) to propagate.
+   *  Availability of peering links: that is the number of different
+      peering ASes from all non-core ASes on the PCB or path segment.  A
+      greater number of peering ASes increases the likelihood of finding
+      a shortcut on the path segment.
 
-   *  The lower network selects PCBs based on _disjointness_. The
-      disjointness of a PCB is calculated relative to the PCBs that have
-      been previously sent.  Paths can be either AS disjoint or link
-      disjoint.  AS disjoint paths have no common upstream/core AS for
-      the current AS, whereas link disjoint paths do not share any AS-
-      to-AS link.  Depending on the objective of the AS, both criteria
-      can be used: AS disjointness allows path diversity in the event
+   *  Path disjointness: Paths can be either AS disjointed or link
+      disjointed.  AS disjointed paths have no common upstream/core AS
+      for the current AS, whereas link disjoint paths do not share any
+      AS-to-AS link.  AS disjointness allows path diversity in the event
       that an AS becomes unresponsive, and link disjointness provides
-      resilience in case of link failure.  Based on the disjointness
-      criterion, the network will select the PCBs representing the path
-      segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to
-      propagate.
+      resilience in case of link failure.  Both criteria can be used
+      depending on the objective of the AS.  The relative disjointness
+      of two PCBs A and B may be calculated by assigning a disjointness
+      score, calculated as the number of links in A that don't appear in
+      B.  The beacon that has the highest disjointness score and is not
+      the shortest path SHOULD be selected.  If this is not better than
+      what has already been selected, then the beacon with the shortest
+      path yet to be selected SHOULD be chosen instead.
 
-  Selected path segment: #------# or *------*
-   Peering Link: PL
+   *  Expiration time: the maximum value for the expiration time when
+      extending the segment.
 
-     ISD A: Path Length                 ISD B: Peering Links
-  +----------------------+          +---------------------------+
-  |      ISD Core        |          |        ISD Core           |
-  | .---.         .---.  |          |  .---.             .---.  |
-  |(  A  ) - - - (  C  ) |          | (  A  ) - - - - - (  C  ) |
-  | `-#-'         `---'  |       + --- `---'             `---'  |
-  |   ||   .---.   | |   |          |      |  .---. - - - - -   |
-  |   | - (  B  ) -      |       |  |    |  -(  B  )            |
-  |   |    `-+-'     |   |          |         `-#-||            |
-  +---|--------------|---+       |  |    |      |   - - - - - - - - +
-      |      |       |           |  |           | |             |
-      |                          |  +----|------|-|-------------+   |
-      |      |     .-+-.                        | + - - - - +
-      |    .-+-.  (  E  )        |       |      |                   |
-      |   (  D  )  `---'                        |           |
-      |    `-+-'     |         .-+-.     |    .-#-.       .-+-.     |
-      |            .-+-.      (  D  )-PL-----(  E  )--PL-(  F  )
-      |      |    (  F  )      `---'     |    `-#-'       `-+-'   .-+-.
-    .-#-.          `-+-'                        |                (  G  )
-   (  G  ) - +       |               - - +      |           |     `-+-'
-    `---- - - - - - -               |           |
-                                  .---.       .-#-.       .-+-.     |
-                                 (  H  )-PL--(  I  )--PL-(  J  )
-                                  `---'       `-#-'       `---'   .-+-.
-                                                |           |    (  K  )
-         ISD C: Disjointness                    |                 `---'
-    +---------------------------+             .-#-.         |       |
-    |          ISD Core         |            (  L  ) - - - -
-    |                           |             `---' - - - - - - - - +
-    | .---.               .---. |
-    |(  A  ) - - - - - - (  C  )|
-    | `-*-'               `-#-' |
-    |   | |     .---.     | |   |
-    |   |  - - (  B  ) - -  |   |
-    |   |       `---'       |   |
-    +---|-------------------|---+
-        |                   |
-   .----*.                .-#---.
-  (   D   )              (   E   )
-   `----*'                `-#---'
-   |    |                   |   |
-      #---------------------#
-   |  | |                       |
-      | *------------------*
-   |  |                    |    |
-   .--#--.                .*----.
-  (   F   #-------#      (   G   )
-   `-----'        |       `*----|
-   |          *------------*
-              |   |             |
-   |-----.    |   |       .-----.
-  (   H  *----*   #------#   I   )
-   `---*-'                `-#---'
-       |                    |
-       |       .---.        |
-       *------*  J  #-------#
-               `---'
+   *  ISD or AS blacklists: certain ASes or ISD that may not appear in a
+      segment.
 
-     Figure 8: Example networks to illustrate path segment selection
-                   based on different path properties.
+   *  ISD loops: if permitted, they allow core AS to reach other core
+      ASes in the same ISD via a third party ISDs.
+
+   Naturally, an AS's policy selects PCBs corresponding to paths that
+   are commercially or otherwise operationally viable.
 
 2.3.2.  Propagation of Selected PCBs
 
@@ -1860,7 +1798,7 @@ path segment 4 |             |     |             |     |             |
        which enables the Control Service to check whether it has the
        relevant TRC(s) and certificate(s).  If not, they can be
        requested from the Control Service of the sending AS through the
-       API described in Figure 22.
+       API described in Figure 21.
 
    2.  As core beaconing is based on propagating PCBs to all AS
        neighbors, it is necessary to avoid loops during path creation.
@@ -2530,7 +2468,7 @@ path segment 4 |             |     |             |     |             |
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 17.
+   The segment lookup API gRPC definition can be found in Figure 16.
 
 5.1.2.  Caching
 
@@ -2702,7 +2640,7 @@ path segment 4 |             |     |             |     |             |
        |                         (variable length)                     |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 9: SCMP message format
+                       Figure 8: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2844,7 +2782,7 @@ path segment 4 |             |     |             |     |             |
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 10: Packet-too-big format
+                      Figure 9: Packet-too-big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2884,7 +2822,7 @@ path segment 4 |             |     |             |     |             |
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 11: External-interface-down format
+                 Figure 10: External-interface-down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2936,7 +2874,7 @@ path segment 4 |             |     |             |     |             |
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 12: Internal-connectivity-down format
+                Figure 11: Internal-connectivity-down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2982,7 +2920,7 @@ path segment 4 |             |     |             |     |             |
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 13: Echo-request format
+                       Figure 12: Echo-request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3018,7 +2956,7 @@ path segment 4 |             |     |             |     |             |
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 14: Echo-reply format
+                        Figure 13: Echo-reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3060,7 +2998,7 @@ path segment 4 |             |     |             |     |             |
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 15: Traceroute-request format
+                    Figure 14: Traceroute-request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3116,7 +3054,7 @@ path segment 4 |             |     |             |     |             |
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 16: Traceroute-reply format
+                     Figure 15: Traceroute-reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3583,7 +3521,7 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 17: Control Service gRPC API - Segment lookup.  This API
+      Figure 16: Control Service gRPC API - Segment lookup.  This API
      is exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -3608,7 +3546,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 18: Control Service gRPC API - Segment registration.  This
+     Figure 17: Control Service gRPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3625,7 +3563,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 19: Control Service gRPC API - Segment creation
+           Figure 18: Control Service gRPC API - Segment creation
 
 
 
@@ -3707,7 +3645,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 20: Control Service gRPC API - Segment representation
+      Figure 19: Control Service gRPC API - Segment representation
 
 
 
@@ -3768,7 +3706,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 21: Control Service gRPC API - Signed ASEntry representation
+   Figure 20: Control Service gRPC API - Signed ASEntry representation
 
 
 
@@ -3833,7 +3771,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
- Figure 22: Control Service gRPC API - Trust Material representation
+ Figure 21: Control Service gRPC API - Trust Material representation
 
 
 
@@ -3938,7 +3876,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 23: Service Resolution gRPC API definition
+          Figure 22: Service Resolution gRPC API definition
 
 
 
@@ -3946,10 +3884,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 24 below.  In both examples, the source
-   endpoint is in AS A.  Figure 25 shows the sequence diagram for the
+   is represented in Figure 23 below.  In both examples, the source
+   endpoint is in AS A.  Figure 24 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 26 shows the path lookup sequence diagram if the destination
+   Figure 25 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3979,7 +3917,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 24: Topology used in the path lookup examples.
+           Figure 23: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -4037,7 +3975,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 25: Sequence diagram illustrating a path lookup for a
+     Figure 24: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -4108,7 +4046,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 26: Sequence diagram illustrating a path lookup for a
+     Figure 25: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
@@ -4128,6 +4066,8 @@ draft-dekater-scion-controlplane-08
 
    *  Qualified better the choice of time allowance in the definition of
       "segment from the future".
+
+   *  PCB selection: clarified criteria and removed superfluous image
 
    *  Control Service gRPC API - add Trust Material definitions
 
