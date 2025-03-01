@@ -21,3 +21,4 @@ draft-dekater-scion-controlplane.xml
 package-lock.json
 report.xml
 !requirements.txt
+.DS_Store
