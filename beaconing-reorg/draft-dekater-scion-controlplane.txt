@@ -4146,12 +4146,17 @@ draft-dekater-scion-controlplane-08
 
    *  New figure: Control Service gRPC API - Trust Material definitions
 
-   Minor changes: - Moved "Special-Purpose SCION AS Numbers" table later
-   in text - Split "Circular dependencies and partitioning" into two
-   sections: "Bootstrapping ability" and "Resistance to partitioning". -
-   Explain why PCBs have a next_isd_as field - Qualified better the
-   choice of time allowance in the definition of segment from the future
-   in section "PCB Validity".
+   Minor changes:
+
+   *  Moved "Special-Purpose SCION AS Numbers" table later in text
+
+   *  Split "Circular dependencies and partitioning" into two sections:
+      "Bootstrapping ability" and "Resistance to partitioning".
+
+   *  Explain why PCBs have a next_isd_as field
+
+   *  Qualified better the choice of time allowance in the definition of
+      segment from the future in section "PCB Validity".
 
 draft-dekater-scion-controlplane-07
 
