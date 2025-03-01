@@ -1918,6 +1918,7 @@ The SCION control plane provides various security properties, as discussed below
 Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
 
 Security properties are:
+
 - Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
 - Forwarding Path Consistency - For every honest path segment registered in any AS
     - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
@@ -2553,19 +2554,24 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-08
 {:numbered="false"}
 
-- Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
-- Added some details about PCBs propagation and storage.
-- Qualified better the choice of time allowance in the definition of "segment from the future".
-- PCB selection: clarified criteria and removed superfluous image
-- Control Service gRPC API - add Trust Material definitions
+Major changes:
 
-## draft-dekater-scion-controlplane-08
-{:numbered="false"}
+- "Propagation of PCBs" section:
+  - clarify checks at reception
+  - introduce criteria for PCB selection policies
+  - remove superfluous policy example figure
+  - Propagation Interval and Best PCBs Set Size: mention tradeoff between scalability and amount of paths discovered.
+  - reorganize order of paragraphs
+- New section "Security Properties" in Security considerations, based on formal model of SCION
+- New figure: Control Service gRPC API - Trust Material definitions
 
-- Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
-- Added some details about PCBs propagation and storage.
-- Qualified better the choice of time allowance in the definition of "segment from the future".
-- Security considerations: clarify assumptions
+Minor changes:
+- Moved "Special-Purpose SCION AS Numbers" table later in text
+- Split "Circular dependencies and partitioning" into two sections: "Bootstrapping ability" and "Resistance to partitioning".
+- Explain why PCBs have a next_isd_as field
+- Qualified better the choice of time allowance in the definition of segment from the future in section "PCB Validity".
+
+
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
