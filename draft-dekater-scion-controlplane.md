@@ -178,7 +178,7 @@ SCION has been developed with the following goals:
 
 *Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
 
-*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing. Security properties are further discussed in [](#security-properties).
 
 *Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
 
@@ -206,7 +206,7 @@ Note (to be removed before publication): this document, together with the other 
 
 **Control Service**: The Control Service is the main control plane infrastructure component within a SCION AS. It is responsible for the path exploration and registration processes that take place within the Control Plane.
 
-**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").
+**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing"). Each ISD MUST have at least one Core AS.
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
@@ -424,7 +424,7 @@ The RPC messages are transported via the {{Connect}}'s rpc protocol; a gRPC-like
 
 In SCION, the *Control Service* of each AS is responsible for the beaconing process. The Control Service generates, receives, and propagates the *Path Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
-PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation.
+PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
 - *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
@@ -1096,11 +1096,11 @@ For the purpose of validation, a timestamp is considered "future" if it is later
 
 For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
 
-### Configuration
+### Configuration {#configuration}
 
 For the purpose of constructing and propagating path segments, an AS Control Service MUST be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
-- Local interface ID
+- Local interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
@@ -1150,6 +1150,7 @@ A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., 
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
 
+
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
 PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
@@ -1159,7 +1160,9 @@ The *best PCBs set size* SHOULD be:
   - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.
 
-These are RECOMMENDED maximums; in current practice the intra-ISD set size is typically 20.
+Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
+Values above are RECOMMENDED maxima which represent a tradeoff between scalability and amount of paths discovered.
+In current practice the intra-ISD set size is typically 20.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS SHOULD have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
@@ -1902,11 +1905,28 @@ Authentication of SCMP packets is not specified here. In current deployments it 
 
 As described previously, the goal of SCION’s beaconing process in the control plane is to securely discover and disseminate paths between any two ASes. This section describes security considerations for SCION's Control Plane that focuses on *inter*-domain routing. SCION does not provide intra-domain routing, nor does it provide end-to-end payload encryption so these topics lie outside the scope of this section.
 
-This section focuses on three kinds of security risks in the control plane:
+This section discusses three kinds of threats to the control plane:
 
 1. When an adversary controls one or all core ASes of an ISD and tries to manipulate the beaconing process from the top down (see [](#topdown-manipulate)).
 2. When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see [](#manipulate-beaconing)).
 3. Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see [](#dos-cp)).
+
+
+## Security Properties {#security-properties}
+
+The SCION control plane provides various security properties, as discussed below.
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
+
+Security properties are:
+- Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
+- Forwarding Path Consistency - For every honest path segment registered in any AS
+    - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
+    - the inter-domain network topology remains unchanged since the segment was first generated.
+- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
+- Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
+
+To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
@@ -1993,7 +2013,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2538,6 +2558,14 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Qualified better the choice of time allowance in the definition of "segment from the future".
 - PCB selection: clarified criteria and removed superfluous image
 - Control Service gRPC API - add Trust Material definitions
+
+## draft-dekater-scion-controlplane-08
+{:numbered="false"}
+
+- Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.
+- Added some details about PCBs propagation and storage.
+- Qualified better the choice of time allowance in the definition of "segment from the future".
+- Security considerations: clarify assumptions
 
 ## draft-dekater-scion-controlplane-07
 {:numbered="false"}
