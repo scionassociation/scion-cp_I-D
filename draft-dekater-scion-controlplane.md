@@ -2556,6 +2556,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- Abstract: reword, mention goal and that document is not an Internet Standard
 - "Propagation of PCBs" section:
   - clarify checks at reception
   - introduce criteria for PCB selection policies
