@@ -109,8 +109,9 @@ Table of Contents
      2.3.  Propagation of PCBs
        2.3.1.  Reception of PCBs
        2.3.2.  Storing Candidate PCBs
-       2.3.3.  Selection of PCBs to Propagate
-       2.3.4.  Propagation of Selected PCBs
+       2.3.3.  PCB Selection Policies
+       2.3.4.  Propagation Interval and Best PCBs Set Size
+       2.3.5.  Propagation of Selected PCBs
    3.  Deployment Considerations
      3.1.  Monitoring Considerations
      3.2.  Effects of Clock Inaccuracy
@@ -787,7 +788,7 @@ Table of Contents
       described in Section 2.3.3.
 
    *  propagates each selected PCB to the selected egress interface(s)
-      associated with it.  This is described in Section 2.3.4.
+      associated with it.  This is described in Section 2.3.5.
 
    For every selected PCB and egress interface combination, the AS
    appends an _AS entry_ to the selected PCB.  This includes a Hop Field
@@ -1715,7 +1716,7 @@ path segment 4 |             |     |             |     |             |
    Current practice is to retain all PCBs until expired or replaced by
    one describing the same path with a later origination time.
 
-2.3.3.  Selection of PCBs to Propagate
+2.3.3.  PCB Selection Policies
 
    An AS MUST select which PCBs to propagate further.  The selection
    process can inspect and compare the properties of the candidate PCBs
@@ -1775,7 +1776,7 @@ path segment 4 |             |     |             |     |             |
    selects PCBs corresponding to paths that are commercially or
    otherwise operationally viable.
 
-2.3.4.  Propagation of Selected PCBs
+2.3.4.  Propagation Interval and Best PCBs Set Size
 
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
@@ -1818,6 +1819,8 @@ path segment 4 |             |     |             |     |             |
    The scalability implications of such parameters are further discussed
    in Section 3.3.
 
+2.3.5.  Propagation of Selected PCBs
+
    To bootstrap the initial communication with a neighboring beacon
    service, ASes use one-hop paths.  This special kind of path handles
    beaconing between neighboring ASes for which no forwarding path may
@@ -1826,7 +1829,7 @@ path segment 4 |             |     |             |     |             |
    circular dependency.  The One-Hop Path Type is described in more
    detail in [I-D.dekater-scion-dataplane].
 
-2.3.4.1.  Propagation of PCBs in Intra-ISD Beaconing
+2.3.5.1.  Propagation of PCBs in Intra-ISD Beaconing
 
    The propagation process in intra-ISD beaconing includes the following
    steps:
@@ -1860,9 +1863,9 @@ path segment 4 |             |     |             |     |             |
        to the correct neighboring ASes by invoking the
        SegmentCreationService.Beacon remote procedure call (RPC) in the
        Control Services of the neighboring ASes (see also
-       Section 2.3.4.3).
+       Section 2.3.5.3).
 
-2.3.4.2.  Propagation of PCBs in Core Beaconing
+2.3.5.2.  Propagation of PCBs in Core Beaconing
 
    The propagation process in core beaconing includes the following
    steps:
@@ -1886,9 +1889,9 @@ path segment 4 |             |     |             |     |             |
        neighboring core ASes by invoking the
        SegmentCreationService.Beacon remote procedure call (RPC) in the
        Control Services of the neighboring core ASes (see also
-       Section 2.3.4.3).
+       Section 2.3.5.3).
 
-2.3.4.3.  Propagation of PCBs in Protobuf Message Format
+2.3.5.3.  Propagation of PCBs in Protobuf Message Format
 
    The last step of the above described core and intra-ISD propagation
    procedures is implemented as follows in Protobuf message format:
