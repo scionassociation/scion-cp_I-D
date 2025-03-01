@@ -2566,6 +2566,7 @@ Major changes:
 - New figure: Control Service gRPC API - Trust Material definitions
 
 Minor changes:
+
 - Moved "Special-Purpose SCION AS Numbers" table later in text
 - Split "Circular dependencies and partitioning" into two sections: "Bootstrapping ability" and "Resistance to partitioning".
 - Explain why PCBs have a next_isd_as field
