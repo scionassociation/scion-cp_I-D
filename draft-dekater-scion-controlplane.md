@@ -1129,7 +1129,7 @@ An AS stores candidate PCBs in a temporary storage called the *Beacon Store*. Th
 
 Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
 
-### Selection of PCBs to Propagate {#selection}
+### PCB Selection Policies {#selection}
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
@@ -1150,7 +1150,7 @@ A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., 
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
 
-### Propagation of Selected PCBs {#path-segment-prop}
+### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
 PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
 
@@ -1171,6 +1171,8 @@ Note that to ensure establish quick connectivity, an AS MAY attempt to forward a
 - or because no beacon was available to propagate.
 
 The scalability implications of such parameters are further discussed in [](#scalability).
+
+### Propagation of Selected PCBs {#path-segment-prop}
 
 To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 
