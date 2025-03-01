@@ -780,7 +780,7 @@ Table of Contents
 
 2.1.2.  Appending Entries to a PCB
 
-   Every propagation period (as configured by the AS), the Control
+   Every propagation interval (as configured by the AS), the Control
    Service:
 
    *  selects the best combinations of PCBs and interfaces connecting to
@@ -2104,12 +2104,12 @@ path segment 4 |             |     |             |     |             |
 
    On a network bootstrap, path segments to each AS are discovered
    within a number of propagation steps proportional to the longest
-   path.  With a 5 second propagation period and a generous longest path
-   of length 10, all path segments are discovered after 25 seconds on
-   average.  When all ASes start propagation just after they've received
-   the first PCBs from any of their upstreams (see 'fast recovery'), the
-   construction of a first path to connect each AS to the ISD core is
-   accelerated.
+   path.  With a 5 second propagation interval and a generous longest
+   path of length 10, all path segments are discovered after 25 seconds
+   on average.  When all ASes start propagation just after they've
+   received the first PCBs from any of their upstreams (see 'fast
+   recovery'), the construction of a first path to connect each AS to
+   the ISD core is accelerated.
 
    When a new parent-child link is added to the network, the parent AS
    will propagate the available PCBs in the next propagation event.  If
