@@ -150,14 +150,15 @@ Table of Contents
        6.6.4.  Traceroute Reply
      6.7.  SCMP Authentication
    7.  Security Considerations
-     7.1.  Manipulation of the Beaconing Process by a Core Adversary
-     7.2.  Manipulation of the Beaconing Process by a Non-Core
+     7.1.  Security Properties
+     7.2.  Manipulation of the Beaconing Process by a Core Adversary
+     7.3.  Manipulation of the Beaconing Process by a Non-Core
            Adversary
-       7.2.1.  Path Hijacking through Interposition
-       7.2.2.  Creation of Spurious ASes and ISDs
-       7.2.3.   Peering Link Misuse
-       7.2.4.  Manipulation of the Path-Selection Process
-     7.3.  Denial of Service Attacks
+       7.3.1.  Path Hijacking through Interposition
+       7.3.2.  Creation of Spurious ASes and ISDs
+       7.3.3.   Peering Link Misuse
+       7.3.4.  Manipulation of the Path-Selection Process
+     7.4.  Denial of Service Attacks
    8.  IANA Considerations
    9.  References
      9.1.  Normative References
@@ -168,6 +169,7 @@ Table of Contents
    SCION Data Plane use by the SCION Control Plane
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-07
      draft-dekater-scion-controlplane-06
@@ -199,7 +201,8 @@ Table of Contents
    to decide where their data travels based on routing information that
    can be unambiguously attributed to an AS, ensuring that packets are
    only forwarded along authorized path segments.  A particular use case
-   is to enable geofencing.
+   is to enable geofencing.  Security properties are further discussed
+   in Section 7.1.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
@@ -280,7 +283,8 @@ Table of Contents
    *Core AS*: Each Isolation Domain (ISD) is administered by a set of
    distinguished autonomous systems (ASes) called core ASes, which are
    responsible for initiating the path-discovery and -construction
-   process (in SCION called "beaconing").
+   process (in SCION called "beaconing").  Each ISD MUST have at least
+   one Core AS.
 
    *Endpoint*: An endpoint is the start or the end of a SCION path, as
    defined in [RFC9473].
@@ -742,7 +746,8 @@ Table of Contents
    into routing processes on two levels, where _inter-ISD_ or core
    beaconing is based on the (selective) sending of PCBs without a
    defined direction, and _intra-ISD_ beaconing on top-to-bottom
-   propagation.
+   propagation.  Beaconing is initiated by core ASes, therefore each ISD
+   MUST have at least one core AS.
 
    *  _Inter-ISD or core beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
@@ -1340,7 +1345,7 @@ path segment 4 |             |     |             |     |             |
 
    *  next_isd_as: The ISD-AS number of the downstream AS to which the
       PCB SHOULD be forwarded.  The presence of this field prevents path
-      hijacking attacks, as further discussed in Section 7.2.1.
+      hijacking attacks, as further discussed in Section 7.3.1.
 
    *  hop_entry: The hop entry (HopEntry) with the information required
       to forward this PCB through the current AS to the next AS.  This
@@ -1647,7 +1652,7 @@ path segment 4 |             |     |             |     |             |
    band fashion (e.g in a configuration file).  For each link, these
    values MUST be configured:
 
-   *  Local interface ID
+   *  Local interface ID.  This MUST be unique within each AS.
 
    *  Neighbor type (core, parent, child, peer), depending on link type
       (see Section 1.3).  Link type depends on mutual agreements between
@@ -1794,8 +1799,11 @@ path segment 4 |             |     |             |     |             |
       per immediate neighbor core AS.  Current practice is that each set
       of 5 is chosen among the PCBs received from each neighbor.
 
-   These are RECOMMENDED maximums; in current practice the intra-ISD set
-   size is typically 20.
+   Note that the PCBs set size should not be too low, in order to make
+   sure that beaconing can discover a wide amount of paths.  Values
+   above are RECOMMENDED maxima which represent a tradeoff between
+   scalability and amount of paths discovered.  In current practice the
+   intra-ISD set size is typically 20.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store in
@@ -3113,20 +3121,52 @@ path segment 4 |             |     |             |     |             |
    payload encryption so these topics lie outside the scope of this
    section.
 
-   This section focuses on three kinds of security risks in the control
-   plane:
+   This section discusses three kinds of threats to the control plane:
 
    1.  When an adversary controls one or all core ASes of an ISD and
        tries to manipulate the beaconing process from the top down (see
-       Section 7.1).
+       Section 7.2).
 
    2.  When "ordinary" (non-core) adversaries try to manipulate the
-       beaconing process (see Section 7.2).
+       beaconing process (see Section 7.3).
 
    3.  Denial of Services (DoS) attacks where attackers overload
-       different parts of the infrastructure (see Section 7.3).
+       different parts of the infrastructure (see Section 7.4).
 
-7.1.  Manipulation of the Beaconing Process by a Core Adversary
+7.1.  Security Properties
+
+   The SCION control plane provides various security properties, as
+   discussed below.  Here, an AS is described as 'honest' if its private
+   keys are unknown to the attacker and if it uses a unique interface
+   identifier for each link.  An honest path is one that only traverses
+   honest ASes.  A honest segment is the one created by an honest AS.
+
+   Security properties are: - Connectivity - For every pair of honest
+   ASes X and Y, X will eventually register enough segments to build at
+   least one path (of any length) leading to Y. - Forwarding Path
+   Consistency - For every honest path segment registered in any AS -
+   its sequence of AS entries corresponds to a continuous SCION
+   forwarding path in the network of inter-domain links - the inter-
+   domain network topology remains unchanged since the segment was first
+   generated. - Loop Freedom - For every honest path segment registered
+   in any AS, its sequence of AS entries contains no duplicates,
+   including current and next ISD-AS and interface IDs. - Path
+   Authorization - For every honest path segment registered in any AS
+   and any AS X appearing on that segment (except for the previous one),
+   AS X propagated a PCB corresponding to the segment portion ending in
+   its own entry to its successor AS on the segment.
+
+   To ensure that the properties hold across the overall SCION network,
+   all core ASes should be able to reach each other with some sequence
+   of core links, and all non-core ASes should have at least one path up
+   to a core AS.  Furthermore, to ensure that the properties hold within
+   a single ISD, all cores ASes of the ISD should be able to reach each
+   other without leaving the ISD, i.e., for every pair of cores in an
+   ISD there is a sequence of SCION links that only traverses ISD
+   members.  A core AS may reach other core ASes in the same ISD via
+   other ISDs.  This may be permitted, depending on the ISD's policies.
+
+7.2.  Manipulation of the Beaconing Process by a Core Adversary
 
    The first risk to the beaconing process comes from an adversary
    controlling one or more core ASes in an ISD.  If the adversary stops
@@ -3137,7 +3177,7 @@ path segment 4 |             |     |             |     |             |
    they expire.  This is an unlikely scenario, as it would require
    compromise of all core ASes within an ISD.
 
-7.2.  Manipulation of the Beaconing Process by a Non-Core Adversary
+7.3.  Manipulation of the Beaconing Process by a Non-Core Adversary
 
    This section examines several possible approaches that could be taken
    by an "ordinary" non-core adversary to manipulate the beaconing
@@ -3145,7 +3185,7 @@ path segment 4 |             |     |             |     |             |
    extent SCION's design can prevent the corresponding attack or help
    mitigate it.
 
-7.2.1.  Path Hijacking through Interposition
+7.3.1.  Path Hijacking through Interposition
 
    A malicious AS M might try to manipulate the beaconing process
    between two neighbor ASes A and B, with the goal to hijack traffic to
@@ -3179,7 +3219,7 @@ path segment 4 |             |     |             |     |             |
    alternate path would be immediately visible to endpoints as traffic
    MUST include Hop Fields from AS M.
 
-7.2.2.  Creation of Spurious ASes and ISDs
+7.3.2.  Creation of Spurious ASes and ISDs
 
    An alternative scenario is when an adversary tries to introduce and
    spoof a non-existent AS.  This would enable the adversary to send
@@ -3201,7 +3241,7 @@ path segment 4 |             |     |             |     |             |
    need the involvement of more than one malicious entity.  Here the
    "costs" of setting up the fake ISD may outweigh the benefits.
 
-7.2.3.   Peering Link Misuse
+7.3.3.   Peering Link Misuse
 
    The misuse of a peering link by an adversary represents another type
    of attack.  Consider the case where AS A wants to share its peering
@@ -3222,7 +3262,7 @@ path segment 4 |             |     |             |     |             |
    interface mismatches.  Therefore, the peering link can only be used
    by the intended AS.
 
-7.2.4.  Manipulation of the Path-Selection Process
+7.3.4.  Manipulation of the Path-Selection Process
 
    Endpoint path control is one of the main benefits of SCION compared
    to the current Internet as SCION endpoints can select inter-domain
@@ -3296,7 +3336,7 @@ path segment 4 |             |     |             |     |             |
    unattractive.  Without specific detection mechanisms these so-called
    wormhole attacks are unavoidable in routing.
 
-7.3.  Denial of Service Attacks
+7.4.  Denial of Service Attacks
 
    The beaconing process in the SCION Control Plane relies on control
    plane communication.  ASes exchange control plane messages within
@@ -3479,13 +3519,16 @@ Acknowledgments
    Many thanks go to William Boye (Swiss National Bank), Matthias Frei
    (SCION Association), Kevin Meynell (SCION Association), Juan A.
    Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for
-   reviewing this document.  We are also very grateful to Adrian Perrig
-   (ETH Zurich), for providing guidance and feedback about every aspect
-   of SCION.  Finally, we are indebted to the SCION development teams of
-   Anapaya and ETH Zurich, for their practical knowledge and for the
-   documentation about the SCION Control Plane, as well as to the
-   authors of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.
+   reviewing this document.  We also thank Daniel Galán Pascual and
+   Christoph Sprenger from the Information Security Group at ETH Zurich
+   for their inputs based on their formal verification work on SCION.
+   We are also very grateful to Adrian Perrig (ETH Zurich), for
+   providing guidance and feedback about every aspect of SCION.
+   Finally, we are indebted to the SCION development teams of Anapaya,
+   ETH Zurich, and the SCION Association for their practical knowledge
+   and for the documentation about the SCION Control Plane, as well as
+   to the authors of [CHUAT22] - the book is an important source of
+   input and inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
@@ -4085,6 +4128,18 @@ draft-dekater-scion-controlplane-08
    *  PCB selection: clarified criteria and removed superfluous image
 
    *  Control Service gRPC API - add Trust Material definitions
+
+draft-dekater-scion-controlplane-08
+
+   *  Split "Circular dependencies and partitioning" into two sections:
+      bootstrapping and partitioning.
+
+   *  Added some details about PCBs propagation and storage.
+
+   *  Qualified better the choice of time allowance in the definition of
+      "segment from the future".
+
+   *  Security considerations: clarify assumptions
 
 draft-dekater-scion-controlplane-07
 
