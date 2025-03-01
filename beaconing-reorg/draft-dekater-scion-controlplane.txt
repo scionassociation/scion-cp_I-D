@@ -170,7 +170,6 @@ Table of Contents
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-08
-     draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-07
      draft-dekater-scion-controlplane-06
      draft-dekater-scion-controlplane-05
@@ -3141,20 +3140,30 @@ path segment 4 |             |     |             |     |             |
    identifier for each link.  An honest path is one that only traverses
    honest ASes.  A honest segment is the one created by an honest AS.
 
-   Security properties are: - Connectivity - For every pair of honest
-   ASes X and Y, X will eventually register enough segments to build at
-   least one path (of any length) leading to Y. - Forwarding Path
-   Consistency - For every honest path segment registered in any AS -
-   its sequence of AS entries corresponds to a continuous SCION
-   forwarding path in the network of inter-domain links - the inter-
-   domain network topology remains unchanged since the segment was first
-   generated. - Loop Freedom - For every honest path segment registered
-   in any AS, its sequence of AS entries contains no duplicates,
-   including current and next ISD-AS and interface IDs. - Path
-   Authorization - For every honest path segment registered in any AS
-   and any AS X appearing on that segment (except for the previous one),
-   AS X propagated a PCB corresponding to the segment portion ending in
-   its own entry to its successor AS on the segment.
+   Security properties are:
+
+   *  Connectivity - For every pair of honest ASes X and Y, X will
+      eventually register enough segments to build at least one path (of
+      any length) leading to Y.
+
+   *  Forwarding Path Consistency - For every honest path segment
+      registered in any AS
+
+      -  its sequence of AS entries corresponds to a continuous SCION
+         forwarding path in the network of inter-domain links
+
+      -  the inter-domain network topology remains unchanged since the
+         segment was first generated.
+
+   *  Loop Freedom - For every honest path segment registered in any AS,
+      its sequence of AS entries contains no duplicates, including
+      current and next ISD-AS and interface IDs.
+
+   *  Path Authorization - For every honest path segment registered in
+      any AS and any AS X appearing on that segment (except for the
+      previous one), AS X propagated a PCB corresponding to the segment
+      portion ending in its own entry to its successor AS on the
+      segment.
 
    To ensure that the properties hold across the overall SCION network,
    all core ASes should be able to reach each other with some sequence
@@ -4117,29 +4126,32 @@ Change Log
 
 draft-dekater-scion-controlplane-08
 
-   *  Split "Circular dependencies and partitioning" into two sections:
-      bootstrapping and partitioning.
+   Major changes:
 
-   *  Added some details about PCBs propagation and storage.
+   *  "Propagation of PCBs" section:
 
-   *  Qualified better the choice of time allowance in the definition of
-      "segment from the future".
+      -  clarify checks at reception
 
-   *  PCB selection: clarified criteria and removed superfluous image
+      -  introduce criteria for PCB selection policies
 
-   *  Control Service gRPC API - add Trust Material definitions
+      -  remove superfluous policy example figure
 
-draft-dekater-scion-controlplane-08
+      -  Propagation Interval and Best PCBs Set Size: mention tradeoff
+         between scalability and amount of paths discovered.
 
-   *  Split "Circular dependencies and partitioning" into two sections:
-      bootstrapping and partitioning.
+      -  reorganize order of paragraphs
 
-   *  Added some details about PCBs propagation and storage.
+   *  New section "Security Properties" in Security considerations,
+      based on formal model of SCION
 
-   *  Qualified better the choice of time allowance in the definition of
-      "segment from the future".
+   *  New figure: Control Service gRPC API - Trust Material definitions
 
-   *  Security considerations: clarify assumptions
+   Minor changes: - Moved "Special-Purpose SCION AS Numbers" table later
+   in text - Split "Circular dependencies and partitioning" into two
+   sections: "Bootstrapping ability" and "Resistance to partitioning". -
+   Explain why PCBs have a next_isd_as field - Qualified better the
+   choice of time allowance in the definition of segment from the future
+   in section "PCB Validity".
 
 draft-dekater-scion-controlplane-07
 
