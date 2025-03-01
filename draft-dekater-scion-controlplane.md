@@ -1106,7 +1106,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor interface underlay address
 
 In addition, the maximum MTU supported by all intra-AS links MAY be configured.
-
+Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally isolate the AS from the network, i.e., such that it does not block connectivity to parent providers and that ensures downstream connectivity for children. For more details, see [](#selection-policy-example).
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1168,7 +1168,37 @@ Note that to ensure establish quick connectivity, an AS MAY attempt to forward a
 
 The scalability implications of such parameters are further discussed in [](#scalability).
 
-To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
+#### Selection Policy Example {#selection-policy-example}
+
+An AS MUST select the best PCBs set to be further propagated.
+A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment. Selection may be based on criteria such as:
+
+- AS path length: from the originator core AS to the child (non-core) AS.
+- Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
+- Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
+The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path SHOULD be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected SHOULD be chosen instead.
+- Expiration time:  the maximum value for the expiration time when extending the segment.
+- ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.
+- ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.
+
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
+
+### Propagation of Selected PCBs {#path-segment-prop}
+
+As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
+
+To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
+
+#### Reception of PCBs
+
+Upon receiving a PCB, the Control Service of an AS performs the following checks:
+
+1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)).  Invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-17}}.
+2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
+3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
+4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
+
+If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see [](#selection).
 
 #### Propagation of PCBs in Intra-ISD Beaconing {#intra-prop}
 
