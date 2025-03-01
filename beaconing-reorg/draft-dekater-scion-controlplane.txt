@@ -4128,6 +4128,9 @@ draft-dekater-scion-controlplane-08
 
    Major changes:
 
+   *  Abstract: reword, mention goal and that document is not an
+      Internet Standard
+
    *  "Propagation of PCBs" section:
 
       -  clarify checks at reception
