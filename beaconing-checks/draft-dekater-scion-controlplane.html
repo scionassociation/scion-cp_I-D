@@ -1048,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION CP</td>
-<td class="right">February 2025</td>
+<td class="right">March 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 1 September 2025</td>
+<td class="center">Expires 2 September 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-02-28" class="published">28 February 2025</time>
+<time datetime="2025-03-01" class="published">1 March 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-01">1 September 2025</time></dd>
+<dd class="expires"><time datetime="2025-09-02">2 September 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1240,10 +1240,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-propagation-of-pcbs" class="internal xref">Propagation of PCBs</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.1">
-                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-selection-of-pcbs-to-propag" class="internal xref">Selection of PCBs to Propagate</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-reception-of-pcbs" class="internal xref">Reception of PCBs</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
-                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-storing-candidate-pcbs" class="internal xref">Storing Candidate PCBs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-selection-of-pcbs-to-propag" class="internal xref">Selection of PCBs to Propagate</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.4">
+                    <p id="section-toc.1-1.2.2.3.2.4.1"><a href="#section-2.3.4" class="auto internal xref">2.3.4</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
 </li>
                 </ul>
 </li>
@@ -1900,10 +1906,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.1.2-1">Every propagation period (as configured by the AS), the Control Service:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1.2-2.1">
-              <p id="section-2.1.2-2.1.1">selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.1.2-2.1.1">selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.1.2-2.2">
-              <p id="section-2.1.2-2.2.1">propagates each selected PCB to the selected egress interface(s) associated with it. This is described in <a href="#path-segment-prop" class="auto internal xref">Section 2.3.2</a>.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.1.2-2.2.1">propagates each selected PCB to the selected egress interface(s) associated with it. This is described in <a href="#path-segment-prop" class="auto internal xref">Section 2.3.4</a>.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.1.2-3">For every selected PCB and egress interface combination, the AS appends an <em>AS entry</em> to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
@@ -2789,186 +2795,176 @@ associated_data(ps, i) = ps.segment_info ||
         <h3 id="name-propagation-of-pcbs">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-propagation-of-pcbs" class="section-name selfRef">Propagation of PCBs</a>
         </h3>
-<p id="section-2.3-1">This section describes how PCBs are received, selected and propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
-<div id="selection">
+<p id="section-2.3-1">This section describes how PCBs are received, selected and further propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<div id="reception-of-pcbs">
 <section id="section-2.3.1">
-          <h4 id="name-selection-of-pcbs-to-propag">
-<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
+          <h4 id="name-reception-of-pcbs">
+<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives PCBs, it <span class="bcp14">MUST</span> select which ones to propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
-The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-2">From these viable PCBs, only a relatively small subset <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-3">The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
-<div id="storing-and-selecting-candidate-pcbs">
-<section id="section-2.3.1.1">
-            <h5 id="name-storing-and-selecting-candi">
-<a href="#section-2.3.1.1" class="section-number selfRef">2.3.1.1. </a><a href="#name-storing-and-selecting-candi" class="section-name selfRef">Storing and Selecting Candidate PCBs</a>
-            </h5>
-<p id="section-2.3.1.1-1">When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs called the <em>Beacon Store</em>. The management of this storage is implementation defined. Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.<a href="#section-2.3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected AS at a fixed frequency known as the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-3">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be:<a href="#section-2.3.1.1-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.1.1-4.1">
-                <p id="section-2.3.1.1-4.1.1">For intra-AS beaconing (i.e. propagating to children ASes): at most 50.<a href="#section-2.3.1.1-4.1.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
+<li id="section-2.3.1-2.1">
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.1-4.2">
-                <p id="section-2.3.1.1-4.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.<a href="#section-2.3.1.1-4.2.1" class="pilcrow">¶</a></p>
+            <li id="section-2.3.1-2.2">
+              <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.1.1-5">These are <span class="bcp14">RECOMMENDED</span> maxima; in current practice the intra-ISD set size is typically 20.<a href="#section-2.3.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-6">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store, to be able to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.1.1-7.1">
-                <p id="section-2.3.1.1-7.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.1.1-7.1.1" class="pilcrow">¶</a></p>
+            <li id="section-2.3.1-2.3">
+              <p id="section-2.3.1-2.3.1">Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) <span class="bcp14">MUST</span> coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB <span class="bcp14">MUST</span> be discarded.<a href="#section-2.3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.1.1-8">Note that to ensure quick connectivity establishment, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:<a href="#section-2.3.1.1-8" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.1.1-9.1">
-                <p id="section-2.3.1.1-9.1.1">because the corresponding RPC failed;<a href="#section-2.3.1.1-9.1.1" class="pilcrow">¶</a></p>
+            <li id="section-2.3.1-2.4">
+              <p id="section-2.3.1-2.4.1">Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.<a href="#section-2.3.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.1-9.2">
-                <p id="section-2.3.1.1-9.2.1">or because no beacon was available to propagate.<a href="#section-2.3.1.1-9.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-<p id="section-2.3.1.1-10">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.1.1-10" class="pilcrow">¶</a></p>
+          </ol>
+<p id="section-2.3.1-3">If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="selection-policy-example">
-<section id="section-2.3.1.2">
-            <h5 id="name-selection-policy-example">
-<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policy-example" class="section-name selfRef">Selection Policy Example</a>
-            </h5>
-<p id="section-2.3.1.2-1">An AS <span class="bcp14">MUST</span> select the best PCBs set to be further propagated. Selection may be based on criteria such as:<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.1.2-2.1">
-                <p id="section-2.3.1.2-2.1.1">AS path length: from the originator core AS to the child (non-core) AS.<a href="#section-2.3.1.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.2">
-                <p id="section-2.3.1.2-2.2.1">Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.<a href="#section-2.3.1.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.3">
-                <p id="section-2.3.1.2-2.3.1">Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
-The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path <span class="bcp14">SHOULD</span> be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected <span class="bcp14">SHOULD</span> be chosen instead.<a href="#section-2.3.1.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.4">
-                <p id="section-2.3.1.2-2.4.1">Expiration time:  the maximum value for the expiration time when extending the segment.<a href="#section-2.3.1.2-2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.5">
-                <p id="section-2.3.1.2-2.5.1">ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.<a href="#section-2.3.1.2-2.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.6">
-                <p id="section-2.3.1.2-2.6.1">ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.<a href="#section-2.3.1.2-2.6.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-<p id="section-2.3.1.2-3">Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.<a href="#section-2.3.1.2-3" class="pilcrow">¶</a></p>
+<div id="storing-candidate-pcbs">
+<section id="section-2.3.2">
+          <h4 id="name-storing-candidate-pcbs">
+<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-storing-candidate-pcbs" class="section-name selfRef">Storing Candidate PCBs</a>
+          </h4>
+<p id="section-2.3.2-1">An AS stores candidate PCBs in a temporary storage called the <em>Beacon Store</em>. The management of this storage is implementation defined.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="selection">
+<section id="section-2.3.3">
+          <h4 id="name-selection-of-pcbs-to-propag">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
+          </h4>
+<p id="section-2.3.3-1">An AS <span class="bcp14">MUST</span> select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">Only a relatively small subset of the viable PCBs <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks. The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-3">As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.3-4.1">
+              <p id="section-2.3.3-4.1.1">AS path length: from the originator core AS to the child (non-core) AS.<a href="#section-2.3.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.2">
+              <p id="section-2.3.3-4.2.1">Expiration time: the maximum value for the expiration time when extending the segment.<a href="#section-2.3.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.3">
+              <p id="section-2.3.3-4.3.1">ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.<a href="#section-2.3.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.4">
+              <p id="section-2.3.3-4.4.1">ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.<a href="#section-2.3.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.5">
+              <p id="section-2.3.3-4.5.1">Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.<a href="#section-2.3.3-4.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.6">
+              <p id="section-2.3.3-4.6.1">Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.<a href="#section-2.3.3-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.3-5">The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path <span class="bcp14">SHOULD</span> be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected <span class="bcp14">SHOULD</span> be chosen instead.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-segment-prop">
-<section id="section-2.3.2">
+<section id="section-2.3.4">
           <h4 id="name-propagation-of-selected-pcb">
-<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
+<a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
-<p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<div id="reception-of-pcbs">
-<section id="section-2.3.2.1">
-            <h5 id="name-reception-of-pcbs">
-<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
-            </h5>
-<p id="section-2.3.2.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.2.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.1-2">
-<li id="section-2.3.2.1-2.1">
-                <p id="section-2.3.2.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>).  Invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.1-2.2">
-                <p id="section-2.3.2.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.1-2.3">
-                <p id="section-2.3.2.1-2.3.1">Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) <span class="bcp14">MUST</span> coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB <span class="bcp14">MUST</span> be discarded.<a href="#section-2.3.2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.1-2.4">
-                <p id="section-2.3.2.1-2.4.1">Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.<a href="#section-2.3.2.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-            </ol>
-<p id="section-2.3.2.1-3">If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.3.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="intra-prop">
-<section id="section-2.3.2.2">
-            <h5 id="name-propagation-of-pcbs-in-intr">
-<a href="#section-2.3.2.2" class="section-number selfRef">2.3.2.2. </a><a href="#name-propagation-of-pcbs-in-intr" class="section-name selfRef">Propagation of PCBs in Intra-ISD Beaconing</a>
-            </h5>
-<p id="section-2.3.2.2-1">The propagation process in intra-ISD beaconing includes the following steps:<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.2-2">
-<li id="section-2.3.2.2-2.1">
-                <p id="section-2.3.2.2-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.2.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.2-2.2">
-                <p id="section-2.3.2.2-2.2.1">The Control Service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.2.2-2.2.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be:<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.2-2.2.2.1">
-                    <p id="section-2.3.2.2-2.2.2.1.1">The ingress interface to this AS, in the Hop Field component.<a href="#section-2.3.2.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4-3.1">
+              <p id="section-2.3.4-3.1.1">For intra-AS beaconing (i.e. propagating to children ASes): at most 50.<a href="#section-2.3.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.2">
-                    <p id="section-2.3.2.2-2.2.2.2.1">The egress interface to the neighboring AS, also in the Hop Field component.<a href="#section-2.3.2.2-2.2.2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.4-3.2">
+              <p id="section-2.3.4-3.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.<a href="#section-2.3.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.3">
-                    <p id="section-2.3.2.2-2.2.2.3.1">The ISD_AS number of the next AS, in the signed body component of the AS entry.<a href="#section-2.3.2.2-2.2.2.3.1" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-2.3.4-4">These are <span class="bcp14">RECOMMENDED</span> maximums; in current practice the intra-ISD set size is typically 20.<a href="#section-2.3.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-5">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.4-6.1">
+              <p id="section-2.3.4-6.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.4-6.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.4">
-                    <p id="section-2.3.2.2-2.2.2.4.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The Hop Field component of each added peer entry <span class="bcp14">MUST</span> have a specified egress interface.<a href="#section-2.3.2.2-2.2.2.4.1" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-2.3.4-7">Note that to ensure establish quick connectivity, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:<a href="#section-2.3.4-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.4-8.1">
+              <p id="section-2.3.4-8.1.1">because the corresponding RPC failed;<a href="#section-2.3.4-8.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.4-8.2">
+              <p id="section-2.3.4-8.2.1">or because no beacon was available to propagate.<a href="#section-2.3.4-8.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.4-9">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.4-9" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-10">To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.3.4-10" class="pilcrow">¶</a></p>
+<div id="intra-prop">
+<section id="section-2.3.4.1">
+            <h5 id="name-propagation-of-pcbs-in-intr">
+<a href="#section-2.3.4.1" class="section-number selfRef">2.3.4.1. </a><a href="#name-propagation-of-pcbs-in-intr" class="section-name selfRef">Propagation of PCBs in Intra-ISD Beaconing</a>
+            </h5>
+<p id="section-2.3.4.1-1">The propagation process in intra-ISD beaconing includes the following steps:<a href="#section-2.3.4.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.4.1-2">
+<li id="section-2.3.4.1-2.1">
+                <p id="section-2.3.4.1-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.4.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-2.3.4.1-2.2">
+                <p id="section-2.3.4.1-2.2.1">The Control Service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.4.1-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.4.1-2.2.2.1">
+                    <p id="section-2.3.4.1-2.2.2.1.1">The ingress interface to this AS, in the Hop Field component.<a href="#section-2.3.4.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-2.3.4.1-2.2.2.2">
+                    <p id="section-2.3.4.1-2.2.2.2.1">The egress interface to the neighboring AS, also in the Hop Field component.<a href="#section-2.3.4.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-2.3.4.1-2.2.2.3">
+                    <p id="section-2.3.4.1-2.2.2.3.1">The ISD_AS number of the next AS, in the signed body component of the AS entry.<a href="#section-2.3.4.1-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-2.3.4.1-2.2.2.4">
+                    <p id="section-2.3.4.1-2.2.2.4.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The Hop Field component of each added peer entry <span class="bcp14">MUST</span> have a specified egress interface.<a href="#section-2.3.4.1-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li id="section-2.3.2.2-2.3">
-                <p id="section-2.3.2.2-2.3.1">The Control Service <span class="bcp14">MUST</span> now sign each selected, extended PCB and append the computed signature.<a href="#section-2.3.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.4.1-2.3">
+                <p id="section-2.3.4.1-2.3.1">The Control Service <span class="bcp14">MUST</span> now sign each selected, extended PCB and append the computed signature.<a href="#section-2.3.4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.2-2.4">
-                <p id="section-2.3.2.2-2.4.1">As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.2.4</a>).<a href="#section-2.3.2.2-2.4.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.4.1-2.4">
+                <p id="section-2.3.4.1-2.4.1">As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.4.3</a>).<a href="#section-2.3.4.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </section>
 </div>
 <div id="propagation-of-pcbs-in-core-beaconing">
-<section id="section-2.3.2.3">
+<section id="section-2.3.4.2">
             <h5 id="name-propagation-of-pcbs-in-core">
-<a href="#section-2.3.2.3" class="section-number selfRef">2.3.2.3. </a><a href="#name-propagation-of-pcbs-in-core" class="section-name selfRef">Propagation of PCBs in Core Beaconing</a>
+<a href="#section-2.3.4.2" class="section-number selfRef">2.3.4.2. </a><a href="#name-propagation-of-pcbs-in-core" class="section-name selfRef">Propagation of PCBs in Core Beaconing</a>
             </h5>
-<p id="section-2.3.2.3-1">The propagation process in core beaconing includes the following steps:<a href="#section-2.3.2.3-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.3-2">
-<li id="section-2.3.2.3-2.1">
-                <p id="section-2.3.2.3-2.1.1">The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.<a href="#section-2.3.2.3-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4.2-1">The propagation process in core beaconing includes the following steps:<a href="#section-2.3.4.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.4.2-2">
+<li id="section-2.3.4.2-2.1">
+                <p id="section-2.3.4.2-2.1.1">The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.<a href="#section-2.3.4.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.3-2.2">
-                <p id="section-2.3.2.3-2.2.1">The service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.2.3-2.2.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.4.2-2.2">
+                <p id="section-2.3.4.2-2.2.1">The service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.4.2-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.3-2.2.2.1">
-                    <p id="section-2.3.2.3-2.2.2.1.1">The egress interface to the neighboring core AS in the Hop Field component.<a href="#section-2.3.2.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4.2-2.2.2.1">
+                    <p id="section-2.3.4.2-2.2.2.1.1">The egress interface to the neighboring core AS in the Hop Field component.<a href="#section-2.3.4.2-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.3-2.2.2.2">
-                    <p id="section-2.3.2.3-2.2.2.2.1">The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.<a href="#section-2.3.2.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-2.3.4.2-2.2.2.2">
+                    <p id="section-2.3.4.2-2.2.2.2.1">The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.<a href="#section-2.3.4.2-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li id="section-2.3.2.3-2.3">
-                <p id="section-2.3.2.3-2.3.1">The core Control Service <span class="bcp14">MUST</span> sign the extended PCBs and append the computed signature.<a href="#section-2.3.2.3-2.3.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.4.2-2.3">
+                <p id="section-2.3.4.2-2.3.1">The core Control Service <span class="bcp14">MUST</span> sign the extended PCBs and append the computed signature.<a href="#section-2.3.4.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.3-2.4">
-                <p id="section-2.3.2.3-2.4.1">As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.2.4</a>).<a href="#section-2.3.2.3-2.4.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.4.2-2.4">
+                <p id="section-2.3.4.2-2.4.1">As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.4.3</a>).<a href="#section-2.3.4.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </section>
 </div>
 <div id="prop-proto">
-<section id="section-2.3.2.4">
+<section id="section-2.3.4.3">
             <h5 id="name-propagation-of-pcbs-in-prot">
-<a href="#section-2.3.2.4" class="section-number selfRef">2.3.2.4. </a><a href="#name-propagation-of-pcbs-in-prot" class="section-name selfRef">Propagation of PCBs in Protobuf Message Format</a>
+<a href="#section-2.3.4.3" class="section-number selfRef">2.3.4.3. </a><a href="#name-propagation-of-pcbs-in-prot" class="section-name selfRef">Propagation of PCBs in Protobuf Message Format</a>
             </h5>
-<p id="section-2.3.2.4-1">The last step of the above described core and intra-ISD propagation procedures is implemented as follows in Protobuf message format:<a href="#section-2.3.2.4-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3.2.4-2">
+<p id="section-2.3.4.3-1">The last step of the above described core and intra-ISD propagation procedures is implemented as follows in Protobuf message format:<a href="#section-2.3.4.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.4.3-2">
 <pre>
    service SegmentCreationService {
        rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
@@ -2979,28 +2975,28 @@ The relative disjointness of two PCBs A and B may be calculated by assigning a d
    }
 
    message BeaconResponse {}
-</pre><a href="#section-2.3.2.4-2" class="pilcrow">¶</a>
+</pre><a href="#section-2.3.4.3-2" class="pilcrow">¶</a>
 </div>
-<p id="section-2.3.2.4-3">The propagation procedure includes the following elements:<a href="#section-2.3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.4.3-3">The propagation procedure includes the following elements:<a href="#section-2.3.4.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.1">
-                <p id="section-2.3.2.4-4.1.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.3.2.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4.3-4.1">
+                <p id="section-2.3.4.3-4.1.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.3.4.3-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.1.2.1">
-                    <p id="section-2.3.2.4-4.1.2.1.1"><code>Beacon</code>: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.<a href="#section-2.3.2.4-4.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4.3-4.1.2.1">
+                    <p id="section-2.3.4.3-4.1.2.1.1"><code>Beacon</code>: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.<a href="#section-2.3.4.3-4.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-4.2">
-                <p id="section-2.3.2.4-4.2.1"><code>BeaconRequest</code>: Specifies the request message sent by the <code>Beacon</code> method to the Control Service of the neighboring AS. It contains the following element:<a href="#section-2.3.2.4-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.4.3-4.2">
+                <p id="section-2.3.4.3-4.2.1"><code>BeaconRequest</code>: Specifies the request message sent by the <code>Beacon</code> method to the Control Service of the neighboring AS. It contains the following element:<a href="#section-2.3.4.3-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.2.2.1">
-                    <p id="section-2.3.2.4-4.2.2.1.1"><code>PathSegment</code>: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type <code>PathSegment</code>, see <a href="#segment" class="auto internal xref">Section 2.2.1.1</a>.<a href="#section-2.3.2.4-4.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4.3-4.2.2.1">
+                    <p id="section-2.3.4.3-4.2.2.1.1"><code>PathSegment</code>: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type <code>PathSegment</code>, see <a href="#segment" class="auto internal xref">Section 2.2.1.1</a>.<a href="#section-2.3.4.3-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-4.3">
-                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.4.3-4.3">
+                <p id="section-2.3.4.3-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.4.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -3246,7 +3242,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-4.1.2-2.3.1">The Control Service adds the newly created up segments to its own path database.<a href="#section-4.1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.1.2-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="transforming-a-pcb-into-a-down-segment">
@@ -3266,7 +3262,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-4.1.3-2.3.1">The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the <code>SegmentRegistrationService.SegmentsRegistration</code> remote procedure call (RPC) in the Control Services of the relevant core ASes (see also <a href="#reg-proto" class="auto internal xref">Section 4.3</a>). The first ISD-AS entry of the path segment <span class="bcp14">SHOULD</span> be equal to the core ISD-AS where the segment is being registered. If not, the core AS <span class="bcp14">SHOULD</span> reject the segment.<a href="#section-4.1.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.1.3-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3289,7 +3285,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-4.2-3.3.1">The Control Service adds the newly created core segments to its own path database.<a href="#section-4.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-4.2-4"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reg-proto">

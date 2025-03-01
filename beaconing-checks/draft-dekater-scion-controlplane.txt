@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 September 2025                                        S. Hitz
+Expires: 2 September 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                        28 February 2025
+                                                            1 March 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2025.
+   This Internet-Draft will expire on 2 September 2025.
 
 Copyright Notice
 
@@ -107,8 +107,10 @@ Table of Contents
        2.2.3.  PCB Validity
        2.2.4.  Configuration
      2.3.  Propagation of PCBs
-       2.3.1.  Selection of PCBs to Propagate
-       2.3.2.  Propagation of Selected PCBs
+       2.3.1.  Reception of PCBs
+       2.3.2.  Storing Candidate PCBs
+       2.3.3.  Selection of PCBs to Propagate
+       2.3.4.  Propagation of Selected PCBs
    3.  Deployment Considerations
      3.1.  Monitoring Considerations
      3.2.  Effects of Clock Inaccuracy
@@ -782,10 +784,10 @@ Table of Contents
 
    *  selects the best combinations of PCBs and interfaces connecting to
       a neighboring AS (i.e. a child AS or a core AS).  This is
-      described in Section 2.3.1.
+      described in Section 2.3.3.
 
    *  propagates each selected PCB to the selected egress interface(s)
-      associated with it.  This is described in Section 2.3.2.
+      associated with it.  This is described in Section 2.3.4.
 
    For every selected PCB and egress interface combination, the AS
    appends an _AS entry_ to the selected PCB.  This includes a Hop Field
@@ -1659,140 +1661,16 @@ path segment 4 |             |     |             |     |             |
 
 2.3.  Propagation of PCBs
 
-   This section describes how PCBs are received, selected and propagated
-   in the path exploration process.
+   This section describes how PCBs are received, selected and further
+   propagated in the path exploration process.
 
-2.3.1.  Selection of PCBs to Propagate
-
-   As an AS receives PCBs, it MUST select which ones to propagate
-   further.  Each AS specifies a local policy on the basis of which PCBs
-   are evaluated, selected, or eliminated.  The selection process can
-   inspect and compare the properties of the candidate PCBs (e.g.,
-   length, disjointness across different paths, age, expiration time)
-   and/or take into account which PCBs have been propagated in the past.
-
-   From these viable PCBs, only a relatively small subset SHOULD be
-   propagated to avoid excessive overhead of the path discovery system
-   in bigger networks.
-
-   The goal of the AS SHOULD be to propagate those candidate PCBs with
-   the highest probability of collectively meeting the needs of the
-   endpoints that will perform path construction.  As SCION does not
-   provide any in-band signal about the intentions of endpoints nor
-   about the policies of downstream ASes, the policy will typically
-   select a somewhat diverse set optimized for multiple, generic
-   parameters.
-
-2.3.1.1.  Storing and Selecting Candidate PCBs
-
-   When receiving a PCB, an AS first stores the PCB in a temporary
-   storage for candidate PCBs called the _Beacon Store_. The management
-   of this storage is implementation defined.  Current practice is to
-   retain all PCBs until expired or replaced by one describing the same
-   path with a later origination time.
-
-   PCBs are propagated in batches to each connected AS at a fixed
-   frequency known as the _propagation interval_. At each propagation
-   event, each AS selects a set of the best PCBs from the candidates in
-   the Beacon Store, according to the AS's selection policy.  This set
-   SHOULD have a fixed size, the _best PCBs set size_.
-
-   The _best PCBs set size_ SHOULD be:
-
-   *  For intra-AS beaconing (i.e. propagating to children ASes): at
-      most 50.
-
-   *  For core beaconing (i.e. propagation between core ASes): at most 5
-      per immediate neighbor core AS.  Current practice is that each set
-      of 5 is chosen among the PCBs received from each neighbor.
-
-   These are RECOMMENDED maxima; in current practice the intra-ISD set
-   size is typically 20.
-
-   Depending on the selection criteria, it may be necessary to keep more
-   candidate PCBs than the _best PCBs set size_ in the Beacon Store, to
-   be able to determine the best set of PCBs.  If this is the case, an
-   AS SHOULD have a suitable pre-selection of candidate PCBs in place in
-   order to keep the Beacon Store capacity limited.
-
-   *  The _propagation interval_ SHOULD be at least "5" (seconds) for
-      intra-ISD beaconing and at least "60" (seconds) for core
-      beaconing.
-
-   Note that to ensure quick connectivity establishment, an AS MAY
-   attempt to forward a PCB more frequently ("fast recovery").  Current
-   practice is to increase the frequency of attempts if no PCB
-   propagation is know to have succeeded within the last propagation
-   interval:
-
-   *  because the corresponding RPC failed;
-
-   *  or because no beacon was available to propagate.
-
-   The scalability implications of such parameters are further discussed
-   in Section 3.3.
-
-2.3.1.2.  Selection Policy Example
-
-   An AS MUST select the best PCBs set to be further propagated.
-   Selection may be based on criteria such as:
-
-   *  AS path length: from the originator core AS to the child (non-
-      core) AS.
-
-   *  Availability of peering links: that is the number of different
-      peering ASes from all non-core ASes on the PCB or path segment.  A
-      greater number of peering ASes increases the likelihood of finding
-      a shortcut on the path segment.
-
-   *  Path disjointness: Paths can be either AS disjointed or link
-      disjointed.  AS disjointed paths have no common upstream/core AS
-      for the current AS, whereas link disjoint paths do not share any
-      AS-to-AS link.  AS disjointness allows path diversity in the event
-      that an AS becomes unresponsive, and link disjointness provides
-      resilience in case of link failure.  Both criteria can be used
-      depending on the objective of the AS.  The relative disjointness
-      of two PCBs A and B may be calculated by assigning a disjointness
-      score, calculated as the number of links in A that don't appear in
-      B.  The beacon that has the highest disjointness score and is not
-      the shortest path SHOULD be selected.  If this is not better than
-      what has already been selected, then the beacon with the shortest
-      path yet to be selected SHOULD be chosen instead.
-
-   *  Expiration time: the maximum value for the expiration time when
-      extending the segment.
-
-   *  ISD or AS blacklists: certain ASes or ISD that may not appear in a
-      segment.
-
-   *  ISD loops: if permitted, they allow core AS to reach other core
-      ASes in the same ISD via a third party ISDs.
-
-   Naturally, an AS's policy selects PCBs corresponding to paths that
-   are commercially or otherwise operationally viable.
-
-2.3.2.  Propagation of Selected PCBs
-
-   As mentioned above, once per _propagation period_ (determined by each
-   AS), an AS propagates selected PCBs to its neighboring ASes which
-   happens at the level of both intra-ISD beaconing and core beaconing.
-   This section describes both processes in more detail.
-
-   To bootstrap the initial communication with a neighboring beacon
-   service, ASes use one-hop paths.  This special kind of path handles
-   beaconing between neighboring ASes for which no forwarding path may
-   be available yet.  In fact, it is the task of beaconing to discover
-   such forwarding paths and the purpose of one-hop paths is to break
-   this circular dependency.  The One-Hop Path Type is described in more
-   detail in [I-D.dekater-scion-dataplane].
-
-2.3.2.1.  Reception of PCBs
+2.3.1.  Reception of PCBs
 
    Upon receiving a PCB, the Control Service of an AS performs the
    following checks:
 
    1.  PCB validity: It verifies the validity of the PCB (see
-       Section 2.2.3).  Invalid PCBs MUST be discarded.  The PCB
+       Section 2.2.3) and invalid PCBs MUST be discarded.  The PCB
        contains the version numbers of the TRC(s) and certificate(s)
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
@@ -1823,10 +1701,121 @@ path segment 4 |             |     |             |     |             |
 
    If the PCB verification is successful, the Control Service decides
    whether to store the PCB as a candidate for propagation based on
-   selection criteria and polices specific for each AS.  For more
-   information on the selection process, see Section 2.3.1.
+   selection criteria and polices specific for each AS.
 
-2.3.2.2.  Propagation of PCBs in Intra-ISD Beaconing
+2.3.2.  Storing Candidate PCBs
+
+   An AS stores candidate PCBs in a temporary storage called the _Beacon
+   Store_. The management of this storage is implementation defined.
+
+   Current practice is to retain all PCBs until expired or replaced by
+   one describing the same path with a later origination time.
+
+2.3.3.  Selection of PCBs to Propagate
+
+   An AS MUST select which PCBs to propagate further.  The selection
+   process can inspect and compare the properties of the candidate PCBs
+   (e.g. length, disjointness across different paths, age, expiration
+   time) and/or take into account which PCBs have been propagated in the
+   past.  The PCBs to select or eliminate is determined by the policy of
+   the AS.
+
+   Only a relatively small subset of the viable PCBs SHOULD be
+   propagated to avoid excessive overhead of the path discovery system
+   in bigger networks.  The goal of the AS SHOULD be to propagate those
+   candidate PCBs with the highest probability of collectively meeting
+   the needs of the endpoints that will perform path construction.
+
+   As SCION does not provide any in-band signal about the intentions of
+   endpoints nor about the policies of downstream ASes, the policy will
+   typically select a somewhat diverse set optimized for multiple,
+   generic parameters.  Selection may be based on criteria such as:
+
+   *  AS path length: from the originator core AS to the child (non-
+      core) AS.
+
+   *  Expiration time: the maximum value for the expiration time when
+      extending the segment.
+
+   *  ISD or AS blacklists: certain ASes or ISD that may not appear in a
+      segment.
+
+   *  ISD loops: if permitted, they allow core AS to reach other core
+      ASes in the same ISD via a third party ISDs.
+
+   *  Availability of peering links: that is the number of different
+      peering ASes from all non-core ASes on the PCB or path segment.  A
+      greater number of peering ASes increases the likelihood of finding
+      a shortcut on the path segment.
+
+   *  Path disjointness: Paths can be either AS disjointed or link
+      disjointed.  AS disjointed paths have no common upstream/core AS
+      for the current AS, whereas link disjointed paths do not share any
+      AS-to-AS link.  AS disjointness allows path diversity in the event
+      that an AS becomes unresponsive, and link disjointness provides
+      resilience in case of link failure.  Both criteria can be used
+      depending on the objective of the AS.
+
+   The relative disjointness of two PCBs A and B may be calculated by
+   assigning a disjointness score, calculated as the number of links in
+   A that don't appear in B.  The beacon that has the highest
+   disjointness score and is not the shortest path SHOULD be selected.
+   If this is not better than what has already been selected, then the
+   beacon with the shortest path yet to be selected SHOULD be chosen
+   instead.
+
+2.3.4.  Propagation of Selected PCBs
+
+   PCBs are propagated in batches to each neighboring AS at a fixed
+   frequency known as the _propagation interval_ which happens for both
+   intra-ISD beaconing and core beaconing.  At each propagation event,
+   each AS selects a set of the best PCBs from the candidates in the
+   Beacon Store according to the AS's selection policy.  This set SHOULD
+   have a fixed size, the _best PCBs set size_.
+
+   The _best PCBs set size_ SHOULD be:
+
+   *  For intra-AS beaconing (i.e. propagating to children ASes): at
+      most 50.
+
+   *  For core beaconing (i.e. propagation between core ASes): at most 5
+      per immediate neighbor core AS.  Current practice is that each set
+      of 5 is chosen among the PCBs received from each neighbor.
+
+   These are RECOMMENDED maximums; in current practice the intra-ISD set
+   size is typically 20.
+
+   Depending on the selection criteria, it may be necessary to keep more
+   candidate PCBs than the _best PCBs set size_ in the Beacon Store in
+   order to determine the best set of PCBs.  If this is the case, an AS
+   SHOULD have a suitable pre-selection of candidate PCBs in place in
+   order to keep the Beacon Store capacity limited.
+
+   *  The _propagation interval_ SHOULD be at least "5" (seconds) for
+      intra-ISD beaconing and at least "60" (seconds) for core
+      beaconing.
+
+   Note that to ensure establish quick connectivity, an AS MAY attempt
+   to forward a PCB more frequently ("fast recovery").  Current practice
+   is to increase the frequency of attempts if no PCB propagation is
+   known to have succeeded within the last propagation interval:
+
+   *  because the corresponding RPC failed;
+
+   *  or because no beacon was available to propagate.
+
+   The scalability implications of such parameters are further discussed
+   in Section 3.3.
+
+   To bootstrap the initial communication with a neighboring beacon
+   service, ASes use one-hop paths.  This special kind of path handles
+   beaconing between neighboring ASes for which no forwarding path may
+   be available yet.  It is the task of beaconing to discover such
+   forwarding paths and the purpose of one-hop paths is to break this
+   circular dependency.  The One-Hop Path Type is described in more
+   detail in [I-D.dekater-scion-dataplane].
+
+2.3.4.1.  Propagation of PCBs in Intra-ISD Beaconing
 
    The propagation process in intra-ISD beaconing includes the following
    steps:
@@ -1860,9 +1849,9 @@ path segment 4 |             |     |             |     |             |
        to the correct neighboring ASes by invoking the
        SegmentCreationService.Beacon remote procedure call (RPC) in the
        Control Services of the neighboring ASes (see also
-       Section 2.3.2.4).
+       Section 2.3.4.3).
 
-2.3.2.3.  Propagation of PCBs in Core Beaconing
+2.3.4.2.  Propagation of PCBs in Core Beaconing
 
    The propagation process in core beaconing includes the following
    steps:
@@ -1886,9 +1875,9 @@ path segment 4 |             |     |             |     |             |
        neighboring core ASes by invoking the
        SegmentCreationService.Beacon remote procedure call (RPC) in the
        Control Services of the neighboring core ASes (see also
-       Section 2.3.2.4).
+       Section 2.3.4.3).
 
-2.3.2.4.  Propagation of PCBs in Protobuf Message Format
+2.3.4.3.  Propagation of PCBs in Protobuf Message Format
 
    The last step of the above described core and intra-ISD propagation
    procedures is implemented as follows in Protobuf message format:
@@ -2262,7 +2251,7 @@ path segment 4 |             |     |             |     |             |
        path database.
 
    *Note:* For more information on possible selection strategies of
-   PCBs, see Section 2.3.1.
+   PCBs, see Section 2.3.3.
 
 4.1.3.  Transforming a PCB into a Down Segment
 
@@ -2286,7 +2275,7 @@ path segment 4 |             |     |             |     |             |
        registered.  If not, the core AS SHOULD reject the segment.
 
    *Note:* For more information on possible selection strategies of
-   PCBs, see Section 2.3.1.
+   PCBs, see Section 2.3.3.
 
 4.2.  Core Path Segment Registration
 
@@ -2312,7 +2301,7 @@ path segment 4 |             |     |             |     |             |
        own path database.
 
    *Note:* For more information on possible selection strategies of
-   PCBs, see Section 2.3.1.
+   PCBs, see Section 2.3.3.
 
 4.3.  Path Segment Registration gRPC API
 
