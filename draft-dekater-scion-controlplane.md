@@ -1183,8 +1183,6 @@ The relative disjointness of two PCBs A and B may be calculated by assigning a d
 
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
-### Propagation of Selected PCBs {#path-segment-prop}
-
 As mentioned above, once per *propagation period* (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.
 
 To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
