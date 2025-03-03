@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-02T00:23:18.122931+00:00",
+  "timestamp": "2025-03-03T17:10:10.722557+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1368,7 +1368,7 @@
       "id": "I_kwDOJx2-rs6sDHke",
       "title": "Beaconing: reorder paragraphs and condense text",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/100",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1379,8 +1379,8 @@
       ],
       "body": "As discussed in #94:  the sections organization is a bit weird, right now we have: \n```\n 2.3.  Propagation of PCBs\n       2.3.1.  Selection of PCBs to Propagate\n           2.3.1.1.  Storing and Selecting Candidate PCBs\n           2.3.1.2.  Selection Policy Example\n       2.3.2.  Propagation of Selected PCBs\n           2.3.2.1.  Reception of PCBs\n           2.3.2.2.  Propagation of PCBs in Intra-ISD Beaconing\n           2.3.2.3.  Propagation of PCBs in Core Beaconing\n```\n\nI think: \n\n-  2.3.1.1.  Storing and Selecting Candidate PCBs and   2.3.1.2.  Selection Policy Example should be close\n- We could create a \"propagation interval and number of propagated beacons section\"\n- etc... \n",
       "createdAt": "2025-02-28T08:13:05Z",
-      "updatedAt": "2025-03-01T07:02:00Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-03T15:52:48Z",
+      "closedAt": "2025-03-03T15:52:48Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -8465,24 +8465,26 @@
       "id": "PR_kwDOJx2-rs6NBtvf",
       "title": "Beaconing: reorganize paragraph 2.3",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/102",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #100 \r\nDraft [diff](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/beaconing-reorg/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-03-01T10:09:11Z",
-      "updatedAt": "2025-03-01T22:21:01Z",
+      "updatedAt": "2025-03-03T15:52:50Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1d410d9eb6c262126d41ca1fd60c8c4346d4ad83",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "beaconing-reorg",
       "headRefOid": "f8884fdf297844c16a274deebab0e7c0da6e01c3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-03T15:52:47Z",
+      "mergedAt": "2025-03-03T15:52:47Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "e2034b1901abdb3104d286359dfc2b809ba89237"
+      },
       "comments": [
         {
           "author": "nicorusti",
