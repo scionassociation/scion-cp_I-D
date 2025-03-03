@@ -156,7 +156,7 @@ Table of Contents
            Adversary
        7.3.1.  Path Hijacking through Interposition
        7.3.2.  Creation of Spurious ASes and ISDs
-       7.3.3.   Peering Link Misuse
+       7.3.3.  Peering Link Misuse
        7.3.4.  Manipulation of the Path-Selection Process
      7.4.  Denial of Service Attacks
    8.  IANA Considerations
@@ -3250,7 +3250,7 @@ path segment 4 |             |     |             |     |             |
    need the involvement of more than one malicious entity.  Here the
    "costs" of setting up the fake ISD may outweigh the benefits.
 
-7.3.3.   Peering Link Misuse
+7.3.3.  Peering Link Misuse
 
    The misuse of a peering link by an adversary represents another type
    of attack.  Consider the case where AS A wants to share its peering
