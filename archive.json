@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-18T00:21:58.419756+00:00",
+  "timestamp": "2025-03-20T00:21:48.904316+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1281,7 +1281,7 @@
       "id": "I_kwDOJx2-rs6ou9Jm",
       "title": "Beaconing: clarify checks",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/90",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1292,10 +1292,10 @@
         "enhancement",
         "needs-discussion"
       ],
-      "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [ ] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
+      "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [x] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-03-01T12:18:57Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-19T11:01:00Z",
+      "closedAt": "2025-03-19T11:00:59Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -1331,6 +1331,13 @@
           "body": "> Clarify if last check (remote registration) is actually needed\n\nLeaving open to check if someone responds to my slack [thread](https://scionproto.slack.com/archives/C8ADA9CEP/p1740679917948679) ",
           "createdAt": "2025-03-01T12:18:56Z",
           "updatedAt": "2025-03-01T12:18:56Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "On the last check, leaving a SHOULD and resolving.\n\nFrom Dominik:\n\n>  I think a SHOULD is fine here. But just that we are clear. The segments will be useless, because no-one is going to ask for them  with the current lookup strategy\nFun fact: Originally, the ASes registered their down segments with all core ASes (or the cores synced amongst them :thinking_face:). But we later changed the lookup strategy to be easier to reason about.",
+          "createdAt": "2025-03-19T11:00:59Z",
+          "updatedAt": "2025-03-19T11:00:59Z"
         }
       ]
     },
@@ -1390,6 +1397,28 @@
           "updatedAt": "2025-03-01T07:01:59Z"
         }
       ]
+    },
+    {
+      "number": 103,
+      "id": "I_kwDOJx2-rs6uqj7d",
+      "title": "Can we learn something from SRv6 security considerations?",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/103",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement",
+        "needs-discussion"
+      ],
+      "body": "The SPRING WG is working on [SRv6 security considerations](https://datatracker.ietf.org/doc/draft-ietf-spring-srv6-security/). Can we learn something from this document? Or the other way around?",
+      "createdAt": "2025-03-19T04:09:41Z",
+      "updatedAt": "2025-03-19T05:19:02Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
