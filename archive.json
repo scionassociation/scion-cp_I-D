@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-01T00:25:51.608811+00:00",
+  "timestamp": "2025-04-06T00:24:28.702876+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1417,6 +1417,27 @@
       "body": "The SPRING WG is working on [SRv6 security considerations](https://datatracker.ietf.org/doc/draft-ietf-spring-srv6-security/). Can we learn something from this document? Or the other way around?",
       "createdAt": "2025-03-19T04:09:41Z",
       "updatedAt": "2025-03-19T05:19:02Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 104,
+      "id": "I_kwDOJx2-rs6w7tdb",
+      "title": "Add SVG figures",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/104",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": "> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "createdAt": "2025-04-03T06:09:32Z",
+      "updatedAt": "2025-04-03T06:09:32Z",
       "closedAt": null,
       "comments": []
     }
