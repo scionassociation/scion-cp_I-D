@@ -13,18 +13,18 @@
        The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
-<meta content="xml2rfc 3.27.0" name="generator">
+<meta content="xml2rfc 3.28.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-controlplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.27.0
+  xml2rfc 3.28.1
     Python 3.12.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.5
+    Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.6
+    platformdirs 4.3.7
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
@@ -1048,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION CP</td>
-<td class="right">February 2025</td>
+<td class="right">April 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 31 August 2025</td>
+<td class="center">Expires 12 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-02-27" class="published">27 February 2025</time>
+<time datetime="2025-04-10" class="published">10 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-08-31">31 August 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-12">12 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1240,10 +1240,19 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-propagation-of-pcbs" class="internal xref">Propagation of PCBs</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.1">
-                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-selection-of-pcbs-to-propag" class="internal xref">Selection of PCBs to Propagate</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-reception-of-pcbs" class="internal xref">Reception of PCBs</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
-                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-storing-candidate-pcbs" class="internal xref">Storing Candidate PCBs</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-pcb-selection-policies" class="internal xref">PCB Selection Policies</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.4">
+                    <p id="section-toc.1-1.2.2.3.2.4.1"><a href="#section-2.3.4" class="auto internal xref">2.3.4</a>.  <a href="#name-propagation-interval-and-be" class="internal xref">Propagation Interval and Best PCBs Set Size</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.5">
+                    <p id="section-toc.1-1.2.2.3.2.5.1"><a href="#section-2.3.5" class="auto internal xref">2.3.5</a>.  <a href="#name-propagation-of-selected-pcb" class="internal xref">Propagation of Selected PCBs</a></p>
 </li>
                 </ul>
 </li>
@@ -1447,19 +1456,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-F.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-08</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
-                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-08</a></p>
+                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-07</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
-                <p id="section-toc.1-1.15.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-07</a></p>
+                <p id="section-toc.1-1.15.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.4">
-                <p id="section-toc.1-1.15.2.4.1"><a href="#appendix-F.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpla" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
+                <p id="section-toc.1-1.15.2.4.1"><a href="#appendix-F.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpla" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.5">
-                <p id="section-toc.1-1.15.2.5.1"><a href="#appendix-F.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplan" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.6">
-                <p id="section-toc.1-1.15.2.6.1"><a href="#appendix-F.6" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplane" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
+                <p id="section-toc.1-1.15.2.5.1"><a href="#appendix-F.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplan" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
 </li>
             </ul>
 </li>
@@ -1606,7 +1612,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -1834,7 +1840,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.6-1">A secure and reliable routing architecture has to be designed specifically to avoid circular dependencies during network bootstrapping. One goal is that the SCION network can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies:<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.6-2.1">
-            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one hop path type which does not rely on any path information. SCION uses these <em>one hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-2.1.1">Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these <em>one-hop paths</em> to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-1.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.6-2.2">
             <p id="section-1.6-2.2.1">Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.<a href="#section-1.6-2.2.1" class="pilcrow">¶</a></p>
@@ -1903,13 +1909,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-appending-entries-to-a-pcb">
 <a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-appending-entries-to-a-pcb" class="section-name selfRef">Appending Entries to a PCB</a>
           </h4>
-<p id="section-2.1.2-1">Every propagation period (as configured by the AS), the Control Service:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-1">Every propagation interval (as configured by the AS), the Control Service:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1.2-2.1">
-              <p id="section-2.1.2-2.1.1">selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.1.2-2.1.1">selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.1.2-2.2">
-              <p id="section-2.1.2-2.2.1">propagates each selected PCB to the selected egress interface(s) associated with it. This is described in <a href="#path-segment-prop" class="auto internal xref">Section 2.3.2</a>.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.1.2-2.2.1">propagates each selected PCB to the selected egress interface(s) associated with it. This is described in <a href="#path-segment-prop" class="auto internal xref">Section 2.3.5</a>.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.1.2-3">For every selected PCB and egress interface combination, the AS appends an <em>AS entry</em> to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
@@ -2173,7 +2179,7 @@ path segment 4 |             |     |             |     |             |
 <a href="#name-top-down-composition-of-one" class="selfRef">Top-down composition of one PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-3"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a>, <a href="#_figure-14" class="auto internal xref">Figure 20</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-3"><strong>Note:</strong> For a full example of one PCB in the Protobuf message format, please see <a href="#app-a" class="auto internal xref">Appendix "Full Control Service gRPC API"</a>, <a href="#_figure-14" class="auto internal xref">Figure 19</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2495,7 +2501,7 @@ path segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.2-5.1.1"><code>isd_as</code>: The ISD-AS number of the AS that created this AS entry.<a href="#section-2.2.1.4.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.2">
-                  <p id="section-2.2.1.4.2-5.2.1"><code>next_isd_as</code>: The ISD-AS number of the downstream AS to which the PCB <span class="bcp14">SHOULD</span> be forwarded.<a href="#section-2.2.1.4.2-5.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.2-5.2.1"><code>next_isd_as</code>: The ISD-AS number of the downstream AS to which the PCB <span class="bcp14">SHOULD</span> be forwarded. The presence of this field prevents path hijacking attacks, as further discussed in <a href="#path-hijack" class="auto internal xref">Section 7.3.1</a>.<a href="#section-2.2.1.4.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.2-5.3">
                   <p id="section-2.2.1.4.2-5.3.1"><code>hop_entry</code>: The hop entry (<code>HopEntry</code>) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see <a href="#hopentry" class="auto internal xref">Section 2.2.1.5</a>.<a href="#section-2.2.1.4.2-5.3.1" class="pilcrow">¶</a></p>
@@ -2785,7 +2791,8 @@ associated_data(ps, i) = ps.segment_info ||
               <p id="section-2.2.4-2.4.1">Neighbor interface underlay address<a href="#section-2.2.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.4-3">In addition, the maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> be configured.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.4-3">In addition, the maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> be configured.
+Last, the AS <span class="bcp14">SHOULD</span> adopt a PCB selection policy that it does not accidentally isolate the AS from the network, i.e., such that it does not block connectivity to parent providers and that ensures downstream connectivity for children. For more details, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2795,244 +2802,187 @@ associated_data(ps, i) = ps.segment_info ||
         <h3 id="name-propagation-of-pcbs">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-propagation-of-pcbs" class="section-name selfRef">Propagation of PCBs</a>
         </h3>
-<p id="section-2.3-1">This section describes how PCBs are selected and propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
-<div id="selection">
+<p id="section-2.3-1">This section describes how PCBs are received, selected and further propagated in the path exploration process.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<div id="reception-of-pcbs">
 <section id="section-2.3.1">
-          <h4 id="name-selection-of-pcbs-to-propag">
-<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-selection-of-pcbs-to-propag" class="section-name selfRef">Selection of PCBs to Propagate</a>
+          <h4 id="name-reception-of-pcbs">
+<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
           </h4>
-<p id="section-2.3.1-1">As an AS receives a series of intra-ISD or core PCBs, it <span class="bcp14">MUST</span> select the PCBs that it will propagate further. Each AS specifies a local policy on the basis of which PCBs are evaluated, selected, or eliminated.
-The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-2">Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
-From these viable PCBs, only a relatively small subset <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-3">The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction. As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
-<div id="storing-and-selecting-candidate-pcbs">
-<section id="section-2.3.1.1">
-            <h5 id="name-storing-and-selecting-candi">
-<a href="#section-2.3.1.1" class="section-number selfRef">2.3.1.1. </a><a href="#name-storing-and-selecting-candi" class="section-name selfRef">Storing and Selecting Candidate PCBs</a>
-            </h5>
-<p id="section-2.3.1.1-1">When receiving a PCB, an AS first stores the PCB in a temporary storage for candidate PCBs called the <em>Beacon Store</em>. The management of this storage is implementation defined. Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.<a href="#section-2.3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-2">PCBs are propagated in batches to each connected AS at a fixed frequency known as the <em>propagation interval</em>. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store, according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-3">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be:<a href="#section-2.3.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
+<li id="section-2.3.1-2.1">
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-2.3.1-2.2">
+              <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-2.3.1-2.3">
+              <p id="section-2.3.1-2.3.1">Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) <span class="bcp14">MUST</span> coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB <span class="bcp14">MUST</span> be discarded.<a href="#section-2.3.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-2.3.1-2.4">
+              <p id="section-2.3.1-2.4.1">Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.<a href="#section-2.3.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+<p id="section-2.3.1-3">If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.<a href="#section-2.3.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="storing-candidate-pcbs">
+<section id="section-2.3.2">
+          <h4 id="name-storing-candidate-pcbs">
+<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-storing-candidate-pcbs" class="section-name selfRef">Storing Candidate PCBs</a>
+          </h4>
+<p id="section-2.3.2-1">An AS stores candidate PCBs in a temporary storage called the <em>Beacon Store</em>. The management of this storage is implementation defined.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="selection">
+<section id="section-2.3.3">
+          <h4 id="name-pcb-selection-policies">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-pcb-selection-policies" class="section-name selfRef">PCB Selection Policies</a>
+          </h4>
+<p id="section-2.3.3-1">An AS <span class="bcp14">MUST</span> select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">Only a relatively small subset of the viable PCBs <span class="bcp14">SHOULD</span> be propagated to avoid excessive overhead of the path discovery system in bigger networks. The goal of the AS <span class="bcp14">SHOULD</span> be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-3">As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.1.1-4.1">
-                <p id="section-2.3.1.1-4.1.1">For intra-AS beaconing (i.e. propagating to children ASes): at most 50.<a href="#section-2.3.1.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.3-4.1">
+              <p id="section-2.3.3-4.1.1">AS path length: from the originator core AS to the child (non-core) AS.<a href="#section-2.3.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.1-4.2">
-                <p id="section-2.3.1.1-4.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.<a href="#section-2.3.1.1-4.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.3-4.2">
+              <p id="section-2.3.3-4.2.1">Expiration time: the maximum value for the expiration time when extending the segment.<a href="#section-2.3.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.1.1-5">Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
+            <li class="normal" id="section-2.3.3-4.3">
+              <p id="section-2.3.3-4.3.1">ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.<a href="#section-2.3.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.4">
+              <p id="section-2.3.3-4.4.1">ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.<a href="#section-2.3.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.5">
+              <p id="section-2.3.3-4.5.1">Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.<a href="#section-2.3.3-4.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.3-4.6">
+              <p id="section-2.3.3-4.6.1">Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.<a href="#section-2.3.3-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.3-5">The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path <span class="bcp14">SHOULD</span> be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected <span class="bcp14">SHOULD</span> be chosen instead.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-6">A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.<a href="#section-2.3.3-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="propagation-interval-size">
+<section id="section-2.3.4">
+          <h4 id="name-propagation-interval-and-be">
+<a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-propagation-interval-and-be" class="section-name selfRef">Propagation Interval and Best PCBs Set Size</a>
+          </h4>
+<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be:<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.3.4-3.1">
+              <p id="section-2.3.4-3.1.1">For intra-AS beaconing (i.e. propagating to children ASes): at most 50.<a href="#section-2.3.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.3.4-3.2">
+              <p id="section-2.3.4-3.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.<a href="#section-2.3.4-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.3.4-4">Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
 Values above are <span class="bcp14">RECOMMENDED</span> maxima which represent a tradeoff between scalability and amount of paths discovered.
-In current practice the intra-ISD set size is typically 20.<a href="#section-2.3.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-6">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store, to be able to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
+In current practice the intra-ISD set size is typically 20.<a href="#section-2.3.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-5">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.1.1-7.1">
-                <p id="section-2.3.1.1-7.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.1.1-7.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4-6.1">
+              <p id="section-2.3.4-6.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.4-6.1.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.1.1-8">Note that to ensure quick connectivity establishment, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is know to have succeeded within the last propagation interval:<a href="#section-2.3.1.1-8" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-2.3.4-7">Note that to ensure establish quick connectivity, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:<a href="#section-2.3.4-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.1.1-9.1">
-                <p id="section-2.3.1.1-9.1.1">because the corresponding RPC failed;<a href="#section-2.3.1.1-9.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.4-8.1">
+              <p id="section-2.3.4-8.1.1">because the corresponding RPC failed;<a href="#section-2.3.4-8.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.1.1-9.2">
-                <p id="section-2.3.1.1-9.2.1">or because no beacon was available to propagate.<a href="#section-2.3.1.1-9.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.4-8.2">
+              <p id="section-2.3.4-8.2.1">or because no beacon was available to propagate.<a href="#section-2.3.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.1.1-10">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.1.1-10" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="selection-policy-example">
-<section id="section-2.3.1.2">
-            <h5 id="name-selection-policy-example">
-<a href="#section-2.3.1.2" class="section-number selfRef">2.3.1.2. </a><a href="#name-selection-policy-example" class="section-name selfRef">Selection Policy Example</a>
-            </h5>
-<p id="section-2.3.1.2-1"><a href="#_figure-7" class="auto internal xref">Figure 8</a> below illustrates the selection of path segments in three networks. Each network uses a different path property to select path segments.<a href="#section-2.3.1.2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.1.2-2.1">
-                <p id="section-2.3.1.2-2.1.1">The network at the upper left considers the <em>path length</em> which is here defined as the number of hops from the originator core AS to the local AS. This number can give an indication of the path's latency and based this, the network will select the PCB representing path segment A-G (in direction of beaconing) to propagate.<a href="#section-2.3.1.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.2">
-                <p id="section-2.3.1.2-2.2.1">The network at the upper right uses <em>peering links</em> as the selection criterion. That is the number of different peering ASes from all non-core ASes on the PCB or path segment: a greater number of peering ASes increases the likelihood of finding a shortcut on the path segment. Based on this, the network will select the PCB representing path segment B-E-I-L (in direction of beaconing) to propagate.<a href="#section-2.3.1.2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.1.2-2.3">
-                <p id="section-2.3.1.2-2.3.1">The lower network selects PCBs based on <em>disjointness</em>. The disjointness of a PCB is calculated relative to the PCBs that have been previously sent. Paths can be either AS disjoint or link disjoint. AS disjoint paths have no common upstream/core AS for the current AS, whereas link disjoint paths do not share any AS-to-AS link. Depending on the objective of the AS, both criteria can be used: AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Based on the disjointness criterion, the network will select the PCBs representing the path segments A-D-G-H-J and C-E-F-I-J (in direction of beaconing) to propagate.<a href="#section-2.3.1.2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-<span id="name-example-networks-to-illustr"></span><div id="_figure-7">
-<figure id="figure-8">
-              <div class="alignLeft art-text artwork" id="section-2.3.1.2-3.1">
-<pre>
-Selected path segment: #------# or *------*
- Peering Link: PL
-
-   ISD A: Path Length                 ISD B: Peering Links
-+----------------------+          +---------------------------+
-|      ISD Core        |          |        ISD Core           |
-| .---.         .---.  |          |  .---.             .---.  |
-|(  A  ) - - - (  C  ) |          | (  A  ) - - - - - (  C  ) |
-| `-#-'         `---'  |       + --- `---'             `---'  |
-|   ||   .---.   | |   |          |      |  .---. - - - - -   |
-|   | - (  B  ) -      |       |  |    |  -(  B  )            |
-|   |    `-+-'     |   |          |         `-#-||            |
-+---|--------------|---+       |  |    |      |   - - - - - - - - +
-    |      |       |           |  |           | |             |
-    |                          |  +----|------|-|-------------+   |
-    |      |     .-+-.                        | + - - - - +
-    |    .-+-.  (  E  )        |       |      |                   |
-    |   (  D  )  `---'                        |           |
-    |    `-+-'     |         .-+-.     |    .-#-.       .-+-.     |
-    |            .-+-.      (  D  )-PL-----(  E  )--PL-(  F  )
-    |      |    (  F  )      `---'     |    `-#-'       `-+-'   .-+-.
-  .-#-.          `-+-'                        |                (  G  )
- (  G  ) - +       |               - - +      |           |     `-+-'
-  `---- - - - - - -               |           |
-                                .---.       .-#-.       .-+-.     |
-                               (  H  )-PL--(  I  )--PL-(  J  )
-                                `---'       `-#-'       `---'   .-+-.
-                                              |           |    (  K  )
-       ISD C: Disjointness                    |                 `---'
-  +---------------------------+             .-#-.         |       |
-  |          ISD Core         |            (  L  ) - - - -
-  |                           |             `---' - - - - - - - - +
-  | .---.               .---. |
-  |(  A  ) - - - - - - (  C  )|
-  | `-*-'               `-#-' |
-  |   | |     .---.     | |   |
-  |   |  - - (  B  ) - -  |   |
-  |   |       `---'       |   |
-  +---|-------------------|---+
-      |                   |
- .----*.                .-#---.
-(   D   )              (   E   )
- `----*'                `-#---'
- |    |                   |   |
-    #---------------------#
- |  | |                       |
-    | *------------------*
- |  |                    |    |
- .--#--.                .*----.
-(   F   #-------#      (   G   )
- `-----'        |       `*----|
- |          *------------*
-            |   |             |
- |-----.    |   |       .-----.
-(   H  *----*   #------#   I   )
- `---*-'                `-#---'
-     |                    |
-     |       .---.        |
-     *------*  J  #-------#
-             `---'
-</pre>
-</div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
-<a href="#name-example-networks-to-illustr" class="selfRef">Example networks to illustrate path segment selection based on different path properties.</a>
-              </figcaption></figure>
-</div>
-</section>
-</div>
+          </ul>
+<p id="section-2.3.4-9">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-segment-prop">
-<section id="section-2.3.2">
+<section id="section-2.3.5">
           <h4 id="name-propagation-of-selected-pcb">
-<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
+<a href="#section-2.3.5" class="section-number selfRef">2.3.5. </a><a href="#name-propagation-of-selected-pcb" class="section-name selfRef">Propagation of Selected PCBs</a>
           </h4>
-<p id="section-2.3.2-1">As mentioned above, once per <em>propagation period</em> (determined by each AS), an AS propagates selected PCBs to its neighboring ASes which happens at the level of both intra-ISD beaconing and core beaconing. This section describes both processes in more detail.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. In fact, it is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<div id="reception-of-pcbs">
-<section id="section-2.3.2.1">
-            <h5 id="name-reception-of-pcbs">
-<a href="#section-2.3.2.1" class="section-number selfRef">2.3.2.1. </a><a href="#name-reception-of-pcbs" class="section-name selfRef">Reception of PCBs</a>
-            </h5>
-<p id="section-2.3.2.1-1">The following first steps of the propagation procedure are the same for both intra-ISD and core beaconing:<a href="#section-2.3.2.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.1-2">
-<li id="section-2.3.2.1-2.1">
-                <p id="section-2.3.2.1-2.1.1">Upon receiving a PCB, the Control Service of an AS verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS.<a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.1-2.2">
-                <p id="section-2.3.2.1-2.2.1">As core beaconing is based on propagating PCBs to all AS neighbors, it is necessary to avoid loops during path creation. The Control Service of core ASes <span class="bcp14">MUST</span> therefore check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes, and if so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. Additionally, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-2.3.2.1-2.3">
-                <p id="section-2.3.2.1-2.3.1">If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS. For more information on the selection process, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-2.3.2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ol>
-</section>
-</div>
+<p id="section-2.3.5-1">To bootstrap the initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.3.5-1" class="pilcrow">¶</a></p>
 <div id="intra-prop">
-<section id="section-2.3.2.2">
+<section id="section-2.3.5.1">
             <h5 id="name-propagation-of-pcbs-in-intr">
-<a href="#section-2.3.2.2" class="section-number selfRef">2.3.2.2. </a><a href="#name-propagation-of-pcbs-in-intr" class="section-name selfRef">Propagation of PCBs in Intra-ISD Beaconing</a>
+<a href="#section-2.3.5.1" class="section-number selfRef">2.3.5.1. </a><a href="#name-propagation-of-pcbs-in-intr" class="section-name selfRef">Propagation of PCBs in Intra-ISD Beaconing</a>
             </h5>
-<p id="section-2.3.2.2-1">The propagation process in intra-ISD beaconing includes the following steps:<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.2-2">
-<li id="section-2.3.2.2-2.1">
-                <p id="section-2.3.2.2-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.2.2-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.5.1-1">The propagation process in intra-ISD beaconing includes the following steps:<a href="#section-2.3.5.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.5.1-2">
+<li id="section-2.3.5.1-2.1">
+                <p id="section-2.3.5.1-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.5.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.2-2.2">
-                <p id="section-2.3.2.2-2.2.1">The Control Service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.2.2-2.2.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.1-2.2">
+                <p id="section-2.3.5.1-2.2.1">The Control Service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.5.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.2-2.2.2.1">
-                    <p id="section-2.3.2.2-2.2.2.1.1">The ingress interface to this AS, in the Hop Field component.<a href="#section-2.3.2.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.5.1-2.2.2.1">
+                    <p id="section-2.3.5.1-2.2.2.1.1">The ingress interface to this AS, in the Hop Field component.<a href="#section-2.3.5.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.2">
-                    <p id="section-2.3.2.2-2.2.2.2.1">The egress interface to the neighboring AS, also in the Hop Field component.<a href="#section-2.3.2.2-2.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-2.3.5.1-2.2.2.2">
+                    <p id="section-2.3.5.1-2.2.2.2.1">The egress interface to the neighboring AS, also in the Hop Field component.<a href="#section-2.3.5.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.3">
-                    <p id="section-2.3.2.2-2.2.2.3.1">The ISD_AS number of the next AS, in the signed body component of the AS entry.<a href="#section-2.3.2.2-2.2.2.3.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-2.3.5.1-2.2.2.3">
+                    <p id="section-2.3.5.1-2.2.2.3.1">The ISD_AS number of the next AS, in the signed body component of the AS entry.<a href="#section-2.3.5.1-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.2-2.2.2.4">
-                    <p id="section-2.3.2.2-2.2.2.4.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The Hop Field component of each added peer entry <span class="bcp14">MUST</span> have a specified egress interface.<a href="#section-2.3.2.2-2.2.2.4.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-2.3.5.1-2.2.2.4">
+                    <p id="section-2.3.5.1-2.2.2.4.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The Hop Field component of each added peer entry <span class="bcp14">MUST</span> have a specified egress interface.<a href="#section-2.3.5.1-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li id="section-2.3.2.2-2.3">
-                <p id="section-2.3.2.2-2.3.1">The Control Service <span class="bcp14">MUST</span> now sign each selected, extended PCB and append the computed signature.<a href="#section-2.3.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.1-2.3">
+                <p id="section-2.3.5.1-2.3.1">The Control Service <span class="bcp14">MUST</span> now sign each selected, extended PCB and append the computed signature.<a href="#section-2.3.5.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.2-2.4">
-                <p id="section-2.3.2.2-2.4.1">As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.2.4</a>).<a href="#section-2.3.2.2-2.4.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.1-2.4">
+                <p id="section-2.3.5.1-2.4.1">As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.5.3</a>).<a href="#section-2.3.5.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </section>
 </div>
 <div id="propagation-of-pcbs-in-core-beaconing">
-<section id="section-2.3.2.3">
+<section id="section-2.3.5.2">
             <h5 id="name-propagation-of-pcbs-in-core">
-<a href="#section-2.3.2.3" class="section-number selfRef">2.3.2.3. </a><a href="#name-propagation-of-pcbs-in-core" class="section-name selfRef">Propagation of PCBs in Core Beaconing</a>
+<a href="#section-2.3.5.2" class="section-number selfRef">2.3.5.2. </a><a href="#name-propagation-of-pcbs-in-core" class="section-name selfRef">Propagation of PCBs in Core Beaconing</a>
             </h5>
-<p id="section-2.3.2.3-1">The propagation process in core beaconing includes the following steps:<a href="#section-2.3.2.3-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.3.2.3-2">
-<li id="section-2.3.2.3-2.1">
-                <p id="section-2.3.2.3-2.1.1">The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.<a href="#section-2.3.2.3-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.5.2-1">The propagation process in core beaconing includes the following steps:<a href="#section-2.3.5.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3.5.2-2">
+<li id="section-2.3.5.2-2.1">
+                <p id="section-2.3.5.2-2.1.1">The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.<a href="#section-2.3.5.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.3-2.2">
-                <p id="section-2.3.2.3-2.2.1">The service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.2.3-2.2.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.2-2.2">
+                <p id="section-2.3.5.2-2.2.1">The service adds a new AS entry to every selected PCB which <span class="bcp14">MUST</span> at least include:<a href="#section-2.3.5.2-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.3-2.2.2.1">
-                    <p id="section-2.3.2.3-2.2.2.1.1">The egress interface to the neighboring core AS in the Hop Field component.<a href="#section-2.3.2.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.5.2-2.2.2.1">
+                    <p id="section-2.3.5.2-2.2.2.1.1">The egress interface to the neighboring core AS in the Hop Field component.<a href="#section-2.3.5.2-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-2.3.2.3-2.2.2.2">
-                    <p id="section-2.3.2.3-2.2.2.2.1">The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.<a href="#section-2.3.2.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-2.3.5.2-2.2.2.2">
+                    <p id="section-2.3.5.2-2.2.2.2.1">The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.<a href="#section-2.3.5.2-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li id="section-2.3.2.3-2.3">
-                <p id="section-2.3.2.3-2.3.1">The core Control Service <span class="bcp14">MUST</span> sign the extended PCBs and append the computed signature.<a href="#section-2.3.2.3-2.3.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.2-2.3">
+                <p id="section-2.3.5.2-2.3.1">The core Control Service <span class="bcp14">MUST</span> sign the extended PCBs and append the computed signature.<a href="#section-2.3.5.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-2.3.2.3-2.4">
-                <p id="section-2.3.2.3-2.4.1">As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.2.4</a>).<a href="#section-2.3.2.3-2.4.1" class="pilcrow">¶</a></p>
+              <li id="section-2.3.5.2-2.4">
+                <p id="section-2.3.5.2-2.4.1">As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the <code>SegmentCreationService.Beacon</code> remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also <a href="#prop-proto" class="auto internal xref">Section 2.3.5.3</a>).<a href="#section-2.3.5.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </section>
 </div>
 <div id="prop-proto">
-<section id="section-2.3.2.4">
+<section id="section-2.3.5.3">
             <h5 id="name-propagation-of-pcbs-in-prot">
-<a href="#section-2.3.2.4" class="section-number selfRef">2.3.2.4. </a><a href="#name-propagation-of-pcbs-in-prot" class="section-name selfRef">Propagation of PCBs in Protobuf Message Format</a>
+<a href="#section-2.3.5.3" class="section-number selfRef">2.3.5.3. </a><a href="#name-propagation-of-pcbs-in-prot" class="section-name selfRef">Propagation of PCBs in Protobuf Message Format</a>
             </h5>
-<p id="section-2.3.2.4-1">The last step of the above described core and intra-ISD propagation procedures is implemented as follows in Protobuf message format:<a href="#section-2.3.2.4-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3.2.4-2">
+<p id="section-2.3.5.3-1">The last step of the above described core and intra-ISD propagation procedures is implemented as follows in Protobuf message format:<a href="#section-2.3.5.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.5.3-2">
 <pre>
    service SegmentCreationService {
        rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
@@ -3043,28 +2993,28 @@ Selected path segment: #------# or *------*
    }
 
    message BeaconResponse {}
-</pre><a href="#section-2.3.2.4-2" class="pilcrow">¶</a>
+</pre><a href="#section-2.3.5.3-2" class="pilcrow">¶</a>
 </div>
-<p id="section-2.3.2.4-3">The propagation procedure includes the following elements:<a href="#section-2.3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.5.3-3">The propagation procedure includes the following elements:<a href="#section-2.3.5.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.1">
-                <p id="section-2.3.2.4-4.1.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.3.2.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.5.3-4.1">
+                <p id="section-2.3.5.3-4.1.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.3.5.3-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.1.2.1">
-                    <p id="section-2.3.2.4-4.1.2.1.1"><code>Beacon</code>: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.<a href="#section-2.3.2.4-4.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.5.3-4.1.2.1">
+                    <p id="section-2.3.5.3-4.1.2.1.1"><code>Beacon</code>: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.<a href="#section-2.3.5.3-4.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-4.2">
-                <p id="section-2.3.2.4-4.2.1"><code>BeaconRequest</code>: Specifies the request message sent by the <code>Beacon</code> method to the Control Service of the neighboring AS. It contains the following element:<a href="#section-2.3.2.4-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.5.3-4.2">
+                <p id="section-2.3.5.3-4.2.1"><code>BeaconRequest</code>: Specifies the request message sent by the <code>Beacon</code> method to the Control Service of the neighboring AS. It contains the following element:<a href="#section-2.3.5.3-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-4.2.2.1">
-                    <p id="section-2.3.2.4-4.2.2.1.1"><code>PathSegment</code>: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type <code>PathSegment</code>, see <a href="#segment" class="auto internal xref">Section 2.2.1.1</a>.<a href="#section-2.3.2.4-4.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.5.3-4.2.2.1">
+                    <p id="section-2.3.5.3-4.2.2.1.1"><code>PathSegment</code>: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type <code>PathSegment</code>, see <a href="#segment" class="auto internal xref">Section 2.2.1.1</a>.<a href="#section-2.3.5.3-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-4.3">
-                <p id="section-2.3.2.4-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.2.4-4.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.5.3-4.3">
+                <p id="section-2.3.5.3-4.3.1"><code>BeaconResponse</code>: An empty message returned as an acknowledgement upon success.<a href="#section-2.3.5.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -3190,7 +3140,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-3.3.1-5">To illustrate this, an AS with a rather large number of 100 parent links receives at most 5000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50000 AS entries.<a href="#section-3.3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-6">Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10000 signature verifications per second.<a href="#section-3.3.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-7">If the same AS has 1000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link), i.e. at most 50000 signatures per propagation event. The total bandwidth for the propagation of these PCBs for all 1000 child links would, be roughly around 25 MB/s which is manageable with even modest consumer hardware.<a href="#section-3.3.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-8">On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation period and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see 'fast recovery'), the construction of a first path to connect each AS to the ISD core is accelerated.<a href="#section-3.3.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-8">On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation interval and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see 'fast recovery'), the construction of a first path to connect each AS to the ISD core is accelerated.<a href="#section-3.3.1-8" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-9">When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.<a href="#section-3.3.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3310,7 +3260,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-4.1.2-2.3.1">The Control Service adds the newly created up segments to its own path database.<a href="#section-4.1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.1.2-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="transforming-a-pcb-into-a-down-segment">
@@ -3327,10 +3277,10 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-4.1.3-2.2.1">The Control Service "terminates" the selected PCBs by performing the steps described in <a href="#term-pcb" class="auto internal xref">Section 4.1.1</a>. From this moment on, the modified PCBs are called <strong>down segments</strong>.<a href="#section-4.1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-4.1.3-2.3">
-              <p id="section-4.1.3-2.3.1">The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the <code>SegmentRegistrationService.SegmentsRegistration</code> remote procedure call (RPC) in the Control Services of the relevant core ASes (see also <a href="#reg-proto" class="auto internal xref">Section 4.3</a>).<a href="#section-4.1.3-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.3-2.3.1">The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the <code>SegmentRegistrationService.SegmentsRegistration</code> remote procedure call (RPC) in the Control Services of the relevant core ASes (see also <a href="#reg-proto" class="auto internal xref">Section 4.3</a>). The first ISD-AS entry of the path segment <span class="bcp14">SHOULD</span> be equal to the core ISD-AS where the segment is being registered. If not, the core AS <span class="bcp14">SHOULD</span> reject the segment.<a href="#section-4.1.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-4.1.3-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3353,7 +3303,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-4.2-3.3.1">The Control Service adds the newly created core segments to its own path database.<a href="#section-4.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-4.2-4"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.1</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reg-proto">
@@ -3523,7 +3473,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-5.1.1-2.3.1">Request down segments starting at core ASes in the destination ISD.<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 17</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 16</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="caching">
@@ -3720,7 +3670,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-6.1-1">Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <span id="name-scmp-message-format"></span><div id="_figure-scmp-format">
-<figure id="figure-9">
+<figure id="figure-8">
           <div class="alignLeft art-text artwork" id="section-6.1-3.1">
 <pre>
      0                   1                   2                   3
@@ -3735,7 +3685,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
           </figcaption></figure>
 </div>
@@ -3939,7 +3889,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
           <h4 id="name-packet-too-big">
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
-<span id="name-packet-too-big-format"></span><figure id="figure-10">
+<span id="name-packet-too-big-format"></span><figure id="figure-9">
             <div class="alignLeft art-text artwork" id="section-6.5.1-1.1">
 <pre>
      0                   1                   2                   3
@@ -3956,7 +3906,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
 
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-packet-too-big-format" class="selfRef">Packet-too-big format</a>
             </figcaption></figure>
 <span id="name-field-values"></span><table class="center" id="table-7">
@@ -3998,7 +3948,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-11">
+<figure id="figure-10">
             <div class="alignLeft art-text artwork" id="section-6.5.2-1.1">
 <pre>
      0                   1                   2                   3
@@ -4021,7 +3971,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-external-interface-down-for" class="selfRef">External-interface-down format</a>
             </figcaption></figure>
 </div>
@@ -4072,7 +4022,7 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-12">
+<figure id="figure-11">
             <div class="alignLeft art-text artwork" id="section-6.5.3-1.1">
 <pre>
      0                   1                   2                   3
@@ -4099,7 +4049,7 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-internal-connectivity-down-" class="selfRef">Internal-connectivity-down format</a>
             </figcaption></figure>
 </div>
@@ -4165,7 +4115,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
           </h4>
 <span id="name-echo-request-format"></span><div id="_figure-26">
-<figure id="figure-13">
+<figure id="figure-12">
             <div class="alignLeft art-text artwork" id="section-6.6.1-1.1">
 <pre>
      0                   1                   2                   3
@@ -4181,7 +4131,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-echo-request-format" class="selfRef">Echo-request format</a>
             </figcaption></figure>
 </div>
@@ -4228,7 +4178,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
           </h4>
 <span id="name-echo-reply-format"></span><div id="_figure-27">
-<figure id="figure-14">
+<figure id="figure-13">
             <div class="alignLeft art-text artwork" id="section-6.6.2-1.1">
 <pre>
      0                   1                   2                   3
@@ -4243,7 +4193,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-echo-reply-format" class="selfRef">Echo-reply format</a>
             </figcaption></figure>
 </div>
@@ -4288,7 +4238,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
 <span id="name-traceroute-request-format"></span><div id="_figure-24">
-<figure id="figure-15">
+<figure id="figure-14">
             <div class="alignLeft art-text artwork" id="section-6.6.3-1.1">
 <pre>
      0                   1                   2                   3
@@ -4309,7 +4259,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute-request format</a>
             </figcaption></figure>
 </div>
@@ -4365,7 +4315,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
 <span id="name-traceroute-reply-format"></span><div id="_figure-25">
-<figure id="figure-16">
+<figure id="figure-15">
             <div class="alignLeft art-text artwork" id="section-6.6.4-1.1">
 <pre>
      0                   1                   2                   3
@@ -4386,7 +4336,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-traceroute-reply-format" class="selfRef">Traceroute-reply format</a>
             </figcaption></figure>
 </div>
@@ -4472,15 +4422,31 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-7.1-1">The SCION control plane provides various security properties, as discussed below.
 Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">Security properties are:
-- Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.
-- Forwarding Path Consistency - For every honest path segment registered in any AS
-    - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
-    - the inter-domain network topology remains unchanged since the segment was first generated.
-- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
-- Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.1-3">To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
-A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Security properties are:<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-3.1">
+            <p id="section-7.1-3.1.1">Connectivity - For every pair of honest ASes X and Y, X will eventually register enough segments to build at least one path (of any length) leading to Y.<a href="#section-7.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-3.2">
+            <p id="section-7.1-3.2.1">Forwarding Path Consistency - For every honest path segment registered in any AS<a href="#section-7.1-3.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-3.2.2.1">
+                <p id="section-7.1-3.2.2.1.1">its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links<a href="#section-7.1-3.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.1-3.2.2.2">
+                <p id="section-7.1-3.2.2.2.1">the inter-domain network topology remains unchanged since the segment was first generated.<a href="#section-7.1-3.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-7.1-3.3">
+            <p id="section-7.1-3.3.1">Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.<a href="#section-7.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-3.4">
+            <p id="section-7.1-3.4.1">Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.<a href="#section-7.1-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.1-4">To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topdown-manipulate">
@@ -4611,11 +4577,11 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-dataplane">[I-D.dekater-scion-dataplane]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-04</span>, <time datetime="2024-12-24" class="refDate">24 December 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-04">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-04</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-05</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-08</span>, <time datetime="2024-12-30" class="refDate">30 December 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-08">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-08</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-09</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-09">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-09</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>
@@ -4735,7 +4701,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
       </h2>
 <p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <span id="name-control-service-grpc-api-se"></span><div id="_figure-11">
-<figure id="figure-17">
+<figure id="figure-16">
         <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 service SegmentLookupService {
@@ -4773,13 +4739,13 @@ message SegmentsResponse {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
 <span id="name-control-service-grpc-api-seg"></span><div id="_figure-12">
-<figure id="figure-18">
+<figure id="figure-17">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service SegmentRegistrationService {
@@ -4802,13 +4768,13 @@ message SegmentsRegistrationRequest {
 message SegmentsRegistrationResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-5"><br></p>
 <span id="name-control-service-grpc-api-segm"></span><div id="_figure-13">
-<figure id="figure-19">
+<figure id="figure-18">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service SegmentCreationService {
@@ -4824,13 +4790,13 @@ message BeaconRequest {
 message BeaconResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-control-service-grpc-api-segm" class="selfRef">Control Service gRPC API - Segment creation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-7"><br></p>
 <span id="name-control-service-grpc-api-segme"></span><div id="_figure-14">
-<figure id="figure-20">
+<figure id="figure-19">
         <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 message PathSegment {
@@ -4912,13 +4878,13 @@ message HopField {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-control-service-grpc-api-segme" class="selfRef">Control Service gRPC API - Segment representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-9"><br></p>
 <span id="name-control-service-grpc-api-si"></span><div id="_figure-15">
-<figure id="figure-21">
+<figure id="figure-20">
         <div class="alignLeft art-text artwork" id="appendix-C-10.1">
 <pre>
 enum SignatureAlgorithm {
@@ -4979,12 +4945,83 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-control-service-grpc-api-si" class="selfRef">Control Service gRPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-11"><br></p>
-<p id="appendix-C-12">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-12" class="pilcrow">¶</a></p>
+<span id="name-control-service-grpc-api-tr"></span><div id="_figure-17">
+<figure id="figure-21">
+        <div class="alignLeft art-text artwork" id="appendix-C-12.1">
+<pre>
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+// VerificationKeyID is used to identify certificates that authenticate the
+// verification key used to verify signatures.
+message VerificationKeyID {
+    // ISD-AS of the subject.
+    uint64 isd_as = 1;
+    // SubjectKeyID referenced in the certificate.
+    bytes subject_key_id = 2;
+    // Base number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_base = 3;
+    // Serial number of the latest TRC available to the signer at the time of
+    // signature creation.
+    uint64 trc_serial = 4;
+}
+</pre>
+</div>
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<a href="#name-control-service-grpc-api-tr" class="selfRef">Control Service gRPC API - Trust Material representation</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-C-13"><br></p>
+<p id="appendix-C-14">In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
@@ -5294,156 +5331,171 @@ message Transport {
         <h3 id="name-draft-dekater-scion-control">
 <a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-08</a>
         </h3>
+<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.1-1.1">
-            <p id="appendix-F.1-1.1.1">Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.<a href="#appendix-F.1-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.1-2.1">
+            <p id="appendix-F.1-2.1.1">Abstract: reword, mention goal and that document is not an Internet Standard<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-1.2">
-            <p id="appendix-F.1-1.2.1">Added some details about PCBs propagation and storage.<a href="#appendix-F.1-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.1-2.2">
+            <p id="appendix-F.1-2.2.1">"Propagation of PCBs" section:<a href="#appendix-F.1-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-2.2.2.1">
+                <p id="appendix-F.1-2.2.2.1.1">clarify checks at reception<a href="#appendix-F.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.1-1.3">
-            <p id="appendix-F.1-1.3.1">Qualified better the choice of time allowance in the definition of "segment from the future".<a href="#appendix-F.1-1.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="appendix-F.1-2.2.2.2">
+                <p id="appendix-F.1-2.2.2.2.1">introduce criteria for PCB selection policies<a href="#appendix-F.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="appendix-F.1-2.2.2.3">
+                <p id="appendix-F.1-2.2.2.3.1">remove superfluous policy example figure<a href="#appendix-F.1-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="appendix-F.1-2.2.2.4">
+                <p id="appendix-F.1-2.2.2.4.1">Propagation Interval and Best PCBs Set Size: mention tradeoff between scalability and amount of paths discovered.<a href="#appendix-F.1-2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="appendix-F.1-2.2.2.5">
+                <p id="appendix-F.1-2.2.2.5.1">reorganize order of paragraphs<a href="#appendix-F.1-2.2.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="appendix-F.1-2.3">
+            <p id="appendix-F.1-2.3.1">New section "Security Properties" in Security considerations, based on formal model of SCION<a href="#appendix-F.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-F.1-2.4">
+            <p id="appendix-F.1-2.4.1">New figure: Control Service gRPC API - Trust Material definitions<a href="#appendix-F.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-</section>
-</div>
-<div id="draft-dekater-scion-controlplane-08-1">
-<section id="appendix-F.2">
-        <h3 id="name-draft-dekater-scion-controlp">
-<a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-08</a>
-        </h3>
+<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.2-1.1">
-            <p id="appendix-F.2-1.1.1">Split "Circular dependencies and partitioning" into two sections: bootstrapping and partitioning.<a href="#appendix-F.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.1-4.1">
+            <p id="appendix-F.1-4.1.1">Moved "Special-Purpose SCION AS Numbers" table later in text<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-1.2">
-            <p id="appendix-F.2-1.2.1">Added some details about PCBs propagation and storage.<a href="#appendix-F.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.1-4.2">
+            <p id="appendix-F.1-4.2.1">Split "Circular dependencies and partitioning" into two sections: "Bootstrapping ability" and "Resistance to partitioning".<a href="#appendix-F.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-1.3">
-            <p id="appendix-F.2-1.3.1">Qualified better the choice of time allowance in the definition of "segment from the future".<a href="#appendix-F.2-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.1-4.3">
+            <p id="appendix-F.1-4.3.1">Explain why PCBs have a next_isd_as field<a href="#appendix-F.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-1.4">
-            <p id="appendix-F.2-1.4.1">Security considerations: clarify assumptions<a href="#appendix-F.2-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.1-4.4">
+            <p id="appendix-F.1-4.4.1">Qualified better the choice of time allowance in the definition of segment from the future in section "PCB Validity".<a href="#appendix-F.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-07">
-<section id="appendix-F.3">
-        <h3 id="name-draft-dekater-scion-controlpl">
-<a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-07</a>
+<section id="appendix-F.2">
+        <h3 id="name-draft-dekater-scion-controlp">
+<a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-07</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-1.1">
-            <p id="appendix-F.3-1.1.1">Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document<a href="#appendix-F.3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.2-1.1">
+            <p id="appendix-F.2-1.1.1">Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document<a href="#appendix-F.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-06">
-<section id="appendix-F.4">
-        <h3 id="name-draft-dekater-scion-controlpla">
-<a href="#name-draft-dekater-scion-controlpla" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
+<section id="appendix-F.3">
+        <h3 id="name-draft-dekater-scion-controlpl">
+<a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
         </h3>
-<p id="appendix-F.4-1">Major changes:<a href="#appendix-F.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-F.3-1">Major changes:<a href="#appendix-F.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.4-2.1">
-            <p id="appendix-F.4-2.1.1">New section: Path MTU<a href="#appendix-F.4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.3-2.1">
+            <p id="appendix-F.3-2.1.1">New section: Path MTU<a href="#appendix-F.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-2.2">
-            <p id="appendix-F.4-2.2.1">New section: Monitoring Considerations<a href="#appendix-F.4-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-2.2">
+            <p id="appendix-F.3-2.2.1">New section: Monitoring Considerations<a href="#appendix-F.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-2.3">
-            <p id="appendix-F.4-2.3.1">Completed description of Control Services gRPC API in appendix<a href="#appendix-F.4-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-2.3">
+            <p id="appendix-F.3-2.3.1">Completed description of Control Services gRPC API in appendix<a href="#appendix-F.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.4-3">Minor changes:<a href="#appendix-F.4-3" class="pilcrow">¶</a></p>
+<p id="appendix-F.3-3">Minor changes:<a href="#appendix-F.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.4-4.1">
-            <p id="appendix-F.4-4.1.1">Introduction: clarify goal of the document<a href="#appendix-F.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.3-4.1">
+            <p id="appendix-F.3-4.1.1">Introduction: clarify goal of the document<a href="#appendix-F.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-4.2">
-            <p id="appendix-F.4-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.4-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-4.2">
+            <p id="appendix-F.3-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-4.3">
-            <p id="appendix-F.4-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-F.4-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-4.3">
+            <p id="appendix-F.3-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-F.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-4.4">
-            <p id="appendix-F.4-4.4.1">General rewording<a href="#appendix-F.4-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-4.4">
+            <p id="appendix-F.3-4.4.1">General rewording<a href="#appendix-F.3-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-4.5">
-            <p id="appendix-F.4-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.4-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-4.5">
+            <p id="appendix-F.3-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.3-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.4-4.6">
-            <p id="appendix-F.4-4.6.1">Introduced this change log<a href="#appendix-F.4-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.3-4.6">
+            <p id="appendix-F.3-4.6.1">Introduced this change log<a href="#appendix-F.3-4.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-05">
-<section id="appendix-F.5">
-        <h3 id="name-draft-dekater-scion-controlplan">
-<a href="#name-draft-dekater-scion-controlplan" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
+<section id="appendix-F.4">
+        <h3 id="name-draft-dekater-scion-controlpla">
+<a href="#name-draft-dekater-scion-controlpla" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
         </h3>
-<p id="appendix-F.5-1">Minor changes:<a href="#appendix-F.5-1" class="pilcrow">¶</a></p>
+<p id="appendix-F.4-1">Minor changes:<a href="#appendix-F.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.5-2.1">
-            <p id="appendix-F.5-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.5-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.4-2.1">
+            <p id="appendix-F.4-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-04">
-<section id="appendix-F.6">
-        <h3 id="name-draft-dekater-scion-controlplane">
-<a href="#name-draft-dekater-scion-controlplane" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
+<section id="appendix-F.5">
+        <h3 id="name-draft-dekater-scion-controlplan">
+<a href="#name-draft-dekater-scion-controlplan" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
         </h3>
-<p id="appendix-F.6-1">Major changes:<a href="#appendix-F.6-1" class="pilcrow">¶</a></p>
+<p id="appendix-F.5-1">Major changes:<a href="#appendix-F.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.6-2.1">
-            <p id="appendix-F.6-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.6-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.5-2.1">
+            <p id="appendix-F.5-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.5-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-2.2">
-            <p id="appendix-F.6-2.2.1">New section: PCB validity<a href="#appendix-F.6-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-2.2">
+            <p id="appendix-F.5-2.2.1">New section: PCB validity<a href="#appendix-F.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-2.3">
-            <p id="appendix-F.6-2.3.1">New section: configuration<a href="#appendix-F.6-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-2.3">
+            <p id="appendix-F.5-2.3.1">New section: configuration<a href="#appendix-F.5-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-2.4">
-            <p id="appendix-F.6-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.6-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-2.4">
+            <p id="appendix-F.5-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.5-2.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-2.5">
-            <p id="appendix-F.6-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.6-2.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-2.5">
+            <p id="appendix-F.5-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.5-2.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-2.6">
-            <p id="appendix-F.6-2.6.1">New appendix: Control Service gRPC API<a href="#appendix-F.6-2.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-2.6">
+            <p id="appendix-F.5-2.6.1">New appendix: Control Service gRPC API<a href="#appendix-F.5-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.6-3">Minor changes:<a href="#appendix-F.6-3" class="pilcrow">¶</a></p>
+<p id="appendix-F.5-3">Minor changes:<a href="#appendix-F.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.6-4.1">
-            <p id="appendix-F.6-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.6-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-F.5-4.1">
+            <p id="appendix-F.5-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.2">
-            <p id="appendix-F.6-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.6-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.2">
+            <p id="appendix-F.5-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.3">
-            <p id="appendix-F.6-4.3.1">Fixed private AS range typo<a href="#appendix-F.6-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.3">
+            <p id="appendix-F.5-4.3.1">Fixed private AS range typo<a href="#appendix-F.5-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.4">
-            <p id="appendix-F.6-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.6-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.4">
+            <p id="appendix-F.5-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.5-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.5">
-            <p id="appendix-F.6-4.5.1">Clarified PCB propagation<a href="#appendix-F.6-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.5">
+            <p id="appendix-F.5-4.5.1">Clarified PCB propagation<a href="#appendix-F.5-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.6">
-            <p id="appendix-F.6-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.6-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.6">
+            <p id="appendix-F.5-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.5-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.7">
-            <p id="appendix-F.6-4.7.1">Removed forward references<a href="#appendix-F.6-4.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.7">
+            <p id="appendix-F.5-4.7.1">Removed forward references<a href="#appendix-F.5-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.6-4.8">
-            <p id="appendix-F.6-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.6-4.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-F.5-4.8">
+            <p id="appendix-F.5-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.5-4.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
