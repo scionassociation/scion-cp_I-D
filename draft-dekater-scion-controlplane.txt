@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 4 September 2025                                        S. Hitz
+Expires: 13 October 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            3 March 2025
+                                                           11 April 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 13 October 2025.
 
 Copyright Notice
 
@@ -667,10 +667,10 @@ Table of Contents
       performed by the beaconing mechanism.  In order to participate in
       this process, an AS only needs to be aware of its direct
       neighbors.  As long as no path segments are available,
-      communicating with the neighboring ASes is possible with the one
+      communicating with the neighboring ASes is possible with the one-
       hop path type which does not rely on any path information.  SCION
-      uses these _one hop paths_ to propagate PCBs to neighboring ASes
-      to which no forwarding path is available yet.  The One Hop Path
+      uses these _one-hop paths_ to propagate PCBs to neighboring ASes
+      to which no forwarding path is available yet.  The One-Hop Path
       Type is described in more detail in [I-D.dekater-scion-dataplane].
 
    *  Path reversal: In SCION, every path is reversible.  That is, the
@@ -3418,16 +3418,16 @@ path segment 4 |             |     |             |     |             |
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-04, 24 December 2024,
+              draft-dekater-scion-dataplane-05, 3 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-04>.
+              scion-dataplane-05>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-08, 30 December 2024,
+              dekater-scion-pki-09, 3 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-08>.
+              scion-pki-09>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
