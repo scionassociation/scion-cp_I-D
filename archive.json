@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-08T00:22:23.767394+00:00",
+  "timestamp": "2025-04-13T00:48:10.678687+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -8582,6 +8582,56 @@
           "body": "",
           "createdAt": "2025-03-01T10:29:56Z",
           "updatedAt": "2025-03-01T10:29:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 106,
+      "id": "PR_kwDOJx2-rs6SEiSS",
+      "title": "fix typo",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/106",
+      "state": "MERGED",
+      "author": "katyatitkova",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\"one hop paths\" are called \"one-hop paths\" in the data plane draft and in the section 2.3.5 of this draft.",
+      "createdAt": "2025-04-10T09:57:10Z",
+      "updatedAt": "2025-04-11T09:09:13Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "603af9f3cda7a77ae0fdf95762b5d8b8cd02992c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "katyatitkova-patch-1",
+      "headRefOid": "3ef02f8115c265d1eaad75ab60afacebde2cf1ed",
+      "closedAt": "2025-04-11T09:09:07Z",
+      "mergedAt": "2025-04-11T09:09:07Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot for fixing! ",
+          "createdAt": "2025-04-11T09:09:04Z",
+          "updatedAt": "2025-04-11T09:09:04Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6kfUeU",
+          "commit": {
+            "abbreviatedOid": "3ef02f8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-04-11T09:08:47Z",
+          "updatedAt": "2025-04-11T09:08:47Z",
           "comments": []
         }
       ]
