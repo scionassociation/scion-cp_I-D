@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-13T00:48:10.678687+00:00",
+  "timestamp": "2025-05-22T00:23:57.572181+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1457,6 +1457,22 @@
       "body": "Opening this to track potential changes to the CP gRPC API discussed in https://github.com/scionproto/scion/issues/4552 \n\nThis is not deployed yet, so at the moment these changes should be out of scope for the draft.",
       "createdAt": "2025-04-07T10:18:34Z",
       "updatedAt": "2025-04-07T10:18:34Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 107,
+      "id": "I_kwDOJx2-rs63XRtk",
+      "title": "Path metadata extensions - shall it be in the draft?",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/107",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "OS currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\nhttps://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n\nTilman is also supervising a thesis using cynamic metadata to improve beaconing ",
+      "createdAt": "2025-05-20T09:26:18Z",
+      "updatedAt": "2025-05-20T09:27:38Z",
       "closedAt": null,
       "comments": []
     }
