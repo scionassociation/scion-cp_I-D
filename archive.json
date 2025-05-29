@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-22T00:23:57.572181+00:00",
+  "timestamp": "2025-05-29T00:24:06.633167+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1472,9 +1472,17 @@
       "labels": [],
       "body": "OS currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\nhttps://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n\nTilman is also supervising a thesis using cynamic metadata to improve beaconing ",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-05-20T09:27:38Z",
+      "updatedAt": "2025-05-28T08:57:19Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed this with Roman, from an interop point of view it would make a lot of sense",
+          "createdAt": "2025-05-28T08:57:18Z",
+          "updatedAt": "2025-05-28T08:57:18Z"
+        }
+      ]
     }
   ],
   "pulls": [
