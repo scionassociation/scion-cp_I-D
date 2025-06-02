@@ -487,7 +487,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 20.
+      AS that sent the PCB through the API described in Figure 21.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -989,6 +989,8 @@ path segment 4 │             │     │             │     │             �
 
 2.2.1.  PCB Message Format
 
+   Figure 6 graphically represents the PCB message format:
+
                            PCB/PATH SEGMENT
 
 ┌─────────────┬────────────┬────────────┬────────┬-───────────────────┐
@@ -1040,6 +1042,11 @@ path segment 4 │             │     │             │     │             �
 ┌────────────┬─────────────┬───────────────────┬───────────┐
 │  Ingress   │    Egress   │  Expiration Time  │    MAC    │
 └────────────┴-────────────┴-──────────────────┴-──────────┘
+
+              Figure 6: Top-down composition of one PCB
+
+   Note: For a full example of one PCB in the Protobuf message format,
+   please see , Figure 19.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1547,7 +1554,7 @@ path segment 4 │             │     │             │     │             �
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 6).
+      peering link, in the direction of beaconing - see also Figure 7).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
 
@@ -1583,7 +1590,7 @@ path segment 4 │             │     │             │     │             �
        |           |
        +-----------+
 
-      Figure 6: Peer entry information, in the direction of beaconing
+      Figure 7: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -1673,7 +1680,7 @@ path segment 4 │             │     │             │     │             �
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 20.
+       Service of the sending AS through the API described in Figure 21.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -2479,7 +2486,7 @@ path segment 4 │             │     │             │     │             �
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 15.
+   The segment lookup API gRPC definition can be found in Figure 16.
 
 5.1.2.  Caching
 
@@ -2651,7 +2658,7 @@ path segment 4 │             │     │             │     │             �
        |                         (variable length)                     |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 7: SCMP message format
+                       Figure 8: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2793,7 +2800,7 @@ path segment 4 │             │     │             │     │             �
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 8: Packet-too-big format
+                      Figure 9: Packet-too-big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2833,7 +2840,7 @@ path segment 4 │             │     │             │     │             �
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                  Figure 9: External-interface-down format
+                 Figure 10: External-interface-down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2885,7 +2892,7 @@ path segment 4 │             │     │             │     │             �
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 10: Internal-connectivity-down format
+                Figure 11: Internal-connectivity-down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2931,7 +2938,7 @@ path segment 4 │             │     │             │     │             �
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 11: Echo-request format
+                       Figure 12: Echo-request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -2967,7 +2974,7 @@ path segment 4 │             │     │             │     │             �
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 12: Echo-reply format
+                        Figure 13: Echo-reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3009,7 +3016,7 @@ path segment 4 │             │     │             │     │             �
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 13: Traceroute-request format
+                    Figure 14: Traceroute-request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3065,7 +3072,7 @@ path segment 4 │             │     │             │     │             �
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 14: Traceroute-reply format
+                     Figure 15: Traceroute-reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3577,7 +3584,7 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 15: Control Service gRPC API - Segment lookup.  This API
+      Figure 16: Control Service gRPC API - Segment lookup.  This API
      is exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -3602,7 +3609,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 16: Control Service gRPC API - Segment registration.  This
+     Figure 17: Control Service gRPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3619,7 +3626,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 17: Control Service gRPC API - Segment creation
+           Figure 18: Control Service gRPC API - Segment creation
 
 
 
@@ -3701,7 +3708,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 18: Control Service gRPC API - Segment representation
+      Figure 19: Control Service gRPC API - Segment representation
 
 
 
@@ -3762,7 +3769,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 19: Control Service gRPC API - Signed ASEntry representation
+   Figure 20: Control Service gRPC API - Signed ASEntry representation
 
 
 
@@ -3827,7 +3834,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
- Figure 20: Control Service gRPC API - Trust Material representation
+ Figure 21: Control Service gRPC API - Trust Material representation
 
 
 
@@ -3932,7 +3939,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 21: Service Resolution gRPC API definition
+          Figure 22: Service Resolution gRPC API definition
 
 
 
@@ -3940,10 +3947,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 22 below.  In both examples, the source
-   endpoint is in AS A.  Figure 23 shows the sequence diagram for the
+   is represented in Figure 23 below.  In both examples, the source
+   endpoint is in AS A.  Figure 24 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 24 shows the path lookup sequence diagram if the destination
+   Figure 25 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3973,7 +3980,7 @@ Path-Lookup Examples
    |   ISD 1                    |     |                    ISD 2   |
    +----------------------------+     +----------------------------+
 
-           Figure 22: Topology used in the path lookup examples.
+           Figure 23: Topology used in the path lookup examples.
 
 +---------+          +---------+          +---------+        +---------+
 |Endpoint |          |Source AS|          | Core AS |        | Core AS |
@@ -4031,7 +4038,7 @@ Path-Lookup Examples
  +---+----+           +---+----+          +----+---+          +----+---+
  +--------+           +--------+          +--------+          +--------+
 
-     Figure 23: Sequence diagram illustrating a path lookup for a
+     Figure 24: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -4102,7 +4109,7 @@ Path-Lookup Examples
 +---+----+       +---+----+       +---+----+    +---+----+    +---+----+
 +--------+       +--------+       +--------+    +--------+    +--------+
 
-     Figure 24: Sequence diagram illustrating a path lookup for a
+     Figure 25: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
