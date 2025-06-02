@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 12 October 2025                                         S. Hitz
+Expires: 4 December 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                           10 April 2025
+                                                             2 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 October 2025.
+   This Internet-Draft will expire on 4 December 2025.
 
 Copyright Notice
 
@@ -394,25 +394,25 @@ Table of Contents
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
 
-   +-------------------------+
-   |                         |       #
-   |        ISD Core         |       |      parent-child
-   |  .---.           .---.  |       |      link
-   | (  A  )*-------*(  C  ) |       |
-   |  `-#-'           `-#-'  |       0
-   |    |               |    |
-   +----|---------------|----+   *-------*  core link
-        |               |
-        |               |        < - - - >  peering link
-      .-0-.           .-0-.
+   ┌─────────────────────────┐
+   │                         │       #
+   │        ISD Core         │       │      parent-child
+   │  .───.           .───.  │       │      link
+   │ (  A  )*-------*(  C  ) │       │
+   │  `─#─'           `─#─'  │       0
+   │    │               │    │
+   └────│───────────────│────┘   *───────*  core link
+        │               │
+        │               │        < - - - >  peering link
+      .─0─.           .─0─.
      (  D  )< - - - >(  E  )
-      `-#-'           `-#-'
-        |               |
-        |               |
-        |               |
-      .-0-.           .-0-.
+      `─#─'           `─#─'
+        │               │
+        │               │
+        │               │
+      .─0─.           .─0─.
      (  G  )         (  F  )
-      `---'           `---'
+      `───'           `───'
 
       Figure 1: The three types of SCION links in one ISD.  Each node
                         in the figure is a SCION AS.
