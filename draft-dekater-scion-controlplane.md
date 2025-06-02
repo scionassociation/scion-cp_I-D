@@ -665,6 +665,9 @@ path segment 4 │             │     │             │     │             �
 │  Ingress   │    Egress   │  Expiration Time  │    MAC    │
 └────────────┴-────────────┴-──────────────────┴-──────────┘
 ~~~~
+{: #figure-5 title="Top-down composition of one PCB"}
+
+Note: For a full example of one PCB in the Protobuf message format, please see , {{figure-14}}.
 
 #### PCB Top-Level Message Format {#segment}
 
