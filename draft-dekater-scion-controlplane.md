@@ -936,15 +936,15 @@ associated_data(ps, i) = ps.segment_info ||
 #### Hop Entry {#hopentry}
 
 ~~~~
-       +-----------+
-       | Hop Entry |
-       +-----------+
-       *- - -#- - -*
-             |
- - - - - - - v - - - - - - *
-+-------------+------------+
-| Ingress MTU | Hop Field  |
-+-------------+------------+
+        ┌───────────┐
+        │ Hop Entry │
+        └───────────┘
+        └─────┬─────┘
+              ▼
+┌───────────────────────────┐
+┌─────────────┬─────────────┐
+│ Ingress MTU │  Hop Field  │
+└─────────────┴-────────────┘
 ~~~~
 
 Each body of an AS entry MUST contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).
@@ -966,16 +966,15 @@ In this description, MTU and packet size are to be understood in the same sense 
 #### Hop Field {#hopfield}
 
 ~~~~
-                      +-----------+
-                      | Hop Field |
-                      +-----------+
-                      *- - -#- - -*
-                            |
-                            |
-*- - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
-+-------------+-------------+-------------------+----------+
-|   Ingress   |    Egress   |  Expiration Time  |   MAC    |
-+-------------+-------------+-------------------+----------+
+                      ┌───────────┐
+                      │ Hop Entry │
+                      └───────────┘
+                      └─────┬─────┘
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+┌─────────────┬─────────────┬───────────────────┬──────────┐
+│   Ingress   │    Egress   │  Expiration Time  │   MAC    │
+└─────────────┴-────────────┴───────────────────┴──────────┘
 ~~~~
 
 The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC) which will be checked by the SCION border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.
@@ -1004,15 +1003,15 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 #### Peer Entry {#peerentry}
 
 ~~~~
-                      +--------------+
-                      |  Peer Entry  |
-                      +--------------+
-                      *- - - -#- - - *
-                              |
-*- - - - - - - - - - - - - - -v- - - - - - - - - - - - - - *
-+-------------+------------+--------------+----------------+
-|  Hop Field  |  Peer MTU  | Peer ISD-AS  | Peer Interface |
-+-------------+------------+--------------+----------------+
+                      ┌──────────────┐
+                      │  Peer Entry  │
+                      └──────────────┘
+                      └───────┬──────┘
+                              ▼
+┌──────────────────────────────────────────────────────────┐
+┌─────────────┬────────────┬──────────────┬────────────────┐
+│  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface │
+└─────────────┴-───────────┴──────────────┴────────────────┘
 ~~~~
 
 By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.
