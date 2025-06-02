@@ -2556,15 +2556,15 @@ associated_data(ps, i) = ps.segment_info ||
             </h5>
 <div class="alignLeft art-text artwork" id="section-2.2.1.5-1">
 <pre>
-       +-----------+
-       | Hop Entry |
-       +-----------+
-       *- - -#- - -*
-             |
- - - - - - - v - - - - - - *
-+-------------+------------+
-| Ingress MTU | Hop Field  |
-+-------------+------------+
+        ┌───────────┐
+        │ Hop Entry │
+        └───────────┘
+        └─────┬─────┘
+              ▼
+┌───────────────────────────┐
+┌─────────────┬─────────────┐
+│ Ingress MTU │  Hop Field  │
+└─────────────┴-────────────┘
 </pre><a href="#section-2.2.1.5-1" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2.1.5-2">Each body of an AS entry <span class="bcp14">MUST</span> contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).<a href="#section-2.2.1.5-2" class="pilcrow">¶</a></p>
@@ -2595,16 +2595,15 @@ associated_data(ps, i) = ps.segment_info ||
             </h5>
 <div class="alignLeft art-text artwork" id="section-2.2.1.6-1">
 <pre>
-                      +-----------+
-                      | Hop Field |
-                      +-----------+
-                      *- - -#- - -*
-                            |
-                            |
-*- - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
-+-------------+-------------+-------------------+----------+
-|   Ingress   |    Egress   |  Expiration Time  |   MAC    |
-+-------------+-------------+-------------------+----------+
+                      ┌───────────┐
+                      │ Hop Entry │
+                      └───────────┘
+                      └─────┬─────┘
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+┌─────────────┬─────────────┬───────────────────┬──────────┐
+│   Ingress   │    Egress   │  Expiration Time  │   MAC    │
+└─────────────┴-────────────┴───────────────────┴──────────┘
 </pre><a href="#section-2.2.1.6-1" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2.1.6-2">The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC) which will be checked by the SCION border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.<a href="#section-2.2.1.6-2" class="pilcrow">¶</a></p>
@@ -2646,15 +2645,15 @@ associated_data(ps, i) = ps.segment_info ||
             </h5>
 <div class="alignLeft art-text artwork" id="section-2.2.1.7-1">
 <pre>
-                      +--------------+
-                      |  Peer Entry  |
-                      +--------------+
-                      *- - - -#- - - *
-                              |
-*- - - - - - - - - - - - - - -v- - - - - - - - - - - - - - *
-+-------------+------------+--------------+----------------+
-|  Hop Field  |  Peer MTU  | Peer ISD-AS  | Peer Interface |
-+-------------+------------+--------------+----------------+
+                      ┌──────────────┐
+                      │  Peer Entry  │
+                      └──────────────┘
+                      └───────┬──────┘
+                              ▼
+┌──────────────────────────────────────────────────────────┐
+┌─────────────┬────────────┬──────────────┬────────────────┐
+│  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface │
+└─────────────┴-───────────┴──────────────┴────────────────┘
 </pre><a href="#section-2.2.1.7-1" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2.1.7-2">By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.<a href="#section-2.2.1.7-2" class="pilcrow">¶</a></p>
