@@ -1035,32 +1035,30 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
 ~~~~
-   +-----------+
-   |           |
-   | parent AS |
-   |           |
-   +-----------+
-         |
-         |
-         | ASE.HF.ingress_interface
-+--------#-----------+                  +-----------------+
-|        |           |         PE.peer_ |                 |
-|                    |         interface|                 |
-|        | + - - - - #------------------#     peer AS     |
-|                    |PE.HF.ingress_    |                 |
-|        | |         |interface         |                 |
-|                    |                  +-----------------+
-|        v v         |
-+---------#----------+
-          | PE.HF.egress_interface
-          | ASE.HF.egress_interface
-          |
-          |
-    +-----------+
-    |           |
-    |  child AS |
-    |           |
-    +-----------+
+   ┌───────────┐
+   │           │
+   │ Parent AS │
+   │           │
+   └─────┬─────┘
+         │
+         │ ASE.HF.ingress_interface
+┌────────#───────────┐                 
+│        │           │        PE.peer_  ┌───────────┐
+│                    │        interface │           │
+│        │ ┌ - - - - #──────────────────#  Peer AS  │
+│                    │ PE.HF.ingress_   │           │
+│        │ │         │ interface        └───────────┘
+│                    │
+│        ▼ ▼         │
+└─────────#──────────┘
+          │ PE.HF.egress_interface
+          │ ASE.HF.egress_interface
+          │
+    ┌─────┴─────┐
+    │           │
+    │ Child AS  │
+    │           │
+    └───────────┘
 ~~~~
 {: #figure-6 title="Peer entry information, in the direction of beaconing"}
 
