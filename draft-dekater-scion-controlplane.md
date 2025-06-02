@@ -731,17 +731,15 @@ In the Protobuf message format, the information component of a PCB is called the
 #### AS Entry {#ase-message}
 
 ~~~~
-                           +--------------+
-                           |  AS Entry    |
-                           +--------------+
-                           *- - - -#- - - *
-                                   |
-                                   |
-                                   |
-*- - - - - - - - - - - - - - - - - v - - - - - - - - - - - - - - - *
-+-----------------------+------------------------------------------+
-|    Unsigned Ext.      |          Signed AS Entry                 |
-+-----------------------+------------------------------------------+
+                           ┌──────────────┐
+                           │   AS Entry   │
+                           └──────────────┘
+                           └──────┬───────┘
+                                  ▼
+┌──────────────────────────────────────────────────────────────────┐
+┌───────────────────────┬──────────────────────────────────────────┐
+│  Unsigned Extension   │             Signed AS Entry              │
+└───────────────────────┴-─────────────────────────────────────────┘
 ~~~~
 
 Each PCB MUST also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS MUST add its AS entry to each PCB it creates, and each traversed AS MUST attach its AS entry to the PCB.
@@ -766,16 +764,15 @@ It includes the following components:
 #### AS Entry Signed Component {#signed-compo}
 
 ~~~~
+        ┌──────────────────────────────────────────────────────┐
+        │                   Signed AS Entry                    │
         +------------------------------------------------------+
-        |                   Signed AS Entry                    |
-        +------------------------------------------------------+
-        *- - - - - - - - - - - - -#- - - - - - - - - - - - - - *
-                                  |
-                                  |
-*- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - -*
-+--------------------+-----------------+------------------------------+
-|      Header        |     Body        |            Signature         |
-+--------------------+-----------------+------------------------------+
+        └──────────────────────────┬───────────────────────────┘
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────┐
+┌────────────────────┬─────────────────┬──────────────────────────────┐
+│       Header       │      Body       │          Signature           │
+└────────────────────┴-────────────────┴──────────────────────────────┘
 ~~~~
 
 Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (See {{I-D.dekater-scion-pki}}).
