@@ -1042,7 +1042,7 @@ In this description, MTU and packet size are to be understood in the same sense 
    └─────┬─────┘
          │
          │ ASE.HF.ingress_interface
-┌────────#───────────┐                 
+┌────────#───────────┐
 │        │           │        PE.peer_  ┌───────────┐
 │                    │        interface │           │
 │        │ ┌ - - - - #──────────────────#  Peer AS  │
