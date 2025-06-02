@@ -331,13 +331,13 @@ An ISD number is the 16-bit global identifier for an ISD and MUST be globally un
 
 The following table gives an overview of the ISD number allocation:
 
-│ ISD          │ Description                                                                             │
-├──────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
-│ 0            │ The wildcard ISD.                                                                       │
-│ 1 - 15       │ Reserved for documentation and sample code (analogous to {{RFC5398}}).                  │
-│ 16 - 63      │ Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments │
-│ 64 - 4094    │ Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. │
-│ 4095&nbsp;-&nbsp;65535 │ Reserved for future use.                                                      │
+| ISD          | Description                                                                             |
+|--------------+-----------------------------------------------------------------------------------------|
+| 0            | The wildcard ISD.                                                                       |
+| 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
+| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments |
+| 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
+| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
 Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
