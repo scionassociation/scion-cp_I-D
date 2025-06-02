@@ -810,21 +810,21 @@ The following code block shows the low level representation of the `HeaderAndBod
 ##### AS Entry Signed Header {#ase-header}
 
 ~~~~
-           +-----------------+
-           |     Header      |
-           +-----------------+
-           *- - - - # - - - -*
-                    |
- - - - - - - - - - -v- - - - - - - - - *
-+----------------+---------------------+
-| Signature Alg. | Verification Key ID |
-+----------------+---------------------+
-                 *- - - - - # - - - - -*
-                            |
- - - - - - - - - - - - - - -v- - - - - - - - - -
-+---------+---------+------------+--------------+
-| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
-+---------+---------+------------+--------------+
+           ┌─────────────────┐
+           │     Header      │
+           └─────────────────┘
+           └────────┬────────┘
+                    ▼
+┌──────────────────────────────────────┐
+┌────────────────┬─────────────────────┐
+│ Signature Alg. │ Verification Key ID │
+└────────────────┴-────────────────────┘
+                 └──────────┬──────────┘
+                            ▼
+┌───────────────────────────────────────────────┐
+┌─────────┬─────────┬────────────┬──────────────┐
+│ ISD-AS  │TRC Base │ TRC Serial │Subject Key ID|
+└─────────┴-────────┴────────────┴──────────────┘
 ~~~~
 
 The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
@@ -870,16 +870,15 @@ The following code block defines the signed header of an AS entry in Protobuf me
 ##### AS Entry Signed Body {#ase-sign}
 
 ~~~~
-                +--------------------------------------+
-                |                 Body                 |
-                +--------------------------------------+
-                *- - - - - - - - - -#- - - - - - - - - *
-                                    |
-                                    |
-*- - - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - -*
-+------+-----------+---------++------------+---+------------++---+----+
-|ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0|...|Peer Entry N||MTU|Ext.|
-+------+-----------+---------++------------+---+------------++---+----+
+                ┌──────────────────────────────────────┐
+                │                 Body                 │
+                └──────────────────────────────────────┘
+                └───────────────────┬──────────────────┘
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────┐
+┌──────┬───────────┬─────────┬─────────────┬───┬─────────────┬───┬────┐
+│ISD-AS│Next ISD-AS│Hop Entry│Peer Entry 0 |...|Peer Entry N │MTU│Ext.│
+└──────┴-──────────┴─────────┴─────────────┴───┴─────────────┴───┴────┘
 ~~~~
 
 The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
