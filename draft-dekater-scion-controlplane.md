@@ -611,7 +611,7 @@ path segment 4 │             │     │             │     │             �
 
 ### PCB Message Format {#pcb-compos}
 
-{{figure-5}} graphically represents the PCB message format:
+{{#figure-5}} graphically represents the PCB message format:
 
 ~~~~
                            PCB/PATH SEGMENT
