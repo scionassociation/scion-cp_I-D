@@ -1545,7 +1545,6 @@ Every SCMP message is preceded by a SCION header, and zero or more SCION extensi
 The messages have the following general format:
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1555,7 +1554,6 @@ The messages have the following general format:
     ├                                                               ┤
     │                       (variable length)                       │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-scmp-format title="SCMP message format"}
 
@@ -1631,7 +1629,6 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 ### Packet Too Big {#packet-too-big}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1643,7 +1640,6 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
     ├              as possible without the SCMP packet              ┤
     │                    exceeding 1232 bytes                       │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {:figure-21 title="Packet-too-big format"}
 
@@ -1663,7 +1659,6 @@ underlay.
 ### External Interface Down {#external-interface-down}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1681,7 +1676,6 @@ underlay.
     ├              as possible without the SCMP packet              ┤
     │                    exceeding 1232 bytes                       │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-22 title="External-interface-down format"}
 
@@ -1704,7 +1698,6 @@ Recipients can use this information to route around broken data-plane links.
 ### Internal Connectivity Down {#internal-connectivity-down}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1726,7 +1719,6 @@ Recipients can use this information to route around broken data-plane links.
     ├              as possible without the SCMP packet              ┤
     │                    exceeding 1232 bytes                       │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-23 title="Internal-connectivity-down format"}
 
@@ -1756,7 +1748,6 @@ AS.
 ### Echo Request {#echo-request}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1766,7 +1757,6 @@ AS.
     ├───────────────────────────────┼───────────────────────────────┤
     │                     Data (variable length)                    │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-26 title="Echo-request format"}
 
@@ -1784,7 +1774,6 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 ### Echo Reply {#echo-reply}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1794,7 +1783,6 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
     ├───────────────────────────────┼───────────────────────────────┤
     │                     Data (variable length)                    │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-27 title="Echo-reply format"}
 
@@ -1814,7 +1802,6 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 ### Traceroute Request {#traceroute-request}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1830,7 +1817,6 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
     ├                          Interface ID                         ┤
     │                                                               │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-24 title="Traceroute-request format"}
 
@@ -1852,7 +1838,6 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 ### Traceroute Reply {#traceroute-reply}
 
 ~~~~
-
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
     ├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -1868,7 +1853,6 @@ A border router is alerted of a Traceroute Request message through the Ingress o
     ├                          Interface ID                         ┤
     │                                                               │
     └───────────────────────────────────────────────────────────────┘
-
 ~~~~
 {: #figure-25 title="Traceroute-reply format"}
 
@@ -2381,29 +2365,29 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 
 ~~~~
-+----------------------------+     +----------------------------+
-|                            |     |                            |
-|                            |     |                            |
-|    +------------------+    |     |    +------------------+    |
-|    |      Core        |    |     |    |          Core    |    |
-|    |                  |    |     |    |                  |    |
-|    | .---.     .---.  |    |     |    |            .---. |    |
-|    |(  C  )---(  B  )-----------------------------(  F  )|    |
-|    | `+--'     `+-+'---------+   |    |    .---.   `+-+' |    |
-|    |  |         | |   |    | +------------(  E  )   | |  |    |
-|    |  |         | |   |    |     |    |    `-+-'----+ |  |    |
-|    +--|---------|-|---+    |     |    +------|--------|--+    |
-|       |         | |        |     |           |        |       |
-|       |         | |        |     |           |        |       |
-|       |+--------+ |        |     |           |        |       |
-|       ||          |        |     |           |        |       |
-|       ||          |        |     |           |        |       |
-|     .-++.         |        |     |         .-+-.      |       |
-|    (  D  )      .-+-.      |     |        (  G  )-----+       |
-|     `---'      (  A  )     |     |         `---'              |
-|                 `---'      |     |                            |
-|   ISD 1                    |     |                    ISD 2   |
-+----------------------------+     +----------------------------+
+┌────────────────────────────┐     ┌────────────────────────────┐
+│                            │     │                            │
+│                            │     │                            │
+│    ┌──────────────────┐    │     │    ┌──────────────────┐    │
+│    │      Core        │    │     │    │          Core    │    │
+│    │                  │    │     │    │                  │    │
+│    │ .───.     .---.  │    │     │    │            .───. │    │
+│    │(  C  )───(  B  )─────────────────────────────(  F  )│    │
+│    │ `┬──'     `┬─┬'──────────+  │    │    .───.   `┬─┬' │    │
+│    │  │         │ │   |    │  +────────── (  E  )───┘ │  │    │
+│    │  │         │ │   │    │     │    │    `─┬─'      │  │    │
+│    └──│─────────│─│───┘    │     │    └──────│────────│──┘    │
+│       │         │ │        │     │           │        │       │
+│       │         │ │        │     │           │        │       │
+│       │┌────────┘ │        │     │           │        │       │
+│       ││          │        │     │           │        │       │
+│       ││          │        │     │           │        │       │
+│     .-++.         │        │     │         .-+-.      │       │
+│    (  D  )      .-+-.      │     │        (  G  )─────┘       │
+│     `───'      (  A  )     │     │         `───'              │
+│                 `───'      │     │                            │
+│   ISD 1                    │     │                    ISD 2   │
+└────────────────────────────┘     └────────────────────────────┘
 ~~~~
 {: #figure-8 title="Topology used in the path lookup examples."}
 
