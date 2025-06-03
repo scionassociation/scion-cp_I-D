@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 4 December 2025                                         S. Hitz
+Expires: 5 December 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                             2 June 2025
+                                                             3 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 December 2025.
+   This Internet-Draft will expire on 5 December 2025.
 
 Copyright Notice
 
@@ -3949,29 +3949,29 @@ Path-Lookup Examples
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
    "CS" stands for Control Service.
 
-   +----------------------------+     +----------------------------+
-   |                            |     |                            |
-   |                            |     |                            |
-   |    +------------------+    |     |    +------------------+    |
-   |    |      Core        |    |     |    |          Core    |    |
-   |    |                  |    |     |    |                  |    |
-   |    | .---.     .---.  |    |     |    |            .---. |    |
-   |    |(  C  )---(  B  )-----------------------------(  F  )|    |
-   |    | `+--'     `+-+'---------+   |    |    .---.   `+-+' |    |
-   |    |  |         | |   |    | +------------(  E  )   | |  |    |
-   |    |  |         | |   |    |     |    |    `-+-'----+ |  |    |
-   |    +--|---------|-|---+    |     |    +------|--------|--+    |
-   |       |         | |        |     |           |        |       |
-   |       |         | |        |     |           |        |       |
-   |       |+--------+ |        |     |           |        |       |
-   |       ||          |        |     |           |        |       |
-   |       ||          |        |     |           |        |       |
-   |     .-++.         |        |     |         .-+-.      |       |
-   |    (  D  )      .-+-.      |     |        (  G  )-----+       |
-   |     `---'      (  A  )     |     |         `---'              |
-   |                 `---'      |     |                            |
-   |   ISD 1                    |     |                    ISD 2   |
-   +----------------------------+     +----------------------------+
+   ┌────────────────────────────┐     ┌────────────────────────────┐
+   │                            │     │                            │
+   │                            │     │                            │
+   │    ┌──────────────────┐    │     │    ┌──────────────────┐    │
+   │    │      Core        │    │     │    │          Core    │    │
+   │    │                  │    │     │    │                  │    │
+   │    │ .───.     .---.  │    │     │    │            .───. │    │
+   │    │(  C  )───(  B  )─────────────────────────────(  F  )│    │
+   │    │ `┬──'     `┬─┬'──────────+  │    │    .───.   `┬─┬' │    │
+   │    │  │         │ │   |    │  +────────── (  E  )───┘ │  │    │
+   │    │  │         │ │   │    │     │    │    `─┬─'      │  │    │
+   │    └──│─────────│─│───┘    │     │    └──────│────────│──┘    │
+   │       │         │ │        │     │           │        │       │
+   │       │         │ │        │     │           │        │       │
+   │       │┌────────┘ │        │     │           │        │       │
+   │       ││          │        │     │           │        │       │
+   │       ││          │        │     │           │        │       │
+   │     .-++.         │        │     │         .-+-.      │       │
+   │    (  D  )      .-+-.      │     │        (  G  )─────┘       │
+   │     `───'      (  A  )     │     │         `───'              │
+   │                 `───'      │     │                            │
+   │   ISD 1                    │     │                    ISD 2   │
+   └────────────────────────────┘     └────────────────────────────┘
 
            Figure 23: Topology used in the path lookup examples.
 
