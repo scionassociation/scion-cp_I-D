@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-29T00:24:06.633167+00:00",
+  "timestamp": "2025-06-03T00:24:48.780041+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1472,7 +1472,7 @@
       "labels": [],
       "body": "OS currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\nhttps://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n\nTilman is also supervising a thesis using cynamic metadata to improve beaconing ",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-05-28T08:57:19Z",
+      "updatedAt": "2025-06-02T16:18:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -1481,6 +1481,13 @@
           "body": "Discussed this with Roman, from an interop point of view it would make a lot of sense",
           "createdAt": "2025-05-28T08:57:18Z",
           "updatedAt": "2025-05-28T08:57:18Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@jiceatscion shall we mention some form of governance around extensions?",
+          "createdAt": "2025-06-02T16:18:09Z",
+          "updatedAt": "2025-06-02T16:18:09Z"
         }
       ]
     }
@@ -8659,6 +8666,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 108,
+      "id": "PR_kwDOJx2-rs6YmBLa",
+      "title": "New diagrams",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/108",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-02T10:25:52Z",
+      "updatedAt": "2025-06-02T17:07:29Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "New_Diagrams",
+      "headRefOid": "b8f98b5cc287894c23e0e611fcbade7fe631a27d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
