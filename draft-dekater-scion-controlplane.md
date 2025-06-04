@@ -453,29 +453,26 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~~
-
-                            ┌─────────────┐
-                            │ Core AS X   │
-                            │             │
-                            │    2   1    │
-                            └────#───#────┘
-          ┌────────┐             │   │             ┌────────┐
-          │PCB     │     ┌─────┐ │   │ ┌─────┐     │PCB     │
-          │========│-----│PCB a│ │   │ │PCB b│̿=====│++++++++│
-          │Core    │     └──┬──┘ │   │ └──┬──┘     │Core    │
-          │- Out:2 │        │    │   │    │        │- Out:1 │
-          └────────┘        ▼    │   │    ▼        └────────┘
-                                 ▼   ▼
-                            ┌────#───#────┐
-                            │     AS Y    │
-
+                           ┌─────────────┐
+                           │  Core AS X  │
+                           │             │
+                           │    2   1    │
+                           └────#───#────┘
+           ┌────────┐┐          │   │          ┌┌────────┐
+           │ PCB a  ││  ┌─────┐ │   │ ┌─────┐  ││ PCB b  │
+           ┝━━━━━━━━┥│◀─┤PCB a│ │   │ │PCB b├─▶│┝━━━━━━━━┥
+           │ Core   ││  └──┬──┘ │   │ └──┬──┘  ││Core    │
+           │- Out:2 ││     │    │   │    │     ││- Out:1 │
+           └────────┘┘     ▼    │   │    ▼     └└────────┘
+                                ▼   ▼
+                           ┌────#───#────┐
+                           │    AS Y     │
 ~~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
 AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
 ~~~~
-
                         ┌─────┐ │   │ ┌─────┐
                         │PCB a│ │   │ │PCB b│
                         └──┬──┘ │   │ └──┬──┘
@@ -487,36 +484,34 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
        │    AS V     #- - -# 1           │     │    AS W     │
        │             │     │    AS Y     │     │             │
        │             │     │           4 #- - -#             │
-       └─────────────┘     │             │     └─────────────┘
-                           │    6   5    │
-            ┌────────┐     └────#───#────┘     ┌────────┐
-            │PCB     │          │   │          │PCB     │
-            │========│          │   │          │========│
-            │Core X  │          │   │          │Core X  │
-            │- Out:2 │          │   │          │- Out:2 │
-┌────────┐  │────────│  ┌─────┐ │   │ ┌─────┐  │────────│  ┌────────┐
-│PCB     │  │AS Y    ├──┤PCB c│ │   │ │PCB d├──┤AS Y    │  │PCB     │
-│++++++++│  │-In:2   │  └──┬──┘ │   │ └──┬──┘  │-In:2   │  │++++++++│
-│Core X  │  │-Out:6  │     │    │   │    │     │-Out:5  │  │Core X  │
-│- Out:1 │  │-PeerV:1│     ▼    │   │    ▼     │-PeerV:1│  │- Out:1 │
-│────────│  │-PeerW:4│          │   │          │-PeerW:4│  │────────│
-│AS Y    │  └────────┘          │   │          └────────┘  │AS Y    │
-│-In:3   │              ┌─────┐ │   │ ┌─────┐              │-In:3   │
-│-Out:6  │==============│PCB e│ │   │ │PCB f│==============│-Out:5  │
-│-PeerV:1│              └──┬──┘ │   │ └──┬──┘              │-PeerV:1│
-│-PeerW:4│                 │    │   │    │                 │-PeerW:4│
-└────────┘                 ▼    │   │    ▼                 └────────┘
+       │             │     │    6   5    │     │             │      
+       └─────────────┘     └────#───#────┘     └─────────────┘
+            ┌────────┐┐         │   │         ┌┌────────┐
+            │ PCB c  ││         │   │         ││ PCB d  │
+            ┝━━━━━━━━┥│         │   │         │┝━━━━━━━━┥
+            │Core X  ││         │   │         ││Core X  │
+            │- Out:2 ││         │   │         ││- Out:2 │
+┌────────┐┐ ├────────┤│  ┌─────┐│   │┌─────┐  │├────────┤ ┌┌────────┐
+│ PCB e  ││ │AS Y    ││◀─┤PCB c││   ││PCB d├─▶││AS Y    │ ││ PCB f  │
+┝━━━━━━━━┥│ │-In:2   ││  └──┬──┘│   │└──┬──┘  ││-In:2   │ │┝━━━━━━━━┥
+│Core X  ││ │-Out:6  ││     │   │   │   │     ││-Out:5  │ ││Core X  │
+│- Out:1 ││ │-PeerV:1││     ▼   │   │   ▼     ││-PeerV:1│ ││- Out:1 │
+├────────┤│ │-PeerW:4││         │   │         ││-PeerW:4│ │├────────┤
+│AS Y    ││ └────────┘┘         │   │         └└────────┘ ││AS Y    │
+│-In:3   ││             ┌─────┐ │   │ ┌─────┐             ││-In:3   │
+│-Out:6  ││◀────────────┤PCB e│ │   │ │PCB f├────────────▶││-Out:5  │
+│-PeerV:1││             └──┬──┘ │   │ └──┬──┘             ││-PeerV:1│
+│-PeerW:4││                │    │   │    │                ││-PeerW:4│
+└────────┘┘                ▼    │   │    ▼                └└────────┘
                                 ▼   ▼
                            ┌────#───#────┐
                            │    AS Z     │
-
 ~~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~~
-
                    ┌─────┐      │   │      ┌─────┐
                    │PCB c│      │   │      │PCB d│
                    └─┬───┘      │   │      └───┬─┘
@@ -529,27 +524,27 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
                            ┌────#───#────┐
                            │    5   1    │
                            │             │
-                           │     AS Z    │
-            ┌────────┐     │      3      │     ┌────────┐
-            │PCB     │     └──────#──────┘     │PCB     │
-            │========│            │            │========│
-            │Core X  │            │            │Core X  │
-┌────────┐  │- Out:2 │            │            │- Out:2 │  ┌────────┐
-│PCB     │  │────────|            │            │────────│  │PCB     │
-│++++++++│  │AS Y    │            │            │AS Y    │  │++++++++│
-│Core X  │  │-In:2   │            │            │-In:2   │  │Core X  │
-│- Out:1 │  │-Out:6  │   ┌─────┐  │  ┌─────┐   │-Out:5  │  │- Out:1 │
-│────────│  │-PeerV:1├───┤PCB g│  │  │PCB h├───│-PeerV:1│  │────────│
-│AS Y    │  │-PeerW:4│   └──┬──┘  │  └──┬──┘   │-PeerW:4│  │AS Y    │
-│-In:3   │  │────────│      │     │     │      │────────│  │-In:3   │
-│-Out:6  │  │AS Z    │      ▼     │     ▼      │AS Z    │  │-Out:5  │
-│-PeerV:1│  │-In:5   │            │            │-In:1   │  │-PeerV:1│
-│-PeerW:4│  │-Out:3  │            │            │-Out:3  │  │-PeerW:4│
-│────────│  └────────┘            │            └────────┘  │────────│
-│AS Z    │               ┌─────┐  │  ┌─────┐               │AS Z    │
-│-In:5   │===============│PCB i│  │  │PCB j│===============│-In:1   │
-│-Out:3  │               └──┬──┘  │  └──┬──┘               │-Out:3  │
-└────────┘                  │     │     │                  └────────┘
+                           │    AS Z     │
+            ┌────────┐┐    │             │    ┌┌────────┐
+            │ PCB g  ││    │      3      │    ││ PCB h  │
+            ┝━━━━━━━━┥│    └──────#──────┘    │┝━━━━━━━━┥
+            │Core X  ││           │           ││Core X  │
+┌────────┐┐ │- Out:2 ││           │           ││- Out:2 │ ┌┌────────┐
+│ PCB i  ││ ├────────┤│           │           │├────────┤ ││ PCB j  │
+┝━━━━━━━━┥│ │AS Y    ││           │           ││AS Y    │ │┝━━━━━━━━┥
+│Core X  ││ │-In:2   ││           │           ││-In:2   │ ││Core X  │
+│- Out:1 ││ │-Out:6  ││  ┌─────┐  │  ┌─────┐  ││-Out:5  │ ││- Out:1 │
+├────────┤│ │-PeerV:1││◀─┤PCB g│  │  │PCB h├─▶││-PeerV:1│ │├────────┤
+│AS Y    ││ │-PeerW:4││  └──┬──┘  │  └──┬──┘  ││-PeerW:4│ ││AS Y    │
+│-In:3   ││ ├────────┤│     │     │     │     │├────────┤ ││-In:3   │
+│-Out:6  ││ │AS Z    ││     ▼     │     ▼     ││AS Z    │ ││-Out:5  │
+│-PeerV:1││ │-In:5   ││           │           ││-In:1   │ ││-PeerV:1│
+│-PeerW:4││ │-Out:3  ││           │           ││-Out:3  │ ││-PeerW:4│
+├────────┤│ └────────┘┘           │           └└────────┘ │├────────┤
+│AS Z    ││              ┌─────┐  │  ┌─────┐              ││AS Z    │
+│-In:5   ││◀─────────────┤PCB i│  │  │PCB j├─────────────▶││-In:1   │
+│-Out:3  ││              └──┬──┘  │  └──┬──┘              ││-Out:3  │
+└────────┘┘                 │     │     │                 └└────────┘
                             ▼     │     ▼
                                   ▼
 
@@ -559,7 +554,6 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
 ~~~~~
-
                 AS Entry Core        AS Entry Y          AS Entry Z
 
                ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
