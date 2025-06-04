@@ -484,7 +484,7 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
        │    AS V     #- - -# 1           │     │    AS W     │
        │             │     │    AS Y     │     │             │
        │             │     │           4 #- - -#             │
-       │             │     │    6   5    │     │             │      
+       │             │     │    6   5    │     │             │
        └─────────────┘     └────#───#────┘     └─────────────┘
             ┌────────┐┐         │   │         ┌┌────────┐
             │ PCB c  ││         │   │         ││ PCB d  │
