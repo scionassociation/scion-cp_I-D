@@ -255,25 +255,25 @@ A path can contain at most one peering link shortcut which means they can only b
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
 ~~~~
-┌─────────────────────────┐
-│                         │       #
-│        ISD Core         │       │      parent-child
-│  .───.           .───.  │       │      link
-│ (  A  )*───────*(  C  ) │       │
-│  `─#─'           `─#─'  │       0
-│    │               │    │
-└────│───────────────│────┘   *───────*  core link
+┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+┆                         ┆       #
+┆        ISD Core         ┆       │      parent-child
+┆ ┌─────┐         ┌─────┐ ┆       │      link
+┆ │AS A │*───────*│AS C │ ┆       │
+┆ └──#──┘         └──#──┘ ┆       0
+┆    │               │    ┆
+└┄┄┄┄│┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄│┄┄┄┄┘   *───────*  core link
      │               │
-     │               │        < - - - >  peering link
-   .─0─.           .─0─.
-  (  D  )< - - - >(  E  )
-   `─#─'           `─#─'
+     │               │        ◀ - - - ▶  peering link
+  ┌──0──┐         ┌──0──┐
+  │AS D │◀ - - - ▶│AS E │
+  └──#──┘         └──#──┘
      │               │
      │               │
      │               │
-   .─0─.           .─0─.
-  (  G  )         (  F  )
-   `───'           `───'
+  ┌──0──┐         ┌──0──┐
+  │AS G │         │AS F │
+  └─────┘         └─────┘
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
@@ -1043,12 +1043,12 @@ In this description, MTU and packet size are to be understood in the same sense 
          │
          │ ASE.HF.ingress_interface
 ┌────────#───────────┐
-│        │           │        PE.peer_  ┌───────────┐
-│                    │        interface │           │
-│        │ ┌ - - - - #──────────────────#  Peer AS  │
-│                    │ PE.HF.ingress_   │           │
-│        │ │         │ interface        └───────────┘
-│                    │
+│        ┆           │        PE.peer_  ┌───────────┐
+│        ┆           │        interface │           │
+│        ┆ ┌┄┄┄┄┄┄┄┄┄#──────────────────#  Peer AS  │
+│        ┆ ┆         │ PE.HF.ingress_   │           │
+│        ┆ ┆         │ interface        └───────────┘
+│        ┆ ┆         │
 │        ▼ ▼         │
 └─────────#──────────┘
           │ PE.HF.egress_interface
