@@ -2464,7 +2464,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
   │  │  │            │               │               │               │
   │  │  │request     │               │               │               │
   │  │  │(core,*,(2,*))              │               │               │
-  │  ├──────────────────────────────▶│               │               │ 
+  │  ├──────────────────────────────▶│               │               │
   │  │  │            │               │               │               │
   │  │◀─ ── ── ── ── ── ── ── ── ── ─┤               │               │
   │  │  │.           │   reply (core,│               │               │
