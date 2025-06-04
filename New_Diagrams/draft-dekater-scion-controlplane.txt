@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 December 2025                                         S. Hitz
+Expires: 6 December 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2025
+                                                             4 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2025.
+   This Internet-Draft will expire on 6 December 2025.
 
 Copyright Notice
 
@@ -394,25 +394,25 @@ Table of Contents
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
 
-   ┌─────────────────────────┐
-   │                         │       #
-   │        ISD Core         │       │      parent-child
-   │  .───.           .───.  │       │      link
-   │ (  A  )*───────*(  C  ) │       │
-   │  `─#─'           `─#─'  │       0
-   │    │               │    │
-   └────│───────────────│────┘   *───────*  core link
+   ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+   ┆                         ┆       #
+   ┆        ISD Core         ┆       │      parent-child
+   ┆ ┌─────┐         ┌─────┐ ┆       │      link
+   ┆ │AS A │*───────*│AS C │ ┆       │
+   ┆ └──#──┘         └──#──┘ ┆       0
+   ┆    │               │    ┆
+   └┄┄┄┄│┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄│┄┄┄┄┘   *───────*  core link
         │               │
-        │               │        < - - - >  peering link
-      .─0─.           .─0─.
-     (  D  )< - - - >(  E  )
-      `─#─'           `─#─'
+        │               │        ◀ - - - ▶  peering link
+     ┌──0──┐         ┌──0──┐
+     │AS D │◀ - - - ▶│AS E │
+     └──#──┘         └──#──┘
         │               │
         │               │
         │               │
-      .─0─.           .─0─.
-     (  G  )         (  F  )
-      `───'           `───'
+     ┌──0──┐         ┌──0──┐
+     │AS G │         │AS F │
+     └─────┘         └─────┘
 
       Figure 1: The three types of SCION links in one ISD.  Each node
                         in the figure is a SCION AS.
@@ -1566,12 +1566,12 @@ path segment 4 │             │     │             │     │             �
             │
             │ ASE.HF.ingress_interface
    ┌────────#───────────┐
-   │        │           │        PE.peer_  ┌───────────┐
-   │                    │        interface │           │
-   │        │ ┌ - - - - #──────────────────#  Peer AS  │
-   │                    │ PE.HF.ingress_   │           │
-   │        │ │         │ interface        └───────────┘
-   │                    │
+   │        ┆           │        PE.peer_  ┌───────────┐
+   │        ┆           │        interface │           │
+   │        ┆ ┌┄┄┄┄┄┄┄┄┄#──────────────────#  Peer AS  │
+   │        ┆ ┆         │ PE.HF.ingress_   │           │
+   │        ┆ ┆         │ interface        └───────────┘
+   │        ┆ ┆         │
    │        ▼ ▼         │
    └─────────#──────────┘
              │ PE.HF.egress_interface
