@@ -2357,30 +2357,29 @@ message Transport {
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
 
-
 ~~~~
 ┌────────────────────────────┐     ┌────────────────────────────┐
 │                            │     │                            │
 │                            │     │                            │
-│    ┌──────────────────┐    │     │    ┌──────────────────┐    │
-│    │      Core        │    │     │    │          Core    │    │
-│    │                  │    │     │    │                  │    │
-│    │ .───.     .---.  │    │     │    │            .───. │    │
-│    │(  C  )───(  B  )─────────────────────────────(  F  )│    │
-│    │ `┬──'     `┬─┬'──────────+  │    │    .───.   `┬─┬' │    │
-│    │  │         │ │   |    │  +────────── (  E  )───┘ │  │    │
-│    │  │         │ │   │    │     │    │    `─┬─'      │  │    │
-│    └──│─────────│─│───┘    │     │    └──────│────────│──┘    │
-│       │         │ │        │     │           │        │       │
-│       │         │ │        │     │           │        │       │
-│       │┌────────┘ │        │     │           │        │       │
-│       ││          │        │     │           │        │       │
-│       ││          │        │     │           │        │       │
-│     .-++.         │        │     │         .-+-.      │       │
-│    (  D  )      .-+-.      │     │        (  G  )─────┘       │
-│     `───'      (  A  )     │     │         `───'              │
-│                 `───'      │     │                            │
-│   ISD 1                    │     │                    ISD 2   │
+│    ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐    │     │    ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐    │
+│    ┆       Core       ┆    │     │    ┆       Core       ┆    │
+│    ┆                  ┆    │     │    ┆                  ┆    │
+│    ┆ ┌─────┐  ┌─────┐ ┆    │     │    ┆          ┌─────┐ ┆    │
+│    ┆ │AS C ├──┤AS B ├────────────────────────────┤AS F │ ┆    │
+│    ┆ └─┬───┘  └┬─┬─┬┘ ┆    │     │    ┆ ┌─────┐  └─┬─┬─┘ ┆    │
+│    ┆   │       │ │ └─────────+ +────────┤AS E ├────┘ │   ┆    │
+│    ┆   │       │ │    ┆    │     │    ┆ └──┬──┘      │   ┆    │
+│    └┄┄┄│┄┄┄┄┄┄┄│┄│┄┄┄┄┘    │     │    └┄┄┄┄│┄┄┄┄┄┄┄┄┄│┄┄┄┘    │
+│        │       │ │         │     │         │         │        │
+│        │       │ │         │     │         │         │        │
+│        │ ┌─────┘ │         │     │         │         │        │
+│        │ │       │         │     │         │         │        │
+│        │ │       │         │     │         │         │        │
+│      ┌─┴─┴─┐  ┌──┴──┐      │     │      ┌──┴──┐      │        │
+│      │AS D │  │AS A │      │     │      │AS G ├──────┘        │
+│      └─────┘  └─────┘      │     │      └─────┘               │
+│                            │     │                            │
+│            ISD 1           │     │            ISD 2           │
 └────────────────────────────┘     └────────────────────────────┘
 ~~~~
 {: #figure-8 title="Topology used in the path lookup examples."}
