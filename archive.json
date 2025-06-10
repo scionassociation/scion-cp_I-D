@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-05T00:24:11.629402+00:00",
+  "timestamp": "2025-06-10T00:24:31.995967+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1490,6 +1490,44 @@
           "updatedAt": "2025-06-02T16:18:09Z"
         }
       ]
+    },
+    {
+      "number": 109,
+      "id": "I_kwDOJx2-rs66om_L",
+      "title": "Service discovery - clarify and move to dedicated section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/109",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "Prio 1"
+      ],
+      "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [ ] Move section to a dedicated paragraph\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [ ] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.",
+      "createdAt": "2025-06-09T19:13:09Z",
+      "updatedAt": "2025-06-09T20:27:22Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 110,
+      "id": "I_kwDOJx2-rs66psQe",
+      "title": "Security considerations: discuss Impact of gRPC/HTTP",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/110",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "question",
+        "Prio 3"
+      ],
+      "body": "> From Alvaro Retana:\n(1) gRPC/HTTP3/QUIC\n  I'm not deeply familiar with gRPC.  I wonder whether it can be exploited by an attacker -- are there any security considerations that are\nSCION-related from its use?  I know the messages are transported over QUIC/H3 -- same question.",
+      "createdAt": "2025-06-09T21:05:55Z",
+      "updatedAt": "2025-06-09T21:05:55Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -8679,13 +8717,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-04T16:07:42Z",
+      "updatedAt": "2025-06-09T02:26:23Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "a801677a0500c7cd92656acc3f4e93ad541b5870",
+      "headRefOid": "9ab1dd8f0e26209c2aab1257694ad37f8858efc9",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
