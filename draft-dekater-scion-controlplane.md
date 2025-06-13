@@ -1112,7 +1112,7 @@ Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally i
 
 This section describes how PCBs are received, selected and further propagated in the path exploration process.
 
-### Reception of PCBs {#reception-of-pcbs}
+### Reception of PCBs
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
@@ -1945,7 +1945,7 @@ A malicious AS M might try to manipulate the beaconing process between two neigh
 - The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.
 - The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.
 
-The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see [](#reception-of-pcbs))
+The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.
 
 The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.
 
