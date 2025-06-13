@@ -375,8 +375,9 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}}) but not identical. It MUST be as follows:
 
-- It uses a 16-bit colon-separated lower-case hex encoding with leading 0s omitted: `0:0:0` to `ffff:ffff:ffff`.
-- The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
+- Using big-endian hexadecimal notation in 3 groups of 4, in the range `0:0:0` to `ffff:ffff:ffff`.
+- Leading zeros are omitted.
+- The `::` zero-compression feature of IPv6 MUST NOT be used.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 - For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
 
@@ -384,7 +385,7 @@ The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}})
 
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
 
-For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
+For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0:1:f`.
 
 
 ## Bootstrapping ability
