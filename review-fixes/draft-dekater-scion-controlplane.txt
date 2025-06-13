@@ -91,8 +91,6 @@ Table of Contents
        1.5.1.  ISD Numbers
        1.5.2.  SCION AS Numbers
        1.5.3.  Text Representation
-       1.5.4.  Wildcard Addressing
-       1.5.5.  Special-Purpose SCION AS Numbers
      1.6.  Bootstrapping ability
      1.7.  Resistance to partitioning
      1.8.  Communication Protocol
@@ -567,65 +565,26 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-
+   ISD numbers are currently allocated by Anapaya, a provider of SCION-
    based networking software and solutions (see [ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
    A SCION AS number is the 48-bit identifier for an AS.  Although they
    play a similar role, there is no relationship between SCION AS
-   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons
+   numbers and BGP ASNs as defined by [RFC4271].  For historical reasons
    some SCION Autonomous Systems use a SCION AS number where the first
    16 bits are 0 and the remaining 32 bits are identical to their BGP
    ASN, but there is no technical requirement for this.
 
-1.5.3.  Text Representation
-
-1.5.3.1.  ISD numbers
-
-   The text representation of SCION ISD numbers MUST be its decimal
-   ASCII representation.
-
-1.5.3.2.  AS numbers
-
-   The text representation of SCION AS numbers is similar to IPv6 (see
-   [RFC5952]) but not identical.  It MUST be as follows:
-
-   *  It uses a 16-bit colon-separated lower-case hex encoding with
-      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.
-
-   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The
-      feature has very limited use in a 48-bit address space and would
-      only add more complexity.
-
-   *  A range of AS numbers can be shortened with a notation similar to
-      the one used for CIDR IP ranges ([RFC4632]).  For example, the
-      range of the lowest 32-bit AS numbers (0-4294967295) can be
-      represented as 0:0:0/16.
-
-   *  For historical reasons, SCION AS numbers in the lower 32-bit range
-      MAY also be represented as decimal for human readability.  For
-      example, if a program receives the AS number 0:1:f, it MAY display
-      the number as "65551".
-
-1.5.3.3.  <ISD, AS> tuples
-
-   The text representation of SCION addresses MUST be <ISD>-<AS>, where
-   <ISD> is the text representation of the ISD number, <AS> is the text
-   representation of the AS number, and - is the literal ASCII character
-   0x2D.
-
-   For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0000:1:f.
-
-1.5.4.  Wildcard Addressing
+1.5.2.1.  Wildcard Addressing
 
    SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
    to place requests for core segments or down segments during path
    lookup.  These wildcard addresses are of the form I-0, to designate
    any AS in ISD I.  For more information, see Section 5.2.1.
 
-1.5.5.  Special-Purpose SCION AS Numbers
+1.5.2.2.  Special-Purpose SCION AS Numbers
 
     +===================+=============+===============================+
     | AS                | Size        | Description                   |
@@ -654,6 +613,45 @@ Table of Contents
                        Table 2: AS number allocations
 
    The rest of the space is currently unallocated.
+
+1.5.3.  Text Representation
+
+1.5.3.1.  ISD numbers
+
+   The text representation of SCION ISD numbers MUST be its decimal
+   ASCII representation.
+
+1.5.3.2.  AS numbers
+
+   The text representation of SCION AS numbers is similar to IPv6 (see
+   [RFC5952]) but not identical.  It MUST be as follows:
+
+   *  Using big-endian hexadecimal notation in 3 groups of 4, in the
+      range 0:0:0 to ffff:ffff:ffff.
+
+   *  Leading zeros are omitted.
+
+   *  The :: zero-compression feature of IPv6 MUST NOT be used.
+
+   *  A range of AS numbers can be shortened with a notation similar to
+      the one used for CIDR IP ranges ([RFC4632]).  For example, the
+      range of the lowest 32-bit AS numbers (0-4294967295) can be
+      represented as 0:0:0/16.
+
+   *  For historical reasons, SCION AS numbers in the lower 32-bit range
+      MAY also be represented as decimal for human readability.  For
+      example, if a program receives the AS number 0:1:f, it MAY display
+      the number as "65551".
+
+1.5.3.3.  <ISD, AS> tuples
+
+   The text representation of SCION addresses MUST be <ISD>-<AS>, where
+   <ISD> is the text representation of the ISD number, <AS> is the text
+   representation of the AS number, and - is the literal ASCII character
+   0x2D.
+
+   For example, the text representation of AS number 65551 (0x1000f) in
+   ISD number 4 is 4-0:1:f.
 
 1.6.  Bootstrapping ability
 
@@ -2530,7 +2528,7 @@ path segment 4 |             |     |             |     |             |
    addresses.  Table 4 below shows who is responsible for what.
 
    *Note:* For general information on the use of wildcard addresses in
-   SCION, see Section 1.5.4.
+   SCION, see Section 1.5.2.1.
 
    +=========+===================+=================+==================+
    | Segment | Wildcard          | Expanded/       | Translated Into  |
@@ -3403,8 +3401,8 @@ path segment 4 |             |     |             |     |             |
    The ISD and SCION AS number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
    networking software and solutions (see [ISD-AS-assignments]).  This
-   task is currently being transitioned from Anapaya to the SCION
-   Association.
+   task is being transitioned from Anapaya to the SCION Association
+   https://scion.org.
 
 9.  References
 
@@ -3496,9 +3494,10 @@ path segment 4 |             |     |             |     |             |
               DOI 10.17487/RFC1122, October 1989,
               <https://www.rfc-editor.org/rfc/rfc1122>.
 
-   [RFC4893]  Vohra, Q. and E. Chen, "BGP Support for Four-octet AS
-              Number Space", RFC 4893, DOI 10.17487/RFC4893, May 2007,
-              <https://www.rfc-editor.org/rfc/rfc4893>.
+   [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
+              Border Gateway Protocol 4 (BGP-4)", RFC 4271,
+              DOI 10.17487/RFC4271, January 2006,
+              <https://www.rfc-editor.org/rfc/rfc4271>.
 
    [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
               Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
