@@ -373,7 +373,7 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 #### AS numbers
 
-The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}}) but not identical. It MUST be as follows:
+The text representation of SCION AS numbers MUST be as follows:
 
 - Using big-endian hexadecimal notation in 3 groups of 4, in the range `0:0:0` to `ffff:ffff:ffff`.
 - Leading zeros are omitted.
