@@ -96,7 +96,7 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
   RFC1122:
-  RFC4893:
+  RFC4271:
   RFC5398:
   RFC6996:
   RFC9217:
