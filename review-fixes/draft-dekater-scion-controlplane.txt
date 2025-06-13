@@ -3219,7 +3219,7 @@ path segment 4 |             |     |             |     |             |
    protected by A's signature.  If M manipulates the PCB while in flight
    from A to B, then verification of the manipulated inbound PCBs will
    fail at AS B, as the adversary's PCBs cannot contain A's correct
-   signature.
+   signature (see {#reception}).
 
    The second type of attack is made impossible by the Hop Field's MAC
    which protects the Hop Field's integrity and chains it with the
