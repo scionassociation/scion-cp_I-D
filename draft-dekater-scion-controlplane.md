@@ -1112,7 +1112,7 @@ Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally i
 
 This section describes how PCBs are received, selected and further propagated in the path exploration process.
 
-### Reception of PCBs [#reception]
+### Reception of PCBs {#reception}
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
@@ -1123,13 +1123,13 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
 
-### Storing Candidate PCBs [#storing]
+### Storing Candidate PCBs {#storing}
 
 An AS stores candidate PCBs in a temporary storage called the *Beacon Store*. The management of this storage is implementation defined.
 
 Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
 
-### PCB Selection Policies [#selection]
+### PCB Selection Policies {#selection}
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
