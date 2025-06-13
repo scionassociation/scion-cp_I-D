@@ -340,11 +340,30 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
+ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4893}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+
+#### Wildcard Addressing {#serv-disc}
+
+SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
+
+#### Special-Purpose SCION AS Numbers
+
+| AS               | Size        | Description                                                                 |
+|------------------+-------------+-----------------------------------------------------------------------------|
+| `0:0:0`          | 1           | The wildcard AS                                                             |
+| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
+| `1:0:0`          | 1           | Reserved                                                                    |
+| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
+| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
+| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
+{: #table-2 title="AS number allocations"}
+
+The rest of the space is currently unallocated.
 
 ### Text Representation
 
@@ -366,26 +385,6 @@ The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}})
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
 
 For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
-
-### Wildcard Addressing {#serv-disc}
-
-SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
-
-### Special-Purpose SCION AS Numbers
-
-| AS               | Size        | Description                                                                 |
-|------------------+-------------+-----------------------------------------------------------------------------|
-| `0:0:0`          | 1           | The wildcard AS                                                             |
-| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
-| `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
-| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
-| `ffff:ffff:ffff` | 1           | Reserved                                                                    |
-{: #table-2 title="AS number allocations"}
-
-The rest of the space is currently unallocated.
-
 
 
 ## Bootstrapping ability
@@ -2007,7 +2006,7 @@ A combination of the mechanism above is used to prevent flooding attacks on the 
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is being transitioned from Anapaya to the SCION Association [](https://scion.org).
 
 --- back
 
