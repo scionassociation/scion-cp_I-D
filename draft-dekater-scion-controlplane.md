@@ -1123,13 +1123,13 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
 
-### Storing Candidate PCBs {#storing-pcbs}
+### Storing Candidate PCBs
 
 An AS stores candidate PCBs in a temporary storage called the *Beacon Store*. The management of this storage is implementation defined.
 
 Current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
 
-### PCB Selection Policies {#selection-of-pcbs}
+### PCB Selection Policies
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
@@ -1945,7 +1945,7 @@ A malicious AS M might try to manipulate the beaconing process between two neigh
 - The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.
 - The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.
 
-The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see [](#reception-of-pcbs)).
+The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see [](#reception-of-pcbs))
 
 The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.
 
