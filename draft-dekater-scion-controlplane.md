@@ -279,7 +279,7 @@ A path can contain at most one peering link shortcut which means they can only b
   +--0--+         +--0--+
   |AS G |         |AS F |
   +-----+         +-----+
-  
+
 </artwork>
 </artset>
 </figure>
