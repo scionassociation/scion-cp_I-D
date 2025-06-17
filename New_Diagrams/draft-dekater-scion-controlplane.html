@@ -18,7 +18,7 @@
 <meta content="draft-dekater-scion-controlplane-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.28.1
-    Python 3.12.10
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -27,7 +27,7 @@
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
+    requests 2.32.4
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 11 December 2025</td>
+<td class="center">Expires 19 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-09" class="published">9 June 2025</time>
+<time datetime="2025-06-17" class="published">17 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-11">11 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-19">19 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1612,7 +1612,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -1965,8 +1965,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                                 ▼   ▼
        ┌─────────────┐     ┌────#───#────┐     ┌─────────────┐
        │             │     │    2   3    │     │             │
-       │    AS V     #- - -# 1           │     │    AS W     │
-       │             │     │    AS Y     │     │             │
+       │             #- - -# 1           │     │             │
+       │    AS V     │     │    AS Y     │     │    AS W     │
        │             │     │           4 #- - -#             │
        │             │     │    6   5    │     │             │
        └─────────────┘     └────#───#────┘     └─────────────┘
@@ -2121,7 +2121,7 @@ path segment 4 │             │     │             │     │             �
 
 ┌─────────────┬────────────┬────────────┬────────┬-───────────────────┐
 │Segment Info │ AS Entry 0 │ AS Entry 1 │  ...   │     AS Entry N     │
-└─────────────┴-───────────┴────────────┴────────┴-───────────────────┘
+└─────────────┴────────────┴────────────┴────────┴────────────────────┘
 └───────┬─────┘            └──────┬─────┘
         ▼                         │
 ┌────────────────┐                │
@@ -2132,60 +2132,66 @@ path segment 4 │             │     │             │     │             �
 ┌──────────────────────────────────────────────────────────────────────┐
 ┌───────────────────────┬──────────────────────────────────────────────┐
 │    Unsigned Ext.      │               Signed AS Entry                │
-└───────────────────────┴-─────────────────────────────────────────────┘
+└───────────────────────┴──────────────────────────────────────────────┘
                         └───────────────────────┬──────────────────────┘
                                                 ▼
 ┌──────────────────────────────────────────────────────────────────────┐
 ┌────────────────────┬──────────────────┬─────────-────────────────────┐
 │     Signature      │      Header      │             Body             │
-└────────────────────┴-─────────────────┴──────────────────────────────┘
+└────────────────────┴──────────────────┴──────────────────────────────┘
                      └────────┬─────────┴───────────────┬──────────────┘
                               ▼                         │
 ┌──────────────────────────────────────┐                │
 ┌────────────────┬─────────────────────┐                │
 │ Signature Alg. │ Verification Key ID │                │
-└────────────────┴-────────────────────┘                │
+└────────────────┴─────────────────────┘                │
                  └──────────┬──────────┘                │
                             ▼                           │
 ┌───────────────────────────────────────────────┐       │
 ┌─────────┬─────────┬────────────┬──────────────┐       │
 │ ISD-AS  │TRC Base │ TRC Serial │Subject Key ID│       │
-└─────────┴-────────┴────────────┴──────────────┘       │
+└─────────┴─────────┴────────────┴──────────────┘       │
                                                         ▼
 ┌──────────────────────────────────────────────────────────────────────┐
 ┌──────┬───────────┬─────────┬────────────┬─────┬────────────┬────┬────┐
 │ISD-AS│Next ISD-AS│Hop Entry│Peer Entry 0│ ... │Peer Entry N│MTU │Ext.│
-└──────┴───────────┴-────────┴────────────┴─────┴────────────┴────┴────┘
+└──────┴───────────┴─────────┴────────────┴─────┴────────────┴────┴────┘
                    └────┬────┴──────┬─────┘
                         ▼           ▼
 ┌──────────────────────────┐ ┌─────────────────────────────────────────┐
 ┌─────────────┬────────────┐ ┌─────────┬────────┬──────────┬───────────┐
 │ Ingress MTU │ Hop Field  │ │Hop Field│PeerMTU │PeerISD-AS│PeerInterf.│
-└─────────────┴-───────────┘ └─────────┴-───────┴──────────┴───────────┘
+└─────────────┴────────────┘ └─────────┴────────┴──────────┴───────────┘
                        └────┬────┘
                             ▼
 ┌──────────────────────────────────────────────────────────┐
 ┌────────────┬─────────────┬───────────────────┬───────────┐
 │  Ingress   │    Egress   │  Expiration Time  │    MAC    │
-└────────────┴-────────────┴-──────────────────┴-──────────┘
+└────────────┴─────────────┴───────────────────┴───────────┘
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-top-down-composition-of-one" class="selfRef">Top-down composition of one PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-3">Note: For a full example of one PCB in the Protobuf message format, please see , <a href="#_figure-14" class="auto internal xref">Figure 19</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-3">Note: For a full example of one PCB in the Protobuf message format, please see , <a href="#_figure-14" class="auto internal xref">Figure 15</a>.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
 <a href="#section-2.2.1.1" class="section-number selfRef">2.2.1.1. </a><a href="#name-pcb-top-level-message-forma" class="section-name selfRef">PCB Top-Level Message Format</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.1-1">
+<span id="name-pcb-top-level-message-format"></span><div id="_figure-6">
+<figure id="figure-7">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.1-1.1">
 <pre>
 ┌─────────────┬────────────┬────────────┬─────┬────────────┐
 │Segment Info │ AS Entry 0 │ AS Entry 1 │ ... │ AS Entry N │
-└─────────────┴-───────────┴-───────────┴─────┴-───────────┘
-</pre><a href="#section-2.2.1.1-1" class="pilcrow">¶</a>
+└─────────────┴────────────┴-───────────┴─────┴-───────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-pcb-top-level-message-format" class="selfRef">PCB Top-Level Message Format</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.1-2">Each PCB <span class="bcp14">MUST</span> consists of at least:<a href="#section-2.2.1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2225,7 +2231,9 @@ path segment 4 │             │     │             │     │             �
             <h5 id="name-segment-information">
 <a href="#section-2.2.1.2" class="section-number selfRef">2.2.1.2. </a><a href="#name-segment-information" class="section-name selfRef">Segment Information</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.2-1">
+<span id="name-segment-information-compone"></span><div id="_figure-7">
+<figure id="figure-8">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.2-1.1">
 <pre>
 ┌────────────────────────────┐
 │         Segment Info       │
@@ -2235,8 +2243,12 @@ path segment 4 │             │     │             │     │             �
 ┌────────────────────────────┐
 ┌─────────────┬──────────────┐
 │  Timestamp  │    Seg ID    │
-└─────────────┴-─────────────┘
-</pre><a href="#section-2.2.1.2-1" class="pilcrow">¶</a>
+└─────────────┴──────────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-segment-information-compone" class="selfRef">Segment Information Component</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.2-2">Each PCB <span class="bcp14">MUST</span> include an information component with basic information about the PCB.<a href="#section-2.2.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.2-3">In the Protobuf message format, the information component of a PCB is called the <code>SegmentInformation</code> message. The following code block shows the Protobuf message definition for the <code>SegmentInformation</code> message.<a href="#section-2.2.1.2-3" class="pilcrow">¶</a></p>
@@ -2264,7 +2276,9 @@ path segment 4 │             │     │             │     │             �
             <h5 id="name-as-entry">
 <a href="#section-2.2.1.3" class="section-number selfRef">2.2.1.3. </a><a href="#name-as-entry" class="section-name selfRef">AS Entry</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.3-1">
+<span id="name-as-entry-message"></span><div id="_figure-8">
+<figure id="figure-9">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.3-1.1">
 <pre>
                            ┌──────────────┐
                            │   AS Entry   │
@@ -2275,7 +2289,11 @@ path segment 4 │             │     │             │     │             �
 ┌───────────────────────┬──────────────────────────────────────────┐
 │  Unsigned Extension   │             Signed AS Entry              │
 └───────────────────────┴-─────────────────────────────────────────┘
-</pre><a href="#section-2.2.1.3-1" class="pilcrow">¶</a>
+</pre>
+</div>
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<a href="#name-as-entry-message" class="selfRef">AS Entry Message</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.3-2">Each PCB <span class="bcp14">MUST</span> also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS <span class="bcp14">MUST</span> add its AS entry to each PCB it creates, and each traversed AS <span class="bcp14">MUST</span> attach its AS entry to the PCB.<a href="#section-2.2.1.3-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.3-3">One AS entry contains the complete hop information for this specific AS in this specific path segment. It consists of a signed and an unsigned component.<a href="#section-2.2.1.3-3" class="pilcrow">¶</a></p>
@@ -2304,7 +2322,9 @@ path segment 4 │             │     │             │     │             �
             <h5 id="name-as-entry-signed-component">
 <a href="#section-2.2.1.4" class="section-number selfRef">2.2.1.4. </a><a href="#name-as-entry-signed-component" class="section-name selfRef">AS Entry Signed Component</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.4-1">
+<span id="name-as-entry-signed-component-2"></span><div id="_figure-9">
+<figure id="figure-10">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.4-1.1">
 <pre>
         ┌──────────────────────────────────────────────────────┐
         │                   Signed AS Entry                    │
@@ -2315,7 +2335,11 @@ path segment 4 │             │     │             │     │             �
 ┌────────────────────┬─────────────────┬──────────────────────────────┐
 │       Header       │      Body       │          Signature           │
 └────────────────────┴-────────────────┴──────────────────────────────┘
-</pre><a href="#section-2.2.1.4-1" class="pilcrow">¶</a>
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-as-entry-signed-component-2" class="selfRef">AS Entry Signed Component</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.4-2">Each AS entry of a PCB <span class="bcp14">MUST</span> include a signed component as well as a signature computed over the signed component. Each AS entry <span class="bcp14">MUST</span> be signed with the Control Plane AS Certificate (See <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>).<a href="#section-2.2.1.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4-3">The signed component of an AS entry <span class="bcp14">MUST</span> include the following elements:<a href="#section-2.2.1.4-3" class="pilcrow">¶</a></p>
@@ -2366,7 +2390,9 @@ path segment 4 │             │     │             │     │             �
               <h6 id="name-as-entry-signed-header">
 <a href="#section-2.2.1.4.1" class="section-number selfRef">2.2.1.4.1. </a><a href="#name-as-entry-signed-header" class="section-name selfRef">AS Entry Signed Header</a>
               </h6>
-<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-1">
+<span id="name-as-entry-signed-header-2"></span><div id="_figure-10">
+<figure id="figure-11">
+                <div class="alignLeft art-text artwork" id="section-2.2.1.4.1-1.1">
 <pre>
            ┌─────────────────┐
            │     Header      │
@@ -2376,14 +2402,18 @@ path segment 4 │             │     │             │     │             �
 ┌──────────────────────────────────────┐
 ┌────────────────┬─────────────────────┐
 │ Signature Alg. │ Verification Key ID │
-└────────────────┴-────────────────────┘
+└────────────────┴─────────────────────┘
                  └──────────┬──────────┘
                             ▼
 ┌───────────────────────────────────────────────┐
 ┌─────────┬─────────┬────────────┬──────────────┐
 │ ISD-AS  │TRC Base │ TRC Serial │Subject Key ID|
-└─────────┴-────────┴────────────┴──────────────┘
-</pre><a href="#section-2.2.1.4.1-1" class="pilcrow">¶</a>
+└─────────┴─────────┴────────────┴──────────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<a href="#name-as-entry-signed-header-2" class="selfRef">AS Entry Signed Header</a>
+                </figcaption></figure>
 </div>
 <p id="section-2.2.1.4.1-2">The header part defines metadata that is relevant to the computation and verification of the signature. It <span class="bcp14">MUST</span> include at least the following metadata:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2459,7 +2489,9 @@ path segment 4 │             │     │             │     │             �
               <h6 id="name-as-entry-signed-body">
 <a href="#section-2.2.1.4.2" class="section-number selfRef">2.2.1.4.2. </a><a href="#name-as-entry-signed-body" class="section-name selfRef">AS Entry Signed Body</a>
               </h6>
-<div class="alignLeft art-text artwork" id="section-2.2.1.4.2-1">
+<span id="name-as-entry-signed-body-2"></span><div id="_figure-11">
+<figure id="figure-12">
+                <div class="alignLeft art-text artwork" id="section-2.2.1.4.2-1.1">
 <pre>
                 ┌──────────────────────────────────────┐
                 │                 Body                 │
@@ -2469,8 +2501,12 @@ path segment 4 │             │     │             │     │             �
 ┌─────────────────────────────────────────────────────────────────────┐
 ┌──────┬───────────┬─────────┬─────────────┬───┬─────────────┬───┬────┐
 │ISD-AS│Next ISD-AS│Hop Entry│Peer Entry 0 |...|Peer Entry N │MTU│Ext.│
-└──────┴-──────────┴─────────┴─────────────┴───┴─────────────┴───┴────┘
-</pre><a href="#section-2.2.1.4.2-1" class="pilcrow">¶</a>
+└──────┴───────────┴─────────┴─────────────┴───┴─────────────┴───┴────┘
+</pre>
+</div>
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<a href="#name-as-entry-signed-body-2" class="selfRef">AS Entry Signed Body</a>
+                </figcaption></figure>
 </div>
 <p id="section-2.2.1.4.2-2">The body of an AS entry <span class="bcp14">MUST</span> consist of the signed component <code>ASEntrySignedBody</code> of all ASes in the path segment represented by the PCB, up until and including the current AS.<a href="#section-2.2.1.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.2-3">The following code block defines the signed body of one AS entry in Protobuf message format (called the <code>ASEntrySignedBody</code> message).<a href="#section-2.2.1.4.2-3" class="pilcrow">¶</a></p>
@@ -2552,7 +2588,9 @@ associated_data(ps, i) = ps.segment_info ||
             <h5 id="name-hop-entry">
 <a href="#section-2.2.1.5" class="section-number selfRef">2.2.1.5. </a><a href="#name-hop-entry" class="section-name selfRef">Hop Entry</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.5-1">
+<span id="name-hop-entry-component"></span><div id="_figure-12">
+<figure id="figure-13">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.5-1.1">
 <pre>
         ┌───────────┐
         │ Hop Entry │
@@ -2562,8 +2600,12 @@ associated_data(ps, i) = ps.segment_info ||
 ┌───────────────────────────┐
 ┌─────────────┬─────────────┐
 │ Ingress MTU │  Hop Field  │
-└─────────────┴-────────────┘
-</pre><a href="#section-2.2.1.5-1" class="pilcrow">¶</a>
+└─────────────┴─────────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<a href="#name-hop-entry-component" class="selfRef">Hop Entry Component</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.5-2">Each body of an AS entry <span class="bcp14">MUST</span> contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).<a href="#section-2.2.1.5-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.5-3">The following code block defines the hop entry component <code>HopEntry</code> in Protobuf message format:<a href="#section-2.2.1.5-3" class="pilcrow">¶</a></p>
@@ -2591,7 +2633,9 @@ associated_data(ps, i) = ps.segment_info ||
             <h5 id="name-hop-field">
 <a href="#section-2.2.1.6" class="section-number selfRef">2.2.1.6. </a><a href="#name-hop-field" class="section-name selfRef">Hop Field</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.6-1">
+<span id="name-hop-field-2"></span><div id="_figure-13">
+<figure id="figure-14">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.6-1.1">
 <pre>
                       ┌───────────┐
                       │ Hop Entry │
@@ -2601,8 +2645,12 @@ associated_data(ps, i) = ps.segment_info ||
 ┌──────────────────────────────────────────────────────────┐
 ┌─────────────┬─────────────┬───────────────────┬──────────┐
 │   Ingress   │    Egress   │  Expiration Time  │   MAC    │
-└─────────────┴-────────────┴───────────────────┴──────────┘
-</pre><a href="#section-2.2.1.6-1" class="pilcrow">¶</a>
+└─────────────┴─────────────┴───────────────────┴──────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<a href="#name-hop-field-2" class="selfRef">Hop Field</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.6-2">The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC) which will be checked by the SCION border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.<a href="#section-2.2.1.6-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.6-3">Control Service and router implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. This document does not specify any further mechanism to coordinate this choice between Control Services and routers of one AS.<a href="#section-2.2.1.6-3" class="pilcrow">¶</a></p>
@@ -2641,7 +2689,9 @@ associated_data(ps, i) = ps.segment_info ||
             <h5 id="name-peer-entry">
 <a href="#section-2.2.1.7" class="section-number selfRef">2.2.1.7. </a><a href="#name-peer-entry" class="section-name selfRef">Peer Entry</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-2.2.1.7-1">
+<span id="name-peer-entry-component"></span><div id="_figure-14">
+<figure id="figure-15">
+              <div class="alignLeft art-text artwork" id="section-2.2.1.7-1.1">
 <pre>
                       ┌──────────────┐
                       │  Peer Entry  │
@@ -2651,8 +2701,12 @@ associated_data(ps, i) = ps.segment_info ||
 ┌──────────────────────────────────────────────────────────┐
 ┌─────────────┬────────────┬──────────────┬────────────────┐
 │  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface │
-└─────────────┴-───────────┴──────────────┴────────────────┘
-</pre><a href="#section-2.2.1.7-1" class="pilcrow">¶</a>
+└─────────────┴────────────┴──────────────┴────────────────┘
+</pre>
+</div>
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<a href="#name-peer-entry-component" class="selfRef">Peer Entry Component</a>
+              </figcaption></figure>
 </div>
 <p id="section-2.2.1.7-2">By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.<a href="#section-2.2.1.7-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.7-3">The following code block defines the peer entry component <code>PeerEntry</code> in Protobuf message format:<a href="#section-2.2.1.7-3" class="pilcrow">¶</a></p>
@@ -2681,8 +2735,8 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
             </ul>
 <p id="section-2.2.1.7-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.1.7-6" class="pilcrow">¶</a></p>
-<span id="name-peer-entry-information-in-t"></span><div id="_figure-6">
-<figure id="figure-7">
+<span id="name-peer-entry-information-in-t"></span><div id="_figure-15">
+<figure id="figure-16">
               <div class="alignLeft art-text artwork" id="section-2.2.1.7-7.1">
 <pre>
    ┌───────────┐
@@ -2711,7 +2765,7 @@ associated_data(ps, i) = ps.segment_info ||
     └───────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-peer-entry-information-in-t" class="selfRef">Peer entry information, in the direction of beaconing</a>
               </figcaption></figure>
 </div>
@@ -2798,7 +2852,7 @@ Last, the AS <span class="bcp14">SHOULD</span> adopt a PCB selection policy that
 <p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
 <li id="section-2.3.1-2.1">
-              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-17" class="auto internal xref">Figure 21</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.1-2.2">
               <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
@@ -3460,7 +3514,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-5.1.1-2.3.1">Request down segments starting at core ASes in the destination ISD.<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 16</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">The segment lookup API gRPC definition can be found in <a href="#_figure-11" class="auto internal xref">Figure 12</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="caching">
@@ -3657,7 +3711,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-6.1-1">Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <span id="name-scmp-message-format"></span><div id="_figure-scmp-format">
-<figure id="figure-8">
+<figure id="figure-17">
           <div class="alignLeft art-text artwork" id="section-6.1-3.1">
 <pre>
  0                   1                   2                   3
@@ -3671,7 +3725,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
           </figcaption></figure>
 </div>
@@ -3875,7 +3929,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
           <h4 id="name-packet-too-big">
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
-<span id="name-packet-too-big-format"></span><figure id="figure-9">
+<span id="name-packet-too-big-format"></span><figure id="figure-18">
             <div class="alignLeft art-text artwork" id="section-6.5.1-1.1">
 <pre>
  0                   1                   2                   3
@@ -3891,7 +3945,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-packet-too-big-format" class="selfRef">Packet-too-big format</a>
             </figcaption></figure>
 <span id="name-field-values"></span><table class="center" id="table-7">
@@ -3933,7 +3987,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-10">
+<figure id="figure-19">
             <div class="alignLeft art-text artwork" id="section-6.5.2-1.1">
 <pre>
  0                   1                   2                   3
@@ -3955,7 +4009,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-external-interface-down-for" class="selfRef">External-interface-down format</a>
             </figcaption></figure>
 </div>
@@ -4006,7 +4060,7 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-11">
+<figure id="figure-20">
             <div class="alignLeft art-text artwork" id="section-6.5.3-1.1">
 <pre>
  0                   1                   2                   3
@@ -4032,7 +4086,7 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-internal-connectivity-down-" class="selfRef">Internal-connectivity-down format</a>
             </figcaption></figure>
 </div>
@@ -4097,8 +4151,8 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
           <h4 id="name-echo-request">
 <a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
           </h4>
-<span id="name-echo-request-format"></span><div id="_figure-26">
-<figure id="figure-12">
+<span id="name-echo-request-format"></span><div id="_figure-24">
+<figure id="figure-21">
             <div class="alignLeft art-text artwork" id="section-6.6.1-1.1">
 <pre>
  0                   1                   2                   3
@@ -4107,12 +4161,12 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 │     Type      │     Code      │           Checksum            │
 ├───────────────┴───────────────┼───────────────────────────────┤
 │           Identifer           │        Sequence Number        │
-├───────────────────────────────┼───────────────────────────────┤
+├───────────────────────────────┴───────────────────────────────┤
 │                     Data (variable length)                    │
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-echo-request-format" class="selfRef">Echo-request format</a>
             </figcaption></figure>
 </div>
@@ -4158,8 +4212,8 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
           <h4 id="name-echo-reply">
 <a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
           </h4>
-<span id="name-echo-reply-format"></span><div id="_figure-27">
-<figure id="figure-13">
+<span id="name-echo-reply-format"></span><div id="_figure-25">
+<figure id="figure-22">
             <div class="alignLeft art-text artwork" id="section-6.6.2-1.1">
 <pre>
  0                   1                   2                   3
@@ -4168,12 +4222,12 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 │     Type      │     Code      │           Checksum            │
 ├───────────────┴───────────────┼───────────────────────────────┤
 │           Identifer           │        Sequence Number        │
-├───────────────────────────────┼───────────────────────────────┤
+├───────────────────────────────┴───────────────────────────────┤
 │                     Data (variable length)                    │
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-echo-reply-format" class="selfRef">Echo-reply format</a>
             </figcaption></figure>
 </div>
@@ -4217,8 +4271,8 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
           <h4 id="name-traceroute-request">
 <a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
-<span id="name-traceroute-request-format"></span><div id="_figure-24">
-<figure id="figure-14">
+<span id="name-traceroute-request-format"></span><div id="_figure-26">
+<figure id="figure-23">
             <div class="alignLeft art-text artwork" id="section-6.6.3-1.1">
 <pre>
  0                   1                   2                   3
@@ -4238,7 +4292,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute-request format</a>
             </figcaption></figure>
 </div>
@@ -4293,8 +4347,8 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
           <h4 id="name-traceroute-reply">
 <a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
-<span id="name-traceroute-reply-format"></span><div id="_figure-25">
-<figure id="figure-15">
+<span id="name-traceroute-reply-format"></span><div id="_figure-27">
+<figure id="figure-24">
             <div class="alignLeft art-text artwork" id="section-6.6.4-1.1">
 <pre>
  0                   1                   2                   3
@@ -4314,7 +4368,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 └───────────────────────────────────────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-traceroute-reply-format" class="selfRef">Traceroute-reply format</a>
             </figcaption></figure>
 </div>
@@ -4678,8 +4732,8 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <a href="#name-full-control-service-grpc-a" class="section-name selfRef">Full Control Service gRPC API</a>
       </h2>
 <p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<span id="name-control-service-grpc-api-se"></span><div id="_figure-11">
-<figure id="figure-16">
+<span id="name-control-service-grpc-api-se"></span><div id="_figure-31">
+<figure id="figure-25">
         <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 service SegmentLookupService {
@@ -4717,13 +4771,13 @@ message SegmentsResponse {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-control-service-grpc-api-se" class="selfRef">Control Service gRPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
-<span id="name-control-service-grpc-api-seg"></span><div id="_figure-12">
-<figure id="figure-17">
+<span id="name-control-service-grpc-api-seg"></span><div id="_figure-32">
+<figure id="figure-26">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service SegmentRegistrationService {
@@ -4746,13 +4800,13 @@ message SegmentsRegistrationRequest {
 message SegmentsRegistrationResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
 <a href="#name-control-service-grpc-api-seg" class="selfRef">Control Service gRPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-5"><br></p>
-<span id="name-control-service-grpc-api-segm"></span><div id="_figure-13">
-<figure id="figure-18">
+<span id="name-control-service-grpc-api-segm"></span><div id="_figure-33">
+<figure id="figure-27">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service SegmentCreationService {
@@ -4768,13 +4822,13 @@ message BeaconRequest {
 message BeaconResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-control-service-grpc-api-segm" class="selfRef">Control Service gRPC API - Segment creation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-7"><br></p>
-<span id="name-control-service-grpc-api-segme"></span><div id="_figure-14">
-<figure id="figure-19">
+<span id="name-control-service-grpc-api-segme"></span><div id="_figure-34">
+<figure id="figure-28">
         <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 message PathSegment {
@@ -4856,13 +4910,13 @@ message HopField {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-control-service-grpc-api-segme" class="selfRef">Control Service gRPC API - Segment representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-9"><br></p>
-<span id="name-control-service-grpc-api-si"></span><div id="_figure-15">
-<figure id="figure-20">
+<span id="name-control-service-grpc-api-si"></span><div id="_figure-35">
+<figure id="figure-29">
         <div class="alignLeft art-text artwork" id="appendix-C-10.1">
 <pre>
 enum SignatureAlgorithm {
@@ -4923,13 +4977,13 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-control-service-grpc-api-si" class="selfRef">Control Service gRPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-11"><br></p>
-<span id="name-control-service-grpc-api-tr"></span><div id="_figure-17">
-<figure id="figure-21">
+<span id="name-control-service-grpc-api-tr"></span><div id="_figure-36">
+<figure id="figure-30">
         <div class="alignLeft art-text artwork" id="appendix-C-12.1">
 <pre>
 service TrustMaterialService {
@@ -4994,7 +5048,7 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-control-service-grpc-api-tr" class="selfRef">Control Service gRPC API - Trust Material representation</a>
         </figcaption></figure>
 </div>
@@ -5073,8 +5127,8 @@ message VerificationKeyID {
 </li>
       </ul>
 <p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
-<span id="name-service-resolution-grpc-api"></span><div id="_figure-16">
-<figure id="figure-22">
+<span id="name-service-resolution-grpc-api"></span><div id="_figure-40">
+<figure id="figure-31">
         <div class="alignLeft art-text artwork" id="appendix-D-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -5111,7 +5165,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
 <a href="#name-service-resolution-grpc-api" class="selfRef">Service Resolution gRPC API definition</a>
         </figcaption></figure>
 </div>
@@ -5123,9 +5177,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-8" class="auto internal xref">Figure 23</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-9" class="auto internal xref">Figure 24</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-10" class="auto internal xref">Figure 25</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
-<span id="name-topology-used-in-the-path-l"></span><div id="_figure-8">
-<figure id="figure-23">
+<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 32</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 33</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 34</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
+<span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
+<figure id="figure-32">
         <div class="alignLeft art-text artwork" id="appendix-E-2.1">
 <pre>
 ┌────────────────────────────┐     ┌────────────────────────────┐
@@ -5137,7 +5191,7 @@ message Transport {
 │    ┆ ┌─────┐  ┌─────┐ ┆    │     │    ┆          ┌─────┐ ┆    │
 │    ┆ │AS C ├──┤AS B ├────────────────────────────┤AS F │ ┆    │
 │    ┆ └─┬───┘  └┬─┬─┬┘ ┆    │     │    ┆ ┌─────┐  └─┬─┬─┘ ┆    │
-│    ┆   │       │ │ └─────────+ +────────┤AS E ├────┘ │   ┆    │
+│    ┆   │       │ │ └────────────────────┤AS E ├────┘ │   ┆    │
 │    ┆   │       │ │    ┆    │     │    ┆ └──┬──┘      │   ┆    │
 │    └┄┄┄│┄┄┄┄┄┄┄│┄│┄┄┄┄┘    │     │    └┄┄┄┄│┄┄┄┄┄┄┄┄┄│┄┄┄┘    │
 │        │       │ │         │     │         │         │        │
@@ -5153,12 +5207,12 @@ message Transport {
 └────────────────────────────┘     └────────────────────────────┘
 </pre>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples.</a>
         </figcaption></figure>
 </div>
-<span id="name-sequence-diagram-illustrati"></span><div id="_figure-9">
-<figure id="figure-24">
+<span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
+<figure id="figure-33">
         <div class="alignLeft art-text artwork" id="appendix-E-3.1">
 <pre>
 ┌─────────┐          ┌─────────┐          ┌─────────┐         ┌─────────┐
@@ -5215,12 +5269,12 @@ message Transport {
      ┆                    ┆                    ┆                   ┆
 </pre>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<figcaption><a href="#figure-33" class="selfRef">Figure 33</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
-<span id="name-sequence-diagram-illustratin"></span><div id="_figure-10">
-<figure id="figure-25">
+<span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
+<figure id="figure-34">
         <div class="alignLeft art-text artwork" id="appendix-E-4.1">
 <pre>
 ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
@@ -5238,7 +5292,7 @@ message Transport {
    ├────────────────▶│               │               │               │
    │ │ │             │               │               │               │
    │◀── ── ── ── ── ─┤               │               │               │
-   │ │ │ reply (up,[A-&gt;B]            │               │               │
+   │ │ │ reply (up,[A-&gt;B])           │               │               │
    │ │ │             │               │               │               │
    │ │ │             │               │               │               │
    │ │ │request (core,*,(2,*))       │               │               │
@@ -5277,7 +5331,7 @@ message Transport {
      ┆               ┆               ┆               ┆               ┆
 </pre>
 </div>
-<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
+<figcaption><a href="#figure-34" class="selfRef">Figure 34</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
