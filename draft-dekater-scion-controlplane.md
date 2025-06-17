@@ -2464,6 +2464,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 </artset>
 </figure>
 
+
 <figure anchor="_figure-42">
 <name>Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</name>
 <artset>
@@ -2526,6 +2527,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 </artwork>
 </artset>
 </figure>
+
 
 <figure anchor="_figure-43">
 <name>Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</name>
