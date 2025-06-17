@@ -1639,7 +1639,7 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 ### Packet Too Big {#packet-too-big}
 
 <figure anchor="_figure-21">
-<name>Packet-too-big format</name>
+<name>Packet Too Big format</name>
 <artset>
 <artwork type="svg" src="images/packet-too-big.svg"/>
 <artwork type="ascii-art">
@@ -1676,7 +1676,7 @@ underlay.
 ### External Interface Down {#external-interface-down}
 
 <figure anchor="_figure-22">
-<name>External-interface-down format</name>
+<name>External Interface Down format</name>
 <artset>
 <artwork type="svg" src="images/external-interface-down.svg"/>
 <artwork type="ascii-art">
@@ -1722,7 +1722,7 @@ Recipients can use this information to route around broken data-plane links.
 ### Internal Connectivity Down {#internal-connectivity-down}
 
 <figure anchor="_figure-23">
-<name>External-interface-down format</name>
+<name>Internal Connectivity Down format</name>
 <artset>
 <artwork type="svg" src="images/internal-connectivity-down.svg"/>
 <artwork type="ascii-art">
@@ -1779,7 +1779,7 @@ AS.
 ### Echo Request {#echo-request}
 
 <figure anchor="_figure-24">
-<name>External-interface-down format</name>
+<name>External Request format</name>
 <artset>
 <artwork type="svg" src="images/echo-request.svg"/>
 <artwork type="ascii-art">
@@ -1811,19 +1811,25 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 
 ### Echo Reply {#echo-reply}
 
-~~~~
+<figure anchor="_figure-25">
+<name>Echo Reply format</name>
+<artset>
+<artwork type="svg" src="images/echo-request.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│     Type      │     Code      │           Checksum            │
-├───────────────┴───────────────┼───────────────────────────────┤
-│           Identifer           │        Sequence Number        │
-├───────────────────────────────┴───────────────────────────────┤
-│                     Data (variable length)                    │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-25 title="Echo-reply format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Identifier          |        Sequence Number        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Data (variable Len)                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+</artwork>
+</artset>
+</figure>
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
