@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-15T00:27:42.387087+00:00",
+  "timestamp": "2025-06-17T00:24:45.892272+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1502,7 +1502,7 @@
       ],
       "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft\n- [ ] Decide wether we want to include a description of some metadata with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n\n\nOS implementation currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-06-12T11:55:24Z",
+      "updatedAt": "2025-06-16T13:21:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -1518,6 +1518,13 @@
           "body": "@jiceatscion shall we mention some form of governance around extensions?",
           "createdAt": "2025-06-02T16:18:09Z",
           "updatedAt": "2025-06-02T16:18:09Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "body": "> @tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing\n\nYes, the thesis delivers live metadata (bandwidth, latency, ...) frequently, probably every 5-30 second. However, the metadata is delivered separately from PCBs. Also, this thesis is more exploratory, it'll be a while before this is solid enough to be implemented fully or even to be standardized.",
+          "createdAt": "2025-06-16T13:21:24Z",
+          "updatedAt": "2025-06-16T13:21:24Z"
         }
       ]
     },
@@ -8896,7 +8903,7 @@
       "labels": [],
       "body": "Contributes to #104 ",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-12T08:20:25Z",
+      "updatedAt": "2025-06-15T22:56:01Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
@@ -8908,7 +8915,34 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6uqbBA",
+          "commit": {
+            "abbreviatedOid": "9ab1dd8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks, I like how you reworked the PCB figures. Some pending/minor things: \r\n\r\n- Also in this ID I think some figures could go away without loosing much (e.g. some of the figures in 2.2)\r\n- There are still some improvements missing from  #104 \r\n- we could specify some figures are not bytes aligned (e.g. fig. 6). Also, should that figure be with all boxes of the same width?\r\n\r\n\r\nFigure 3: coud the AS be vertically centered?\r\n<img width=\"517\" alt=\"Screenshot 2025-06-16 at 00 42 43\" src=\"https://github.com/user-attachments/assets/08d09e8a-5b5d-4fd8-a928-8fb958657677\" />\r\n\r\nFigure 12, 13: \r\n<img width=\"591\" alt=\"Screenshot 2025-06-16 at 00 50 19\" src=\"https://github.com/user-attachments/assets/0c151533-b03d-4529-8779-eac9d7263f43\" />\r\n\r\nFigure 23: the line between AS B and E should be a straight line\r\n<img width=\"582\" alt=\"Screenshot 2025-06-16 at 00 51 53\" src=\"https://github.com/user-attachments/assets/8ea06a5a-c3b9-4e92-83b1-91bba6e01684\" />\r\n\r\nFigure 25:",
+          "createdAt": "2025-06-15T22:46:29Z",
+          "updatedAt": "2025-06-15T22:56:01Z",
+          "comments": [
+            {
+              "originalPosition": 473,
+              "body": "Missing caption.. But IMHO it could go away..",
+              "createdAt": "2025-06-15T22:46:29Z",
+              "updatedAt": "2025-06-15T22:56:01Z"
+            },
+            {
+              "originalPosition": 1256,
+              "body": "```suggestion\r\n   \u2502 \u2502 \u2502 reply (up,[A->B])           \u2502               \u2502               \u2502\r\n```",
+              "createdAt": "2025-06-15T22:53:36Z",
+              "updatedAt": "2025-06-15T22:56:01Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 115,
