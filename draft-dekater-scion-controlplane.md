@@ -1638,20 +1638,27 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 
 ### Packet Too Big {#packet-too-big}
 
-~~~~
+<figure anchor="_figure-21">
+<name>Packet-too-big format</name>
+<artset>
+<artwork type="svg" src="images/packet-too-big.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│     Type      │     Code      │           Checksum            │
-├───────────────┴───────────────┼───────────────────────────────┤
-│           Reserved            │             MTU               │
-├───────────────────────────────┴───────────────────────────────┤
-│                As much of the offending packet                │
-├              as possible without the SCMP packet              ┤
-│                    exceeding 1232 bytes                       │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{:figure-21 title="Packet-too-big format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Reserved           |             MTU               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                As much of the offending packet                |
++              as possible without the SCMP packet              +
+|                    exceeding 1232 bytes.                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 | Name         | Value                                               |
 |--------------+-----------------------------------------------------|
