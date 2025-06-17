@@ -254,28 +254,35 @@ A path can contain at most one peering link shortcut which means they can only b
 
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
-~~~~
-┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
-┆                         ┆       #
-┆        ISD Core         ┆       │      parent-child
-┆ ┌─────┐         ┌─────┐ ┆       │      link
-┆ │AS A │*───────*│AS C │ ┆       │
-┆ └──#──┘         └──#──┘ ┆       0
-┆    │               │    ┆
-└┄┄┄┄│┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄│┄┄┄┄┘   *───────*  core link
-     │               │
-     │               │        ◀ - - - ▶  peering link
-  ┌──0──┐         ┌──0──┐
-  │AS D │◀ - - - ▶│AS E │
-  └──#──┘         └──#──┘
-     │               │
-     │               │
-     │               │
-  ┌──0──┐         ┌──0──┐
-  │AS G │         │AS F │
-  └─────┘         └─────┘
-~~~~
-{: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
+<figure anchor="_figure-1">
+<name>The three types of SCION links in one ISD. Each node in the figure is a SCION AS.</name>
+<artset>
+<artwork type="svg" src="images/scion-links.svg"/>
+<artwork type="ascii-art">
+
++-------------------------+
+|                         |       #
+|        ISD Core         |       |      parent-child
+| +-----+         +-----+ |       |      link
+| |AS A *---------*AS C | |       |
+| *--#--+         +--#--+ |       0
+|    |               |    |
++----|---------------|----+   *-------*  core link
+     |               |
+     |               |        < - - - >  peering link
+  +--0--+         +--0--+
+  |AS D |< - - - >|AS E |
+  *--#--*         *--#--*
+     |               |
+     |               |
+     |               |
+  +--0--+         +--0--+
+  |AS G |         |AS F |
+  +-----+         +-----+
+  
+</artwork>
+</artset>
+</figure>
 
 Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
 
@@ -1594,7 +1601,7 @@ This specification defines the message formats for the following SCMP messages:
 |101  | Private Experimentation                                   |
 |     |                                                           |
 |127  | Reserved for expansion of SCMP error messages             |
-{: title="Error Messages Types"}
+{: title="Error Message Types"}
 
 
 | Type | Meaning                                                  |
@@ -1607,7 +1614,7 @@ This specification defines the message formats for the following SCMP messages:
 | 201  | Private Experimentation                                  |
 |      |                                                          |
 | 255  | Reserved for expansion of SCMP informational messages    |
-{: title="Informational Messages Types"}
+{: title="Informational Message Types"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
 
@@ -1779,7 +1786,7 @@ AS.
 ### Echo Request {#echo-request}
 
 <figure anchor="_figure-24">
-<name>External Request format</name>
+<name>Echo Request format</name>
 <artset>
 <artwork type="svg" src="images/echo-request.svg"/>
 <artwork type="ascii-art">
