@@ -1845,24 +1845,31 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 
 ### Traceroute Request {#traceroute-request}
 
-~~~~
+<figure anchor="_figure-26">
+<name>Traceroute Request format</name>
+<artset>
+<artwork type="svg" src="images/traceroute-request.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│     Type      │     Code      │           Checksum            │
-├───────────────┴───────────────┼───────────────────────────────┤
-│           Identifer           │        Sequence Number        │
-├───────────────────────────────┼───────────────────────────────┤
-│              ISD              │                               │
-├───────────────────────────────┘              AS               ┤
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                                                               │
-├                          Interface ID                         ┤
-│                                                               │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-26 title="Traceroute-request format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Identifier          |        Sequence Number        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              ISD              |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+              AS               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                          Interface ID                         +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
 
