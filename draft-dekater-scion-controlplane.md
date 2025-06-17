@@ -1547,18 +1547,25 @@ Every SCMP message is preceded by a SCION header, and zero or more SCION extensi
 
 The messages have the following general format:
 
-~~~~
+<figure anchor="_scmp-format">
+<name>SCMP message format</name>
+<artset>
+<artwork type="svg" src="images/scmp-message-format.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│     Type      │     Code      │           Checksum            │
-├───────────────┴───────────────┴───────────────────────────────┤
-│                     Type-dependent Block                      │
-├                                                               ┤
-│                       (variable length)                       │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-scmp-format title="SCMP message format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |           Checksum            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Type-dependent Block                    |
++                                                               +
+|                         (variable length)                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 - `Type`: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.
 
