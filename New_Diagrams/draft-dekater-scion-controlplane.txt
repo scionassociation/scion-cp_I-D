@@ -166,7 +166,7 @@ Table of Contents
    Acknowledgments
    Deployment Testing: SCIONLab
    Full Control Service gRPC API
-   SCION Data Plane use by the SCION Control Plane
+   Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-08
@@ -722,9 +722,9 @@ Table of Contents
    Appendix "Full Control Service gRPC API" provides the entire Control
    Service API definition in protobuf format.
 
-   Appendix "SCION Data Plane use by the SCION Control Plane" provides
-   details about the establishment of the underlying QUIC connections
-   through the data plane.
+   Appendix "Use of the SCION Data Plane" provides details about the
+   establishment of the underlying QUIC connections through the data
+   plane.
 
 2.  Path Exploration or Beaconing
 
@@ -3853,7 +3853,7 @@ message VerificationKeyID {
    gRPC framework.  That is, a non-zero status code and an explanatory
    string.
 
-SCION Data Plane use by the SCION Control Plane
+Use of the SCION Data Plane
 
    The SCION Control Plane RPC APIs rely on QUIC connections carried by
    the SCION dataplane.  The main difference between QUIC over native
@@ -3967,31 +3967,32 @@ Path-Lookup Examples
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
    "CS" stands for Control Service.
 
-   ┌────────────────────────────┐     ┌────────────────────────────┐
-   │                            │     │                            │
-   │                            │     │                            │
-   │    ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐    │     │    ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐    │
-   │    ┆       Core       ┆    │     │    ┆       Core       ┆    │
-   │    ┆                  ┆    │     │    ┆                  ┆    │
-   │    ┆ ┌─────┐  ┌─────┐ ┆    │     │    ┆          ┌─────┐ ┆    │
-   │    ┆ │AS C ├──┤AS B ├────────────────────────────┤AS F │ ┆    │
-   │    ┆ └─┬───┘  └┬─┬─┬┘ ┆    │     │    ┆ ┌─────┐  └─┬─┬─┘ ┆    │
-   │    ┆   │       │ │ └────────────────────┤AS E ├────┘ │   ┆    │
-   │    ┆   │       │ │    ┆    │     │    ┆ └──┬──┘      │   ┆    │
-   │    └┄┄┄│┄┄┄┄┄┄┄│┄│┄┄┄┄┘    │     │    └┄┄┄┄│┄┄┄┄┄┄┄┄┄│┄┄┄┘    │
-   │        │       │ │         │     │         │         │        │
-   │        │       │ │         │     │         │         │        │
-   │        │ ┌─────┘ │         │     │         │         │        │
-   │        │ │       │         │     │         │         │        │
-   │        │ │       │         │     │         │         │        │
-   │      ┌─┴─┴─┐  ┌──┴──┐      │     │      ┌──┴──┐      │        │
-   │      │AS D │  │AS A │      │     │      │AS G ├──────┘        │
-   │      └─────┘  └─────┘      │     │      └─────┘               │
-   │                            │     │                            │
-   │            ISD 1           │     │            ISD 2           │
-   └────────────────────────────┘     └────────────────────────────┘
+   +----------------------------+     +----------------------------+
+   |                            |     |                            |
+   |                            |     |                            |
+   |    +------------------+    |     |    +------------------+    |
+   |    |       Core       |    |     |    |       Core       |    |
+   |    |                  |    |     |    |                  |    |
+   |    | +-----+  +-----+ |    |     |    |          +-----+ |    |
+   |    | |AS C +--+AS B +----------------------------+AS F | |    |
+   |    | +-+---+  ++-+-++ |    |     |    |          +-+-+-+ |    |
+   |    |   |       | | |  |    |     |    | +-----+    | |   |    |
+   |    |   |       | | +--------------------+AS E +----+ |   |    |
+   |    |   |       | |    |    |     |    | +--+--+      |   |    |
+   |    +---|-------|-|----+    |     |    +----│---------|---+    |
+   |        |       | |         |     |         │         |        |
+   |        |       | |         |     |         │         |        |
+   |        | +-----+ |         |     |         │         |        |
+   |        | |       |         |     |         │         |        |
+   |        | |       |         |     |         │         |        |
+   |      +-+-+-+  +--+--+      |     |      +--+--+      |        |
+   |      |AS D |  |AS A |      |     |      |AS G +------+        |
+   |      +-----+  +-----+      |     |      +-----+               |
+   |                            |     |                            |
+   |            ISD 1           |     |            ISD 2           |
+   +----------------------------+     +----------------------------+
 
-           Figure 32: Topology used in the path lookup examples.
+            Figure 32: Topology used in the path lookup examples
 
 ┌─────────┐          ┌─────────┐          ┌─────────┐         ┌─────────┐
 │Endpoint │          │Source AS│          │ Core AS │         │ Core AS │
