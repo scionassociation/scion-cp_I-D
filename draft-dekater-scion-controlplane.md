@@ -299,7 +299,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 - Generating, receiving, and propagating PCBs. Periodically, the Control Service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - Selecting and registering the set of path segments via which the AS wants to be reached.
-- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in {{#figure-17}}.
+- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in {{#figure-36}}.
 
 **Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
@@ -1108,7 +1108,7 @@ This section describes how PCBs are received, selected and further propagated in
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
-1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-17}}.
+1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-36}}.
 2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
 3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
 4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
@@ -1761,7 +1761,7 @@ AS.
 │                     Data (variable length)                    │
 └───────────────────────────────────────────────────────────────┘
 ~~~~
-{: #figure-26 title="Echo-request format"}
+{: #figure-24 title="Echo-request format"}
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -1787,7 +1787,7 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 │                     Data (variable length)                    │
 └───────────────────────────────────────────────────────────────┘
 ~~~~
-{: #figure-27 title="Echo-reply format"}
+{: #figure-25 title="Echo-reply format"}
 
 
 | Name         | Value                                                         |
@@ -1821,7 +1821,7 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
 ~~~~
-{: #figure-24 title="Traceroute-request format"}
+{: #figure-26 title="Traceroute-request format"}
 
 Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
 
@@ -1857,7 +1857,7 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
 ~~~~
-{: #figure-25 title="Traceroute-reply format"}
+{: #figure-27 title="Traceroute-reply format"}
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -2038,7 +2038,7 @@ message SegmentsResponse {
     map<int32, Segments> segments = 1;
 }
 ~~~~
-{: #figure-11 title="Control Service gRPC API - Segment lookup.
+{: #figure-31 title="Control Service gRPC API - Segment lookup.
    This API is exposed on the SCION dataplane by the control
    services of core ASes and exposed on the intra-domain protocol
    network."}
@@ -2064,7 +2064,7 @@ message SegmentsRegistrationRequest {
 
 message SegmentsRegistrationResponse {}
 ~~~~
-{: #figure-12 title="Control Service gRPC API - Segment registration.
+{: #figure-32 title="Control Service gRPC API - Segment registration.
    This API is only exposed by core ASes and only on the SCION
    dataplane."}
 <br>
@@ -2082,7 +2082,7 @@ message BeaconRequest {
 
 message BeaconResponse {}
 ~~~~
-{: #figure-13 title="Control Service gRPC API - Segment creation"}
+{: #figure-33 title="Control Service gRPC API - Segment creation"}
 <br>
 
 ~~~~~
@@ -2164,7 +2164,7 @@ message HopField {
     bytes mac = 4;
 }
 ~~~~~
-{: #figure-14 title="Control Service gRPC API - Segment representation"}
+{: #figure-34 title="Control Service gRPC API - Segment representation"}
 <br>
 
 ~~~~~
@@ -2225,7 +2225,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 ~~~~~
-{: #figure-15 title="Control Service gRPC API - Signed ASEntry representation"}
+{: #figure-35 title="Control Service gRPC API - Signed ASEntry representation"}
 <br>
 
 ~~~~~
@@ -2290,7 +2290,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 ~~~~~
-{: #figure-17 title="Control Service gRPC API - Trust Material representation"}
+{: #figure-36 title="Control Service gRPC API - Trust Material representation"}
 <br>
 
 In case of failure, gRPC calls return an error as specified by the gRPC framework. That is, a non-zero status code and an explanatory string.
@@ -2358,13 +2358,13 @@ message Transport {
 }
 
 ~~~~~
-{: #figure-16 title="Service Resolution gRPC API definition"}
+{: #figure-40 title="Service Resolution gRPC API definition"}
 <br>
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
-To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-8}} below. In both examples, the source endpoint is in AS A. {{figure-9}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-10}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
+To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-41}} below. In both examples, the source endpoint is in AS A. {{figure-42}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-43}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
 
 ~~~~
 ┌────────────────────────────┐     ┌────────────────────────────┐
@@ -2391,7 +2391,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 │            ISD 1           │     │            ISD 2           │
 └────────────────────────────┘     └────────────────────────────┘
 ~~~~
-{: #figure-8 title="Topology used in the path lookup examples."}
+{: #figure-41 title="Topology used in the path lookup examples."}
 
 ~~~~
 ┌─────────┐          ┌─────────┐          ┌─────────┐         ┌─────────┐
@@ -2447,7 +2447,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      ┆                    ┆                    ┆                   ┆
      ┆                    ┆                    ┆                   ┆
 ~~~~
-{: #figure-9 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
+{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
 
 ~~~~
 ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
@@ -2503,7 +2503,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      ┆               ┆               ┆               ┆               ┆
      ┆               ┆               ┆               ┆               ┆
 ~~~~
-{: #figure-10 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
+{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
 
 # Change Log
 {:numbered="false"}
