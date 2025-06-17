@@ -1594,7 +1594,7 @@ This specification defines the message formats for the following SCMP messages:
 |101  | Private Experimentation                                   |
 |     |                                                           |
 |127  | Reserved for expansion of SCMP error messages             |
-{: title="error messages types"}
+{: title="Error Messages Types"}
 
 
 | Type | Meaning                                                  |
@@ -1607,7 +1607,7 @@ This specification defines the message formats for the following SCMP messages:
 | 201  | Private Experimentation                                  |
 |      |                                                          |
 | 255  | Reserved for expansion of SCMP informational messages    |
-{: title="informational messages types"}
+{: title="Informational Messages Types"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
 
@@ -1665,7 +1665,7 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 | Type         | 2                                                   |
 | Code         | 0                                                   |
 | MTU          | The Maximum Transmission Unit of the next-hop link. |
-{: title="field values"}
+{: title="Error Message field values"}
 
 A **Packet Too Big** message SHOULD be originated by a router in response to a
 packet that cannot be forwarded because the packet is larger than the MTU of the
@@ -1710,7 +1710,7 @@ underlay.
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
 | Interface ID | The interface ID of the external link with connectivity issue.|
-{: title="field values"}
+{: title="Error Message field values"}
 
 A **External Interface Down** message SHOULD be originated by a router in response
 to a packet that cannot be forwarded because the link to an external AS is broken.
@@ -1761,7 +1761,7 @@ Recipients can use this information to route around broken data-plane links.
 | AS           | The 48-bit AS identifier of the SCMP originator               |
 | Ingress ID   | The interface ID of the ingress link.                         |
 | Egress ID    | The interface ID of the egress link.                          |
-{: title="field values"}
+{: title="Error Message field values"}
 
 A **Internal Connectivity Down** message SHOULD be originated by a router in
 response to a packet that cannot be forwarded inside the AS because because the
@@ -1805,7 +1805,7 @@ AS.
 | Identifier   | A 16-bit identifier to aid matching replies with requests     |
 | Sequence Nr. | A 16-bit sequence number to aid matching replies with requests|
 | Data         | Variable length of arbitrary data                             |
-{: title="field values"}
+{: title="Informational Message field values"}
 
 Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
 
@@ -1838,6 +1838,7 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 | Identifier   | The identifier of the Echo Request                            |
 | Sequence Nr. | The sequence number of the Echo Request                       |
 | Data         | The data of the Echo Request                                  |
+{: title="Informational Message field values"}
 
 Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
 
@@ -1882,7 +1883,7 @@ Given a SCION path constituted of hop fields, traceroute allows to identify the 
 | ISD          | Place holder set to zero by SCMP sender                       |
 | AS           | Place holder set to zero by SCMP sender                       |
 | Interface ID | Place holder set to zero by SCMP sender                       |
-{: title="field values"}
+{: title="Informational Message field values"}
 
 A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (see {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Path Header/SCION Path Type/Hop Field"). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
 
@@ -1923,7 +1924,7 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
 | Interface ID | The interface ID of the SCMP originating router               |
-{: title="field values"}
+{: title="Informational Message field values"}
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
 
