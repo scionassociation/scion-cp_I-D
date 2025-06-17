@@ -2716,7 +2716,7 @@ path segment 4 │             │     │             │     │             �
          | 127  | Reserved for expansion of SCMP error messages |
          +------+-----------------------------------------------+
 
-                      Table 5: error messages types
+                      Table 5: Error Messages Types
 
      +======+=======================================================+
      | Type | Meaning                                               |
@@ -2737,7 +2737,7 @@ path segment 4 │             │     │             │     │             �
      | 255  | Reserved for expansion of SCMP informational messages |
      +------+-------------------------------------------------------+
 
-                  Table 6: informational messages types
+                  Table 6: Informational Messages Types
 
    Type values 100, 101, 200, and 201 are reserved for private
    experimentation.
@@ -2823,7 +2823,7 @@ path segment 4 │             │     │             │     │             �
       | MTU  | The Maximum Transmission Unit of the next-hop link. |
       +------+-----------------------------------------------------+
 
-                          Table 7: field values
+                   Table 7: Error Message field values
 
    A *Packet Too Big* message SHOULD be originated by a router in
    response to a packet that cannot be forwarded because the packet is
@@ -2868,7 +2868,7 @@ path segment 4 │             │     │             │     │             �
     |              | connectivity issue.                              |
     +--------------+--------------------------------------------------+
 
-                           Table 8: field values
+                    Table 8: Error Message field values
 
    A *External Interface Down* message SHOULD be originated by a router
    in response to a packet that cannot be forwarded because the link to
@@ -2921,7 +2921,7 @@ path segment 4 │             │     │             │     │             �
      | Egress ID  | The interface ID of the egress link.             |
      +------------+--------------------------------------------------+
 
-                           Table 9: field values
+                    Table 9: Error Message field values
 
    A *Internal Connectivity Down* message SHOULD be originated by a
    router in response to a packet that cannot be forwarded inside the AS
@@ -2968,7 +2968,7 @@ path segment 4 │             │     │             │     │             �
              |            | data                            |
              +------------+---------------------------------+
 
-                          Table 10: field values
+               Table 10: Informational Message field values
 
    Every node SHOULD implement a SCMP Echo responder function that
    receives Echo Requests and originates corresponding Echo replies.
@@ -3001,7 +3001,7 @@ path segment 4 │             │     │             │     │             �
         | Data         | The data of the Echo Request            |
         +--------------+-----------------------------------------+
 
-                                 Table 11
+               Table 11: Informational Message field values
 
    Every node SHOULD implement a SCMP Echo responder function that
    receives Echo Requests and originates corresponding Echo replies.
@@ -3055,7 +3055,7 @@ path segment 4 │             │     │             │     │             �
              | ID         | SCMP sender                     |
              +------------+---------------------------------+
 
-                          Table 12: field values
+               Table 12: Informational Message field values
 
    A border router is alerted of a Traceroute Request message through
    the Ingress or Egress Router Alert flag set to 1 in the hop field
@@ -3103,7 +3103,7 @@ path segment 4 │             │     │             │     │             �
     | Interface ID | The interface ID of the SCMP originating router  |
     +--------------+--------------------------------------------------+
 
-                           Table 13: field values
+                Table 13: Informational Message field values
 
    The identifier is set to the identifier value from the Traceroute
    Request message (Section 6.6.3).  The ISD and AS identifiers are set
