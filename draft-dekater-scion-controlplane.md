@@ -2464,61 +2464,68 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 </artset>
 </figure>
 
-~~~~
-┌─────────┐          ┌─────────┐          ┌─────────┐         ┌─────────┐
-│Endpoint │          │Source AS│          │ Core AS │         │ Core AS │
-│         │          │ CS (A)  │          │ CS (B)  │         │ CS (C)  │
-└──┬─┬─┬──┘          └────┬────┘          └────┬────┘         └────┬────┘
-   │ │ │                  │                    │                   │
-   │ │ │                  │                    │                   │
-┌──┴─┴─┴──────┐           │                    │                   │
-│Send Requests│           │                    │                   │
-│ in parallel │           │                    │                   │
-└──┬─┬─┬──────┘           │                    │                   │
-   │ │ │                  │                    │                   │
-   │ │ │request (up)      │                    │                   │
-   ├─────────────────────▶│                    │                   │
-   │◀─ ── ── ── ── ── ── ─┤                    │                   │
-   │ │ │ reply (up,[A->B])│                    │                   │
-   │ │ │                  │                    │                   │
-   │ │ │                  │                    │                   │
-   │ │ │request (core,*,*)│                    │                   │
-   │ ├───────────────────▶│                    │                   │
-   │ │ │                  │request (core,B,*)  │                   │
-   │ │ │                  ├───────────────────▶│                   │
-   │ │ │                  │◀── ── ── ── ── ── ─┤                   │
-   │ │ │                  │  reply(core,[B->C])│                   │
-   │ │◀── ── ── ── ── ── ─┤                    │                   │
-   │ │ │ reply (core,[B->C])                   │                   │
-   │ │ │                  │                    │                   │
-   │ │ │                  │                    │                   │
-   │ │ │request (down,*,D)│                    │                   │
-   │ │ │           ┌──────┴──────┐             │                   │
-   │ │ ├──────────▶│send requests│             │                   │
-   │ │ │           │ in parallel │             │                   │
-   │ │ │           └─────┬─┬─────┘             │                   │
-   │ │ │                 │ │                   │                   │
-   │ │ │                 │ │request (down,B,D) │                   │
-   │ │ │                 ├────────────────────▶│                   │
-   │ │ │                 │◀─ ── ── ── ── ── ── ┤                   │
-   │ │ │                 │ │ reply(down,[B->D])│                   │
-   │ │ │                 │ │                   │                   │
-   │ │ │                 │ │                   │request (down,C,D) │
-   │ │ │                 │ ├──────────────────────────────────────▶│
-   │ │ │                 │ │◀─ ── ── ── ── ── ── ── ── ── ── ── ── ┤
-   │ │ │                 │ │                   │ reply(down,[C->D])│
-   │ │ │                 │ │                   │                   │
-   │ │ │◀─ ── ── ── ── ──└┬┘                   │                   │
-   │ │ │ reply (down,[B->D, C->D])             │                   │
-   │ │ │                  │                    │                   │
-┌──┴─┴─┴─────────┐        │                    │                   │
-│Combine Segments│        │                    │                   │
-└────┬───────────┘        │                    │                   │
-     │                    │                    │                   │
-     ┆                    ┆                    ┆                   ┆
-     ┆                    ┆                    ┆                   ┆
-~~~~
-{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
+<figure anchor="_figure-42">
+<name>Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</name>
+<artset>
+<artwork type="svg" src="images/path-lookup-for-destination-in-source-isd.svg"/>
+<artwork type="ascii-art">
+
++---------+          +---------+          +---------+         +---------+
+|Endpoint |          |Source AS|          | Core AS |         | Core AS |
+|         |          | CS (A)  |          | CS (B)  |         | CS (C)  |
++--+-+-+--+          +----+----+          +----+----+         +----+----+
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
++--+-+-+------+           |                    |                   |
+|Send Requests|           |                    |                   |
+| in parallel |           |                    |                   |
++--+-+-+------+           |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (up)      |                    |                   |
+   +--------------------->|                    |                   |
+   |<-- -- -- -- -- -- -- +                    |                   |
+   | | | reply (up,[A->B])|                    |                   |
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (core,*,*)|                    |                   |
+   | +------------------->|                    |                   |
+   | | |                  |request (core,B,*)  |                   |
+   | | |                  +------------------->|                   |
+   | | |                  |<-- -- -- -- -- -- -+                   |
+   | | |                  |  reply(core,[B->C])|                   |
+   | |<-- -- -- -- -- -- -+                    |                   |
+   | | | reply (core,[B->C])                   |                   |
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (down,*,D)|                    |                   |
+   | | |           +------+------+             |                   |
+   | | +---------->|send requests|             |                   |
+   | | |           | in parallel |             |                   |
+   | | |           +-----+-+-----+             |                   |
+   | | |                 | |                   |                   |
+   | | |                 | |request (down,B,D) |                   |
+   | | |                 +-------------------->|                   |
+   | | |                 |<-- -- -- -- -- -- --+                   |
+   | | |                 | | reply(down,[B->D])|                   |
+   | | |                 | |                   |                   |
+   | | |                 | |                   |request (down,C,D) |
+   | | |                 | +-------------------------------------->|
+   | | |                 | |<-- -- -- -- -- -- -- -- -- -- -- -- --+
+   | | |                 | |                   | reply(down,[C->D])|
+   | | |                 | |                   |                   |
+   | | |<-- -- -- -- -- -+++                   |                   |
+   | | | reply (down,[B->D, C->D])             |                   |
+   | | |                  |                    |                   |
++--+-+-+---------+        |                    |                   |
+|Combine Segments|        |                    |                   |
++----+-----------+        |                    |                   |
+     |                    |                    |                   |
+     |                    |                    |                   |
+     |                    |                    |                   |
+
+</artwork>
+</artset>
+</figure>
 
 ~~~~
 ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
