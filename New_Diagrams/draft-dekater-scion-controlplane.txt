@@ -394,25 +394,25 @@ Table of Contents
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
 
-   ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
-   ┆                         ┆       #
-   ┆        ISD Core         ┆       │      parent-child
-   ┆ ┌─────┐         ┌─────┐ ┆       │      link
-   ┆ │AS A │*───────*│AS C │ ┆       │
-   ┆ └──#──┘         └──#──┘ ┆       0
-   ┆    │               │    ┆
-   └┄┄┄┄│┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄│┄┄┄┄┘   *───────*  core link
-        │               │
-        │               │        ◀ - - - ▶  peering link
-     ┌──0──┐         ┌──0──┐
-     │AS D │◀ - - - ▶│AS E │
-     └──#──┘         └──#──┘
-        │               │
-        │               │
-        │               │
-     ┌──0──┐         ┌──0──┐
-     │AS G │         │AS F │
-     └─────┘         └─────┘
+   +-------------------------+
+   |                         |       #
+   |        ISD Core         |       |      parent-child
+   | +-----+         +-----+ |       |      link
+   | |AS A *---------*AS C | |       |
+   | *--#--+         +--#--+ |       0
+   |    |               |    |
+   +----|---------------|----+   *-------*  core link
+        |               |
+        |               |        < - - - >  peering link
+     +--0--+         +--0--+
+     |AS D |< - - - >|AS E |
+     *--#--*         *--#--*
+        |               |
+        |               |
+        |               |
+     +--0--+         +--0--+
+     |AS G |         |AS F |
+     +-----+         +-----+
 
       Figure 1: The three types of SCION links in one ISD.  Each node
                         in the figure is a SCION AS.
@@ -2716,7 +2716,7 @@ path segment 4 │             │     │             │     │             �
          | 127  | Reserved for expansion of SCMP error messages |
          +------+-----------------------------------------------+
 
-                      Table 5: Error Messages Types
+                       Table 5: Error Message Types
 
      +======+=======================================================+
      | Type | Meaning                                               |
@@ -2737,7 +2737,7 @@ path segment 4 │             │     │             │     │             �
      | 255  | Reserved for expansion of SCMP informational messages |
      +------+-------------------------------------------------------+
 
-                  Table 6: Informational Messages Types
+                   Table 6: Informational Message Types
 
    Type values 100, 101, 200, and 201 are reserved for private
    experimentation.
@@ -2949,7 +2949,7 @@ path segment 4 │             │     │             │     │             �
    |                     Data (variable Len)                       |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 21: External Request format
+                       Figure 21: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
