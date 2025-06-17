@@ -2527,61 +2527,68 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 </artset>
 </figure>
 
-~~~~
-┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
-│Endpoint │     │Source AS│     │ Core AS │     │ Core AS │     │ Core AS │
-│         │     │ CS (A)  │     │ CS (B)  │     │ CS (E)  │     │ CS (F)  │
-└──┬─┬─┬──┘     └────┬────┘     └────┬────┘     └────┬────┘     └────┬────┘
-   │ │ │             │               │               │               │
-   │ │ │             │               │               │               │
-┌──┴─┴─┴──────┐      │               │               │               │
-│Send Requests│      │               │               │               │
-│ in parallel │      │               │               │               │
-└──┬─┬─┬──────┘      │               │               │               │
-   │ │ │             │               │               │               │
-   │ │ │request (up) │               │               │               │
-   ├────────────────▶│               │               │               │
-   │ │ │             │               │               │               │
-   │◀── ── ── ── ── ─┤               │               │               │
-   │ │ │ reply (up,[A->B])           │               │               │
-   │ │ │             │               │               │               │
-   │ │ │             │               │               │               │
-   │ │ │request (core,*,(2,*))       │               │               │
-   │ ├──────────────▶│               │               │               │
-   │ │ │             │request (core,*,(2,*))         │               │
-   │ │ │             │──────────────▶                │               │
-   │ │ │             │◀─ ── ── ── ── ┤               │               │
-   │ │ │             │ reply (core,[B->E,B->F])      │               │
-   │ │◀─ ── ── ── ── ┤               │               │               │
-   │ │ │ reply (core,[B->E,B->F])    │               │               │
-   │ │ │             │               │               │               │
-   │ │ │             │               │               │               │
-   │ │ │request (down,(2,*),G)       │               │               │
-   │ │ │      ┌──────┴──────┐        │               │               │
-   │ │ ├─────▶│send requests│        │               │               │
-   │ │ │      │ in parallel │        │               │               │
-   │ │ │      └─────┬─┬─────┘        │               │               │
-   │ │ │            │ │              │request (down,E,G)             │
-   │ │ │            ├───────────────────────────────▶│               │
-   │ │ │            │◀── ── ── ── ── ── ── ── ── ── ─┤               │
-   │ │ │            │ │              │ reply (down,[E->G])           │
-   │ │ │            │ │              │               │               │
-   │ │ │            │ │              │               │               │
-   │ │ │            │ │              │               │request (down,F,G)
-   │ │ │            │ ├─────────────────────────────────────────────▶│
-   │ │ │            │ │◀── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ┤
-   │ │ │            │ │              │               │ reply (down,[F->G])
-   │ │ │◀─ ── ── ── └┬┘              │               │               │
-   │ │ │ reply (down,[E->G,F->G])    │               │               │
-   │ │ │             │               │               │               │
-┌──┴─┴─┴─────────┐   │               │               │               │
-│Combine Segments│   │               │               │               │
-└────┬───────────┘   │               │               │               │
-     │               │               │               │               │
-     ┆               ┆               ┆               ┆               ┆
-     ┆               ┆               ┆               ┆               ┆
-~~~~
-{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
+<figure anchor="_figure-43">
+<name>Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</name>
+<artset>
+<artwork type="svg" src="images/path-lookup-for-destination-in-remote-isd.svg"/>
+<artwork type="ascii-art">
+	
++---------+     +---------+     +---------+     +---------+     +---------+
+|Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
+|         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
++--+-+-+--+     +----+----+     +----+----+     +----+----+     +----+----+
+   | | |             |               |               |               |
+   | | |             |               |               |               |
++--+-+-+------+      |               |               |               |
+|Send Requests|      |               |               |               |
+| in parallel |      |               |               |               |
++--+-+-+------+      |               |               |               |
+   | | |             |               |               |               |
+   | | |request (up) |               |               |               |
+   +---------------->|               |               |               |
+   | | |             |               |               |               |
+   |<-- -- -- -- -- -+               |               |               |
+   | | | reply (up,[A->B])           |               |               |
+   | | |             |               |               |               |
+   | | |             |               |               |               |
+   | | |request (core,*,(2,*))       |               |               |
+   | +-------------->|               |               |               |
+   | | |             |request (core,*,(2,*))         |               |
+   | | |             +-------------->|               |               |
+   | | |             |<- -- -- -- -- +               |               |
+   | | |             | reply (core,[B->E,B->F])      |               |
+   | |<- -- -- -- -- +               |               |               |
+   | | | reply (core,[B->E,B->F])    |               |               |
+   | | |             |               |               |               |
+   | | |             |               |               |               |
+   | | |request (down,(2,*),G)       |               |               |
+   | | |      +------+------+        |               |               |
+   | | +----->|send requests|        |               |               |
+   | | |      | in parallel |        |               |               |
+   | | |      +-----+-+-----+        |               |               |
+   | | |            | |              |request (down,E,G)             |
+   | | |            +------------------------------->|               |
+   | | |            |<-- -- -- -- -- -- -- -- -- -- -+               |
+   | | |            | |              | reply (down,[E->G])           |
+   | | |            | |              |               |               |
+   | | |            | |              |               |               |
+   | | |            | |              |               |request (down,F,G)
+   | | |            | +--------------------------------------------->|
+   | | |            | |<- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -+
+   | | |            | |              |               | reply (down,[F->G])
+   | | |<- -- -- -- +++              |               |               |
+   | | | reply (down,[E->G,F->G])    |               |               |
+   | | |             |               |               |               |
++--+-+-+---------+   |               |               |               |
+|Combine Segments|   |               |               |               |
++----+-----------+   |               |               |               |
+     |               |               |               |               |
+     |               |               |               |               |
+     |               |               |               |               |
+
+</artwork>
+</artset>
+</figure>
 
 # Change Log
 {:numbered="false"}
