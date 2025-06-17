@@ -1721,30 +1721,37 @@ Recipients can use this information to route around broken data-plane links.
 
 ### Internal Connectivity Down {#internal-connectivity-down}
 
-~~~~
+<figure anchor="_figure-23">
+<name>External-interface-down format</name>
+<artset>
+<artwork type="svg" src="images/internal-connectivity-down.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│     Type      │     Code      │           Checksum            │
-├───────────────┴───────────────┼───────────────────────────────┤
-│              ISD              │                               │
-├───────────────────────────────┘              AS               ┤
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                                                               │
-├                     Ingress Interface ID                      ┤
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                                                               │
-├                      Egress Interface ID                      ┤
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                As much of the offending packet                │
-├              as possible without the SCMP packet              ┤
-│                    exceeding 1232 bytes                       │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-23 title="Internal-connectivity-down format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Type      |     Code      |          Checksum             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              ISD              |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+             AS                +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                   Ingress Interface ID                        +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                   Egress Interface ID                         +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                As much of the offending packet                |
++              as possible without the SCMP packet              +
+|                    exceeding 1232 bytes.                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
