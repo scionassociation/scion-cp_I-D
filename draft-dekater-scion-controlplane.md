@@ -459,7 +459,12 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
-~~~~
+<figure anchor="_figure-3a">
+<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 1</name>
+<artset>
+<artwork type="svg" src="images/intra-isd-pcb-propagation-part1.svg"/>
+<artwork type="ascii-art">
+
                            ┌─────────────┐
                            │  Core AS X  │
                            │             │
@@ -474,12 +479,19 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                                 ▼   ▼
                            ┌────#───#────┐
                            │    AS Y     │
-~~~~
-{: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
+
+</artwork>
+</artset>
+</figure>
 
 AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
-~~~~
+<figure anchor="_figure-3b">
+<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 2</name>
+<artset>
+<artwork type="svg" src="images/intra-isd-pcb-propagation-part2.svg"/>
+<artwork type="ascii-art">
+
                         ┌─────┐ │   │ ┌─────┐
                         │PCB a│ │   │ │PCB b│
                         └──┬──┘ │   │ └──┬──┘
@@ -513,12 +525,19 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                                 ▼   ▼
                            ┌────#───#────┐
                            │    AS Z     │
-~~~~
-{: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
+
+</artwork>
+</artset>
+</figure>
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
-~~~~
+<figure anchor="_figure-3b">
+<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 3</name>
+<artset>
+<artwork type="svg" src="images/intra-isd-pcb-propagation-part3.svg"/>
+<artwork type="ascii-art">
+
                    ┌─────┐      │   │      ┌─────┐
                    │PCB c│      │   │      │PCB d│
                    └─┬───┘      │   │      └───┬─┘
@@ -555,8 +574,9 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
                             ▼     │     ▼
                                   ▼
 
-~~~~
-{: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
+</artwork>
+</artset>
+</figure>
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
