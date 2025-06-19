@@ -532,7 +532,7 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
-<figure anchor="_figure-3b">
+<figure anchor="_figure-3c">
 <name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 3</name>
 <artset>
 <artwork type="svg" src="images/intra-isd-pcb-propagation-part3.svg"/>
