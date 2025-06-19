@@ -1054,9 +1054,9 @@ Table of Contents
 
 2.2.1.1.  PCB Top-Level Message Format
 
-   ┌─────────────┬────────────┬────────────┬─────┬────────────┐
-   │Segment Info │ AS Entry 0 │ AS Entry 1 │ ... │ AS Entry N │
-   └─────────────┴────────────┴-───────────┴─────┴-───────────┘
+   +-------------+------------+------------+-----+------------+
+   |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
+   +-------------+------------+------------+-----+------------+
 
                    Figure 7: PCB Top-Level Message Format
 
