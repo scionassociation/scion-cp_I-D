@@ -957,13 +957,13 @@ The following code block defines the signed header of an AS entry in Protobuf me
 <artset>
 <artwork type="svg" src="images/as-entry-signed-body.svg"/>
 <artwork type="ascii-art">
-	
+
                 +--------------------------------------+
                 |                 Body                 |
                 +--------------------------------------+
-                +-------------------+------------------+
-                                    |
-                                    v
+                +------------------+-------------------+
+                                   |
+                                   v
 +---------------------------------------------------------------------+
 +------+-----------+---------+-------------+---+-------------+---+----+
 |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
@@ -1027,18 +1027,26 @@ associated_data(ps, i) = ps.segment_info ||
 
 #### Hop Entry {#hopentry}
 
-~~~~
-        ┌───────────┐
-        │ Hop Entry │
-        └───────────┘
-        └─────┬─────┘
-              ▼
-┌───────────────────────────┐
-┌─────────────┬─────────────┐
-│ Ingress MTU │  Hop Field  │
-└─────────────┴─────────────┘
-~~~~
-{: #figure-12 title="Hop Entry Component"}
+<figure anchor="_figure-12">
+<name>Hop Entry</name>
+<artset>
+<artwork type="svg" src="images/hop-entrysvg"/>
+<artwork type="ascii-art">
+
+        +-----------+
+        | Hop Entry |
+        +-----------+
+        +-----+-----+
+              |
+              v
++---------------------------+
++-------------+-------------+
+| Ingress MTU |  Hop Field  |
++-------------+-------------+
+
+</artwork>
+</artset>
+</figure>
 
 Each body of an AS entry MUST contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).
 
