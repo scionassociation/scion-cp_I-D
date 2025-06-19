@@ -1077,7 +1077,7 @@ In this description, MTU and packet size are to be understood in the same sense 
                       +-----------+
                       +-----+-----+
                             |
-                            ▼
+                            V
 +----------------------------------------------------------+
 +-------------+-------------+-------------------+----------+
 |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
@@ -1112,18 +1112,26 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 #### Peer Entry {#peerentry}
 
-~~~~
-                      ┌──────────────┐
-                      │  Peer Entry  │
-                      └──────────────┘
-                      └───────┬──────┘
-                              ▼
-┌──────────────────────────────────────────────────────────┐
-┌─────────────┬────────────┬──────────────┬────────────────┐
-│  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface │
-└─────────────┴────────────┴──────────────┴────────────────┘
-~~~~
-{: #figure-14 title="Peer Entry Component"}
+<figure anchor="_figure-14">
+<name>Peer Entry</name>
+<artset>
+<artwork type="svg" src="images/peer-entry.svg"/>
+<artwork type="ascii-art">
+
+                      +--------------+
+                      |  Peer Entry  |
+                      +--------------+
+                      +------+-------+
+                             |
+                             v
++----------------------------------------------------------+
++-------------+------------+--------------+----------------+
+|  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
++-------------+------------+--------------+----------------+
+
+</artwork>
+</artset>
+</figure>
 
 By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.
 
