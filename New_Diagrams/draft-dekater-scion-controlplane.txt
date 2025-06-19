@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 December 2025                                        S. Hitz
+Expires: 21 December 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                            17 June 2025
+                                                            19 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 December 2025.
+   This Internet-Draft will expire on 21 December 2025.
 
 Copyright Notice
 
@@ -1576,30 +1576,30 @@ path segment 4 │             │     │             │     │             �
    framing or packet encapsulation (for links using an underlay
    network).
 
-      ┌───────────┐
-      │           │
-      │ Parent AS │
-      │           │
-      └─────┬─────┘
-            │
-            │ ASE.HF.ingress_interface
-   ┌────────#───────────┐
-   │        ┆           │        PE.peer_  ┌───────────┐
-   │        ┆           │        interface │           │
-   │        ┆ ┌┄┄┄┄┄┄┄┄┄#──────────────────#  Peer AS  │
-   │        ┆ ┆         │ PE.HF.ingress_   │           │
-   │        ┆ ┆         │ interface        └───────────┘
-   │        ┆ ┆         │
-   │        ▼ ▼         │
-   └─────────#──────────┘
+      +-----------+
+      |           |
+      | Parent AS |
+      |           |
+      +-----+-----+
+            |
+            | ASE.HF.ingress_interface
+   +--------#-----------+
+   |                    |        PE.peer_  +-----------+
+   |        |           |        interface |           |
+   |          + - - - - #------------------#  Peer AS  |
+   |        | |         | PE.HF.ingress_   |           |
+   |                    | interface        +-----------+
+   |        | |         |
+   |        ▼ ▼         |
+   +---------#----------+
              │ PE.HF.egress_interface
              │ ASE.HF.egress_interface
              │
-       ┌─────┴─────┐
-       │           │
-       │ Child AS  │
-       │           │
-       └───────────┘
+       +-----+-----+
+       |           |
+       | Child AS  |
+       |           |
+       +-----------+
 
       Figure 16: Peer entry information, in the direction of beaconing
 
