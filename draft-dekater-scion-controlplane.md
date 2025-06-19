@@ -740,7 +740,7 @@ The following code block defines the PCB at the top level in Protobuf message fo
 
 - `segment_info`: This field is used as input for the PCB signature. It is the encoded version of the component `SegmentInformation`, which provides basic information about the PCB. The `SegmentInformation` component is specified in detail in [](#seginfo).
 - `as_entries`: Contains the `ASEntry` component of all ASes on the path segment represented by this PCB.
-   - `ASEntry`: The `ASEntry` component contains the complete path information of a specific AS that is part of the path segment represented by the PCB. The `ASEntry` component is specified in detail in [](#ase-message).
+   - `ASEntry`: The `ASEntry` component contains the complete path information of a specific AS that is part of the path segment represented by the PCB. The `ASEntry` component is specified in detail in [](#as-entry).
 
 
 #### Segment Information {#seginfo}
@@ -1145,7 +1145,7 @@ In addition to basic routing information such a hop entries and peer entries, PC
 
 In Protobuf, extensions are specified as follows:
 
-- Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#ase-message)).
+- Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
 - Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
 **Note:** SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
