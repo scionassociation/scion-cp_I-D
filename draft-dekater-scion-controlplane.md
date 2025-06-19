@@ -713,7 +713,7 @@ Note: For a full example of a PCB in the Protobuf message format, please see {{f
 <figure anchor="_figure-6">
 <name>PCB Top-Level Message Format</name>
 <artset>
-<artwork type="svg" src="images/pcb-composition.svg"/>
+<artwork type="svg" src="images/pcb-top-level-message-format.svg"/>
 <artwork type="ascii-art">
 	
 +-------------+------------+------------+-----+------------+
@@ -745,18 +745,26 @@ The following code block defines the PCB at the top level in Protobuf message fo
 
 #### Segment Information {#seginfo}
 
-~~~~
-┌────────────────────────────┐
-│         Segment Info       │
-└────────────────────────────┘
-└─────────────┬──────────────┘
-              ▼
-┌────────────────────────────┐
-┌─────────────┬──────────────┐
-│  Timestamp  │    Seg ID    │
-└─────────────┴──────────────┘
-~~~~
-{: #figure-7 title="Segment Information Component"}
+<figure anchor="_figure-7">
+<name>Segment Information Component</name>
+<artset>
+<artwork type="svg" src="images/segment-information.svg"/>
+<artwork type="ascii-art">
+	
++----------------------------+
+|         Segment Info       |
++----------------------------+
++-------------+--------------+
+              |
+              v
++----------------------------+
++-------------+--------------+
+|  Timestamp  |    Seg ID    |
++-------------+--------------+
+
+</artwork>
+</artset>
+</figure>
 
 Each PCB MUST include an information component with basic information about the PCB.
 
