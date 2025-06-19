@@ -472,7 +472,7 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                            +----#---#----+
            +--------+           |   |           +--------+
            | PCB a  |   +-----+ |   | +-----+   | PCB b  |
-           +========+ <-|PCB a| |   | |PCB b|-> +========+
+           +========+ <-+PCB a| |   | |PCB b|-> +========+
            | Core   |   +--+--+ |   | +--+--+   |Core    |
            |- Out:2 |      |    |   |    │      |- Out:1 |
            +--------+      v    |   |    v      +--------+
@@ -525,6 +525,7 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                                 v   v
                            +----#---#----+
                            |    AS Z     |
+
 </artwork>
 </artset>
 </figure>
@@ -579,53 +580,59 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
-~~~~~
+<figure anchor="_figure-4">
+<name>Possible up- or down segments for AS Z</name>
+<artset>
+<artwork type="svg" src="images/possible-up-down-segments.svg"/>
+<artwork type="ascii-art">
+
                 AS Entry Core        AS Entry Y          AS Entry Z
 
-               ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-               │  Core AS X  │     │    AS Y     │     │    AS Z     │
-Path Segment 1 │            1#     #3           5#     #1            │
-               │             │     │             │     │             │
-               │            2#─────#2───────────6#─────#5            │
-               │             │     │             │     │             │
-               └─────────────┘     └─────────────┘     └─────────────┘
+               +-------------+     +-------------+     +-------------+
+               |  Core AS X  |     |    AS Y     |     |    AS Z     |
+Path Segment 1 |            1#     #3           5#     #1            |
+               |             |     |             |     |             |
+               |            2#-----#2-----------6#-----#5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
                   Egress 2       Ingress 2 - Egress 6     Ingress 5
 
 ----------------------------------------------------------------------
 
-               ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-               │  Core AS X  │     │    AS Y     │     │    AS Z     │
-               │            1#     #3     ┌─────5#─────#1            │
-Path Segment 2 │             │     │      │      │     │             │
-               │            2#─────#2─────┘     6#     #5            │
-               │             │     │             │     │             │
-               └─────────────┘     └─────────────┘     └─────────────┘
-                  Egress 2       Ingress 2 - Egress 5     Ungress 1
+               +-------------+     +-------------+     +-------------+
+               |  Core AS X  |     |    AS Y     |     |    AS Z     |
+               |            1#     #3     +-----5#-----#1            |
+Path Segment 2 |             |     |      |      |     |             |
+               |            2#---- #2-----+     6#     #5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                  Egress 2       Ingress 2 - Egress 5     Ingress 1
 
 ------------------------------------------------------------------------
 
-               ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-               │  Core AS X  │     │    AS Y     │     │    AS Z     │
-               │            1#─────#3─────┐     5#     #1            │
-Path Segment 3 │             │     │      │      │     │             │
-               │            2#     #2     └─────6#─────#5            │
-               │             │     │             │     │             │
-               └─────────────┘     └─────────────┘     └─────────────┘
+               +-------------+     +-------------+     +-------------+
+               |  Core AS X  |     |    AS Y     |     |    AS Z     |
+               |            1#-----#3-----+     5#     #1            |
+Path Segment 3 |             |     |      |      |     |             |
+               |            2#     #2     +-----6#-----#5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
                   Egress 1       Ingress 3 - Egress 6     Ingress 5
 
 ------------------------------------------------------------------------
 
-               ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-               │  Core AS X  │     │    AS Y     │     │    AS Z     │
-               │            1#─────#3───────────5#─────#1            │
-path segment 4 │             │     │             │     │             │
-               │            2#     #2           6#     #5            │
-               │             │     │             │     │             │
-               └─────────────┘     └─────────────┘     └─────────────┘
-                  egress 1       ingress 3 - egress 5      ingress 1
+               +-------------+     +-------------+     +-------------+
+               |  Core AS X  |     |    AS Y     |     |    AS Z     |
+               |            1#-----#3-----------5#-----#1            |
+Path Segment 4 |             |     |             |     |             |
+               |            2#     #2           6#     #5            |
+               |             |     |             |     |             |
+               +-------------+     +-------------+     +-------------+
+                  Egress 1       Ingress 3 - Egress 5      Ingress 1
 
-~~~~~
-{: #figure-4 title="Possible up- or down segments for AS Z"}
+</artwork>
+</artset>
+</figure>
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
