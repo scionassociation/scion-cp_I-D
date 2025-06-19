@@ -1478,7 +1478,7 @@ Table of Contents
                          +-----------+
                          +-----+-----+
                                |
-                               ▼
+                               V
    +----------------------------------------------------------+
    +-------------+-------------+-------------------+----------+
    |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
@@ -1537,17 +1537,18 @@ Table of Contents
 
 2.2.1.7.  Peer Entry
 
-                         ┌──────────────┐
-                         │  Peer Entry  │
-                         └──────────────┘
-                         └───────┬──────┘
-                                 ▼
-   ┌──────────────────────────────────────────────────────────┐
-   ┌─────────────┬────────────┬──────────────┬────────────────┐
-   │  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface │
-   └─────────────┴────────────┴──────────────┴────────────────┘
+                         +--------------+
+                         |  Peer Entry  |
+                         +--------------+
+                         +------+-------+
+                                |
+                                v
+   +----------------------------------------------------------+
+   +-------------+------------+--------------+----------------+
+   |  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
+   +-------------+------------+--------------+----------------+
 
-                      Figure 15: Peer Entry Component
+                           Figure 15: Peer Entry
 
    By means of a peer entry, an AS can announce that it has a peering
    link to another AS.  A peer entry is an optional component of a PCB -
