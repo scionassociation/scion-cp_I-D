@@ -1030,7 +1030,7 @@ associated_data(ps, i) = ps.segment_info ||
 <figure anchor="_figure-12">
 <name>Hop Entry</name>
 <artset>
-<artwork type="svg" src="images/hop-entrysvg"/>
+<artwork type="svg" src="images/hop-entry.svg"/>
 <artwork type="ascii-art">
 
         +-----------+
@@ -1066,18 +1066,26 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 #### Hop Field {#hopfield}
 
-~~~~
-                      ┌───────────┐
-                      │ Hop Entry │
-                      └───────────┘
-                      └─────┬─────┘
+<figure anchor="_figure-13">
+<name>Hop Field</name>
+<artset>
+<artwork type="svg" src="images/hop-field.svg"/>
+<artwork type="ascii-art">
+
+                      +-----------+
+                      | Hop Entry |
+                      +-----------+
+                      +-----+-----+
+                            |
                             ▼
-┌──────────────────────────────────────────────────────────┐
-┌─────────────┬─────────────┬───────────────────┬──────────┐
-│   Ingress   │    Egress   │  Expiration Time  │   MAC    │
-└─────────────┴─────────────┴───────────────────┴──────────┘
-~~~~
-{: #figure-13 title="Hop Field"}
++----------------------------------------------------------+
++-------------+-------------+-------------------+----------+
+|   Ingress   |    Egress   |  Expiration Time  |   MAC    |
++-------------+-------------+-------------------+----------+
+
+</artwork>
+</artset>
+</figure>
 
 The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC) which will be checked by the SCION border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.
 
