@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T00:24:45.892272+00:00",
+  "timestamp": "2025-06-19T00:25:04.186030+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1449,9 +1449,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "- [ ] Improve ASCII art\n- [ ] Add SVG to each figure (or enable aasvg)\n- [ ] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [ ] Protobuf: follow same order as in figures if it does not matter\n- [ ]  AS Entry Signed Component - check order\n- [ ] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "body": "- [ ] Improve ASCII art\n- [ ] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [ ] Protobuf: follow same order as in figures if it does not matter\n- [ ]  AS Entry Signed Component - check order\n- [ ] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-06-13T09:09:08Z",
+      "updatedAt": "2025-06-17T02:41:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -8903,13 +8903,13 @@
       "labels": [],
       "body": "Contributes to #104 ",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-15T22:56:01Z",
+      "updatedAt": "2025-06-17T06:48:52Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "9ab1dd8f0e26209c2aab1257694ad37f8858efc9",
+      "headRefOid": "449be38aa33b855fcbc0db767a888a00ed95c938",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -8939,6 +8939,26 @@
               "body": "```suggestion\r\n   \u2502 \u2502 \u2502 reply (up,[A->B])           \u2502               \u2502               \u2502\r\n```",
               "createdAt": "2025-06-15T22:53:36Z",
               "updatedAt": "2025-06-15T22:56:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6u4PFl",
+          "commit": {
+            "abbreviatedOid": "9ab1dd8"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-17T02:43:47Z",
+          "updatedAt": "2025-06-17T02:43:48Z",
+          "comments": [
+            {
+              "originalPosition": 1256,
+              "body": "Fixed typo",
+              "createdAt": "2025-06-17T02:43:48Z",
+              "updatedAt": "2025-06-17T02:43:48Z"
             }
           ]
         }
