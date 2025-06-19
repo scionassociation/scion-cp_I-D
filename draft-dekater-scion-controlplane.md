@@ -638,7 +638,7 @@ Path Segment 4 |             |     |             |     |             |
 
 ### PCB Message Format {#pcb-compos}
 
-<figure anchor="_figure-4">
+<figure anchor="_figure-5">
 <name>Top-down composition of a PCB</name>
 <artset>
 <artwork type="svg" src="images/pcb-composition.svg"/>
