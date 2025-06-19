@@ -882,24 +882,33 @@ The following code block shows the low level representation of the `HeaderAndBod
 
 ##### AS Entry Signed Header {#ase-header}
 
-~~~~
-           ┌─────────────────┐
-           │     Header      │
-           └─────────────────┘
-           └────────┬────────┘
-                    ▼
-┌──────────────────────────────────────┐
-┌────────────────┬─────────────────────┐
-│ Signature Alg. │ Verification Key ID │
-└────────────────┴─────────────────────┘
-                 └──────────┬──────────┘
-                            ▼
-┌───────────────────────────────────────────────┐
-┌─────────┬─────────┬────────────┬──────────────┐
-│ ISD-AS  │TRC Base │ TRC Serial │Subject Key ID|
-└─────────┴─────────┴────────────┴──────────────┘
-~~~~
-{: #figure-10 title="AS Entry Signed Header"}
+<figure anchor="_figure-10">
+<name>AS Entry Signed Header</name>
+<artset>
+<artwork type="svg" src="images/as-entry-signed-header.svg"/>
+<artwork type="ascii-art">
+
+           +-----------------+
+           |     Header      |
+           +-----------------+
+           +--------+--------+
+                    |
+                    v
++---------------------------------------------------------+
++--------------+-------------------+---------+------------+
+|Signature Alg.|Verification Key ID|Timestamp|AssocDataLen|
++--------------+-------------------+---------+------------+
+               +---------+---------+
+                         |
+                         v
++-----------------------------------------------+
++---------+---------+------------+--------------+
+| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
++---------+---------+------------+--------------+
+
+</artwork>
+</artset>
+</figure>
 
 The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
 
