@@ -639,7 +639,6 @@ Path Segment 4 |             |     |             |     |             |
 ### PCB Message Format {#pcb-compos}
 
 
-Note: For a full example of a PCB in the Protobuf message format, please see {{figure-34}}.
 
 #### PCB Top-Level Message Format {#segment}
 
