@@ -790,7 +790,7 @@ In the Protobuf message format, the information component of a PCB is called the
 <artset>
 <artwork type="svg" src="images/as-entry.svg"/>
 <artwork type="ascii-art">
-	
+
                            +--------------+
                            |   AS Entry   |
                            +--------------+
@@ -798,9 +798,9 @@ In the Protobuf message format, the information component of a PCB is called the
                                   |
                                   v
 +------------------------------------------------------------------+
-┌───────────────────────┬──────────────────────────────────────────┐
-│  Unsigned Extension   │             Signed AS Entry              │
-└───────────────────────┴-─────────────────────────────────────────┘
++-----------------------+------------------------------------------+
+|  Unsigned Extension   |             Signed AS Entry              |
++-----------------------+------------------------------------------+
 
 </artwork>
 </artset>
@@ -827,18 +827,26 @@ It includes the following components:
 
 #### AS Entry Signed Component {#signed-compo}
 
-~~~~
-        ┌──────────────────────────────────────────────────────┐
-        │                   Signed AS Entry                    │
-        └──────────────────────────────────────────────────────┘
-        └──────────────────────────┬───────────────────────────┘
-                                   ▼
-┌─────────────────────────────────────────────────────────────────────┐
-┌────────────────────┬─────────────────┬──────────────────────────────┐
-│       Header       │      Body       │          Signature           │
-└────────────────────┴-────────────────┴──────────────────────────────┘
-~~~~
-{: #figure-9 title="AS Entry Signed Component"}
+<figure anchor="_figure-9">
+<name>AS Entry Signed Component</name>
+<artset>
+<artwork type="svg" src="images/as-entry-signed-component.svg"/>
+<artwork type="ascii-art">
+
+        +------------------------------------------------------+
+        |                   Signed AS Entry                    |
+        +------------------------------------------------------+
+        +--------------------------+---------------------------+
+                                   |
+                                   v
++---------------------------------------------------------------------+
++--------------------+-----------------+------------------------------+
+|       Header       |      Body       |          Signature           |
++--------------------+-----------------+------------------------------+
+
+</artwork>
+</artset>
+</figure>
 
 Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (See {{I-D.dekater-scion-pki}}).
 
