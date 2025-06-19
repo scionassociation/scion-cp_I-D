@@ -888,12 +888,12 @@ The following code block shows the low level representation of the `HeaderAndBod
 <artwork type="svg" src="images/as-entry-signed-header.svg"/>
 <artwork type="ascii-art">
 
-           +-----------------+
-           |     Header      |
-           +-----------------+
-           +--------+--------+
-                    |
-                    v
+                    +-----------------+
+                    |     Header      |
+                    +-----------------+
+                    +--------+--------+
+                             |
+                             v
 +---------------------------------------------------------+
 +--------------+-------------------+---------+------------+
 |Signature Alg.|Verification Key ID|Timestamp|AssocDataLen|
@@ -901,10 +901,10 @@ The following code block shows the low level representation of the `HeaderAndBod
                +---------+---------+
                          |
                          v
-+-----------------------------------------------+
-+---------+---------+------------+--------------+
-| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
-+---------+---------+------------+--------------+
+     +-----------------------------------------------+
+     +---------+---------+------------+--------------+
+     | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
+     +---------+---------+------------+--------------+
 
 </artwork>
 </artset>
@@ -952,18 +952,26 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 ##### AS Entry Signed Body {#ase-sign}
 
-~~~~
-                ┌──────────────────────────────────────┐
-                │                 Body                 │
-                └──────────────────────────────────────┘
-                └───────────────────┬──────────────────┘
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-┌──────┬───────────┬─────────┬─────────────┬───┬─────────────┬───┬────┐
-│ISD-AS│Next ISD-AS│Hop Entry│Peer Entry 0 |...|Peer Entry N │MTU│Ext.│
-└──────┴───────────┴─────────┴─────────────┴───┴─────────────┴───┴────┘
-~~~~
-{: #figure-11 title="AS Entry Signed Body"}
+<figure anchor="_figure-11">
+<name>AS Entry Signed Body</name>
+<artset>
+<artwork type="svg" src="images/as-entry-signed-body.svg"/>
+<artwork type="ascii-art">
+	
+                +--------------------------------------+
+                |                 Body                 |
+                +--------------------------------------+
+                +-------------------+------------------+
+                                    |
+                                    v
++---------------------------------------------------------------------+
++------+-----------+---------+-------------+---+-------------+---+----+
+|ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
++------+-----------+---------+-------------+---+-------------+---+----+
+
+</artwork>
+</artset>
+</figure>
 
 The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
 
