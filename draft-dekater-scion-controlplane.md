@@ -783,20 +783,28 @@ In the Protobuf message format, the information component of a PCB is called the
 
 **Note:** See [](#hopfield) for more information on the Hop Field message format. {{I-D.dekater-scion-dataplane}} provides a detailed description of the computation of the MAC and the verification of the Hop Field in the data plane.
 
-#### AS Entry {#ase-message}
+#### AS Entry {#as-entry}
 
-~~~~
-                           ┌──────────────┐
-                           │   AS Entry   │
-                           └──────────────┘
-                           └──────┬───────┘
-                                  ▼
-┌──────────────────────────────────────────────────────────────────┐
+<figure anchor="_figure-8">
+<name>AS Entry</name>
+<artset>
+<artwork type="svg" src="images/as-entry.svg"/>
+<artwork type="ascii-art">
+	
+                           +--------------+
+                           |   AS Entry   |
+                           +--------------+
+                           +------+-------+
+                                  |
+                                  v
++------------------------------------------------------------------+
 ┌───────────────────────┬──────────────────────────────────────────┐
 │  Unsigned Extension   │             Signed AS Entry              │
 └───────────────────────┴-─────────────────────────────────────────┘
-~~~~
-{: #figure-8 title="AS Entry Message"}
+
+</artwork>
+</artset>
+</figure>
 
 Each PCB MUST also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS MUST add its AS entry to each PCB it creates, and each traversed AS MUST attach its AS entry to the PCB.
 
