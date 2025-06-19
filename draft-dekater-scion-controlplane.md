@@ -710,12 +710,19 @@ Note: For a full example of a PCB in the Protobuf message format, please see {{f
 
 #### PCB Top-Level Message Format {#segment}
 
-~~~~
-┌─────────────┬────────────┬────────────┬─────┬────────────┐
-│Segment Info │ AS Entry 0 │ AS Entry 1 │ ... │ AS Entry N │
-└─────────────┴────────────┴-───────────┴─────┴-───────────┘
-~~~~
-{: #figure-6 title="PCB Top-Level Message Format"}
+<figure anchor="_figure-6">
+<name>PCB Top-Level Message Format</name>
+<artset>
+<artwork type="svg" src="images/pcb-composition.svg"/>
+<artwork type="ascii-art">
+	
++-------------+------------+------------+-----+------------+
+|Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
++-------------+------------+------------+-----+------------+
+
+</artwork>
+</artset>
+</figure>
 
 Each PCB MUST consists of at least:
 
