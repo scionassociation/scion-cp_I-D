@@ -989,9 +989,6 @@ Table of Contents
 
 2.2.1.  PCB Message Format
 
-   Note: For a full example of a PCB in the Protobuf message format,
-   please see Figure 27.
-
 2.2.1.1.  PCB Top-Level Message Format
 
    ┌─────────────┬────────────┬────────────┬─────┬────────────┐
