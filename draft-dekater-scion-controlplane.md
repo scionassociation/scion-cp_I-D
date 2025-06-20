@@ -248,7 +248,7 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 
 SCION paths are comprised of at most three path segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Each path segment is established over one or more links.
 
-SCION paths are always "valley free" whereby a child AS MUST NOT carry transit traffic from a parent AS to another parent AS. These paths can contain at most one peering link which can be used as shortcut in an up-core-down path.  
+SCION paths are always "valley free" whereby a child AS MUST NOT carry transit traffic from a parent AS to another parent AS. These paths can contain at most one peering link which can be used as shortcut in an up-core-down path.
 
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
