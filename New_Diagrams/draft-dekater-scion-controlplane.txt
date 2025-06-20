@@ -1355,7 +1355,7 @@ Table of Contents
    *  isd_as: The ISD-AS number of the AS that created this AS entry.
 
    *  next_isd_as: The ISD-AS number of the downstream AS to which the
-      PCB SHOULD be forwarded.  The presence of this field prevents path
+      PCB MUST be forwarded.  The presence of this field prevents path
       hijacking attacks, as further discussed in Section 7.3.1.
 
    *  hop_entry: The hop entry (HopEntry) with the information required
