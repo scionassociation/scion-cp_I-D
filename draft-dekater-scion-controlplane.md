@@ -236,9 +236,9 @@ Note (to be removed before publication): this document, together with the other 
 
 ## Paths and Links {#paths-links}
 
-SCION routers and endpoints connect to each other via links. A SCION path between two endpoints essentially traverses one or more links.
+SCION routers and endpoints connect to each other via links. A SCION path between two endpoints traverses one or more links.
 
-In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (i.e. a common jurisdiction). An ISD is administered by a set of distinguished ASes called core ASes.
+In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that are part of a uniform trust environment (i.e. a common jurisdiction) and is administered by a set of distinguished ASes called core ASes.
 
 SCION distinguishes three types of links between ASes: (1) core links, (2) parent-child links, and (3) peering links.
 
@@ -246,11 +246,11 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
 - *Peering* links exist between ASes with a (settlement-free or paid) peering relationship. They can be established between any two ASes (core or non-core) and can cross ISD boundaries.
 
-These link types form the basis of the notion of "valley free" paths. Valley free paths means that a child AS does not carry transit traffic from a parent AS to another parent AS.
+SCION paths are comprised of at most three path segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Each path segment is established over one or more links.
 
-The SCION paths are always valley free, and consist of at most three segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Peering links can be used as "shortcuts" in an up-core-down path.
+SCION paths can contain at most one peering link which can be used as shortcut in an up-core-down path.  
 
-A path can contain at most one peering link shortcut which means they can only be used in paths between ASes within the "customer cone" of the ASes connected by the peering link.
+SCION paths are always "valley free" whereby a child AS MUST NOT carry transit traffic from a parent AS to another parent AS. These paths can contain at most one peering link which can be used as shortcut in an up-core-down path.  
 
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
