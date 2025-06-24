@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 December 2025                                        S. Hitz
+Expires: 26 December 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                            13 June 2025
+                                                            24 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 December 2025.
+   This Internet-Draft will expire on 26 December 2025.
 
 Copyright Notice
 
@@ -295,7 +295,7 @@ Table of Contents
    Construction Beacons (PCBs) accumulate cryptographically protected
    AS-level path information in the form of Hop Fields.  In the data
    plane, Hop Fields are used for packet forwarding: they contain the
-   incoming and outgoing interface IDs of the ASes on the forwarding
+   incoming and outgoing Interface IDs of the ASes on the forwarding
    path.
 
    *Info Field (INF)*: Each Path Segment Construction Beacon (PCB)
@@ -417,12 +417,10 @@ Table of Contents
                         in the figure is a SCION AS.
 
    Each link connecting SCION routers is bi-directional and is
-   identified by its corresponding egress and ingress interface IDs.  An
-   interface ID consists of a 16-bit identifier that MUST be unique
-   within each AS, with the exception of value 0 (see
-   [I-D.dekater-scion-dataplane]).  Therefore, they can be chosen and
-   encoded by each AS independently without any need for coordination
-   between ASes.
+   identified by its corresponding egress and ingress Interface IDs.  An
+   Interface ID is a 16-bit identifier that is unique within each AS and
+   can therefore be chosen without any need for coordination between
+   ASes (see [I-D.dekater-scion-dataplane]).
 
 1.4.  Routing
 
@@ -1649,7 +1647,7 @@ path segment 4 |             |     |             |     |             |
    band fashion (e.g in a configuration file).  For each link, these
    values MUST be configured:
 
-   *  Local interface ID.  This MUST be unique within each AS.
+   *  Local Interface ID.  This MUST be unique within each AS.
 
    *  Neighbor type (core, parent, child, peer), depending on link type
       (see Section 1.3).  Link type depends on mutual agreements between
@@ -2232,7 +2230,7 @@ path segment 4 |             |     |             |     |             |
    2.  If the AS has peering links, the Control Service MAY add
        corresponding peer entry components to the signed body of the AS
        entry - one peer entry component for each peering link that the
-       AS wants to advertise.  The egress interface ID in the Hop Field
+       AS wants to advertise.  The egress Interface ID in the Hop Field
        component of each added peer entry MUST NOT be specified.
 
        *  In Protobuf message format, this means that the value of the
@@ -2855,8 +2853,8 @@ path segment 4 |             |     |             |     |             |
     +--------------+--------------------------------------------------+
     | AS           | The 48-bit AS identifier of the SCMP originator  |
     +--------------+--------------------------------------------------+
-    | Interface ID | The interface ID of the external link with       |
-    |              | connectivity issue.                              |
+    | Interface ID | The Interface ID of the external link with       |
+    |              | connectivity issue                               |
     +--------------+--------------------------------------------------+
 
                            Table 8: field values
@@ -2864,7 +2862,7 @@ path segment 4 |             |     |             |     |             |
    A *External Interface Down* message SHOULD be originated by a router
    in response to a packet that cannot be forwarded because the link to
    an external AS is broken.  The ISD and AS identifier are set to the
-   ISD-AS of the originating router.  The interface ID identifies the
+   ISD-AS of the originating router.  The Interface ID identifies the
    link of the originating AS that is down.
 
    Recipients can use this information to route around broken data-plane
@@ -2907,9 +2905,9 @@ path segment 4 |             |     |             |     |             |
      +------------+--------------------------------------------------+
      | AS         | The 48-bit AS identifier of the SCMP originator  |
      +------------+--------------------------------------------------+
-     | Ingress ID | The interface ID of the ingress link.            |
+     | Ingress ID | The Interface ID of the ingress link.            |
      +------------+--------------------------------------------------+
-     | Egress ID  | The interface ID of the egress link.             |
+     | Egress ID  | The Interface ID of the egress link.             |
      +------------+--------------------------------------------------+
 
                            Table 9: field values
@@ -2918,8 +2916,8 @@ path segment 4 |             |     |             |     |             |
    router in response to a packet that cannot be forwarded inside the AS
    because because the connectivity between the ingress and egress
    routers is broken.  The ISD and AS identifier are set to the ISD-AS
-   of the originating router.  The ingress interface ID identifies the
-   interface on which the packet enters the AS.  The egress interface ID
+   of the originating router.  The ingress Interface ID identifies the
+   interface on which the packet enters the AS.  The egress Interface ID
    identifies the interface on which the packet is destined to leave the
    AS, but the connection is broken to.
 
@@ -3091,7 +3089,7 @@ path segment 4 |             |     |             |     |             |
     +--------------+--------------------------------------------------+
     | AS           | The 48-bit AS identifier of the SCMP originator  |
     +--------------+--------------------------------------------------+
-    | Interface ID | The interface ID of the SCMP originating router  |
+    | Interface ID | The Interface ID of the SCMP originating router  |
     +--------------+--------------------------------------------------+
 
                            Table 13: field values
@@ -3155,7 +3153,7 @@ path segment 4 |             |     |             |     |             |
 
    *  Loop Freedom - For every honest path segment registered in any AS,
       its sequence of AS entries contains no duplicates, including
-      current and next ISD-AS and interface IDs.
+      current and next ISD-AS and Interface IDs.
 
    *  Path Authorization - For every honest path segment registered in
       any AS and any AS X appearing on that segment (except for the
@@ -4216,7 +4214,7 @@ draft-dekater-scion-controlplane-04
 
    *  Introduction: Added overview of SCION components
 
-   *  Clarified path reversibility, link types, interface IDs
+   *  Clarified path reversibility, link types, Interface IDs
 
    *  Fixed private AS range typo
 

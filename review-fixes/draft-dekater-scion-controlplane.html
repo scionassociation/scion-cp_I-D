@@ -13,12 +13,12 @@
        The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.29.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-controlplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
-    Python 3.12.10
+  xml2rfc 3.29.0
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -27,7 +27,7 @@
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
+    requests 2.32.4
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 15 December 2025</td>
+<td class="center">Expires 26 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-13" class="published">13 June 2025</time>
+<time datetime="2025-06-24" class="published">24 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-15">15 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-26">26 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1499,7 +1499,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-5"><strong>Core AS</strong>: Each Isolation Domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing"). Each ISD <span class="bcp14">MUST</span> have at least one Core AS.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1-6"><strong>Endpoint</strong>: An endpoint is the start or the end of a SCION path, as defined in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <p id="section-1.1-7"><strong>Forwarding Path</strong>: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).<a href="#section-1.1-7" class="pilcrow">¶</a></p>
-<p id="section-1.1-8"><strong>Hop Field (HF)</strong>: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
+<p id="section-1.1-8"><strong>Hop Field (HF)</strong>: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 <p id="section-1.1-9"><strong>Info Field (INF)</strong>: Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
 <p id="section-1.1-10"><strong>Isolation Domain (ISD)</strong>: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
 <p id="section-1.1-11"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
@@ -1573,7 +1573,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#name-the-three-types-of-scion-li" class="selfRef">The three types of SCION links in one ISD. Each node in the figure is a SCION AS.</a>
           </figcaption></figure>
 </div>
-<p id="section-1.3-10">Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that <span class="bcp14">MUST</span> be unique within each AS, with the exception of value 0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.<a href="#section-1.3-10" class="pilcrow">¶</a></p>
+<p id="section-1.3-10">Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier that is unique within each AS and can therefore be chosen without any need for coordination between ASes (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>).<a href="#section-1.3-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="routing">
@@ -2776,7 +2776,7 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.2.4-1">For the purpose of constructing and propagating path segments, an AS Control Service <span class="bcp14">MUST</span> be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values <span class="bcp14">MUST</span> be configured:<a href="#section-2.2.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.4-2.1">
-              <p id="section-2.2.4-2.1.1">Local interface ID. This <span class="bcp14">MUST</span> be unique within each AS.<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.4-2.1.1">Local Interface ID. This <span class="bcp14">MUST</span> be unique within each AS.<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.4-2.2">
               <p id="section-2.2.4-2.2.1">Neighbor type (core, parent, child, peer), depending on link type (see <a href="#paths-links" class="auto internal xref">Section 1.3</a>). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.<a href="#section-2.2.4-2.2.1" class="pilcrow">¶</a></p>
@@ -3212,7 +3212,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               </ul>
 </li>
             <li id="section-4.1.1-3.2">
-              <p id="section-4.1.1-3.2.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the Hop Field component of each added peer entry <span class="bcp14">MUST NOT</span> be specified.<a href="#section-4.1.1-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-3.2.1">If the AS has peering links, the Control Service <span class="bcp14">MAY</span> add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress Interface ID in the Hop Field component of each added peer entry <span class="bcp14">MUST NOT</span> be specified.<a href="#section-4.1.1-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.1-3.2.2.1">
                   <p id="section-4.1.1-3.2.2.1.1">In Protobuf message format, this means that the value of the <code>egress</code> field in the <code>HopField</code> component <span class="bcp14">MUST</span> be "0".<a href="#section-4.1.1-3.2.2.1.1" class="pilcrow">¶</a></p>
@@ -4002,14 +4002,14 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
-                <td class="text-left" rowspan="1" colspan="1">The interface ID of the external link with connectivity issue.</td>
+                <td class="text-left" rowspan="1" colspan="1">The Interface ID of the external link with connectivity issue</td>
               </tr>
             </tbody>
           </table>
 <p id="section-6.5.2-3">A <strong>External Interface Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response
 to a packet that cannot be forwarded because the link to an external AS is broken.
 The ISD and AS identifier are set to the ISD-AS of the originating router.
-The interface ID identifies the link of the originating AS that is down.<a href="#section-6.5.2-3" class="pilcrow">¶</a></p>
+The Interface ID identifies the link of the originating AS that is down.<a href="#section-6.5.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.5.2-4">Recipients can use this information to route around broken data-plane links.<a href="#section-6.5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4080,11 +4080,11 @@ The interface ID identifies the link of the originating AS that is down.<a href=
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Ingress ID</td>
-                <td class="text-left" rowspan="1" colspan="1">The interface ID of the ingress link.</td>
+                <td class="text-left" rowspan="1" colspan="1">The Interface ID of the ingress link.</td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Egress ID</td>
-                <td class="text-left" rowspan="1" colspan="1">The interface ID of the egress link.</td>
+                <td class="text-left" rowspan="1" colspan="1">The Interface ID of the egress link.</td>
               </tr>
             </tbody>
           </table>
@@ -4092,8 +4092,8 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 response to a packet that cannot be forwarded inside the AS because because the
 connectivity between the ingress and egress routers is broken. The ISD and AS
 identifier are set to the ISD-AS of the originating router. The ingress
-interface ID identifies the interface on which the packet enters the AS. The
-egress interface ID identifies the interface on which the packet is destined to
+Interface ID identifies the interface on which the packet enters the AS. The
+egress Interface ID identifies the interface on which the packet is destined to
 leave the AS, but the connection is broken to.<a href="#section-6.5.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.5.3-4">Recipients can use this information to route around a broken data plane inside an
 AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
@@ -4375,7 +4375,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
-                <td class="text-left" rowspan="1" colspan="1">The interface ID of the SCMP originating router</td>
+                <td class="text-left" rowspan="1" colspan="1">The Interface ID of the SCMP originating router</td>
               </tr>
             </tbody>
           </table>
@@ -4436,7 +4436,7 @@ Here, an AS is described as 'honest' if its private keys are unknown to the atta
             </ul>
 </li>
           <li class="normal" id="section-7.1-3.3">
-            <p id="section-7.1-3.3.1">Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.<a href="#section-7.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-3.3.1">Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.<a href="#section-7.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.1-3.4">
             <p id="section-7.1-3.4.1">Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.<a href="#section-7.1-3.4.1" class="pilcrow">¶</a></p>
@@ -5474,7 +5474,7 @@ message Transport {
             <p id="appendix-F.5-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.5-4.2">
-            <p id="appendix-F.5-4.2.1">Clarified path reversibility, link types, interface IDs<a href="#appendix-F.5-4.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-F.5-4.2.1">Clarified path reversibility, link types, Interface IDs<a href="#appendix-F.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-F.5-4.3">
             <p id="appendix-F.5-4.3.1">Fixed private AS range typo<a href="#appendix-F.5-4.3.1" class="pilcrow">¶</a></p>
