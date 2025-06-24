@@ -396,7 +396,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender. This avoids circular dependencies between the PKI and connectivity.<br>
 
-**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI {{I-D.dekater-scion-pki}}.
+**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
 
 ## Resistance to partitioning
 
@@ -782,7 +782,7 @@ It includes the following components:
 +--------------------+-----------------+------------------------------+
 ~~~~
 
-Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (See {{I-D.dekater-scion-pki}}).
+Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (see {{I-D.dekater-scion-pki}}).
 
 The signed component of an AS entry MUST include the following elements:
 
@@ -868,7 +868,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
   - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-**Note:** For more information on signing and verifying control plane messages (such as PCBs), see the chapter Signing and Verifying Control Plane Messages of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}.
+**Note:** For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
@@ -926,7 +926,7 @@ The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as 
 Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )
 
-The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see the chapter "Signing and Verifying Control Plane Messages" of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}.
+The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
 
