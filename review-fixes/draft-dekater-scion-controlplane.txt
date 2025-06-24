@@ -683,8 +683,8 @@ Table of Contents
       the PKI and connectivity.
 
    *Note:* For a detailed description of a TRC and more information on
-   the availability of certificates and TRCs, see the SCION Control-
-   Plane PKI [I-D.dekater-scion-pki].
+   the availability of certificates and TRCs, see
+   [I-D.dekater-scion-pki].
 
 1.7.  Resistance to partitioning
 
@@ -1180,7 +1180,7 @@ path segment 4 |             |     |             |     |             |
 
    Each AS entry of a PCB MUST include a signed component as well as a
    signature computed over the signed component.  Each AS entry MUST be
-   signed with the Control Plane AS Certificate (See
+   signed with the Control Plane AS Certificate (see
    [I-D.dekater-scion-pki]).
 
    The signed component of an AS entry MUST include the following
@@ -1289,11 +1289,10 @@ path segment 4 |             |     |             |     |             |
          available to the signer at the time of the signature creation.
 
    *Note:* For more information on signing and verifying control plane
-   messages (such as PCBs), see the chapter Signing and Verifying
-   Control Plane Messages of the SCION Control Plane PKI Specification
-   [I-D.dekater-scion-pki].  For more information on the TRC base and
-   serial number, see the chapter Trust Root Configuration Specification
-   of the SCION Control Plane PKI Specification [I-D.dekater-scion-pki].
+   messages (such as PCBs), see 'Signing and Verifying Control Plane
+   Messages' in [I-D.dekater-scion-pki].  For more information on the
+   TRC base and serial number, see 'Trust Root Configuration
+   Specification' in [I-D.dekater-scion-pki].
 
    *  timestamp: Defines the signature creation timestamp.  This field
       is OPTIONAL.
@@ -1389,9 +1388,8 @@ path segment 4 |             |     |             |     |             |
    The signature metadata minimally contains the ISD-AS number of the
    signing entity and the key identifier of the public key to be used to
    verify the message.  For more information on signing and verifying
-   control plane messages, see the chapter "Signing and Verifying
-   Control Plane Messages" of the SCION Control Plane PKI Specification
-   [I-D.dekater-scion-pki].
+   control plane messages, see 'Signing and Verifying Control Plane
+   Messages' in [I-D.dekater-scion-pki].
 
    The following code block shows how the signature input is defined in
    the SCION Protobuf implementation ("ps" stands for path segment).
