@@ -212,7 +212,7 @@ Note (to be removed before publication): this document, together with the other 
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
-**Hop Field (HF)**: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.
+**Hop Field (HF)**: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
 
 **Info Field (INF)**: Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
@@ -277,7 +277,7 @@ A path can contain at most one peering link shortcut which means they can only b
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
-Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
+Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier that is unique within each AS and can therefore be chosen without any need for coordination between ASes (see {{I-D.dekater-scion-dataplane}}).
 
 ## Routing
 
@@ -1100,7 +1100,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 For the purpose of constructing and propagating path segments, an AS Control Service MUST be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
-- Local interface ID. This MUST be unique within each AS.
+- Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
@@ -1350,7 +1350,7 @@ The Control Service of a non-core AS MUST perform the following steps to "termin
      - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
    - The egress interface in the Hop Field component MUST NOT be specified.
      - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
-2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the Hop Field component of each added peer entry MUST NOT be specified.
+2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress Interface ID in the Hop Field component of each added peer entry MUST NOT be specified.
    - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
 3. The Control Service MUST sign the modified PCB and append the computed signature.
 
@@ -1702,13 +1702,13 @@ underlay.
 | Code         | 0                                                             |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Interface ID | The interface ID of the external link with connectivity issue.|
+| Interface ID | The Interface ID of the external link with connectivity issue |
 {: title="field values"}
 
 A **External Interface Down** message SHOULD be originated by a router in response
 to a packet that cannot be forwarded because the link to an external AS is broken.
 The ISD and AS identifier are set to the ISD-AS of the originating router.
-The interface ID identifies the link of the originating AS that is down.
+The Interface ID identifies the link of the originating AS that is down.
 
 Recipients can use this information to route around broken data-plane links.
 
@@ -1747,16 +1747,16 @@ Recipients can use this information to route around broken data-plane links.
 | Code         | 0                                                             |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Ingress ID   | The interface ID of the ingress link.                         |
-| Egress ID    | The interface ID of the egress link.                          |
+| Ingress ID   | The Interface ID of the ingress link.                         |
+| Egress ID    | The Interface ID of the egress link.                          |
 {: title="field values"}
 
 A **Internal Connectivity Down** message SHOULD be originated by a router in
 response to a packet that cannot be forwarded inside the AS because because the
 connectivity between the ingress and egress routers is broken. The ISD and AS
 identifier are set to the ISD-AS of the originating router. The ingress
-interface ID identifies the interface on which the packet enters the AS. The
-egress interface ID identifies the interface on which the packet is destined to
+Interface ID identifies the interface on which the packet enters the AS. The
+egress Interface ID identifies the interface on which the packet is destined to
 leave the AS, but the connection is broken to.
 
 Recipients can use this information to route around a broken data plane inside an
@@ -1892,7 +1892,7 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 | Sequence Nr. | The sequence number of the Tracroute Request                  |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Interface ID | The interface ID of the SCMP originating router               |
+| Interface ID | The Interface ID of the SCMP originating router               |
 {: title="field values"}
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
@@ -1923,7 +1923,7 @@ Security properties are:
 - Forwarding Path Consistency - For every honest path segment registered in any AS
     - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
     - the inter-domain network topology remains unchanged since the segment was first generated.
-- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
+- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
 To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
@@ -2620,7 +2620,7 @@ Major changes:
 Minor changes:
 
 - Introduction: Added overview of SCION components
-- Clarified path reversibility, link types, interface IDs
+- Clarified path reversibility, link types, Interface IDs
 - Fixed private AS range typo
 - Clarified PCB selection policies and endpoint requirements
 - Clarified PCB propagation
