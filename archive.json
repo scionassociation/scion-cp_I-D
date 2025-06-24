@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-22T00:27:36.589312+00:00",
+  "timestamp": "2025-06-24T00:24:43.768678+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1690,9 +1690,17 @@
       ],
       "body": "- [x]  Find a better wording in \"The ISD-AS number of the downstream AS to which the PCB **SHOULD** be forwarded.\"\n- [x] maybe this section also deserves a double MUST? (introduced in #98, discussed [here](https://github.com/scionassociation/scion-cp_I-D/pull/98#discussion_r1972040628) and on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1740679917948679) ) --> leaving a SHOULD as per Slack discussion\n       ```\n        The first ISD-AS entry of the path segment\n       SHOULD be equal to the core ISD-AS where the segment is being\n       registered.  If not, the core AS SHOULD reject the segment.\n       ```\n\nFrom Alvaro: \n```\n2.2.1.4.2.  AS Entry Signed Body\n...\n1340   *  next_isd_as: The ISD-AS number of the downstream AS to which the\n1341      PCB SHOULD be forwarded.  The presence of this field prevents path\n1342      hijacking attacks, as further discussed in Section 7.3.1.\n```\n> When is it ok to forward the PCB to a different downstream AS?  I assume\n\"never\", which makes me think that you wanted to use \"MUST\" (instead of\n\"SHOULD\").\n\n",
       "createdAt": "2025-06-12T09:24:12Z",
-      "updatedAt": "2025-06-20T07:13:16Z",
+      "updatedAt": "2025-06-23T13:52:40Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Changed to MUST. It's still debatable, but I feel that adds clarity. ",
+          "createdAt": "2025-06-23T13:52:40Z",
+          "updatedAt": "2025-06-23T13:52:40Z"
+        }
+      ]
     },
     {
       "number": 116,
