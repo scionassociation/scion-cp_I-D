@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-24T00:24:43.768678+00:00",
+  "timestamp": "2025-06-26T00:24:41.913498+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -306,7 +306,7 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2025-06-12T12:02:09Z",
+      "updatedAt": "2025-06-25T13:06:17Z",
       "closedAt": null,
       "comments": [
         {
@@ -340,16 +340,16 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening due to feedback from Alvaro: \n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n\nCC @katyatitkova ",
+          "body": "Reopening due to feedback from Alvaro. TODO\n\n- [ ] Update text in 2.1.2 to mention potentially conflicting policies \n- [ ] Move text '[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\nfrom  [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.4)[Configuration](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-configuration)  to 2.3.3. and remove SHOULD\n\n\n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n```\n[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\n```\n\nWhen is it ok to adopt a policy that isolates the AS from the network? ;-)   The use of \"SHOULD\" implies that there are cases where it is ok not to do what is specified.  In this case, I assume it is never ok to select a policy that isolates the AS -- and if it were done, then it wouldn't be accidental.\n\nThis is to say that this sentence has no Normative value here.  It may be better if something similar (\"care should be taken to avoid...\", maybe with an example) were included in \u00a72.3.3.\n\n\nCC @katyatitkova ",
           "createdAt": "2025-06-12T09:06:11Z",
-          "updatedAt": "2025-06-12T09:06:11Z"
+          "updatedAt": "2025-06-25T13:06:17Z"
         },
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "We discussed this, \"triangle routing\" should not be problematic and it won't create a loop. Maybe we need to make the text clearer. TODO: draw this and think about it one more time..\n ",
+          "body": "We discussed this, \"triangle routing\" should not be problematic and it won't create a loop. Maybe we need to make the text clearer. TODO: draw this and think about it one more time..\n [Slack Discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1750792582215319)",
           "createdAt": "2025-06-12T12:00:50Z",
-          "updatedAt": "2025-06-12T12:02:09Z"
+          "updatedAt": "2025-06-24T19:18:00Z"
         }
       ]
     },
@@ -754,7 +754,7 @@
       "id": "I_kwDOJx2-rs6OtOg6",
       "title": "Clarifications in introduction and beaconing (Til's feedback)",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/46",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -766,8 +766,8 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-02-26T09:20:11Z",
-      "closedAt": "2025-02-26T09:20:10Z",
+      "updatedAt": "2025-06-25T14:24:48Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "matzf",
@@ -824,6 +824,13 @@
           "body": "> To be addressed from David Galan's review:\n> \n> > In our formal model, we assume that the network of physical links is such that no ISD is internally partitioned (i.e., each AS in an ISD can reach every other AS in the same ISD),\n> \n\n\nCopied from our email for your convenience:\n\nWhen we stated that ISDs are not internally partitioned, we intended to convey what @tzaeschke refers to as \"indirect reachability (leaving AS allowed).\" This means that any two ASes within the same ISD can be connected through a sequence of one or more physical links (not beacons or segments). Currently, our model can handle paths that leave and re-enter the ISD. However, we are concerned that this topology might compromise certain strong notions of ISD isolation, potentially allowing external agents to influence the internal connectivity of an ISD. This is an area we plan to explore further in future work.",
           "createdAt": "2025-02-21T15:22:35Z",
           "updatedAt": "2025-02-21T15:22:35Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Reopening to address further Feedback received from  Alvaro. TODO: \n\n- [ ] Clarify How were these numbers selected\n- [ ] Eventually remove normative language\n- [ ] Include a pointer to \u00a73.3.1.\n- [ ] [] \"SHOULD have a suitable pre-selection of candidate PCBs\" --> should\n\n\nThis was discussed in a PR [here](https://github.com/scionassociation/scion-cp_I-D/pull/42#discussion_r1650834549) \n\n### Feedback Alvaro \n```...\n1778\t2.3.4.  Propagation Interval and Best PCBs Set Size\n...\n1787\t   The _best PCBs set size_ SHOULD be:\n\n1789\t   *  For intra-AS beaconing (i.e. propagating to children ASes): at\n1790\t      most 50.\n\n1792\t   *  For core beaconing (i.e. propagation between core ASes): at most 5\n1793\t      per immediate neighbor core AS.  Current practice is that each set\n1794\t      of 5 is chosen among the PCBs received from each neighbor.\n\n1796\t   Note that the PCBs set size should not be too low, in order to make\n1797\t   sure that beaconing can discover a wide amount of paths.  Values\n1798\t   above are RECOMMENDED maxima which represent a tradeoff between\n1799\t   scalability and amount of paths discovered.  In current practice the\n1800\t   intra-ISD set size is typically 20.\n```\n\n How were these numbers selected?  Are they a function of the memory, the current size of the deployments, etc.?\n\nThe only reason I'm asking is because of the use of Normative language to describe them.  Please describe the expectations/current practice without using Normative language.\n\nInclude a pointer to \u00a73.3.1.\n\n\n\n```\n1802\t   Depending on the selection criteria, it may be necessary to keep more\n1803\t   candidate PCBs than the _best PCBs set size_ in the Beacon Store in\n1804\t   order to determine the best set of PCBs.  If this is the case, an AS\n1805\t   SHOULD have a suitable pre-selection of candidate PCBs in place in\n1806\t   order to keep the Beacon Store capacity limited.\n```\n[] \"SHOULD have a suitable pre-selection of candidate PCBs\"\n\nWhen is it ok to not have a suitable pre-selection...?  s/SHOULD/should\n\n",
+          "createdAt": "2025-06-25T14:11:19Z",
+          "updatedAt": "2025-06-25T14:24:48Z"
         }
       ]
     },
@@ -956,7 +963,7 @@
       "id": "I_kwDOJx2-rs6Qjl2o",
       "title": "MTU clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/57",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -968,8 +975,8 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2024-10-04T12:24:39Z",
-      "closedAt": "2024-10-04T12:24:38Z",
+      "updatedAt": "2025-06-25T10:17:38Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "jiceatscion",
@@ -991,6 +998,13 @@
           "body": "> L2 --> Underlay/lower layer protocol\r\n\r\nHmm, yes. We need to be clearer with this. The SCION network layer cannot know if any link on the path has a UDP/IP encapsulation, so the MTU described in segments should measure the payload of the encapsulated packet if encapsulated. => for raw L2: real L2 MTU; for V4 underlay: real L2 MTU - 28; for v6 underlay: real  L2 MTU - 48\r\n\r\nI'll try and clarify this concisely. Making a PR now.\r\n",
           "createdAt": "2024-09-20T09:00:58Z",
           "updatedAt": "2024-09-20T09:01:09Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "is the MTU directional? Does it affect path reversal (in terms of how endpoints calculate it)?\n[Slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1750842088078769).\n\n- [ ] Clarify this point in 4.4.  Path MTU\n- [ ] Add a cross reference in 2.2.1.5.  Hop Entry pointing to 4.4.  Path MTU\n- [ ] Check if we need to update anything in the DP draft in 5.1.  MTU \n- [ ] Do we need to say something about MTU in 5.  Path Lookup? \n\n### Feedback Alvaro: \n\n```\n...\n1409\t2.2.1.5.  Hop Entry\n...\n1439\t   *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the\n1440\t      ingress interface (in beaconing direction) of the hop being\n1441\t      described.  The MTU of paths constructed from the containing\n1442\t      beacon is necessarily less than or equal to this value.  How the\n1443\t      control service obtains the MTU of an inter-AS link is\n1444\t      implementation dependent.  It may be discovered or configured.\n1445\t      Current practice to make it a configuration item.\n\n[] \"in beaconing direction\"\n```\n\n> Does this imply that the MTU in the opposite direction can be different?  If so, how is the reversible nature of the paths maintained?  Or is the reversible property only applicable to the fact that a path exists, and not that the characteristics are the same?\n",
+          "createdAt": "2025-06-25T08:52:31Z",
+          "updatedAt": "2025-06-25T10:17:38Z"
         }
       ]
     },
@@ -1295,7 +1309,7 @@
       "id": "I_kwDOJx2-rs6ou9Jm",
       "title": "Beaconing: clarify checks",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/90",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1308,8 +1322,8 @@
       ],
       "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [x] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-03-19T11:01:00Z",
-      "closedAt": "2025-03-19T11:00:59Z",
+      "updatedAt": "2025-06-25T13:58:16Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "jiceatscion",
@@ -1352,6 +1366,13 @@
           "body": "On the last check, leaving a SHOULD and resolving.\n\nFrom Dominik:\n\n>  I think a SHOULD is fine here. But just that we are clear. The segments will be useless, because no-one is going to ask for them  with the current lookup strategy\nFun fact: Originally, the ASes registered their down segments with all core ASes (or the cores synced amongst them :thinking_face:). But we later changed the lookup strategy to be easier to reason about.",
           "createdAt": "2025-03-19T11:00:59Z",
           "updatedAt": "2025-03-19T11:00:59Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Reopening following new feedback received from Alvaro on exactly this wording:\n\n- [ ] Decide if to change this into a MUST: `\"SHOULD discard PCBs that were propagated at any point by a non-core AS\"`\n- [ ] @nicorusti Respond to Alvaro\n- [ ] Clarify text ` MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more..` by specifying that it refers to the same ISD bud different ASes\n- [ ] MAY make a policy decision ~not~ to propagate \n\n\n### Feedback Alvaro\n\n```\n1684\t   2.  Loop avoidance: If it is a core AS, the Control Service MUST\n1685\t       check whether the PCB includes duplicate hop entries created by\n1686\t       the core AS itself or by other ASes.  If so, the PCB MUST be\n1687\t       discarded in order to avoid loops.  This step is necessary\n1688\t       because core beaconing is based on propagating PCBs to all AS\n1689\t       neighbors.  Additionally, core ASes SHOULD discard PCBs that were\n1690\t       propagated at any point by a non-core AS.  Ultimately, core ASes\n1691\t       MAY make a policy decision not to propagate beacons containing\n1692\t       path segments that traverse the same ISD more than once as this\n1693\t       can be legitimate, e.g. if the ISD spans a large geographical\n1694\t       area, a path transiting another ISD may constitute a shortcut.\n```\n[] \"SHOULD discard PCBs that were propagated at any point by a non-core AS\"\n\nWhen is it ok not to discard these PCBs?  IOW, why is it not a requirement?\n> @nicorusti: The reason for a SHOULD here is implementation complexity. To complete this check, a core AS would need to look at the TRC of the corresponding iSD to get a list of all core ASes, then use it to verify that all ASes on the PCB are actually core. AFAIK we don\u2019t have such check in the current implementation. But let me double check this, and think a bit more on the relevance of this check. \n\n[] \"If...the PCB includes duplicate hop entries...MUST be discarded...[but]...MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once\"\n\nI assume you meant \"decision to propagate\". ??\n\nThe MAY and MUST are in Normative contradiction.  Use SHOULD (instead of MUST).",
+          "createdAt": "2025-06-25T13:42:12Z",
+          "updatedAt": "2025-06-25T13:58:16Z"
         }
       ]
     },
@@ -1451,7 +1472,7 @@
       ],
       "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-06-20T06:37:34Z",
+      "updatedAt": "2025-06-24T19:23:39Z",
       "closedAt": null,
       "comments": [
         {
@@ -1460,6 +1481,13 @@
           "body": "Small issues reported by Alvaro: \n### Number figures \n```\n800 2.1.3.  PCB Propagation - Illustrated Examples\n...\n807   In Figure 2 below, core AS X sends the two different PCBs \"a\" and \"b\"\n808   via two different links to child AS Y: PCB \"a\" leaves core AS X via\n809   egress interface \"2\", whereas PCB \"b\" is sent over egress interface\n810   \"1\".  Core AS X adds the respective egress information to the PCBs\n811   when sending them off, as can be seen in the figure (the entries\n812   \"_Core - Out:2_\" and \"_Core - Out:1_\", respectively).\n```\n>  As shown later in Figure 3, it should be \"Core X - Out:2\" and \"Core X -\nOut:1\".\n\n### Protobuf & figures - order\n>  I'm not sure if the order of the elements in Protobuf matters...but the\ndescription doesn't follow the same order as the figure.  For the reader,\nit would be better if the order were the same.  This is especially\nimportant given the field names in the figures and the names of the\ninformation in Protobuf are not the same (for example, \"Unsigned Ext.\" vs\n\"PathSegmentUnsignedExtensions\").\n\n\n###   AS Entry Signed Component\n```\n1170         +------------------------------------------------------+\n1171         |                   Signed AS Entry                    |\n1172         +------------------------------------------------------+\n1173         *- - - - - - - - - - - - -#- - - - - - - - - - - - - - *\n1174                                   |\n1175                                   |\n1176 *- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - -*\n1177 +--------------------+-----------------+------------------------------+\n1178 |      Header        |     Body        |            Signature         |\n1179 +--------------------+-----------------+------------------------------+\n```\n> The order shown here is different than what is shown in Figure 6.\n\n\n###  2.2.1.4.1.  AS Entry Signed Header\n```\n1225              +-----------------+\n1226              |     Header      |\n1227              +-----------------+\n1228              *- - - - # - - - -*\n1229                       |\n1230    - - - - - - - - - -v- - - - - - - - - *\n1231   +----------------+---------------------+\n1232   | Signature Alg. | Verification Key ID |\n1233   +----------------+---------------------+\n1234                    *- - - - - # - - - - -*\n1235                               |\n1236    - - - - - - - - - - - - - -v- - - - - - - - - -\n1237   +---------+---------+------------+--------------+\n1238   | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|\n1239   +---------+---------+------------+--------------+\n```\n```\n1255      message Header {\n1256          SignatureAlgorithm signature_algorithm = 1;\n1257          bytes verification_key_id = 2;\n1258          // Optional\n1259          google.protobuf.Timestamp timestamp = 3;\n1260          // Optional\n1261          bytes metadata = 4;\n1262          int32 associated_data_length = 5;\n1263      }\n```\n> If I'm reading this correctly...the optional fields are not represented\nin the figures.\n\n- [ ] Also introduce a notion of associated_data (now the value is there in protobuf, bot not introduced)\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n- [x] Also fix the header in figure 6 (fields are missing there too)\n```\n                                                 |\n*- - - - - - - - - - - - - - - - - - - - - - - - v - - - - - - - - - - *\n+--------------------+-----------------++------------------------------+\n|     Signature      |    Header       ||                    Body      |\n+--------------------+-----------------++------------------------------+\n                     *- - - - # - - - -**- - - - - - - - # - - - - - - *\n                              |                          |\n*- - - - - - - - - - - - - - -v- - - - *                 |\n+----------------+---------------------+                 |\n| Signature Alg. | Verification Key ID |                 |\n+----------------+---------------------+                 |\n```\n\n\n",
           "createdAt": "2025-06-12T09:10:35Z",
           "updatedAt": "2025-06-19T14:42:49Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Other pending point that I forgot to include:\n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n\n> What is the format?  What does \"per-protocol\" mean?\n\nI'd also leave the issue open until merged.",
+          "createdAt": "2025-06-24T19:23:39Z",
+          "updatedAt": "2025-06-24T19:23:39Z"
         }
       ]
     },
@@ -1500,9 +1528,9 @@
         "question",
         "needs-discussion"
       ],
-      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft\n- [ ] Decide wether we want to include a description of some metadata with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n\n\nOS implementation currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?",
+      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft\n- [ ] Decide wether we want to include a description of some metadata with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [ ] 2.2.2  - explain what PCB extensions are\n\n\nOS implementation currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-06-16T13:21:24Z",
+      "updatedAt": "2025-06-25T10:32:23Z",
       "closedAt": null,
       "comments": [
         {
@@ -1525,6 +1553,13 @@
           "body": "> @tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing\n\nYes, the thesis delivers live metadata (bandwidth, latency, ...) frequently, probably every 5-30 second. However, the metadata is delivered separately from PCBs. Also, this thesis is more exploratory, it'll be a while before this is solid enough to be implemented fully or even to be standardized.",
           "createdAt": "2025-06-16T13:21:24Z",
           "updatedAt": "2025-06-16T13:21:24Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke thank you for your clarification. By the way, this draft is about the current spec, it is not a standard...",
+          "createdAt": "2025-06-25T07:25:52Z",
+          "updatedAt": "2025-06-25T07:25:52Z"
         }
       ]
     },
@@ -1599,7 +1634,7 @@
       "id": "I_kwDOJx2-rs67HsWO",
       "title": "Remove double use of MUST in different drafts",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/111",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1609,11 +1644,19 @@
         "Prio 1",
         "editorial"
       ],
-      "body": "```\n417   Each link connecting SCION routers is bi-directional and is\n418   identified by its corresponding egress and ingress interface IDs.  An\n419   interface ID consists of a 16-bit identifier that MUST be unique\n420   within each AS, with the exception of value 0 (see\n421   [I-D.dekater-scion-dataplane]).  Therefore, they can be chosen and\n422   encoded by each AS independently without any need for coordination\n423   between ASes.\n```\n\nThe identifier is defined in I-D.dekater-scion-dataplane.  In general,\nyou should only normatively specify (using \"MUST\", for example) in one\nplace.\n\n- [ ] s/MUST be unique/is required to be unique\n- [ ] Check use of MUST in relation to definitions in other drafts",
+      "body": "```\n417   Each link connecting SCION routers is bi-directional and is\n418   identified by its corresponding egress and ingress interface IDs.  An\n419   interface ID consists of a 16-bit identifier that MUST be unique\n420   within each AS, with the exception of value 0 (see\n421   [I-D.dekater-scion-dataplane]).  Therefore, they can be chosen and\n422   encoded by each AS independently without any need for coordination\n423   between ASes.\n```\n\nThe identifier is defined in I-D.dekater-scion-dataplane.  In general,\nyou should only normatively specify (using \"MUST\", for example) in one\nplace.\n\n- [x] s/MUST be unique/is required to be unique\n- [x] Check use of MUST in relation to definitions in other drafts",
       "createdAt": "2025-06-12T08:32:36Z",
-      "updatedAt": "2025-06-12T08:32:36Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-06-24T16:16:48Z",
+      "closedAt": "2025-06-24T16:16:48Z",
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Removed double MUST with respect to the referenced example. \n\nAlso checked the other drafts for double MUST and cannot find other examples. ",
+          "createdAt": "2025-06-24T16:16:36Z",
+          "updatedAt": "2025-06-24T16:16:36Z"
+        }
+      ]
     },
     {
       "number": 112,
@@ -1630,9 +1673,9 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "- [ ] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [ ] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
+      "body": "- [x] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [ ] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
       "createdAt": "2025-06-12T08:35:26Z",
-      "updatedAt": "2025-06-20T07:09:54Z",
+      "updatedAt": "2025-06-25T21:17:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -1669,9 +1712,17 @@
       ],
       "body": "- [x] Terminology - \"Hop Field (HF)\" is repeated. This also happens in other definitions. \n- [x] `*SCMP*: A signaling protocol analogous to the Internet Control.` - [nit] Expand SCMP.\n- [x] Clarifications in `1.3.  Paths and Links`\n  ```\n  387   A path can contain at most one peering link shortcut which means they\n  388   can only be used in paths between ASes within the \"customer cone\" of\n  389   the ASes connected by the peering link.\n  ```\n  > We have links (which I assume are one-hop connections), paths (which are\ne2e; \"an up-core-down path\", for example), and path segments.  The\ndefinition of \"path segments\" (in the Terminology section) combines terms:\n\"A path segment can be (1) an up segment (i.e. a path between a non-core AS\nand a core AS in the same ISD),\": \"A path segment can be...[a]...segment\n(i.e. a path...\".\nI think this description could be clarified.\n- [x] Typo `litteral` --> literal (e.g. in 1.5.3.3.  <ISD, AS> tuples) \n- [x] After reading \u00a77.3.1, also point to the specification in \u00a72.3.1.",
       "createdAt": "2025-06-12T08:46:57Z",
-      "updatedAt": "2025-06-20T07:08:07Z",
+      "updatedAt": "2025-06-25T14:09:26Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "More clarifications (from the second part of Alvaro's feedback):\n\n- [ ] `2.2.1.6.  Hop Field`: add a sentence to clarify that  MAC is a form of authenticating segments between the Control Plane of an AS and its own routers within the AS. It is never computed by endpoints\n  > [] Only one MAC algorithm is specified, but an AS can select its own.  This may be a question for the dataplane draft...  How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?\n- [ ] \n  ```\n  1641\t2.2.4.  Configuration\n  \n  1643\t   For the purpose of constructing and propagating path segments, an AS\n  1644\t   Control Service MUST be configured with links to neighboring ASes.\n  1645\t   Such information may be conveyed to the Control Service in an out-of-\n  1646\t   band fashion (e.g in a configuration file).  For each link, these\n  1647\t   values MUST be configured:\n  \n  [] \"MUST be configured with links to neighboring ASes\"\n  ```\n  s/MUST/must\n  > There's no Normative value in using \"MUST\" here because the sentence is explaining a fact: if no links exist then nothing can happen...\n- [ ] [nit] s/policy that it does not/policy that does not\n- [ ] [] s/must check/MUST check in `1702\t       receiver Control Service must check every AS entry except the`\n- [ ] [] \"relatively small subset of the viable PCBs SHOULD be propagated\" ->    \"Not all viable PCBs should be propagated...\"\n   > This is not a good Normative statement because it is not clear what a \"relatively small subset\" is?  Half, 10%, only 2, etc. ??\n- [ ] [] \"The goal of the AS SHOULD be...\"\n    > When is it ok for the goal to be something else?  I guess it's a matter of configuration, but the point is that this sentence is just referring to a fact: s/SHOULD/should\n- [ ] Use [inclusive language](https://www.rfc-editor.org/styleguide/part2/#inclusive_language) (e.g. blacklists, whitelist)\n- [ ] Lowercase some SHOULD\n  ```\n  1755\t   *  Path disjointness: Paths can be either AS disjointed or link\n  1756\t      disjointed.  AS disjointed paths have no common upstream/core AS\n  1757\t      for the current AS, whereas link disjointed paths do not share any\n  1758\t      AS-to-AS link.  AS disjointness allows path diversity in the event\n  1759\t      that an AS becomes unresponsive, and link disjointness provides\n  1760\t      resilience in case of link failure.  Both criteria can be used\n  1761\t      depending on the objective of the AS.\n  \n  1763\t   The relative disjointness of two PCBs A and B may be calculated by\n  1764\t   assigning a disjointness score, calculated as the number of links in\n  1765\t   A that don't appear in B.  The beacon that has the highest\n  1766\t   disjointness score and is not the shortest path SHOULD be selected.\n  1767\t   If this is not better than what has already been selected, then the\n  1768\t   beacon with the shortest path yet to be selected SHOULD be chosen\n  1769\t   instead.\n  ```\n   > [] The list above presented examples, which I take to mean that the policy is up to the local AS.  IOW, there shouldn't be a specification of which paths to choose.  I take this paragraph as an example too.  Note also that the use of SHOULD allows for any selection.  Suggestion: Avoid using normative language and introduce the paragraph with \"For example...\".\n\n\n\n",
+          "createdAt": "2025-06-25T10:24:53Z",
+          "updatedAt": "2025-06-25T14:09:26Z"
+        }
+      ]
     },
     {
       "number": 114,
@@ -1688,9 +1739,9 @@
         "Prio 2",
         "needs-discussion"
       ],
-      "body": "- [x]  Find a better wording in \"The ISD-AS number of the downstream AS to which the PCB **SHOULD** be forwarded.\"\n- [x] maybe this section also deserves a double MUST? (introduced in #98, discussed [here](https://github.com/scionassociation/scion-cp_I-D/pull/98#discussion_r1972040628) and on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1740679917948679) ) --> leaving a SHOULD as per Slack discussion\n       ```\n        The first ISD-AS entry of the path segment\n       SHOULD be equal to the core ISD-AS where the segment is being\n       registered.  If not, the core AS SHOULD reject the segment.\n       ```\n\nFrom Alvaro: \n```\n2.2.1.4.2.  AS Entry Signed Body\n...\n1340   *  next_isd_as: The ISD-AS number of the downstream AS to which the\n1341      PCB SHOULD be forwarded.  The presence of this field prevents path\n1342      hijacking attacks, as further discussed in Section 7.3.1.\n```\n> When is it ok to forward the PCB to a different downstream AS?  I assume\n\"never\", which makes me think that you wanted to use \"MUST\" (instead of\n\"SHOULD\").\n\n",
+      "body": "- [x]  Find a better wording in \"The ISD-AS number of the downstream AS to which the PCB **SHOULD** be forwarded.\"\n   From Alvaro: \n   ```\n   2.2.1.4.2.  AS Entry Signed Body\n   ...\n   1340   *  next_isd_as: The ISD-AS number of the downstream AS to which the\n   1341      PCB SHOULD be forwarded.  The presence of this field prevents path\n   1342      hijacking attacks, as further discussed in Section 7.3.1.\n   ```\n   > When is it ok to forward the PCB to a different downstream AS?  I assume\n\"never\", which makes me think that you wanted to use \"MUST\" (instead of\n\"SHOULD\").\n\n- [x] maybe this section also deserves a double MUST? (introduced in #98, discussed [here](https://github.com/scionassociation/scion-cp_I-D/pull/98#discussion_r1972040628) and on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1740679917948679) ) --> leaving a SHOULD as per Slack discussion\n       ```\n        The first ISD-AS entry of the path segment\n       SHOULD be equal to the core ISD-AS where the segment is being\n       registered.  If not, the core AS SHOULD reject the segment.\n       ```\n\n",
       "createdAt": "2025-06-12T09:24:12Z",
-      "updatedAt": "2025-06-23T13:52:40Z",
+      "updatedAt": "2025-06-24T20:43:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -1699,6 +1750,20 @@
           "body": "Changed to MUST. It's still debatable, but I feel that adds clarity. ",
           "createdAt": "2025-06-23T13:52:40Z",
           "updatedAt": "2025-06-23T13:52:40Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Where did you change it? I cannot find the PR. Could you link in each PR which issues they address? ",
+          "createdAt": "2025-06-24T19:31:54Z",
+          "updatedAt": "2025-06-24T19:31:54Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It was changed in the latest commit to 'New Diagrams' PR. ",
+          "createdAt": "2025-06-24T20:43:22Z",
+          "updatedAt": "2025-06-24T20:43:22Z"
         }
       ]
     },
@@ -1720,6 +1785,68 @@
       "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n\n- [ ] Mapping is also sort of a CP task. Shall we add a reference to the SIG also in this draft? \n- [ ] Can SGRP be better documented in https://docs.scion.org/en/latest/sig.html  \n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
       "createdAt": "2025-06-13T16:04:15Z",
       "updatedAt": "2025-06-13T16:04:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 117,
+      "id": "I_kwDOJx2-rs69OxDG",
+      "title": "PCB Validity - clarify wording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/117",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": "- [ ] Reword to clarify that the certificate MUST expire later than the segment.\n- [ ] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
+      "createdAt": "2025-06-25T08:41:14Z",
+      "updatedAt": "2025-06-25T10:38:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 118,
+      "id": "I_kwDOJx2-rs69QHtl",
+      "title": "Reword \"unspecified\" interface ID to clarify it is 0",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/118",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 2",
+        "editorial"
+      ],
+      "body": "- [ ] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [ ] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```",
+      "createdAt": "2025-06-25T10:30:52Z",
+      "updatedAt": "2025-06-25T10:30:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 119,
+      "id": "I_kwDOJx2-rs69Qy3R",
+      "title": "Beaconing - clarify checks and impact of link type misconfigurations",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/119",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 2",
+        "editorial",
+        "needs-discussion"
+      ],
+      "body": "Relates to  #90 \n\n- [ ] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
+      "createdAt": "2025-06-25T11:31:43Z",
+      "updatedAt": "2025-06-25T13:41:25Z",
       "closedAt": null,
       "comments": []
     }
@@ -8909,9 +9036,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Contributes to #104 ",
+      "body": "Addresses #104 \r\nAddresses #114",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-20T07:13:15Z",
+      "updatedAt": "2025-06-25T11:19:46Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
@@ -8922,7 +9049,22 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Addresses #104 and #114",
+          "createdAt": "2025-06-24T20:45:17Z",
+          "updatedAt": "2025-06-24T20:45:17Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell  Should we use the same style in figure 1  for link types also in figures 2, 3, 4? \r\n\r\nIn figure 1, we have this for peering links: `< - - - >`\r\n<img width=\"562\" alt=\"Screenshot 2025-06-25 at 13 16 05\" src=\"https://github.com/user-attachments/assets/d8f0e743-e011-4bd2-8367-88f3b86a5ae2\" />\r\n\r\nBut then in figure 2, 3, 4, peering links between V-Y and Y-W are using `#- --#`\r\n<img width=\"737\" alt=\"Screenshot 2025-06-25 at 13 19 08\" src=\"https://github.com/user-attachments/assets/08027108-a08f-479a-9c69-9a867099cbda\" />\r\n\r\n ",
+          "createdAt": "2025-06-25T11:19:27Z",
+          "updatedAt": "2025-06-25T11:19:46Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs6uqbBA",
@@ -8984,13 +9126,13 @@
       "labels": [],
       "body": "Addresses some of #113",
       "createdAt": "2025-06-13T03:31:42Z",
-      "updatedAt": "2025-06-13T04:41:22Z",
+      "updatedAt": "2025-06-24T16:29:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "review-fixes",
-      "headRefOid": "bd97063a3b5b7ed5c0fc35d2fa59f77351f27d3c",
+      "headRefOid": "b4b41eee6fca99c0ba4cb3a8c6e095363845e07c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
