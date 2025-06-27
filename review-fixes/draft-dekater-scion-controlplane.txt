@@ -627,7 +627,7 @@ Table of Contents
    *  Using big-endian hexadecimal notation in 3 groups of 4, in the
       range 0:0:0 to ffff:ffff:ffff.
 
-   *  Leading zeros are omitted.
+   *  Leading zeros in each group are omitted (e.g., 0:0:1)
 
    *  The :: zero-compression feature of IPv6 MUST NOT be used.
 
