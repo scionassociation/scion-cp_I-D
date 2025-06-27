@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 26 December 2025</td>
+<td class="center">Expires 29 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-24" class="published">24 June 2025</time>
+<time datetime="2025-06-27" class="published">27 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-26">26 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-29">29 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -4477,7 +4477,7 @@ A core AS may reach other core ASes in the same ISD via other ISDs. This may be 
               <p id="section-7.3.1-2.3.1">The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.<a href="#section-7.3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.3.1-3">The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see <span><a href="{#reception}">{#reception}</a></span>).<a href="#section-7.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.3.1-3">The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see <a href="#reception" class="auto internal xref">Section 2.3.1</a>).<a href="#section-7.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.3.1-4">The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.<a href="#section-7.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-7.3.1-5">The third type of attack generally cannot be prevented. However the alternate path would be immediately visible to endpoints as traffic <span class="bcp14">MUST</span> include Hop Fields from AS M.<a href="#section-7.3.1-5" class="pilcrow">¶</a></p>
 </section>

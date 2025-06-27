@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 26 December 2025                                        S. Hitz
+Expires: 29 December 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                            24 June 2025
+                                                            27 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 December 2025.
+   This Internet-Draft will expire on 29 December 2025.
 
 Copyright Notice
 
@@ -3210,7 +3210,7 @@ path segment 4 |             |     |             |     |             |
    protected by A's signature.  If M manipulates the PCB while in flight
    from A to B, then verification of the manipulated inbound PCBs will
    fail at AS B, as the adversary's PCBs cannot contain A's correct
-   signature (see {#reception}).
+   signature (see Section 2.3.1).
 
    The second type of attack is made impossible by the Hop Field's MAC
    which protects the Hop Field's integrity and chains it with the
