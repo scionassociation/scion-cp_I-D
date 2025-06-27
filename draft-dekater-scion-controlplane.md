@@ -262,7 +262,7 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 |                         |       #
 |        ISD Core         |       |      parent-child
 | +-----+         +-----+ |       |      link
-| |AS A ©---------©AS C | |       |
+| |AS A |©-------©|AS C | |       |
 | +--#--+         +--#--+ |       *
 |    |               |    |
 +----|---------------|----+   ©-------©  core link
@@ -498,9 +498,9 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                                 |   |
        +-------------+     +----*---*----+     +-------------+
        |             |     |    2   3    |     |             |
-       |             #<- -># 1           |     |             |
+       |             |<- ->| 1           |     |             |
        |    AS V     |     |    AS Y     |     |    AS W     |
-       |             |     |           4 #<- ->#             |
+       |             |     |           4 |<- ->|             |
        |             |     |    6   5    |     |             |
        +-------------+     +----#---#----+     +-------------+
             +--------+          |   |          +--------+
