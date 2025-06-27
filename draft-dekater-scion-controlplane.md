@@ -38,7 +38,6 @@ normative:
   I-D.dekater-scion-pki:
   RFC4632:
   RFC5280:
-  RFC5952:
   RFC9000:
   RFC9114:
   gRPC:
@@ -56,10 +55,14 @@ normative:
 
 informative:
   I-D.dekater-panrg-scion-overview:
-  ISD-AS-assignments:
+  ISD-AS-assignments-Anapaya:
     title: "SCION ISD and AS Assignments"
-    date: 2024
+    date: 2025
     target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
+  ISD-AS-assignments:
+    title: "SCION Registry"
+    date: 2025
+    target: http://scion.org/registry/
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -96,7 +99,7 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
   RFC1122:
-  RFC4893:
+  RFC4271:
   RFC5398:
   RFC6996:
   RFC9217:
@@ -184,11 +187,11 @@ SCION has been developed with the following goals:
 
 SCION relies on three main components:
 
-*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION Control Plane relies upon for the authentication of messages that is used for the SCION Control Plane. See {{I-D.dekater-scion-pki}}
+*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure used for the authentication of messages used by the SCION Control Plane.
 
 *Control Plane* - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs.
 
-*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. See {{I-D.dekater-scion-dataplane}}
+*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
 
 This document describes the SCION Control Plane component. It should be read in conjunction with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-dataplane}}.
 
@@ -212,21 +215,21 @@ Note (to be removed before publication): this document, together with the other 
 
 **Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
-**Hop Field (HF)**: Hop Field (HF): As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.
+**Hop Field (HF)**: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
 
-**Info Field (INF)**: Info Field (INF): Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
+**Info Field (INF)**: Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
-**Isolation Domain (ISD)**: Isolation Domain (ISD): In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
+**Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
-**MAC**: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
+**Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
-**Path Segment**: Path segments are derived from Path Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.
+**Path Segment**: Path segments are derived from Path Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Up to three path segments can be used to create a forwarding path.
 
 **Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.
 
-**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
+**SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
 **Trust Root Configuration (TRC)**: A Trust Root Configuration or TRC is a signed collection of certificates pertaining to an isolation domain (ISD). TRCs also contain ISD-specific policies.
 
@@ -277,7 +280,7 @@ A path can contain at most one peering link shortcut which means they can only b
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
-Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress interface IDs. An interface ID consists of a 16-bit identifier that MUST be unique within each AS, with the exception of value 0 (see {{I-D.dekater-scion-dataplane}}). Therefore, they can be chosen and encoded by each AS independently without any need for coordination between ASes.
+Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} that is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
 
 ## Routing
 
@@ -340,38 +343,17 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-Currently, ISD numbers are allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
+ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4893}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use a SCION AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
 
-### Text Representation
-
-#### ISD numbers
-
-The text representation of SCION ISD numbers MUST be its decimal ASCII representation.
-
-#### AS numbers
-
-The text representation of SCION AS numbers is similar to IPv6 (see {{RFC5952}}) but not identical. It MUST be as follows:
-
-- It uses a 16-bit colon-separated lower-case hex encoding with leading 0s omitted: `0:0:0` to `ffff:ffff:ffff`.
-- The `::` zero-compression feature of IPv6 MUST NOT be used. The feature has very limited use in a 48-bit address space and would only add more complexity.
-- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
-- For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
-
-#### <ISD, AS> tuples
-
-The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the litteral ASCII character 0x2D.
-
-For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0000:1:f`.
-
-### Wildcard Addressing {#serv-disc}
+#### Wildcard Addressing {#serv-disc}
 
 SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
-### Special-Purpose SCION AS Numbers
+#### SCION AS numbers
 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
@@ -386,6 +368,27 @@ SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place 
 
 The rest of the space is currently unallocated.
 
+### Text Representation
+
+#### ISD numbers
+
+The text representation of SCION ISD numbers MUST be its decimal ASCII representation.
+
+#### AS numbers
+
+The text representation of SCION AS numbers MUST be as follows:
+
+- Using big-endian hexadecimal notation in 3 groups of 4, in the range `0:0:0` to `ffff:ffff:ffff`.
+- Leading zeros in each group are omitted (e.g., `0:0:1`)
+- The `::` zero-compression feature of IPv6 MUST NOT be used.
+- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
+- For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
+
+#### <ISD, AS> tuples
+
+The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
+
+For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0:1:f`.
 
 
 ## Bootstrapping ability
@@ -396,7 +399,7 @@ A secure and reliable routing architecture has to be designed specifically to av
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
 - Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender. This avoids circular dependencies between the PKI and connectivity.<br>
 
-**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see the SCION Control-Plane PKI {{I-D.dekater-scion-pki}}.
+**Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
 
 ## Resistance to partitioning
 
@@ -782,7 +785,7 @@ It includes the following components:
 +--------------------+-----------------+------------------------------+
 ~~~~
 
-Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (See {{I-D.dekater-scion-pki}}).
+Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (see {{I-D.dekater-scion-pki}}).
 
 The signed component of an AS entry MUST include the following elements:
 
@@ -868,7 +871,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
   - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
 
-**Note:** For more information on signing and verifying control plane messages (such as PCBs), see the chapter Signing and Verifying Control Plane Messages of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see the chapter Trust Root Configuration Specification of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}.
+**Note:** For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
@@ -926,7 +929,7 @@ The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as 
 Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )
 
-The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see the chapter "Signing and Verifying Control Plane Messages" of the SCION Control Plane PKI Specification {{I-D.dekater-scion-pki}}.
+The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
 The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
 
@@ -1100,7 +1103,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 For the purpose of constructing and propagating path segments, an AS Control Service MUST be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
-- Local interface ID. This MUST be unique within each AS.
+- Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
@@ -1112,7 +1115,7 @@ Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally i
 
 This section describes how PCBs are received, selected and further propagated in the path exploration process.
 
-### Reception of PCBs
+### Reception of PCBs {#reception}
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
@@ -1123,7 +1126,7 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
 
-### Storing Candidate PCBs
+### Storing Candidate PCBs {#storing}
 
 An AS stores candidate PCBs in a temporary storage called the *Beacon Store*. The management of this storage is implementation defined.
 
@@ -1350,7 +1353,7 @@ The Control Service of a non-core AS MUST perform the following steps to "termin
      - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
    - The egress interface in the Hop Field component MUST NOT be specified.
      - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
-2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress interface ID in the Hop Field component of each added peer entry MUST NOT be specified.
+2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress Interface ID in the Hop Field component of each added peer entry MUST NOT be specified.
    - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
 3. The Control Service MUST sign the modified PCB and append the computed signature.
 
@@ -1702,13 +1705,13 @@ underlay.
 | Code         | 0                                                             |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Interface ID | The interface ID of the external link with connectivity issue.|
+| Interface ID | The Interface ID of the external link with connectivity issue |
 {: title="field values"}
 
 A **External Interface Down** message SHOULD be originated by a router in response
 to a packet that cannot be forwarded because the link to an external AS is broken.
 The ISD and AS identifier are set to the ISD-AS of the originating router.
-The interface ID identifies the link of the originating AS that is down.
+The Interface ID identifies the link of the originating AS that is down.
 
 Recipients can use this information to route around broken data-plane links.
 
@@ -1747,16 +1750,16 @@ Recipients can use this information to route around broken data-plane links.
 | Code         | 0                                                             |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Ingress ID   | The interface ID of the ingress link.                         |
-| Egress ID    | The interface ID of the egress link.                          |
+| Ingress ID   | The Interface ID of the ingress link.                         |
+| Egress ID    | The Interface ID of the egress link.                          |
 {: title="field values"}
 
 A **Internal Connectivity Down** message SHOULD be originated by a router in
 response to a packet that cannot be forwarded inside the AS because because the
 connectivity between the ingress and egress routers is broken. The ISD and AS
 identifier are set to the ISD-AS of the originating router. The ingress
-interface ID identifies the interface on which the packet enters the AS. The
-egress interface ID identifies the interface on which the packet is destined to
+Interface ID identifies the interface on which the packet enters the AS. The
+egress Interface ID identifies the interface on which the packet is destined to
 leave the AS, but the connection is broken to.
 
 Recipients can use this information to route around a broken data plane inside an
@@ -1892,7 +1895,7 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 | Sequence Nr. | The sequence number of the Tracroute Request                  |
 | ISD          | The 16-bit ISD identifier of the SCMP originator              |
 | AS           | The 48-bit AS identifier of the SCMP originator               |
-| Interface ID | The interface ID of the SCMP originating router               |
+| Interface ID | The Interface ID of the SCMP originating router               |
 {: title="field values"}
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
@@ -1923,7 +1926,7 @@ Security properties are:
 - Forwarding Path Consistency - For every honest path segment registered in any AS
     - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
     - the inter-domain network topology remains unchanged since the segment was first generated.
-- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and interface IDs.
+- Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
 To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
@@ -1935,7 +1938,7 @@ The first risk to the beaconing process comes from an adversary controlling one 
 
 ## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
 
-This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the SCION Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.
+This section examines several possible approaches that could be taken by an "ordinary" non-core adversary to manipulate the beaconing process in the Control Plane. For each case it shows to what extent SCION's design can prevent the corresponding attack or help mitigate it.
 
 ### Path Hijacking through Interposition {#path-hijack}
 
@@ -1945,7 +1948,7 @@ A malicious AS M might try to manipulate the beaconing process between two neigh
 - The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.
 - The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.
 
-The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature.
+The first type of attack is detectable and blocked by downstream ASes (e.g. B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B, and protected by A's signature. If M manipulates the PCB while in flight from A to B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain A's correct signature (see [](#reception)).
 
 The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.
 
@@ -2007,7 +2010,7 @@ A combination of the mechanism above is used to prevent flooding attacks on the 
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
 
 --- back
 
@@ -2620,7 +2623,7 @@ Major changes:
 Minor changes:
 
 - Introduction: Added overview of SCION components
-- Clarified path reversibility, link types, interface IDs
+- Clarified path reversibility, link types, Interface IDs
 - Fixed private AS range typo
 - Clarified PCB selection policies and endpoint requirements
 - Clarified PCB propagation
