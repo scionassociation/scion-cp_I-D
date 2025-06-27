@@ -562,7 +562,9 @@ Table of Contents
                       Table 1: ISD number allocations
 
    ISD numbers are currently allocated by Anapaya, a provider of SCION-
-   based networking software and solutions (see [ISD-AS-assignments]).
+   based networking software and solutions (see
+   [ISD-AS-assignments-Anapaya]).  This function is being transitioned
+   to the SCION Association ([ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -3393,9 +3395,9 @@ path segment 4 |             |     |             |     |             |
 
    The ISD and SCION AS number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments]).  This
-   task is being transitioned from Anapaya to the SCION Association
-   https://scion.org.
+   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
+   This task is being transitioned from Anapaya to the SCION Association
+   (see [ISD-AS-assignments]).
 
 9.  References
 
@@ -3440,11 +3442,6 @@ path segment 4 |             |     |             |     |             |
               (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
               <https://www.rfc-editor.org/rfc/rfc5280>.
 
-   [RFC5952]  Kawamura, S. and M. Kawashima, "A Recommendation for IPv6
-              Address Text Representation", RFC 5952,
-              DOI 10.17487/RFC5952, August 2010,
-              <https://www.rfc-editor.org/rfc/rfc5952>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
@@ -3478,7 +3475,10 @@ path segment 4 |             |     |             |     |             |
               panrg-scion-overview-06>.
 
    [ISD-AS-assignments]
-              "SCION ISD and AS Assignments", 2024,
+              "SCION Registry", 2025, <http://scion.org/registry/>.
+
+   [ISD-AS-assignments-Anapaya]
+              "SCION ISD and AS Assignments", 2025,
               <https://docs.anapaya.net/en/latest/resources/isd-as-
               assignments/>.
 
