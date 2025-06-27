@@ -38,7 +38,6 @@ normative:
   I-D.dekater-scion-pki:
   RFC4632:
   RFC5280:
-  RFC5952:
   RFC9000:
   RFC9114:
   gRPC:
@@ -56,10 +55,14 @@ normative:
 
 informative:
   I-D.dekater-panrg-scion-overview:
-  ISD-AS-assignments:
+  ISD-AS-assignments-Anapaya:
     title: "SCION ISD and AS Assignments"
-    date: 2024
+    date: 2025
     target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
+  ISD-AS-assignments:
+    title: "SCION Registry"
+    date: 2025
+    target: http://scion.org/registry/
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -340,7 +343,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
 {: #table-1 title="ISD number allocations"}
 
-ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}).
+ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
@@ -2007,7 +2010,7 @@ A combination of the mechanism above is used to prevent flooding attacks on the 
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is being transitioned from Anapaya to the SCION Association [](https://scion.org).
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
 
 --- back
 
