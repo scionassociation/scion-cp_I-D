@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 22 December 2025                                        S. Hitz
+Expires: 29 December 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                            20 June 2025
+                                                            27 June 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 December 2025.
+   This Internet-Draft will expire on 29 December 2025.
 
 Copyright Notice
 
@@ -382,10 +382,10 @@ Table of Contents
    from parent to child.  Each path segment is established over one or
    more links.
 
-   SCION paths are always "valley free" whereby a child AS MUST NOT
+   SCION paths are always "valley free" whereby a child AS does not
    carry transit traffic from a parent AS to another parent AS.  These
    paths can contain at most one peering link which can be used as
-   shortcut in an up-core-down path.
+   shortcut between two path segments containing two peer ASes.
 
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
