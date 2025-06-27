@@ -262,19 +262,19 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 |                         |       #
 |        ISD Core         |       |      parent-child
 | +-----+         +-----+ |       |      link
-| |AS A *---------*AS C | |       |
-| *--#--+         +--#--+ |       0
+| |AS A ©---------©AS C | |       |
+| +--#--+         +--#--+ |       *
 |    |               |    |
-+----|---------------|----+   *-------*  core link
++----|---------------|----+   ©-------©  core link
      |               |
      |               |        < - - - >  peering link
-  +--0--+         +--0--+
+  +--*--+         +--*--+
   |AS D |< - - - >|AS E |
-  *--#--*         *--#--*
+  +--#--+         +--#--+
      |               |
      |               |
      |               |
-  +--0--+         +--0--+
+  +--*--+         +--*--+
   |AS G |         |AS F |
   +-----+         +-----+
 
@@ -474,8 +474,8 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
            | Core   |   +--+--+ |   | +--+--+   |Core    |
            |- Out:2 |      |    |   |    │      |- Out:1 |
            +--------+      v    |   |    v      +--------+
-                                v   v
-                           +----#---#----+
+                                |   |
+                           +----*---*----+
                            |    AS Y     |
 
 </artwork>
@@ -495,12 +495,12 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                         +--+--+ |   | +--+--+
                            |    |   |    |
                            v    |   |    v
-                                v   v
-       +-------------+     +----#---#----+     +-------------+
+                                |   |
+       +-------------+     +----*---*----+     +-------------+
        |             |     |    2   3    |     |             |
-       |             #- - -# 1           |     |             |
+       |             #<- -># 1           |     |             |
        |    AS V     |     |    AS Y     |     |    AS W     |
-       |             |     |           4 #- - -#             |
+       |             |     |           4 #<- ->#             |
        |             |     |    6   5    |     |             |
        +-------------+     +----#---#----+     +-------------+
             +--------+          |   |          +--------+
@@ -520,8 +520,8 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
 |-PeerV:1|              +--+--+ |   | +--+--+              |-PeerV:1|
 |-PeerW:4|                 |    |   |    |                 |-PeerW:4|
 +--------+                 v    |   |    v                 +--------+
-                                v   v
-                           +----#---#----+
+                                |   |
+                           +----*---*----+
                            |    AS Z     |
 
 </artwork>
@@ -544,8 +544,8 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
                         +--+--+ |   | +--+--+
                            |    |   |    |
                            v    |   |    v
-                                v   v
-                           +----#---#----+
+                                |   |
+                           +----*---*----+
                            |    5   1    |
                            |             |
                            |    AS Z     |
@@ -1167,14 +1167,14 @@ In this description, MTU and packet size are to be understood in the same sense 
          |
          | ASE.HF.ingress_interface
 +--------#-----------+
-|                    |        PE.peer_  +-----------+
+|        |           |        PE.peer_  +-----------+
 |        |           |        interface |           |
-|          + - - - - #------------------#  Peer AS  |
+|        | + - - - - |<- - - - - - - - >|  Peer AS  |
 |        | |         | PE.HF.ingress_   |           |
-|                    | interface        +-----------+
+|        |           | interface        +-----------+
 |        | |         |
-|        ▼ ▼         |
-+---------#----------+
+|        v v         |
++---------*----------+
           │ PE.HF.egress_interface
           │ ASE.HF.egress_interface
           │
