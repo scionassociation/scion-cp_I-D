@@ -353,7 +353,7 @@ A SCION AS number is the 48-bit identifier for an AS. Although they play a simil
 
 SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
-#### Special-Purpose SCION AS Numbers
+#### SCION AS numbers
 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
