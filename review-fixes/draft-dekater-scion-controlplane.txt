@@ -582,7 +582,7 @@ Table of Contents
    lookup.  These wildcard addresses are of the form I-0, to designate
    any AS in ISD I.  For more information, see Section 5.2.1.
 
-1.5.2.2.  Special-Purpose SCION AS Numbers
+1.5.2.2.  SCION AS numbers
 
     +===================+=============+===============================+
     | AS                | Size        | Description                   |
