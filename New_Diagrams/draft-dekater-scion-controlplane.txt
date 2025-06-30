@@ -394,14 +394,14 @@ Table of Contents
    |                         |       #
    |        ISD Core         |       |      parent-child
    | +-----+         +-----+ |       |      link
-   | |AS A |©-------©|AS C | |       |
+   | |AS A |c-------c|AS C | |       |
    | +-----+         +-----+ |       *
    |    #               #    |
-   +----|---------------|----+   ©-------©  core link
+   +----|---------------|----+   c-------c  core link
         |               |
-        *               *        < - - - >  peering link
+        *               *        p - - - p  peering link
      +-----+         +-----+
-     |AS D |< - - - >|AS E |
+     |AS D |p - - - p|AS E |
      +-----+         +-----+
         #               #
         |               |
