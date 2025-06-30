@@ -349,8 +349,10 @@ Table of Contents
 
 1.3.  Paths and Links
 
-   SCION routers and endpoints connect to each other via links.  A SCION
-   path between two endpoints traverses one or more links.
+   SCION routers and endpoints connect to each other via links.  A link
+   refers to a physical or logical connection between two SCION nodes
+   (e.g., router or endpoint).  A SCION path between two endpoints
+   traverses one or more links.
 
    In SCION, Autonomous Systems (ASes) are organized into logical groups
    called Isolation Domains or ISDs.  Each ISD consists of ASes that are
