@@ -262,14 +262,14 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 |                         |       #
 |        ISD Core         |       |      parent-child
 | +-----+         +-----+ |       |      link
-| |AS A |©-------©|AS C | |       |
+| |AS A |c-------c|AS C | |       |
 | +-----+         +-----+ |       *
 |    #               #    |
-+----|---------------|----+   ©-------©  core link
++----|---------------|----+   c-------c  core link
      |               |
-     *               *        < - - - >  peering link
+     *               *        p - - - p  peering link
   +-----+         +-----+
-  |AS D |< - - - >|AS E |
+  |AS D |p - - - p|AS E |
   +-----+         +-----+
      #               #
      |               |
