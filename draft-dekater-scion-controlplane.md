@@ -358,13 +358,20 @@ SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
 | `0:0:0`          | 1           | The wildcard AS                                                             |
-| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                              |
-| `1:0:0-1:ffff:ffff`| ~4.3&nbsp;billion| Reserved for future use                                              |
-| `2:0:0-2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                              |
-| `3:0:0-feff:ffff:ffff`| ~280&nbsp;trillion| Reserved for future use                                              |
-| `ff00:0:0-ff00:0:ffff`| 65535      | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ffaa:0:0-ffaa:00ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
-| `ffaa:0100:0-ffff:ffff:fffe`| ~369&nbsp;billion| Reserved for future use                                     |
+| `0:0:1 -
+0:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                              |
+| `1:0:0 -
+1:ffff:ffff`| ~4.3&nbsp;billion| Reserved for future use                                              |
+| `2:0:0 -
+2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                              |
+| `3:0:0 -
+feff:ffff:ffff`| ~280&nbsp;trillion| Reserved for future use                                              |
+| `ff00:0:0 -
+ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}). |
+| `ffaa:0:0 -
+ffaa:00ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffaa:0100:0 -
+ffff:ffff:fffe`| ~369&nbsp;billion| Reserved for future use                                     |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
 
