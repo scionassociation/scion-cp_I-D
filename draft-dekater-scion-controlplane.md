@@ -280,7 +280,7 @@ A path can contain at most one peering link shortcut which means they can only b
 ~~~~
 {: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
-Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} that is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
+Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} that is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes. 0 is not valid as an Interface ID.
 
 ## Routing
 
