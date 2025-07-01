@@ -363,8 +363,8 @@ SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place 
 | `2:0:0 - 2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                              |
 | `3:0:0 - feff:ffff:ffff`| ~280&nbsp;trillion| Reserved for future use                                              |
 | `ff00:0:0 - ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}). |
-| `ffaa:0:0 - ffaa:00ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
-| `ffaa:0100:0 - ffff:ffff:fffe`| ~369&nbsp;billion| Reserved for future use                                     |
+| `ffaa:0:0 - ffaa:ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `ffaa:100:0 - ffff:ffff:fffe`| ~369&nbsp;billion| Reserved for future use                                     |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
 
@@ -379,8 +379,7 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 The text representation of SCION AS numbers MUST be as follows:
 
 - Using big-endian hexadecimal notation in 3 groups of 4, in the range `0:0:0` to `ffff:ffff:ffff`.
-- Leading zeros in each group are omitted (e.g., `0:0:1`)
-- The `::` zero-compression feature of IPv6 MUST NOT be used.
+- Leading zeros in each group are omitted, with the exception that one zero must be notated if a group is entirely zeros (e.g., `0:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 - For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
 
