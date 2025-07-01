@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-29T00:28:06.084218+00:00",
+  "timestamp": "2025-07-01T00:28:45.793555+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -968,12 +968,13 @@
     {
       "number": 57,
       "id": "I_kwDOJx2-rs6Qjl2o",
-      "title": "MTU for reversed paths - clarifications",
+      "title": "MTU - clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/57",
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
+        "romshark",
         "jiceatscion"
       ],
       "labels": [
@@ -982,7 +983,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2025-06-27T08:06:13Z",
+      "updatedAt": "2025-06-30T08:20:47Z",
       "closedAt": null,
       "comments": [
         {
@@ -1632,7 +1633,7 @@
       ],
       "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [ ] Move section to a dedicated paragraph\n- [ ] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [ ] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [ ] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [ ] Explicitly indicate how the information is used.\n- [ ] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
       "createdAt": "2025-06-09T19:13:09Z",
-      "updatedAt": "2025-06-27T09:02:01Z",
+      "updatedAt": "2025-06-30T12:05:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -1655,6 +1656,13 @@
           "body": "Q: I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\n\nA: this is a tough one. Yes, that is what happens, but at the protocol level, SCION doesn't care. So it is the choice of the control service implementation to do that. The problem is that, as implemented, the CS expects the client to do that. I don't think it is actually able to process anything but resolution messages when receiving a QUIC/SCION connection packet. So, we'd have to describe the entire CS rpc protocol in excruciating details in order to be complete.\n",
           "createdAt": "2025-06-27T09:02:01Z",
           "updatedAt": "2025-06-27T09:02:01Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I spoke to @jiceatscion : JC says that the current implementation makes it up to you how you use it.  In the end, the connection on top of service addresses is just a QUIC connection. Today this is using QUIC redirection, which makes the address a service address.\n[Here](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/private/app/appnet/addr.go#L39) in the open source implementation:",
+          "createdAt": "2025-06-30T12:05:43Z",
+          "updatedAt": "2025-06-30T12:05:43Z"
         }
       ]
     },
@@ -1731,9 +1739,9 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "- [ ] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [x] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n- [x] https://github.com/scionassociation/scion-cppki_I-D/pull/68 from the PKI draft and replace it with cross  reference: `Table 1: ISD Number Allocations`\n- [ ] Devs: confirm that the right notation for ISD 65551 is `0:1:f` (which is what we have in the draft)\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
+      "body": "- [ ] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [x] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n- [x] https://github.com/scionassociation/scion-cppki_I-D/pull/68 from the PKI draft and replace it with cross  reference: `Table 1: ISD Number Allocations`\n- [x] Devs: confirm that the right notation for ISD 65551 is `0:1:f` (which is what we have in the draft)\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
       "createdAt": "2025-06-12T08:35:26Z",
-      "updatedAt": "2025-06-27T15:03:02Z",
+      "updatedAt": "2025-06-30T11:16:57Z",
       "closedAt": null,
       "comments": [
         {
@@ -1763,6 +1771,27 @@
           "body": "> Check that ISD-AS in the drafts follow the text representation rule (e.g. 4-0000:1:f does not)\n\nI went through all other drafts and I did not see any other misuse",
           "createdAt": "2025-06-27T14:39:09Z",
           "updatedAt": "2025-06-27T14:39:09Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Question for @katyatitkova : is the right notation for 65551 0000:1:f or 0:1:f or 1:f? What is the implementation using?\n\nThe implementation uses human-readable numbers for the lower 32-bit range: see [test](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/pkg/addr/isdas_test.go#L140) and [implementation](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/pkg/addr/fmt.go#L105). So, 65551 will be printed out as 65551. Both `0000:1:f` and `0:1:f` will be parsed (and `0:1:f` seems to be a more common option according to the tests), and `1:f` is not correct since the implementation expects that there will be three parts in the address.",
+          "createdAt": "2025-06-30T08:17:57Z",
+          "updatedAt": "2025-06-30T08:17:57Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot! What is used to write ASes in  certificates by the PKI?  I'd like to double check as this should match what we describe [here](https://www.ietf.org/archive/id/draft-dekater-scion-pki-09.html#name-isd-as-number-attribute). Right now we say `hex encoding with leading zeros omitted`",
+          "createdAt": "2025-06-30T08:31:25Z",
+          "updatedAt": "2025-06-30T08:31:25Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If I'm not mistaken, ISD-AS numbers are provided manually and then are being verified and written as-is. The validation code is [here](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/pkg/scrypto/cppki/certs.go#L548), and it expects AS number to be formatted in the same manner as the implementation from the link above does. So it looks like 65551 should still be 65551 and not 0:1:f. @jiceatscion did I miss something?",
+          "createdAt": "2025-06-30T11:16:57Z",
+          "updatedAt": "2025-06-30T11:16:57Z"
         }
       ]
     },
@@ -1913,7 +1942,7 @@
       ],
       "body": "- [ ] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [ ] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```\n\nQuestion by Alvaro: \n`ingress interface identifier MUST NOT be specified`: What value should be used on the Ingress field?  0?",
       "createdAt": "2025-06-25T10:30:52Z",
-      "updatedAt": "2025-06-27T10:11:02Z",
+      "updatedAt": "2025-06-30T18:24:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -1922,6 +1951,13 @@
           "body": "According to @jiceatscion each AS administers its interface IDs. Each AS could use any non-existent value as the \"unspecified\" ID, without coordinating with other ASes. So there is no need to coordinate this for interop.\nHowever, we also we say in the DP spec: `Interface ID 0 is not a valid identifier as implementations MAY use it as the \"unspecified\" value.`\n",
           "createdAt": "2025-06-27T10:09:32Z",
           "updatedAt": "2025-06-27T10:09:32Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've clarified this in both the CP and DP drafts.",
+          "createdAt": "2025-06-30T18:24:31Z",
+          "updatedAt": "2025-06-30T18:24:31Z"
         }
       ]
     },
@@ -1939,9 +1975,9 @@
         "editorial",
         "needs-discussion"
       ],
-      "body": "Relates to  #90 \n\n- [ ] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
+      "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-06-25T13:41:25Z",
+      "updatedAt": "2025-06-30T16:49:52Z",
       "closedAt": null,
       "comments": []
     },
@@ -1963,7 +1999,7 @@
       ],
       "body": "Section 1.5.1 - ISD numbers\n\nShould the ranges be 64-4095 and 4096-65535?\n\nThe first 12-bits provide 4096 numbers, which if starting from zero means the last number in the range should be 4095 rather than 4094. This would mean the range above should start at 4096. \n\nSection 1.5.5 - Special-Purpose SCION AS Numbers\n\nThis section is confused. I think it may already have been moved into Section 1.5.2 \"SCION AS numbers\" in a pending PR, but I think this should simply be called 'SCION AS number allocations'. \n\nThe ranges of Public AS numbers are not special purpose. \n\nThe allocations have large gaps in the address space - assume these are reserved for future use, but should they be documented as with the reserved ISD numbers? See https://docs.google.com/spreadsheets/d/1p-Qdon6umxY6mVaoPU062NvSxkoeFVW_ulM2ZvwtVyk/\n",
       "createdAt": "2025-06-26T13:16:40Z",
-      "updatedAt": "2025-06-27T15:32:09Z",
+      "updatedAt": "2025-06-30T17:59:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -1979,6 +2015,20 @@
           "body": "> This section is confused. I think it may already have been moved into Section 1.5.2 \"SCION AS numbers\" in a pending PR, but I think this should simply be called 'SCION AS number allocations'.\n\nAgreed, I changed it in #115 directly",
           "createdAt": "2025-06-27T15:32:09Z",
           "updatedAt": "2025-06-27T15:32:09Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We agreed to remove ISD 4095. @shitz wrote on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1751269944894259?thread_ts=1751037993.236509&cid=C8ADA9CEP): \n>  honestly don't remember anymore. I could imagine that we wanted to have a \"canary\" value 0b111111111111 to mark the end of the range or to have it reserved for any special future use, e.g., much like 255.255.255.255 is the broadcast address for the current network.\nI'm aware that all of this sounds very superficial and given that the max ISD is 2^16-1 having this reserved number in the middle doesn't make a lot of sense, i.e., I wouldn't know how to defend it in a draft. Maybe we should just drop this.",
+          "createdAt": "2025-06-30T09:47:37Z",
+          "updatedAt": "2025-06-30T09:47:37Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've added the reserved ranges to the SCION AS table, plus the full address range to improve readability.",
+          "createdAt": "2025-06-30T17:59:52Z",
+          "updatedAt": "2025-06-30T17:59:52Z"
         }
       ]
     },
@@ -9208,13 +9258,13 @@
       "labels": [],
       "body": "Addresses #104 \r\nAddresses #114\r\nContributes to #113 on links and paths\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/New_Diagrams/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-27T16:51:31Z",
+      "updatedAt": "2025-06-30T17:39:11Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
+      "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "77fa2b383fcc9610b7d1a6b4d4e143bc78294423",
+      "headRefOid": "9cb829d26c5f020e49e9cf41e181610cb95a3cba",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9349,6 +9399,46 @@
               "updatedAt": "2025-06-27T13:28:41Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xJOXn",
+          "commit": {
+            "abbreviatedOid": "81f4869"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-30T16:51:54Z",
+          "updatedAt": "2025-06-30T16:51:54Z",
+          "comments": [
+            {
+              "originalPosition": 431,
+              "body": " Now added",
+              "createdAt": "2025-06-30T16:51:54Z",
+              "updatedAt": "2025-06-30T16:51:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xJQ9d",
+          "commit": {
+            "abbreviatedOid": "81f4869"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-30T16:54:08Z",
+          "updatedAt": "2025-06-30T16:54:08Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "I think this is now addressed.",
+              "createdAt": "2025-06-30T16:54:08Z",
+              "updatedAt": "2025-06-30T16:54:08Z"
+            }
+          ]
         }
       ]
     },
@@ -9467,6 +9557,58 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 123,
+      "id": "PR_kwDOJx2-rs6cvmxW",
+      "title": "Updated SCION AS table",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/123",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Added full address ranges and reserved space",
+      "createdAt": "2025-06-30T17:57:43Z",
+      "updatedAt": "2025-06-30T18:07:59Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "SCION_AS_Table",
+      "headRefOid": "95a24089e40039ffb28f819a2bdd1712f4aaa447",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 124,
+      "id": "PR_kwDOJx2-rs6cvyEl",
+      "title": "Update Interface ID",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/124",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-30T18:20:07Z",
+      "updatedAt": "2025-06-30T18:20:08Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Interface-ID",
+      "headRefOid": "01e70c88a1db2410da2285a08c021762448cd6ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
