@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 January 2026                                          S. Hitz
+Expires: 2 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                            30 June 2025
+                                                             1 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2026.
+   This Internet-Draft will expire on 2 January 2026.
 
 Copyright Notice
 
@@ -607,11 +607,11 @@ Table of Contents
     |                |               | [RFC5398]).                   |
     +----------------+---------------+-------------------------------+
     | ffaa:0:0 -     | ~16.8 million | Reserved for private use      |
-    | ffaa:00ff:ffff |               | (analogous to [RFC6996]).     |
+    | ffaa:ff:ffff   |               | (analogous to [RFC6996]).     |
     |                |               | These numbers can be used for |
     |                |               | testing/private deployments.  |
     +----------------+---------------+-------------------------------+
-    | ffaa:0100:0 -  | ~369 billion  | Reserved for future use       |
+    | ffaa:100:0 -   | ~369 billion  | Reserved for future use       |
     | ffff:ffff:fffe |               |                               |
     +----------------+---------------+-------------------------------+
     | ffff:ffff:ffff | 1             | Reserved                      |
@@ -633,9 +633,9 @@ Table of Contents
    *  Using big-endian hexadecimal notation in 3 groups of 4, in the
       range 0:0:0 to ffff:ffff:ffff.
 
-   *  Leading zeros in each group are omitted (e.g., 0:0:1)
-
-   *  The :: zero-compression feature of IPv6 MUST NOT be used.
+   *  Leading zeros in each group are omitted, with the exception that
+      one zero must be notated if a group is entirely zeros (e.g.,
+      0:0:1).  The :: zero-compression feature of IPv6 MUST NOT be used.
 
    *  A range of AS numbers can be shortened with a notation similar to
       the one used for CIDR IP ranges ([RFC4632]).  For example, the
