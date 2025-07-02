@@ -606,6 +606,9 @@ Table of Contents
    | ff00:0:ffff    |               | sample code (analogous to       |
    |                |               | [RFC5398])                      |
    +----------------+---------------+---------------------------------+
+   | ff00:1:0 -     | ~730 billion  | Unallocated                     |
+   | ffa9:ffff:ffff |               |                                 |
+   +----------------+---------------+---------------------------------+
    | ffaa:0:0 -     | ~16.8 million | Reserved for private use        |
    | ffaa:ff:ffff   |               | (analogous to [RFC6996]) -      |
    |                |               | these numbers can be used for   |
