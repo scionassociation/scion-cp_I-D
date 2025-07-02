@@ -546,18 +546,18 @@ Table of Contents
      +==============+================================================+
      | ISD          | Description                                    |
      +==============+================================================+
-     | 0            | The wildcard ISD.                              |
+     | 0            | The wildcard ISD                               |
      +--------------+------------------------------------------------+
      | 1 - 15       | Reserved for documentation and sample code     |
      |              | (analogous to [RFC5398]).                      |
      +--------------+------------------------------------------------+
-     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |
+     | 16 - 63      | Private use (analogous to [RFC6996]) - can be  |
      |              | used for testing and private deployments       |
      +--------------+------------------------------------------------+
-     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |
-     |              | order, without gaps and "vanity" numbers.      |
+     | 64 - 4094    | Public ISDs - should be allocated in ascending |
+     |              | order, without gaps and "vanity" numbers       |
      +--------------+------------------------------------------------+
-     | 4095 - 65535 | Reserved for future use.                       |
+     | 4095 - 65535 | Unallocated                                    |
      +--------------+------------------------------------------------+
 
                       Table 1: ISD number allocations
@@ -585,37 +585,37 @@ Table of Contents
 
 1.5.2.2.  SCION AS numbers
 
-    +================+===============+===============================+
-    | AS             | Size          | Description                   |
-    +================+===============+===============================+
-    | 0:0:0          | 1             | The wildcard AS               |
-    +----------------+---------------+-------------------------------+
-    | 0:0:1 -        | ~4.3 billion  | Public SCION AS numbers       |
-    | 0:ffff:ffff    |               |                               |
-    +----------------+---------------+-------------------------------+
-    | 1:0:0 -        | ~4.3 billion  | Reserved for future use       |
-    | 1:ffff:ffff    |               |                               |
-    +----------------+---------------+-------------------------------+
-    | 2:0:0 -        | ~4.3 billion  | Public SCION AS numbers       |
-    | 2:ffff:ffff    |               |                               |
-    +----------------+---------------+-------------------------------+
-    | 3:0:0 -        | ~280 trillion | Reserved for future use       |
-    | feff:ffff:ffff |               |                               |
-    +----------------+---------------+-------------------------------+
-    | ff00:0:0 -     | 65536         | Reserved for documentation    |
-    | ff00:0:ffff    |               | and sample code (analogous to |
-    |                |               | [RFC5398]).                   |
-    +----------------+---------------+-------------------------------+
-    | ffaa:0:0 -     | ~16.8 million | Reserved for private use      |
-    | ffaa:ff:ffff   |               | (analogous to [RFC6996]).     |
-    |                |               | These numbers can be used for |
-    |                |               | testing/private deployments.  |
-    +----------------+---------------+-------------------------------+
-    | ffaa:100:0 -   | ~369 billion  | Reserved for future use       |
-    | ffff:ffff:fffe |               |                               |
-    +----------------+---------------+-------------------------------+
-    | ffff:ffff:ffff | 1             | Reserved                      |
-    +----------------+---------------+-------------------------------+
+   +================+===============+=================================+
+   | AS             | Size          | Description                     |
+   +================+===============+=================================+
+   | 0:0:0          | 1             | The wildcard AS                 |
+   +----------------+---------------+---------------------------------+
+   | 0:0:1 -        | ~4.3 billion  | Public SCION AS numbers         |
+   | 0:ffff:ffff    |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | 1:0:0 -        | ~4.3 billion  | Unallocated                     |
+   | 1:ffff:ffff    |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | 2:0:0 -        | ~4.3 billion  | Public SCION AS numbers         |
+   | 2:ffff:ffff    |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | 3:0:0 -        | ~280 trillion | Unallocated                     |
+   | feff:ffff:ffff |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | ff00:0:0 -     | 65536         | Reserved for documentation and  |
+   | ff00:0:ffff    |               | sample code (analogous to       |
+   |                |               | [RFC5398])                      |
+   +----------------+---------------+---------------------------------+
+   | ffaa:0:0 -     | ~16.8 million | Reserved for private use        |
+   | ffaa:ff:ffff   |               | (analogous to [RFC6996]) -      |
+   |                |               | these numbers can be used for   |
+   |                |               | testing and private deployments |
+   +----------------+---------------+---------------------------------+
+   | ffaa:100:0 -   | ~369 billion  | Unallocated                     |
+   | ffff:ffff:fffe |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | ffff:ffff:ffff | 1             | Reserved                        |
+   +----------------+---------------+---------------------------------+
 
                       Table 2: AS number allocations
 
