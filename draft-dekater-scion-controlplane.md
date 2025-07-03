@@ -1090,7 +1090,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 </artset>
 </figure>
 
-The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. To prevent forgery, this information is authenticated with a message authentication code (MAC) which will be checked by the SCION border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.
+The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Plane of an AS to authenticate path segments with its border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.
 
 Control Service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.dekater-scion-dataplane}}. This document does not specify any further mechanism to coordinate this choice between Control Services and routers of one AS.
 
@@ -1217,15 +1217,16 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 ### Configuration {#configuration}
 
-For the purpose of constructing and propagating path segments, an AS Control Service MUST be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
+For the purpose of constructing and propagating path segments, an AS Control Service is configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
-In addition, the maximum MTU supported by all intra-AS links MAY be configured.
-Last, the AS SHOULD adopt a PCB selection policy that it does not accidentally isolate the AS from the network, i.e., such that it does not block connectivity to parent providers and that ensures downstream connectivity for children. For more details, see [](#selection).
+The maximum MTU supported by all intra-AS links MAY also be configured.
+
+The AS SHOULD adopt a PCB selection policy so that it does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1238,7 +1239,7 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-36}}.
 2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
 3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
-4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
+4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
 
@@ -1252,22 +1253,21 @@ Current practice is to retain all PCBs until expired or replaced by one describi
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
-Only a relatively small subset of the viable PCBs SHOULD be propagated to avoid excessive overhead of the path discovery system in bigger networks. The goal of the AS SHOULD be to propagate those candidate PCBs with the highest probability of collectively meeting the needs of the endpoints that will perform path construction.
+In order to avoid excessive overhead on the path discovery system in bigger networks, an AS SHOULD only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction.
 
 As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:
 
 - AS path length: from the originator core AS to the child (non-core) AS.
 - Expiration time: the maximum value for the expiration time when extending the segment.
-- ISD or AS blacklists: certain ASes or ISD that may not appear in a segment.
+- ISD or AS exclusion lists: certain ASes or ISD that may not appear in a segment.
 - ISD loops: if permitted, they allow core AS to reach other core ASes in the same ISD via a third party ISDs.
 - Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
 - Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
 
-The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. The beacon that has the highest disjointness score and is not the shortest path SHOULD be selected. If this is not better than what has already been selected, then the beacon with the shortest path yet to be selected SHOULD be chosen instead.
+The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
 
 A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
-
 
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
@@ -1304,12 +1304,8 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 The propagation process in intra-ISD beaconing includes the following steps:
 
 1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
-2. The Control Service adds a new AS entry to every selected PCB which MUST at least include:
-   - The ingress interface to this AS, in the Hop Field component.
-   - The egress interface to the neighboring AS, also in the Hop Field component.
-   - The ISD_AS number of the next AS, in the signed body component of the AS entry.
-   - If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry; one peer entry component for each peering link that the AS wants to advertise. The Hop Field component of each added peer entry MUST have a specified egress interface.
-3. The Control Service MUST now sign each selected, extended PCB and append the computed signature.
+2. The Control Service MUST add a new AS entry (see [](#as-entry)), including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
+3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
 
 #### Propagation of PCBs in Core Beaconing
@@ -1317,7 +1313,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
 The propagation process in core beaconing includes the following steps:
 
 1. The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.
-2. The service adds a new AS entry to every selected PCB which MUST at least include:
+2. The service adds a new AS entry to every selected PCB which MUST at include:
    - The egress interface to the neighboring core AS in the Hop Field component.
    - The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.
 3. The core Control Service MUST sign the extended PCBs and append the computed signature.
