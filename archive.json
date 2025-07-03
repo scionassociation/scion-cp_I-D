@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-01T00:28:45.793555+00:00",
+  "timestamp": "2025-07-03T00:24:59.819835+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -983,7 +983,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2025-06-30T08:20:47Z",
+      "updatedAt": "2025-07-02T16:17:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -1020,6 +1020,13 @@
           "body": "Yeah, good point. I propose to clarify it along the following lines:\n\n \"ingress interface MTU\" means the MTU of that interface in both directions (which should be defined as the least of the MTU in either directions). It is the interface that is \"ingress\" not the MTU. The term \"ingress interface in construction direction\" is just a way to designate the interface relative to the path. Not the direction of traffic.",
           "createdAt": "2025-06-27T08:06:13Z",
           "updatedAt": "2025-06-27T08:06:13Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Other feedback from Alvaro: \n\n\n...\n> > 1659 In addition, the maximum MTU supported by all intra-AS links MAY be\n> > 1660 configured. Last, the AS SHOULD adopt a PCB selection policy that it\n> > 1661 does not accidentally isolate the AS from the network, i.e., such\n> > 1662 that it does not block connectivity to parent providers and that\n> > 1663 ensures downstream connectivity for children. For more details, see\n> > 1664 Section 2.3.3.\n> >\n> > [] \"MTU...MAY be configured\"\n> >\n> > This Normative statement contradicts the specifications in \u00a72.2.* where it \n> > says that it is \"implementation dependent\u201d.\n> \n> In 2.2 we say: \"How the control service obtains the MTU of an inter-AS link \n> is implementation dependent. It may be discovered or configured. Current\n> practice to make it a configuration item.\u201d. I think this is not contradicting\n> with \"MTU...MAY be configured\u201d. What we wanted to convey there is that\n> configuring the MTU is optional, as an operator could leverage some form of\n> discovery, or pre configure it.\n\nRight.  My point is that rfc2119 talks about using Normative language when the action is important for interoperability.  In this case, because the nodes can do anything (\"implementation dependent\"), there's not really an option.  If there was an option, it would be between configuring and what?  Even if \u00a72.2 mentions \"discovered or configured\", it is not enforcing/requiring one or the other.\n\n[Sorry, just being extra picky on Normative language stuck with me from my AD days...]\n",
+          "createdAt": "2025-07-02T16:17:16Z",
+          "updatedAt": "2025-07-02T16:17:16Z"
         }
       ]
     },
@@ -1095,7 +1102,7 @@
       "id": "I_kwDOJx2-rs6Y82gT",
       "title": "gRPC API - remove duplicated definitions in appendix",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/67",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1106,8 +1113,8 @@
       ],
       "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2024-10-08T08:29:56Z",
-      "closedAt": "2024-10-08T08:29:56Z",
+      "updatedAt": "2025-07-02T16:20:40Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "jiceatscion",
@@ -1122,6 +1129,13 @@
           "body": "I tried my best. Probably missed a spot or two.\r\nThere weren't many opportunities to reference the appendix. Most places had enough documentation in-line.\r\nI couldn't remember if there was anything missing from the appendix. Was there?",
           "createdAt": "2024-10-04T16:59:58Z",
           "updatedAt": "2024-10-04T16:59:58Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Reopening this because in #125 I bumped into some oddities that are partially due to duplicated definitions. Before remembering of this issue, I even re-analyzed the draft for duplicates, highlighted: [SCION Control Plane-08-grpc.pdf](https://github.com/user-attachments/files/21021922/SCION.Control.Plane-08-grpc.pdf)\n\nI will also ask Alvaro what he thinks about removing duplicates..",
+          "createdAt": "2025-07-02T16:20:40Z",
+          "updatedAt": "2025-07-02T16:20:40Z"
         }
       ]
     },
@@ -1482,7 +1496,7 @@
       "id": "I_kwDOJx2-rs6w7tdb",
       "title": "Add SVG figures and small corrections",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/104",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1494,22 +1508,22 @@
       ],
       "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-06-24T19:23:39Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-02T15:25:00Z",
+      "closedAt": "2025-07-02T15:23:48Z",
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Small issues reported by Alvaro: \n### Number figures \n```\n800 2.1.3.  PCB Propagation - Illustrated Examples\n...\n807   In Figure 2 below, core AS X sends the two different PCBs \"a\" and \"b\"\n808   via two different links to child AS Y: PCB \"a\" leaves core AS X via\n809   egress interface \"2\", whereas PCB \"b\" is sent over egress interface\n810   \"1\".  Core AS X adds the respective egress information to the PCBs\n811   when sending them off, as can be seen in the figure (the entries\n812   \"_Core - Out:2_\" and \"_Core - Out:1_\", respectively).\n```\n>  As shown later in Figure 3, it should be \"Core X - Out:2\" and \"Core X -\nOut:1\".\n\n### Protobuf & figures - order\n>  I'm not sure if the order of the elements in Protobuf matters...but the\ndescription doesn't follow the same order as the figure.  For the reader,\nit would be better if the order were the same.  This is especially\nimportant given the field names in the figures and the names of the\ninformation in Protobuf are not the same (for example, \"Unsigned Ext.\" vs\n\"PathSegmentUnsignedExtensions\").\n\n\n###   AS Entry Signed Component\n```\n1170         +------------------------------------------------------+\n1171         |                   Signed AS Entry                    |\n1172         +------------------------------------------------------+\n1173         *- - - - - - - - - - - - -#- - - - - - - - - - - - - - *\n1174                                   |\n1175                                   |\n1176 *- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - -*\n1177 +--------------------+-----------------+------------------------------+\n1178 |      Header        |     Body        |            Signature         |\n1179 +--------------------+-----------------+------------------------------+\n```\n> The order shown here is different than what is shown in Figure 6.\n\n\n###  2.2.1.4.1.  AS Entry Signed Header\n```\n1225              +-----------------+\n1226              |     Header      |\n1227              +-----------------+\n1228              *- - - - # - - - -*\n1229                       |\n1230    - - - - - - - - - -v- - - - - - - - - *\n1231   +----------------+---------------------+\n1232   | Signature Alg. | Verification Key ID |\n1233   +----------------+---------------------+\n1234                    *- - - - - # - - - - -*\n1235                               |\n1236    - - - - - - - - - - - - - -v- - - - - - - - - -\n1237   +---------+---------+------------+--------------+\n1238   | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|\n1239   +---------+---------+------------+--------------+\n```\n```\n1255      message Header {\n1256          SignatureAlgorithm signature_algorithm = 1;\n1257          bytes verification_key_id = 2;\n1258          // Optional\n1259          google.protobuf.Timestamp timestamp = 3;\n1260          // Optional\n1261          bytes metadata = 4;\n1262          int32 associated_data_length = 5;\n1263      }\n```\n> If I'm reading this correctly...the optional fields are not represented\nin the figures.\n\n- [ ] Also introduce a notion of associated_data (now the value is there in protobuf, bot not introduced)\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n- [x] Also fix the header in figure 6 (fields are missing there too)\n```\n                                                 |\n*- - - - - - - - - - - - - - - - - - - - - - - - v - - - - - - - - - - *\n+--------------------+-----------------++------------------------------+\n|     Signature      |    Header       ||                    Body      |\n+--------------------+-----------------++------------------------------+\n                     *- - - - # - - - -**- - - - - - - - # - - - - - - *\n                              |                          |\n*- - - - - - - - - - - - - - -v- - - - *                 |\n+----------------+---------------------+                 |\n| Signature Alg. | Verification Key ID |                 |\n+----------------+---------------------+                 |\n```\n\n\n",
+          "body": "Small issues reported by Alvaro: \n### Number figures \n```\n800 2.1.3.  PCB Propagation - Illustrated Examples\n...\n807   In Figure 2 below, core AS X sends the two different PCBs \"a\" and \"b\"\n808   via two different links to child AS Y: PCB \"a\" leaves core AS X via\n809   egress interface \"2\", whereas PCB \"b\" is sent over egress interface\n810   \"1\".  Core AS X adds the respective egress information to the PCBs\n811   when sending them off, as can be seen in the figure (the entries\n812   \"_Core - Out:2_\" and \"_Core - Out:1_\", respectively).\n```\n>  As shown later in Figure 3, it should be \"Core X - Out:2\" and \"Core X -\nOut:1\".\n\n### Protobuf & figures - order\n>  I'm not sure if the order of the elements in Protobuf matters...but the\ndescription doesn't follow the same order as the figure.  For the reader,\nit would be better if the order were the same.  This is especially\nimportant given the field names in the figures and the names of the\ninformation in Protobuf are not the same (for example, \"Unsigned Ext.\" vs\n\"PathSegmentUnsignedExtensions\").\n\n\n###   AS Entry Signed Component\n```\n1170         +------------------------------------------------------+\n1171         |                   Signed AS Entry                    |\n1172         +------------------------------------------------------+\n1173         *- - - - - - - - - - - - -#- - - - - - - - - - - - - - *\n1174                                   |\n1175                                   |\n1176 *- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - -*\n1177 +--------------------+-----------------+------------------------------+\n1178 |      Header        |     Body        |            Signature         |\n1179 +--------------------+-----------------+------------------------------+\n```\n> The order shown here is different than what is shown in Figure 6.\n\n\n###  2.2.1.4.1.  AS Entry Signed Header\n```\n1225              +-----------------+\n1226              |     Header      |\n1227              +-----------------+\n1228              *- - - - # - - - -*\n1229                       |\n1230    - - - - - - - - - -v- - - - - - - - - *\n1231   +----------------+---------------------+\n1232   | Signature Alg. | Verification Key ID |\n1233   +----------------+---------------------+\n1234                    *- - - - - # - - - - -*\n1235                               |\n1236    - - - - - - - - - - - - - -v- - - - - - - - - -\n1237   +---------+---------+------------+--------------+\n1238   | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|\n1239   +---------+---------+------------+--------------+\n```\n```\n1255      message Header {\n1256          SignatureAlgorithm signature_algorithm = 1;\n1257          bytes verification_key_id = 2;\n1258          // Optional\n1259          google.protobuf.Timestamp timestamp = 3;\n1260          // Optional\n1261          bytes metadata = 4;\n1262          int32 associated_data_length = 5;\n1263      }\n```\n> If I'm reading this correctly...the optional fields are not represented\nin the figures.\n\n- [ ] ~Also introduce a notion of associated_data (now the value is there in protobuf, bot not introduced)~\n   https://github.com/scionassociation/scion-cp_I-D/issues/125 \n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n- [x] Also fix the header in figure 6 (fields are missing there too)\n```\n                                                 |\n*- - - - - - - - - - - - - - - - - - - - - - - - v - - - - - - - - - - *\n+--------------------+-----------------++------------------------------+\n|     Signature      |    Header       ||                    Body      |\n+--------------------+-----------------++------------------------------+\n                     *- - - - # - - - -**- - - - - - - - # - - - - - - *\n                              |                          |\n*- - - - - - - - - - - - - - -v- - - - *                 |\n+----------------+---------------------+                 |\n| Signature Alg. | Verification Key ID |                 |\n+----------------+---------------------+                 |\n```\n\n\n",
           "createdAt": "2025-06-12T09:10:35Z",
-          "updatedAt": "2025-06-19T14:42:49Z"
+          "updatedAt": "2025-07-02T15:23:46Z"
         },
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Other pending point that I forgot to include:\n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n\n> What is the format?  What does \"per-protocol\" mean?\n\nI'd also leave the issue open until merged.",
+          "body": "Other pending point that I forgot to include:\n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n\n> What is the format?  What does \"per-protocol\" mean?\n\nI'd also leave the issue open until merged.\n\nUpdate: this is also its own issue: \nhttps://github.com/scionassociation/scion-cp_I-D/issues/107",
           "createdAt": "2025-06-24T19:23:39Z",
-          "updatedAt": "2025-06-24T19:23:39Z"
+          "updatedAt": "2025-07-02T15:25:00Z"
         }
       ]
     },
@@ -1741,7 +1755,7 @@
       ],
       "body": "- [ ] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [x] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n- [x] https://github.com/scionassociation/scion-cppki_I-D/pull/68 from the PKI draft and replace it with cross  reference: `Table 1: ISD Number Allocations`\n- [x] Devs: confirm that the right notation for ISD 65551 is `0:1:f` (which is what we have in the draft)\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
       "createdAt": "2025-06-12T08:35:26Z",
-      "updatedAt": "2025-06-30T11:16:57Z",
+      "updatedAt": "2025-07-01T14:56:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -1792,6 +1806,27 @@
           "body": "If I'm not mistaken, ISD-AS numbers are provided manually and then are being verified and written as-is. The validation code is [here](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/pkg/scrypto/cppki/certs.go#L548), and it expects AS number to be formatted in the same manner as the implementation from the link above does. So it looks like 65551 should still be 65551 and not 0:1:f. @jiceatscion did I miss something?",
           "createdAt": "2025-06-30T11:16:57Z",
           "updatedAt": "2025-06-30T11:16:57Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Regarding the certificate format, I agree; it looks like the validation code want the decimal representation.\n\nLooks like we are not being quite prescriptive enough in the CP draft. I would suggest making a decision about the 0-65535 decimal representation and spelling it out. I remember writing the \"For historical reasons... <decimal repr allowed>.\" phrase. It was probably a mistake to not make a clear decision about whether that was a \"canonical form\" or not.\n\nThe PKI drafts mentions a \"Canonical form\", but it is canonical only in that doc.\n\nMy suggestions to address Alvaro's concerns:\n* Clarify which is the canonical representation; decimal allowed or not. We must chose. I would prefer that the decimal representation be non-canonical, but it might be too late to change it because of existing certs and cert verification/generation code.\n* Possibly indicate where the non-canonical form is allowed, if anywhere. At least mention the PKI draft and the certificates as a place where only the canonical form is allowed.\n* Clarify that the leading zeros suppression still must leave one 0; this isn't self evident.\n* Make sure that we use the canonical representation everywhere in the drafts that calls for a canonical representation.\n* Specify in the PKI draft where the definition of \"Canonical representation\" is and remove it for the PKI draft itself.\n",
+          "createdAt": "2025-07-01T10:05:59Z",
+          "updatedAt": "2025-07-01T10:05:59Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've clarified the leading zeros in the section about SCION AS numbers.",
+          "createdAt": "2025-07-01T14:54:27Z",
+          "updatedAt": "2025-07-01T14:54:27Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Is the canonical representation the one now in Section 1.5.2.2 (see https://scionassociation.github.io/scion-cp_I-D/SCION_AS_Table/draft-dekater-scion-controlplane.html)\n",
+          "createdAt": "2025-07-01T14:56:12Z",
+          "updatedAt": "2025-07-01T14:56:12Z"
         }
       ]
     },
@@ -1942,7 +1977,7 @@
       ],
       "body": "- [ ] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [ ] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```\n\nQuestion by Alvaro: \n`ingress interface identifier MUST NOT be specified`: What value should be used on the Ingress field?  0?",
       "createdAt": "2025-06-25T10:30:52Z",
-      "updatedAt": "2025-06-30T18:24:31Z",
+      "updatedAt": "2025-07-02T09:43:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -1958,6 +1993,13 @@
           "body": "I've clarified this in both the CP and DP drafts.",
           "createdAt": "2025-06-30T18:24:31Z",
           "updatedAt": "2025-06-30T18:24:31Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": ">  Each AS could use any non-existent value as the \"unspecified\" ID, without coordinating with other ASes. \n\n@jiceatscion this value still needs to be coordinated between different implementations running within an AS. I don't see the benefit of leaving this as a value to be configured by the operator. Could we just fix it in the spec to 0? This would make it a lot easier in terms of vendor interoperability\n\nCC: @shitz @oncilla ",
+          "createdAt": "2025-07-02T09:43:31Z",
+          "updatedAt": "2025-07-02T09:43:31Z"
         }
       ]
     },
@@ -2067,6 +2109,25 @@
       "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n[] Should the conditions in this paragraph be described using Normative language?\n",
       "createdAt": "2025-06-26T16:28:10Z",
       "updatedAt": "2025-06-26T16:28:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 125,
+      "id": "I_kwDOJx2-rs6-g5yz",
+      "title": "Clarify associated_data and PCB signing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/125",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "Prio 2"
+      ],
+      "body": "- [ ] Clarify the purpose of associated_data (now the value is there in protobuf, but not introduced)\n\n\n#### Comments from Alvaro:\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n\n#### Some thoughts:\n\nThe figure in [2.2.1.4.3.  AS Entry Signature](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#sign) is not right. It contains the text below, which comes from a [comment in the segment definition](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/proto/control_plane/v1/seg.proto#L108): \n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n\nassociated_data(ps, i) = ps.segment_info ||\n                         ps.as_entries[1].signed.header_and_body ||\n                         ps.as_entries[1].signed.signature ||\n                         ...\n                         ps.as_entries[i-1].signed.header_and_body ||\n                         ps.as_entries[i-1].signed.signature\n```\n\nThe problems I see with this are:\n\n- [ ] Check that the code corresponds to what the code actually does in terms of signature calculation \n- [ ] `header_and_body` is explained, but its content is not specified in protobuf\n- [ ] `message ASEntry` in protobuf is defined twice, once in [2.2.1.3. AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.3)[AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry) and once in [Figure 20](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-control-service-grpc-api-si) in the appendix.",
+      "createdAt": "2025-07-02T15:22:20Z",
+      "updatedAt": "2025-07-02T15:59:47Z",
       "closedAt": null,
       "comments": []
     }
@@ -9251,24 +9312,26 @@
       "id": "PR_kwDOJx2-rs6YmBLa",
       "title": "New diagrams - overhaul",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/108",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses #104 \r\nAddresses #114\r\nContributes to #113 on links and paths\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/New_Diagrams/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-06-30T17:39:11Z",
+      "updatedAt": "2025-07-02T14:05:41Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "New_Diagrams",
       "headRefOid": "9cb829d26c5f020e49e9cf41e181610cb95a3cba",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-02T14:05:41Z",
+      "mergedAt": "2025-07-02T14:05:41Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "b8a5fe3f99eda89c355854c92649c589355098fb"
+      },
       "comments": [
         {
           "author": "knmeynell",
@@ -9439,6 +9502,19 @@
               "updatedAt": "2025-06-30T16:54:08Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xjcwN",
+          "commit": {
+            "abbreviatedOid": "9cb829d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-02T11:56:28Z",
+          "updatedAt": "2025-07-02T11:56:28Z",
+          "comments": []
         }
       ]
     },
@@ -9570,19 +9646,92 @@
       "labels": [],
       "body": "Added full address ranges and reserved space",
       "createdAt": "2025-06-30T17:57:43Z",
-      "updatedAt": "2025-06-30T18:07:59Z",
+      "updatedAt": "2025-07-02T10:16:03Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "SCION_AS_Table",
-      "headRefOid": "95a24089e40039ffb28f819a2bdd1712f4aaa447",
+      "headRefOid": "4e1d989a06d4caeaf634918d4fb4c793d198ac0d",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6xhIEZ",
+          "commit": {
+            "abbreviatedOid": "1720d7b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "See comments",
+          "createdAt": "2025-07-02T08:33:51Z",
+          "updatedAt": "2025-07-02T08:42:48Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "```suggestion\r\n- Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `0:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.\r\n```",
+              "createdAt": "2025-07-02T08:33:51Z",
+              "updatedAt": "2025-07-02T08:42:48Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\n| `ff00:0:0 - ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}). |\r\n| `ff00:1:0 - ffa9:ffff:ffff`| ~281&nbsp;trillion | Reserved |\r\n| `ffaa:0:0 - ffaa:ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |\r\n```\r\n\r\nI think you are missing one range here",
+              "createdAt": "2025-07-02T08:36:47Z",
+              "updatedAt": "2025-07-02T08:42:48Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "What is the difference between \"reserved for future use\" and Reserved (e.g. `ffff:ffff:ffff`)?\r\nShall we use \"unallocated\" instead of reserved? Because these spaces are actually unallocated, they are not truly reserved for anything.. ",
+              "createdAt": "2025-07-02T08:42:38Z",
+              "updatedAt": "2025-07-02T08:42:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xiSyB",
+          "commit": {
+            "abbreviatedOid": "1720d7b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-02T10:07:25Z",
+          "updatedAt": "2025-07-02T10:07:25Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "'Reserved for future use' was the terminology used in the ISD table. I've changed in both to 'Unallocated'.",
+              "createdAt": "2025-07-02T10:07:25Z",
+              "updatedAt": "2025-07-02T10:07:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xiYsc",
+          "commit": {
+            "abbreviatedOid": "1720d7b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-02T10:16:03Z",
+          "updatedAt": "2025-07-02T10:16:03Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "I've added this.",
+              "createdAt": "2025-07-02T10:16:03Z",
+              "updatedAt": "2025-07-02T10:16:03Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 124,
@@ -9594,9 +9743,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Resolves #118",
       "createdAt": "2025-06-30T18:20:07Z",
-      "updatedAt": "2025-06-30T18:20:08Z",
+      "updatedAt": "2025-07-02T08:44:04Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
