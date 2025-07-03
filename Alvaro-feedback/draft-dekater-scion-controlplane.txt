@@ -2059,7 +2059,8 @@ Table of Contents
    Note that link removal is not part of path discovery in SCION.  For
    scheduled removal of links, operators let path segments expire.  On
    link failures, endpoints route around the failed link by switching to
-   different paths in the data plane .
+   different paths in the data plane (see [I-D.dekater-scion-dataplane]
+   section "Handling Link Failures").
 
    To achieve scalability, SCION partitions ASes into ISDs and in an
    ideal topology the inter-ISD core network should be kept to a
