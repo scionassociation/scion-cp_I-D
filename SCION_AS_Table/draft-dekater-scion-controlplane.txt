@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 January 2026                                          S. Hitz
+Expires: 4 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                             2 July 2025
+                                                             3 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2026.
+   This Internet-Draft will expire on 4 January 2026.
 
 Copyright Notice
 
@@ -164,7 +164,7 @@ Table of Contents
    Acknowledgments
    Deployment Testing: SCIONLab
    Full Control Service gRPC API
-   SCION Data Plane use by the SCION Control Plane
+   Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-08
@@ -349,14 +349,15 @@ Table of Contents
 
 1.3.  Paths and Links
 
-   SCION routers and endpoints connect to each other via links.  A SCION
-   path between two endpoints essentially traverses one or more links.
+   SCION routers and endpoints connect to each other via links.  A link
+   refers to a physical or logical connection between two SCION nodes
+   (e.g., router or endpoint).  A SCION path between two endpoints
+   traverses one or more links.
 
    In SCION, Autonomous Systems (ASes) are organized into logical groups
-   called Isolation Domains or ISDs.  Each ISD consists of ASes that
-   span an area with a uniform trust environment (i.e. a common
-   jurisdiction).  An ISD is administered by a set of distinguished ASes
-   called core ASes.
+   called Isolation Domains or ISDs.  Each ISD consists of ASes that are
+   part of a uniform trust environment (i.e. a common jurisdiction) and
+   is administered by a set of distinguished ASes called core ASes.
 
    SCION distinguishes three types of links between ASes: (1) core
    links, (2) parent-child links, and (3) peering links.
@@ -374,19 +375,16 @@ Table of Contents
       paid) peering relationship.  They can be established between any
       two ASes (core or non-core) and can cross ISD boundaries.
 
-   These link types form the basis of the notion of "valley free" paths.
-   Valley free paths means that a child AS does not carry transit
-   traffic from a parent AS to another parent AS.
+   SCION paths are comprised of at most three path segments: an up
+   segment, traversing links from child to parent, then a core segment
+   consisting of core links, followed by a down segment traversing links
+   from parent to child.  Each path segment is established over one or
+   more links.
 
-   The SCION paths are always valley free, and consist of at most three
-   segments: an up segment, traversing links from child to parent, then
-   a core segment consisting of core links, followed by a down segment
-   traversing links from parent to child.  Peering links can be used as
-   "shortcuts" in an up-core-down path.
-
-   A path can contain at most one peering link shortcut which means they
-   can only be used in paths between ASes within the "customer cone" of
-   the ASes connected by the peering link.
+   SCION paths are always "valley free" whereby a child AS does not
+   carry transit traffic from a parent AS to another parent AS.  These
+   paths can contain at most one peering link which can be used as
+   shortcut between two path segments containing two peer ASes.
 
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
@@ -394,22 +392,22 @@ Table of Contents
    +-------------------------+
    |                         |       #
    |        ISD Core         |       |      parent-child
-   |  .---.           .---.  |       |      link
-   | (  A  )*-------*(  C  ) |       |
-   |  `-#-'           `-#-'  |       0
-   |    |               |    |
-   +----|---------------|----+   *-------*  core link
+   | +-----+         +-----+ |       |      link
+   | |AS A +c-------c+AS C | |       |
+   | +--+--+         +--+--+ |       *
+   |    #               #    |
+   +----|---------------|----+   c-------c  core link
         |               |
-        |               |        < - - - >  peering link
-      .-0-.           .-0-.
-     (  D  )< - - - >(  E  )
-      `-#-'           `-#-'
+        *               *        p-------p  peering link
+     +--+--+         +--+--+
+     |AS D +p-------p+AS E |
+     +--+--+         +--+--+
+        #               #
         |               |
-        |               |
-        |               |
-      .-0-.           .-0-.
-     (  G  )         (  F  )
-      `---'           `---'
+        *               *
+     +--+--+         +--+--+
+     |AS G |         |AS F |
+     +-----+         +-----+
 
       Figure 1: The three types of SCION links in one ISD.  Each node
                         in the figure is a SCION AS.
@@ -483,7 +481,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 21.
+      AS that sent the PCB through the API described in Figure 30.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -728,9 +726,9 @@ Table of Contents
    Appendix "Full Control Service gRPC API" provides the entire Control
    Service API definition in protobuf format.
 
-   Appendix "SCION Data Plane use by the SCION Control Plane" provides
-   details about the establishment of the underlying QUIC connections
-   through the data plane.
+   Appendix "Use of the SCION Data Plane" provides details about the
+   establishment of the underlying QUIC connections through the data
+   plane.
 
 2.  Path Exploration or Beaconing
 
@@ -820,20 +818,20 @@ Table of Contents
    when sending them off, as can be seen in the figure (the entries
    "_Core - Out:2_" and "_Core - Out:1_", respectively).
 
-                               +-------------+
-                               | Core AS X   |
-                               |             |
-                               |    2   1    |
-                               +----#---#----+
-             +--------+             |   |             +--------+
-             |PCB     |     +-----+ |   | +-----+     |PCB     |
-             |========|-----|PCB a| |   | |PCB b|=====|++++++++|
-             |Core    |     +-----+ |   | +-----+     |Core    |
-             |- Out:2 |        |    |   |    |        |- Out:1 |
-             +--------+        v    |   |    v        +--------+
-                                    v   v
-                               +----#---#----+
-                               |     AS Y    |
+                              +-------------+
+                              |  Core AS X  |
+                              |             |
+                              |    2   1    |
+                              +----+---+----+
+              +--------+           #   #           +--------+
+              | PCB a  |   +-----+ |   | +-----+   | PCB b  |
+              +========+ <-+PCB a| |   | |PCB b|-> +========+
+              | Core   |   +--+--+ |   | +--+--+   |Core    |
+              |- Out:2 |      |    |   |    │      |- Out:1 |
+              +--------+      v    |   |    v      +--------+
+                                   *   *
+                              +----+---+----+
+                              |    AS Y     |
 
        Figure 2: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
@@ -851,36 +849,36 @@ Table of Contents
 
                            +-----+ |   | +-----+
                            |PCB a| |   | |PCB b|
-                           +-----+ |   | +-----+
+                           +--+--+ |   | +--+--+
                               |    |   |    |
                               v    |   |    v
-           +-------------+         v   v
-           |             |    +----#---#----+    +-------------+
-           |             |    |    2   3    |    |             |
-           |    AS V     #- --# 1           |    |             |
-           |             |    |     AS Y    |    |    AS W     |
-           |             |    |           4 #- --#             |
-           +-------------+    |             |    |             |
-                              |    6   5    |    +-------------+
-               +--------+     +----#---#----+     +--------+
-               |PCB     |          |   |          |PCB     |
-               |========|          |   |          |========|
+                                   *   *
+          +-------------+     +----+---+----+     +-------------+
+          |             |     |    2   3    |     |             |
+          |             +p---p+ 1           |     |             |
+          |    AS V     |     |    AS Y     |     |    AS W     |
+          |             |     |           4 +p---p+             |
+          |             |     |    6   5    |     |             |
+          +-------------+     +----+---+----+     +-------------+
+               +--------+          #   #          +--------+
+               | PCB c  │          |   |          | PCB d  |
+               +========+          |   |          +========+
                |Core X  |          |   |          |Core X  |
                |- Out:2 |          |   |          |- Out:2 |
-   +--------+  |--------|  +-----+ |   | +-----+  |--------|  +--------+
-   |PCB     |  |AS Y    |--|PCB c| |   | |PCB d|--|AS Y    |  |PCB     |
-   |++++++++|  |-In:2   |  +-----+ |   | +-----+  |-In:2   |  |++++++++|
-   |Core X  |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core X  |
-   |- Out:1 |  |-PeerV:1|     v    |   |    v     |-PeerV:1|  |- Out:1 |
-   |--------|  |-PeerW:4|          |   |          |-PeerW:4|  |--------|
-   |AS Y    |  +--------+          |   |          +--------+  |AS Y    |
+   +--------+  +--------+   +-----+|   |+-----+   +--------+  +--------+
+   | PCB e  |  |AS Y    | <-|PCB c||   ||PCB d|-> |AS Y    |  | PCB f  │
+   +========+  |-In:2   |   +--+--+|   |+--+--+   |-In:2   |  +========+
+   |Core X  |  |-Out:6  |      |   |   |   |      |-Out:5  |  |Core X  |
+   |- Out:1 |  |-PeerV:1|      v   |   |   v      |-PeerV:1|  |- Out:1 |
+   +--------+  |-PeerW:4|          |   |          |-PeerW:4|  +--------+
+   |AS Y    |  +--------+.         |   |          +--------+  |AS Y    |
    |-In:3   |              +-----+ |   | +-----+              |-In:3   |
-   |-Out:6  |==============|PCB e| |   | |PCB f|==============|-Out:5  |
-   |-PeerV:1|              +-----+ |   | +-----+              |-PeerV:1|
+   |-Out:6  | <------------|PCB e| |   | |PCB f|------------> |-Out:5  |
+   |-PeerV:1|              +--+--+ |   | +--+--+              |-PeerV:1|
    |-PeerW:4|                 |    |   |    |                 |-PeerW:4|
    +--------+                 v    |   |    v                 +--------+
-                                   v   v
-                              +----#---#----+
+                                   *   *
+                              +----+---+----+
                               |    AS Z     |
 
        Figure 3: Intra-ISD PCB propagation from the ISD core to child
@@ -897,36 +895,36 @@ Table of Contents
 
                       +-----+      |   |      +-----+
                       |PCB c|      |   |      |PCB d|
-                      +-----+      |   |      +-----+
+                      +-+---+      |   |      +---+-+
                         |  +-----+ |   | +-----+  |
                         v  |PCB e| |   | |PCB f|  v
-                           +-----+ |   | +-----+
+                           +--+--+ |   | +--+--+
                               |    |   |    |
                               v    |   |    v
-                                   v   v
-                            +------#---#------+
-                            |      5   1      |
-                            |                 |
-                            | AS Z            |
-               +--------+   |        3        |   +--------+
-               |PCB     |   +--------#--------+   |PCB     |
-               |========|            |            |========|
-               |Core X  |            |            |Core X  |
-   +--------+  |- Out:2 |            |            |- Out:2 |  +--------+
-   |PCB     |  |--------|            |            |--------|  |PCB     |
-   |++++++++|  |AS Y    |            |            |AS Y    |  |++++++++|
-   |Core X  |  |-In:2   |            |            |-In:2   |  |Core X  |
-   |- Out:1 |  |-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
-   |--------|  |-PeerV:1|---|PCB g|  |  |PCB h|---|-PeerV:1|  |--------|
-   |AS Y    |  |-PeerW:4|   +-----+  |  +-----+   |-PeerW:4|  |AS Y    |
-   |-In:3   |  |--------|      |     |     |      |--------|  |-In:3   |
-   |-Out:6  |  |AS Z    |      v     |     v      |AS Z    |  |-Out:5  |
-   |-PeerV:1|  |-In:5   |            |            |-In:1   |  |-PeerV:1|
-   |-PeerW:4|  |-Out:3  |            |            |-Out:3  |  |-PeerW:4|
-   |--------|  +--------+            |            +--------+  |--------|
+                                   *   *
+                              +----+---+----+
+                              |    5   1    |
+                              |             |
+                              |    AS Z     |
+               +--------+     |             |     +--------+
+               │ PCB g  |     |      3      |     | PCB h  |
+               +========+     +------+------+     +========+
+               │Core X  |            #            |Core X  |
+   +--------+  │- Out:2 |            |            |- Out:2 |  +--------+
+   | PCB i  |  +--------+            |            +--------+  | PCB j  |
+   +========+  │AS Y    |            |            |AS Y    |  +========+
+   |Core X  |  │-In:2   |            |            |-In:2   |  |Core X  |
+   |- Out:1 |  │-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
+   +--------+  │-PeerV:1| <-|PCB g│  |  |PCB h|-> |-PeerV:1|  +--------+
+   |AS Y    |  │-PeerW:4|   +--+--+  |  +--+--+   |-PeerW:4|  |AS Y    |
+   |-In:3   |  +--------+      |     |     |      +--------+  |-In:3   |
+   |-Out:6  |  │AS Z    |      v     |     v      |AS Z    |  |Out:5   |
+   |-PeerV:1|  │-In:5   |            |            |-In:1   |  |-PeerV:1|
+   |-PeerW:4|  │-Out:3  |            |            |-Out:3  |  |-PeerW:4|
+   +--------+  +--------+            |            +--------+  +--------+
    |AS Z    |               +-----+  |  +-----+               |AS Z    |
-   |-In:5   |===============|PCB i|  |  |PCB j|===============|-In:1   |
-   |-Out:3  |               +-----+  |  +-----+               |-Out:3  |
+   |-In:5   | <-------------|PCB i|  |  |PCB j|------------>  |-In:1   |
+   |-Out:3  |               +--+--+  |  +--+--+               |-Out:3  |
    +--------+                  |     |     |                  +--------+
                                v     |     v
                                      v
@@ -945,123 +943,128 @@ Table of Contents
    "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use all
    of these path segments or just a selection of them.
 
-                AS Entry Core         AS Entry Y          AS Entry Z
+                  AS Entry Core        AS Entry Y          AS Entry Z
 
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |     AS Z    |
-path segment 1 |            1#     #3            5     #1            |
-               |             |     |             |     |             |
-               |            2#-----#2----------- 6-----#5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                 egress 2       ingress 2 - egress 6      ingress 5
+                 +-------------+     +-------------+     +-------------+
+                 |  Core AS X  |     |    AS Y     |     |    AS Z     |
+  Path Segment 1 |            1+     +3           5+     +1            |
+                 |             |     |             |     |             |
+                 |            2+#---*+2-----------6+#---*+5            |
+                 |             |     |             |     |             |
+                 +-------------+     +-------------+     +-------------+
+                    Egress 2       Ingress 2 - Egress 6     Ingress 5
 
-----------------------------------------------------------------------
+  ----------------------------------------------------------------------
 
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |     AS Z    |
-               |            1#     #3     +-----5#-----#1            |
-path segment 2 |             |     |      |      |     |             |
-               |            2#-----#2-----+     6#     #5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                 egress 2       ingress 2 - egress 5      ingress 1
+                 +-------------+     +-------------+     +-------------+
+                 |  Core AS X  |     |    AS Y     |     |    AS Z     |
+                 |            1+     +3     +-----5+#---*+1            |
+  Path Segment 2 |             |     |      |      |     |             |
+                 |            2+#---*+2-----+     6+     +5            |
+                 |             |     |             |     |             |
+                 +-------------+     +-------------+     +-------------+
+                    Egress 2       Ingress 2 - Egress 5     Ingress 1
 
-------------------------------------------------------------------------
+  ----------------------------------------------------------------------
 
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |     AS Z    |
-               |            1#-----#3-----+     5#     #1            |
-path segment 3 |             |     |      |      |     |             |
-               |            2#     #2     +-----6#-----#5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                 egress 1       ingress 3 - egress 6      ingress 5
+                 +-------------+     +-------------+     +-------------+
+                 |  Core AS X  |     |    AS Y     |     |    AS Z     |
+                 |            1+#---*+3-----+     5+     +1            |
+  Path Segment 3 |             |     |      |      |     |             |
+                 |            2+     +2     +-----6+#---*+5            |
+                 |             |     |             |     |             |
+                 +-------------+     +-------------+     +-------------+
+                    Egress 1       Ingress 3 - Egress 6     Ingress 5
 
-------------------------------------------------------------------------
+  ----------------------------------------------------------------------
 
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |   AS Y      |     |     AS Z    |
-               |            1#-----#3-----------5#-----#1            |
-path segment 4 |             |     |             |     |             |
-               |            2#     #2           6#     #5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                 egress 1       ingress 3 - egress 5      ingress 1
+                 +-------------+     +-------------+     +-------------+
+                 |  Core AS X  |     |    AS Y     |     |    AS Z     |
+                 |            1+#---*+3-----------5+#---*+1            |
+  Path Segment 4 |             |     |             |     |             |
+                 |            2+     +2           6+     +5            |
+                 |             |     |             |     |             |
+                 +-------------+     +-------------+     +-------------+
+                    Egress 1       Ingress 3 - Egress 5      Ingress 1
 
-           Figure 5: Possible up- or down segments for AS Z
+             Figure 5: Possible up- or down segments for AS Z
 
 2.2.  Path-Segment Construction Beacons (PCBs)
 
 2.2.1.  PCB Message Format
 
-   Figure 6 graphically represents the PCB message format:
-
-                              PCB / PATH SEGMENT
+                           PCB/Path Segment
 
 +-------------+------------+------------+--------+--------------------+
 |Segment Info | AS Entry 0 | AS Entry 1 |  ...   |     AS Entry N     |
 +-------------+------------+------------+--------+--------------------+
-*- - - - # - -*            *- - - # - - *
-         |                        |
-*- - - - v - - - *                |
++------+------+            +------+-----+
+       |                          |
+       v                          |
++----------------+                |
 +---------+------+                |
-|Timestamp|Seg ID|                |
+|Timestamp|Seg ID                 |
 +---------+------+                |
-                                  |
-*- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - - *
+                                  v
++----------------------------------------------------------------------+
 +-----------------------+----------------------------------------------+
 |    Unsigned Ext.      |               Signed AS Entry                |
 +-----------------------+----------------------------------------------+
-                        *- - - - - - - - - - - - # - - - - - - - - - - *
-                                                 |
-                                                 |
-*- - - - - - - - - - - - - - - - - - - - - - - - v - - - - - - - - - - *
-+--------------------+-----------------++------------------------------+
-|     Signature      |    Header       ||                    Body      |
-+--------------------+-----------------++------------------------------+
-                     *- - - - # - - - -**- - - - - - - - # - - - - - - *
-                              |                          |
-*- - - - - - - - - - - - - - -v- - - - *                 |
-+----------------+---------------------+                 |
-| Signature Alg. | Verification Key ID |                 |
-+----------------+---------------------+                 |
-                 *- - - - - # - - - - -*                 |
-                            |                            |
-*- - - - - - - - - - - - - -v- - - - - - - - - -*        |
-+---------+---------+------------+--------------+        |
-| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|        |
-+---------+---------+------------+--------------+        |
-                                                         |
-*- - - - - - - - - - - - - - - - - - - - - - - - - - - - v - - - - - - *
-+------+-----------+---------++------------+----+------------++---+----+
-|ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0| ...|Peer Entry N||MTU|Ext.|
-+------+-----------+---------++------------+----+------------++---+----+
-                   *- - # - -**- - - # - - *
-                        |            |
-                        |            |
-*- - - - - - - - - - - -v- *  *- - - v - - - - - - - - - - - - - - - - *
-+-------------+------------+  +--------+--------+----------+-----------+
-| Ingress MTU | Hop Field  |  |HopField|PeerMTU |PeerISD-AS|PeerInterf.|
-+-------------+--------+---+  +----+---+--------+----------+-----------+
-                       *- - -#- - -*
-                             |
-                             |
-*- - - - - - - - - - - - - - v - - - - - - - - - - - - - - *
+                        +-----------------------+----------------------+
+                                                |
+                                                v
++----------------------------------------------------------------------+
++--------------------+------------------+------------------------------+
+|     Signature      |      Header      |             Body             |
++--------------------+------------------+------------------------------+
+                     +--------+---------+-------------------------+----+
+                              |                                   |
+                              v                                   |
++-------------------------------------------------------------+   |
++---------+-------------------+---------+--------+------------+   |
+|Sig. Alg.|Verification Key ID|Timestamp|Metadata|AssocDataLen|   |
++---------+-------------------+---------+--------+------------+   |
+          +---------+---------+                                   |
+                    |                                             |
+                    v                                             |
++-----------------------------------------------+                 |
++---------+---------+------------+--------------+                 |
+| ISD-AS  |TRC Base | TRC Serial |Subject Key ID|                 |
++---------+---------+------------+--------------+                 |
+                                                                  |
+                                                                  |
+                                                                  v
++----------------------------------------------------------------------+
++------+-----------+---------+------------+-----+------------+----+----+
+|ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0| ... |Peer Entry N|MTU |Ext.|
++------+-----------+---------+------------+-----+------------+----+----+
+                   +----+----+------+-----+
+                        |           |
+                        v           v
++--------------------------+ +-----------------------------------------+
++-------------+------------+ +---------+--------+----------+-----------+
+| Ingress MTU | Hop Field  | |Hop Field|PeerMTU |PeerISD-AS|PeerInterf.|
++-------------+------------+ +---------+--------+----------+-----------+
+                       +----+----+
+                            |
+                            v
++----------------------------------------------------------+
 +------------+-------------+-------------------+-----------+
-|  Ingress   |    Egress   |  Expiration Time  |   MAC     |
+|  Ingress   |    Egress   |  Expiration Time  |    MAC    |
 +------------+-------------+-------------------+-----------+
 
-              Figure 6: Top-down composition of one PCB
+               Figure 6: Top-down composition of a PCB
 
-   *Note:* For a full example of one PCB in the Protobuf message format,
-   please see Appendix "Full Control Service gRPC API", Figure 19.
+   Note: For a full example of a PCB in the Protobuf message format,
+   please see Figure 28.
 
 2.2.1.1.  PCB Top-Level Message Format
 
-   +-------------+-------------+------------+------+------------+
-   |Segment Info | AS Entry 0  | AS Entry 1 |  ... | AS Entry N |
-   +-------------+-------------+------------+------+------------+
+   +-------------+------------+------------+-----+------------+
+   |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
+   +-------------+------------+------------+-----+------------+
+
+                   Figure 7: PCB Top-Level Message Format
 
    Each PCB MUST consists of at least:
 
@@ -1096,13 +1099,15 @@ path segment 4 |             |     |             |     |             |
    +----------------------------+
    |         Segment Info       |
    +----------------------------+
-   *- - - - - - - # - - - - - - *
-                  |
-                  |
-   *- - - - - - - v - - - - - - *
-   +--------------+-------------+
-   |   Timestamp  |   Seg ID    |
-   +--------------+-------------+
+   +-------------+--------------+
+                 |
+                 v
+   +----------------------------+
+   +-------------+--------------+
+   |  Timestamp  |    Seg ID    |
+   +-------------+--------------+
+
+                  Figure 8: Segment Information Component
 
    Each PCB MUST include an information component with basic information
    about the PCB.
@@ -1138,16 +1143,17 @@ path segment 4 |             |     |             |     |             |
 2.2.1.3.  AS Entry
 
                               +--------------+
-                              |  AS Entry    |
+                              |   AS Entry   |
                               +--------------+
-                              *- - - -#- - - *
-                                      |
-                                      |
-                                      |
-   *- - - - - - - - - - - - - - - - - v - - - - - - - - - - - - - - - *
+                              +------+-------+
+                                     |
+                                     v
+   +------------------------------------------------------------------+
    +-----------------------+------------------------------------------+
-   |    Unsigned Ext.      |          Signed AS Entry                 |
+   |  Unsigned Extension   |             Signed AS Entry              |
    +-----------------------+------------------------------------------+
+
+                             Figure 9: AS Entry
 
    Each PCB MUST also contain the entries of all ASes included in the
    corresponding path segment.  This means that the originating core AS
@@ -1181,13 +1187,15 @@ path segment 4 |             |     |             |     |             |
          +------------------------------------------------------+
          |                   Signed AS Entry                    |
          +------------------------------------------------------+
-         *- - - - - - - - - - - - -#- - - - - - - - - - - - - - *
-                                   |
-                                   |
- *- - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - - -*
- +--------------------+-----------------+------------------------------+
- |      Header        |     Body        |            Signature         |
- +--------------------+-----------------+------------------------------+
+         +--------------------------+---------------------------+
+                                    |
+                                    v
+ +---------------------------------------------------------------------+
+ +--------------------+------------------+-----------------------------+
+ |     Signature      |      Header      |             Body            |
+ +--------------------+------------------+-----------------------------+
+
+                  Figure 10: AS Entry Signed Component
 
    Each AS entry of a PCB MUST include a signed component as well as a
    signature computed over the signed component.  Each AS entry MUST be
@@ -1233,21 +1241,25 @@ path segment 4 |             |     |             |     |             |
 
 2.2.1.4.1.  AS Entry Signed Header
 
-              +-----------------+
-              |     Header      |
-              +-----------------+
-              *- - - - # - - - -*
+                         +-----------------+
+                         |     Header      |
+                         +-----------------+
+                         +--------+--------+
+                                  |
+                                  v
+   +-------------------------------------------------------------+
+   +---------+-------------------+---------+--------+------------+
+   |Sig. Alg.|Verification Key ID|Timestamp|Metadata|AssocDataLen|
+   +---------+-------------------+---------+--------+------------+
+             +---------+---------+
                        |
-    - - - - - - - - - -v- - - - - - - - - *
-   +----------------+---------------------+
-   | Signature Alg. | Verification Key ID |
-   +----------------+---------------------+
-                    *- - - - - # - - - - -*
-                               |
-    - - - - - - - - - - - - - -v- - - - - - - - - -
-   +---------+---------+------------+--------------+
-   | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
-   +---------+---------+------------+--------------+
+                       v
+        +-----------------------------------------------+
+        +---------+---------+------------+--------------+
+        | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
+        +---------+---------+------------+--------------+
+
+                     Figure 11: AS Entry Signed Header
 
    The header part defines metadata that is relevant to the computation
    and verification of the signature.  It MUST include at least the
@@ -1321,13 +1333,15 @@ path segment 4 |             |     |             |     |             |
                  +--------------------------------------+
                  |                 Body                 |
                  +--------------------------------------+
-                 *- - - - - - - - - -#- - - - - - - - - *
-                                     |
-                                     |
- *- - - - - - - - - - - - - - - - - -v- - - - - - - - - - - - - - - - -*
- +------+-----------+---------++------------+---+------------++---+----+
- |ISD-AS|Next ISD-AS|Hop Entry||Peer Entry 0|...|Peer Entry N||MTU|Ext.|
- +------+-----------+---------++------------+---+------------++---+----+
+                 +------------------+-------------------+
+                                    |
+                                    v
+ +---------------------------------------------------------------------+
+ +------+-----------+---------+-------------+---+-------------+---+----+
+ |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
+ +------+-----------+---------+-------------+---+-------------+---+----+
+
+                    Figure 12: AS Entry Signed Body
 
    The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all ASes in the path segment represented by the
@@ -1348,7 +1362,7 @@ path segment 4 |             |     |             |     |             |
    *  isd_as: The ISD-AS number of the AS that created this AS entry.
 
    *  next_isd_as: The ISD-AS number of the downstream AS to which the
-      PCB SHOULD be forwarded.  The presence of this field prevents path
+      PCB MUST be forwarded.  The presence of this field prevents path
       hijacking attacks, as further discussed in Section 7.3.1.
 
    *  hop_entry: The hop entry (HopEntry) with the information required
@@ -1417,15 +1431,18 @@ path segment 4 |             |     |             |     |             |
 
 2.2.1.5.  Hop Entry
 
-          +-----------+
-          | Hop Entry |
-          +-----------+
-          *- - -#- - -*
-                |
-    - - - - - - v - - - - - - *
-   +-------------+------------+
-   | Ingress MTU | Hop Field  |
-   +-------------+------------+
+           +-----------+
+           | Hop Entry |
+           +-----------+
+           +-----+-----+
+                 |
+                 v
+   +---------------------------+
+   +-------------+-------------+
+   | Ingress MTU |  Hop Field  |
+   +-------------+-------------+
+
+                            Figure 13: Hop Entry
 
    Each body of an AS entry MUST contain exactly one hop entry
    component.  The hop entry component specifies forwarding information
@@ -1461,15 +1478,17 @@ path segment 4 |             |     |             |     |             |
 2.2.1.6.  Hop Field
 
                          +-----------+
-                         | Hop Field |
+                         | Hop Entry |
                          +-----------+
-                         *- - -#- - -*
+                         +-----+-----+
                                |
-                               |
-   *- - - - - - - - - - - - - -v- - - - - - - - - - - - - - - *
+                               V
+   +----------------------------------------------------------+
    +-------------+-------------+-------------------+----------+
    |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
    +-------------+-------------+-------------------+----------+
+
+                            Figure 14: Hop Field
 
    The Hop Field, part of both hop entries and peer entries, is used
    directly in the data plane for packet forwarding and specifies the
@@ -1525,12 +1544,15 @@ path segment 4 |             |     |             |     |             |
                          +--------------+
                          |  Peer Entry  |
                          +--------------+
-                         *- - - -#- - - *
-                                 |
-   *- - - - - - - - - - - - - - -v- - - - - - - - - - - - - - *
+                         +------+-------+
+                                |
+                                v
+   +----------------------------------------------------------+
    +-------------+------------+--------------+----------------+
-   |  Hop Field  |  Peer MTU  | Peer ISD-AS  | Peer Interface |
+   |  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
    +-------------+------------+--------------+----------------+
+
+                           Figure 15: Peer Entry
 
    By means of a peer entry, an AS can announce that it has a peering
    link to another AS.  A peer entry is an optional component of a PCB -
@@ -1573,32 +1595,31 @@ path segment 4 |             |     |             |     |             |
 
       +-----------+
       |           |
-      | parent AS |
+      | Parent AS |
       |           |
-      +-----------+
+      +-----+-----+
+            #
             |
-            |
-            | ASE.HF.ingress_interface
-   +--------#-----------+                  +-----------------+
-   |        |           |         PE.peer_ |                 |
-   |                    |         interface|                 |
-   |        | + - - - - #------------------#     peer AS     |
-   |                    |PE.HF.ingress_    |                 |
-   |        | |         |interface         |                 |
-   |                    |                  +-----------------+
+            * ASE.HF.ingress_interface
+   +--------+-----------+
+   |        |           |        PE.peer_  +-----------+
+   |        |           |        interface |           |
+   |        | +---------+p----------------p+  Peer AS  |
+   |        | |         | PE.HF.ingress_   |           |
+   |        | |         | interface        +-----------+
+   |        | |         |
    |        v v         |
-   +---------#----------+
-             | PE.HF.egress_interface
-             | ASE.HF.egress_interface
-             |
-             |
-       +-----------+
+   +---------+----------+
+             # PE.HF.egress_interface
+             │ ASE.HF.egress_interface
+             *
+       +-----+-----+
        |           |
-       |  child AS |
+       | Child AS  |
        |           |
        +-----------+
 
-      Figure 7: Peer entry information, in the direction of beaconing
+      Figure 16: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -1688,7 +1709,7 @@ path segment 4 |             |     |             |     |             |
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 21.
+       Service of the sending AS through the API described in Figure 30.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -2494,7 +2515,7 @@ path segment 4 |             |     |             |     |             |
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 16.
+   The segment lookup API gRPC definition can be found in Figure 12.
 
 5.1.2.  Caching
 
@@ -2656,17 +2677,17 @@ path segment 4 |             |     |             |     |             |
 
    The messages have the following general format:
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |           Checksum            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                       Type-dependent Block                    |
-       +                                                               +
-       |                         (variable length)                     |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |           Checksum            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                       Type-dependent Block                    |
+   +                                                               +
+   |                         (variable length)                     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 8: SCMP message format
+                       Figure 17: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2713,7 +2734,7 @@ path segment 4 |             |     |             |     |             |
          | 127  | Reserved for expansion of SCMP error messages |
          +------+-----------------------------------------------+
 
-                      Table 5: error messages types
+                       Table 5: Error Message Types
 
      +======+=======================================================+
      | Type | Meaning                                               |
@@ -2734,7 +2755,7 @@ path segment 4 |             |     |             |     |             |
      | 255  | Reserved for expansion of SCMP informational messages |
      +------+-------------------------------------------------------+
 
-                  Table 6: informational messages types
+                   Table 6: Informational Message Types
 
    Type values 100, 101, 200, and 201 are reserved for private
    experimentation.
@@ -2796,19 +2817,19 @@ path segment 4 |             |     |             |     |             |
 
 6.5.1.  Packet Too Big
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |            reserved           |             MTU               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                As much of the offending packet                |
-       +              as possible without the SCMP packet              +
-       |                    exceeding 1232 bytes.                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |            Reserved           |             MTU               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                As much of the offending packet                |
+   +              as possible without the SCMP packet              +
+   |                    exceeding 1232 bytes.                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 9: Packet-too-big format
+                      Figure 18: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2820,7 +2841,7 @@ path segment 4 |             |     |             |     |             |
       | MTU  | The Maximum Transmission Unit of the next-hop link. |
       +------+-----------------------------------------------------+
 
-                          Table 7: field values
+                   Table 7: Error Message field values
 
    A *Packet Too Big* message SHOULD be originated by a router in
    response to a packet that cannot be forwarded because the packet is
@@ -2830,25 +2851,25 @@ path segment 4 |             |     |             |     |             |
 
 6.5.2.  External Interface Down
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |              ISD              |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                        Interface ID                           +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                As much of the offending packet                |
-       +              as possible without the SCMP packet              +
-       |                    exceeding 1232 bytes.                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |              ISD              |                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+             AS                +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                        Interface ID                           +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                As much of the offending packet                |
+   +              as possible without the SCMP packet              +
+   |                    exceeding 1232 bytes.                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 10: External-interface-down format
+                 Figure 19: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2861,11 +2882,11 @@ path segment 4 |             |     |             |     |             |
     +--------------+--------------------------------------------------+
     | AS           | The 48-bit AS identifier of the SCMP originator  |
     +--------------+--------------------------------------------------+
-    | Interface ID | The Interface ID of the external link with       |
-    |              | connectivity issue                               |
+    | Interface ID | The interface ID of the external link with       |
+    |              | connectivity issue.                              |
     +--------------+--------------------------------------------------+
 
-                           Table 8: field values
+                    Table 8: Error Message field values
 
    A *External Interface Down* message SHOULD be originated by a router
    in response to a packet that cannot be forwarded because the link to
@@ -2878,29 +2899,29 @@ path segment 4 |             |     |             |     |             |
 
 6.5.3.  Internal Connectivity Down
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |              ISD              |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                   Ingress Interface ID                        +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                   Egress Interface ID                         +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                As much of the offending packet                |
-       +              as possible without the SCMP packet              +
-       |                    exceeding 1232 bytes.                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |              ISD              |                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+             AS                +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                   Ingress Interface ID                        +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                   Egress Interface ID                         +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                As much of the offending packet                |
+   +              as possible without the SCMP packet              +
+   |                    exceeding 1232 bytes.                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 11: Internal-connectivity-down format
+                Figure 20: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2913,12 +2934,12 @@ path segment 4 |             |     |             |     |             |
      +------------+--------------------------------------------------+
      | AS         | The 48-bit AS identifier of the SCMP originator  |
      +------------+--------------------------------------------------+
-     | Ingress ID | The Interface ID of the ingress link.            |
+     | Ingress ID | The interface ID of the ingress link.            |
      +------------+--------------------------------------------------+
-     | Egress ID  | The Interface ID of the egress link.             |
+     | Egress ID  | The interface ID of the egress link.             |
      +------------+--------------------------------------------------+
 
-                           Table 9: field values
+                    Table 9: Error Message field values
 
    A *Internal Connectivity Down* message SHOULD be originated by a
    router in response to a packet that cannot be forwarded inside the AS
@@ -2936,17 +2957,17 @@ path segment 4 |             |     |             |     |             |
 
 6.6.1.  Echo Request
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |           Identifier          |        Sequence Number        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Data (variable Len)                       |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Identifier          |        Sequence Number        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                     Data (variable Len)                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 12: Echo-request format
+                       Figure 21: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -2965,24 +2986,24 @@ path segment 4 |             |     |             |     |             |
              |            | data                            |
              +------------+---------------------------------+
 
-                          Table 10: field values
+               Table 10: Informational Message field values
 
    Every node SHOULD implement a SCMP Echo responder function that
    receives Echo Requests and originates corresponding Echo replies.
 
 6.6.2.  Echo Reply
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |           Identifier          |        Sequence Number        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Data (variable Len)                       |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Identifier          |        Sequence Number        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                     Data (variable Len)                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 13: Echo-reply format
+                        Figure 22: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -2998,7 +3019,7 @@ path segment 4 |             |     |             |     |             |
         | Data         | The data of the Echo Request            |
         +--------------+-----------------------------------------+
 
-                                 Table 11
+               Table 11: Informational Message field values
 
    Every node SHOULD implement a SCMP Echo responder function that
    receives Echo Requests and originates corresponding Echo replies.
@@ -3008,23 +3029,23 @@ path segment 4 |             |     |             |     |             |
 
 6.6.3.  Traceroute Request
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |           Identifier          |        Sequence Number        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |              ISD              |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                          Interface ID                         +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Identifier          |        Sequence Number        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |              ISD              |                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+              AS               +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                          Interface ID                         +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 14: Traceroute-request format
+                    Figure 23: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3052,7 +3073,7 @@ path segment 4 |             |     |             |     |             |
              | ID         | SCMP sender                     |
              +------------+---------------------------------+
 
-                          Table 12: field values
+               Table 12: Informational Message field values
 
    A border router is alerted of a Traceroute Request message through
    the Ingress or Egress Router Alert flag set to 1 in the hop field
@@ -3064,23 +3085,23 @@ path segment 4 |             |     |             |     |             |
 
 6.6.4.  Traceroute Reply
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |           Identifier          |        Sequence Number        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |              ISD              |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                          Interface ID                         +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |     Code      |          Checksum             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Identifier          |        Sequence Number        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |              ISD              |                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+              AS               +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                          Interface ID                         +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 15: Traceroute-reply format
+                     Figure 24: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3097,10 +3118,10 @@ path segment 4 |             |     |             |     |             |
     +--------------+--------------------------------------------------+
     | AS           | The 48-bit AS identifier of the SCMP originator  |
     +--------------+--------------------------------------------------+
-    | Interface ID | The Interface ID of the SCMP originating router  |
+    | Interface ID | The interface ID of the SCMP originating router  |
     +--------------+--------------------------------------------------+
 
-                           Table 13: field values
+                Table 13: Informational Message field values
 
    The identifier is set to the identifier value from the Traceroute
    Request message (Section 6.6.3).  The ISD and AS identifiers are set
@@ -3591,7 +3612,7 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 16: Control Service gRPC API - Segment lookup.  This API
+      Figure 25: Control Service gRPC API - Segment lookup.  This API
      is exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -3616,7 +3637,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 17: Control Service gRPC API - Segment registration.  This
+     Figure 26: Control Service gRPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3633,7 +3654,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 18: Control Service gRPC API - Segment creation
+           Figure 27: Control Service gRPC API - Segment creation
 
 
 
@@ -3715,7 +3736,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 19: Control Service gRPC API - Segment representation
+      Figure 28: Control Service gRPC API - Segment representation
 
 
 
@@ -3776,7 +3797,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 20: Control Service gRPC API - Signed ASEntry representation
+   Figure 29: Control Service gRPC API - Signed ASEntry representation
 
 
 
@@ -3841,7 +3862,7 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
- Figure 21: Control Service gRPC API - Trust Material representation
+ Figure 30: Control Service gRPC API - Trust Material representation
 
 
 
@@ -3849,7 +3870,7 @@ message VerificationKeyID {
    gRPC framework.  That is, a non-zero status code and an explanatory
    string.
 
-SCION Data Plane use by the SCION Control Plane
+Use of the SCION Data Plane
 
    The SCION Control Plane RPC APIs rely on QUIC connections carried by
    the SCION dataplane.  The main difference between QUIC over native
@@ -3946,7 +3967,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 22: Service Resolution gRPC API definition
+          Figure 31: Service Resolution gRPC API definition
 
 
 
@@ -3954,10 +3975,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 23 below.  In both examples, the source
-   endpoint is in AS A.  Figure 24 shows the sequence diagram for the
+   is represented in Figure 32 below.  In both examples, the source
+   endpoint is in AS A.  Figure 33 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 25 shows the path lookup sequence diagram if the destination
+   Figure 34 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3967,156 +3988,142 @@ Path-Lookup Examples
    |                            |     |                            |
    |                            |     |                            |
    |    +------------------+    |     |    +------------------+    |
-   |    |      Core        |    |     |    |          Core    |    |
+   |    |       Core       |    |     |    |       Core       |    |
    |    |                  |    |     |    |                  |    |
-   |    | .---.     .---.  |    |     |    |            .---. |    |
-   |    |(  C  )---(  B  )-----------------------------(  F  )|    |
-   |    | `+--'     `+-+'---------+   |    |    .---.   `+-+' |    |
-   |    |  |         | |   |    | +------------(  E  )   | |  |    |
-   |    |  |         | |   |    |     |    |    `-+-'----+ |  |    |
-   |    +--|---------|-|---+    |     |    +------|--------|--+    |
-   |       |         | |        |     |           |        |       |
-   |       |         | |        |     |           |        |       |
-   |       |+--------+ |        |     |           |        |       |
-   |       ||          |        |     |           |        |       |
-   |       ||          |        |     |           |        |       |
-   |     .-++.         |        |     |         .-+-.      |       |
-   |    (  D  )      .-+-.      |     |        (  G  )-----+       |
-   |     `---'      (  A  )     |     |         `---'              |
-   |                 `---'      |     |                            |
-   |   ISD 1                    |     |                    ISD 2   |
+   |    | +-----+  +-----+ |    |     |    |          +-----+ |    |
+   |    | |AS C +--+AS B +----------------------------+AS F | |    |
+   |    | +-+---+  ++-+-++ |    |     |    |          +-+-+-+ |    |
+   |    |   |       | | |  |    |     |    | +-----+    | |   |    |
+   |    |   |       | | +--------------------+AS E +----+ |   |    |
+   |    |   |       | |    |    |     |    | +--+--+      |   |    |
+   |    +---|-------|-|----+    |     |    +----│---------|---+    |
+   |        |       | |         |     |         │         |        |
+   |        |       | |         |     |         │         |        |
+   |        | +-----+ |         |     |         │         |        |
+   |        | |       |         |     |         │         |        |
+   |        | |       |         |     |         │         |        |
+   |      +-+-+-+  +--+--+      |     |      +--+--+      |        |
+   |      |AS D |  |AS A |      |     |      |AS G +------+        |
+   |      +-----+  +-----+      |     |      +-----+               |
+   |                            |     |                            |
+   |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-           Figure 23: Topology used in the path lookup examples.
+            Figure 32: Topology used in the path lookup examples
 
-+---------+          +---------+          +---------+        +---------+
-|Endpoint |          |Source AS|          | Core AS |        | Core AS |
-|         |          | CS (A)  |          | CS (B)  |        | CS (C)  |
-+----+----+          +----+----+          +----+----+        +-----+---+
-    +++                   |                    |                   |
-    | |                   |                    |                   |
-+---+-+-------+           |                    |                   |
-|send requests|           |                    |                   |
++---------+          +---------+          +---------+         +---------+
+|Endpoint |          |Source AS|          | Core AS |         | Core AS |
+|         |          | CS (A)  |          | CS (B)  |         | CS (C)  |
++--+-+-+--+          +----+----+          +----+----+         +----+----+
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
++--+-+-+------+           |                    |                   |
+|Send Requests|           |                    |                   |
 | in parallel |           |                    |                   |
-+---+-+-------+           |                    |                   |
-    | |                   |                    |                   |
-    | |  request (up)     |                    |                   |
-    | +----------------->+++                   |                   |
-    | |< -- -- -- -- -- -+++                   |                   |
-    | | reply (up,[A->B]) |                    |                   |
-    | |                   |                    |                   |
-    | |                   |                    |                   |
-    | |                   |                    |                   |
-    | |request (core,*,*) |                    |                   |
-    | +----------------->+++                   |                   |
-    | |                  | |request (core,B,*) |                   |
-    | |                  | +----------------->+++                  |
-    | |                  | |<-- -- -- -- -- --+++                  |
-    | |                  | | reply(core,[B->C])|                   |
-    | |< -- -- -- -- -- -+++                   |                   |
-    | |reply (core,[B->C])|                    |                   |
-    | |                   |                    |                   |
-    | |                   |                    |                   |
-    | |request (down,*,D) |                    |                   |
-    | +----------------->+++                   |                   |
-    | |            +-----+-+-----+             |                   |
-    | |            |send requests|             |                   |
-    | |            | in parallel |             |                   |
-    | |            +-----+-+-----+             |                   |
-    | |                  | |                   |                   |
-    | |                  | |request (down,B,D) |                   |
-    | |                  | +----------------->+++                  |
-    | |                  | |<-- -- -- -- -- --+++                  |
-    | |                  | | reply(down,[B->D])|                   |
-    | |                  | |                   |                   |
-    | |                  | |                   |request (down,C,D) |
-    | |                  | +-------------------+----------------->+++
-    | |                  | <-- -- -- -- -- -- -+ -- -- -- -- -- --+++
-    | |   reply (down,   | |                   | reply(down,[C->D])|
-    | |   [B->D, C->D])  | |                   |                   |
-    | |< -- -- -- -- -- -+++                   |                   |
-    | |                   |                    |                   |
-+---+-+----------+        |                    |                   |
-|combine segments|        |                    |                   |
-+---+-+----------+        |                    |                   |
-    | |                   |                    |                   |
-    +++                   |                    |                   |
++--+-+-+------+           |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (up)      |                    |                   |
+   +--------------------->|                    |                   |
+   |<-- -- -- -- -- -- -- +                    |                   |
+   | | | reply (up,[A->B])|                    |                   |
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (core,*,*)|                    |                   |
+   | +------------------->|                    |                   |
+   | | |                  |request (core,B,*)  |                   |
+   | | |                  +------------------->|                   |
+   | | |                  |<-- -- -- -- -- -- -+                   |
+   | | |                  |  reply(core,[B->C])|                   |
+   | |<-- -- -- -- -- -- -+                    |                   |
+   | | | reply (core,[B->C])                   |                   |
+   | | |                  |                    |                   |
+   | | |                  |                    |                   |
+   | | |request (down,*,D)|                    |                   |
+   | | |           +------+------+             |                   |
+   | | +---------->|send requests|             |                   |
+   | | |           | in parallel |             |                   |
+   | | |           +-----+-+-----+             |                   |
+   | | |                 | |                   |                   |
+   | | |                 | |request (down,B,D) |                   |
+   | | |                 +-------------------->|                   |
+   | | |                 |<-- -- -- -- -- -- --+                   |
+   | | |                 | | reply(down,[B->D])|                   |
+   | | |                 | |                   |                   |
+   | | |                 | |                   |request (down,C,D) |
+   | | |                 | +-------------------------------------->|
+   | | |                 | |<-- -- -- -- -- -- -- -- -- -- -- -- --+
+   | | |                 | |                   | reply(down,[C->D])|
+   | | |                 | |                   |                   |
+   | | |<-- -- -- -- -- -+++                   |                   |
+   | | | reply (down,[B->D, C->D])             |                   |
+   | | |                  |                    |                   |
++--+-+-+---------+        |                    |                   |
+|Combine Segments|        |                    |                   |
++----+-----------+        |                    |                   |
      |                    |                    |                   |
- +---+----+           +---+----+          +----+---+          +----+---+
- +--------+           +--------+          +--------+          +--------+
+     |                    |                    |                   |
+     |                    |                    |                   |
 
-     Figure 24: Sequence diagram illustrating a path lookup for a
+     Figure 33: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
                             destination D.
 
-+---------+     +---------+      +---------+   +---------+   +---------+
-|Endpoint |     |Source AS|      | Core AS |   | Core AS |   | Core AS |
-|         |     | CS (A)  |      | CS (B)  |   | CS (E)  |   | CS (F)  |
-+---+-----+     +----+----+      +----+----+   +----+----+   +----+----+
-    |                |                |             |             |
-   +++               |                |             |             |
-   | |               |                |             |             |
-+--+-+------+        |                |             |             |
-|   send    |        |                |             |             |
-|requests in|        |                |             |             |
-| parallel  |        |                |             |             |
-+--+-+------+        |                |             |             |
-   | |               |                |             |             |
-   | |  request (up) |                |             |             |
-   | +------------->+++               |             |             |
-   | |<- -- -- -- --+++               |             |             |
-   | |    reply      |                |             |             |
-   | | (up,[A->B])   |                |             |             |
-   | |               |                |             |             |
-   | |               |                |             |             |
-   | |   request     |                |             |             |
-   | |(core,*,(2,*)) |                |             |             |
-   | +------------->+++    request    |             |             |
-   | |              | |(core,B,(2,*)) |             |             |
-   | |              | +------------->+++            |             |
-   | |              | |<- -- -- -- --+++            |             |
-   | |              | | reply (core,  |             |             |
-   | |              | | [B->E,B->F])  |             |             |
-   | |<- -- -- -- --+++               |             |             |
-   | | reply (core,  |                |             |             |
-   | | [B->E,B->F])  |                |             |             |
-   | |               |                |             |             |
-   | |               |                |             |             |
-   | |               |                |             |             |
-   | |   request     |                |             |             |
-   | |(down,(2,*),G) |                |             |             |
-   | +------------->+++               |             |             |
-   | |        +-----+-+-----+         |             |             |
-   | |        |send requests|         |             |             |
-   | |        | in parallel |         |             |             |
-   | |        +-----+-+-----+         |   request   |             |
-   | |              | |               | (down,E,G)  |             |
-   | |              | +---------------+----------->+++            |
-   | |              | <- -- -- -- -- -+ -- -- -- --+++            |
-   | |              | |               |    reply    |             |
-   | |              | |               |(down,[E->G])|             |
-   | |              | |               |             |   request   |
-   | |              | |               |             | (down,F,G)  |
-   | |              | +---------------+-------------+----------->+++
-   | |              | < -- -- -- -- --|-- -- -- -- -+ -- -- -- --+++
-   | |              | |               |             |    reply    |
-   | | reply (down, | |               |             |(down,[F->G])|
-   | | [E->G,F->G]) | |               |             |             |
-   | |<- -- -- -- --+++               |             |             |
-   | |               |                |             |             |
-+--+-+----+          |                |             |             |
-| combine |          |                |             |             |
-|segments |          |                |             |             |
-+--+-+----+          |                |             |             |
-   | |               |                |             |             |
-   +++               |                |             |             |
-    |                |                |             |             |
-+---+----+       +---+----+       +---+----+    +---+----+    +---+----+
-+--------+       +--------+       +--------+    +--------+    +--------+
++---------+     +---------+     +---------+     +---------+     +---------+
+|Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
+|         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
++--+-+-+--+     +----+----+     +----+----+     +----+----+     +----+----+
+   | | |             |               |               |               |
+   | | |             |               |               |               |
++--+-+-+------+      |               |               |               |
+|Send Requests|      |               |               |               |
+| in parallel |      |               |               |               |
++--+-+-+------+      |               |               |               |
+   | | |             |               |               |               |
+   | | |request (up) |               |               |               |
+   +---------------->|               |               |               |
+   | | |             |               |               |               |
+   |<-- -- -- -- -- -+               |               |               |
+   | | | reply (up,[A->B])           |               |               |
+   | | |             |               |               |               |
+   | | |             |               |               |               |
+   | | |request (core,*,(2,*))       |               |               |
+   | +-------------->|               |               |               |
+   | | |             |request (core,*,(2,*))         |               |
+   | | |             +-------------->|               |               |
+   | | |             |<- -- -- -- -- +               |               |
+   | | |             | reply (core,[B->E,B->F])      |               |
+   | |<- -- -- -- -- +               |               |               |
+   | | | reply (core,[B->E,B->F])    |               |               |
+   | | |             |               |               |               |
+   | | |             |               |               |               |
+   | | |request (down,(2,*),G)       |               |               |
+   | | |      +------+------+        |               |               |
+   | | +----->|send requests|        |               |               |
+   | | |      | in parallel |        |               |               |
+   | | |      +-----+-+-----+        |               |               |
+   | | |            | |              |request (down,E,G)             |
+   | | |            +------------------------------->|               |
+   | | |            |<-- -- -- -- -- -- -- -- -- -- -+               |
+   | | |            | |              | reply (down,[E->G])           |
+   | | |            | |              |               |               |
+   | | |            | |              |               |               |
+   | | |            | |              |               |request (down,F,G)
+   | | |            | +--------------------------------------------->|
+   | | |            | |<- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -+
+   | | |            | |              |               | reply (down,[F->G])
+   | | |<- -- -- -- +++              |               |               |
+   | | | reply (down,[E->G,F->G])    |               |               |
+   | | |             |               |               |               |
++--+-+-+---------+   |               |               |               |
+|Combine Segments|   |               |               |               |
++----+-----------+   |               |               |               |
+     |               |               |               |               |
+     |               |               |               |               |
+     |               |               |               |               |
 
-     Figure 25: Sequence diagram illustrating a path lookup for a
+     Figure 34: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
