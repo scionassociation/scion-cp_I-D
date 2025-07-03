@@ -1090,9 +1090,9 @@ In this description, MTU and packet size are to be understood in the same sense 
 </artset>
 </figure>
 
-The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Plane of an AS to authenticate path segments with its border routers during packet forwarding. The algorithm used to compute the Hop Field MAC is an AS-specific choice and the operator of an AS can freely choose a MAC algorithm without outside coordination. However, the Control Service and routers of the AS do need to agree on the algorithm used.
+The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.
 
-Control Service and router implementations MUST support the Default Hop Field MAC algorithm described in {{I-D.dekater-scion-dataplane}}. This document does not specify any further mechanism to coordinate this choice between Control Services and routers of one AS.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs") for more information.
 
 The following code block defines the Hop Field component `HopField` in Protobuf message format:
 
@@ -1306,7 +1306,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
 1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)), including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
-4. As a final step, the Control Service propagates each extended PCB to the correct neighboring ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
+4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
 
 #### Propagation of PCBs in Core Beaconing
 
