@@ -647,7 +647,7 @@ Table of Contents
    0x2D.
 
    For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0:1:f.
+   ISD number 16 is 16-0:1:f.
 
 1.6.  Bootstrapping ability
 
