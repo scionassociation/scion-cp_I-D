@@ -659,8 +659,8 @@ Table of Contents
    representation of the AS number, and - is the literal ASCII character
    0x2D.
 
-   For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0:1:f.
+   For example, the text representation of AS number 280375465082881
+   (0xff0000000001) in ISD number 15 is 15-ff00:0:1.
 
 1.6.  Bootstrapping ability
 
