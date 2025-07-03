@@ -384,10 +384,9 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 The text representation of SCION AS numbers MUST be as follows:
 
-- SCION AS numbers in the lower 32-bit range MUST be represented as decimal.
-- SCION AS numbers in the higher 32-bit range MUST be represented using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`.
-- Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
-- Implementations MAY accept AS numbers in the lower 32-bit range in the Hex form, but they should convert them to the decimal form (e.g. a program may accept AS number '0:1:f' and convert it to 65551).
+- SCION AS numbers in the lower 32-bit range MUST be represented as decimal notation.
+- SCION AS numbers in the higher 32-bit range MUST be represented using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
+- Implementations MAY accept AS numbers in the lower 32-bit range in hexadecimal notation, but they should convert them to decimal notation (e.g. a program may accept AS number '0:1:f' and convert it to 65551).
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). In such case, the Hex notation MUST be used. For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 
