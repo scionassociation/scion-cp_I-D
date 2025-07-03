@@ -1485,17 +1485,13 @@ Table of Contents
    directly in the data plane for packet forwarding and specifies the
    incoming and outgoing interfaces of the ASes on the forwarding path.
    This information is authenticated with a Message Authentication Code
-   (MAC) which is used by the Control Plane of an AS to authenticate
-   path segments with its border routers during packet forwarding.  The
-   algorithm used to compute the Hop Field MAC is an AS-specific choice
-   and the operator of an AS can freely choose a MAC algorithm without
-   outside coordination.  However, the Control Service and routers of
-   the AS do need to agree on the algorithm used.
+   (MAC) which is used by the Control Service of an AS to authenticate
+   path segments with its border routers during packet forwarding.
 
-   Control Service and router implementations MUST support the Default
-   Hop Field MAC algorithm described in [I-D.dekater-scion-dataplane].
-   This document does not specify any further mechanism to coordinate
-   this choice between Control Services and routers of one AS.
+   The algorithm used to compute the Hop Field MAC is an AS-specific
+   choice, although implementations MUST also support the Default Hop
+   Field MAC algorithm.  See [I-D.dekater-scion-dataplane] section
+   "Authorizing Segments through Chained MACs") for more information.
 
    The following code block defines the Hop Field component HopField in
    Protobuf message format:
@@ -1871,9 +1867,9 @@ Table of Contents
        append the computed signature.
 
    4.  As a final step, the Control Service propagates each extended PCB
-       to the correct neighboring ASes by invoking the
-       SegmentCreationService.Beacon remote procedure call (RPC) in the
-       Control Services of the neighboring ASes (see also
+       to the neighboring AS specified in the new AS entry by invoking
+       the SegmentCreationService.Beacon remote procedure call (RPC) in
+       the Control Services of the neighboring ASes (see also
        Section 2.3.5.3).
 
 2.3.5.2.  Propagation of PCBs in Core Beaconing
