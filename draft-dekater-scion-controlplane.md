@@ -1393,11 +1393,11 @@ The resource costs for path discovery are as follows:
 
 All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments.
 
-Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery".
+Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery".
 
 At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
 
-Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane.
+Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane .
 
 To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and inter-ISD beaconing.
 
@@ -1427,7 +1427,7 @@ In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along cor
 
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
-Without making strong assumptions on the topology of the core network, we can assume that shortest paths through real world networks are relatively short: e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and The average distance scales in the same way. Whilst we cannot assume that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
+Without making strong assumptions on the topology of the core network, we can assume that shortest paths through real world networks are relatively short, e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst we cannot assume that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
 
 With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1000 ASes, a AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 
@@ -1458,7 +1458,7 @@ The up segments and down segments do not have to be equal as AS may want to comm
 
 Both the up segments and down segments end at the AS, so by transforming a PCB into a path segment, an AS "terminates" the PCB for this AS ingress interface and at that moment in time.
 
-The Control Service of a non-core AS MUST perform the following steps to "terminate" a PCB:
+The Control Service of a non-core performs the following steps to "terminate" a PCB:
 
 1. The Control Service adds a new AS entry to the PCB which MUST be defined as follows:
    - The next AS MUST NOT be specified.
@@ -1492,7 +1492,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
-3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered. If not, the core AS SHOULD reject the segment.
+3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment MUST be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
@@ -1549,7 +1549,7 @@ SCION paths represent a sequence of ASes and inter-AS links; each with possibly 
 * The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 
-Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes, therefore when looking up a path they MUST assume that all hops are constrained by the intra-AS MTU of each AS traversed.
+Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path MUST infer that all hops are constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
@@ -1662,11 +1662,11 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
-This document specifies only messages RECOMMENDED for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
+This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
 
 ## General Format
 
-Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a `NextHdr` value of `202` in the immediately preceding header.
+Every SCMP message is preceded by a SCION header and zero or more SCION extension headers (see {{I-D.dekater-scion-dataplane}} section "SCION Header Specification"). The SCMP header is identified by a `NextHdr` value of `202` in the immediately preceding header.
 
 The messages have the following general format:
 
@@ -1745,7 +1745,7 @@ protocol type as defined in {{I-D.dekater-scion-dataplane}} section "SCION Heade
 
 ## Processing Rules
 
-Implementations MUST respect the following rules when processing SCMP messages:
+The following rules apply when processing SCMP messages:
 
    - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
    - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
@@ -1887,7 +1887,7 @@ Recipients can use this information to route around broken data-plane links.
 {: title="Error Message field values"}
 
 A **Internal Connectivity Down** message SHOULD be originated by a router in
-response to a packet that cannot be forwarded inside the AS because because the
+response to a packet that cannot be forwarded inside the AS because the
 connectivity between the ingress and egress routers is broken. The ISD and AS
 identifier are set to the ISD-AS of the originating router. The ingress
 Interface ID identifies the interface on which the packet enters the AS. The
@@ -2008,7 +2008,7 @@ Given a SCION path constituted of hop fields, traceroute allows to identify the 
 | Interface ID | Place holder set to zero by SCMP sender                       |
 {: title="Informational Message field values"}
 
-A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (see {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Path Header/SCION Path Type/Hop Field"). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
+A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (see {{I-D.dekater-scion-dataplane}} section "SCION Header Specification"). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
 
 ### Traceroute Reply {#traceroute-reply}
 
@@ -2053,7 +2053,7 @@ The identifier is set to the identifier value from the [Traceroute Request messa
 
 ## SCMP Authentication
 
-Authentication of SCMP packets is not specified here. In current deployments it is still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
+Authentication of SCMP packets is not specified here. It is currently still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations. These additional signals are outside the scope of this specification.
 
 # Security Considerations
 
@@ -2121,7 +2121,7 @@ Even if an adversary succeeds in misusing a peering link as described above, SCI
 
 ### Manipulation of the Path-Selection Process {#manipulate-selection}
 
-Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain forwarding paths for each packet. However, with the benefits of path selection comes the risk of endpoints selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
+SCION endpoints can select inter-domain forwarding paths for each packet, but the benefits of path selection comes with the risk selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
 
 In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.
 
