@@ -393,7 +393,7 @@ The text representation of SCION AS numbers MUST be as follows:
 
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
 
-For example, the text representation of AS number 65551 (0x1000f) in ISD number 4 is `4-0:1:f`.
+For example, the text representation of AS number 65551 (0x1000f) in ISD number 16 is `16-0:1:f`.
 
 
 ## Bootstrapping ability
