@@ -2718,6 +2718,19 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-controlplane-09
+{:numbered="false"}
+
+Major changes:
+
+- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation
+
+Minor changes:
+
+- Nits and wording improvements
+- Figures: redraw and add SVG version
+- "Paths and Links": clarify relationship between path segments and links
+
 ## draft-dekater-scion-controlplane-08
 {:numbered="false"}
 
