@@ -1489,9 +1489,11 @@ Table of Contents
    path segments with its border routers during packet forwarding.
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
-   choice, although implementations MUST also support the Default Hop
+   choice, although the Control Services and border routers MUST use the
+   same algorithm.  Implementations MUST also support the Default Hop
    Field MAC algorithm.  See [I-D.dekater-scion-dataplane] section
-   "Authorizing Segments through Chained MACs") for more information.
+   "Authorizing Segments through Chained MACs") for more information
+   including configuration.
 
    The following code block defines the Hop Field component HopField in
    Protobuf message format:
