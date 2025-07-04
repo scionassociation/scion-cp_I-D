@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 4 January 2026                                          S. Hitz
+Expires: 5 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                             3 July 2025
+                                                             4 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2026.
+   This Internet-Draft will expire on 5 January 2026.
 
 Copyright Notice
 
@@ -631,20 +631,17 @@ Table of Contents
 
    The text representation of SCION AS numbers SHOULD be as follows:
 
-   *  SCION AS numbers in the lower 32-bit range SHOULD be represented
-      as decimal notation.
+   *  SCION AS numbers in the lower 32-bit range MUST be printed as
+      decimal by implementations.  Implementations may parse AS numbers
+      in the lower 32-bit range in hexadecimal notation too (e.g., a
+      program may accept AS number '0:1:f' for AS 65551).
 
-   *  SCION AS numbers in the higher 32-bit range MUST be represented
-      using big-endian hexadecimal notation in 3 groups of 4, in the
-      range 1:0:0 to ffff:ffff:ffff.  Leading zeros in each group are
-      omitted, with the exception that one zero MUST be notated if a
-      group is entirely zeros (e.g., 1:0:1).  The :: zero-compression
-      feature of IPv6 MUST NOT be used.
-
-   *  Implementations MAY accept AS numbers in the lower 32-bit range in
-      hexadecimal notation, but they should convert them to decimal
-      notation (e.g. a program may accept AS number '0:1:f' and convert
-      it to 65551).
+   *  SCION AS numbers in the higher 32-bit range MUST be printed using
+      big-endian hexadecimal notation in 3 groups of 4, in the range
+      1:0:0 to ffff:ffff:ffff.  Leading zeros in each group are omitted,
+      with the exception that one zero MUST be notated if a group is
+      entirely zeros (e.g., 1:0:1).  The :: zero-compression feature of
+      IPv6 MUST NOT be used.
 
    *  A range of AS numbers can be shortened with a notation similar to
       the one used for CIDR IP ranges ([RFC4632]).  In such case,
@@ -659,8 +656,8 @@ Table of Contents
    representation of the AS number, and - is the literal ASCII character
    0x2D.
 
-   For example, the text representation of AS number 280375465082881
-   (0xff0000000001) in ISD number 15 is 15-ff00:0:1.
+   For example, the text representation of AS number ff00:0:1 in ISD
+   number 15 is 15-ff00:0:1.
 
 1.6.  Bootstrapping ability
 
