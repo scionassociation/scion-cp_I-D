@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 January 2026                                          S. Hitz
+Expires: 5 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                             2 July 2025
+                                                             4 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2026.
+   This Internet-Draft will expire on 5 January 2026.
 
 Copyright Notice
 
@@ -167,6 +167,7 @@ Table of Contents
    Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-09
      draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-07
      draft-dekater-scion-controlplane-06
@@ -544,18 +545,18 @@ Table of Contents
      +==============+================================================+
      | ISD          | Description                                    |
      +==============+================================================+
-     | 0            | The wildcard ISD.                              |
+     | 0            | The wildcard ISD                               |
      +--------------+------------------------------------------------+
      | 1 - 15       | Reserved for documentation and sample code     |
      |              | (analogous to [RFC5398]).                      |
      +--------------+------------------------------------------------+
-     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |
+     | 16 - 63      | Private use (analogous to [RFC6996]) - can be  |
      |              | used for testing and private deployments       |
      +--------------+------------------------------------------------+
-     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |
-     |              | order, without gaps and "vanity" numbers.      |
+     | 64 - 4094    | Public ISDs - should be allocated in ascending |
+     |              | order, without gaps and "vanity" numbers       |
      +--------------+------------------------------------------------+
-     | 4095 - 65535 | Reserved for future use.                       |
+     | 4095 - 65535 | Unallocated                                    |
      +--------------+------------------------------------------------+
 
                       Table 1: ISD number allocations
@@ -576,40 +577,48 @@ Table of Contents
 
 1.5.2.1.  Wildcard Addressing
 
-   SCION endpoints use wildcard AS 0:0:0 to designate any core AS, e.g.
-   to place requests for core segments or down segments during path
-   lookup.  These wildcard addresses are of the form I-0, to designate
-   any AS in ISD I.  For more information, see Section 5.2.1.
+   SCION endpoints use wildcard AS 0 to designate any core AS, e.g. to
+   place requests for core segments or down segments during path lookup.
+   These wildcard addresses are of the form I-0, to designate any AS in
+   ISD I.  For more information, see Section 5.2.1.
 
 1.5.2.2.  SCION AS numbers
 
-    +===================+=============+===============================+
-    | AS                | Size        | Description                   |
-    +===================+=============+===============================+
-    | 0:0:0             | 1           | The wildcard AS               |
-    +-------------------+-------------+-------------------------------+
-    | 0:0:1-0:ffff:ffff | ~4.3 bill.  | Public SCION AS numbers       |
-    +-------------------+-------------+-------------------------------+
-    | 1:0:0             | 1           | Reserved                      |
-    +-------------------+-------------+-------------------------------+
-    | 2:0:0/16          | ~4.3 bill.  | Additional public SCION AS    |
-    |                   |             | numbers                       |
-    +-------------------+-------------+-------------------------------+
-    | ff00:0:0/32       | 65535       | Reserved for documentation    |
-    |                   |             | and test/sample code          |
-    |                   |             | (analogous to [RFC5398]).     |
-    +-------------------+-------------+-------------------------------+
-    | ffaa:0:0/24       | ~16.8 mill. | Reserved for private use      |
-    |                   |             | (analogous to [RFC6996]).     |
-    |                   |             | These numbers can be used for |
-    |                   |             | testing/private deployments.  |
-    +-------------------+-------------+-------------------------------+
-    | ffff:ffff:ffff    | 1           | Reserved                      |
-    +-------------------+-------------+-------------------------------+
+   +================+===============+=================================+
+   | AS             | Size          | Description                     |
+   +================+===============+=================================+
+   | 0              | 1             | The wildcard AS                 |
+   +----------------+---------------+---------------------------------+
+   | 1 - 4294967295 | ~4.3 billion  | Public SCION AS numbers         |
+   +----------------+---------------+---------------------------------+
+   | 1:0:0 -        | ~4.3 billion  | Unallocated                     |
+   | 1:ffff:ffff    |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | 2:0:0 -        | ~4.3 billion  | Public SCION AS numbers         |
+   | 2:ffff:ffff    |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | 3:0:0 -        | ~280 trillion | Unallocated                     |
+   | feff:ffff:ffff |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | ff00:0:0 -     | 65536         | Reserved for documentation and  |
+   | ff00:0:ffff    |               | sample code (analogous to       |
+   |                |               | [RFC5398])                      |
+   +----------------+---------------+---------------------------------+
+   | ff00:1:0 -     | ~730 billion  | Unallocated                     |
+   | ffa9:ffff:ffff |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | ffaa:0:0 -     | ~16.8 million | Reserved for private use        |
+   | ffaa:ff:ffff   |               | (analogous to [RFC6996]) -      |
+   |                |               | these numbers can be used for   |
+   |                |               | testing and private deployments |
+   +----------------+---------------+---------------------------------+
+   | ffaa:100:0 -   | ~369 billion  | Unallocated                     |
+   | ffff:ffff:fffe |               |                                 |
+   +----------------+---------------+---------------------------------+
+   | ffff:ffff:ffff | 1             | Reserved                        |
+   +----------------+---------------+---------------------------------+
 
-                       Table 2: AS number allocations
-
-   The rest of the space is currently unallocated.
+                      Table 2: AS number allocations
 
 1.5.3.  Text Representation
 
@@ -620,24 +629,25 @@ Table of Contents
 
 1.5.3.2.  AS numbers
 
-   The text representation of SCION AS numbers MUST be as follows:
+   The text representation of SCION AS numbers is as follows:
 
-   *  Using big-endian hexadecimal notation in 3 groups of 4, in the
-      range 0:0:0 to ffff:ffff:ffff.
+   *  SCION AS numbers in the lower 32-bit range MUST be printed as
+      decimal by implementations.  Implementations may parse AS numbers
+      in the lower 32-bit range in hexadecimal notation too (e.g., a
+      program may accept AS number '0:1:f' for AS 65551).
 
-   *  Leading zeros in each group are omitted (e.g., 0:0:1)
-
-   *  The :: zero-compression feature of IPv6 MUST NOT be used.
+   *  SCION AS numbers in the higher 32-bit range MUST be printed using
+      big-endian hexadecimal notation in 3 groups of 4, in the range
+      1:0:0 to ffff:ffff:ffff.  Leading zeros in each group are omitted,
+      with the exception that one zero MUST be notated if a group is
+      entirely zeros (e.g., 1:0:1).  The :: zero-compression feature of
+      IPv6 MUST NOT be used.
 
    *  A range of AS numbers can be shortened with a notation similar to
-      the one used for CIDR IP ranges ([RFC4632]).  For example, the
-      range of the lowest 32-bit AS numbers (0-4294967295) can be
-      represented as 0:0:0/16.
-
-   *  For historical reasons, SCION AS numbers in the lower 32-bit range
-      MAY also be represented as decimal for human readability.  For
-      example, if a program receives the AS number 0:1:f, it MAY display
-      the number as "65551".
+      the one used for CIDR IP ranges ([RFC4632]).  In such case,
+      hexadecimal notation MUST be used.  For example, the range of the
+      lowest 32-bit AS numbers (0-4294967295) can be represented as
+      0:0:0/16.
 
 1.5.3.3.  <ISD, AS> tuples
 
@@ -646,8 +656,8 @@ Table of Contents
    representation of the AS number, and - is the literal ASCII character
    0x2D.
 
-   For example, the text representation of AS number 65551 (0x1000f) in
-   ISD number 4 is 4-0:1:f.
+   For example, the text representation of AS number ff00:0:1 in ISD
+   number 15 is 15-ff00:0:1.
 
 1.6.  Bootstrapping ability
 
@@ -4124,6 +4134,22 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-09
+
+   Major changes:
+
+   *  "SCION AS numbers": make text representation for lower 32-bit ASes
+      consistent with PKI draft, add reference to allocation
+
+   Minor changes:
+
+   *  Nits and wording improvements
+
+   *  Figures: redraw and add SVG version
+
+   *  "Paths and Links": clarify relationship between path segments and
+      links
 
 draft-dekater-scion-controlplane-08
 
