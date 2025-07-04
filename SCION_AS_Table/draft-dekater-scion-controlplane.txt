@@ -629,7 +629,7 @@ Table of Contents
 
 1.5.3.2.  AS numbers
 
-   The text representation of SCION AS numbers SHOULD be as follows:
+   The text representation of SCION AS numbers is as follows:
 
    *  SCION AS numbers in the lower 32-bit range MUST be printed as
       decimal by implementations.  Implementations may parse AS numbers
