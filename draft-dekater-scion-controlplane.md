@@ -382,7 +382,7 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 #### AS numbers
 
-The text representation of SCION AS numbers SHOULD be as follows:
+The text representation of SCION AS numbers is as follows:
 
 - SCION AS numbers in the lower 32-bit range MUST be printed as decimal by implementations. Implementations may parse AS numbers in the lower 32-bit range in hexadecimal notation too (e.g., a program may accept AS number '0:1:f' for AS 65551).
 - SCION AS numbers in the higher 32-bit range MUST be printed using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
