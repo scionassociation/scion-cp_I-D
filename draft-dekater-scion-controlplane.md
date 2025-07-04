@@ -341,11 +341,11 @@ The following table gives an overview of the ISD number allocation:
 
 | ISD          | Description                                                                             |
 |--------------+-----------------------------------------------------------------------------------------|
-| 0            | The wildcard ISD.                                                                       |
+| 0            | The wildcard ISD                                                                        |
 | 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
-| 16 - 63      | Private use (analogous to {{RFC6996}}). Can be used for testing and private deployments |
-| 64 - 4094    | Public ISDs. Should be allocated in ascending order, without gaps and "vanity" numbers. |
-| 4095&nbsp;-&nbsp;65535 | Reserved for future use.                                                      |
+| 16 - 63      | Private use (analogous to {{RFC6996}}) - can be used for testing and private deployments |
+| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers |
+| 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
 ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
@@ -356,22 +356,23 @@ A SCION AS number is the 48-bit identifier for an AS. Although they play a simil
 
 #### Wildcard Addressing {#serv-disc}
 
-SCION endpoints use wildcard AS `0:0:0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
+SCION endpoints use wildcard AS `0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
 #### SCION AS numbers
 
 | AS               | Size        | Description                                                                 |
 |------------------+-------------+-----------------------------------------------------------------------------|
-| `0:0:0`          | 1           | The wildcard AS                                                             |
-| `0:0:1-0:ffff:ffff`| ~4.3&nbsp;bill.  | Public SCION AS numbers                                              |
-| `1:0:0`          | 1           | Reserved                                                                    |
-| `2:0:0/16`       | ~4.3&nbsp;bill.  | Additional public SCION AS numbers                                     |
-| `ff00:0:0/32`    | 65535       | Reserved for documentation and test/sample code (analogous to {{RFC5398}}). |
-| `ffaa:0:0/24`    | ~16.8&nbsp;mill. | Reserved for private use (analogous to {{RFC6996}}). These numbers can be used for testing/private deployments. |
+| `0`          | 1           | The wildcard AS                                                             |
+| `1 - 4294967295`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
+| `1:0:0 - 1:ffff:ffff`| ~4.3&nbsp;billion| Unallocated                                                        |
+| `2:0:0 - 2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
+| `3:0:0 - feff:ffff:ffff`| ~280&nbsp;trillion| Unallocated                                                    |
+| `ff00:0:0 - ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}) |
+| `ff00:1:0 - ffa9:ffff:ffff`| ~730&nbsp;billion | Unallocated                                                 |
+| `ffaa:0:0 - ffaa:ff:ffff`| ~16.8&nbsp;million| Reserved for private use (analogous to {{RFC6996}}) - these numbers can be used for testing and private deployments |
+| `ffaa:100:0 - ffff:ffff:fffe`| ~369&nbsp;billion| Unallocated                                                |
 | `ffff:ffff:ffff` | 1           | Reserved                                                                    |
 {: #table-2 title="AS number allocations"}
-
-The rest of the space is currently unallocated.
 
 ### Text Representation
 
@@ -381,19 +382,18 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 #### AS numbers
 
-The text representation of SCION AS numbers MUST be as follows:
+The text representation of SCION AS numbers is as follows:
 
-- Using big-endian hexadecimal notation in 3 groups of 4, in the range `0:0:0` to `ffff:ffff:ffff`.
-- Leading zeros in each group are omitted (e.g., `0:0:1`)
-- The `::` zero-compression feature of IPv6 MUST NOT be used.
-- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
-- For historical reasons, SCION AS numbers in the lower 32-bit range MAY also be represented as decimal for human readability. For example, if a program receives the AS number `0:1:f`, it MAY display the number as "65551".
+- SCION AS numbers in the lower 32-bit range MUST be printed as decimal by implementations. Implementations may parse AS numbers in the lower 32-bit range in hexadecimal notation too (e.g., a program may accept AS number '0:1:f' for AS 65551).
+- SCION AS numbers in the higher 32-bit range MUST be printed using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
+- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). In such case, hexadecimal notation MUST be used. For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
+
 
 #### <ISD, AS> tuples
 
 The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
 
-For example, the text representation of AS number 65551 (0x1000f) in ISD number 16 is `16-0:1:f`.
+For example, the text representation of AS number ff00:0:1 in ISD number 15 is `15-ff00:0:1`.
 
 
 ## Bootstrapping ability
@@ -2712,6 +2712,19 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-09
+{:numbered="false"}
+
+Major changes:
+
+- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation
+
+Minor changes:
+
+- Nits and wording improvements
+- Figures: redraw and add SVG version
+- "Paths and Links": clarify relationship between path segments and links
 
 ## draft-dekater-scion-controlplane-08
 {:numbered="false"}
