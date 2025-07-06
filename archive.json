@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-03T00:24:59.819835+00:00",
+  "timestamp": "2025-07-06T00:27:44.230515+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -306,7 +306,7 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2025-06-25T13:06:17Z",
+      "updatedAt": "2025-07-03T09:08:50Z",
       "closedAt": null,
       "comments": [
         {
@@ -350,6 +350,13 @@
           "body": "We discussed this, \"triangle routing\" should not be problematic and it won't create a loop. Maybe we need to make the text clearer. TODO: draw this and think about it one more time..\n [Slack Discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1750792582215319)",
           "createdAt": "2025-06-12T12:00:50Z",
           "updatedAt": "2025-06-24T19:18:00Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I discussed this with @katyatitkova . She agrees that the triangle situation is in principle possible, however in the current implementation we don't have policies configurable in a way that would cause them (but they could be in principle implemented)",
+          "createdAt": "2025-07-03T09:08:50Z",
+          "updatedAt": "2025-07-03T09:08:50Z"
         }
       ]
     },
@@ -1689,7 +1696,8 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "katyatitkova"
+        "katyatitkova",
+        "nicorusti"
       ],
       "labels": [
         "question",
@@ -1697,7 +1705,7 @@
       ],
       "body": "- [ ] Do we write in the drafts what certs are used for the HTTPS requests for the gRPC API? \n- [ ] Do we clarify the overall layers used? Is the text clear enough?\n- [ ] Think about it and eventually update security considerations\n\n> From Alvaro Retana:\n(1) gRPC/HTTP3/QUIC\n  I'm not deeply familiar with gRPC.  I wonder whether it can be exploited by an attacker -- are there any security considerations that are SCION-related from its use?  I know the messages are transported over QUIC/H3 -- same question.",
       "createdAt": "2025-06-09T21:05:55Z",
-      "updatedAt": "2025-06-27T10:02:25Z",
+      "updatedAt": "2025-07-03T14:55:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -1706,6 +1714,27 @@
           "body": "@romshark to share some ideas in relation to QUIC\n",
           "createdAt": "2025-06-12T11:29:47Z",
           "updatedAt": "2025-06-12T11:29:47Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@katyatitkova following our discussion: \n- What keys/certs are used for the QUIC handshake?\n- Are there any DoS attack vectors?\n- What measures does the OS have or should have (e.g. only accept gRPCs from neighbor ASes and intra-AS endpoints)?",
+          "createdAt": "2025-07-03T08:25:55Z",
+          "updatedAt": "2025-07-03T08:25:55Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> What keys/certs are used for the QUIC handshake?\n\nLooking into [this](https://github.com/scionproto/scion/blob/150ee877b96aafffcd9e0dfafef16a018bf68483/control/cmd/control/main.go#L229 ) and [this](https://github.com/scionproto/scion/blob/150ee877b96aafffcd9e0dfafef16a018bf68483/private/app/appnet/infraenv.go#L111), I'd say that when listening, control plane uses the keys and certs from `crypto/as` and `certs` directories (in the config directory), and, when dialing, certificates are not checked at all.\n\n@jiceatscion Could you verify my findings please? Something seems off here...",
+          "createdAt": "2025-07-03T14:42:16Z",
+          "updatedAt": "2025-07-03T14:42:16Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Are there any DoS attack vectors?\nWhat measures does the OS have or should have (e.g. only accept gRPCs from neighbor ASes and intra-AS endpoints)?\n\nSo there's [QUIC flood](https://www.cloudflare.com/en-gb/learning/ddos/what-is-a-quic-flood/) kind of attack, when too many handshaking requests are being sent. The researchers [here](https://arxiv.org/html/2412.08936v1) say: \"existing mitigation techniques focus primarily on reactive measures, such as the monitoring and the filtering of malicious traffic. They do not fix the vulnerability from the root cause - high resource amplification factors during the attack. Instead, they may demand extra resource for the detection\". So the researches propose using cryptographic challenges instead. The preprint is rather new (December 2024), so I guess the only thing that could be implemented now is the filtering of the traffic.",
+          "createdAt": "2025-07-03T14:55:32Z",
+          "updatedAt": "2025-07-03T14:55:32Z"
         }
       ]
     },
@@ -1743,7 +1772,7 @@
       "id": "I_kwDOJx2-rs67HuO0",
       "title": "Numbers registry - update reference and clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/112",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1753,10 +1782,10 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "- [ ] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [x] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n- [x] https://github.com/scionassociation/scion-cppki_I-D/pull/68 from the PKI draft and replace it with cross  reference: `Table 1: ISD Number Allocations`\n- [x] Devs: confirm that the right notation for ISD 65551 is `0:1:f` (which is what we have in the draft)\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
+      "body": "- [x] create placeholder link on scion.org about registry activity (for now redirecting to Anapaya AND linking the same table as the draft (which I think is now on scionproto github)\n- [x] Update reference to point to scion.org\n- [x] Check reference to RFC4893 in relation to AS number definition\n- [x] Do we need a reference to RFC5952 in relation to formatting? Maybe not as Alvaro suggests\n- [x] Check that ISD-AS in the drafts follow the text representation rule (e.g. `4-0000:1:f` does not)  \n- [x] Move table 2 to 1.5.2.\n- [x] https://github.com/scionassociation/scion-cppki_I-D/pull/68 from the PKI draft and replace it with cross  reference: `Table 1: ISD Number Allocations`\n- [x] Devs: confirm that the right notation for ISD 65551 is `0:1:f` (which is what we have in the draft)\n- [x] Update PKI draft https://github.com/scionassociation/scion-cppki_I-D/pull/73\n\n\n---- \n## Feedback from Alvaro:\n\n### 1.5.1.  ISD Numbers\n```\n542   An ISD number is the 16-bit global identifier for an ISD and MUST be\n543   globally unique.\n\n545   The following table gives an overview of the ISD number allocation:\n\n547     +==============+================================================+\n548     | ISD          | Description                                    |\n549     +==============+================================================+\n550     | 0            | The wildcard ISD.                              |\n551     +--------------+------------------------------------------------+\n552     | 1 - 15       | Reserved for documentation and sample code     |\n553     |              | (analogous to [RFC5398]).                      |\n554     +--------------+------------------------------------------------+\n555     | 16 - 63      | Private use (analogous to [RFC6996]).  Can be  |\n556     |              | used for testing and private deployments       |\n557     +--------------+------------------------------------------------+\n558     | 64 - 4094    | Public ISDs.  Should be allocated in ascending |\n559     |              | order, without gaps and \"vanity\" numbers.      |\n560     +--------------+------------------------------------------------+\n561     | 4095 - 65535 | Reserved for future use.                       |\n562     +--------------+------------------------------------------------+\n\n564                      Table 1: ISD number allocations\n\n566   Currently, ISD numbers are allocated by Anapaya, a provider of SCION-\n567   based networking software and solutions (see [ISD-AS-assignments]).\n```\n\n>  Suggestion: the Anapaya site doesn't have a summary similar to Table 1.\nIf anyone is looking there, they won't know which ISD can be used for\ntesting (for example).  You might want to include this information, similar\nto the IANA pages. ;-)\n\n\n### 1.5.2.  SCION AS Numbers\n```\n571   A SCION AS number is the 48-bit identifier for an AS.  Although they\n572   play a similar role, there is no relationship between SCION AS\n573   numbers and BGP ASNs as defined by [RFC4893].  For historical reasons\n574   some SCION Autonomous Systems use a SCION AS number where the first\n575   16 bits are 0 and the remaining 32 bits are identical to their BGP\n576   ASN, but there is no technical requirement for this.\n```\n> [] s/RFC4893/RFC4271 I know that there isn't a specific definition in rfc4271 of an ASN (there\nisn't one in rfc4893 either).\n\n###  1.5.3.2.  AS numbers\n```\n587   The text representation of SCION AS numbers is similar to IPv6 (see\n588   [RFC5952]) but not identical.  It MUST be as follows:\n\n590   *  It uses a 16-bit colon-separated lower-case hex encoding with\n591      leading 0s omitted: 0:0:0 to ffff:ffff:ffff.\n\n593   *  The :: zero-compression feature of IPv6 MUST NOT be used.  The\n594      feature has very limited use in a 48-bit address space and would\n595      only add more complexity.\n\n597   *  A range of AS numbers can be shortened with a notation similar to\n598      the one used for CIDR IP ranges ([RFC4632]).  For example, the\n599      range of the lowest 32-bit AS numbers (0-4294967295) can be\n600      represented as 0:0:0/16.\n\n602   *  For historical reasons, SCION AS numbers in the lower 32-bit range\n603      MAY also be represented as decimal for human readability.  For\n604      example, if a program receives the AS number 0:1:f, it MAY display\n605      the number as \"65551\".\n```\n> IMHO, the comparison to RFC5952 makes the explanation more complex as\nyou have to then explain the exceptions (::)...\n\n### Example\n```\n614   For example, the text representation of AS number 65551 (0x1000f) in\n615   ISD number 4 is 4-0000:1:f.\n```\n\n> 0000:1:f doesn't follow the rules in \u00a71.5.3.2: the leading 0s are\nincluded.  Shouldn't it be 1:f?\n\n### Table 2: AS number allocations\n\n> Maybe this table belongs in \u00a71.5.2.\n",
       "createdAt": "2025-06-12T08:35:26Z",
-      "updatedAt": "2025-07-01T14:56:12Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-04T11:11:08Z",
+      "closedAt": "2025-07-04T11:06:58Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1827,6 +1856,27 @@
           "body": "Is the canonical representation the one now in Section 1.5.2.2 (see https://scionassociation.github.io/scion-cp_I-D/SCION_AS_Table/draft-dekater-scion-controlplane.html)\n",
           "createdAt": "2025-07-01T14:56:12Z",
           "updatedAt": "2025-07-01T14:56:12Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I discussed this with @katyatitkova:  she agree that we should specify one canonical representation that is consistent in both drafts. SO I agree with the proicess you propose @jiceatscion \n\n> Clarify which is the canonical representation; decimal allowed or not. We must chose. \n\nI discussed this with @katyatitkova , she would ideally like to transition to an uniform, hex-only representation. However, IMHO: \n- This draft's goal is to document the existing implementation\n- Such a change would be major and take a lot of time to roll out (e.g. in SSFN)\n\nFor these two reasons above, I think we should agree on the dual Hex/dec representation and write something like: \n> SCION AS numbers in the lower 32-bit range MUST be represented as decimal. Implementations MAY accept such numbers in the Hex form, but then they should be converted to the decimal form (e.g. a program may accept AS number '0:1:f' and convert it to `65551`).\n\nWhat do you think @jiceatscion ?",
+          "createdAt": "2025-07-03T08:57:42Z",
+          "updatedAt": "2025-07-03T09:00:55Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that we are forced to allow both representations. However we have to specify where each is acceptable. Your phrasing is contradictory: \"MUST be represented...\" by what/whom? \"convert...\" when? On input, on output?\n\n I think that you mean:\n* software MUST output the canonical form (unless when generating config files that have a different requirement).\n* software SHOULD accept either forms (in args or config files), but is not required to. E.g. pki requires the canonical form.\n",
+          "createdAt": "2025-07-03T10:33:47Z",
+          "updatedAt": "2025-07-03T10:33:47Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> * software MUST output the canonical form (unless when generating config files that have a different requirement).\n> * software SHOULD accept either forms (in args or config files), but is not required to. E.g. pki requires the canonical form.\n\nGreat point. \"be conservative in what you send, be liberal in what you accept\". I will adapt\n\n",
+          "createdAt": "2025-07-03T11:44:22Z",
+          "updatedAt": "2025-07-03T11:44:22Z"
         }
       ]
     },
@@ -1848,22 +1898,22 @@
       ],
       "body": "- [x] Terminology - \"Hop Field (HF)\" is repeated. This also happens in other definitions. \n- [x] `*SCMP*: A signaling protocol analogous to the Internet Control.` - [nit] Expand SCMP.\n- [x] Clarifications in `1.3.  Paths and Links`\n  ```\n  387   A path can contain at most one peering link shortcut which means they\n  388   can only be used in paths between ASes within the \"customer cone\" of\n  389   the ASes connected by the peering link.\n  ```\n  > We have links (which I assume are one-hop connections), paths (which are\ne2e; \"an up-core-down path\", for example), and path segments.  The\ndefinition of \"path segments\" (in the Terminology section) combines terms:\n\"A path segment can be (1) an up segment (i.e. a path between a non-core AS\nand a core AS in the same ISD),\": \"A path segment can be...[a]...segment\n(i.e. a path...\".\nI think this description could be clarified.\n- [x] Typo `litteral` --> literal (e.g. in 1.5.3.3.  <ISD, AS> tuples) \n- [x] After reading \u00a77.3.1, also point to the specification in \u00a72.3.1.\n\n\nNITS in this part were DONE in #115 ",
       "createdAt": "2025-06-12T08:46:57Z",
-      "updatedAt": "2025-06-27T13:56:16Z",
+      "updatedAt": "2025-07-03T13:24:55Z",
       "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "More clarifications (from the second part of Alvaro's feedback):\n\n- [ ] `2.2.1.6.  Hop Field`: add a sentence to clarify that  MAC is a form of authenticating segments between the Control Plane of an AS and its own routers within the AS. It is never computed by endpoints\n  > [] Only one MAC algorithm is specified, but an AS can select its own.  This may be a question for the dataplane draft...  How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?\n- [ ] \n  ```\n  1641\t2.2.4.  Configuration\n  \n  1643\t   For the purpose of constructing and propagating path segments, an AS\n  1644\t   Control Service MUST be configured with links to neighboring ASes.\n  1645\t   Such information may be conveyed to the Control Service in an out-of-\n  1646\t   band fashion (e.g in a configuration file).  For each link, these\n  1647\t   values MUST be configured:\n  \n  [] \"MUST be configured with links to neighboring ASes\"\n  ```\n  s/MUST/must\n  > There's no Normative value in using \"MUST\" here because the sentence is explaining a fact: if no links exist then nothing can happen...\n- [ ] [nit] s/policy that it does not/policy that does not\n- [ ] [] s/must check/MUST check in `1702\t       receiver Control Service must check every AS entry except the`\n- [ ] [] \"relatively small subset of the viable PCBs SHOULD be propagated\" ->    \"Not all viable PCBs should be propagated...\"\n   > This is not a good Normative statement because it is not clear what a \"relatively small subset\" is?  Half, 10%, only 2, etc. ??\n- [ ] [] \"The goal of the AS SHOULD be...\"\n    > When is it ok for the goal to be something else?  I guess it's a matter of configuration, but the point is that this sentence is just referring to a fact: s/SHOULD/should\n- [ ] Use [inclusive language](https://www.rfc-editor.org/styleguide/part2/#inclusive_language) (e.g. blacklists, whitelist)\n- [ ] Lowercase some SHOULD\n  ```\n  1755\t   *  Path disjointness: Paths can be either AS disjointed or link\n  1756\t      disjointed.  AS disjointed paths have no common upstream/core AS\n  1757\t      for the current AS, whereas link disjointed paths do not share any\n  1758\t      AS-to-AS link.  AS disjointness allows path diversity in the event\n  1759\t      that an AS becomes unresponsive, and link disjointness provides\n  1760\t      resilience in case of link failure.  Both criteria can be used\n  1761\t      depending on the objective of the AS.\n  \n  1763\t   The relative disjointness of two PCBs A and B may be calculated by\n  1764\t   assigning a disjointness score, calculated as the number of links in\n  1765\t   A that don't appear in B.  The beacon that has the highest\n  1766\t   disjointness score and is not the shortest path SHOULD be selected.\n  1767\t   If this is not better than what has already been selected, then the\n  1768\t   beacon with the shortest path yet to be selected SHOULD be chosen\n  1769\t   instead.\n  ```\n   > [] The list above presented examples, which I take to mean that the policy is up to the local AS.  IOW, there shouldn't be a specification of which paths to choose.  I take this paragraph as an example too.  Note also that the use of SHOULD allows for any selection.  Suggestion: Avoid using normative language and introduce the paragraph with \"For example...\".\n- [ ] s/must check/MUST check\n   `1702\t       receiver Control Service must check every AS entry except the`\n-  [ ] [] \"MUST at least include: ... MAY add\"\n  ```\n  ...\n  1834\t2.3.5.1.  Propagation of PCBs in Intra-ISD Beaconing\n  \n  1836\t   The propagation process in intra-ISD beaconing includes the following\n  1837\t   steps:\n  \n  1839\t   1.  From the candidate PCBs stored in the Beacon Store, the Control\n  1840\t       Service of an AS selects the best PCBs to propagate to its\n  1841\t       downstream neighboring ASes, based on a selection algorithm\n  1842\t       specific for this AS.\n  \n  1844\t   2.  The Control Service adds a new AS entry to every selected PCB\n  1845\t       which MUST at least include:\n  \n  1847\t       *  The ingress interface to this AS, in the Hop Field component.\n  \n  1849\t       *  The egress interface to the neighboring AS, also in the Hop\n  1850\t          Field component.\n  \n  1852\t       *  The ISD_AS number of the next AS, in the signed body component\n  1853\t          of the AS entry.\n  \n  1855\t       *  If the AS has peering links, the Control Service MAY add\n  1856\t          corresponding peer entry components to the signed body of the\n  1857\t          AS entry; one peer entry component for each peering link that\n  1858\t          the AS wants to advertise.  The Hop Field component of each\n  1859\t          added peer entry MUST have a specified egress interface.\n  ```\n   > The use of MUST and then MAY is a Normative conflict.  Instead of reiterating the information, leverage the previous specifications.  Note also that the minimum includes the Header information (key IDs, ISD_AS, etc.). Suggestion: \n       > The Control Service MUST add a new AS Entry (\u00a72.2.1.3), including any\n       Peer Entry information (\u00a72.2.1.7) the AS is configured to advertise.\n\n\n\n\n\n",
+          "body": "More clarifications (from the second part of Alvaro's feedback):\n\n- [x] `2.2.1.6.  Hop Field`: add a sentence to clarify that  MAC is a form of authenticating segments between the Control Plane of an AS and its own routers within the AS. It is never computed by endpoints\n  > [] Only one MAC algorithm is specified, but an AS can select its own.  This may be a question for the dataplane draft...  How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?\n  --> this iss to be further clarified in the DP draft, see https://github.com/scionassociation/scion-dp_I-D/issues/98 \n- [ ] \n  ```\n  1641\t2.2.4.  Configuration\n  \n  1643\t   For the purpose of constructing and propagating path segments, an AS\n  1644\t   Control Service MUST be configured with links to neighboring ASes.\n  1645\t   Such information may be conveyed to the Control Service in an out-of-\n  1646\t   band fashion (e.g in a configuration file).  For each link, these\n  1647\t   values MUST be configured:\n  \n  [] \"MUST be configured with links to neighboring ASes\"\n  ```\n  s/MUST/must\n  > There's no Normative value in using \"MUST\" here because the sentence is explaining a fact: if no links exist then nothing can happen...\n- [ ] [nit] s/policy that it does not/policy that does not\n- [ ] [] s/must check/MUST check in `1702\t       receiver Control Service must check every AS entry except the`\n- [ ] [] \"relatively small subset of the viable PCBs SHOULD be propagated\" ->    \"Not all viable PCBs should be propagated...\"\n   > This is not a good Normative statement because it is not clear what a \"relatively small subset\" is?  Half, 10%, only 2, etc. ??\n- [x] [] \"The goal of the AS SHOULD be...\"\n    > When is it ok for the goal to be something else?  I guess it's a matter of configuration, but the point is that this sentence is just referring to a fact: s/SHOULD/should\n- [ ] Use [inclusive language](https://www.rfc-editor.org/styleguide/part2/#inclusive_language) (e.g. blacklists, whitelist)\n- [x] Lowercase some SHOULD\n  ```\n  1755\t   *  Path disjointness: Paths can be either AS disjointed or link\n  1756\t      disjointed.  AS disjointed paths have no common upstream/core AS\n  1757\t      for the current AS, whereas link disjointed paths do not share any\n  1758\t      AS-to-AS link.  AS disjointness allows path diversity in the event\n  1759\t      that an AS becomes unresponsive, and link disjointness provides\n  1760\t      resilience in case of link failure.  Both criteria can be used\n  1761\t      depending on the objective of the AS.\n  \n  1763\t   The relative disjointness of two PCBs A and B may be calculated by\n  1764\t   assigning a disjointness score, calculated as the number of links in\n  1765\t   A that don't appear in B.  The beacon that has the highest\n  1766\t   disjointness score and is not the shortest path SHOULD be selected.\n  1767\t   If this is not better than what has already been selected, then the\n  1768\t   beacon with the shortest path yet to be selected SHOULD be chosen\n  1769\t   instead.\n  ```\n   > [] The list above presented examples, which I take to mean that the policy is up to the local AS.  IOW, there shouldn't be a specification of which paths to choose.  I take this paragraph as an example too.  Note also that the use of SHOULD allows for any selection.  Suggestion: Avoid using normative language and introduce the paragraph with \"For example...\".\n- [ ] s/must check/MUST check\n   `1702\t       receiver Control Service must check every AS entry except the`\n-  [x] [] \"MUST at least include: ... MAY add\"\n  ```\n  ...\n  1834\t2.3.5.1.  Propagation of PCBs in Intra-ISD Beaconing\n  \n  1836\t   The propagation process in intra-ISD beaconing includes the following\n  1837\t   steps:\n  \n  1839\t   1.  From the candidate PCBs stored in the Beacon Store, the Control\n  1840\t       Service of an AS selects the best PCBs to propagate to its\n  1841\t       downstream neighboring ASes, based on a selection algorithm\n  1842\t       specific for this AS.\n  \n  1844\t   2.  The Control Service adds a new AS entry to every selected PCB\n  1845\t       which MUST at least include:\n  \n  1847\t       *  The ingress interface to this AS, in the Hop Field component.\n  \n  1849\t       *  The egress interface to the neighboring AS, also in the Hop\n  1850\t          Field component.\n  \n  1852\t       *  The ISD_AS number of the next AS, in the signed body component\n  1853\t          of the AS entry.\n  \n  1855\t       *  If the AS has peering links, the Control Service MAY add\n  1856\t          corresponding peer entry components to the signed body of the\n  1857\t          AS entry; one peer entry component for each peering link that\n  1858\t          the AS wants to advertise.  The Hop Field component of each\n  1859\t          added peer entry MUST have a specified egress interface.\n  ```\n   > The use of MUST and then MAY is a Normative conflict.  Instead of reiterating the information, leverage the previous specifications.  Note also that the minimum includes the Header information (key IDs, ISD_AS, etc.). Suggestion: \n       > The Control Service MUST add a new AS Entry (\u00a72.2.1.3), including any\n       Peer Entry information (\u00a72.2.1.7) the AS is configured to advertise.\n\n\n\n\n\n",
           "createdAt": "2025-06-25T10:24:53Z",
-          "updatedAt": "2025-06-26T15:16:05Z"
+          "updatedAt": "2025-07-03T13:20:58Z"
         },
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "And more: \n\n- [ ] The ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n   ```\n  1864\t   4.  As a final step, the Control Service propagates each extended PCB\n  1865\t       to the correct neighboring ASes by invoking the\n  1866\t       SegmentCreationService.Beacon remote procedure call (RPC) in the\n  1867\t       Control Services of the neighboring ASes (see also\n  1868\t       Section 2.3.5.3).\n  ```\n   [] What is the set of \"correct neighboring ASes\"?  \"correct\" is not explained anywhere.\nThe ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n- [ ] [] s/until new link/until a new link\n- [ ] If a link fails, rendering a PCB invalid, how is that detected?  I assume that the ASes on each side of the link would reevaluate the contents of the PCBs in their Beacon Store after such an event and take action -- where is that specified? --> Ahhh...I found the answer in the dataplane document (\u00a76.2). :-)  Please point to it.\n   ```\n   2051\t   scheduled removal of links, operators let path segments expire.  On\n  2052\t   link failures, endpoints route around the failed link by switching to\n  2053\t   different paths in the data plane.\n  ```\n- [ ] [] s/and The average/and the average\n- [ ] [] s/SHOULD...SHOULD/MUST...MUST\n ```\n 2290\t       SHOULD be equal to the core ISD-AS where the segment is being\n 2291\t       registered.  If not, the core AS SHOULD reject the segment.\n```\n- [ ] `2381\t   MUST assume that all hops are constrained by the intra-AS MTU of each` s/MUST assume/assumes. There's no Normative action resulting from \"assume\".  Also, the important part of this section is specified where the path MTU is defined.\n- [ ] `2638\t   This document specifies only messages RECOMMENDED for the purposes of\n`\"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [ ] `2638\t   This document specifies only messages RECOMMENDED for the purposes of` \"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [ ] `2644\t   Every SCMP message is preceded by a SCION header, and zero or more` [] Include a reference to the SCION header.\n- [ ] `2746\t   Implementations MUST respect the following rules when processing SCMP`. [] \"MUST respect\" is not an actionable Normative action.  Given that the bullets below include Normative language, here's a suggestion:    The following rules apply when processing SCMP messages:\n- [ ] [] s/because because/because\n- [ ] with additional signals for reliable operations. --> \"These additional signals are outside the scope of this specification.\"\n- [ ] [] `Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain` --> Please don't use this document to compare SCION to anything.\n\n\n\n\n\n\n\n\n  \n\n",
+          "body": "And more: \n\n- [x] The ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n   ```\n  1864\t   4.  As a final step, the Control Service propagates each extended PCB\n  1865\t       to the correct neighboring ASes by invoking the\n  1866\t       SegmentCreationService.Beacon remote procedure call (RPC) in the\n  1867\t       Control Services of the neighboring ASes (see also\n  1868\t       Section 2.3.5.3).\n  ```\n   [] What is the set of \"correct neighboring ASes\"?  \"correct\" is not explained anywhere.\nThe ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n- [x] [] s/until new link/until a new link\n- [x] If a link fails, rendering a PCB invalid, how is that detected?  I assume that the ASes on each side of the link would reevaluate the contents of the PCBs in their Beacon Store after such an event and take action -- where is that specified? --> Ahhh...I found the answer in the dataplane document (\u00a76.2). :-)  Please point to it.\n   ```\n   2051\t   scheduled removal of links, operators let path segments expire.  On\n  2052\t   link failures, endpoints route around the failed link by switching to\n  2053\t   different paths in the data plane.\n  ```\n- [x] [] s/and The average/and the average\n- [x] [] s/SHOULD...SHOULD/MUST...MUST\n ```\n 2290\t       SHOULD be equal to the core ISD-AS where the segment is being\n 2291\t       registered.  If not, the core AS SHOULD reject the segment.\n```\n- [x] `2381\t   MUST assume that all hops are constrained by the intra-AS MTU of each` s/MUST assume/assumes. There's no Normative action resulting from \"assume\".  Also, the important part of this section is specified where the path MTU is defined.\n- [x] `2638\t   This document specifies only messages RECOMMENDED for the purposes of\n`\"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [x] `2638\t   This document specifies only messages RECOMMENDED for the purposes of` \"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [x] `2644\t   Every SCMP message is preceded by a SCION header, and zero or more` [] Include a reference to the SCION header.\n- [x] `2746\t   Implementations MUST respect the following rules when processing SCMP`. [] \"MUST respect\" is not an actionable Normative action.  Given that the bullets below include Normative language, here's a suggestion:    The following rules apply when processing SCMP messages:\n- [x] [] s/because because/because\n- [x] with additional signals for reliable operations. --> \"These additional signals are outside the scope of this specification.\"\n- [x] [] `Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain` --> Please don't use this document to compare SCION to anything.\n\n\n\n\n\n\n\n\n  \n\n",
           "createdAt": "2025-06-26T15:28:53Z",
-          "updatedAt": "2025-06-26T16:19:42Z"
+          "updatedAt": "2025-07-03T13:24:55Z"
         }
       ]
     },
@@ -1977,7 +2027,7 @@
       ],
       "body": "- [ ] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [ ] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```\n\nQuestion by Alvaro: \n`ingress interface identifier MUST NOT be specified`: What value should be used on the Ingress field?  0?",
       "createdAt": "2025-06-25T10:30:52Z",
-      "updatedAt": "2025-07-02T09:43:31Z",
+      "updatedAt": "2025-07-04T16:14:39Z",
       "closedAt": null,
       "comments": [
         {
@@ -2000,6 +2050,20 @@
           "body": ">  Each AS could use any non-existent value as the \"unspecified\" ID, without coordinating with other ASes. \n\n@jiceatscion this value still needs to be coordinated between different implementations running within an AS. I don't see the benefit of leaving this as a value to be configured by the operator. Could we just fix it in the spec to 0? This would make it a lot easier in terms of vendor interoperability\n\nCC: @shitz @oncilla ",
           "createdAt": "2025-07-02T09:43:31Z",
           "updatedAt": "2025-07-02T09:43:31Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I am not too sure where an unspecified interface ID convention is needed across components, but OK, if only to cut on questions, it doesn't much hurt to specify 0 as both invalid and as the only allowed representation of the unspecified ifID.",
+          "createdAt": "2025-07-04T15:40:31Z",
+          "updatedAt": "2025-07-04T15:40:31Z"
+        },
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "Fixing it to 0 sounds good to me. I never thought it could be anything else than 0, tbh.\n\nOur implementation confirms this btw: https://github.com/scionproto/scion/blob/ad39a826931ce404b6fb922052e5d99d0e22ed2a/pkg/segment/seg.go#L166-L168\n\nhttps://github.com/scionproto/scion/blob/ad39a826931ce404b6fb922052e5d99d0e22ed2a/pkg/segment/seg.go#L181-L183",
+          "createdAt": "2025-07-04T16:14:39Z",
+          "updatedAt": "2025-07-04T16:14:39Z"
         }
       ]
     },
@@ -2028,7 +2092,7 @@
       "id": "I_kwDOJx2-rs69fU6T",
       "title": "Are the ISD and SCION AS number allocations correct?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/120",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -2041,8 +2105,8 @@
       ],
       "body": "Section 1.5.1 - ISD numbers\n\nShould the ranges be 64-4095 and 4096-65535?\n\nThe first 12-bits provide 4096 numbers, which if starting from zero means the last number in the range should be 4095 rather than 4094. This would mean the range above should start at 4096. \n\nSection 1.5.5 - Special-Purpose SCION AS Numbers\n\nThis section is confused. I think it may already have been moved into Section 1.5.2 \"SCION AS numbers\" in a pending PR, but I think this should simply be called 'SCION AS number allocations'. \n\nThe ranges of Public AS numbers are not special purpose. \n\nThe allocations have large gaps in the address space - assume these are reserved for future use, but should they be documented as with the reserved ISD numbers? See https://docs.google.com/spreadsheets/d/1p-Qdon6umxY6mVaoPU062NvSxkoeFVW_ulM2ZvwtVyk/\n",
       "createdAt": "2025-06-26T13:16:40Z",
-      "updatedAt": "2025-06-30T17:59:52Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-04T11:06:57Z",
+      "closedAt": "2025-07-04T11:06:57Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2130,6 +2194,42 @@
       "updatedAt": "2025-07-02T15:59:47Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 127,
+      "id": "I_kwDOJx2-rs6-4Xvj",
+      "title": "Use example ranges in examples",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/127",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 3",
+        "editorial"
+      ],
+      "body": "We changed ISD and ASes to use example ranges in the DP and PKI drafts. We have a few examples in the CP draft that we should think about: \n- Figure 1 \"SCION Links\" - uses AS A, B, C etc... - maybe this is okay\n- Figures 2-4 \"PCB Propagation\" use AS V, W, X, Y, Z\n- Figure 5 \"Possible path segments\" uses AS X, Y, Z\n- Figure 32-34 \"Topology\" use AS A, B, C, D, E, F, G\n\n@knmeynell says  It's impractical (due to space) and arguably unnecessary (as the AS examples use alphanumeric representations rather than addresses) for the Control Plane figures.\n\nI agree with him, I see two solutions: \n- add a note saying that we use letters in figures\n- We say these ASes are `ff00:0:a` , b, c, d, e and then in figures we only use A, B, C, D, E, F. However, figures 32-24 would be problematic as they also include G\n\n\nTwin issues: \n- https://github.com/scionassociation/scion-cppki_I-D/issues/69\n- https://github.com/scionassociation/scion-dp_I-D/issues/99",
+      "createdAt": "2025-07-04T11:52:13Z",
+      "updatedAt": "2025-07-04T13:28:59Z",
+      "closedAt": "2025-07-04T13:28:59Z",
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Whilst we could add hex addresses in the explanations and map them to letters in a diagrams, I feel this ultimately would be more confusing. The figures are more conceptual diagrams rather than examples and do not mix other forms of addresses such as ISDs or IP numbers, so I think are understandable as is. ",
+          "createdAt": "2025-07-04T13:06:24Z",
+          "updatedAt": "2025-07-04T13:06:24Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Right, I noticed we already have a note in the text in figure 3: \n>  Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.  \n",
+          "createdAt": "2025-07-04T13:28:59Z",
+          "updatedAt": "2025-07-04T13:28:59Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -9639,25 +9739,40 @@
       "id": "PR_kwDOJx2-rs6cvmxW",
       "title": "Updated SCION AS table",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/123",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
-      "labels": [],
-      "body": "Added full address ranges and reserved space",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 2"
+      ],
+      "body": "Added full address ranges and reserved space\r\n\r\nResolves #120 \r\nResolves #112 (mention AS number formatting MUST use decimal for lower ranges) \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/SCION_AS_Table/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-30T17:57:43Z",
-      "updatedAt": "2025-07-02T10:16:03Z",
+      "updatedAt": "2025-07-04T11:06:56Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
+      "baseRefOid": "b8a5fe3f99eda89c355854c92649c589355098fb",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "SCION_AS_Table",
-      "headRefOid": "4e1d989a06d4caeaf634918d4fb4c793d198ac0d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "76d90e40668d9dad8c5f18051f61cf8e697750e1",
+      "closedAt": "2025-07-04T11:06:51Z",
+      "mergedAt": "2025-07-04T11:06:51Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "b2f88a5c26ee585ef0b09630a0835770fc40f802"
+      },
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Except for my opinion about the decimal representation which I posted in the issue, LGTM.\r\n\r\nI agree use of MUST and MAY is somewhat contradictory. I've revised this a bit.",
+          "createdAt": "2025-07-03T10:43:14Z",
+          "updatedAt": "2025-07-03T10:43:14Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs6xhIEZ",
@@ -9730,28 +9845,199 @@
               "updatedAt": "2025-07-02T10:16:03Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xxu4E",
+          "commit": {
+            "abbreviatedOid": "66a5759"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Fine",
+          "createdAt": "2025-07-03T10:18:18Z",
+          "updatedAt": "2025-07-03T10:18:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xx-NJ",
+          "commit": {
+            "abbreviatedOid": "e271f2f"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Except for my opinion about the decimal representation which I posted in the issue, LGTM.\r\n",
+          "createdAt": "2025-07-03T10:39:16Z",
+          "updatedAt": "2025-07-03T10:39:16Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xyxgJ",
+          "commit": {
+            "abbreviatedOid": "c33dcbf"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T11:52:51Z",
+          "updatedAt": "2025-07-03T11:56:00Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "```suggestion\r\nThe text representation of SCION AS numbers is as follows:\r\n\r\n- SCION AS numbers in the lower 32-bit range MUST be represented as decimal notation when output by implementations. Implementations MAY accept AS numbers in the lower 32-bit range in hexadecimal notation too, but they should convert them to decimal notation (e.g., a program may accept AS number '0:1:f' and convert it to 65551).\r\n- SCION AS numbers in the higher 32-bit range MUST be represented using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.\r\n- A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). In such case, hexadecimal notation MUST be used. For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.\r\n```",
+              "createdAt": "2025-07-03T11:52:51Z",
+              "updatedAt": "2025-07-03T11:56:00Z"
+            },
+            {
+              "originalPosition": 60,
+              "body": "@jiceatscion @knmeynell what do you think about this wording? \r\n- I removed the first MUST\r\n- I tried to use the woridng suggested by @jiceatscion ",
+              "createdAt": "2025-07-03T11:55:55Z",
+              "updatedAt": "2025-07-03T11:56:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xy8nA",
+          "commit": {
+            "abbreviatedOid": "c33dcbf"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T12:09:18Z",
+          "updatedAt": "2025-07-03T12:09:18Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "I still disagree with the following phrase:\r\n\"but they should convert them to decimal notation (e.g., a program may accept AS number '0:1:f' and convert it to 65551).\"\r\n\r\nThe problem I see with this is that it does not state at all what the conversion is for and when it may take place. Internally neither string representations are used. Any conversion that takes place is from string to internal (when parsing config or args from humans) and from internal to string (when printing out human readable information or generating config). So, conversions between the two string representations aren't relevant. We must state what is printed and what is parsed. That's it.\r\n",
+              "createdAt": "2025-07-03T12:09:18Z",
+              "updatedAt": "2025-07-03T12:09:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6xzDWx",
+          "commit": {
+            "abbreviatedOid": "c33dcbf"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T12:19:01Z",
+          "updatedAt": "2025-07-03T12:19:01Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "> So, conversions between the two string representations aren't relevant. We must state what is printed and what is parsed. That's it.\r\n\r\n@jiceatscion how about this wording: \r\n> - SCION AS numbers in the lower 32-bit range MUST be printed as decimal by implementations. Implementations MAY parse AS numbers in the lower 32-bit range in hexadecimal notation too (e.g., a program may accept AS number '0:1:f' for AS 65551).",
+              "createdAt": "2025-07-03T12:19:01Z",
+              "updatedAt": "2025-07-03T12:19:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6x_F2t",
+          "commit": {
+            "abbreviatedOid": "c33dcbf"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-04T08:37:11Z",
+          "updatedAt": "2025-07-04T08:37:12Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "LGTM",
+              "createdAt": "2025-07-04T08:37:12Z",
+              "updatedAt": "2025-07-04T08:37:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6yBKCo",
+          "commit": {
+            "abbreviatedOid": "c9a5878"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-04T10:55:00Z",
+          "updatedAt": "2025-07-04T10:55:01Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "We should use the text representation according to rules above, so higher-range AS numbers in the documentation range MUST be printed in HEX. I replaced it again with `ff00:0:1`\r\n@knmeynell ",
+              "createdAt": "2025-07-04T10:55:00Z",
+              "updatedAt": "2025-07-04T10:55:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs6yBQSb",
+          "commit": {
+            "abbreviatedOid": "76d90e4"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-04T11:01:00Z",
+          "updatedAt": "2025-07-04T11:01:00Z",
+          "comments": []
         }
       ]
     },
     {
       "number": 124,
       "id": "PR_kwDOJx2-rs6cvyEl",
-      "title": "Update Interface ID",
+      "title": "Reword \"unspecified\" interface ID",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/124",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #118",
+      "body": "Resolves #118\r\n\r\n<br class=\"Apple-interchange-newline\">[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Interface-ID/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-30T18:20:07Z",
-      "updatedAt": "2025-07-02T08:44:04Z",
+      "updatedAt": "2025-07-04T13:20:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
+      "baseRefOid": "b2f88a5c26ee585ef0b09630a0835770fc40f802",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Interface-ID",
-      "headRefOid": "01e70c88a1db2410da2285a08c021762448cd6ee",
+      "headRefOid": "e906ef611d2dd5af08fee9b5cb5318482b66dcbe",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 126,
+      "id": "PR_kwDOJx2-rs6dPY0i",
+      "title": "nits - Alvaro's Feedback part 2 ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/126",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves \r\n-  #113 \r\nContinues work done in \r\n- https://github.com/scionassociation/scion-cp_I-D/pull/115 \r\n\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Alvaro-feedback/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-07-03T10:12:51Z",
+      "updatedAt": "2025-07-04T14:34:56Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "b2f88a5c26ee585ef0b09630a0835770fc40f802",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Alvaro-feedback",
+      "headRefOid": "9eedcbc98d5220dd31617dc588ae7d3422d78f71",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
