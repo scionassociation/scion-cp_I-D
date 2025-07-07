@@ -285,7 +285,7 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 </artset>
 </figure>
 
-Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} that is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
+Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} in section Terminology. It is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
 
 ## Routing
 
@@ -1107,7 +1107,7 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
 
-**Note:** For the core AS that initiates the PCB, the ingress interface identifier MUST NOT be specified. This initiating AS is a core AS.
+**Note:** For the core AS that initiates the PCB, the ingress interface identifier MUST be set to the "unspecified" value (see {{I-D.dekater-scion-dataplane}} section Terminology).
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the Hop Field is the sum of these two values.
