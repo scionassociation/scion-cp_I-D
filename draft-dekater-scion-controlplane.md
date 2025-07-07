@@ -1092,7 +1092,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs") for more information including configuration.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.
 
 The following code block defines the Hop Field component `HopField` in Protobuf message format:
 
