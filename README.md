@@ -1,3 +1,5 @@
+<!-- regenerate: on (set to off if you edit this file) -->
+
 # SCION Control Plane
 
 This is the working area for the individual Internet-Draft, "SCION Control Plane".
