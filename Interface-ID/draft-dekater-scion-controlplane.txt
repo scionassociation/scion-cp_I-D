@@ -4140,6 +4140,8 @@ draft-dekater-scion-controlplane-09
    *  "Paths and Links": clarify relationship between path segments and
       links
 
+   *  Ensure consistent use of example ranges
+
 draft-dekater-scion-controlplane-08
 
    Major changes:
