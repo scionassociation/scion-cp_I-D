@@ -2675,7 +2675,7 @@ Table of Contents
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                       Type-dependent Block                    |
    +                                                               +
-   |                         (variable length)                     |
+   |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                        Figure 17: SCMP message format
@@ -2954,7 +2954,7 @@ Table of Contents
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |           Identifier          |        Sequence Number        |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                     Data (variable Len)                       |
+   |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                        Figure 21: Echo Request format
@@ -2990,7 +2990,7 @@ Table of Contents
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |           Identifier          |        Sequence Number        |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                     Data (variable Len)                       |
+   |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         Figure 22: Echo Reply format
@@ -4058,6 +4058,7 @@ Path-Lookup Examples
   D) is for down segments between any core AS in the source ISD and
                             destination D.
 
+
 +---------+     +---------+     +---------+     +---------+     +---------+
 |Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
 |         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
@@ -4135,7 +4136,7 @@ draft-dekater-scion-controlplane-09
 
    *  Reviewed use of normative language
 
-   *  Figures: redraw and add SVG version
+   *  Figures: redraw and use aasvg when possible
 
    *  "Paths and Links": clarify relationship between path segments and
       links
