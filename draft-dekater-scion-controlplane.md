@@ -285,7 +285,7 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 </artset>
 </figure>
 
-Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} that is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes. 0 is not valid as an Interface ID.
+Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} in section Terminology. It is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
 
 ## Routing
 
