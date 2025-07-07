@@ -1217,7 +1217,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 ### Configuration {#configuration}
 
-For the purpose of constructing and propagating path segments, an AS Control Service is configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
+For the purpose of constructing and propagating path segments, an AS Control Service must be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
@@ -1226,7 +1226,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 
 The maximum MTU supported by all intra-AS links MAY also be configured.
 
-The AS SHOULD adopt a PCB selection policy so that it does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
+The AS SHOULD adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1253,7 +1253,7 @@ Current practice is to retain all PCBs until expired or replaced by one describi
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
-In order to avoid excessive overhead on the path discovery system in bigger networks, an AS SHOULD only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction.
+In order to avoid excessive overhead on the path discovery system in bigger networks, an AS should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction.
 
 As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:
 
@@ -1313,7 +1313,7 @@ The propagation process in intra-ISD beaconing includes the following steps:
 The propagation process in core beaconing includes the following steps:
 
 1. The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.
-2. The service adds a new AS entry to every selected PCB which MUST at include:
+2. The service adds a new AS entry to every selected PCB which MUST include:
    - The egress interface to the neighboring core AS in the Hop Field component.
    - The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.
 3. The core Control Service MUST sign the extended PCBs and append the computed signature.
@@ -1549,7 +1549,7 @@ SCION paths represent a sequence of ASes and inter-AS links; each with possibly 
 * The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 
-Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path MUST infer that all hops are constrained by the intra-AS MTU of each AS traversed.
+Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path they assume that all hops are constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
@@ -2121,7 +2121,7 @@ Even if an adversary succeeds in misusing a peering link as described above, SCI
 
 ### Manipulation of the Path-Selection Process {#manipulate-selection}
 
-SCION endpoints can select inter-domain forwarding paths for each packet, but the benefits of path selection comes with the risk selecting non-optimal paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
+SCION endpoints select inter-domain forwarding paths. This section discusses some mechanisms with which an adversary can attempt to trick endpoints downstream (in the direction of beaconing) into choosing non-optimal paths. The goal of such attacks is to make paths that are controlled by the adversary more attractive than other available paths.
 
 In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.
 
@@ -2168,7 +2168,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2723,6 +2723,7 @@ Major changes:
 Minor changes:
 
 - Nits and wording improvements
+- Reviewed use of normative language
 - Figures: redraw and add SVG version
 - "Paths and Links": clarify relationship between path segments and links
 
