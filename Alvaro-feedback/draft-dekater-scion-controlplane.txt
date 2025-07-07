@@ -1670,10 +1670,10 @@ Table of Contents
 2.2.4.  Configuration
 
    For the purpose of constructing and propagating path segments, an AS
-   Control Service is configured with links to neighboring ASes.  Such
-   information may be conveyed to the Control Service in an out-of-band
-   fashion (e.g in a configuration file).  For each link, these values
-   MUST be configured:
+   Control Service must be configured with links to neighboring ASes.
+   Such information may be conveyed to the Control Service in an out-of-
+   band fashion (e.g in a configuration file).  For each link, these
+   values MUST be configured:
 
    *  Local Interface ID.  This MUST be unique within each AS.
 
@@ -1688,10 +1688,10 @@ Table of Contents
    The maximum MTU supported by all intra-AS links MAY also be
    configured.
 
-   The AS SHOULD adopt a PCB selection policy so that it does not
-   accidentally isolate the AS from the network, i.e. such that it does
-   not block connectivity to parent providers and ensures downstream
-   connectivity for children.  For more details, see Section 2.3.3.
+   The AS SHOULD adopt a PCB selection policy that does not accidentally
+   isolate the AS from the network, i.e. such that it does not block
+   connectivity to parent providers and ensures downstream connectivity
+   for children.  For more details, see Section 2.3.3.
 
 2.3.  Propagation of PCBs
 
@@ -1755,7 +1755,7 @@ Table of Contents
    the AS.
 
    In order to avoid excessive overhead on the path discovery system in
-   bigger networks, an AS SHOULD only propagate those candidate PCBs
+   bigger networks, an AS should only propagate those candidate PCBs
    with the highest probability of meeting the needs of the endpoints
    that will perform path construction.
 
@@ -1893,7 +1893,7 @@ Table of Contents
        neighboring core ASes observed so far.
 
    2.  The service adds a new AS entry to every selected PCB which MUST
-       at include:
+       include:
 
        *  The egress interface to the neighboring core AS in the Hop
           Field component.
@@ -2395,7 +2395,7 @@ Table of Contents
 
    Such information is then made available to endpoints during the path
    lookup process (See Section 5).  SCION endpoints are oblivious to the
-   topology of intermediate ASes and when looking up a path MUST infer
+   topology of intermediate ASes and when looking up a path they assume
    that all hops are constrained by the intra-AS MTU of each AS
    traversed.
 
@@ -3286,13 +3286,12 @@ Table of Contents
 
 7.3.4.  Manipulation of the Path-Selection Process
 
-   SCION endpoints can select inter-domain forwarding paths for each
-   packet, but the benefits of path selection comes with the risk
-   selecting non-optimal paths.  This section discusses some mechanisms
-   with which an adversary can attempt to trick endpoints downstream (in
-   the direction of beaconing) into choosing non-optimal paths.  The
-   goal of such attacks is to make paths that are controlled by the
-   adversary more attractive than other available paths.
+   SCION endpoints select inter-domain forwarding paths.  This section
+   discusses some mechanisms with which an adversary can attempt to
+   trick endpoints downstream (in the direction of beaconing) into
+   choosing non-optimal paths.  The goal of such attacks is to make
+   paths that are controlled by the adversary more attractive than other
+   available paths.
 
    In SCION, overall path selection is the result of three steps.
    Firstly, each AS selects which PCBs are further forwarded to its
@@ -3535,19 +3534,20 @@ Table of Contents
 
 Acknowledgments
 
-   Many thanks go to William Boye (Swiss National Bank), Matthias Frei
-   (SCION Association), Kevin Meynell (SCION Association), Juan A.
-   Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for
-   reviewing this document.  We also thank Daniel Galán Pascual and
-   Christoph Sprenger from the Information Security Group at ETH Zurich
-   for their inputs based on their formal verification work on SCION.
-   We are also very grateful to Adrian Perrig (ETH Zurich), for
-   providing guidance and feedback about every aspect of SCION.
-   Finally, we are indebted to the SCION development teams of Anapaya,
-   ETH Zurich, and the SCION Association for their practical knowledge
-   and for the documentation about the SCION Control Plane, as well as
-   to the authors of [CHUAT22] - the book is an important source of
-   input and inspiration for this draft.
+   Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
+   (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
+   Association), Kevin Meynell (SCION Association), Juan A.  Garcia
+   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing
+   this document.  We also thank Daniel Galán Pascual and Christoph
+   Sprenger from the Information Security Group at ETH Zurich for their
+   inputs based on their formal verification work on SCION.  We are also
+   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
+   and feedback about every aspect of SCION.  Finally, we are indebted
+   to the SCION development teams of Anapaya, ETH Zurich, and the SCION
+   Association for their practical knowledge and for the documentation
+   about the SCION Control Plane, as well as to the authors of [CHUAT22]
+   - the book is an important source of input and inspiration for this
+   draft.
 
 Deployment Testing: SCIONLab
 
@@ -4130,6 +4130,8 @@ draft-dekater-scion-controlplane-09
    Minor changes:
 
    *  Nits and wording improvements
+
+   *  Reviewed use of normative language
 
    *  Figures: redraw and add SVG version
 
