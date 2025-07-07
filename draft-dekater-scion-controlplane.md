@@ -1253,7 +1253,7 @@ Current practice is to retain all PCBs until expired or replaced by one describi
 
 An AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
-In order to avoid excessive overhead on the path discovery system in bigger networks, an AS should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction.
+In order to avoid excessive overhead on the path discovery system in bigger networks, an AS should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction, in accordance with [](#propagation-interval-size).
 
 As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:
 
