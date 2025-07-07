@@ -2726,6 +2726,7 @@ Minor changes:
 - Reviewed use of normative language
 - Figures: redraw and add SVG version
 - "Paths and Links": clarify relationship between path segments and links
+- Ensure consistent use of example ranges
 
 ## draft-dekater-scion-controlplane-08
 {:numbered="false"}
