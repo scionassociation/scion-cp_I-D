@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 January 2026                                          S. Hitz
+Expires: 8 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                             4 July 2025
+                                                             7 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2026.
+   This Internet-Draft will expire on 8 January 2026.
 
 Copyright Notice
 
@@ -1494,18 +1494,16 @@ Table of Contents
    The Hop Field, part of both hop entries and peer entries, is used
    directly in the data plane for packet forwarding and specifies the
    incoming and outgoing interfaces of the ASes on the forwarding path.
-   To prevent forgery, this information is authenticated with a message
-   authentication code (MAC) which will be checked by the SCION border
-   routers during packet forwarding.  The algorithm used to compute the
-   Hop Field MAC is an AS-specific choice and the operator of an AS can
-   freely choose a MAC algorithm without outside coordination.  However,
-   the Control Service and routers of the AS do need to agree on the
-   algorithm used.
+   This information is authenticated with a Message Authentication Code
+   (MAC) which is used by the Control Service of an AS to authenticate
+   path segments with its border routers during packet forwarding.
 
-   Control Service and router implementations MUST support the Default
-   Hop Field MAC algorithm described in [I-D.dekater-scion-dataplane].
-   This document does not specify any further mechanism to coordinate
-   this choice between Control Services and routers of one AS.
+   The algorithm used to compute the Hop Field MAC is an AS-specific
+   choice, although the Control Services and border routers within an AS
+   MUST use the same algorithm.  Implementations MUST also support the
+   Default Hop Field MAC algorithm.  See [I-D.dekater-scion-dataplane]
+   section "Authorizing Segments through Chained MACs") for more
+   information including configuration.  Endpoints do not compute MACs.
 
    The following code block defines the Hop Field component HopField in
    Protobuf message format:
@@ -1672,7 +1670,7 @@ Table of Contents
 2.2.4.  Configuration
 
    For the purpose of constructing and propagating path segments, an AS
-   Control Service MUST be configured with links to neighboring ASes.
+   Control Service must be configured with links to neighboring ASes.
    Such information may be conveyed to the Control Service in an out-of-
    band fashion (e.g in a configuration file).  For each link, these
    values MUST be configured:
@@ -1687,12 +1685,13 @@ Table of Contents
 
    *  Neighbor interface underlay address
 
-   In addition, the maximum MTU supported by all intra-AS links MAY be
-   configured.  Last, the AS SHOULD adopt a PCB selection policy that it
-   does not accidentally isolate the AS from the network, i.e., such
-   that it does not block connectivity to parent providers and that
-   ensures downstream connectivity for children.  For more details, see
-   Section 2.3.3.
+   The maximum MTU supported by all intra-AS links MAY also be
+   configured.
+
+   The AS SHOULD adopt a PCB selection policy that does not accidentally
+   isolate the AS from the network, i.e. such that it does not block
+   connectivity to parent providers and ensures downstream connectivity
+   for children.  For more details, see Section 2.3.3.
 
 2.3.  Propagation of PCBs
 
@@ -1730,7 +1729,7 @@ Table of Contents
        MUST be discarded.
 
    4.  Continuity: when a PCB contains two or more AS entries, the
-       receiver Control Service must check every AS entry except the
+       receiver Control Service MUST check every AS entry except the
        last and discard beacons where the ISD-AS of an entry does not
        equal the ISD-AS of the next entry.
 
@@ -1755,11 +1754,11 @@ Table of Contents
    past.  The PCBs to select or eliminate is determined by the policy of
    the AS.
 
-   Only a relatively small subset of the viable PCBs SHOULD be
-   propagated to avoid excessive overhead of the path discovery system
-   in bigger networks.  The goal of the AS SHOULD be to propagate those
-   candidate PCBs with the highest probability of collectively meeting
-   the needs of the endpoints that will perform path construction.
+   In order to avoid excessive overhead on the path discovery system in
+   bigger networks, an AS should only propagate those candidate PCBs
+   with the highest probability of meeting the needs of the endpoints
+   that will perform path construction, in accordance with
+   Section 2.3.4.
 
    As SCION does not provide any in-band signal about the intentions of
    endpoints nor about the policies of downstream ASes, the policy will
@@ -1772,8 +1771,8 @@ Table of Contents
    *  Expiration time: the maximum value for the expiration time when
       extending the segment.
 
-   *  ISD or AS blacklists: certain ASes or ISD that may not appear in a
-      segment.
+   *  ISD or AS exclusion lists: certain ASes or ISD that may not appear
+      in a segment.
 
    *  ISD loops: if permitted, they allow core AS to reach other core
       ASes in the same ISD via a third party ISDs.
@@ -1793,11 +1792,11 @@ Table of Contents
 
    The relative disjointness of two PCBs A and B may be calculated by
    assigning a disjointness score, calculated as the number of links in
-   A that don't appear in B.  The beacon that has the highest
-   disjointness score and is not the shortest path SHOULD be selected.
-   If this is not better than what has already been selected, then the
-   beacon with the shortest path yet to be selected SHOULD be chosen
-   instead.
+   A that don't appear in B.  For example, the beacon that has the
+   highest disjointness score and is not the shortest path should be
+   selected, but if this not better than what has already been selected,
+   then the beacon with the shortest path yet to be selected should be
+   chosen instead.
 
    A PCB Selection Policy can be expressed as a stateful filter of
    segments, i.e., a function which indicates whether to accept or deny
@@ -1872,30 +1871,18 @@ Table of Contents
        downstream neighboring ASes, based on a selection algorithm
        specific for this AS.
 
-   2.  The Control Service adds a new AS entry to every selected PCB
-       which MUST at least include:
+   2.  The Control Service MUST add a new AS entry (see
+       Section 2.2.1.3), including any Peer Entry information (see
+       Section 2.2.1.7) the AS is configured to advertise to every
+       selected PCB.
 
-       *  The ingress interface to this AS, in the Hop Field component.
-
-       *  The egress interface to the neighboring AS, also in the Hop
-          Field component.
-
-       *  The ISD_AS number of the next AS, in the signed body component
-          of the AS entry.
-
-       *  If the AS has peering links, the Control Service MAY add
-          corresponding peer entry components to the signed body of the
-          AS entry; one peer entry component for each peering link that
-          the AS wants to advertise.  The Hop Field component of each
-          added peer entry MUST have a specified egress interface.
-
-   3.  The Control Service MUST now sign each selected, extended PCB and
+   3.  The Control Service MUST sign each selected, extended PCB and
        append the computed signature.
 
    4.  As a final step, the Control Service propagates each extended PCB
-       to the correct neighboring ASes by invoking the
-       SegmentCreationService.Beacon remote procedure call (RPC) in the
-       Control Services of the neighboring ASes (see also
+       to the neighboring AS specified in the new AS entry by invoking
+       the SegmentCreationService.Beacon remote procedure call (RPC) in
+       the Control Services of the neighboring ASes (see also
        Section 2.3.5.3).
 
 2.3.5.2.  Propagation of PCBs in Core Beaconing
@@ -1907,7 +1894,7 @@ Table of Contents
        neighboring core ASes observed so far.
 
    2.  The service adds a new AS entry to every selected PCB which MUST
-       at least include:
+       include:
 
        *  The egress interface to the neighboring core AS in the Hop
           Field component.
@@ -2064,8 +2051,8 @@ Table of Contents
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
-   after a network bootstrap, and the time until new link is usable.  In
-   general, the time until a specific PCB is built depends on its
+   after a network bootstrap, and the time until a new link is usable.
+   In general, the time until a specific PCB is built depends on its
    length, the propagation interval, and whether on-path ASes use "fast
    recovery".
 
@@ -2081,7 +2068,8 @@ Table of Contents
    Note that link removal is not part of path discovery in SCION.  For
    scheduled removal of links, operators let path segments expire.  On
    link failures, endpoints route around the failed link by switching to
-   different paths in the data plane.
+   different paths in the data plane (see [I-D.dekater-scion-dataplane]
+   section "Handling Link Failures").
 
    To achieve scalability, SCION partitions ASes into ISDs and in an
    ideal topology the inter-ISD core network should be kept to a
@@ -2165,9 +2153,9 @@ Table of Contents
 
    Without making strong assumptions on the topology of the core
    network, we can assume that shortest paths through real world
-   networks are relatively short: e.g. the Barabási-Albert random graph
+   networks are relatively short, e.g. the Barabási-Albert random graph
    model predicts a diameter of log(N)/log(log(N)) for a network with N
-   nodes [BollRio-2000] and The average distance scales in the same way.
+   nodes [BollRio-2000] and the average distance scales in the same way.
    Whilst we cannot assume that the selected PCBs are strictly the
    shortest paths through the network, they are likely to be not very
    much longer than the shortest paths either.
@@ -2239,8 +2227,8 @@ Table of Contents
    transforming a PCB into a path segment, an AS "terminates" the PCB
    for this AS ingress interface and at that moment in time.
 
-   The Control Service of a non-core AS MUST perform the following steps
-   to "terminate" a PCB:
+   The Control Service of a non-core performs the following steps to
+   "terminate" a PCB:
 
    1.  The Control Service adds a new AS entry to the PCB which MUST be
        defined as follows:
@@ -2318,8 +2306,8 @@ Table of Contents
        SegmentRegistrationService.SegmentsRegistration remote procedure
        call (RPC) in the Control Services of the relevant core ASes (see
        also Section 4.3).  The first ISD-AS entry of the path segment
-       SHOULD be equal to the core ISD-AS where the segment is being
-       registered.  If not, the core AS SHOULD reject the segment.
+       MUST be equal to the core ISD-AS where the segment is being
+       registered.  If not, the core AS MUST reject the segment.
 
    *Note:* For more information on possible selection strategies of
    PCBs, see Section 2.3.3.
@@ -2408,9 +2396,9 @@ Table of Contents
 
    Such information is then made available to endpoints during the path
    lookup process (See Section 5).  SCION endpoints are oblivious to the
-   topology of intermediate ASes, therefore when looking up a path they
-   MUST assume that all hops are constrained by the intra-AS MTU of each
-   AS traversed.
+   topology of intermediate ASes and when looking up a path they assume
+   that all hops are constrained by the intra-AS MTU of each AS
+   traversed.
 
 5.  Path Lookup
 
@@ -2666,15 +2654,16 @@ Table of Contents
    the availability of SCMP, as this protocol may not be supported by
    all devices and/or may be subject to rate limiting.
 
-   This document specifies only messages RECOMMENDED for the purposes of
+   This document only specifies the messages used for the purposes of
    path diagnosis and recovery.  An extended specification, still a work
    in progress, can be found in [SCMP].
 
 6.1.  General Format
 
-   Every SCMP message is preceded by a SCION header, and zero or more
-   SCION extension headers.  The SCMP header is identified by a NextHdr
-   value of 202 in the immediately preceding header.
+   Every SCMP message is preceded by a SCION header and zero or more
+   SCION extension headers (see [I-D.dekater-scion-dataplane] section
+   "SCION Header Specification").  The SCMP header is identified by a
+   NextHdr value of 202 in the immediately preceding header.
 
    The messages have the following general format:
 
@@ -2774,8 +2763,7 @@ Table of Contents
 
 6.4.  Processing Rules
 
-   Implementations MUST respect the following rules when processing SCMP
-   messages:
+   The following rules apply when processing SCMP messages:
 
    *  If an SCMP error message of unknown type is received at its
       destination, it MUST be passed to the upper-layer process that
@@ -2944,9 +2932,9 @@ Table of Contents
 
    A *Internal Connectivity Down* message SHOULD be originated by a
    router in response to a packet that cannot be forwarded inside the AS
-   because because the connectivity between the ingress and egress
-   routers is broken.  The ISD and AS identifier are set to the ISD-AS
-   of the originating router.  The ingress Interface ID identifies the
+   because the connectivity between the ingress and egress routers is
+   broken.  The ISD and AS identifier are set to the ISD-AS of the
+   originating router.  The ingress Interface ID identifies the
    interface on which the packet enters the AS.  The egress Interface ID
    identifies the interface on which the packet is destined to leave the
    AS, but the connection is broken to.
@@ -3079,10 +3067,9 @@ Table of Contents
    A border router is alerted of a Traceroute Request message through
    the Ingress or Egress Router Alert flag set to 1 in the hop field
    that describes the traversal of that router in a packet's path (see
-   [I-D.dekater-scion-dataplane] section "SCION Header Specification/
-   Path Header/SCION Path Type/Hop Field").  When such a packet is
-   received, the border router SHOULD reply with a Traceroute Reply
-   message (Section 6.6.4).
+   [I-D.dekater-scion-dataplane] section "SCION Header Specification").
+   When such a packet is received, the border router SHOULD reply with a
+   Traceroute Reply message (Section 6.6.4).
 
 6.6.4.  Traceroute Reply
 
@@ -3130,11 +3117,12 @@ Table of Contents
 
 6.7.  SCMP Authentication
 
-   Authentication of SCMP packets is not specified here.  In current
-   deployments it is still experimental so endpoints should validate
-   link down messages (External Interface Down (Section 6.5.2) and
-   Internal Connectivity Down (Section 6.5.3)) with additional signals
-   for reliable operations.
+   Authentication of SCMP packets is not specified here.  It is
+   currently still experimental so endpoints should validate link down
+   messages (External Interface Down (Section 6.5.2) and Internal
+   Connectivity Down (Section 6.5.3)) with additional signals for
+   reliable operations.  These additional signals are outside the scope
+   of this specification.
 
 7.  Security Considerations
 
@@ -3299,13 +3287,10 @@ Table of Contents
 
 7.3.4.  Manipulation of the Path-Selection Process
 
-   Endpoint path control is one of the main benefits of SCION compared
-   to the current Internet as SCION endpoints can select inter-domain
-   forwarding paths for each packet.  However, with the benefits of path
-   selection comes the risk of endpoints selecting non-optimal paths.
-   This section discusses some mechanisms with which an adversary can
-   attempt to trick endpoints downstream (in the direction of beaconing)
-   into choosing non-optimal paths.  The goal of such attacks is to make
+   SCION endpoints select inter-domain forwarding paths.  This section
+   discusses some mechanisms with which an adversary can attempt to
+   trick endpoints downstream (in the direction of beaconing) into
+   choosing non-optimal paths.  The goal of such attacks is to make
    paths that are controlled by the adversary more attractive than other
    available paths.
 
@@ -3550,19 +3535,20 @@ Table of Contents
 
 Acknowledgments
 
-   Many thanks go to William Boye (Swiss National Bank), Matthias Frei
-   (SCION Association), Kevin Meynell (SCION Association), Juan A.
-   Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for
-   reviewing this document.  We also thank Daniel Galán Pascual and
-   Christoph Sprenger from the Information Security Group at ETH Zurich
-   for their inputs based on their formal verification work on SCION.
-   We are also very grateful to Adrian Perrig (ETH Zurich), for
-   providing guidance and feedback about every aspect of SCION.
-   Finally, we are indebted to the SCION development teams of Anapaya,
-   ETH Zurich, and the SCION Association for their practical knowledge
-   and for the documentation about the SCION Control Plane, as well as
-   to the authors of [CHUAT22] - the book is an important source of
-   input and inspiration for this draft.
+   Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
+   (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
+   Association), Kevin Meynell (SCION Association), Juan A.  Garcia
+   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing
+   this document.  We also thank Daniel Galán Pascual and Christoph
+   Sprenger from the Information Security Group at ETH Zurich for their
+   inputs based on their formal verification work on SCION.  We are also
+   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
+   and feedback about every aspect of SCION.  Finally, we are indebted
+   to the SCION development teams of Anapaya, ETH Zurich, and the SCION
+   Association for their practical knowledge and for the documentation
+   about the SCION Control Plane, as well as to the authors of [CHUAT22]
+   - the book is an important source of input and inspiration for this
+   draft.
 
 Deployment Testing: SCIONLab
 
@@ -4145,6 +4131,8 @@ draft-dekater-scion-controlplane-09
    Minor changes:
 
    *  Nits and wording improvements
+
+   *  Reviewed use of normative language
 
    *  Figures: redraw and add SVG version
 
