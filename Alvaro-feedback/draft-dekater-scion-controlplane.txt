@@ -1757,7 +1757,8 @@ Table of Contents
    In order to avoid excessive overhead on the path discovery system in
    bigger networks, an AS should only propagate those candidate PCBs
    with the highest probability of meeting the needs of the endpoints
-   that will perform path construction.
+   that will perform path construction, in accordance with
+   Section 2.3.4.
 
    As SCION does not provide any in-band signal about the intentions of
    endpoints nor about the policies of downstream ASes, the policy will
