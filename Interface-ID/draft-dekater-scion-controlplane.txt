@@ -416,9 +416,9 @@ Table of Contents
    Each link connecting SCION routers is bi-directional and is
    identified by its corresponding egress and ingress Interface IDs.  An
    Interface ID is a 16-bit identifier as described in
-   [I-D.dekater-scion-dataplane] that is required to be unique within
-   each AS and can therefore be chosen without any need for coordination
-   between ASes. 0 is not valid as an Interface ID.
+   [I-D.dekater-scion-dataplane] in section Terminology.  It is required
+   to be unique within each AS and can therefore be chosen without any
+   need for coordination between ASes.
 
 1.4.  Routing
 
@@ -1520,7 +1520,8 @@ Table of Contents
       through the current AS).
 
    *Note:* For the core AS that initiates the PCB, the ingress interface
-   identifier MUST NOT be specified.  This initiating AS is a core AS.
+   identifier MUST be set to the "unspecified" value (see
+   [I-D.dekater-scion-dataplane] section Terminology).
 
    *  egress: The 16-bit egress interface identifier (in the direction
       of beaconing).
