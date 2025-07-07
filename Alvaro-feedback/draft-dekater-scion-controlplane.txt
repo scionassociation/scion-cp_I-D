@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 January 2026                                          S. Hitz
+Expires: 8 January 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                             4 July 2025
+                                                             7 July 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2026.
+   This Internet-Draft will expire on 8 January 2026.
 
 Copyright Notice
 
@@ -1499,11 +1499,11 @@ Table of Contents
    path segments with its border routers during packet forwarding.
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
-   choice, although the Control Services and border routers MUST use the
-   same algorithm.  Implementations MUST also support the Default Hop
-   Field MAC algorithm.  See [I-D.dekater-scion-dataplane] section
-   "Authorizing Segments through Chained MACs") for more information
-   including configuration.
+   choice, although the Control Services and border routers within an AS
+   MUST use the same algorithm.  Implementations MUST also support the
+   Default Hop Field MAC algorithm.  See [I-D.dekater-scion-dataplane]
+   section "Authorizing Segments through Chained MACs") for more
+   information including configuration.  Endpoints do not compute MACs.
 
    The following code block defines the Hop Field component HopField in
    Protobuf message format:
