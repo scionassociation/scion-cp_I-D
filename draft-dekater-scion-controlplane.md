@@ -255,12 +255,8 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
-<figure anchor="_figure-1">
-<name>The three types of SCION links in one ISD. Each node in the figure is a SCION AS.</name>
-<artset>
-<artwork type="svg" src="images/scion-links.svg"/>
-<artwork type="ascii-art">
 
+~~~
 +-------------------------+
 |                         |       #
 |        ISD Core         |       |      parent-child
@@ -280,10 +276,8 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
   +--+--+         +--+--+
   |AS G |         |AS F |
   +-----+         +-----+
-
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-1 title="The three types of SCION links in one ISD. Each node in the figure is a SCION AS."}
 
 Each link connecting SCION routers is bi-directional and is identified by its corresponding egress and ingress Interface IDs. An Interface ID is a 16-bit identifier as described in {{I-D.dekater-scion-dataplane}} in section Terminology. It is required to be unique within each AS and can therefore be chosen without any need for coordination between ASes.
 
@@ -460,11 +454,7 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
-<figure anchor="_figure-3a">
-<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 1</name>
-<artset>
-<artwork type="svg" src="images/intra-isd-pcb-propagation-part1.svg"/>
-<artwork type="ascii-art">
+~~~
 
                            +-------------+
                            |  Core AS X  |
@@ -480,19 +470,12 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                                 *   *
                            +----+---+----+
                            |    AS Y     |
-
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
 AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
-<figure anchor="_figure-3b">
-<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 2</name>
-<artset>
-<artwork type="svg" src="images/intra-isd-pcb-propagation-part2.svg"/>
-<artwork type="ascii-art">
-
+~~~
                         +-----+ |   | +-----+
                         |PCB a| |   | |PCB b|
                         +--+--+ |   | +--+--+
@@ -526,18 +509,13 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
                                 *   *
                            +----+---+----+
                            |    AS Z     |
+~~~
+{: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
-</artwork>
-</artset>
-</figure>
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
-<figure anchor="_figure-3c">
-<name>Intra-ISD PCB propagation from the ISD core to child ASes - Part 3</name>
-<artset>
-<artwork type="svg" src="images/intra-isd-pcb-propagation-part3.svg"/>
-<artwork type="ascii-art">
+~~~
 
                    +-----+      |   |      +-----+
                    |PCB c|      |   |      |PCB d|
@@ -575,17 +553,13 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
                             v     |     v
                                   v
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
+
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
-<figure anchor="_figure-4">
-<name>Possible up- or down segments for AS Z</name>
-<artset>
-<artwork type="svg" src="images/possible-up-down-segments.svg"/>
-<artwork type="ascii-art">
+~~~
 
                 AS Entry Core        AS Entry Y          AS Entry Z
 
@@ -631,19 +605,15 @@ Path Segment 4 |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                   Egress 1       Ingress 3 - Egress 5      Ingress 1
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-4 title="Possible up- or down segments for AS Z"}
+
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
 ### PCB Message Format {#pcb-compos}
 
-<figure anchor="_figure-5">
-<name>Top-down composition of a PCB</name>
-<artset>
-<artwork type="svg" src="images/pcb-composition.svg"/>
-<artwork type="ascii-art">
+~~~
 
                            PCB/Path Segment
 
@@ -705,27 +675,22 @@ Path Segment 4 |             |     |             |     |             |
 |  Ingress   |    Egress   |  Expiration Time  |    MAC    |
 +------------+-------------+-------------------+-----------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-5 title="Top-down composition of a PCB"}
+
 
 Note: For a full example of a PCB in the Protobuf message format, please see {{figure-34}}.
 
 #### PCB Top-Level Message Format {#segment}
 
-<figure anchor="_figure-6">
-<name>PCB Top-Level Message Format</name>
-<artset>
-<artwork type="svg" src="images/pcb-top-level-message-format.svg"/>
-<artwork type="ascii-art">
-	
+~~~
+
 +-------------+------------+------------+-----+------------+
 |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
 +-------------+------------+------------+-----+------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-6 title="PCB Top-Level Message Format"}
 
 Each PCB MUST consists of at least:
 
@@ -748,12 +713,8 @@ The following code block defines the PCB at the top level in Protobuf message fo
 
 #### Segment Information {#seginfo}
 
-<figure anchor="_figure-7">
-<name>Segment Information Component</name>
-<artset>
-<artwork type="svg" src="images/segment-information.svg"/>
-<artwork type="ascii-art">
-	
+~~~
+
 +----------------------------+
 |         Segment Info       |
 +----------------------------+
@@ -765,9 +726,8 @@ The following code block defines the PCB at the top level in Protobuf message fo
 |  Timestamp  |    Seg ID    |
 +-------------+--------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-7 title="Segment Information Component"}
 
 Each PCB MUST include an information component with basic information about the PCB.
 
@@ -788,11 +748,7 @@ In the Protobuf message format, the information component of a PCB is called the
 
 #### AS Entry {#as-entry}
 
-<figure anchor="_figure-8">
-<name>AS Entry</name>
-<artset>
-<artwork type="svg" src="images/as-entry.svg"/>
-<artwork type="ascii-art">
+~~~
 
                            +--------------+
                            |   AS Entry   |
@@ -805,9 +761,8 @@ In the Protobuf message format, the information component of a PCB is called the
 |  Unsigned Extension   |             Signed AS Entry              |
 +-----------------------+------------------------------------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-8 title="AS Entry"}
 
 Each PCB MUST also contain the entries of all ASes included in the corresponding path segment. This means that the originating core AS MUST add its AS entry to each PCB it creates, and each traversed AS MUST attach its AS entry to the PCB.
 
@@ -830,11 +785,7 @@ It includes the following components:
 
 #### AS Entry Signed Component {#signed-compo}
 
-<figure anchor="_figure-9">
-<name>AS Entry Signed Component</name>
-<artset>
-<artwork type="svg" src="images/as-entry-signed-component.svg"/>
-<artwork type="ascii-art">
+~~~
 
         +------------------------------------------------------+
         |                   Signed AS Entry                    |
@@ -847,9 +798,9 @@ It includes the following components:
 |     Signature      |      Header      |             Body            |
 +--------------------+------------------+-----------------------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-9 title="AS Entry Signed Component"}
+
 
 Each AS entry of a PCB MUST include a signed component as well as a signature computed over the signed component. Each AS entry MUST be signed with the Control Plane AS Certificate (see {{I-D.dekater-scion-pki}}).
 
@@ -885,11 +836,7 @@ The following code block shows the low level representation of the `HeaderAndBod
 
 ##### AS Entry Signed Header {#ase-header}
 
-<figure anchor="_figure-10">
-<name>AS Entry Signed Header</name>
-<artset>
-<artwork type="svg" src="images/as-entry-signed-header.svg"/>
-<artwork type="ascii-art">
+~~~
 
                       +-----------------+
                       |     Header      |
@@ -909,9 +856,9 @@ The following code block shows the low level representation of the `HeaderAndBod
      | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
      +---------+---------+------------+--------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-10 title="AS Entry Signed Header"}
+
 
 The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
 
@@ -955,11 +902,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 ##### AS Entry Signed Body {#ase-sign}
 
-<figure anchor="_figure-11">
-<name>AS Entry Signed Body</name>
-<artset>
-<artwork type="svg" src="images/as-entry-signed-body.svg"/>
-<artwork type="ascii-art">
+~~~
 
                 +--------------------------------------+
                 |                 Body                 |
@@ -972,9 +915,9 @@ The following code block defines the signed header of an AS entry in Protobuf me
 |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
 +------+-----------+---------+-------------+---+-------------+---+----+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-11 title="AS Entry Signed Body"}
+
 
 The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of all ASes in the path segment represented by the PCB, up until and including the current AS.
 
@@ -1030,11 +973,7 @@ associated_data(ps, i) = ps.segment_info ||
 
 #### Hop Entry {#hopentry}
 
-<figure anchor="_figure-12">
-<name>Hop Entry</name>
-<artset>
-<artwork type="svg" src="images/hop-entry.svg"/>
-<artwork type="ascii-art">
+~~~
 
         +-----------+
         | Hop Entry |
@@ -1047,9 +986,9 @@ associated_data(ps, i) = ps.segment_info ||
 | Ingress MTU |  Hop Field  |
 +-------------+-------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-12 title="Hop Entry"}
+
 
 Each body of an AS entry MUST contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).
 
@@ -1069,11 +1008,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 #### Hop Field {#hopfield}
 
-<figure anchor="_figure-13">
-<name>Hop Field</name>
-<artset>
-<artwork type="svg" src="images/hop-field.svg"/>
-<artwork type="ascii-art">
+~~~
 
                       +-----------+
                       | Hop Entry |
@@ -1086,9 +1021,9 @@ In this description, MTU and packet size are to be understood in the same sense 
 |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
 +-------------+-------------+-------------------+----------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-13 title="Hop Field"}
+
 
 The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.
 
@@ -1115,11 +1050,7 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 #### Peer Entry {#peerentry}
 
-<figure anchor="_figure-14">
-<name>Peer Entry</name>
-<artset>
-<artwork type="svg" src="images/peer-entry.svg"/>
-<artwork type="ascii-art">
+~~~
 
                       +--------------+
                       |  Peer Entry  |
@@ -1132,9 +1063,9 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 |  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
 +-------------+------------+--------------+----------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-14 title="Peer Entry"}
+
 
 By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.
 
@@ -1156,11 +1087,7 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
-<figure anchor="_figure-15">
-<name>Peer entry information, in the direction of beaconing</name>
-<artset>
-<artwork type="svg" src="images/peer-entry-information.svg"/>
-<artwork type="ascii-art">
+~~~
 
    +-----------+
    |           |
@@ -1188,9 +1115,9 @@ In this description, MTU and packet size are to be understood in the same sense 
     |           |
     +-----------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-15 title="Peer entry information, in the direction of beaconing"}
+
 
 ### PCB Extensions {#pcb-ext}
 
@@ -1670,11 +1597,7 @@ Every SCMP message is preceded by a SCION header and zero or more SCION extensio
 
 The messages have the following general format:
 
-<figure anchor="_scmp-format">
-<name>SCMP message format</name>
-<artset>
-<artwork type="svg" src="images/scmp-message-format.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1686,9 +1609,9 @@ The messages have the following general format:
 |                         (variable length)                     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #scmp-format title="SCMP message format"}
+
 
 - `Type`: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.
 
@@ -1761,11 +1684,7 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 
 ### Packet Too Big {#packet-too-big}
 
-<figure anchor="_figure-21">
-<name>Packet Too Big format</name>
-<artset>
-<artwork type="svg" src="images/packet-too-big.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1779,9 +1698,9 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 |                    exceeding 1232 bytes.                      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-21 title="Packet Too Big format"}
+
 
 | Name         | Value                                               |
 |--------------+-----------------------------------------------------|
@@ -1798,11 +1717,7 @@ underlay.
 
 ### External Interface Down {#external-interface-down}
 
-<figure anchor="_figure-22">
-<name>External Interface Down format</name>
-<artset>
-<artwork type="svg" src="images/external-interface-down.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1822,9 +1737,9 @@ underlay.
 |                    exceeding 1232 bytes.                      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-22 title="External Interface Down format"}
+
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -1844,11 +1759,7 @@ Recipients can use this information to route around broken data-plane links.
 
 ### Internal Connectivity Down {#internal-connectivity-down}
 
-<figure anchor="_figure-23">
-<name>Internal Connectivity Down format</name>
-<artset>
-<artwork type="svg" src="images/internal-connectivity-down.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1872,9 +1783,9 @@ Recipients can use this information to route around broken data-plane links.
 |                    exceeding 1232 bytes.                      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-23 title="Internal Connectivity Down format"}
+
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -1901,11 +1812,7 @@ AS.
 
 ### Echo Request {#echo-request}
 
-<figure anchor="_figure-24">
-<name>Echo Request format</name>
-<artset>
-<artwork type="svg" src="images/echo-request.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1917,9 +1824,9 @@ AS.
 |                     Data (variable Len)                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-24 title="Echo Request format"}
+
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -1934,11 +1841,7 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 
 ### Echo Reply {#echo-reply}
 
-<figure anchor="_figure-25">
-<name>Echo Reply format</name>
-<artset>
-<artwork type="svg" src="images/echo-request.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1950,9 +1853,9 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
 |                     Data (variable Len)                       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-25 title="Echo Reply format"}
+
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -1969,11 +1872,7 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 
 ### Traceroute Request {#traceroute-request}
 
-<figure anchor="_figure-26">
-<name>Traceroute Request format</name>
-<artset>
-<artwork type="svg" src="images/traceroute-request.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1991,9 +1890,9 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-26 title="Traceroute Request format"}
+
 
 Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
 
@@ -2012,11 +1911,7 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 
 ### Traceroute Reply {#traceroute-reply}
 
-<figure anchor="_figure-27">
-<name>Traceroute Reply format</name>
-<artset>
-<artwork type="svg" src="images/traceroute-reply.svg"/>
-<artwork type="ascii-art">
+~~~ aasvg
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2034,9 +1929,9 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-27 title="Traceroute Reply format"}
+
 
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
@@ -2545,11 +2440,7 @@ message Transport {
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-41}} below. In both examples, the source endpoint is in AS A. {{figure-42}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-43}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
 
-<figure anchor="_figure-41">
-<name>Topology used in the path lookup examples</name>
-<artset>
-<artwork type="svg" src="images/example-topology.svg"/>
-<artwork type="ascii-art">
+~~~
 
 +----------------------------+     +----------------------------+
 |                            |     |                            |
@@ -2576,16 +2467,12 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 |            ISD 1           |     |            ISD 2           |
 +----------------------------+     +----------------------------+
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-41 title="Topology used in the path lookup examples"}
 
 
-<figure anchor="_figure-42">
-<name>Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</name>
-<artset>
-<artwork type="svg" src="images/path-lookup-for-destination-in-source-isd.svg"/>
-<artwork type="ascii-art">
+
+~~~
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -2640,16 +2527,12 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |                    |                    |                   |
      |                    |                    |                   |
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
 
 
-<figure anchor="_figure-43">
-<name>Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</name>
-<artset>
-<artwork type="svg" src="images/path-lookup-for-destination-in-remote-isd.svg"/>
-<artwork type="ascii-art">
+
+~~~
 	
 +---------+     +---------+     +---------+     +---------+     +---------+
 |Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
@@ -2704,9 +2587,9 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |               |               |               |               |
      |               |               |               |               |
 
-</artwork>
-</artset>
-</figure>
+~~~
+{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
+
 
 # Change Log
 {:numbered="false"}
@@ -2724,7 +2607,7 @@ Minor changes:
 
 - Nits and wording improvements
 - Reviewed use of normative language
-- Figures: redraw and add SVG version
+- Figures: redraw and use aasvg when possible
 - "Paths and Links": clarify relationship between path segments and links
 - Ensure consistent use of example ranges
 
