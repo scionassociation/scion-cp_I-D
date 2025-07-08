@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-06T00:27:44.230515+00:00",
+  "timestamp": "2025-07-08T00:24:55.846542+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1503,7 +1503,7 @@
       "id": "I_kwDOJx2-rs6w7tdb",
       "title": "Add SVG figures and small corrections",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/104",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1513,10 +1513,10 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "body": "- [x] Improve ASCII art\n- [ ] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-07-02T15:25:00Z",
-      "closedAt": "2025-07-02T15:23:48Z",
+      "updatedAt": "2025-07-07T18:11:29Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
@@ -1531,6 +1531,34 @@
           "body": "Other pending point that I forgot to include:\n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n\n> What is the format?  What does \"per-protocol\" mean?\n\nI'd also leave the issue open until merged.\n\nUpdate: this is also its own issue: \nhttps://github.com/scionassociation/scion-cp_I-D/issues/107",
           "createdAt": "2025-06-24T19:23:39Z",
           "updatedAt": "2025-07-02T15:25:00Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Cannot submit. Datatracker says:\n\n```\nSubmission rejected: Error during xml2rfc prep: ['**/draft-dekater-scion-controlplane-09.xml(120): Error: Can not access local file: images/scion-links.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(419): Error: Can not access local file: images/intra-isd-pcb-propagation-part1.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(444): Error: Can not access local file: images/intra-isd-pcb-propagation-part2.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(488): Error: Can not access local file: images/intra-isd-pcb-propagation-part3.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(534): Error: Can not access local file: images/possible-up-down-segments.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(593): Error: Can not access local file: images/pcb-composition.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(665): Error: Can not access local file: images/pcb-top-level-message-format.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(711): Error: Can not access local file: images/segment-information.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(751): Error: Can not access local file: images/as-entry.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(792): Error: Can not access local file: images/as-entry-signed-component.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(854): Error: Can not access local file: images/as-entry-signed-header.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(950): Error: Can not access local file: images/as-entry-signed-body.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(1037): Error: Can not access local file: images/hop-entry.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(1077): Error: Can not access local file: images/hop-field.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(1128): Error: Can not access local file: images/peer-entry.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(1173): Error: Can not access local file: images/peer-entry-information.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(1976): Error: Can not access local file: images/scmp-message-format.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2164): Error: Can not access local file: images/packet-too-big.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2216): Error: Can not access local file: images/external-interface-down.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2282): Error: Can not access local file: images/internal-connectivity-down.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2363): Error: Can not access local file: images/echo-request.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2417): Error: Can not access local file: images/echo-request.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2472): Error: Can not access local file: images/traceroute-request.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(2541): Error: Can not access local file: images/traceroute-reply.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(3586): Error: Can not access local file: images/example-topology.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(3620): Error: Can not access local file: images/path-lookup-for-destination-in-source-isd.svg. Use --allow-local-file-access enable access.', '**/draft-dekater-scion-controlplane-09.xml(3682): Error: Can not access local file: images/path-lookup-for-destination-in-remote-isd.svg. Use --allow-local-file-access enable access.']\n```",
+          "createdAt": "2025-07-07T16:15:33Z",
+          "updatedAt": "2025-07-07T16:15:33Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "The [github action](https://github.com/scionassociation/scion-cp_I-D/actions/runs/16122030190/job/45489966730) is using flag ` --allow-local-file-access` locally: \n```\ncat versioned/draft-dekater-scion-controlplane-09.md  | kramdown-rfc --v3 | lib/trace.sh -v -q versioned/draft-dekater-scion-controlplane-09.xml -s venue python3 lib/add-note.py | lib/trace.sh -v -q versioned/draft-dekater-scion-controlplane-09.xml -s v2v3 xml2rfc -q --rfc-base-url https://www.rfc-editor.org/rfc/ --id-base-url https://datatracker.ietf.org/doc/html/ --allow-local-file-access --cache=/github/workspace/.refcache --v2v3 /dev/stdin -o /dev/stdout >versioned/draft-dekater-scion-controlplane-09.xml\n```\n\nBut then the submission fails: https://datatracker.ietf.org/api/submission/153725/status \n",
+          "createdAt": "2025-07-07T16:22:56Z",
+          "updatedAt": "2025-07-07T16:22:56Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "It could be related to https://github.com/ietf-tools/xml2rfc/security/advisories/GHSA-432c-wxpg-m4q3 \nhttps://github.com/ietf-tools/xml2rfc/commit/ec98f9cb4b9a8658222117df037dda473ca3f4e4",
+          "createdAt": "2025-07-07T16:25:56Z",
+          "updatedAt": "2025-07-07T16:25:56Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I rolled abck SVGs in https://github.com/scionassociation/scion-cp_I-D/pull/130 ",
+          "createdAt": "2025-07-07T18:11:29Z",
+          "updatedAt": "2025-07-07T18:11:29Z"
         }
       ]
     },
@@ -1885,7 +1913,7 @@
       "id": "I_kwDOJx2-rs67H2D-",
       "title": "nits and small clarifications - Alvaro's feedback",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/113",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1898,15 +1926,15 @@
       ],
       "body": "- [x] Terminology - \"Hop Field (HF)\" is repeated. This also happens in other definitions. \n- [x] `*SCMP*: A signaling protocol analogous to the Internet Control.` - [nit] Expand SCMP.\n- [x] Clarifications in `1.3.  Paths and Links`\n  ```\n  387   A path can contain at most one peering link shortcut which means they\n  388   can only be used in paths between ASes within the \"customer cone\" of\n  389   the ASes connected by the peering link.\n  ```\n  > We have links (which I assume are one-hop connections), paths (which are\ne2e; \"an up-core-down path\", for example), and path segments.  The\ndefinition of \"path segments\" (in the Terminology section) combines terms:\n\"A path segment can be (1) an up segment (i.e. a path between a non-core AS\nand a core AS in the same ISD),\": \"A path segment can be...[a]...segment\n(i.e. a path...\".\nI think this description could be clarified.\n- [x] Typo `litteral` --> literal (e.g. in 1.5.3.3.  <ISD, AS> tuples) \n- [x] After reading \u00a77.3.1, also point to the specification in \u00a72.3.1.\n\n\nNITS in this part were DONE in #115 ",
       "createdAt": "2025-06-12T08:46:57Z",
-      "updatedAt": "2025-07-03T13:24:55Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T10:14:10Z",
+      "closedAt": "2025-07-07T10:14:10Z",
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "More clarifications (from the second part of Alvaro's feedback):\n\n- [x] `2.2.1.6.  Hop Field`: add a sentence to clarify that  MAC is a form of authenticating segments between the Control Plane of an AS and its own routers within the AS. It is never computed by endpoints\n  > [] Only one MAC algorithm is specified, but an AS can select its own.  This may be a question for the dataplane draft...  How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?\n  --> this iss to be further clarified in the DP draft, see https://github.com/scionassociation/scion-dp_I-D/issues/98 \n- [ ] \n  ```\n  1641\t2.2.4.  Configuration\n  \n  1643\t   For the purpose of constructing and propagating path segments, an AS\n  1644\t   Control Service MUST be configured with links to neighboring ASes.\n  1645\t   Such information may be conveyed to the Control Service in an out-of-\n  1646\t   band fashion (e.g in a configuration file).  For each link, these\n  1647\t   values MUST be configured:\n  \n  [] \"MUST be configured with links to neighboring ASes\"\n  ```\n  s/MUST/must\n  > There's no Normative value in using \"MUST\" here because the sentence is explaining a fact: if no links exist then nothing can happen...\n- [ ] [nit] s/policy that it does not/policy that does not\n- [ ] [] s/must check/MUST check in `1702\t       receiver Control Service must check every AS entry except the`\n- [ ] [] \"relatively small subset of the viable PCBs SHOULD be propagated\" ->    \"Not all viable PCBs should be propagated...\"\n   > This is not a good Normative statement because it is not clear what a \"relatively small subset\" is?  Half, 10%, only 2, etc. ??\n- [x] [] \"The goal of the AS SHOULD be...\"\n    > When is it ok for the goal to be something else?  I guess it's a matter of configuration, but the point is that this sentence is just referring to a fact: s/SHOULD/should\n- [ ] Use [inclusive language](https://www.rfc-editor.org/styleguide/part2/#inclusive_language) (e.g. blacklists, whitelist)\n- [x] Lowercase some SHOULD\n  ```\n  1755\t   *  Path disjointness: Paths can be either AS disjointed or link\n  1756\t      disjointed.  AS disjointed paths have no common upstream/core AS\n  1757\t      for the current AS, whereas link disjointed paths do not share any\n  1758\t      AS-to-AS link.  AS disjointness allows path diversity in the event\n  1759\t      that an AS becomes unresponsive, and link disjointness provides\n  1760\t      resilience in case of link failure.  Both criteria can be used\n  1761\t      depending on the objective of the AS.\n  \n  1763\t   The relative disjointness of two PCBs A and B may be calculated by\n  1764\t   assigning a disjointness score, calculated as the number of links in\n  1765\t   A that don't appear in B.  The beacon that has the highest\n  1766\t   disjointness score and is not the shortest path SHOULD be selected.\n  1767\t   If this is not better than what has already been selected, then the\n  1768\t   beacon with the shortest path yet to be selected SHOULD be chosen\n  1769\t   instead.\n  ```\n   > [] The list above presented examples, which I take to mean that the policy is up to the local AS.  IOW, there shouldn't be a specification of which paths to choose.  I take this paragraph as an example too.  Note also that the use of SHOULD allows for any selection.  Suggestion: Avoid using normative language and introduce the paragraph with \"For example...\".\n- [ ] s/must check/MUST check\n   `1702\t       receiver Control Service must check every AS entry except the`\n-  [x] [] \"MUST at least include: ... MAY add\"\n  ```\n  ...\n  1834\t2.3.5.1.  Propagation of PCBs in Intra-ISD Beaconing\n  \n  1836\t   The propagation process in intra-ISD beaconing includes the following\n  1837\t   steps:\n  \n  1839\t   1.  From the candidate PCBs stored in the Beacon Store, the Control\n  1840\t       Service of an AS selects the best PCBs to propagate to its\n  1841\t       downstream neighboring ASes, based on a selection algorithm\n  1842\t       specific for this AS.\n  \n  1844\t   2.  The Control Service adds a new AS entry to every selected PCB\n  1845\t       which MUST at least include:\n  \n  1847\t       *  The ingress interface to this AS, in the Hop Field component.\n  \n  1849\t       *  The egress interface to the neighboring AS, also in the Hop\n  1850\t          Field component.\n  \n  1852\t       *  The ISD_AS number of the next AS, in the signed body component\n  1853\t          of the AS entry.\n  \n  1855\t       *  If the AS has peering links, the Control Service MAY add\n  1856\t          corresponding peer entry components to the signed body of the\n  1857\t          AS entry; one peer entry component for each peering link that\n  1858\t          the AS wants to advertise.  The Hop Field component of each\n  1859\t          added peer entry MUST have a specified egress interface.\n  ```\n   > The use of MUST and then MAY is a Normative conflict.  Instead of reiterating the information, leverage the previous specifications.  Note also that the minimum includes the Header information (key IDs, ISD_AS, etc.). Suggestion: \n       > The Control Service MUST add a new AS Entry (\u00a72.2.1.3), including any\n       Peer Entry information (\u00a72.2.1.7) the AS is configured to advertise.\n\n\n\n\n\n",
+          "body": "More clarifications (from the second part of Alvaro's feedback):\n\n- [x] `2.2.1.6.  Hop Field`: add a sentence to clarify that  MAC is a form of authenticating segments between the Control Plane of an AS and its own routers within the AS. It is never computed by endpoints\n  > [] Only one MAC algorithm is specified, but an AS can select its own.  This may be a question for the dataplane draft...  How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?\n  --> this iss to be further clarified in the DP draft, see https://github.com/scionassociation/scion-dp_I-D/issues/98 \n- [ ] \n  ```\n  1641\t2.2.4.  Configuration\n  \n  1643\t   For the purpose of constructing and propagating path segments, an AS\n  1644\t   Control Service MUST be configured with links to neighboring ASes.\n  1645\t   Such information may be conveyed to the Control Service in an out-of-\n  1646\t   band fashion (e.g in a configuration file).  For each link, these\n  1647\t   values MUST be configured:\n  \n  [] \"MUST be configured with links to neighboring ASes\"\n  ```\n  s/MUST/must\n  > There's no Normative value in using \"MUST\" here because the sentence is explaining a fact: if no links exist then nothing can happen...\n- [ ] [nit] s/policy that it does not/policy that does not\n- [ ] [] s/must check/MUST check in `1702\t       receiver Control Service must check every AS entry except the`\n- [ ] [] \"relatively small subset of the viable PCBs SHOULD be propagated\" ->    \"Not all viable PCBs should be propagated...\"\n   > This is not a good Normative statement because it is not clear what a \"relatively small subset\" is?  Half, 10%, only 2, etc. ??\n- [x] [] \"The goal of the AS SHOULD be...\"\n    > When is it ok for the goal to be something else?  I guess it's a matter of configuration, but the point is that this sentence is just referring to a fact: s/SHOULD/should\n- [ ] Use [inclusive language](https://www.rfc-editor.org/styleguide/part2/#inclusive_language) (e.g. blacklists, whitelist)\n- [x] Lowercase some SHOULD\n  ```\n  1755\t   *  Path disjointness: Paths can be either AS disjointed or link\n  1756\t      disjointed.  AS disjointed paths have no common upstream/core AS\n  1757\t      for the current AS, whereas link disjointed paths do not share any\n  1758\t      AS-to-AS link.  AS disjointness allows path diversity in the event\n  1759\t      that an AS becomes unresponsive, and link disjointness provides\n  1760\t      resilience in case of link failure.  Both criteria can be used\n  1761\t      depending on the objective of the AS.\n  \n  1763\t   The relative disjointness of two PCBs A and B may be calculated by\n  1764\t   assigning a disjointness score, calculated as the number of links in\n  1765\t   A that don't appear in B.  The beacon that has the highest\n  1766\t   disjointness score and is not the shortest path SHOULD be selected.\n  1767\t   If this is not better than what has already been selected, then the\n  1768\t   beacon with the shortest path yet to be selected SHOULD be chosen\n  1769\t   instead.\n  ```\n   > [] The list above presented examples, which I take to mean that the policy is up to the local AS.  IOW, there shouldn't be a specification of which paths to choose.  I take this paragraph as an example too.  Note also that the use of SHOULD allows for any selection.  Suggestion: Avoid using normative language and introduce the paragraph with \"For example...\".\n- [ ] s/must check/MUST check\n   `1702\t       receiver Control Service must check every AS entry except the`\n-  [ ] [] \"MUST at least include: ... MAY add\"\n  ```\n  ...\n  1834\t2.3.5.1.  Propagation of PCBs in Intra-ISD Beaconing\n  \n  1836\t   The propagation process in intra-ISD beaconing includes the following\n  1837\t   steps:\n  \n  1839\t   1.  From the candidate PCBs stored in the Beacon Store, the Control\n  1840\t       Service of an AS selects the best PCBs to propagate to its\n  1841\t       downstream neighboring ASes, based on a selection algorithm\n  1842\t       specific for this AS.\n  \n  1844\t   2.  The Control Service adds a new AS entry to every selected PCB\n  1845\t       which MUST at least include:\n  \n  1847\t       *  The ingress interface to this AS, in the Hop Field component.\n  \n  1849\t       *  The egress interface to the neighboring AS, also in the Hop\n  1850\t          Field component.\n  \n  1852\t       *  The ISD_AS number of the next AS, in the signed body component\n  1853\t          of the AS entry.\n  \n  1855\t       *  If the AS has peering links, the Control Service MAY add\n  1856\t          corresponding peer entry components to the signed body of the\n  1857\t          AS entry; one peer entry component for each peering link that\n  1858\t          the AS wants to advertise.  The Hop Field component of each\n  1859\t          added peer entry MUST have a specified egress interface.\n  ```\n   > The use of MUST and then MAY is a Normative conflict.  Instead of reiterating the information, leverage the previous specifications.  Note also that the minimum includes the Header information (key IDs, ISD_AS, etc.). Suggestion: \n       > The Control Service MUST add a new AS Entry (\u00a72.2.1.3), including any\n       Peer Entry information (\u00a72.2.1.7) the AS is configured to advertise.\n\n\n\n\n\n",
           "createdAt": "2025-06-25T10:24:53Z",
-          "updatedAt": "2025-07-03T13:20:58Z"
+          "updatedAt": "2025-07-07T09:14:45Z"
         },
         {
           "author": "nicorusti",
@@ -1914,6 +1942,13 @@
           "body": "And more: \n\n- [x] The ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n   ```\n  1864\t   4.  As a final step, the Control Service propagates each extended PCB\n  1865\t       to the correct neighboring ASes by invoking the\n  1866\t       SegmentCreationService.Beacon remote procedure call (RPC) in the\n  1867\t       Control Services of the neighboring ASes (see also\n  1868\t       Section 2.3.5.3).\n  ```\n   [] What is the set of \"correct neighboring ASes\"?  \"correct\" is not explained anywhere.\nThe ISD_AS number inside the PCB must be equal to the one of the neighbor AS. We can clarify this. \n- [x] [] s/until new link/until a new link\n- [x] If a link fails, rendering a PCB invalid, how is that detected?  I assume that the ASes on each side of the link would reevaluate the contents of the PCBs in their Beacon Store after such an event and take action -- where is that specified? --> Ahhh...I found the answer in the dataplane document (\u00a76.2). :-)  Please point to it.\n   ```\n   2051\t   scheduled removal of links, operators let path segments expire.  On\n  2052\t   link failures, endpoints route around the failed link by switching to\n  2053\t   different paths in the data plane.\n  ```\n- [x] [] s/and The average/and the average\n- [x] [] s/SHOULD...SHOULD/MUST...MUST\n ```\n 2290\t       SHOULD be equal to the core ISD-AS where the segment is being\n 2291\t       registered.  If not, the core AS SHOULD reject the segment.\n```\n- [x] `2381\t   MUST assume that all hops are constrained by the intra-AS MTU of each` s/MUST assume/assumes. There's no Normative action resulting from \"assume\".  Also, the important part of this section is specified where the path MTU is defined.\n- [x] `2638\t   This document specifies only messages RECOMMENDED for the purposes of\n`\"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [x] `2638\t   This document specifies only messages RECOMMENDED for the purposes of` \"RECOMMENDED\" in this context leaves the option of not using the messages, which I'm sure is not the intent.  s/messages RECOMMENDED for/messages used for\n- [x] `2644\t   Every SCMP message is preceded by a SCION header, and zero or more` [] Include a reference to the SCION header.\n- [x] `2746\t   Implementations MUST respect the following rules when processing SCMP`. [] \"MUST respect\" is not an actionable Normative action.  Given that the bullets below include Normative language, here's a suggestion:    The following rules apply when processing SCMP messages:\n- [x] [] s/because because/because\n- [x] with additional signals for reliable operations. --> \"These additional signals are outside the scope of this specification.\"\n- [x] [] `Endpoint path control is one of the main benefits of SCION compared to the current Internet as SCION endpoints can select inter-domain` --> Please don't use this document to compare SCION to anything.\n\n\n\n\n\n\n\n\n  \n\n",
           "createdAt": "2025-06-26T15:28:53Z",
           "updatedAt": "2025-07-03T13:24:55Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I went through the draft and all points are addressed, even tough there seems to be a bug in GitHub and I cannot tick the points here in this issue.",
+          "createdAt": "2025-07-07T09:36:08Z",
+          "updatedAt": "2025-07-07T09:36:08Z"
         }
       ]
     },
@@ -2015,7 +2050,7 @@
       "id": "I_kwDOJx2-rs69QHtl",
       "title": "Reword \"unspecified\" interface ID to clarify it is 0",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/118",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2025,10 +2060,10 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "- [ ] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [ ] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```\n\nQuestion by Alvaro: \n`ingress interface identifier MUST NOT be specified`: What value should be used on the Ingress field?  0?",
+      "body": "- [x] Clarify What value should be used on the Ingress field?  0? \n   ```\n    1491\t   *  ingress: The 16-bit ingress interface identifier (in the direction\n    1492\t      of the path construction, that is, in the direction of beaconing\n    1493\t      through the current AS).\n    \n    1495\t   *Note:* For the core AS that initiates the PCB, the ingress interface\n    1496\t   identifier MUST NOT be specified.  This initiating AS is a core AS.\n   ```\n- [x] Following previous point, should we change wording also in the CP draft. Current wording on 0 is weird.\n   ```\n   The Interface ID MUST be unique within each AS.  Interface ID 0 is\n   not a valid identifier as implementations MAY use it as the\n   \"unspecified\" value.\n   ```\n\nQuestion by Alvaro: \n`ingress interface identifier MUST NOT be specified`: What value should be used on the Ingress field?  0?",
       "createdAt": "2025-06-25T10:30:52Z",
-      "updatedAt": "2025-07-04T16:14:39Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T13:36:33Z",
+      "closedAt": "2025-07-07T13:36:33Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2064,6 +2099,13 @@
           "body": "Fixing it to 0 sounds good to me. I never thought it could be anything else than 0, tbh.\n\nOur implementation confirms this btw: https://github.com/scionproto/scion/blob/ad39a826931ce404b6fb922052e5d99d0e22ed2a/pkg/segment/seg.go#L166-L168\n\nhttps://github.com/scionproto/scion/blob/ad39a826931ce404b6fb922052e5d99d0e22ed2a/pkg/segment/seg.go#L181-L183",
           "createdAt": "2025-07-04T16:14:39Z",
           "updatedAt": "2025-07-04T16:14:39Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Agreed, let's fix it to 0. ! I'll try to find a wording. ",
+          "createdAt": "2025-07-07T06:05:21Z",
+          "updatedAt": "2025-07-07T06:05:21Z"
         }
       ]
     },
@@ -9998,51 +10040,194 @@
       "id": "PR_kwDOJx2-rs6cvyEl",
       "title": "Reword \"unspecified\" interface ID",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/124",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #118\r\n\r\n<br class=\"Apple-interchange-newline\">[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Interface-ID/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-30T18:20:07Z",
-      "updatedAt": "2025-07-04T13:20:55Z",
+      "updatedAt": "2025-07-07T13:36:32Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "b2f88a5c26ee585ef0b09630a0835770fc40f802",
+      "baseRefOid": "d4d48e7076664469e4dacef247381647c148d2b1",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Interface-ID",
-      "headRefOid": "e906ef611d2dd5af08fee9b5cb5318482b66dcbe",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "b6cb00c77eb08dec617ca20e84ef348c489d9a6c",
+      "closedAt": "2025-07-07T13:36:32Z",
+      "mergedAt": "2025-07-07T13:36:32Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "44b04529ed6149320b24da4596e609706307bc86"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6yc7-k",
+          "commit": {
+            "abbreviatedOid": "b6cb00c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-07T13:36:26Z",
+          "updatedAt": "2025-07-07T13:36:26Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 126,
       "id": "PR_kwDOJx2-rs6dPY0i",
       "title": "nits - Alvaro's Feedback part 2 ",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/126",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves \r\n-  #113 \r\nContinues work done in \r\n- https://github.com/scionassociation/scion-cp_I-D/pull/115 \r\n\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Alvaro-feedback/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-07-03T10:12:51Z",
-      "updatedAt": "2025-07-04T14:34:56Z",
+      "updatedAt": "2025-07-07T10:14:00Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "b2f88a5c26ee585ef0b09630a0835770fc40f802",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Alvaro-feedback",
-      "headRefOid": "9eedcbc98d5220dd31617dc588ae7d3422d78f71",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "027bf0571199bdc6c61423eab0050dd3775222b4",
+      "closedAt": "2025-07-07T10:14:00Z",
+      "mergedAt": "2025-07-07T10:14:00Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d4d48e7076664469e4dacef247381647c148d2b1"
+      },
       "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs6xzevU",
+          "commit": {
+            "abbreviatedOid": "027bf05"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-03T12:55:34Z",
+          "updatedAt": "2025-07-07T10:13:53Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "```suggestion\r\nIn order to avoid excessive overhead on the path discovery system in bigger networks, an AS SHOULD only propagate up to a certain number of candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction, in accordance with {{#propagation-interval-size}}.\r\n```",
+              "createdAt": "2025-07-03T12:55:34Z",
+              "updatedAt": "2025-07-07T10:13:53Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "@knmeynell what do you think about my change? I think we should refer to the best PCB set size section",
+              "createdAt": "2025-07-04T15:18:58Z",
+              "updatedAt": "2025-07-07T10:13:53Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "Applied similar wording",
+              "createdAt": "2025-07-07T09:38:48Z",
+              "updatedAt": "2025-07-07T10:13:53Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDOJx2-rs6dyZuN",
+      "title": "Changelog",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/128",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-07T15:55:17Z",
+      "updatedAt": "2025-07-07T15:58:15Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "44b04529ed6149320b24da4596e609706307bc86",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Interface-ID",
+      "headRefOid": "56c05484806dd895c8f60e7c292d0c421c9a700c",
+      "closedAt": "2025-07-07T15:58:10Z",
+      "mergedAt": "2025-07-07T15:58:10Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d92a2e3b389896014ef9c927cf2df3350aca2863"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDOJx2-rs6dyyxd",
+      "title": "Update actions",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/129",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-07T16:33:21Z",
+      "updatedAt": "2025-07-07T16:33:41Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d92a2e3b389896014ef9c927cf2df3350aca2863",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "fix-svg-submission",
+      "headRefOid": "336aa2bc275d66a29a07c7e36c648cf1b39cfb05",
+      "closedAt": "2025-07-07T16:33:41Z",
+      "mergedAt": "2025-07-07T16:33:41Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "a1ea042e524931fae1096d84f418ddafc8f539fe"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDOJx2-rs6dzfhI",
+      "title": "Remove external SVGs and use aasvg for SCMP diagrams",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/130",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-07T18:01:41Z",
+      "updatedAt": "2025-07-07T18:10:05Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a1ea042e524931fae1096d84f418ddafc8f539fe",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "fix-svg-submission",
+      "headRefOid": "1c849708cba88d7ae648ca85efbda23f2030f453",
+      "closedAt": "2025-07-07T18:10:05Z",
+      "mergedAt": "2025-07-07T18:10:05Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "LGTM, TXT version is the same\r\n\r\n<img width=\"1430\" alt=\"Screenshot 2025-07-07 at 20 02 22\" src=\"https://github.com/user-attachments/assets/733fae9c-e6b3-4118-9133-26925ceea007\" />\r\n\r\nAnd aasvg SCMP does not look too bad..\r\n\r\n<img width=\"1430\" alt=\"Screenshot 2025-07-07 at 20 02 51\" src=\"https://github.com/user-attachments/assets/c9a01849-3745-4bd5-9a26-738eecafae60\" />\r\n",
+          "createdAt": "2025-07-07T18:03:21Z",
+          "updatedAt": "2025-07-07T18:03:21Z"
+        }
+      ],
       "reviews": []
     }
   ]
