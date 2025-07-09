@@ -1151,7 +1151,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
-The maximum MTU supported by all intra-AS links MAY also be configured.
+The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
 The AS SHOULD adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
