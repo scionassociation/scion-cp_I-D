@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T00:24:55.846542+00:00",
+  "timestamp": "2025-07-10T00:25:15.073459+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1358,7 +1358,7 @@
       ],
       "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [x] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-06-27T09:12:43Z",
+      "updatedAt": "2025-07-09T10:24:45Z",
       "closedAt": null,
       "comments": [
         {
@@ -1406,9 +1406,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening following new feedback received from Alvaro on exactly this wording:\n\n- [ ] Decide if to change this into a MUST: `\"SHOULD discard PCBs that were propagated at any point by a non-core AS\"`\n- [ ] @nicorusti Respond to Alvaro\n- [ ] Clarify text ` MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more..` by specifying that it refers to the same ISD bud different ASes\n- [ ] MAY make a policy decision ~not~ to propagate \n\n\n### Feedback Alvaro\n\n```\n1684\t   2.  Loop avoidance: If it is a core AS, the Control Service MUST\n1685\t       check whether the PCB includes duplicate hop entries created by\n1686\t       the core AS itself or by other ASes.  If so, the PCB MUST be\n1687\t       discarded in order to avoid loops.  This step is necessary\n1688\t       because core beaconing is based on propagating PCBs to all AS\n1689\t       neighbors.  Additionally, core ASes SHOULD discard PCBs that were\n1690\t       propagated at any point by a non-core AS.  Ultimately, core ASes\n1691\t       MAY make a policy decision not to propagate beacons containing\n1692\t       path segments that traverse the same ISD more than once as this\n1693\t       can be legitimate, e.g. if the ISD spans a large geographical\n1694\t       area, a path transiting another ISD may constitute a shortcut.\n```\n[] \"SHOULD discard PCBs that were propagated at any point by a non-core AS\"\n\nWhen is it ok not to discard these PCBs?  IOW, why is it not a requirement?\n> @nicorusti: The reason for a SHOULD here is implementation complexity. To complete this check, a core AS would need to look at the TRC of the corresponding iSD to get a list of all core ASes, then use it to verify that all ASes on the PCB are actually core. AFAIK we don\u2019t have such check in the current implementation. But let me double check this, and think a bit more on the relevance of this check. \n\n[] \"If...the PCB includes duplicate hop entries...MUST be discarded...[but]...MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once\"\n\nI assume you meant \"decision to propagate\". ??\n\nThe MAY and MUST are in Normative contradiction.  Use SHOULD (instead of MUST).",
+          "body": "Reopening following new feedback received from Alvaro on exactly this wording:\n\n- [ ] Decide if to change this into a MUST: `\"SHOULD discard PCBs that were propagated at any point by a non-core AS\"` or else lowercase it ([Slack thread](https://scionproto.slack.com/archives/C8ADA9CEP/p1752056667859509))\n- [ ] @nicorusti Respond to Alvaro\n- [ ] Clarify text ` MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more..` by specifying that it refers to the same ISD bud different ASes\n- [ ] MAY make a policy decision ~not~ to propagate \n\n\n### Feedback Alvaro\n\n```\n1684\t   2.  Loop avoidance: If it is a core AS, the Control Service MUST\n1685\t       check whether the PCB includes duplicate hop entries created by\n1686\t       the core AS itself or by other ASes.  If so, the PCB MUST be\n1687\t       discarded in order to avoid loops.  This step is necessary\n1688\t       because core beaconing is based on propagating PCBs to all AS\n1689\t       neighbors.  Additionally, core ASes SHOULD discard PCBs that were\n1690\t       propagated at any point by a non-core AS.  Ultimately, core ASes\n1691\t       MAY make a policy decision not to propagate beacons containing\n1692\t       path segments that traverse the same ISD more than once as this\n1693\t       can be legitimate, e.g. if the ISD spans a large geographical\n1694\t       area, a path transiting another ISD may constitute a shortcut.\n```\n[] \"SHOULD discard PCBs that were propagated at any point by a non-core AS\"\n\nWhen is it ok not to discard these PCBs?  IOW, why is it not a requirement?\n> @nicorusti: The reason for a SHOULD here is implementation complexity. To complete this check, a core AS would need to look at the TRC of the corresponding iSD to get a list of all core ASes, then use it to verify that all ASes on the PCB are actually core. AFAIK we don\u2019t have such check in the current implementation. But let me double check this, and think a bit more on the relevance of this check. \n\n[] \"If...the PCB includes duplicate hop entries...MUST be discarded...[but]...MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once\"\n\nI assume you meant \"decision to propagate\". ??\n\nThe MAY and MUST are in Normative contradiction.  Use SHOULD (instead of MUST).\n\n> \n> I don\u2019t think this is a contradiction, because the MUST refers to a path\n> traversing the same AS twice, while the MAY refers to a path traversing the\n> same ISD twice (but a different AS). We can clarify it in the text that the\n> MAY refers to the same ISD but a different AS.\n> \n> https://github.com/scionassociation/scion-cp_I-D/issues/90\n\nYup, you're right.",
           "createdAt": "2025-06-25T13:42:12Z",
-          "updatedAt": "2025-06-25T13:58:16Z"
+          "updatedAt": "2025-07-09T10:24:45Z"
         },
         {
           "author": "nicorusti",
@@ -2212,9 +2212,9 @@
         "Prio 2",
         "needs-discussion"
       ],
-      "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n[] Should the conditions in this paragraph be described using Normative language?\n",
+      "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
       "createdAt": "2025-06-26T16:28:10Z",
-      "updatedAt": "2025-06-26T16:28:10Z",
+      "updatedAt": "2025-07-09T13:15:16Z",
       "closedAt": null,
       "comments": []
     },
@@ -10228,6 +10228,58 @@
           "updatedAt": "2025-07-07T18:03:21Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 131,
+      "id": "PR_kwDOJx2-rs6eGC-x",
+      "title": "MTU - clarifications",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/131",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #57",
+      "createdAt": "2025-07-09T10:09:24Z",
+      "updatedAt": "2025-07-09T10:09:30Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "mtu-clarifications",
+      "headRefOid": "6c9745f57c0b73e4ce2f3fe8d26b601f43c66e51",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDOJx2-rs6eICGV",
+      "title": "security considerations: use normative wording on connectedness",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/132",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #122 ",
+      "createdAt": "2025-07-09T13:22:07Z",
+      "updatedAt": "2025-07-09T13:22:37Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "security-considerations",
+      "headRefOid": "27faadd37f0fd27884b6673edbf41aaf002f4b23",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
