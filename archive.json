@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-10T00:25:15.073459+00:00",
+  "timestamp": "2025-07-17T00:26:25.568449+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -773,7 +773,7 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-06-27T09:38:15Z",
+      "updatedAt": "2025-07-16T09:25:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -845,6 +845,13 @@
           "body": "@jiceatscion could you check how expensive it is to compute a PCB? Is it feasible to have `150 thousand signature validations per second` as we mention in the draft?",
           "createdAt": "2025-06-27T09:38:15Z",
           "updatedAt": "2025-06-27T09:38:15Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> could you check how expensive it is to compute a PCB? Is it feasible to have 150 thousand signature validations per second as we mention in the draft?\n\nOr @katyatitkova could you try to figure it out?",
+          "createdAt": "2025-07-16T09:25:09Z",
+          "updatedAt": "2025-07-16T09:25:09Z"
         }
       ]
     },
@@ -982,7 +989,7 @@
       "authorAssociation": "MEMBER",
       "assignees": [
         "romshark",
-        "jiceatscion"
+        "nicorusti"
       ],
       "labels": [
         "enhancement",
@@ -990,7 +997,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2025-07-02T16:17:16Z",
+      "updatedAt": "2025-07-16T09:22:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -1034,6 +1041,13 @@
           "body": "Other feedback from Alvaro: \n\n\n...\n> > 1659 In addition, the maximum MTU supported by all intra-AS links MAY be\n> > 1660 configured. Last, the AS SHOULD adopt a PCB selection policy that it\n> > 1661 does not accidentally isolate the AS from the network, i.e., such\n> > 1662 that it does not block connectivity to parent providers and that\n> > 1663 ensures downstream connectivity for children. For more details, see\n> > 1664 Section 2.3.3.\n> >\n> > [] \"MTU...MAY be configured\"\n> >\n> > This Normative statement contradicts the specifications in \u00a72.2.* where it \n> > says that it is \"implementation dependent\u201d.\n> \n> In 2.2 we say: \"How the control service obtains the MTU of an inter-AS link \n> is implementation dependent. It may be discovered or configured. Current\n> practice to make it a configuration item.\u201d. I think this is not contradicting\n> with \"MTU...MAY be configured\u201d. What we wanted to convey there is that\n> configuring the MTU is optional, as an operator could leverage some form of\n> discovery, or pre configure it.\n\nRight.  My point is that rfc2119 talks about using Normative language when the action is important for interoperability.  In this case, because the nodes can do anything (\"implementation dependent\"), there's not really an option.  If there was an option, it would be between configuring and what?  Even if \u00a72.2 mentions \"discovered or configured\", it is not enforcing/requiring one or the other.\n\n[Sorry, just being extra picky on Normative language stuck with me from my AD days...]\n",
           "createdAt": "2025-07-02T16:17:16Z",
           "updatedAt": "2025-07-02T16:17:16Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I discussed this with @jiceatscion today, we should write that when using path reversibility, the endpoint using it has to estimate MTU for the reverse path. Options include either use some form of MTU discovery, estimate MTU from the largest packet received, do a reverse path lookup. ",
+          "createdAt": "2025-07-16T09:19:26Z",
+          "updatedAt": "2025-07-16T09:19:26Z"
         }
       ]
     },
@@ -1113,14 +1127,15 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "jiceatscion"
+        "nicorusti",
+        "knmeynell"
       ],
       "labels": [
         "Prio 2"
       ],
       "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2025-07-02T16:20:40Z",
+      "updatedAt": "2025-07-16T09:23:01Z",
       "closedAt": null,
       "comments": [
         {
@@ -1428,7 +1443,7 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "jiceatscion"
+        "knmeynell"
       ],
       "labels": [
         "enhancement",
@@ -1436,7 +1451,7 @@
       ],
       "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
       "createdAt": "2025-02-25T15:53:49Z",
-      "updatedAt": "2025-02-28T10:28:45Z",
+      "updatedAt": "2025-07-16T09:06:45Z",
       "closedAt": null,
       "comments": [
         {
@@ -1513,9 +1528,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "- [x] Improve ASCII art\n- [ ] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-07-07T18:11:29Z",
+      "updatedAt": "2025-07-15T02:12:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -1674,6 +1689,7 @@
       "authorAssociation": "MEMBER",
       "assignees": [
         "nicorusti",
+        "knmeynell",
         "jiceatscion"
       ],
       "labels": [
@@ -1682,7 +1698,7 @@
       ],
       "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [ ] Move section to a dedicated paragraph\n- [ ] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [ ] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [ ] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [ ] Explicitly indicate how the information is used.\n- [ ] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
       "createdAt": "2025-06-09T19:13:09Z",
-      "updatedAt": "2025-06-30T12:05:43Z",
+      "updatedAt": "2025-07-16T09:06:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -1712,6 +1728,13 @@
           "body": "I spoke to @jiceatscion : JC says that the current implementation makes it up to you how you use it.  In the end, the connection on top of service addresses is just a QUIC connection. Today this is using QUIC redirection, which makes the address a service address.\n[Here](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/private/app/appnet/addr.go#L39) in the open source implementation:",
           "createdAt": "2025-06-30T12:05:43Z",
           "updatedAt": "2025-06-30T12:05:43Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell this issue has a bunch of editorial stuff, could you perhaps start with some of these? \n",
+          "createdAt": "2025-07-16T09:06:04Z",
+          "updatedAt": "2025-07-16T09:06:04Z"
         }
       ]
     },
@@ -10240,9 +10263,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Contributes to #57",
+      "body": "Contributes to #57\n\n<!-- Reviewable:start -->\n- - -\nThis change is\u2002[<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/scionassociation/scion-cp_I-D/131)\n<!-- Reviewable:end -->\n",
       "createdAt": "2025-07-09T10:09:24Z",
-      "updatedAt": "2025-07-09T10:09:30Z",
+      "updatedAt": "2025-07-16T10:27:46Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
@@ -10266,9 +10289,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #122 ",
+      "body": "Resolves #122\n\n<!-- Reviewable:start -->\n- - -\nThis change is\u2002[<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/scionassociation/scion-cp_I-D/132)\n<!-- Reviewable:end -->\n",
       "createdAt": "2025-07-09T13:22:07Z",
-      "updatedAt": "2025-07-09T13:22:37Z",
+      "updatedAt": "2025-07-16T10:27:46Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
