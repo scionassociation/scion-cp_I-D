@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-17T00:26:25.568449+00:00",
+  "timestamp": "2025-07-20T00:29:07.878578+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2054,9 +2054,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "- [ ] Reword to clarify that the certificate MUST expire later than the segment.\n- [ ] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
+      "body": "- [x] Reword to clarify that the certificate MUST expire later than the segment.\n- [x] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
       "createdAt": "2025-06-25T08:41:14Z",
-      "updatedAt": "2025-06-27T08:19:05Z",
+      "updatedAt": "2025-07-18T02:36:46Z",
       "closedAt": null,
       "comments": [
         {
@@ -2065,6 +2065,13 @@
           "body": "\"2.2.3 - Should the same allowance be made in this case?\": Yes, we need to say that.\n\"2.2.1.6 - I assume that the 1 in the formula represents the allowance, do you confirm that?\" Nope. The +1 is simply so we don't waste bits encoding the useless value zero. As we say, the minimum value that can be expressed is one time the quantum; not zero. I guess it is worth saying. The confusion comes from the name of the duration \"exp_time\" which suggests that it expresses an absolute time. I guess we need to say that too. Because of this I guess the reader felt justified to conflate the allowance (applied after computing the absolute time), with the plus 1 (applied to exp_time).\n",
           "createdAt": "2025-06-27T08:19:05Z",
           "updatedAt": "2025-06-27T08:19:05Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The wording in the draft was overly verbose and confusing. I've tried to simplify things whilst adding clarification...\n\nTo be valid (that is, usable to construct a valid path), a PCB MUST:\n\n* Contain valid AS Entry signatures ([](#sign)).\n* Have a timestamp ([](#seginfo)) that is not later than the current time at the point of validation, plus an allowance for differences between the clocks of the validator and originator.\n* Contain only unexpired hops ([](#hopfield)).\n\nIt is recommend to use the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)) as the allowance for differences between the clocks of the validator and originator.",
+          "createdAt": "2025-07-18T02:36:46Z",
+          "updatedAt": "2025-07-18T02:36:46Z"
         }
       ]
     },
@@ -10298,6 +10305,58 @@
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "security-considerations",
       "headRefOid": "27faadd37f0fd27884b6673edbf41aaf002f4b23",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 133,
+      "id": "PR_kwDOJx2-rs6ffTex",
+      "title": "Que?",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/133",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-18T02:13:51Z",
+      "updatedAt": "2025-07-18T02:15:59Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Not-sure-what-these-are",
+      "headRefOid": "061c7d67688d5a29d1c50f0a8274db97fea5e54d",
+      "closedAt": "2025-07-18T02:15:59Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 134,
+      "id": "PR_kwDOJx2-rs6ffcJo",
+      "title": "Reworded and clarified PCB Validity",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/134",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #117 ",
+      "createdAt": "2025-07-18T02:38:03Z",
+      "updatedAt": "2025-07-18T02:38:04Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "PCB-Validity",
+      "headRefOid": "b477e12eb3700b39032531c15f896d9f7637b660",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
