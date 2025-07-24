@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-20T00:29:07.878578+00:00",
+  "timestamp": "2025-07-24T00:26:25.201923+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2244,9 +2244,17 @@
       ],
       "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
       "createdAt": "2025-06-26T16:28:10Z",
-      "updatedAt": "2025-07-09T13:15:16Z",
+      "updatedAt": "2025-07-22T16:27:29Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "JFYI - the ISEG recently published guidance on the use of normative BCP 14 language https://datatracker.ietf.org/doc/statement-iesg-statement-on-clarifying-the-use-of-bcp-14-key-words/  ",
+          "createdAt": "2025-07-22T16:27:29Z",
+          "updatedAt": "2025-07-22T16:27:29Z"
+        }
+      ]
     },
     {
       "number": 125,
