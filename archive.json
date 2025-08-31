@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-12T00:24:48.792924+00:00",
+  "timestamp": "2025-08-31T00:25:48.193615+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1593,7 +1593,8 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "katyatitkova"
+        "katyatitkova",
+        "knmeynell"
       ],
       "labels": [
         "question",
@@ -1601,7 +1602,7 @@
       ],
       "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [ ] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
       "createdAt": "2025-04-07T10:18:34Z",
-      "updatedAt": "2025-06-27T10:00:00Z",
+      "updatedAt": "2025-08-28T09:20:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -1610,6 +1611,13 @@
           "body": "JFYI in -08 we have this text\n```\n   All communication between the Control Services in different ASes is\n   expressed in terms of gRPC remote procedure calls (for details, see\n   [gRPC]).  Service interfaces and messages are defined in the Protocol\n   Buffer \"proto3\" interface definition language (for details, see\n   [proto3]).\n\n   The RPC messages are transported via the [Connect]'s rpc protocol; a\n   gRPC-like protocol that carries messages over HTTP/3 (see\n   [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport\n   layer.  In the case of SCION, UDP relies on the data plane.\n```",
           "createdAt": "2025-06-27T09:58:49Z",
           "updatedAt": "2025-06-27T09:58:49Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "TODO: we should not have gRPC and connect. Maybe we can make it more general: \n\n- [ ] change \"gRPC definition\" to something like \"protobuf something\"\n- [ ] mark`[gRPC]` as supported but deprecated. \n- [ ] replace mentions of gRPC with RPC",
+          "createdAt": "2025-08-28T09:20:18Z",
+          "updatedAt": "2025-08-28T09:20:18Z"
         }
       ]
     },
