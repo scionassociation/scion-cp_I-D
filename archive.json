@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-31T00:25:48.193615+00:00",
+  "timestamp": "2025-09-04T00:21:48.688596+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1458,7 +1458,7 @@
       ],
       "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
       "createdAt": "2025-02-25T15:53:49Z",
-      "updatedAt": "2025-07-16T09:06:45Z",
+      "updatedAt": "2025-09-03T12:49:36Z",
       "closedAt": null,
       "comments": [
         {
@@ -1467,6 +1467,13 @@
           "body": "Keeping it open to further discuss wether this better fits the PKI draft",
           "createdAt": "2025-02-28T09:11:45Z",
           "updatedAt": "2025-02-28T09:11:45Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Does this depend on the outcome of discussions on #105 ?",
+          "createdAt": "2025-09-03T12:49:36Z",
+          "updatedAt": "2025-09-03T12:49:36Z"
         }
       ]
     },
@@ -1587,7 +1594,7 @@
     {
       "number": 105,
       "id": "I_kwDOJx2-rs6xZ8E_",
-      "title": "Control plane gRPC API - track potential  future changes?",
+      "title": "Control plane: clarify relationship between gRPC/Connect RPC",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/105",
       "state": "OPEN",
       "author": "nicorusti",
@@ -1602,7 +1609,7 @@
       ],
       "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [ ] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
       "createdAt": "2025-04-07T10:18:34Z",
-      "updatedAt": "2025-08-28T09:20:18Z",
+      "updatedAt": "2025-09-03T14:11:12Z",
       "closedAt": null,
       "comments": [
         {
