@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-04T00:21:48.688596+00:00",
+  "timestamp": "2025-09-07T00:24:51.173583+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2339,6 +2339,22 @@
           "updatedAt": "2025-07-04T13:28:59Z"
         }
       ]
+    },
+    {
+      "number": 135,
+      "id": "I_kwDOJx2-rs7Jm1zG",
+      "title": "Add reference for formal verification work",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/135",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": " Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router (CCS 2025)\n\nJo\u00e3o Pereira (ETH Zurich), Tobias Klenze (Independent Researcher), Sofia Giampietro (ETH Zurich), Markus Limbeck (ETH Zurich), Dionysios Spiliopoulos (ETH Zurich), Felix Wolf (ETH Zurich), Marco Eilers (ETH Zurich), Christoph Sprenger (ETH Zurich), David Basin (ETH Zurich), Peter M\u00fcller (ETH Zurich), Adrian Perrig (ETH Zurich)\n\nhttps://pm.inf.ethz.ch/publications/ScionOverview2024.pdf",
+      "createdAt": "2025-09-04T06:49:46Z",
+      "updatedAt": "2025-09-04T06:49:46Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
