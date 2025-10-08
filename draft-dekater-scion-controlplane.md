@@ -780,7 +780,7 @@ The code block below defines an AS entry `ASEntry` in Protobuf message format.
 It includes the following components:
 
 - `SignedMessage`: The signed component of an AS entry. For the specification of this part of the AS entry, see [](#signed-compo) below.
-- `PathSegmentUnsignedExtensions`: The unsigned and thus unprotected part of the AS entry. These are extensions with metadata that need no explicit protection.
+- `PathSegmentUnsignedExtensions`: Optional unsigned PCB extensions, further described in [](#pcb-ext).
 
 
 #### AS Entry Signed Component {#signed-compo}
@@ -1121,14 +1121,19 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 ### PCB Extensions {#pcb-ext}
 
-In addition to basic routing information such a hop entries and peer entries, PCBs can be used to communicate additional metadata in extensions. Extensions can be signed and unsigned: signed extensions are protected by the AS signature, whereas unsigned extensions are not.
+PCBs AS entries may carry a number of optional extensions, encoding information traveling across ASes. Extensions can be:
 
-In Protobuf, extensions are specified as follows:
+- Unsigned extensions `PathSegmentUnsignedExtensions`. They are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
+- Signed extensions `PathSegmentExtensions`. They are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
-- Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
-- Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
+It is recommended to keep the size of signed extensions moderate, since they are an integral part of the input to every AS’s signature. For larger amount of data, it is recommended to use a "detachable extension", which can be implemented by adding the extension's data as an unsigned extension, and its cryptographic hash as a signed extension.
 
-**Note:** SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
+The example below contains the Protobuf extension definition containing a `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the `StaticInfoExtension` message.
+~~~~
+  message PathSegmentExtensions {
+    StaticInfoExtension static_info = 1;
+  }
+~~~~
 
 ### PCB Validity {#pcb-validity}
 
