@@ -1390,9 +1390,9 @@ Table of Contents
 
    Each AS entry MUST be signed with the AS certificate's private key
    K_i.  The certificate MUST have a validity period that is longer than
-   the Hop Field absolute expiration time (described in Section 2.2.1.6.
-   The signature Sig_i of an AS entry ASE_i is computed over the AS
-   entry's signed component.
+   the Hop Field absolute expiration time (described in
+   Section 2.2.1.6).  The signature Sig_i of an AS entry ASE_i is
+   computed over the AS entry's signed component.
 
    This is the input for the computation of the signature:
 
@@ -1665,7 +1665,8 @@ Table of Contents
 
    For the purpose of validation, a hop is considered expired if its
    absolute expiration time, calculated as defined in Section 2.2.1.6,
-   is later than the current time at the point of validation.
+   is later than the current time + allowance at the point of
+   validation.
 
 2.2.4.  Configuration
 
