@@ -943,7 +943,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield)). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
 This is the input for the computation of the signature:
 
@@ -1140,7 +1140,7 @@ To be valid (that is, usable to construct a valid path), a PCB MUST:
 
 It is recommend to use the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)) as the allowance for differences between the clocks of the validator and originator.
 
-For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
+For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time + allowance at the point of validation.
 
 ### Configuration {#configuration}
 
