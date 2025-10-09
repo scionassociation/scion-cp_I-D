@@ -1964,7 +1964,7 @@ This section discusses three kinds of threats to the control plane:
 ## Security Properties {#security-properties}
 
 The SCION control plane provides various security properties, as discussed below.
-Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker, and if it follows this specification's "MUST" clauses and performs operations correctly (e.g., use an unique interface identifier for each link). An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
 
 Security properties are:
 
@@ -1975,7 +1975,11 @@ Security properties are:
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
-To ensure that the properties hold across the overall SCION network, all core ASes MUST be able to reach each other with some sequence of core links, and all non-core ASes MUST have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+To ensure that the properties hold across the overall SCION network, these are the prerequisites to follow:
+  - all core ASes MUST be able to reach each other with some sequence of core links
+  - and all non-core ASes MUST have at least one path up to a core AS.
+
+Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
 A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
