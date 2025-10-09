@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-07T00:24:51.173583+00:00",
+  "timestamp": "2025-10-09T00:22:34.678410+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1523,7 +1523,7 @@
       ],
       "body": "The SPRING WG is working on [SRv6 security considerations](https://datatracker.ietf.org/doc/draft-ietf-spring-srv6-security/). Can we learn something from this document? Or the other way around?",
       "createdAt": "2025-03-19T04:09:41Z",
-      "updatedAt": "2025-03-19T05:19:02Z",
+      "updatedAt": "2025-10-08T09:38:06Z",
       "closedAt": null,
       "comments": []
     },
@@ -1544,7 +1544,7 @@
       ],
       "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-07-15T02:12:00Z",
+      "updatedAt": "2025-10-08T09:38:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -1600,16 +1600,15 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "katyatitkova",
         "knmeynell"
       ],
       "labels": [
         "question",
-        "needs-discussion"
+        "Prio 1"
       ],
       "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [ ] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
       "createdAt": "2025-04-07T10:18:34Z",
-      "updatedAt": "2025-09-03T14:11:12Z",
+      "updatedAt": "2025-10-08T08:53:14Z",
       "closedAt": null,
       "comments": [
         {
@@ -1631,7 +1630,7 @@
     {
       "number": 107,
       "id": "I_kwDOJx2-rs63XRtk",
-      "title": "Add Path metadata extensions specification",
+      "title": "Add Path metadata extensions specification or reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/107",
       "state": "OPEN",
       "author": "nicorusti",
@@ -1645,9 +1644,9 @@
         "question",
         "needs-discussion"
       ],
-      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft\n- [ ] Decide wether we want to include a description of some metadata with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [ ] 2.2.2  - explain what PCB extensions are\n\n\nOS implementation currently supports path metadata (e.g. BW), Anapaya's propagates it. Should this be included in the draft?\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
+      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft (this relates to AS Entry Signed Header) \n- [x] Decide how much to include regarding PCB extensions (e.g. Path metadata) with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [ ] 2.2.2  - explain what PCB extensions are\n\nOS implementation currently supports path metadata extensions (e.g. BW), Anapaya's propagates it but typically does not configure them in their routers.\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-06-27T15:35:29Z",
+      "updatedAt": "2025-10-08T17:23:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -1688,9 +1687,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Ok, we'll add it. @romshark can you check what the OS is doing: \n\n- Which extensions are handled by the open source?  Are they all documented in the [docs](https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types)? \n- How is the data formatted?  (e.g. field size, unit of measurement)\n- Can you add pointers to the code?",
+          "body": "Ok, we feel something should be added. @romshark can you check what the OS is doing: \n\n- Which extensions are handled by the open source?  Are they all documented in the [docs](https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types)? \n- How is the data formatted?  (e.g. field size, unit of measurement). I see something [here ](https://github.com/scionproto/scion/blob/38e79c43faf38ebec719ac71fb65e1f814050e3b/pkg/snet/path.go#L102)\n- Can you add pointers to the code? [here ](https://github.com/scionproto/scion/blob/38e79c43faf38ebec719ac71fb65e1f814050e3b/proto/control_plane/v1/seg_extensions.proto#L40)",
           "createdAt": "2025-06-27T09:53:26Z",
-          "updatedAt": "2025-06-27T09:53:26Z"
+          "updatedAt": "2025-10-08T17:09:32Z"
         },
         {
           "author": "nicorusti",
@@ -1698,6 +1697,13 @@
           "body": "@oncilla @shitz anything against adding metadata spec to the draft?",
           "createdAt": "2025-06-27T15:35:29Z",
           "updatedAt": "2025-06-27T15:35:29Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We discussed this on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1759922251335239), extensions are still too experimental, not fully supported by Anapaya. We therefore decided to rewrite the section to address reviewer's comments, mentioning  an example of the `StaticInfoExtension`.",
+          "createdAt": "2025-10-08T17:23:31Z",
+          "updatedAt": "2025-10-08T17:23:31Z"
         }
       ]
     },
@@ -1712,7 +1718,7 @@
       "assignees": [
         "nicorusti",
         "knmeynell",
-        "jiceatscion"
+        "jiceathome"
       ],
       "labels": [
         "enhancement",
@@ -1720,7 +1726,7 @@
       ],
       "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [ ] Move section to a dedicated paragraph\n- [ ] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [ ] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [ ] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [ ] Explicitly indicate how the information is used.\n- [ ] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
       "createdAt": "2025-06-09T19:13:09Z",
-      "updatedAt": "2025-07-16T09:06:04Z",
+      "updatedAt": "2025-10-08T09:38:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -1738,7 +1744,7 @@
           "updatedAt": "2025-06-12T11:45:54Z"
         },
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "Q: I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\n\nA: this is a tough one. Yes, that is what happens, but at the protocol level, SCION doesn't care. So it is the choice of the control service implementation to do that. The problem is that, as implemented, the CS expects the client to do that. I don't think it is actually able to process anything but resolution messages when receiving a QUIC/SCION connection packet. So, we'd have to describe the entire CS rpc protocol in excruciating details in order to be complete.\n",
           "createdAt": "2025-06-27T09:02:01Z",
@@ -1778,7 +1784,7 @@
       ],
       "body": "- [ ] Do we write in the drafts what certs are used for the HTTPS requests for the gRPC API? \n- [ ] Do we clarify the overall layers used? Is the text clear enough?\n- [ ] Think about it and eventually update security considerations\n\n> From Alvaro Retana:\n(1) gRPC/HTTP3/QUIC\n  I'm not deeply familiar with gRPC.  I wonder whether it can be exploited by an attacker -- are there any security considerations that are SCION-related from its use?  I know the messages are transported over QUIC/H3 -- same question.",
       "createdAt": "2025-06-09T21:05:55Z",
-      "updatedAt": "2025-07-03T14:55:32Z",
+      "updatedAt": "2025-10-08T09:38:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -2057,7 +2063,7 @@
       ],
       "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [ ] Add some text on mapping \n- [ ] Mapping is also sort of a CP task. Shall we add a reference to the SIG also in this draft? \n- [ ] https://github.com/scionproto/scion/issues/4787 \n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
       "createdAt": "2025-06-13T16:04:15Z",
-      "updatedAt": "2025-06-27T07:31:42Z",
+      "updatedAt": "2025-10-08T09:38:09Z",
       "closedAt": null,
       "comments": []
     },
@@ -2078,11 +2084,11 @@
       ],
       "body": "- [x] Reword to clarify that the certificate MUST expire later than the segment.\n- [x] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
       "createdAt": "2025-06-25T08:41:14Z",
-      "updatedAt": "2025-07-18T02:36:46Z",
+      "updatedAt": "2025-10-08T09:38:10Z",
       "closedAt": null,
       "comments": [
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "\"2.2.3 - Should the same allowance be made in this case?\": Yes, we need to say that.\n\"2.2.1.6 - I assume that the 1 in the formula represents the allowance, do you confirm that?\" Nope. The +1 is simply so we don't waste bits encoding the useless value zero. As we say, the minimum value that can be expressed is one time the quantum; not zero. I guess it is worth saying. The confusion comes from the name of the duration \"exp_time\" which suggests that it expresses an absolute time. I guess we need to say that too. Because of this I guess the reader felt justified to conflate the allowance (applied after computing the absolute time), with the plus 1 (applied to exp_time).\n",
           "createdAt": "2025-06-27T08:19:05Z",
@@ -2177,7 +2183,7 @@
       ],
       "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-06-30T16:49:52Z",
+      "updatedAt": "2025-10-08T09:38:10Z",
       "closedAt": null,
       "comments": []
     },
@@ -2247,7 +2253,7 @@
       ],
       "body": "We briefly discuss this in 6.7.  SCMP Authentication, perhaps we could move and extend this paragraph to the security considerations section. \n\n\nFeedback Alvaro: \n```\n2921\t   Recipients can use this information to route around a broken data\n2922\t   plane inside an AS.\n```\n\n[] A rogue router can send this message (or the External Interface Down message) to disrupt the forwarding of information and/or force the traffic through a different path. This type of potential attack should be listed in the Security Considerations.",
       "createdAt": "2025-06-26T16:08:59Z",
-      "updatedAt": "2025-06-27T07:29:21Z",
+      "updatedAt": "2025-10-08T09:38:11Z",
       "closedAt": null,
       "comments": []
     },
@@ -2266,7 +2272,7 @@
       ],
       "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
       "createdAt": "2025-06-26T16:28:10Z",
-      "updatedAt": "2025-08-11T16:44:31Z",
+      "updatedAt": "2025-10-08T09:38:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -2348,11 +2354,13 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [],
       "body": " Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router (CCS 2025)\n\nJo\u00e3o Pereira (ETH Zurich), Tobias Klenze (Independent Researcher), Sofia Giampietro (ETH Zurich), Markus Limbeck (ETH Zurich), Dionysios Spiliopoulos (ETH Zurich), Felix Wolf (ETH Zurich), Marco Eilers (ETH Zurich), Christoph Sprenger (ETH Zurich), David Basin (ETH Zurich), Peter M\u00fcller (ETH Zurich), Adrian Perrig (ETH Zurich)\n\nhttps://pm.inf.ethz.ch/publications/ScionOverview2024.pdf",
       "createdAt": "2025-09-04T06:49:46Z",
-      "updatedAt": "2025-09-04T06:49:46Z",
+      "updatedAt": "2025-10-08T08:39:48Z",
       "closedAt": null,
       "comments": []
     }
@@ -10410,6 +10418,32 @@
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "PCB-Validity",
       "headRefOid": "b477e12eb3700b39032531c15f896d9f7637b660",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 136,
+      "id": "PR_kwDOJx2-rs6svkUO",
+      "title": "Rewrite PCB extensions section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/136",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #107 \r\n[SCION CP](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-10-08T17:01:33Z",
+      "updatedAt": "2025-10-08T17:07:25Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "metadata-extension",
+      "headRefOid": "af46dc03a796b39858fcd2cf1c95301fcdc9e37c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
