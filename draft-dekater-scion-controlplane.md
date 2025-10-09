@@ -943,7 +943,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than validity of the segment being verified. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
 This is the input for the computation of the signature:
 
