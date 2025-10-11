@@ -1121,7 +1121,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 ### PCB Extensions {#pcb-ext}
 
-PCBs AS entries may carry a number of optional extensions, encoding information traveling across ASes. Extensions can be:
+AS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes. Extensions can be:
 
 - Unsigned extensions `PathSegmentUnsignedExtensions`. They are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
 - Signed extensions `PathSegmentExtensions`. They are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
