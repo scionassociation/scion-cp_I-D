@@ -1832,7 +1832,7 @@ Table of Contents
    discussion on these trade-offs is provided in Section 3.3.  In
    current practice the intra-ISD set size is typically 20.  Current
    practice also showed that in small SCION core networks, higher values
-   of the core PCB best set size (e.g., 20) can be used.
+   of the core best PCBs set size (e.g., 20) can be used.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store in
@@ -2096,7 +2096,7 @@ Table of Contents
    core to itself.  While the number of distinct provider chains to the
    core is typically moderate, the multiplicity of links between
    provider ASes has multiplicative effect on the number of PCBs.  Once
-   this number grows above the maximum recommended best PCBs set size of
+   this number grows above the maximum recommended best PCB set size of
    50, ASes SHOULD trim the set of PCBs propagated.
 
    Ultimately, the number of PCBs received by an AS per propagation
