@@ -1823,14 +1823,16 @@ Table of Contents
 
    *  For core beaconing (i.e. propagation between core ASes): at most 5
       per immediate neighbor core AS.  Current practice is that each set
-      of 5 is chosen among the PCBs received from each neighbor.
+      is chosen among the PCBs received from each neighbor.
 
    These values reflect a tradeoff between scalability —limited by the
    computational overhead of signature verification—and the amount of
    paths discovered.  The PCBs set size should not be too low, to make
    sure that beaconing can discover a wide amount of paths.  Further
    discussion on these trade-offs is provided in Section 3.3.  In
-   current practice the intra-ISD set size is typically 20.
+   current practice the intra-ISD set size is typically 20.  Current
+   practice also showed that in small SCION core networks, higher values
+   of the core PCB best set size (e.g., 20) can be used.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store in
@@ -2047,7 +2049,8 @@ Table of Contents
 
    All of these are dependent on the number and length of the discovered
    path segments, i.e. the total number of AS entries of the discovered
-   path segments.
+   path segments.  These, in turn, depend on the configured best PCBs
+   set size (Section 2.3.4).
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
