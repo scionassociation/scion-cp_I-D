@@ -1204,10 +1204,10 @@ PCBs are propagated in batches to each neighboring AS at a fixed frequency known
 The *best PCBs set size* should be:
 
   - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
-  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.
+  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
 
 These values reflect a tradeoff between scalability —limited by the computational overhead of signature verification—and the amount of paths discovered. The PCBs set size should not be too low, to make sure that beaconing can discover a wide amount of paths. Further discussion on these trade-offs is provided in [](#scalability).
-In current practice the intra-ISD set size is typically 20.
+In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core PCB best set size (e.g., 20) can be used.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
@@ -1315,7 +1315,7 @@ The resource costs for path discovery are as follows:
 - Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the beaconing policies.
 - Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 
-All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments.
+All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These, in turn, depend on the configured best PCBs set size ([](#propagation-interval-size)).
 
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery".
 
