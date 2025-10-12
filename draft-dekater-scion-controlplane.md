@@ -896,7 +896,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
-- `associated_data_length`: Specifies the length of data that is covered by the signature but not included in the header and body themselves. This data covers information about previous AS entries it is described in[](#sign). The value of this field is zero, if no associated data is covered by the signature.
+- `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 ##### AS Entry Signed Body {#ase-sign}
 
