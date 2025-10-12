@@ -819,13 +819,11 @@ In the Protobuf message format implementation, the signed component of an AS ent
    }
 ~~~~
 
-The following code block shows the low level representation of the `HeaderAndBodyInternal` message used for signature computation input. This message SHOULD NOT be used by external code.
+Protobuf definition of the `HeaderAndBody` message used for signature computation input.
 
 ~~~~
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 ~~~~
