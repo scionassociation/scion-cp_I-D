@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-09T00:22:34.678410+00:00",
+  "timestamp": "2025-10-12T00:24:09.057989+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -765,15 +765,14 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "nicorusti",
-        "jiceatscion"
+        "nicorusti"
       ],
       "labels": [
         "Prio 3"
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-07-24T08:06:38Z",
+      "updatedAt": "2025-10-11T19:30:14Z",
       "closedAt": null,
       "comments": [
         {
@@ -835,9 +834,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening to address further Feedback received from  Alvaro. TODO: \n\n- [ ] Clarify How were these numbers selected\n- [ ] Eventually remove normative language\n- [ ] Include a pointer to \u00a73.3.1.\n- [ ] [] \"SHOULD have a suitable pre-selection of candidate PCBs\" --> should\n\n\nThis was discussed in a PR [here](https://github.com/scionassociation/scion-cp_I-D/pull/42#discussion_r1650834549) \n\n### Feedback Alvaro \n```...\n1778\t2.3.4.  Propagation Interval and Best PCBs Set Size\n...\n1787\t   The _best PCBs set size_ SHOULD be:\n\n1789\t   *  For intra-AS beaconing (i.e. propagating to children ASes): at\n1790\t      most 50.\n\n1792\t   *  For core beaconing (i.e. propagation between core ASes): at most 5\n1793\t      per immediate neighbor core AS.  Current practice is that each set\n1794\t      of 5 is chosen among the PCBs received from each neighbor.\n\n1796\t   Note that the PCBs set size should not be too low, in order to make\n1797\t   sure that beaconing can discover a wide amount of paths.  Values\n1798\t   above are RECOMMENDED maxima which represent a tradeoff between\n1799\t   scalability and amount of paths discovered.  In current practice the\n1800\t   intra-ISD set size is typically 20.\n```\n\n How were these numbers selected?  Are they a function of the memory, the current size of the deployments, etc.?\n\nThe only reason I'm asking is because of the use of Normative language to describe them.  Please describe the expectations/current practice without using Normative language.\n\nInclude a pointer to \u00a73.3.1.\n\n\n\n```\n1802\t   Depending on the selection criteria, it may be necessary to keep more\n1803\t   candidate PCBs than the _best PCBs set size_ in the Beacon Store in\n1804\t   order to determine the best set of PCBs.  If this is the case, an AS\n1805\t   SHOULD have a suitable pre-selection of candidate PCBs in place in\n1806\t   order to keep the Beacon Store capacity limited.\n```\n[] \"SHOULD have a suitable pre-selection of candidate PCBs\"\n\nWhen is it ok to not have a suitable pre-selection...?  s/SHOULD/should\n\n",
+          "body": "Reopening to address further Feedback received from  Alvaro. TODO: \n\n- [x] Clarify How were these numbers selected\n- [x] Eventually remove normative language\n- [x] Include a pointer to \u00a73.3.1.\n- [x] [] \"SHOULD have a suitable pre-selection of candidate PCBs\" --> should\n\n\nThis was discussed in a PR [here](https://github.com/scionassociation/scion-cp_I-D/pull/42#discussion_r1650834549) \n\n### Feedback Alvaro \n```...\n1778\t2.3.4.  Propagation Interval and Best PCBs Set Size\n...\n1787\t   The _best PCBs set size_ SHOULD be:\n\n1789\t   *  For intra-AS beaconing (i.e. propagating to children ASes): at\n1790\t      most 50.\n\n1792\t   *  For core beaconing (i.e. propagation between core ASes): at most 5\n1793\t      per immediate neighbor core AS.  Current practice is that each set\n1794\t      of 5 is chosen among the PCBs received from each neighbor.\n\n1796\t   Note that the PCBs set size should not be too low, in order to make\n1797\t   sure that beaconing can discover a wide amount of paths.  Values\n1798\t   above are RECOMMENDED maxima which represent a tradeoff between\n1799\t   scalability and amount of paths discovered.  In current practice the\n1800\t   intra-ISD set size is typically 20.\n```\n\n How were these numbers selected?  Are they a function of the memory, the current size of the deployments, etc.?\n\nThe only reason I'm asking is because of the use of Normative language to describe them.  Please describe the expectations/current practice without using Normative language.\n\nInclude a pointer to \u00a73.3.1.\n\n\n\n```\n1802\t   Depending on the selection criteria, it may be necessary to keep more\n1803\t   candidate PCBs than the _best PCBs set size_ in the Beacon Store in\n1804\t   order to determine the best set of PCBs.  If this is the case, an AS\n1805\t   SHOULD have a suitable pre-selection of candidate PCBs in place in\n1806\t   order to keep the Beacon Store capacity limited.\n```\n[] \"SHOULD have a suitable pre-selection of candidate PCBs\"\n\nWhen is it ok to not have a suitable pre-selection...?  s/SHOULD/should\n\n",
           "createdAt": "2025-06-25T14:11:19Z",
-          "updatedAt": "2025-06-25T14:24:48Z"
+          "updatedAt": "2025-10-11T18:45:36Z"
         },
         {
           "author": "nicorusti",
@@ -859,6 +858,13 @@
           "body": "> Is it feasible to have 150 thousand signature validations per second as we mention in the draft?\n\nI did some experiments on this a while ago, as during one of our projects the signature verifications were found to be a bottleneck on the hardware we used, and therefore had to be disabled. I still have some microbenchmarks from the signature verification in scionproto,  that might help inform the draft: \nVerifying a single AS entry (on Intel(R) Core(TM) Ultra 7 155H) takes about 65 microseconds. Considering an average PCB length of 6, that would mean verifying a PCB takes 390 microseconds, which is roughly 2564 PCB verifications per second per core. \n\nTo continue with the example in the draft, an AS receiving 1.5 million PCBs per 60s propagation interval, would thus need at least 10 dedicated cores for the signature verifications.  \n\nNote that this is assuming all AS certs are already at the local AS, if these need to be fetched first, the throughput would obviously be lower.  It should be taken into account that a control service will have other tasks, and will have to create the signatures too, requiring more compute than the 10 cores.\n\nI do believe there is still some gain in optimizing the current implementation in scionproto, so these numbers could certainly improve. More lightweight cryptographic schemes could help too, there are some recent advancements with efficient and lightweight post-quantum (or IoT) signatures. Distributing it over multiple control services, as proposed in the draft, seems to be the easiest solution.\n\nSmall sidenote, the draft assumes 5 path segments to every destination AS are discovered, in the current scionproto the default limit is set to 20 PCBs for each destination that are selected for propagation: https://github.com/scionproto/scion/blob/1615ae80e004f1753028a9990abd9928c8aa332d/control/beacon/policy.go#L104",
           "createdAt": "2025-07-24T08:06:37Z",
           "updatedAt": "2025-07-24T08:06:37Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@jeltevanbommel thanks a lot for your clarifications.\n\n> Small sidenote, the draft assumes 5 path segments to every destination AS are discovered, in the current scionproto the default limit is set to 20 PCBs for each destination that are selected for propagation:\n\nThis was discussed [here](https://github.com/scionassociation/scion-cp_I-D/issues/50), it was the result of some calculations that Matthias Frei did. I think that means that the current value in scionproto would not scale too well in a large core network (but it works well in the networks that are deployed today). I wrote that this  can be higher in small networks, see #137 .\n\n\n> To continue with the example in the draft, an AS receiving 1.5 million PCBs per 60s propagation interval, would thus need at least 10 dedicated cores for the signature verifications.\n\n> Note that this is assuming all AS certs are already at the local AS, if these need to be fetched first, the throughput would obviously be lower. It should be taken into account that a control service will have other tasks, and will have to create the signatures too, requiring more compute than the 10 cores.\n\nI think this roughly coincides with the calculations Matthias Frei did back then, and it does not seem to unrealistic to me. I see the Intel 155H i7 you tested is a high-end 2023 laptop CPU. I think there is quite some more room if you take a server CPU. For that reason, I'd not touch the numbers in that section of the draft, unless you have strong feelings about them..  ",
+          "createdAt": "2025-10-11T19:03:23Z",
+          "updatedAt": "2025-10-11T19:30:14Z"
         }
       ]
     },
@@ -1444,7 +1450,7 @@
     {
       "number": 96,
       "id": "I_kwDOJx2-rs6rl7tK",
-      "title": "The PKI gRPC API should be specified",
+      "title": "The PKI protobuf API should be specified",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/96",
       "state": "OPEN",
       "author": "nicorusti",
@@ -1458,7 +1464,7 @@
       ],
       "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
       "createdAt": "2025-02-25T15:53:49Z",
-      "updatedAt": "2025-09-03T12:49:36Z",
+      "updatedAt": "2025-10-09T16:16:53Z",
       "closedAt": null,
       "comments": [
         {
@@ -1474,6 +1480,13 @@
           "body": "Does this depend on the outcome of discussions on #105 ?",
           "createdAt": "2025-09-03T12:49:36Z",
           "updatedAt": "2025-09-03T12:49:36Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> Does this depend on the outcome of discussions on https://github.com/scionassociation/scion-cp_I-D/issues/105 ?\n\nI don't think it does. What matters is that we have all the needed protobuf definitions from [here](https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55) to somewhere in one of the two drafts. Right now this is in the CP appendix, I'm not sure this is the best location..",
+          "createdAt": "2025-10-09T16:15:36Z",
+          "updatedAt": "2025-10-09T16:16:53Z"
         }
       ]
     },
@@ -2265,14 +2278,16 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "nicorusti"
+      ],
       "labels": [
         "Prio 2",
         "needs-discussion"
       ],
       "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
       "createdAt": "2025-06-26T16:28:10Z",
-      "updatedAt": "2025-10-08T09:38:12Z",
+      "updatedAt": "2025-10-09T13:15:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -2288,6 +2303,13 @@
           "body": "> Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)?\n\n(TL;DR: In our current model, an AS that accidentally includes incorrect information is considered dishonest. Thus, some properties about beacons handled by such an AS may no longer be guaranteed to hold; the beacon is only *partially* valid.)\n\nIn our model, a beacon is tentatively considered *valid* when it meets six key criteria:\n\n- Non-empty: there is at least one (signed) hop entry.\n- Rooted: the first hop entry has the corresponding fields set to null, indicating that the beacon started there rather than being a suffix of a larger path.\n- Continuous: each hop's `next` field matches the subsequent hop's `current` field.\n- Acyclic: no duplicated hop entries (still under discussion).\n- Network-consistent (*): hop entries correspond to actual network topology links.\n- Valley-free (*): follows standard valley-free routing principles.\n\nHonest ASes perform sanity checks on received beacons and drop invalid ones. However, local validation has inherent limitations. While ASes can easily verify some properties (like non-rooted beacons), they cannot fully validate network-wide consistency or valley-free properties across the entire path. Thus, beacons traversing only honest ASes should remain fully valid, as the aggregation of all local checks appears sufficient to ensure end-to-end validity, while those passing through paths containing mixed honest/dishonest ASes may only be *partially* valid. The properties marked with (*) above are those that may be lost in paths that involve dishonest ASes.\n\nFor incorrect interface IDs specifically, each AS is only required to know its own interfaces, so validation is limited to local checks. ASes only verify that the beacon's claimed source matches the known remote end of their receiving interface. In other words, this covers the last hop entry only. Previous hops in the path are not verified, allowing dishonest ASes to potentially include incorrect interface information without detection. So \"network-consistency\" (of interfaces) is one of the aspects of validity that may be lost in mixed honest/dishonest paths.\n\nGoing back to your question, an \"honest\" AS is currently defined as one that follows all specification requirements (\"MUST\" clauses) and performs operations correctly. This includes ASes that accidentally include incorrect information: they are still considered dishonest/non-compliant under this working model. The terms \"compliant\" or \"correct\" may be more precise than \"honest.\" This approach aligns with distributed algorithms literature, where Byzantine fault models treat accidental errors and malicious behavior equivalently as \"arbitrary failures\", since both can cause nodes to deviate from correct protocol behavior and require the same defensive mechanisms.\n\n> In this case I was thinking more s/should/MUST. The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n\n(TL;DR: We suggest flexible \"if you want these properties for the considered subnetwork, then follow these prerequisites\" phrasing instead of strict requirements, allowing non-standard SCION deployments while making trade-offs clear.)\n\nOur approach aims to frame network topology assumptions to be evaluable universally across any subnetwork. For any given subnetwork, if it meets the specified assumptions and contains sufficient honest (compliant) ASes, then the security properties should hold within that subnetwork. This generalized framing would eliminate the need for specific language like \"for properties to hold for an ISD...\" in favor of universal statements applicable to any network scope.\n\nHowever, not all assumptions may be practical for every real-world deployment. Some network operators might prefer more flexible topologies even if it means sacrificing certain formal guarantees. Therefore, rather than using strict \"MUST\" requirements, it may be better to frame the specification as conditional: \"if you wish to have these properties, then these are the prerequisites to follow\". This approach would avoid unnecessarily constraining valid SCION deployments while clearly communicating the trade-offs.\n\nThe long-term goal is to establish more precise mappings between specific assumptions and their corresponding properties. This would enable network operators to understand exactly which guarantees they retain, which require manual verification, and which become impossible when they deviate from particular topology requirements. Such granular mapping would provide operators with informed choices about their deployment trade-offs rather than an all-or-nothing approach to compliance.",
           "createdAt": "2025-08-11T16:44:31Z",
           "updatedAt": "2025-08-11T16:44:31Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot for the thorough explanation @dgalan7 ! I Updated the text taking inspiration from your suggestions, you can find the diff [here](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/security-considerations/draft-dekater-scion-controlplane.txt) and in PR #132. What do you think? \n\n\n>  Therefore, rather than using strict \"MUST\" requirements, it may be better to frame the specification as conditional:  \n\nI really trust our reviewer on use of normative language, and I think some MUST do fit in the wording. I agree with you that this should be conditional. I therefore removed the first MUSS, and only left the MUSTs in the conditions that need to be fulfilled if you want to get a certain property\n",
+          "createdAt": "2025-10-09T13:14:59Z",
+          "updatedAt": "2025-10-09T13:15:25Z"
         }
       ]
     },
@@ -2355,12 +2377,12 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "knmeynell"
+        "nicorusti"
       ],
       "labels": [],
       "body": " Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router (CCS 2025)\n\nJo\u00e3o Pereira (ETH Zurich), Tobias Klenze (Independent Researcher), Sofia Giampietro (ETH Zurich), Markus Limbeck (ETH Zurich), Dionysios Spiliopoulos (ETH Zurich), Felix Wolf (ETH Zurich), Marco Eilers (ETH Zurich), Christoph Sprenger (ETH Zurich), David Basin (ETH Zurich), Peter M\u00fcller (ETH Zurich), Adrian Perrig (ETH Zurich)\n\nhttps://pm.inf.ethz.ch/publications/ScionOverview2024.pdf",
       "createdAt": "2025-09-04T06:49:46Z",
-      "updatedAt": "2025-10-08T08:39:48Z",
+      "updatedAt": "2025-10-09T12:57:01Z",
       "closedAt": null,
       "comments": []
     }
@@ -10357,15 +10379,15 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #122\n\n<!-- Reviewable:start -->\n- - -\nThis change is\u2002[<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/scionassociation/scion-cp_I-D/132)\n<!-- Reviewable:end -->\n",
+      "body": "Resolves #122\r\nResolves #135\r\n",
       "createdAt": "2025-07-09T13:22:07Z",
-      "updatedAt": "2025-07-16T10:27:46Z",
+      "updatedAt": "2025-10-09T13:13:44Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "security-considerations",
-      "headRefOid": "27faadd37f0fd27884b6673edbf41aaf002f4b23",
+      "headRefOid": "e78a74da94c6ef8ba6060f654b3719af24151afd",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10411,19 +10433,40 @@
       "labels": [],
       "body": "Addresses #117 ",
       "createdAt": "2025-07-18T02:38:03Z",
-      "updatedAt": "2025-07-18T02:38:04Z",
+      "updatedAt": "2025-10-11T18:09:38Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "PCB-Validity",
-      "headRefOid": "b477e12eb3700b39032531c15f896d9f7637b660",
+      "headRefOid": "bb9b60c8ab40db431c2bd25850c47625e264c288",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7FzcoJ",
+          "commit": {
+            "abbreviatedOid": "b477e12"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-09T11:53:54Z",
+          "updatedAt": "2025-10-09T11:53:54Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nEach AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.\r\n```",
+              "createdAt": "2025-10-09T11:53:54Z",
+              "updatedAt": "2025-10-09T11:53:55Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 136,
@@ -10437,13 +10480,106 @@
       "labels": [],
       "body": "Resolves #107 \r\n[SCION CP](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-08T17:01:33Z",
-      "updatedAt": "2025-10-08T17:07:25Z",
+      "updatedAt": "2025-10-11T18:08:02Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "metadata-extension",
-      "headRefOid": "af46dc03a796b39858fcd2cf1c95301fcdc9e37c",
+      "headRefOid": "2a7c6ff35df9cefb78db5a420b79c0303561a8e8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7GAhj_",
+          "commit": {
+            "abbreviatedOid": "af46dc0"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-10T08:40:03Z",
+          "updatedAt": "2025-10-10T09:05:56Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "`PCBs` -> `PCB's`\nProposal: `AS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes.`\n",
+              "createdAt": "2025-10-10T08:40:03Z",
+              "updatedAt": "2025-10-10T09:05:56Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "Is `moderate` maybe too vague for a draft?\nAlso, I am not sure how that works, the signed part is just a bitstream, how do we know whether it is a signed hash or a signed extension? From the length? I guess I'm missing something?\n\nI think a clean solution would be to always only sign the hash. \n\nI know that we should describe what is implemented but maybe the current implementation isn't very good. Also, I think the \"detachable extension\" is not implemented, or is it?",
+              "createdAt": "2025-10-10T08:57:33Z",
+              "updatedAt": "2025-10-10T09:05:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7GVbYE",
+          "commit": {
+            "abbreviatedOid": "af46dc0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-11T17:54:26Z",
+          "updatedAt": "2025-10-11T17:54:26Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nAS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes. Extensions can be:\r\n```",
+              "createdAt": "2025-10-11T17:54:26Z",
+              "updatedAt": "2025-10-11T17:54:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7GVdE8",
+          "commit": {
+            "abbreviatedOid": "af46dc0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-11T18:08:02Z",
+          "updatedAt": "2025-10-11T18:08:02Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Thanks @tzaeschke!\r\n\r\n> Is moderate maybe too vague for a draft?\r\n\r\nI also don't like it, but I'm not sure there is a hard limit. Can you think of something better? \r\n\r\n\r\n> I think the \"detachable extension\" is not implemented, or is it?\r\n\r\nI see there is  a detatchable extension defined for EPIC [here](https://github.com/scionproto/scion/blob/38e79c43faf38ebec719ac71fb65e1f814050e3b/proto/control_plane/v1/seg_extensions.proto#L170),  unless I'm mistaken \r\n\r\n>  how do we know whether it is a signed hash or a signed extension? From the length? I guess I'm missing something?\r\n\r\nMy understanding is that you need the same protobuf definition on both sides, then it is protobuf that magically gives you the same object. I think this is also how it is implemented for EPIC.\r\n\r\n> I think a clean solution would be to always only sign the hash.\r\n\r\nI agree, but we won't redesign the protocol in this document. This is why we have the section recommending the detachable approach for large amount of data. \r\n ",
+              "createdAt": "2025-10-11T18:08:02Z",
+              "updatedAt": "2025-10-11T18:08:18Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 137,
+      "id": "PR_kwDOJx2-rs6tRFHO",
+      "title": "PCB best set size: rewording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/137",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #46  ",
+      "createdAt": "2025-10-11T19:04:27Z",
+      "updatedAt": "2025-10-11T19:28:25Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "pcb_set_size_language",
+      "headRefOid": "a7e64f13839fda19524e464b0b5019bed96dd59d",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
