@@ -3437,7 +3437,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-4.4-2.2.1">The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each <a href="#hopentry" class="auto internal xref">Section 2.2.1.5</a> or the peer_mtu field of each <a href="#peerentry" class="auto internal xref">Section 2.2.1.7</a> used)<a href="#section-4.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.4-3">Such information is then made available to endpoints during the path lookup process (See <a href="#lookup" class="auto internal xref">Section 5</a>). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path they assume that all hops are constrained by the intra-AS MTU of each AS traversed.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">Such information is then made available to source endpoints during the path lookup process (See <a href="#lookup" class="auto internal xref">Section 5</a>). Note that the destination endpoint does not receive such information, therefore when using path reversibility, it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path they assume that all hops are constrained by the intra-AS MTU of each AS traversed.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
