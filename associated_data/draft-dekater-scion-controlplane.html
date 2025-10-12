@@ -2391,13 +2391,11 @@ Path Segment 4 |             |     |             |     |             |
    }
 </pre><a href="#section-2.2.1.4-6" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4-7">The following code block shows the low level representation of the <code>HeaderAndBodyInternal</code> message used for signature computation input. This message <span class="bcp14">SHOULD NOT</span> be used by external code.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4-7">Protobuf definition of the <code>HeaderAndBody</code> message used for signature computation input.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4-8">
 <pre>
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 </pre><a href="#section-2.2.1.4-8" class="pilcrow">¶</a>
