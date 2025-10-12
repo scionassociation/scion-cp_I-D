@@ -898,7 +898,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
-- `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
+- `associated_data_length`: Specifies the length of data that is covered by the signature but not included in the header and body themselves. This data covers information about previous AS entries it is described in[](#sign). The value of this field is zero, if no associated data is covered by the signature.
 
 ##### AS Entry Signed Body {#ase-sign}
 
@@ -959,7 +959,7 @@ K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub>
 
 The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
-The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
+Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:
 
 ~~~
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
