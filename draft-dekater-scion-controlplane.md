@@ -947,9 +947,10 @@ Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>
 
 This is the input for the computation of the signature:
 
-- The signed header and body of the current AS (`header_and_body`).
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
+- The signed header and body of the current AS (`header_and_body`).
+
 
 The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:
 
