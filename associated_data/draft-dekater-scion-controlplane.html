@@ -2510,7 +2510,7 @@ Path Segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.1-8.2.1"><code>metadata</code>: Can be used to include arbitrary per-protocol metadata. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-8.3">
-                  <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of data that is covered by the signature but not included in the header and body themselves. This data covers information about previous AS entries it is described in<a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero, if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </section>
@@ -2599,7 +2599,7 @@ Path Segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-5">Sig<sub>i</sub> =
 K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-7">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-7">Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-8">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
