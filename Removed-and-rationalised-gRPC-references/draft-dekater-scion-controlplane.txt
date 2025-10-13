@@ -1388,10 +1388,10 @@ Table of Contents
 2.2.1.4.3.  AS Entry Signature
 
    Each AS entry MUST be signed with the AS certificate's private key
-   K_i.  The certificate MUST have a validity period fully containing
-   that of the segment being verified, regardless of current time.  The
-   signature Sig_i of an AS entry ASE_i is computed over the AS entry's
-   signed component.
+   K_i.  The certificate MUST have a validity period that is longer than
+   the Hop Field absolute expiration time (described in
+   Section 2.2.1.6).  The signature Sig_i of an AS entry ASE_i is
+   computed over the AS entry's signed component.
 
    This is the input for the computation of the signature:
 
@@ -1652,20 +1652,20 @@ Table of Contents
 
    *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
 
-   *  Have a timestamp (Section 2.2.1.2) that is not in the future.
+   *  Have a timestamp (Section 2.2.1.2) that is not later than the
+      current time at the point of validation, plus an allowance for
+      differences between the clocks of the validator and originator.
 
    *  Contain only unexpired hops (Section 2.2.1.6).
 
-   For the purpose of validation, a timestamp is considered "future" if
-   it is later than the current time at the point of validation plus an
-   allowance for differences between the validator's and originator's
-   clock.  As an allowance, it is recommended to use the granularity of
-   the hopfield expiration time (that is 337.5 seconds, see
-   Section 2.2.1.6).
+   It is recommend to use the hopfield expiration time (that is 337.5
+   seconds, see Section 2.2.1.6) as the allowance for differences
+   between the clocks of the validator and originator.
 
    For the purpose of validation, a hop is considered expired if its
    absolute expiration time, calculated as defined in Section 2.2.1.6,
-   is later than the current time at the point of validation.
+   is later than the current time + allowance at the point of
+   validation.
 
 2.2.4.  Configuration
 
