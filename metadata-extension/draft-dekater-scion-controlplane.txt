@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 April 2026                                           S. Hitz
+Expires: 16 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         11 October 2025
+                                                         13 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 April 2026.
+   This Internet-Draft will expire on 16 April 2026.
 
 Copyright Notice
 
@@ -1634,12 +1634,8 @@ Table of Contents
       signed body component of an AS entry (the ASEntrySignedBody
       message, see also Section 2.2.1.4.2).
 
-   It is recommended to keep the size of signed extensions moderate,
-   since they are an integral part of the input to every AS’s signature.
-   For larger amount of data, it is recommended to use a "detachable
-   extension", which can be implemented by adding the extension's data
-   as an unsigned extension, and its cryptographic hash as a signed
-   extension.
+   It is recommended to keep the size of signed extensions small, since
+   they are an integral part of the input to every AS’s signature.
 
    The example below contains the Protobuf extension definition
    containing a StaticInfoExtension.  It is a signed extension that is
