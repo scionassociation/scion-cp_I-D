@@ -2829,12 +2829,14 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
           </ul>
 <p id="section-2.2.2-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-4">The example below contains the Protobuf extension definition containing a <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the <code>StaticInfoExtension</code> message.
-~~~~
+<p id="section-2.2.2-4">The example below contains the Protobuf extension definition containing a <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the <code>StaticInfoExtension</code> message.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2-5">
+<pre>
   message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
   }
-~~~~<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+</pre><a href="#section-2.2.2-5" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="pcb-validity">

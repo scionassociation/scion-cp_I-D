@@ -1643,8 +1643,11 @@ Table of Contents
    bandwidth, router coordinates, link type, number of internal hops.
    This and other extensions are at time of writing experimental, we
    therefore omit protobuf definitions of the StaticInfoExtension
-   message. ~~~~ message PathSegmentExtensions { StaticInfoExtension
-   static_info = 1; } ~~~~
+   message.
+
+     message PathSegmentExtensions {
+       StaticInfoExtension static_info = 1;
+     }
 
 2.2.3.  PCB Validity
 
