@@ -2596,6 +2596,14 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-controlplane-10
+{:numbered="false"}
+
+Major changes:
+- Mention ConnectRPC as main RPC method instead of gRPC
+
+Minor changes:
+
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
 
