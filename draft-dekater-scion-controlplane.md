@@ -1129,6 +1129,7 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
 The example below contains the Protobuf extension definition containing a `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the `StaticInfoExtension` message.
+
 ~~~~
   message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
