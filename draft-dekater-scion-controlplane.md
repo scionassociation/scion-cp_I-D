@@ -104,6 +104,20 @@ informative:
   RFC6996:
   RFC9217:
   RFC9473:
+  PCBExtensions:
+    title: PCB Path Metadata Extension
+    date: 2025
+    target: https://docs.scion.org/en/latest/beacon-metadata.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
   BollRio-2000:
     title: The diameter of a scale-free random graph
     target: https://kam.mff.cuni.cz/~ksemweb/clanky/BollobasR-scale_free_random.pdf
@@ -116,7 +130,7 @@ informative:
         name: Oliver Riordan
   SCMP:
     title: SCMP Documentation
-    date: 2024
+    date: 2025
     target: https://docs.scion.org/en/latest/protocols/scmp.html
     author:
       -
@@ -1128,7 +1142,7 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 
 It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
-The example below contains the Protobuf extension definition containing a `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the `StaticInfoExtension` message.
+The example below contains the Protobuf definition of the `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental. We therefore omit definitions of the `StaticInfoExtension` message format and refer to [PCBExtensions].
 
 ~~~~
   message PathSegmentExtensions {
