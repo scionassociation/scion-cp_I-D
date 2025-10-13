@@ -1153,7 +1153,6 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 
 The maximum MTU supported by all intra-AS links MAY also be configured.
 
-The AS SHOULD adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1196,6 +1195,7 @@ The relative disjointness of two PCBs A and B may be calculated by assigning a d
 A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
+Care should be taken to avoid a PCB selection policy that accidentally isolates the AS from the network (e.g. blocking connectivity to parent providers).
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
