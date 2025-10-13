@@ -2829,7 +2829,7 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
           </ul>
 <p id="section-2.2.2-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-4">The example below contains the Protobuf extension definition containing a <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the <code>StaticInfoExtension</code> message.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-4">The example below contains the Protobuf definition of the <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental. We therefore omit definitions of the <code>StaticInfoExtension</code> message format and refer to <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span>.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.2-5">
 <pre>
   message PathSegmentExtensions {
@@ -5116,6 +5116,10 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
         <dd>
 <span class="refTitle">"SCION ISD and AS Assignments"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">https://docs.anapaya.net/en/latest/resources/isd-as-assignments/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="PCBExtensions">[PCBExtensions]</dt>
+        <dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"PCB Path Metadata Extension"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/beacon-metadata.html">https://docs.scion.org/en/latest/beacon-metadata.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC1122">[RFC1122]</dt>
         <dd>
 <span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
@@ -5146,7 +5150,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <dd class="break"></dd>
 <dt id="SCMP">[SCMP]</dt>
       <dd>
-<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
