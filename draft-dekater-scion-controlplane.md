@@ -1126,7 +1126,7 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 - Unsigned extensions `PathSegmentUnsignedExtensions`. They are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
 - Signed extensions `PathSegmentExtensions`. They are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
-It is recommended to keep the size of signed extensions moderate, since they are an integral part of the input to every AS’s signature. For larger amount of data, it is recommended to use a "detachable extension", which can be implemented by adding the extension's data as an unsigned extension, and its cryptographic hash as a signed extension.
+It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
 The example below contains the Protobuf extension definition containing a `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, we therefore omit protobuf definitions of the `StaticInfoExtension` message.
 ~~~~
