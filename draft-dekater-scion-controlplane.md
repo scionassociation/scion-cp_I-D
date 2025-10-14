@@ -1589,7 +1589,9 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
-This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
+This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}.
+
+SCMP packet authentication is also not specified here. It is currently still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations. These additional signals are outside the scope of this specification.
 
 ## General Format
 
@@ -1946,9 +1948,6 @@ A border router is alerted of a Traceroute Request message through the Ingress o
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
 
-## SCMP Authentication
-
-Authentication of SCMP packets is not specified here. It is currently still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations. These additional signals are outside the scope of this specification.
 
 # Security Considerations
 
@@ -2031,9 +2030,14 @@ In general, the number of PCBs that an adversary can announce this way scales ex
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.
 
 Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
+
 In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.
 
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
+
+**SCMP Messages**
+
+A malicious router can send link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) to disrupt the forwarding of information and/or force the traffic through a different path.
 
 ## Denial of Service Attacks {#dos-cp}
 
