@@ -167,12 +167,6 @@ Table of Contents
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-10
-     draft-dekater-scion-controlplane-09
-     draft-dekater-scion-controlplane-08
-     draft-dekater-scion-controlplane-07
-     draft-dekater-scion-controlplane-06
-     draft-dekater-scion-controlplane-05
-     draft-dekater-scion-controlplane-04
    Authors' Addresses
 
 1.  Introduction
@@ -3357,11 +3351,13 @@ Table of Contents
    wormhole attacks are unavoidable in routing.
 
    *SCMP Messages*
-
    A malicious router can send link down messages (External Interface
    Down (Section 6.5.2) and Internal Connectivity Down (Section 6.5.3))
    to disrupt the forwarding of information and/or force the traffic
    through a different path.
+
+   The validity of such messages could be authenticated with SCMP
+   authentication if available, or validated with additional signals.
 
 7.4.  Denial of Service Attacks
 
@@ -4133,136 +4129,6 @@ draft-dekater-scion-controlplane-10
 
    Major changes: - Mention ConnectRPC as main RPC method instead of
    gRPC
-
-   Minor changes:
-
-draft-dekater-scion-controlplane-09
-
-   Major changes:
-
-   *  "SCION AS numbers": make text representation for lower 32-bit ASes
-      consistent with PKI draft, add reference to allocation
-
-   Minor changes:
-
-   *  Nits and wording improvements
-
-   *  Reviewed use of normative language
-
-   *  Figures: redraw and use aasvg when possible
-
-   *  "Paths and Links": clarify relationship between path segments and
-      links
-
-   *  Ensure consistent use of example ranges
-
-draft-dekater-scion-controlplane-08
-
-   Major changes:
-
-   *  Abstract: reword, mention goal and that document is not an
-      Internet Standard
-
-   *  "Propagation of PCBs" section:
-
-      -  clarify checks at reception
-
-      -  introduce criteria for PCB selection policies
-
-      -  remove superfluous policy example figure
-
-      -  Propagation Interval and Best PCBs Set Size: mention tradeoff
-         between scalability and amount of paths discovered.
-
-      -  reorganize order of paragraphs
-
-   *  New section "Security Properties" in Security considerations,
-      based on formal model of SCION
-
-   *  New figure: Control Service RPC API - Trust Material definitions
-
-   Minor changes:
-
-   *  Moved "Special-Purpose SCION AS Numbers" table later in text
-
-   *  Split "Circular dependencies and partitioning" into two sections:
-      "Bootstrapping ability" and "Resistance to partitioning".
-
-   *  Explain why PCBs have a next_isd_as field
-
-   *  Qualified better the choice of time allowance in the definition of
-      segment from the future in section "PCB Validity".
-
-draft-dekater-scion-controlplane-07
-
-   *  Moved SCMP specification from draft-dekater-scion-dataplane-03 to
-      this document
-
-draft-dekater-scion-controlplane-06
-
-   Major changes:
-
-   *  New section: Path MTU
-
-   *  New section: Monitoring Considerations
-
-   *  Completed description of Control Services RPC API in appendix
-
-   Minor changes:
-
-   *  Introduction: clarify goal of the document
-
-   *  Clarify typical vs recommended-limits values for best PCB set size
-      and for certificate validity duration.
-
-   *  Clarify text representation of ISD-AS
-
-   *  General rewording
-
-   *  Added reference to SCIONLab as a testbed for implementors
-
-   *  Introduced this change log
-
-draft-dekater-scion-controlplane-05
-
-   Minor changes:
-
-   *  Clarify beaconing fast retry at bootstrapping
-
-draft-dekater-scion-controlplane-04
-
-   Major changes:
-
-   *  Clarified selection of MAC including a default algorithm
-
-   *  New section: PCB validity
-
-   *  New section: configuration
-
-   *  New section: Path Discovery Time and Scalability
-
-   *  New section: Effects of Clock Inaccuracy
-
-   *  New appendix: Control Service RPC API
-
-   Minor changes:
-
-   *  Introduction: Added overview of SCION components
-
-   *  Clarified path reversibility, link types, Interface IDs
-
-   *  Fixed private AS range typo
-
-   *  Clarified PCB selection policies and endpoint requirements
-
-   *  Clarified PCB propagation
-
-   *  General edits to make terminology consistent, remove duplication
-      and rationalize text
-
-   *  Removed forward references
-
-   *  Added RFC2119 compliant terminology
 
 Authors' Addresses
 
