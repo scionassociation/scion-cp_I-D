@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 April 2026                                           S. Hitz
+Expires: 17 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         13 October 2025
+                                                         14 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2026.
+   This Internet-Draft will expire on 17 April 2026.
 
 Copyright Notice
 
@@ -122,7 +122,7 @@ Table of Contents
        4.1.2.  Transforming a PCB into an Up Segment
        4.1.3.  Transforming a PCB into a Down Segment
      4.2.  Core Path Segment Registration
-     4.3.  Path Segment Registration gRPC API
+     4.3.  Path Segment Registration RPC API
      4.4.  Path MTU
    5.  Path Lookup
      5.1.  Lookup Process
@@ -163,10 +163,11 @@ Table of Contents
      9.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
-   Full Control Service gRPC API
+   Full Control Service RPC API
    Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-10
      draft-dekater-scion-controlplane-09
      draft-dekater-scion-controlplane-08
      draft-dekater-scion-controlplane-07
@@ -714,17 +715,16 @@ Table of Contents
 1.8.  Communication Protocol
 
    All communication between the Control Services in different ASes is
-   expressed in terms of gRPC remote procedure calls (for details, see
-   [gRPC]).  Service interfaces and messages are defined in the Protocol
-   Buffer "proto3" interface definition language (for details, see
-   [proto3]).
+   expressed in terms of RPC remote procedure calls.  Service interfaces
+   and messages are defined in the Protocol Buffer "proto3" interface
+   definition language (for details, see [proto3]).
 
-   The RPC messages are transported via the [Connect]'s rpc protocol; a
-   gRPC-like protocol that carries messages over HTTP/3 (see
-   [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
-   layer.  In the case of SCION, UDP relies on the data plane.
+   The RPC messages are transported via [Connect]'s RPC protocol that
+   carries messages over HTTP/3 (see [RFC9114])) which in turn uses
+   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
+   compatible with [gRPC] which is supported but deprecated.
 
-   Appendix "Full Control Service gRPC API" provides the entire Control
+   Appendix "Full Control Service RPC API" provides the entire Control
    Service API definition in protobuf format.
 
    Appendix "Use of the SCION Data Plane" provides details about the
@@ -2339,7 +2339,7 @@ Table of Contents
    *Note:* For more information on possible selection strategies of
    PCBs, see Section 2.3.3.
 
-4.3.  Path Segment Registration gRPC API
+4.3.  Path Segment Registration RPC API
 
    The Control Service of a non-core AS has to register the newly
    created down segments with the Control Services of the core ASes that
@@ -2505,7 +2505,7 @@ Table of Contents
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 12.
+   The segment lookup API RPC definition can be found in Figure 25.
 
 5.1.2.  Caching
 
@@ -3561,7 +3561,7 @@ Deployment Testing: SCIONLab
    More information can be found on the SCIONLab website and in the
    [SCIONLAB] paper.
 
-Full Control Service gRPC API
+Full Control Service RPC API
 
    The following code blocks provide, in protobuf format, the entire API
    by which control services interact.
@@ -3600,8 +3600,8 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 25: Control Service gRPC API - Segment lookup.  This API
-     is exposed on the SCION dataplane by the control services of core
+     Figure 25: Control Service RPC API - Segment lookup.  This API is
+       exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
 
@@ -3625,7 +3625,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 26: Control Service gRPC API - Segment registration.  This
+      Figure 26: Control Service RPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3642,7 +3642,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 27: Control Service gRPC API - Segment creation
+           Figure 27: Control Service RPC API - Segment creation
 
 
 
@@ -3724,7 +3724,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 28: Control Service gRPC API - Segment representation
+      Figure 28: Control Service RPC API - Segment representation
 
 
 
@@ -3785,7 +3785,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 29: Control Service gRPC API - Signed ASEntry representation
+    Figure 29: Control Service RPC API - Signed ASEntry representation
 
 
 
@@ -3850,12 +3850,12 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
- Figure 30: Control Service gRPC API - Trust Material representation
+  Figure 30: Control Service RPC API - Trust Material representation
 
 
 
-   In case of failure, gRPC calls return an error as specified by the
-   gRPC framework.  That is, a non-zero status code and an explanatory
+   In case of failure, RPC calls return an error as specified by the RPC
+   framework.  That is, a non-zero status code and an explanatory
    string.
 
 Use of the SCION Data Plane
@@ -3955,7 +3955,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 31: Service Resolution gRPC API definition
+           Figure 31: Service Resolution RPC API definition
 
 
 
@@ -4123,6 +4123,13 @@ Change Log
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
 
+draft-dekater-scion-controlplane-10
+
+   Major changes: - Mention ConnectRPC as main RPC method instead of
+   gRPC
+
+   Minor changes:
+
 draft-dekater-scion-controlplane-09
 
    Major changes:
@@ -4166,7 +4173,7 @@ draft-dekater-scion-controlplane-08
    *  New section "Security Properties" in Security considerations,
       based on formal model of SCION
 
-   *  New figure: Control Service gRPC API - Trust Material definitions
+   *  New figure: Control Service RPC API - Trust Material definitions
 
    Minor changes:
 
@@ -4193,7 +4200,7 @@ draft-dekater-scion-controlplane-06
 
    *  New section: Monitoring Considerations
 
-   *  Completed description of Control Services gRPC API in appendix
+   *  Completed description of Control Services RPC API in appendix
 
    Minor changes:
 
@@ -4230,7 +4237,7 @@ draft-dekater-scion-controlplane-04
 
    *  New section: Effects of Clock Inaccuracy
 
-   *  New appendix: Control Service gRPC API
+   *  New appendix: Control Service RPC API
 
    Minor changes:
 
