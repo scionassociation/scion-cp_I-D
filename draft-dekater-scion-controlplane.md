@@ -1520,7 +1520,7 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 2. Request core segments, which start at the core ASes that are reachable with up segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up segment.
 3. Request down segments starting at core ASes in the destination ISD.
 
-The segment lookup API RPC definition can be found in {{figure-11}}.
+The segment lookup API RPC definition can be found in {{figure-31}}.
 
 ### Caching
 
