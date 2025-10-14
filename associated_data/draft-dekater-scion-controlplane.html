@@ -2587,13 +2587,13 @@ Path Segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.3-2">This is the input for the computation of the signature:<a href="#section-2.2.1.4.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.3-3.1">
-                  <p id="section-2.2.1.4.3-3.1.1">The <code>segment_info</code> component of the current AS. This is the encoded version of the <code>SegmentInformation</code> component containing basic information about the path segment represented by the PCB. For the specification of <code>SegmentInformation</code>, see <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>.<a href="#section-2.2.1.4.3-3.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.3-3.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.1.4.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.3-3.2">
-                  <p id="section-2.2.1.4.3-3.2.1">The signed <code>header_and_body</code>/<code>signature</code> combination of each previous AS on this specific path segment.<a href="#section-2.2.1.4.3-3.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.3-3.2.1">The <code>segment_info</code> component of the current AS. This is the encoded version of the <code>SegmentInformation</code> component containing basic information about the path segment represented by the PCB. For the specification of <code>SegmentInformation</code>, see <a href="#seginfo" class="auto internal xref">Section 2.2.1.2</a>.<a href="#section-2.2.1.4.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.3-3.3">
-                  <p id="section-2.2.1.4.3-3.3.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.1.4.3-3.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.3-3.3.1">The signed <code>header_and_body</code>/<code>signature</code> combination of each previous AS on this specific path segment.<a href="#section-2.2.1.4.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 <p id="section-2.2.1.4.3-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>

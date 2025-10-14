@@ -1395,6 +1395,8 @@ Table of Contents
 
    This is the input for the computation of the signature:
 
+   *  The signed header and body of the current AS (header_and_body).
+
    *  The segment_info component of the current AS.  This is the encoded
       version of the SegmentInformation component containing basic
       information about the path segment represented by the PCB.  For
@@ -1402,8 +1404,6 @@ Table of Contents
 
    *  The signed header_and_body/signature combination of each previous
       AS on this specific path segment.
-
-   *  The signed header and body of the current AS (header_and_body).
 
    The signature Sig_i of an AS entry ASE_i is now computed as follows:
 
