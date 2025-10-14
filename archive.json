@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-12T00:24:09.057989+00:00",
+  "timestamp": "2025-10-14T00:22:19.553694+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -306,7 +306,7 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2025-07-03T09:08:50Z",
+      "updatedAt": "2025-10-13T20:44:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -340,9 +340,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening due to feedback from Alvaro. TODO\n\n- [ ] Update text in 2.1.2 to mention potentially conflicting policies \n- [ ] Move text '[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\nfrom  [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.4)[Configuration](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-configuration)  to 2.3.3. and remove SHOULD\n\n\n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n```\n[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\n```\n\nWhen is it ok to adopt a policy that isolates the AS from the network? ;-)   The use of \"SHOULD\" implies that there are cases where it is ok not to do what is specified.  In this case, I assume it is never ok to select a policy that isolates the AS -- and if it were done, then it wouldn't be accidental.\n\nThis is to say that this sentence has no Normative value here.  It may be better if something similar (\"care should be taken to avoid...\", maybe with an example) were included in \u00a72.3.3.\n\n\nCC @katyatitkova ",
+          "body": "Reopening due to feedback from Alvaro. TODO\n\n- [x] Move text '[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\nfrom  [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.4)[Configuration](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-configuration)  to 2.3.3. and remove SHOULD\n- [ ] Update text in 2.1.3 to mention potentially conflicting policies \n\n\n\n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n```\n[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\n```\n\nWhen is it ok to adopt a policy that isolates the AS from the network? ;-)   The use of \"SHOULD\" implies that there are cases where it is ok not to do what is specified.  In this case, I assume it is never ok to select a policy that isolates the AS -- and if it were done, then it wouldn't be accidental.\n\nThis is to say that this sentence has no Normative value here.  It may be better if something similar (\"care should be taken to avoid...\", maybe with an example) were included in \u00a72.3.3.\n\n\nCC @katyatitkova ",
           "createdAt": "2025-06-12T09:06:11Z",
-          "updatedAt": "2025-06-25T13:06:17Z"
+          "updatedAt": "2025-10-13T20:44:25Z"
         },
         {
           "author": "nicorusti",
@@ -997,7 +997,7 @@
       "id": "I_kwDOJx2-rs6Qjl2o",
       "title": "MTU - clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/57",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1010,11 +1010,11 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nAlso, I find this text is not clear: \r\n```\r\n mtu: The size of the maximum transmission unit (MTU) within the\r\n      current AS's network.\r\n```\r\nShoudln't this be the minimum MTU among alll intra-domain links in the AS (so the maximum supported MTU for intra-domain forwarding)? Maybe we can find a better wording\r\n\r\nRelated issues: \r\n* DP draft: https://github.com/scionassociation/scion-dp_I-D/issues/39\r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
       "createdAt": "2024-07-23T13:38:45Z",
-      "updatedAt": "2025-07-16T09:22:30Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-13T19:37:24Z",
+      "closedAt": "2025-10-13T19:37:23Z",
       "comments": [
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "Regarding MTUs in the control plane, I would suggest the following:\r\n\r\nI would add a section 3.4.  Paths MTU, saying something like this. Here, I am creating new material. My only reference is the scion daemon which makes exactly these assumptions:\r\n\r\n> Paths represent a sequence of ASes and inter-AS links; each with possibly different MTUs. As a result, a path has an effective MTU which is the least of the MTUs of each link and ASes it traverses. The relevant MTUs for calculating a path's effective MTU are available from the segments used in its construction:\r\n> \r\n> - The MTU of the first and last ASes (represented by the mtu field of the corresponding AS Entries)\r\n> - The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each hop or the peer_mtu field of each Peer Entry used)\r\n> - The MTU of any intra-AS network traversed if the ingress and egress interfaces of a hop exist on two different border routers\r\n> \r\n> Regarding the later point: A scion host using a path segment has no means of knowing whether a given hop implies traversing the corresponding AS' internal network or not, and the control service does not reduce the hop's MTU when that is the case. As a result, a scion host building a path must assume that all hops are constrained by the AS's internal network MTU.\r\n>\r\n> This could be optimized if the control service was required to make the hop's ingress_mtu field no greater than the MTU of the AS in case of a hop crossing the internal network. However existing implementations have not historically done this.\r\n\r\nIn section 2.2.1.4.2 AS Entry Signed Body, describe the mtu field as follows:\r\n\r\n> The maximum transmission unit (MTU) that is supported by all hosts within the AS being described. This is set by the control service adding the entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is do make it a configuration item.\r\n\r\nIn section 2.2.1.5 Hop Entry, describe the ingress_mtu field as follows:\r\n\r\n> Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. Packets traveling through the associated inter-AS link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n\r\n\r\nIn section 2.2.1.7 Peer Entry, describe the peer_mtu field as follows:\r\n> Specifies the maximum transmission unit (MTU) of the peering link being described. Packets traveling through this link in either direction cannot exceed this size (not including the L2 header). As a result, no path segment constructed from the containing beacon can have an MTU greater than this. How the control service obtains the MTU of an inter-AS link is implementation depend. It may be discovered or configured. Current practice to make it a configuration item.\r\n",
           "createdAt": "2024-09-18T10:06:58Z",
@@ -1028,7 +1028,7 @@
           "updatedAt": "2024-09-19T15:57:31Z"
         },
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "> L2 --> Underlay/lower layer protocol\r\n\r\nHmm, yes. We need to be clearer with this. The SCION network layer cannot know if any link on the path has a UDP/IP encapsulation, so the MTU described in segments should measure the payload of the encapsulated packet if encapsulated. => for raw L2: real L2 MTU; for V4 underlay: real L2 MTU - 28; for v6 underlay: real  L2 MTU - 48\r\n\r\nI'll try and clarify this concisely. Making a PR now.\r\n",
           "createdAt": "2024-09-20T09:00:58Z",
@@ -1037,12 +1037,12 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "is the MTU directional? Does it affect path reversal (in terms of how endpoints calculate it)?\n[Slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1750842088078769).\n\n- [ ] Clarify this point in 4.4.  Path MTU\n- [ ] Add a cross reference in 2.2.1.5.  Hop Entry pointing to 4.4.  Path MTU\n- [ ] Check if we need to update anything in the DP draft in 5.1.  MTU \n- [ ] Do we need to say something about MTU in 5.  Path Lookup? \n\n### Feedback Alvaro: \n\n```\n...\n1409\t2.2.1.5.  Hop Entry\n...\n1439\t   *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the\n1440\t      ingress interface (in beaconing direction) of the hop being\n1441\t      described.  The MTU of paths constructed from the containing\n1442\t      beacon is necessarily less than or equal to this value.  How the\n1443\t      control service obtains the MTU of an inter-AS link is\n1444\t      implementation dependent.  It may be discovered or configured.\n1445\t      Current practice to make it a configuration item.\n\n[] \"in beaconing direction\"\n```\n\n> Does this imply that the MTU in the opposite direction can be different?  If so, how is the reversible nature of the paths maintained?  Or is the reversible property only applicable to the fact that a path exists, and not that the characteristics are the same?\n",
+          "body": "is the MTU directional? Does it affect path reversal (in terms of how endpoints calculate it)?\n[Slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1750842088078769).\n\n- [x] Clarify this point in 4.4.  Path MTU\n- [x] Add a cross reference in 2.2.1.5.  Hop Entry pointing to 4.4.  Path MTU\n- [x] Check if we need to update anything in the DP draft in 5.1.  MTU --> https://github.com/scionassociation/scion-dp_I-D/pull/107 \n- [x] Do we need to say something about MTU in 5.  Path Lookup?  --> I don't think so\n\n### Feedback Alvaro: \n\n```\n...\n1409\t2.2.1.5.  Hop Entry\n...\n1439\t   *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the\n1440\t      ingress interface (in beaconing direction) of the hop being\n1441\t      described.  The MTU of paths constructed from the containing\n1442\t      beacon is necessarily less than or equal to this value.  How the\n1443\t      control service obtains the MTU of an inter-AS link is\n1444\t      implementation dependent.  It may be discovered or configured.\n1445\t      Current practice to make it a configuration item.\n\n[] \"in beaconing direction\"\n```\n\n> Does this imply that the MTU in the opposite direction can be different?  If so, how is the reversible nature of the paths maintained?  Or is the reversible property only applicable to the fact that a path exists, and not that the characteristics are the same?\n",
           "createdAt": "2025-06-25T08:52:31Z",
-          "updatedAt": "2025-06-25T10:17:38Z"
+          "updatedAt": "2025-10-12T20:21:01Z"
         },
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "Yeah, good point. I propose to clarify it along the following lines:\n\n \"ingress interface MTU\" means the MTU of that interface in both directions (which should be defined as the least of the MTU in either directions). It is the interface that is \"ingress\" not the MTU. The term \"ingress interface in construction direction\" is just a way to designate the interface relative to the path. Not the direction of traffic.",
           "createdAt": "2025-06-27T08:06:13Z",
@@ -1134,7 +1134,7 @@
     {
       "number": 67,
       "id": "I_kwDOJx2-rs6Y82gT",
-      "title": "gRPC API - remove duplicated definitions in appendix",
+      "title": "protobuf RPC API - remove duplicated definitions in appendix",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/67",
       "state": "OPEN",
       "author": "nicorusti",
@@ -1148,18 +1148,18 @@
       ],
       "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2025-07-16T09:23:01Z",
+      "updatedAt": "2025-10-13T21:13:35Z",
       "closedAt": null,
       "comments": [
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "I am not sure we should de-duplicated the APIs between text and index. The APIs in the text are for explanation purposes while the appendix is for reference. The appendix is there to make sure that we document the whole API. If we de-duplicate, then what do we name the appendix: \"Those bits and pieces that we haven't mentioned somewhere in the document already\"? That's not nice to future users of the spec.",
           "createdAt": "2024-10-04T11:38:47Z",
           "updatedAt": "2024-10-04T11:38:47Z"
         },
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "I tried my best. Probably missed a spot or two.\r\nThere weren't many opportunities to reference the appendix. Most places had enough documentation in-line.\r\nI couldn't remember if there was anything missing from the appendix. Was there?",
           "createdAt": "2024-10-04T16:59:58Z",
@@ -1621,7 +1621,7 @@
       ],
       "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [ ] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
       "createdAt": "2025-04-07T10:18:34Z",
-      "updatedAt": "2025-10-08T08:53:14Z",
+      "updatedAt": "2025-10-13T13:43:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -1634,9 +1634,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "TODO: we should not have gRPC and connect. Maybe we can make it more general: \n\n- [ ] change \"gRPC definition\" to something like \"protobuf something\"\n- [ ] mark`[gRPC]` as supported but deprecated. \n- [ ] replace mentions of gRPC with RPC",
+          "body": "TODO: we should not have gRPC and connect. Maybe we can make it more general: \n\n- [x] change \"gRPC definition\" to something like \"protobuf something\"\n- [x] mark`[gRPC]` as supported but deprecated. \n- [x] replace mentions of gRPC with RPC",
           "createdAt": "2025-08-28T09:20:18Z",
-          "updatedAt": "2025-08-28T09:20:18Z"
+          "updatedAt": "2025-10-13T13:43:33Z"
         }
       ]
     },
@@ -1657,9 +1657,9 @@
         "question",
         "needs-discussion"
       ],
-      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft (this relates to AS Entry Signed Header) \n- [x] Decide how much to include regarding PCB extensions (e.g. Path metadata) with ETH & Anapaya\n- [ ] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [ ] 2.2.2  - explain what PCB extensions are\n\nOS implementation currently supports path metadata extensions (e.g. BW), Anapaya's propagates it but typically does not configure them in their routers.\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
+      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft (this relates to AS Entry Signed Header) \n- [x] Decide how much to include regarding PCB extensions (e.g. Path metadata) with ETH & Anapaya\n- [x] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [x] 2.2.2  - explain what PCB extensions are\n\nOS implementation currently supports path metadata extensions (e.g. BW), Anapaya's propagates it but typically does not configure them in their routers.\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-10-08T17:23:31Z",
+      "updatedAt": "2025-10-13T20:07:42Z",
       "closedAt": null,
       "comments": [
         {
@@ -2085,7 +2085,7 @@
       "id": "I_kwDOJx2-rs69OxDG",
       "title": "PCB Validity - clarify wording",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/117",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2097,8 +2097,8 @@
       ],
       "body": "- [x] Reword to clarify that the certificate MUST expire later than the segment.\n- [x] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
       "createdAt": "2025-06-25T08:41:14Z",
-      "updatedAt": "2025-10-08T09:38:10Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-13T20:27:47Z",
+      "closedAt": "2025-10-13T20:27:46Z",
       "comments": [
         {
           "author": "jiceathome",
@@ -2113,6 +2113,13 @@
           "body": "The wording in the draft was overly verbose and confusing. I've tried to simplify things whilst adding clarification...\n\nTo be valid (that is, usable to construct a valid path), a PCB MUST:\n\n* Contain valid AS Entry signatures ([](#sign)).\n* Have a timestamp ([](#seginfo)) that is not later than the current time at the point of validation, plus an allowance for differences between the clocks of the validator and originator.\n* Contain only unexpired hops ([](#hopfield)).\n\nIt is recommend to use the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)) as the allowance for differences between the clocks of the validator and originator.",
           "createdAt": "2025-07-18T02:36:46Z",
           "updatedAt": "2025-07-18T02:36:46Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Does anything still needed to be done here?",
+          "createdAt": "2025-10-13T13:42:18Z",
+          "updatedAt": "2025-10-13T13:42:18Z"
         }
       ]
     },
@@ -2188,7 +2195,10 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "katyatitkova",
+        "nicorusti"
+      ],
       "labels": [
         "Prio 2",
         "editorial",
@@ -2196,7 +2206,7 @@
       ],
       "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-10-08T09:38:10Z",
+      "updatedAt": "2025-10-13T20:31:32Z",
       "closedAt": null,
       "comments": []
     },
@@ -2326,9 +2336,9 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "- [ ] Clarify the purpose of associated_data (now the value is there in protobuf, but not introduced)\n\n\n#### Comments from Alvaro:\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n\n#### Some thoughts:\n\nThe figure in [2.2.1.4.3.  AS Entry Signature](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#sign) is not right. It contains the text below, which comes from a [comment in the segment definition](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/proto/control_plane/v1/seg.proto#L108): \n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n\nassociated_data(ps, i) = ps.segment_info ||\n                         ps.as_entries[1].signed.header_and_body ||\n                         ps.as_entries[1].signed.signature ||\n                         ...\n                         ps.as_entries[i-1].signed.header_and_body ||\n                         ps.as_entries[i-1].signed.signature\n```\n\nThe problems I see with this are:\n\n- [ ] Check that the code corresponds to what the code actually does in terms of signature calculation \n- [ ] `header_and_body` is explained, but its content is not specified in protobuf\n- [ ] `message ASEntry` in protobuf is defined twice, once in [2.2.1.3. AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.3)[AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry) and once in [Figure 20](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-control-service-grpc-api-si) in the appendix.",
+      "body": "The purpose and use of associated_data is now not clear and consistent in the draft.\n\n\n#### Comments from Alvaro:\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n\n#### Some thoughts:\n\nThe figure in [2.2.1.4.3.  AS Entry Signature](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#sign) is IMHO not right. It does not match with the definition that we give of associated data _\"data that is covered by the signature, but is not included in the header and body\"_. It contains the text below, which comes from a [comment in the segment definition](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/proto/control_plane/v1/seg.proto#L108). Associated data seems to be used in the same way [here](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/scrypto/signed/msg.go#L144) in the code.\n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n\nassociated_data(ps, i) = ps.segment_info ||\n                         ps.as_entries[1].signed.header_and_body ||\n                         ps.as_entries[1].signed.signature ||\n                         ...\n                         ps.as_entries[i-1].signed.header_and_body ||\n                         ps.as_entries[i-1].signed.signature\n```\n\nThe problems I see with this are:\n\n- [x] Should Associated data length be part of header figure in [2.2.1.4.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.1)[AS Entry Signed Header](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry-signed-header)?  --> Already fixed in v-09\n- [ ] Which formula is correct for signature calculation? Does the [formula in the text](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.3-5) correspond to what the code actually does in terms of signature calculation ([here? ](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/segment/seg.go#L327))? Right now we have this formula where the AS own entry _ASE_i^(signed)_ is at the end  : \n```\n   Sig_i = K_i( SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )\n```\nThen we have  this text, that I think does not match the order in the previous formula : \n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n```\nI think it one of the two should change: \n```\n  input(ps, i) =  associated_data(ps, i) || signed.header_and_body\nor \n  Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) )\n```\n([Slack discussion](https://scionproto.slack.com/archives/C07EDUQSE6L/p1760258044184369))\n- [ ] `header_and_body` is explained, but its content is not specified in protobuf. We only define `HeaderAndBodyInternal` in the appendix. Should we change `HeaderAndBodyInternal`  to `HeaderAndBody` ?\n- [ ] `message ASEntry` in protobuf is defined twice, once in [2.2.1.3. AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.3)[AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry) and once in [Figure 20](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-control-service-grpc-api-si) in the appendix. --> To be handled in #67 ",
       "createdAt": "2025-07-02T15:22:20Z",
-      "updatedAt": "2025-07-02T15:59:47Z",
+      "updatedAt": "2025-10-12T19:50:07Z",
       "closedAt": null,
       "comments": []
     },
@@ -10353,21 +10363,62 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Contributes to #57\n\n<!-- Reviewable:start -->\n- - -\nThis change is\u2002[<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/scionassociation/scion-cp_I-D/131)\n<!-- Reviewable:end -->\n",
+      "body": "Resolves #57\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\r\n",
       "createdAt": "2025-07-09T10:09:24Z",
-      "updatedAt": "2025-07-16T10:27:46Z",
+      "updatedAt": "2025-10-13T19:33:07Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "mtu-clarifications",
-      "headRefOid": "6c9745f57c0b73e4ce2f3fe8d26b601f43c66e51",
+      "headRefOid": "d11ffe9fda27274b8e083dd479604f52076ad91c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7GhA29",
+          "commit": {
+            "abbreviatedOid": "d11ffe9"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM % intra-AS comment",
+          "createdAt": "2025-10-13T08:53:32Z",
+          "updatedAt": "2025-10-13T08:54:17Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "I think the last sentence is not correct. The MTU is constrained by the intra-AS MTU and the inter-AS MTU, see {#path-mtu}.\n\nHow about removing the sentence and just insert a reference to {#path-mtu}:\n`[..] packet received), see also [](path-mtu).`\n?",
+              "createdAt": "2025-10-13T08:53:32Z",
+              "updatedAt": "2025-10-13T08:54:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7GpnYK",
+          "commit": {
+            "abbreviatedOid": "d11ffe9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-13T19:33:07Z",
+          "updatedAt": "2025-10-13T19:33:07Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "This chapter is already `## Path MTU`  :) so no point adding a self reference. How about: \r\n```suggestion\r\nSuch information is then made available to source endpoints during the path lookup process (See [](#lookup)). Note that the destination endpoint does not receive such information, therefore when using path reversibility, it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes. When looking up a path they should therefore assume that all hops are also constrained by the intra-AS MTU of each AS traversed.\r\n```\r\n",
+              "createdAt": "2025-10-13T19:33:07Z",
+              "updatedAt": "2025-10-13T19:35:11Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 132,
@@ -10426,24 +10477,26 @@
       "id": "PR_kwDOJx2-rs6ffcJo",
       "title": "Reworded and clarified PCB Validity",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/134",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses #117 ",
       "createdAt": "2025-07-18T02:38:03Z",
-      "updatedAt": "2025-10-11T18:09:38Z",
+      "updatedAt": "2025-10-13T20:24:41Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "PCB-Validity",
       "headRefOid": "bb9b60c8ab40db431c2bd25850c47625e264c288",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-13T20:24:38Z",
+      "mergedAt": "2025-10-13T20:24:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -10465,6 +10518,19 @@
               "updatedAt": "2025-10-09T11:53:55Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Gju1g",
+          "commit": {
+            "abbreviatedOid": "bb9b60c"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-13T11:42:56Z",
+          "updatedAt": "2025-10-13T11:42:56Z",
+          "comments": []
         }
       ]
     },
@@ -10480,13 +10546,13 @@
       "labels": [],
       "body": "Resolves #107 \r\n[SCION CP](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-08T17:01:33Z",
-      "updatedAt": "2025-10-11T18:08:02Z",
+      "updatedAt": "2025-10-13T20:07:29Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "metadata-extension",
-      "headRefOid": "2a7c6ff35df9cefb78db5a420b79c0303561a8e8",
+      "headRefOid": "b77343bbc44418e74a24e581d9381915eca926db",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10558,6 +10624,46 @@
               "updatedAt": "2025-10-11T18:08:18Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Gjfv1",
+          "commit": {
+            "abbreviatedOid": "2a7c6ff"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM % proposal to remove signed hash discussion",
+          "createdAt": "2025-10-13T11:25:47Z",
+          "updatedAt": "2025-10-13T11:34:31Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Automatic signing of hash vs whole ASEntry is, as far as I can tell, neither implemented nor documented. They have a similar concept in FABRID, but there they always only signing the hash.\n\nAlso, the EPIC extension is different:  this extension not really about metadata, and EPIC is not part of the CP/DP drafts either.\n\nIf we really want this mechanism, I still believe we need an additional field in the proto definition, e.g.\n```\nbool signed_part_contains_only_hash;\n```\nOtherwise there is no (clean) way for a receiver to known whether the signed part contains actual data or just a hash.\nAlso we need to make sure that the unsigned part has fields to store the additional data.\n\n**TL;DR**\nAs far as I can tell, this \"signed hash\" logic is neither implemented or documented.\nI would propose to remove the whole paragraph or at least the part starting with `For larger amounts of data ...`.\n\n\n",
+              "createdAt": "2025-10-13T11:25:48Z",
+              "updatedAt": "2025-10-13T11:34:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Gp6dP",
+          "commit": {
+            "abbreviatedOid": "af46dc0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-13T19:51:26Z",
+          "updatedAt": "2025-10-13T19:51:26Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "> As far as I can tell, this \"signed hash\" logic is neither implemented or documented. I would propose to remove the whole paragraph or at least the part starting with  For larger amounts of data\r\n\r\nOk agreed, I think not having this paragraph does not prevent implementers from implementing this mechanism in the future, so I think this text can be safely removed. I will remove the last sentence. \r\n\r\n\r\n> Otherwise there is no (clean) way for a receiver to known whether the signed part contains actual data or just a hash.\r\n\r\nI think there is, if all parties  use the same protobuf message definition. However, as we said, this is experimental and I'll take it out\r\n```suggestion\r\nIt is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS\u2019s signature.\r\n```\r\n",
+              "createdAt": "2025-10-13T19:51:26Z",
+              "updatedAt": "2025-10-13T19:52:26Z"
+            }
+          ]
         }
       ]
     },
@@ -10580,6 +10686,111 @@
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "pcb_set_size_language",
       "headRefOid": "a7e64f13839fda19524e464b0b5019bed96dd59d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 138,
+      "id": "PR_kwDOJx2-rs6tSvef",
+      "title": "clarify associated data",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/138",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #125\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-10-12T08:04:47Z",
+      "updatedAt": "2025-10-12T08:48:32Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "associated_data",
+      "headRefOid": "31479eb39eaee287c1401cbb82c774fce40fd81e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 139,
+      "id": "PR_kwDOJx2-rs6td1Qv",
+      "title": "Sorted out gRPC inconsistencies",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/139",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #105",
+      "createdAt": "2025-10-13T13:34:18Z",
+      "updatedAt": "2025-10-13T21:12:20Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Removed-and-rationalised-gRPC-references",
+      "headRefOid": "eadfd1071acc61bb9dd241483f3f241e4e30a9e0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7Gqfal",
+          "commit": {
+            "abbreviatedOid": "eadfd10"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Let's clarify \"deprecated\", then merge ",
+          "createdAt": "2025-10-13T20:58:59Z",
+          "updatedAt": "2025-10-13T21:12:20Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nThe RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})) which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported.\r\n```",
+              "createdAt": "2025-10-13T20:58:59Z",
+              "updatedAt": "2025-10-13T21:12:20Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "I'm not sure we can deprecate it yet. Asking on [slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1760389384826539?thread_ts=1717528045.914749&cid=C8ADA9CEP).",
+              "createdAt": "2025-10-13T21:01:53Z",
+              "updatedAt": "2025-10-13T21:12:20Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 140,
+      "id": "PR_kwDOJx2-rs6tiZXJ",
+      "title": "Clarify conflicting beaconing policies",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/140",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #16",
+      "createdAt": "2025-10-13T20:46:01Z",
+      "updatedAt": "2025-10-13T20:46:01Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "pcb_policy",
+      "headRefOid": "37a6175c9ec84ac6c941fdf2a29edcb2a572d7eb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
