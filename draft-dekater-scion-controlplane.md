@@ -872,13 +872,15 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 {: #figure-10 title="AS Entry Signed Header"}
 
 
-The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
+The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
+- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED.
+- `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
+- `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
+- `metadata`: it may include metadata. This field is OPTIONAL. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header.
+- `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
-- The algorithm to compute the signature
-- The subjectKeyIdentifier of the public key to be used to verify the signature (see {{I-D.dekater-scion-pki}})
-- The ISD-AS number of the AS
 
-The following code block defines the signed header of an AS entry in Protobuf message format (called the `Header` message).
+The `Header` protobuf message definition is:
 
 ~~~~
    message Header {
@@ -890,7 +892,17 @@ The following code block defines the signed header of an AS entry in Protobuf me
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
+~~~~
 
+The `VerificationKeyID` message contains fields:
+  - `isd_as`: The ISD-AS number of the current AS.
+  - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
+  - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
+  - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
+
+Its protobuf message definition is:
+
+~~~~
    message VerificationKeyID {
        uint64 isd_as = 1;
        bytes subject_key_id = 2;
@@ -899,18 +911,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
    }
 ~~~~
 
-- `signature_algorithm`: Specifies the algorithm to compute the signature.
-- `verification_key_id`: Contains information that is relevant to signing and verifying PCBs and other control-plane messages. It includes the following fields (see also the above code block):
-  - `isd_as`: The ISD-AS number of the current AS.
-  - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
-  - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
-  - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
-
-**Note:** For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
-
-- `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
-- `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
-- `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
+For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
 
 ##### AS Entry Signed Body {#ase-sign}
 
