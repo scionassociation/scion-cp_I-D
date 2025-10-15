@@ -1260,19 +1260,27 @@ Table of Contents
 
    The header part carries information that is relevant to the
    computation and verification of the signature.  It contains the
-   following fields: - signature_algorithm: Specifies the algorithm to
-   compute the signature.  This field is REQUIRED. -
-   verification_key_id: Contains a VerificationKeyID message, carrying
-   information relevant to signing and verifying PCBs and other control-
-   plane messages.  This field is REQUIRED. - timestamp: Defines the
-   signature creation timestamp.  This field is OPTIONAL. - metadata: it
-   may include metadata.  This field is OPTIONAL.  While it is part of
-   the generic Header message format, it MUST be empty in an AS entry
-   signed header. - associated_data_length: Specifies the length of the
-   data covered by the signature but not included within the header or
-   body.  This data contains information about preceding AS entries, as
-   described in Section 2.2.1.4.3.  The value of this field is zero if
-   no associated data is covered by the signature.
+   following fields:
+
+   *  signature_algorithm: Specifies the algorithm to compute the
+      signature.  This field is REQUIRED.
+
+   *  verification_key_id: Contains a VerificationKeyID message,
+      carrying information relevant to signing and verifying PCBs and
+      other control-plane messages.  This field is REQUIRED.
+
+   *  timestamp: Defines the signature creation timestamp.  This field
+      is OPTIONAL.
+
+   *  metadata: it may include metadata.  This field is OPTIONAL.  While
+      it is part of the generic Header message format, it MUST be empty
+      in an AS entry signed header.
+
+   *  associated_data_length: Specifies the length of the data covered
+      by the signature but not included within the header or body.  This
+      data contains information about preceding AS entries, as described
+      in Section 2.2.1.4.3.  The value of this field is zero if no
+      associated data is covered by the signature.
 
    The Header protobuf message definition is:
 
@@ -1286,14 +1294,19 @@ Table of Contents
           int32 associated_data_length = 5;
       }
 
-   The VerificationKeyID message contains fields: - isd_as: The ISD-AS
-   number of the current AS.  - subject_key_id: Refers to the
-   certificate that contains the public key needed to verify this PCB's
-   signature.  - trc_base: Defines the _base_ number of the latest Trust
-   Root Configuration (TRC) available to the signer at the time of the
-   signature creation.  - trc_serial: Defines the _serial_ number of the
-   latest TRC available to the signer at the time of the signature
-   creation.
+   The VerificationKeyID message contains fields:
+
+   *  isd_as: The ISD-AS number of the current AS.
+
+   *  subject_key_id: Refers to the certificate that contains the public
+      key needed to verify this PCB's signature.
+
+   *  trc_base: Defines the _base_ number of the latest Trust Root
+      Configuration (TRC) available to the signer at the time of the
+      signature creation.
+
+   *  trc_serial: Defines the _serial_ number of the latest TRC
+      available to the signer at the time of the signature creation.
 
    Its protobuf message definition is:
 

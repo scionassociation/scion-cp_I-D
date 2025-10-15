@@ -2447,14 +2447,26 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#name-as-entry-signed-header-2" class="selfRef">AS Entry Signed Header</a>
                 </figcaption></figure>
 </div>
-<p id="section-2.2.1.4.1-2">The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
-- <code>signature_algorithm</code>: Specifies the algorithm to compute the signature. This field is <span class="bcp14">REQUIRED</span>.
-- <code>verification_key_id</code>: Contains a <code>VerificationKeyID</code> message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is <span class="bcp14">REQUIRED</span>.
-- <code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.
-- <code>metadata</code>: it may include metadata. This field is <span class="bcp14">OPTIONAL</span>. While it is part of the generic <code>Header</code> message format, it <span class="bcp14">MUST</span> be empty in an AS entry signed header.
-- <code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.1-3">The <code>Header</code> protobuf message definition is:<a href="#section-2.2.1.4.1-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-4">
+<p id="section-2.2.1.4.1-2">The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.1.4.1-3.1">
+                  <p id="section-2.2.1.4.1-3.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.2">
+                  <p id="section-2.2.1.4.1-3.2.1"><code>verification_key_id</code>: Contains a <code>VerificationKeyID</code> message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.3">
+                  <p id="section-2.2.1.4.1-3.3.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.4">
+                  <p id="section-2.2.1.4.1-3.4.1"><code>metadata</code>: it may include metadata. This field is <span class="bcp14">OPTIONAL</span>. While it is part of the generic <code>Header</code> message format, it <span class="bcp14">MUST</span> be empty in an AS entry signed header.<a href="#section-2.2.1.4.1-3.4.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.5">
+                  <p id="section-2.2.1.4.1-3.5.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-3.5.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+<p id="section-2.2.1.4.1-4">The <code>Header</code> protobuf message definition is:<a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-5">
 <pre>
    message Header {
        SignatureAlgorithm signature_algorithm = 1;
@@ -2465,15 +2477,25 @@ Path Segment 4 |             |     |             |     |             |
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
-</pre><a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.1.4.1-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4.1-5">The <code>VerificationKeyID</code> message contains fields:
-  - <code>isd_as</code>: The ISD-AS number of the current AS.
-  - <code>subject_key_id</code>: Refers to the certificate that contains the public key needed to verify this PCB's signature.
-  - <code>trc_base</code>: Defines the <em>base</em> number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
-  - <code>trc_serial</code>: Defines the <em>serial</em> number of the latest TRC available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.1-6">Its protobuf message definition is:<a href="#section-2.2.1.4.1-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-7">
+<p id="section-2.2.1.4.1-6">The <code>VerificationKeyID</code> message contains fields:<a href="#section-2.2.1.4.1-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.1.4.1-7.1">
+                  <p id="section-2.2.1.4.1-7.1.1"><code>isd_as</code>: The ISD-AS number of the current AS.<a href="#section-2.2.1.4.1-7.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.2">
+                  <p id="section-2.2.1.4.1-7.2.1"><code>subject_key_id</code>: Refers to the certificate that contains the public key needed to verify this PCB's signature.<a href="#section-2.2.1.4.1-7.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.3">
+                  <p id="section-2.2.1.4.1-7.3.1"><code>trc_base</code>: Defines the <em>base</em> number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-7.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.4">
+                  <p id="section-2.2.1.4.1-7.4.1"><code>trc_serial</code>: Defines the <em>serial</em> number of the latest TRC available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-7.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+<p id="section-2.2.1.4.1-8">Its protobuf message definition is:<a href="#section-2.2.1.4.1-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-9">
 <pre>
    message VerificationKeyID {
        uint64 isd_as = 1;
@@ -2481,9 +2503,9 @@ Path Segment 4 |             |     |             |     |             |
        uint64 trc_base = 3;
        uint64 trc_serial = 4;
    }
-</pre><a href="#section-2.2.1.4.1-7" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.1.4.1-9" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4.1-8">For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-8" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-10">For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-sign">
