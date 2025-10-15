@@ -1312,7 +1312,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-sequence-of-lookup-requests" class="internal xref">Sequence of Lookup Requests</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
-                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-caching" class="internal xref">Caching</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-lookup-requests-message-for" class="internal xref">Lookup Requests Message Format</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-caching" class="internal xref">Caching</a></p>
 </li>
                 </ul>
 </li>
@@ -3543,22 +3546,60 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-5.1.1-2.3.1">Request down segments starting at core ASes in the destination ISD.<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-5.1.1-3">The segment lookup API RPC definition can be found in <a href="#_figure-31" class="auto internal xref">Figure 25</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="lookup-requests-message-format">
+<section id="section-5.1.2">
+          <h4 id="name-lookup-requests-message-for">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-lookup-requests-message-for" class="section-name selfRef">Lookup Requests Message Format</a>
+          </h4>
+<span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
+<figure id="figure-17">
+            <div class="alignLeft art-text artwork" id="section-5.1.2-1.1">
+<pre>
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
+
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
+
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
+
+    // Mapping from path segment type to path segments.
+    // The key is the integer representation of the SegmentType enum.
+    map&lt;int32, Segments&gt; segments = 1;
+}
+</pre>
+</div>
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<a href="#name-control-service-rpc-api-seg" class="selfRef">Control Service RPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
+            </figcaption></figure>
+</div>
 </section>
 </div>
 <div id="caching">
-<section id="section-5.1.2">
+<section id="section-5.1.3">
           <h4 id="name-caching">
-<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-caching" class="section-name selfRef">Caching</a>
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-caching" class="section-name selfRef">Caching</a>
           </h4>
-<p id="section-5.1.2-1">For the sake of efficiency, the Control Service of the source AS <span class="bcp14">SHOULD</span> cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations and is also essential to ensure that the path lookup process is scalable and can be performed with low latency.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-2">In general, to improve overall efficiency, the Control Services of all ASes <span class="bcp14">SHOULD</span> do the following:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-1">For the sake of efficiency, the Control Service of the source AS <span class="bcp14">SHOULD</span> cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations and is also essential to ensure that the path lookup process is scalable and can be performed with low latency.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-2">In general, to improve overall efficiency, the Control Services of all ASes <span class="bcp14">SHOULD</span> do the following:<a href="#section-5.1.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2-3.1">
-              <p id="section-5.1.2-3.1.1">Cache the returned path segments.<a href="#section-5.1.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.3-3.1">
+              <p id="section-5.1.3-3.1.1">Cache the returned path segments.<a href="#section-5.1.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5.1.2-3.2">
-              <p id="section-5.1.2-3.2.1">Send requests in parallel when requesting path segments from other Control Services.<a href="#section-5.1.2-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.3-3.2">
+              <p id="section-5.1.3-3.2.1">Send requests in parallel when requesting path segments from other Control Services.<a href="#section-5.1.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -3740,7 +3781,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-6.1-1">Every SCMP message is preceded by a SCION header and zero or more SCION extension headers (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification"). The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <span id="name-scmp-message-format"></span><div id="scmp-format">
-<figure id="figure-17">
+<figure id="figure-18">
           <div id="section-6.1-3.1">
             <div class="alignLeft art-svg artwork" id="section-6.1-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3801,7 +3842,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               </svg><a href="#section-6.1-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
           </figcaption></figure>
 </div>
@@ -4006,7 +4047,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
 <span id="name-packet-too-big-format"></span><div id="_figure-21">
-<figure id="figure-18">
+<figure id="figure-19">
             <div id="section-6.5.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="528" viewBox="0 0 528 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4079,7 +4120,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
                 </svg><a href="#section-6.5.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-packet-too-big-format" class="selfRef">Packet Too Big format</a>
             </figcaption></figure>
 </div>
@@ -4122,7 +4163,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-19">
+<figure id="figure-20">
             <div id="section-6.5.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="528" viewBox="0 0 528 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4199,7 +4240,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.5.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-external-interface-down-for" class="selfRef">External Interface Down format</a>
             </figcaption></figure>
 </div>
@@ -4250,7 +4291,7 @@ The Interface ID identifies the link of the originating AS that is down.<a href=
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-20">
+<figure id="figure-21">
             <div id="section-6.5.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="384" width="528" viewBox="0 0 528 384" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4332,7 +4373,7 @@ The Interface ID identifies the link of the originating AS that is down.<a href=
                 </svg><a href="#section-6.5.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-internal-connectivity-down-" class="selfRef">Internal Connectivity Down format</a>
             </figcaption></figure>
 </div>
@@ -4398,7 +4439,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
           </h4>
 <span id="name-echo-request-format"></span><div id="_figure-24">
-<figure id="figure-21">
+<figure id="figure-22">
             <div id="section-6.6.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4462,7 +4503,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-echo-request-format" class="selfRef">Echo Request format</a>
             </figcaption></figure>
 </div>
@@ -4509,7 +4550,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
           </h4>
 <span id="name-echo-reply-format"></span><div id="_figure-25">
-<figure id="figure-22">
+<figure id="figure-23">
             <div id="section-6.6.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4573,7 +4614,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-echo-reply-format" class="selfRef">Echo Reply format</a>
             </figcaption></figure>
 </div>
@@ -4621,7 +4662,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
 <span id="name-traceroute-request-format"></span><div id="_figure-26">
-<figure id="figure-23">
+<figure id="figure-24">
             <div id="section-6.6.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4686,7 +4727,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute Request format</a>
             </figcaption></figure>
 </div>
@@ -4742,7 +4783,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
 <span id="name-traceroute-reply-format"></span><div id="_figure-27">
-<figure id="figure-24">
+<figure id="figure-25">
             <div id="section-6.6.4-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.4-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4807,7 +4848,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.4-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-traceroute-reply-format" class="selfRef">Traceroute Reply format</a>
             </figcaption></figure>
 </div>
@@ -5182,42 +5223,9 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <a href="#name-full-control-service-rpc-ap" class="section-name selfRef">Full Control Service RPC API</a>
       </h2>
 <p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
-<figure id="figure-25">
-        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
-<pre>
-service SegmentLookupService {
-    // Segments returns all segments that match the request.
-    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
-}
-
-message SegmentsRequest {
-    // The source ISD-AS of the segment.
-    uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
-    uint64 dst_isd_as = 2;
-}
-
-message SegmentsResponse {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map&lt;int32, Segments&gt; segments = 1;
-}
-</pre>
-</div>
-<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
-<a href="#name-control-service-rpc-api-seg" class="selfRef">Control Service RPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-C-3"><br></p>
 <span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
 <figure id="figure-26">
-        <div class="alignLeft art-text artwork" id="appendix-C-4.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
@@ -5236,10 +5244,10 @@ enum SignatureAlgorithm {
 <a href="#name-control-service-rpc-api-sig" class="selfRef">Control Service RPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-5"><br></p>
+<p id="appendix-C-3"><br></p>
 <span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
 <figure id="figure-27">
-        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
+        <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service TrustMaterialService {
     // Return the certificate chains that match the request.
@@ -5293,8 +5301,8 @@ message TRCResponse {
 <a href="#name-control-service-rpc-api-tru" class="selfRef">Control Service RPC API - Trust Material representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-7"><br></p>
-<p id="appendix-C-8">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
+<p id="appendix-C-5"><br></p>
+<p id="appendix-C-6">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
