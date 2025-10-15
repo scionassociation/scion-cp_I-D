@@ -2341,7 +2341,7 @@ Path Segment 4 |             |     |             |     |             |
                 <p id="section-2.2.1.3-7.1.1"><code>SignedMessage</code>: The signed component of an AS entry. For the specification of this part of the AS entry, see <a href="#signed-compo" class="auto internal xref">Section 2.2.1.4</a> below.<a href="#section-2.2.1.3-7.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.3-7.2">
-                <p id="section-2.2.1.3-7.2.1"><code>PathSegmentUnsignedExtensions</code>: The unsigned and thus unprotected part of the AS entry. These are extensions with metadata that need no explicit protection.<a href="#section-2.2.1.3-7.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.3-7.2.1"><code>PathSegmentUnsignedExtensions</code>: Optional unsigned PCB extensions, further described in <a href="#pcb-ext" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2.1.3-7.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2822,17 +2822,24 @@ associated_data(ps, i) = ps.segment_info ||
           <h4 id="name-pcb-extensions">
 <a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-pcb-extensions" class="section-name selfRef">PCB Extensions</a>
           </h4>
-<p id="section-2.2.2-1">In addition to basic routing information such a hop entries and peer entries, PCBs can be used to communicate additional metadata in extensions. Extensions can be signed and unsigned: signed extensions are protected by the AS signature, whereas unsigned extensions are not.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">In Protobuf, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-1">AS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes. Extensions can be:<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.2-3.1">
-              <p id="section-2.2.2-3.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code> are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#as-entry" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2-2.1">
+              <p id="section-2.2.2-2.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code>. They are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#as-entry" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.2.2-3.2">
-              <p id="section-2.2.2-3.2.1">Signed extensions <code>PathSegmentExtensions</code> are part of the signed body component of an AS entry (the <code>ASEntrySignedBody</code> message, see also <a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>).<a href="#section-2.2.2-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.2.2-2.2">
+              <p id="section-2.2.2-2.2.1">Signed extensions <code>PathSegmentExtensions</code>. They are part of the signed body component of an AS entry (the <code>ASEntrySignedBody</code> message, see also <a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>).<a href="#section-2.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.2-4"><strong>Note:</strong> SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-4">The example below contains the Protobuf definition of the <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental. We therefore omit definitions of the <code>StaticInfoExtension</code> message format and refer to <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span>.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2-5">
+<pre>
+  message PathSegmentExtensions {
+    StaticInfoExtension static_info = 1;
+  }
+</pre><a href="#section-2.2.2-5" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="pcb-validity">
@@ -5110,6 +5117,10 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
         <dd>
 <span class="refTitle">"SCION ISD and AS Assignments"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">https://docs.anapaya.net/en/latest/resources/isd-as-assignments/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="PCBExtensions">[PCBExtensions]</dt>
+        <dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"PCB Path Metadata Extension"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/beacon-metadata.html">https://docs.scion.org/en/latest/beacon-metadata.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC1122">[RFC1122]</dt>
         <dd>
 <span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
@@ -5140,7 +5151,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <dd class="break"></dd>
 <dt id="SCMP">[SCMP]</dt>
       <dd>
-<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
