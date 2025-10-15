@@ -2184,11 +2184,6 @@ message SegmentsResponse {
    network."}
 <br>
 
-~~~~
-{: #figure-32 title="Control Service RPC API - Segment registration.
-   This API is only exposed by core ASes and only on the SCION
-   dataplane."}
-<br>
 
 ~~~~~
 
