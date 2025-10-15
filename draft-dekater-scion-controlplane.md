@@ -1592,7 +1592,36 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 2. Request core segments, which start at the core ASes that are reachable with up segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up segment.
 3. Request down segments starting at core ASes in the destination ISD.
 
-The segment lookup API RPC definition can be found in {{figure-31}}.
+### Lookup Requests Message Format
+
+~~~~
+service SegmentLookupService {
+    // Segments returns all segments that match the request.
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
+
+message SegmentsRequest {
+    // The source ISD-AS of the segment.
+    uint64 src_isd_as = 1;
+    // The destination ISD-AS of the segment.
+    uint64 dst_isd_as = 2;
+}
+
+message SegmentsResponse {
+    message Segments {
+        // List of path segments.
+        repeated PathSegment segments = 1;
+    }
+
+    // Mapping from path segment type to path segments.
+    // The key is the integer representation of the SegmentType enum.
+    map<int32, Segments> segments = 1;
+}
+~~~~
+{: #figure-31 title="Control Service RPC API - Segment lookup.
+   This API is exposed on the SCION dataplane by the control
+   services of core ASes and exposed on the intra-domain protocol
+   network."}
 
 ### Caching
 
@@ -2153,35 +2182,6 @@ More information can be found on the SCIONLab website and in the {{SCIONLAB}} pa
 
 The following code blocks provide, in protobuf format, the entire API by which control services interact.
 
-~~~~
-service SegmentLookupService {
-    // Segments returns all segments that match the request.
-    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
-}
-
-message SegmentsRequest {
-    // The source ISD-AS of the segment.
-    uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
-    uint64 dst_isd_as = 2;
-}
-
-message SegmentsResponse {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
-~~~~
-{: #figure-31 title="Control Service RPC API - Segment lookup.
-   This API is exposed on the SCION dataplane by the control
-   services of core ASes and exposed on the intra-domain protocol
-   network."}
-<br>
 
 
 
