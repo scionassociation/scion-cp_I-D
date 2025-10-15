@@ -1294,7 +1294,7 @@ Table of Contents
           int32 associated_data_length = 5;
       }
 
-   The VerificationKeyID message contains fields:
+   The VerificationKeyID message contains the following REQUIRED fields:
 
    *  isd_as: The ISD-AS number of the current AS.
 
