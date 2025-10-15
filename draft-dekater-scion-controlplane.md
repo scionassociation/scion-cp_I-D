@@ -1097,13 +1097,9 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 ~~~~
    message HopField {
-       // Ingress interface identifier
        uint64 ingress = 1;
-       // Egress interface identifier.
        uint64 egress = 2;
-       // 8-bit encoded expiration offset relative to the segment creation timestamp.
        uint32 exp_time = 3;
-       // MAC used in the dataplane to verify the Hop Field.
        bytes mac = 4;
    }
 
