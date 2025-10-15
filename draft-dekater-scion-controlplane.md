@@ -833,13 +833,11 @@ In the Protobuf message format implementation, the signed component of an AS ent
    }
 ~~~~
 
-The following code block shows the low level representation of the `HeaderAndBodyInternal` message used for signature computation input. This message SHOULD NOT be used by external code.
+Protobuf definition of the `HeaderAndBody` message used for signature computation input.
 
 ~~~~
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 ~~~~
@@ -912,7 +910,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
 
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
-- `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
+- `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 ##### AS Entry Signed Body {#ase-sign}
 
@@ -965,14 +963,15 @@ This is the input for the computation of the signature:
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
 
+
 The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:
 
 Sig<sub>i</sub> =
-K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )
+K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )
 
 The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
-The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
+Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:
 
 ~~~
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -2620,6 +2619,7 @@ Major changes:
 - Mention ConnectRPC as main RPC method instead of gRPC
 
 Minor changes:
+- AS Entry Signature: fix order of terms in one formula
 
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
