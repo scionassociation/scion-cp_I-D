@@ -742,7 +742,6 @@ Path Segment 4 |             |     |             |     |             |
 {: #figure-5 title="Top-down composition of a PCB"}
 
 
-Note: For a full example of a PCB in the Protobuf message format, please see {{figure-34}}.
 
 #### PCB Top-Level Message Format {#segment}
 
@@ -2185,31 +2184,6 @@ message SegmentsResponse {
 <br>
 
 
-~~~~~
-
-message ASEntry {
-    // The signed part of the AS entry. The body of the SignedMessage
-    // is the serialized ASEntrySignedBody. The signature input is
-    // defined as follows:
-    //
-    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-    //
-    //  associated_data(ps, i) =
-    //          ps.segment_info ||
-    //          ps.as_entries[1].signed.header_and_body ||
-    //          ps.as_entries[1].signed.signature ||
-    //          ...
-    //          ps.as_entries[i-1].signed.header_and_body ||
-    //          ps.as_entries[i-1].signed.signature
-    //
-    proto.crypto.v1.SignedMessage signed = 1;
-    // The unsigned part of the AS entry.
-    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
-}
-
-~~~~~
-{: #figure-34 title="Control Service RPC API - Segment representation"}
-<br>
 
 ~~~~~
 enum SignatureAlgorithm {
