@@ -110,6 +110,7 @@ Table of Contents
        2.3.3.  PCB Selection Policies
        2.3.4.  Propagation Interval and Best PCBs Set Size
        2.3.5.  Propagation of Selected PCBs
+     2.4.  Distribution of Cryptographic Material
    3.  Deployment Considerations
      3.1.  Monitoring Considerations
      3.2.  Effects of Clock Inaccuracy
@@ -164,7 +165,6 @@ Table of Contents
      9.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
-   Full Control Service RPC API
    Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
@@ -484,7 +484,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 27.
+      AS that sent the PCB through the API described in Figure 18.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -725,8 +725,9 @@ Table of Contents
    QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
    compatible with [gRPC] which is supported but deprecated.
 
-   Appendix "Full Control Service RPC API" provides the entire Control
-   Service API definition in protobuf format.
+   In case of failure, RPC calls return an error as specified by the RPC
+   framework.  That is, a non-zero status code and an explanatory
+   string.
 
    Appendix "Use of the SCION Data Plane" provides details about the
    establishment of the underlying QUIC connections through the data
@@ -1710,7 +1711,7 @@ Table of Contents
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 27.
+       Service of the sending AS through the API described in Figure 18.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -1947,6 +1948,74 @@ Table of Contents
 
    *  BeaconResponse: An empty message returned as an acknowledgement
       upon success.
+
+2.4.  Distribution of Cryptographic Material
+
+   The following code blocks provide, in protobuf format, the entire API
+   by which control services interact.
+
+   enum SignatureAlgorithm {
+       // Unspecified signature algorithm. This value is never valid.
+       SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+       // ECDS with SHA256.
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+       // ECDS with SHA384.
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+       // ECDS with SHA512.
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+   }
+
+     Figure 17: Control Service RPC API - Signed ASEntry representation
+
+
+
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+  Figure 18: Control Service RPC API - Trust Material representation
 
 3.  Deployment Considerations
 
@@ -2532,7 +2601,7 @@ Table of Contents
        map<int32, Segments> segments = 1;
    }
 
-     Figure 17: Control Service RPC API - Segment lookup.  This API is
+     Figure 19: Control Service RPC API - Segment lookup.  This API is
        exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -2707,7 +2776,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 18: SCMP message format
+                       Figure 20: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2848,7 +2917,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 19: Packet Too Big format
+                      Figure 21: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2888,7 +2957,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 20: External Interface Down format
+                 Figure 22: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2940,7 +3009,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 21: Internal Connectivity Down format
+                Figure 23: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2986,7 +3055,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 22: Echo Request format
+                       Figure 24: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3022,7 +3091,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 23: Echo Reply format
+                        Figure 25: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3064,7 +3133,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 24: Traceroute Request format
+                    Figure 26: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3119,7 +3188,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 25: Traceroute Reply format
+                     Figure 27: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3604,80 +3673,6 @@ Deployment Testing: SCIONLab
 
    More information can be found on the SCIONLab website and in the
    [SCIONLAB] paper.
-
-Full Control Service RPC API
-
-   The following code blocks provide, in protobuf format, the entire API
-   by which control services interact.
-
-   enum SignatureAlgorithm {
-       // Unspecified signature algorithm. This value is never valid.
-       SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-       // ECDS with SHA256.
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-       // ECDS with SHA384.
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-       // ECDS with SHA512.
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-   }
-
-     Figure 26: Control Service RPC API - Signed ASEntry representation
-
-
-
-service TrustMaterialService {
-    // Return the certificate chains that match the request.
-    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-    // Return a specific TRC that matches the request.
-    rpc TRC(TRCRequest) returns (TRCResponse) {}
-}
-
-message ChainsRequest {
-    // ISD-AS of Subject in the AS certificate.
-    uint64 isd_as = 1;
-    // SubjectKeyID in the AS certificate.
-    bytes subject_key_id = 2;
-    // Point in time at which the AS certificate must still be valid. In seconds
-    // since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_until = 3;
-    // Point in time at which the AS certificate must be or must have been
-    // valid. In seconds since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_since = 4;
-}
-
-message ChainsResponse {
-    // List of chains that match the request.
-    repeated Chain chains = 1;
-}
-
-message Chain {
-    // AS certificate in the chain.
-    bytes as_cert = 1;
-    // CA certificate in the chain.
-    bytes ca_cert = 2;
-}
-
-message TRCRequest {
-    // ISD of the TRC.
-    uint32 isd = 1;
-    // BaseNumber of the TRC.
-    uint64 base = 2;
-    // SerialNumber of the TRC.
-    uint64 serial = 3;
-}
-
-message TRCResponse {
-    // Raw TRC.
-    bytes trc = 1;
-}
-
-  Figure 27: Control Service RPC API - Trust Material representation
-
-
-
-   In case of failure, RPC calls return an error as specified by the RPC
-   framework.  That is, a non-zero status code and an explanatory
-   string.
 
 Use of the SCION Data Plane
 
