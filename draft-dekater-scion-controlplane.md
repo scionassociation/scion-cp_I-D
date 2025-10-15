@@ -475,7 +475,7 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-{{app-a}} provides the entire Control Service API definition in protobuf format.
+In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
 
 {{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
 
@@ -1342,6 +1342,79 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
+## Distribution of Cryptographic Material
+
+The following code blocks provide, in protobuf format, the entire API by which control services interact.
+
+
+
+
+~~~~~
+enum SignatureAlgorithm {
+    // Unspecified signature algorithm. This value is never valid.
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    // ECDS with SHA256.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    // ECDS with SHA384.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    // ECDS with SHA512.
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+}
+
+~~~~~
+{: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
+<br>
+
+~~~~~
+service TrustMaterialService {
+    // Return the certificate chains that match the request.
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    // Return a specific TRC that matches the request.
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+
+message ChainsRequest {
+    // ISD-AS of Subject in the AS certificate.
+    uint64 isd_as = 1;
+    // SubjectKeyID in the AS certificate.
+    bytes subject_key_id = 2;
+    // Point in time at which the AS certificate must still be valid. In seconds
+    // since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    // Point in time at which the AS certificate must be or must have been
+    // valid. In seconds since UNIX epoch.
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    // List of chains that match the request.
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    // AS certificate in the chain.
+    bytes as_cert = 1;
+    // CA certificate in the chain.
+    bytes ca_cert = 2;
+}
+
+message TRCRequest {
+    // ISD of the TRC.
+    uint32 isd = 1;
+    // BaseNumber of the TRC.
+    uint64 base = 2;
+    // SerialNumber of the TRC.
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    // Raw TRC.
+    bytes trc = 1;
+}
+
+~~~~~
+{: #figure-36 title="Control Service RPC API - Trust Material representation"}
+
 
 # Deployment Considerations
 
@@ -2177,82 +2250,6 @@ SCIONLab is a global research network that is available to test the SCION archit
 
 More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
 
-# Full Control Service RPC API {#app-a}
-{:numbered="false"}
-
-The following code blocks provide, in protobuf format, the entire API by which control services interact.
-
-
-
-
-~~~~~
-enum SignatureAlgorithm {
-    // Unspecified signature algorithm. This value is never valid.
-    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    // ECDS with SHA256.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    // ECDS with SHA384.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    // ECDS with SHA512.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-}
-
-~~~~~
-{: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
-<br>
-
-~~~~~
-service TrustMaterialService {
-    // Return the certificate chains that match the request.
-    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-    // Return a specific TRC that matches the request.
-    rpc TRC(TRCRequest) returns (TRCResponse) {}
-}
-
-message ChainsRequest {
-    // ISD-AS of Subject in the AS certificate.
-    uint64 isd_as = 1;
-    // SubjectKeyID in the AS certificate.
-    bytes subject_key_id = 2;
-    // Point in time at which the AS certificate must still be valid. In seconds
-    // since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_until = 3;
-    // Point in time at which the AS certificate must be or must have been
-    // valid. In seconds since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_since = 4;
-}
-
-message ChainsResponse {
-    // List of chains that match the request.
-    repeated Chain chains = 1;
-}
-
-message Chain {
-    // AS certificate in the chain.
-    bytes as_cert = 1;
-    // CA certificate in the chain.
-    bytes ca_cert = 2;
-}
-
-message TRCRequest {
-    // ISD of the TRC.
-    uint32 isd = 1;
-    // BaseNumber of the TRC.
-    uint64 base = 2;
-    // SerialNumber of the TRC.
-    uint64 serial = 3;
-}
-
-message TRCResponse {
-    // Raw TRC.
-    bytes trc = 1;
-}
-
-~~~~~
-{: #figure-36 title="Control Service RPC API - Trust Material representation"}
-<br>
-
-In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
 
 # Use of the SCION Data Plane {#app-b}
 {:numbered="false"}
