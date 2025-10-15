@@ -720,7 +720,7 @@ Table of Contents
    definition language (for details, see [proto3]).
 
    The RPC messages are transported via [Connect]'s RPC protocol that
-   carries messages over HTTP/3 (see [RFC9114])) which in turn uses
+   carries messages over HTTP/3 (see [RFC9114])), which in turn uses
    QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
    compatible with [gRPC] which is supported but deprecated.
 
@@ -4130,11 +4130,13 @@ Change Log
 
 draft-dekater-scion-controlplane-10
 
-   Major changes: - Mention ConnectRPC as main RPC method instead of
-   gRPC
+   Major changes:
 
-   Minor changes: - AS Entry Signature: fix order of terms in one
-   formula
+   *  Mention ConnectRPC as main RPC method instead of gRPC
+
+   Minor changes:
+
+   *  AS Entry Signature: fix order of terms in one formula
 
 draft-dekater-scion-controlplane-09
 
