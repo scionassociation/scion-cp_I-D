@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 April 2026                                           S. Hitz
+Expires: 18 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         14 October 2025
+                                                         15 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 April 2026.
+   This Internet-Draft will expire on 18 April 2026.
 
 Copyright Notice
 
@@ -3151,11 +3151,10 @@ Table of Contents
 
    The SCION control plane provides various security properties, as
    discussed below.  Here, an AS is described as 'honest' if its private
-   keys are unknown to the attacker, and if it follows this
-   specification's "MUST" clauses and performs operations correctly
-   (e.g., use an unique interface identifier for each link).  An honest
-   path is one that only traverses honest ASes.  A honest segment is the
-   one created by an honest AS.
+   keys are unknown to the attacker and it correctly performs operations
+   in accordance with this specification (e.g. uses a unique interface
+   identifier for each link).  An honest path is one that only traverses
+   honest ASes.  An honest segment is the one created by an honest AS.
 
    Security properties are:
 
