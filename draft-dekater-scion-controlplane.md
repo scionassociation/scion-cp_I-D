@@ -1033,11 +1033,16 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 
 ~~~~
    message HopField {
+       // Ingress interface identifier
        uint64 ingress = 1;
+       // Egress interface identifier.
        uint64 egress = 2;
+       // 8-bit encoded expiration offset relative to the segment creation timestamp.
        uint32 exp_time = 3;
+       // MAC used in the dataplane to verify the Hop Field.
        bytes mac = 4;
    }
+
 ~~~~
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
@@ -2090,17 +2095,6 @@ message SegmentsRequest {
     uint64 dst_isd_as = 2;
 }
 
-enum SegmentType {
-    // Unknown segment type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
-
 message SegmentsResponse {
     message Segments {
         // List of path segments.
@@ -2119,63 +2113,12 @@ message SegmentsResponse {
 <br>
 
 ~~~~
-service SegmentRegistrationService {
-    // SegmentsRegistration registers segments at the remote.
-    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-        SegmentsRegistrationResponse) {}
-}
-
-message SegmentsRegistrationRequest {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
-
-message SegmentsRegistrationResponse {}
-~~~~
 {: #figure-32 title="Control Service RPC API - Segment registration.
    This API is only exposed by core ASes and only on the SCION
    dataplane."}
 <br>
 
-~~~~
-service SegmentCreationService {
-    // Beacon sends a beacon to the remote control service.
-    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
-}
-
-message BeaconRequest {
-    // Beacon in form of a partial path segment.
-    PathSegment segment = 1;
-}
-
-message BeaconResponse {}
-~~~~
-{: #figure-33 title="Control Service RPC API - Segment creation"}
-<br>
-
 ~~~~~
-message PathSegment {
-    // The encoded SegmentInformation. It is used for signature input.
-    bytes segment_info = 1;
-    // Entries of ASes on the path.
-    repeated ASEntry as_entries = 2;
-}
-
-message SegmentInformation {
-    // Segment creation time set by the originating AS. Segment
-    // expiration time is computed relative to this timestamp.
-    // The timestamp is encoded as the number of seconds elapsed
-    // since January 1, 1970 UTC.
-    int64 timestamp = 1;
-    // The 16-bit segment ID integer used for MAC computation.
-    uint32 segment_id = 2;
-}
 
 message ASEntry {
     // The signed part of the AS entry. The body of the SignedMessage
@@ -2197,46 +2140,6 @@ message ASEntry {
     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
 }
 
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
-}
-
-message HopEntry {
-    // Material to create the data-plane Hop Field.
-    HopField hop_field = 1;
-    // MTU on the ingress link.
-    uint32 ingress_mtu = 2;
-}
-
-message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments
-    // during path construction.
-    uint64 peer_isd_as = 1;
-    // Remote peer interface identifier. This is used to match
-    // peering segments
-    // during path construction.
-    uint64 peer_interface = 2;
-    // MTU on the peering link.
-    uint32 peer_mtu = 3;
-    // Material to create the data-plane Hop Field
-    HopField hop_field = 4;
-}
-
-message HopField {
-    // Ingress interface identifier.
-    uint64 ingress = 1;
-    // Egress interface identifier.
-    uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment
-    // creation timestamp.
-    uint32 exp_time = 3;
-    // MAC used in the dataplane to verify the Hop Field.
-    bytes mac = 4;
-}
 ~~~~~
 {: #figure-34 title="Control Service RPC API - Segment representation"}
 <br>
@@ -2253,51 +2156,6 @@ enum SignatureAlgorithm {
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
 }
 
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Encoded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
-}
-
-message Header {
-    // Algorithm used to compute the signature.
-    SignatureAlgorithm signature_algorithm = 1;
-    // Optional arbitrary per-protocol key identifier.
-    bytes verification_key_id = 2;
-    // Optional signature creation timestamp.
-    google.protobuf.Timestamp timestamp = 3;
-    // Optional arbitrary per-protocol metadata.
-    bytes metadata = 4;
-    // Length of associated data that is covered by the signature, but
-    // is not included in the header and body. This is zero, if no
-    // associated data is covered by the signature.
-    int32 associated_data_length = 5;
-}
-
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
-}
-
-message VerificationKeyID {
-    uint64 isd_as = 1;
-    bytes subject_key_id = 2;
-    uint64 trc_base = 3;
-    uint64 trc_serial = 4;
-}
 ~~~~~
 {: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
 <br>
@@ -2349,20 +2207,6 @@ message TRCResponse {
     bytes trc = 1;
 }
 
-// VerificationKeyID is used to identify certificates that authenticate the
-// verification key used to verify signatures.
-message VerificationKeyID {
-    // ISD-AS of the subject.
-    uint64 isd_as = 1;
-    // SubjectKeyID referenced in the certificate.
-    bytes subject_key_id = 2;
-    // Base number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_base = 3;
-    // Serial number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_serial = 4;
-}
 ~~~~~
 {: #figure-36 title="Control Service RPC API - Trust Material representation"}
 <br>
