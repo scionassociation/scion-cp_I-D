@@ -2013,7 +2013,7 @@ This section discusses three kinds of threats to the control plane:
 ## Security Properties {#security-properties}
 
 The SCION control plane provides various security properties, as discussed below.
-Here, an AS is described as 'honest' if its private keys are unknown to the attacker, and if it follows this specification's "MUST" clauses and performs operations correctly (e.g., use an unique interface identifier for each link). An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.
 
 Security properties are:
 
