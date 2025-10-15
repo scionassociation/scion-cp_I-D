@@ -104,6 +104,20 @@ informative:
   RFC6996:
   RFC9217:
   RFC9473:
+  PCBExtensions:
+    title: PCB Path Metadata Extension
+    date: 2025
+    target: https://docs.scion.org/en/latest/beacon-metadata.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
   BollRio-2000:
     title: The diameter of a scale-free random graph
     target: https://kam.mff.cuni.cz/~ksemweb/clanky/BollobasR-scale_free_random.pdf
@@ -116,7 +130,7 @@ informative:
         name: Oliver Riordan
   SCMP:
     title: SCMP Documentation
-    date: 2024
+    date: 2025
     target: https://docs.scion.org/en/latest/protocols/scmp.html
     author:
       -
@@ -161,6 +175,55 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  PEREIRA2025:
+    title: "Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"
+    date: 2025
+    author:
+      -
+        ins: J. Pereira
+        name: João Pereira
+        org: ETH Zürich
+      -
+        ins: T. Klenze
+        name: Tobias Klenze
+        org: Independent
+      -
+        ins: S. Giampietro
+        name: Sofia Giampietro
+        org: ETH Zürich
+      -
+        ins:  M. Limbeck
+        name:  Markus Limbeck
+        org: ETH Zürich
+      -
+        ins: Dionysios Spiliopoulos
+        name: D. Spiliopoulos
+        org: ETH Zürich
+      -
+        ins:  F. Wolf
+        name:  Felix Wolf
+        org: ETH Zürich
+      -
+        ins:  M. Eilers
+        name:  Marco Eilers
+        org: ETH Zürich
+      -
+        ins:  C. Sprenger
+        name:  Christoph Sprenger
+        org: ETH Zürich
+      -
+        ins:  D. Basin
+        name:  David Basin
+        org: ETH Zürich
+      -
+        ins:  P. Müller
+        name:  Peter Müller
+        org: ETH Zürich
+      -
+        ins:  A. Perrig
+        name:  Adrian Perrig
+        org: ETH Zürich
+
 
 --- abstract
 
@@ -410,7 +473,11 @@ Recovering from a partitioned network is also seamless as only coarse time synch
 
 All communication between the Control Services in different ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
+<<<<<<< HEAD
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})) which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
+=======
+The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
+>>>>>>> origin/main
 
 {{app-a}} provides the entire Control Service API definition in protobuf format.
 
@@ -780,7 +847,7 @@ The code block below defines an AS entry `ASEntry` in Protobuf message format.
 It includes the following components:
 
 - `SignedMessage`: The signed component of an AS entry. For the specification of this part of the AS entry, see [](#signed-compo) below.
-- `PathSegmentUnsignedExtensions`: The unsigned and thus unprotected part of the AS entry. These are extensions with metadata that need no explicit protection.
+- `PathSegmentUnsignedExtensions`: Optional unsigned PCB extensions, further described in [](#pcb-ext).
 
 
 #### AS Entry Signed Component {#signed-compo}
@@ -819,13 +886,11 @@ In the Protobuf message format implementation, the signed component of an AS ent
    }
 ~~~~
 
-The following code block shows the low level representation of the `HeaderAndBodyInternal` message used for signature computation input. This message SHOULD NOT be used by external code.
+Protobuf definition of the `HeaderAndBody` message used for signature computation input.
 
 ~~~~
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 ~~~~
@@ -860,13 +925,16 @@ The following code block shows the low level representation of the `HeaderAndBod
 {: #figure-10 title="AS Entry Signed Header"}
 
 
-The header part defines metadata that is relevant to the computation and verification of the signature. It MUST include at least the following metadata:
+The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
-- The algorithm to compute the signature
-- The subjectKeyIdentifier of the public key to be used to verify the signature (see {{I-D.dekater-scion-pki}})
-- The ISD-AS number of the AS
+- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED.
+- `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
+- `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
+- `metadata`: it may include metadata. This field is OPTIONAL. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header.
+- `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
-The following code block defines the signed header of an AS entry in Protobuf message format (called the `Header` message).
+
+The `Header` protobuf message definition is:
 
 ~~~~
    message Header {
@@ -878,7 +946,18 @@ The following code block defines the signed header of an AS entry in Protobuf me
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
+~~~~
 
+The `VerificationKeyID` message contains the following REQUIRED fields:
+
+  - `isd_as`: The ISD-AS number of the current AS.
+  - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
+  - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
+  - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
+
+Its protobuf message definition is:
+
+~~~~
    message VerificationKeyID {
        uint64 isd_as = 1;
        bytes subject_key_id = 2;
@@ -887,18 +966,7 @@ The following code block defines the signed header of an AS entry in Protobuf me
    }
 ~~~~
 
-- `signature_algorithm`: Specifies the algorithm to compute the signature.
-- `verification_key_id`: Contains information that is relevant to signing and verifying PCBs and other control-plane messages. It includes the following fields (see also the above code block):
-  - `isd_as`: The ISD-AS number of the current AS.
-  - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
-  - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
-  - `trc_serial`: Defines the *serial* number of the latest TRC available to the signer at the time of the signature creation.
-
-**Note:** For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
-
-- `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
-- `metadata`: Can be used to include arbitrary per-protocol metadata. This field is OPTIONAL.
-- `associated_data_length`: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.
+For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
 
 ##### AS Entry Signed Body {#ase-sign}
 
@@ -943,7 +1011,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 ##### AS Entry Signature {#sign}
 
-Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period fully containing that of the segment being verified, regardless of current time. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield)). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
 This is the input for the computation of the signature:
 
@@ -951,14 +1019,15 @@ This is the input for the computation of the signature:
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
 
+
 The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:
 
 Sig<sub>i</sub> =
-K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )
+K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )
 
 The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
-The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.
+Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:
 
 ~~~
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -1121,26 +1190,32 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 ### PCB Extensions {#pcb-ext}
 
-In addition to basic routing information such a hop entries and peer entries, PCBs can be used to communicate additional metadata in extensions. Extensions can be signed and unsigned: signed extensions are protected by the AS signature, whereas unsigned extensions are not.
+AS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes. Extensions can be:
 
-In Protobuf, extensions are specified as follows:
+- Unsigned extensions `PathSegmentUnsignedExtensions`. They are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
+- Signed extensions `PathSegmentExtensions`. They are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
-- Unsigned extensions `PathSegmentUnsignedExtensions` are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
-- Signed extensions `PathSegmentExtensions` are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
+It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
-**Note:** SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.
+The example below contains the Protobuf definition of the `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental. We therefore omit definitions of the `StaticInfoExtension` message format and refer to [PCBExtensions].
+
+~~~~
+  message PathSegmentExtensions {
+    StaticInfoExtension static_info = 1;
+  }
+~~~~
 
 ### PCB Validity {#pcb-validity}
 
 To be valid (that is, usable to construct a valid path), a PCB MUST:
 
 * Contain valid AS Entry signatures ([](#sign)).
-* Have a timestamp ([](#seginfo)) that is not in the future.
+* Have a timestamp ([](#seginfo)) that is not later than the current time at the point of validation, plus an allowance for differences between the clocks of the validator and originator.
 * Contain only unexpired hops ([](#hopfield)).
 
-For the purpose of validation, a timestamp is considered "future" if it is later than the current time at the point of validation plus an allowance for differences between the validator's and originator's clock. As an allowance, it is recommended to use the granularity of the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)).
+It is recommend to use the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)) as the allowance for differences between the clocks of the validator and originator.
 
-For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time at the point of validation.
+For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in [](#hopfield), is later than the current time + allowance at the point of validation.
 
 ### Configuration {#configuration}
 
@@ -1199,27 +1274,24 @@ Naturally, an AS's policy selects PCBs corresponding to paths that are commercia
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set SHOULD have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#inter-isd-beaconing)). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
 
-The *best PCBs set size* SHOULD be:
+The *best PCBs set size* should be:
 
   - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
-  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.
+  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
 
-Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
-Values above are RECOMMENDED maxima which represent a tradeoff between scalability and amount of paths discovered.
-In current practice the intra-ISD set size is typically 20.
+These values reflect a tradeoff between scalability —limited by the computational overhead of signature verification—and the amount of paths discovered. The PCBs set size should not be too low, to make sure that beaconing can discover a wide amount of paths. Further discussion on these trade-offs is provided in [](#scalability).
+In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core best PCBs set size (e.g., 20) can be used.
 
-Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS SHOULD have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
+Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
-- The *propagation interval* SHOULD be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
+- The *propagation interval* should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
 Note that to ensure establish quick connectivity, an AS MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
 
 - because the corresponding RPC failed;
 - or because no beacon was available to propagate.
-
-The scalability implications of such parameters are further discussed in [](#scalability).
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
@@ -1318,7 +1390,7 @@ The resource costs for path discovery are as follows:
 - Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the beaconing policies.
 - Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 
-All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments.
+All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These, in turn, depend on the configured best PCBs set size ([](#propagation-interval-size)).
 
 Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery".
 
@@ -1328,13 +1400,13 @@ Note that link removal is not part of path discovery in SCION. For scheduled rem
 
 To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and inter-ISD beaconing.
 
-### Intra-ISD Beaconing
+### Intra-ISD Beaconing {#intra-isd-beaconing}
 
 In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
 This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will have a large number of children, while they only have a small number of parents and the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
 
-Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCBs set size of 50, ASes SHOULD trim the set of PCBs propagated.
+Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
 
 Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily manageable even for highly connected ASes.
 
@@ -1348,7 +1420,7 @@ On a network bootstrap, path segments to each AS are discovered within a number 
 
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
-### Inter-ISD Beaconing
+### Inter-ISD Beaconing {#inter-isd-beaconing}
 
 In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 
@@ -1520,7 +1592,11 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 2. Request core segments, which start at the core ASes that are reachable with up segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up segment.
 3. Request down segments starting at core ASes in the destination ISD.
 
+<<<<<<< HEAD
 The segment lookup API RPC definition can be found in {{figure-11}}.
+=======
+The segment lookup API RPC definition can be found in {{figure-31}}.
+>>>>>>> origin/main
 
 ### Caching
 
@@ -1964,7 +2040,7 @@ This section discusses three kinds of threats to the control plane:
 ## Security Properties {#security-properties}
 
 The SCION control plane provides various security properties, as discussed below.
-Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.
 
 Security properties are:
 
@@ -1975,7 +2051,11 @@ Security properties are:
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
-To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+To ensure that the properties hold across the overall SCION network, these are the prerequisites to follow:
+  - all core ASes MUST be able to reach each other with some sequence of core links
+  - and all non-core ASes MUST have at least one path up to a core AS.
+
+Furthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.
 A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
@@ -2063,7 +2143,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION [PEREIRA2025]. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2595,6 +2675,17 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-10
+{:numbered="false"}
+
+Major changes:
+
+- Mention ConnectRPC as main RPC method instead of gRPC
+
+Minor changes:
+
+- AS Entry Signature: fix order of terms in one formula
 
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
