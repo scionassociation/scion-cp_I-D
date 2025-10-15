@@ -1611,7 +1611,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 28</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 27</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -2198,7 +2198,6 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#name-top-down-composition-of-a-p" class="selfRef">Top-down composition of a PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-2">Note: For a full example of a PCB in the Protobuf message format, please see <a href="#_figure-34" class="auto internal xref">Figure 26</a>.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2898,7 +2897,7 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
 <li id="section-2.3.1-2.1">
-              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 28</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 27</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.1-2.2">
               <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
@@ -5216,40 +5215,9 @@ message SegmentsResponse {
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
-<span id="name-control-service-rpc-api-segm"></span><div id="_figure-34">
+<span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
 <figure id="figure-26">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
-<pre>
-message ASEntry {
-    // The signed part of the AS entry. The body of the SignedMessage
-    // is the serialized ASEntrySignedBody. The signature input is
-    // defined as follows:
-    //
-    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-    //
-    //  associated_data(ps, i) =
-    //          ps.segment_info ||
-    //          ps.as_entries[1].signed.header_and_body ||
-    //          ps.as_entries[1].signed.signature ||
-    //          ...
-    //          ps.as_entries[i-1].signed.header_and_body ||
-    //          ps.as_entries[i-1].signed.signature
-    //
-    proto.crypto.v1.SignedMessage signed = 1;
-    // The unsigned part of the AS entry.
-    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
-}
-
-</pre>
-</div>
-<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
-<a href="#name-control-service-rpc-api-segm" class="selfRef">Control Service RPC API - Segment representation</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-C-5"><br></p>
-<span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
-<figure id="figure-27">
-        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
@@ -5264,14 +5232,14 @@ enum SignatureAlgorithm {
 
 </pre>
 </div>
-<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
 <a href="#name-control-service-rpc-api-sig" class="selfRef">Control Service RPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-7"><br></p>
+<p id="appendix-C-5"><br></p>
 <span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
-<figure id="figure-28">
-        <div class="alignLeft art-text artwork" id="appendix-C-8.1">
+<figure id="figure-27">
+        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service TrustMaterialService {
     // Return the certificate chains that match the request.
@@ -5321,12 +5289,12 @@ message TRCResponse {
 
 </pre>
 </div>
-<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-control-service-rpc-api-tru" class="selfRef">Control Service RPC API - Trust Material representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-9"><br></p>
-<p id="appendix-C-10">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-10" class="pilcrow">¶</a></p>
+<p id="appendix-C-7"><br></p>
+<p id="appendix-C-8">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
@@ -5401,7 +5369,7 @@ message TRCResponse {
       </ul>
 <p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
-<figure id="figure-29">
+<figure id="figure-28">
         <div class="alignLeft art-text artwork" id="appendix-D-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -5438,7 +5406,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-service-resolution-rpc-api-" class="selfRef">Service Resolution RPC API definition</a>
         </figcaption></figure>
 </div>
@@ -5450,9 +5418,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 30</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 31</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 32</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
+<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 29</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 30</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 31</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
-<figure id="figure-30">
+<figure id="figure-29">
         <div class="alignLeft art-text artwork" id="appendix-E-2.1">
 <pre>
 +----------------------------+     +----------------------------+
@@ -5482,12 +5450,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
-<figure id="figure-31">
+<figure id="figure-30">
         <div class="alignLeft art-text artwork" id="appendix-E-3.1">
 <pre>
 +---------+          +---------+          +---------+         +---------+
@@ -5545,12 +5513,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
-<figure id="figure-32">
+<figure id="figure-31">
         <div class="alignLeft art-text artwork" id="appendix-E-4.1">
 <pre>
 
@@ -5609,7 +5577,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
+<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>

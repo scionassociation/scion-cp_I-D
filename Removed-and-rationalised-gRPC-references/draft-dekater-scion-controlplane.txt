@@ -483,7 +483,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 28.
+      AS that sent the PCB through the API described in Figure 27.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1055,9 +1055,6 @@ Table of Contents
 +------------+-------------+-------------------+-----------+
 
                Figure 6: Top-down composition of a PCB
-
-   Note: For a full example of a PCB in the Protobuf message format,
-   please see Figure 26.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1712,7 +1709,7 @@ Table of Contents
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 28.
+       Service of the sending AS through the API described in Figure 27.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -3614,30 +3611,6 @@ Full Control Service RPC API
 
 
 
- message ASEntry {
-     // The signed part of the AS entry. The body of the SignedMessage
-     // is the serialized ASEntrySignedBody. The signature input is
-     // defined as follows:
-     //
-     //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-     //
-     //  associated_data(ps, i) =
-     //          ps.segment_info ||
-     //          ps.as_entries[1].signed.header_and_body ||
-     //          ps.as_entries[1].signed.signature ||
-     //          ...
-     //          ps.as_entries[i-1].signed.header_and_body ||
-     //          ps.as_entries[i-1].signed.signature
-     //
-     proto.crypto.v1.SignedMessage signed = 1;
-     // The unsigned part of the AS entry.
-     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
- }
-
-      Figure 26: Control Service RPC API - Segment representation
-
-
-
    enum SignatureAlgorithm {
        // Unspecified signature algorithm. This value is never valid.
        SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
@@ -3649,7 +3622,7 @@ Full Control Service RPC API
        SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
    }
 
-     Figure 27: Control Service RPC API - Signed ASEntry representation
+     Figure 26: Control Service RPC API - Signed ASEntry representation
 
 
 
@@ -3699,7 +3672,7 @@ message TRCResponse {
     bytes trc = 1;
 }
 
-  Figure 28: Control Service RPC API - Trust Material representation
+  Figure 27: Control Service RPC API - Trust Material representation
 
 
 
@@ -3804,7 +3777,7 @@ message Transport {
     string address = 1;
 }
 
-           Figure 29: Service Resolution RPC API definition
+           Figure 28: Service Resolution RPC API definition
 
 
 
@@ -3812,10 +3785,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 30 below.  In both examples, the source
-   endpoint is in AS A.  Figure 31 shows the sequence diagram for the
+   is represented in Figure 29 below.  In both examples, the source
+   endpoint is in AS A.  Figure 30 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 32 shows the path lookup sequence diagram if the destination
+   Figure 31 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3846,7 +3819,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 30: Topology used in the path lookup examples
+            Figure 29: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -3901,7 +3874,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 31: Sequence diagram illustrating a path lookup for a
+     Figure 30: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3961,7 +3934,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 32: Sequence diagram illustrating a path lookup for a
+     Figure 31: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
