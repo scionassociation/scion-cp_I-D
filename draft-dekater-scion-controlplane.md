@@ -2035,8 +2035,8 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
 
-**SCMP Messages** <br>
-A malicious router can send link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) to disrupt the forwarding of information and/or force the traffic through a different path.
+**SCMP Error Messages** <br>
+([SCMP error messages](#scmp-notification)) can potentially be abused by an attacker to signal spurious network errors, attempting to degrade or deny a victim's use of a service or network path, and/or attempt to force traffic through a different path.
 
 The validity of such messages could be authenticated with SCMP authentication if available, or validated with additional signals.
 
