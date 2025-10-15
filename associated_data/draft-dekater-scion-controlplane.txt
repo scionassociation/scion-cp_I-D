@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 April 2026                                           S. Hitz
+Expires: 18 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         14 October 2025
+                                                         15 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 April 2026.
+   This Internet-Draft will expire on 18 April 2026.
 
 Copyright Notice
 
@@ -122,7 +122,7 @@ Table of Contents
        4.1.2.  Transforming a PCB into an Up Segment
        4.1.3.  Transforming a PCB into a Down Segment
      4.2.  Core Path Segment Registration
-     4.3.  Path Segment Registration gRPC API
+     4.3.  Path Segment Registration RPC API
      4.4.  Path MTU
    5.  Path Lookup
      5.1.  Lookup Process
@@ -163,7 +163,7 @@ Table of Contents
      9.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
-   Full Control Service gRPC API
+   Full Control Service RPC API
    Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
@@ -715,17 +715,16 @@ Table of Contents
 1.8.  Communication Protocol
 
    All communication between the Control Services in different ASes is
-   expressed in terms of gRPC remote procedure calls (for details, see
-   [gRPC]).  Service interfaces and messages are defined in the Protocol
-   Buffer "proto3" interface definition language (for details, see
-   [proto3]).
+   expressed in terms of RPC remote procedure calls.  Service interfaces
+   and messages are defined in the Protocol Buffer "proto3" interface
+   definition language (for details, see [proto3]).
 
-   The RPC messages are transported via the [Connect]'s rpc protocol; a
-   gRPC-like protocol that carries messages over HTTP/3 (see
-   [RFC9114])).  HTTP3 traffic uses QUIC/UDP ([RFC9000]) as a transport
-   layer.  In the case of SCION, UDP relies on the data plane.
+   The RPC messages are transported via [Connect]'s RPC protocol that
+   carries messages over HTTP/3 (see [RFC9114])) which in turn uses
+   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
+   compatible with [gRPC] which is supported but deprecated.
 
-   Appendix "Full Control Service gRPC API" provides the entire Control
+   Appendix "Full Control Service RPC API" provides the entire Control
    Service API definition in protobuf format.
 
    Appendix "Use of the SCION Data Plane" provides details about the
@@ -1180,9 +1179,8 @@ Table of Contents
       specification of this part of the AS entry, see Section 2.2.1.4
       below.
 
-   *  PathSegmentUnsignedExtensions: The unsigned and thus unprotected
-      part of the AS entry.  These are extensions with metadata that
-      need no explicit protection.
+   *  PathSegmentUnsignedExtensions: Optional unsigned PCB extensions,
+      further described in Section 2.2.2.
 
 2.2.1.4.  AS Entry Signed Component
 
@@ -1388,10 +1386,10 @@ Table of Contents
 2.2.1.4.3.  AS Entry Signature
 
    Each AS entry MUST be signed with the AS certificate's private key
-   K_i.  The certificate MUST have a validity period fully containing
-   that of the segment being verified, regardless of current time.  The
-   signature Sig_i of an AS entry ASE_i is computed over the AS entry's
-   signed component.
+   K_i.  The certificate MUST have a validity period that is longer than
+   the Hop Field absolute expiration time (described in
+   Section 2.2.1.6).  The signature Sig_i of an AS entry ASE_i is
+   computed over the AS entry's signed component.
 
    This is the input for the computation of the signature:
 
@@ -1623,29 +1621,32 @@ Table of Contents
 
 2.2.2.  PCB Extensions
 
-   In addition to basic routing information such a hop entries and peer
-   entries, PCBs can be used to communicate additional metadata in
-   extensions.  Extensions can be signed and unsigned: signed extensions
-   are protected by the AS signature, whereas unsigned extensions are
-   not.
+   AS entries in PCBs may carry a number of optional extensions that
+   accumulate information while traveling across ASes.  Extensions can
+   be:
 
-   In Protobuf, extensions are specified as follows:
-
-   *  Unsigned extensions PathSegmentUnsignedExtensions are part of the
-      AS entry component (the ASEntry message, see also
+   *  Unsigned extensions PathSegmentUnsignedExtensions.  They are part
+      of the AS entry component (the ASEntry message, see also
       Section 2.2.1.3).
 
-   *  Signed extensions PathSegmentExtensions are part of the signed
-      body component of an AS entry (the ASEntrySignedBody message, see
-      also Section 2.2.1.4.2).
+   *  Signed extensions PathSegmentExtensions.  They are part of the
+      signed body component of an AS entry (the ASEntrySignedBody
+      message, see also Section 2.2.1.4.2).
 
-   *Note:* SCION also supports so-called "detachable extensions".  The
-   detachable extension is part of a PCB's unsigned extensions, but a
-   cryptographic hash of the detachable extension data is added to the
-   signed extensions.  Thus, a PCB with a detachable extension can be
-   signed and verified without actually including the detachable
-   extension in the signature.  This prevents a possible processing
-   overhead caused by large cryptographically-protected extensions.
+   It is recommended to keep the size of signed extensions small, since
+   they are an integral part of the input to every AS’s signature.
+
+   The example below contains the Protobuf definition of the
+   StaticInfoExtension.  It is a signed extension that is used to carry
+   path segment metadata, such as segment latency, bandwidth, router
+   coordinates, link type, number of internal hops.  This and other
+   extensions are at time of writing experimental.  We therefore omit
+   definitions of the StaticInfoExtension message format and refer to
+   [PCBExtensions].
+
+     message PathSegmentExtensions {
+       StaticInfoExtension static_info = 1;
+     }
 
 2.2.3.  PCB Validity
 
@@ -1653,20 +1654,20 @@ Table of Contents
 
    *  Contain valid AS Entry signatures (Section 2.2.1.4.3).
 
-   *  Have a timestamp (Section 2.2.1.2) that is not in the future.
+   *  Have a timestamp (Section 2.2.1.2) that is not later than the
+      current time at the point of validation, plus an allowance for
+      differences between the clocks of the validator and originator.
 
    *  Contain only unexpired hops (Section 2.2.1.6).
 
-   For the purpose of validation, a timestamp is considered "future" if
-   it is later than the current time at the point of validation plus an
-   allowance for differences between the validator's and originator's
-   clock.  As an allowance, it is recommended to use the granularity of
-   the hopfield expiration time (that is 337.5 seconds, see
-   Section 2.2.1.6).
+   It is recommend to use the hopfield expiration time (that is 337.5
+   seconds, see Section 2.2.1.6) as the allowance for differences
+   between the clocks of the validator and originator.
 
    For the purpose of validation, a hop is considered expired if its
    absolute expiration time, calculated as defined in Section 2.2.1.6,
-   is later than the current time at the point of validation.
+   is later than the current time + allowance at the point of
+   validation.
 
 2.2.4.  Configuration
 
@@ -1810,33 +1811,37 @@ Table of Contents
 
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
-   intra-ISD beaconing and core beaconing.  At each propagation event,
-   each AS selects a set of the best PCBs from the candidates in the
-   Beacon Store according to the AS's selection policy.  This set SHOULD
-   have a fixed size, the _best PCBs set size_.
+   intra-ISD beaconing (Section 3.3.1) and core beaconing
+   (Section 3.3.2).  At each propagation event, each AS selects a set of
+   the best PCBs from the candidates in the Beacon Store according to
+   the AS's selection policy.  This set should have a fixed size, the
+   _best PCBs set size_.
 
-   The _best PCBs set size_ SHOULD be:
+   The _best PCBs set size_ should be:
 
    *  For intra-AS beaconing (i.e. propagating to children ASes): at
       most 50.
 
    *  For core beaconing (i.e. propagation between core ASes): at most 5
       per immediate neighbor core AS.  Current practice is that each set
-      of 5 is chosen among the PCBs received from each neighbor.
+      is chosen among the PCBs received from each neighbor.
 
-   Note that the PCBs set size should not be too low, in order to make
-   sure that beaconing can discover a wide amount of paths.  Values
-   above are RECOMMENDED maxima which represent a tradeoff between
-   scalability and amount of paths discovered.  In current practice the
-   intra-ISD set size is typically 20.
+   These values reflect a tradeoff between scalability —limited by the
+   computational overhead of signature verification—and the amount of
+   paths discovered.  The PCBs set size should not be too low, to make
+   sure that beaconing can discover a wide amount of paths.  Further
+   discussion on these trade-offs is provided in Section 3.3.  In
+   current practice the intra-ISD set size is typically 20.  Current
+   practice also showed that in small SCION core networks, higher values
+   of the core best PCBs set size (e.g., 20) can be used.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store in
    order to determine the best set of PCBs.  If this is the case, an AS
-   SHOULD have a suitable pre-selection of candidate PCBs in place in
+   should have a suitable pre-selection of candidate PCBs in place in
    order to keep the Beacon Store capacity limited.
 
-   *  The _propagation interval_ SHOULD be at least "5" (seconds) for
+   *  The _propagation interval_ should be at least "5" (seconds) for
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
@@ -1848,9 +1853,6 @@ Table of Contents
    *  because the corresponding RPC failed;
 
    *  or because no beacon was available to propagate.
-
-   The scalability implications of such parameters are further discussed
-   in Section 3.3.
 
 2.3.5.  Propagation of Selected PCBs
 
@@ -2048,7 +2050,8 @@ Table of Contents
 
    All of these are dependent on the number and length of the discovered
    path segments, i.e. the total number of AS entries of the discovered
-   path segments.
+   path segments.  These, in turn, depend on the configured best PCBs
+   set size (Section 2.3.4).
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
@@ -2094,7 +2097,7 @@ Table of Contents
    core to itself.  While the number of distinct provider chains to the
    core is typically moderate, the multiplicity of links between
    provider ASes has multiplicative effect on the number of PCBs.  Once
-   this number grows above the maximum recommended best PCBs set size of
+   this number grows above the maximum recommended best PCB set size of
    50, ASes SHOULD trim the set of PCBs propagated.
 
    Ultimately, the number of PCBs received by an AS per propagation
@@ -2339,7 +2342,7 @@ Table of Contents
    *Note:* For more information on possible selection strategies of
    PCBs, see Section 2.3.3.
 
-4.3.  Path Segment Registration gRPC API
+4.3.  Path Segment Registration RPC API
 
    The Control Service of a non-core AS has to register the newly
    created down segments with the Control Services of the core ASes that
@@ -2505,7 +2508,7 @@ Table of Contents
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API gRPC definition can be found in Figure 12.
+   The segment lookup API RPC definition can be found in Figure 25.
 
 5.1.2.  Caching
 
@@ -3500,6 +3503,11 @@ Table of Contents
               <https://docs.anapaya.net/en/latest/resources/isd-as-
               assignments/>.
 
+   [PCBExtensions]
+              Anapaya, ETH, and SCION, "PCB Path Metadata Extension",
+              2025,
+              <https://docs.scion.org/en/latest/beacon-metadata.html>.
+
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -3531,7 +3539,7 @@ Table of Contents
               Generation Internet Testbed", 2020,
               <https://ieeexplore.ieee.org/abstract/document/9259355>.
 
-   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2024,
+   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
 Acknowledgments
@@ -3561,7 +3569,7 @@ Deployment Testing: SCIONLab
    More information can be found on the SCIONLab website and in the
    [SCIONLAB] paper.
 
-Full Control Service gRPC API
+Full Control Service RPC API
 
    The following code blocks provide, in protobuf format, the entire API
    by which control services interact.
@@ -3600,8 +3608,8 @@ Full Control Service gRPC API
        map<int32, Segments> segments = 1;
    }
 
-      Figure 25: Control Service gRPC API - Segment lookup.  This API
-     is exposed on the SCION dataplane by the control services of core
+     Figure 25: Control Service RPC API - Segment lookup.  This API is
+       exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
 
@@ -3625,7 +3633,7 @@ Full Control Service gRPC API
 
    message SegmentsRegistrationResponse {}
 
-     Figure 26: Control Service gRPC API - Segment registration.  This
+      Figure 26: Control Service RPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3642,7 +3650,7 @@ Full Control Service gRPC API
 
    message BeaconResponse {}
 
-           Figure 27: Control Service gRPC API - Segment creation
+           Figure 27: Control Service RPC API - Segment creation
 
 
 
@@ -3724,7 +3732,7 @@ Full Control Service gRPC API
      bytes mac = 4;
  }
 
-      Figure 28: Control Service gRPC API - Segment representation
+      Figure 28: Control Service RPC API - Segment representation
 
 
 
@@ -3785,7 +3793,7 @@ Full Control Service gRPC API
       uint64 trc_serial = 4;
   }
 
-   Figure 29: Control Service gRPC API - Signed ASEntry representation
+    Figure 29: Control Service RPC API - Signed ASEntry representation
 
 
 
@@ -3850,12 +3858,12 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
- Figure 30: Control Service gRPC API - Trust Material representation
+  Figure 30: Control Service RPC API - Trust Material representation
 
 
 
-   In case of failure, gRPC calls return an error as specified by the
-   gRPC framework.  That is, a non-zero status code and an explanatory
+   In case of failure, RPC calls return an error as specified by the RPC
+   framework.  That is, a non-zero status code and an explanatory
    string.
 
 Use of the SCION Data Plane
@@ -3955,7 +3963,7 @@ message Transport {
     string address = 1;
 }
 
-          Figure 31: Service Resolution gRPC API definition
+           Figure 31: Service Resolution RPC API definition
 
 
 
@@ -4125,7 +4133,11 @@ Change Log
 
 draft-dekater-scion-controlplane-10
 
-   *  AS Entry Signature: fix order of terms in one formula
+   Major changes: - Mention ConnectRPC as main RPC method instead of
+   gRPC
+
+   Minor changes: - AS Entry Signature: fix order of terms in one
+   formula
 
 draft-dekater-scion-controlplane-09
 
@@ -4170,7 +4182,7 @@ draft-dekater-scion-controlplane-08
    *  New section "Security Properties" in Security considerations,
       based on formal model of SCION
 
-   *  New figure: Control Service gRPC API - Trust Material definitions
+   *  New figure: Control Service RPC API - Trust Material definitions
 
    Minor changes:
 
@@ -4197,7 +4209,7 @@ draft-dekater-scion-controlplane-06
 
    *  New section: Monitoring Considerations
 
-   *  Completed description of Control Services gRPC API in appendix
+   *  Completed description of Control Services RPC API in appendix
 
    Minor changes:
 
@@ -4234,7 +4246,7 @@ draft-dekater-scion-controlplane-04
 
    *  New section: Effects of Clock Inaccuracy
 
-   *  New appendix: Control Service gRPC API
+   *  New appendix: Control Service RPC API
 
    Minor changes:
 
