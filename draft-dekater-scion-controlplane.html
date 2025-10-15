@@ -1883,7 +1883,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-1.8" class="section-number selfRef">1.8. </a><a href="#name-communication-protocol" class="section-name selfRef">Communication Protocol</a>
         </h3>
 <p id="section-1.8-1">All communication between the Control Services in different ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.8-1" class="pilcrow">¶</a></p>
-<p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)) which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
+<p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)), which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
 <p id="section-1.8-3"><a href="#app-a" class="auto internal xref">Appendix "Full Control Service RPC API"</a> provides the entire Control Service API definition in protobuf format.<a href="#section-1.8-3" class="pilcrow">¶</a></p>
 <p id="section-1.8-4"><a href="#app-b" class="auto internal xref">Appendix "Use of the SCION Data Plane"</a> provides details about the establishment of the underlying QUIC connections through the data plane.<a href="#section-1.8-4" class="pilcrow">¶</a></p>
 </section>
@@ -2394,13 +2394,11 @@ Path Segment 4 |             |     |             |     |             |
    }
 </pre><a href="#section-2.2.1.4-6" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4-7">The following code block shows the low level representation of the <code>HeaderAndBodyInternal</code> message used for signature computation input. This message <span class="bcp14">SHOULD NOT</span> be used by external code.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4-7">Protobuf definition of the <code>HeaderAndBody</code> message used for signature computation input.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4-8">
 <pre>
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 </pre><a href="#section-2.2.1.4-8" class="pilcrow">¶</a>
@@ -2513,7 +2511,7 @@ Path Segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.1-8.2.1"><code>metadata</code>: Can be used to include arbitrary per-protocol metadata. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-8.3">
-                  <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </section>
@@ -2600,9 +2598,9 @@ Path Segment 4 |             |     |             |     |             |
               </ul>
 <p id="section-2.2.1.4.3-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-5">Sig<sub>i</sub> =
-K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
+K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-7">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-7">Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-8">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -5802,9 +5800,18 @@ message Transport {
         <h3 id="name-draft-dekater-scion-control">
 <a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-10</a>
         </h3>
-<p id="appendix-F.1-1">Major changes:
-- Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-F.1-2">Minor changes:<a href="#appendix-F.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-2.1">
+            <p id="appendix-F.1-2.1.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-4.1">
+            <p id="appendix-F.1-4.1.1">AS Entry Signature: fix order of terms in one formula<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-09">

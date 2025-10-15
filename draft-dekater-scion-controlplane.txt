@@ -720,7 +720,7 @@ Table of Contents
    definition language (for details, see [proto3]).
 
    The RPC messages are transported via [Connect]'s RPC protocol that
-   carries messages over HTTP/3 (see [RFC9114])) which in turn uses
+   carries messages over HTTP/3 (see [RFC9114])), which in turn uses
    QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
    compatible with [gRPC] which is supported but deprecated.
 
@@ -1221,14 +1221,11 @@ Table of Contents
           bytes signature = 2;
       }
 
-   The following code block shows the low level representation of the
-   HeaderAndBodyInternal message used for signature computation input.
-   This message SHOULD NOT be used by external code.
+   Protobuf definition of the HeaderAndBody message used for signature
+   computation input.
 
-      message HeaderAndBodyInternal {
-          // Encoded header suitable for signature computation.
+      message HeaderAndBody {
           bytes header = 1;
-          // Raw payload suitable for signature computation.
           bytes body = 2;
       }
 
@@ -1323,9 +1320,10 @@ Table of Contents
    *  metadata: Can be used to include arbitrary per-protocol metadata.
       This field is OPTIONAL.
 
-   *  associated_data_length: Specifies the length of associated data
-      that is covered by the signature, but is not included in the
-      header and body.  The value of this field is zero, if no
+   *  associated_data_length: Specifies the length of the data covered
+      by the signature but not included within the header or body.  This
+      data contains information about preceding AS entries, as described
+      in Section 2.2.1.4.3.  The value of this field is zero if no
       associated data is covered by the signature.
 
 2.2.1.4.2.  AS Entry Signed Body
@@ -1407,8 +1405,8 @@ Table of Contents
 
    The signature Sig_i of an AS entry ASE_i is now computed as follows:
 
-   Sig_i = K_i( SegInfo || ASE_0^(signed) || Sig_0 || ... ||
-   ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )
+   Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 ||
+   ... || ASE_(i-1)^(signed) || Sig_(i-1) )
 
    The signature metadata minimally contains the ISD-AS number of the
    signing entity and the key identifier of the public key to be used to
@@ -1416,9 +1414,10 @@ Table of Contents
    control plane messages, see 'Signing and Verifying Control Plane
    Messages' in [I-D.dekater-scion-pki].
 
-   The following code block shows how the signature input is defined in
-   the SCION Protobuf implementation ("ps" stands for path segment).
-   Note that the signature has a nested structure.
+   Some of the data used as an input to the signature comes from
+   previous ASes in the path segment.  This data is therefore called
+   "associated data" and it gives the signature a nested structure.  The
+   content of associated data defined in Protobuf is:
 
    input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
@@ -4134,10 +4133,13 @@ Change Log
 
 draft-dekater-scion-controlplane-10
 
-   Major changes: - Mention ConnectRPC as main RPC method instead of
-   gRPC
+   Major changes:
+
+   *  Mention ConnectRPC as main RPC method instead of gRPC
 
    Minor changes:
+
+   *  AS Entry Signature: fix order of terms in one formula
 
 draft-dekater-scion-controlplane-09
 
