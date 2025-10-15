@@ -895,7 +895,7 @@ The `Header` protobuf message definition is:
    }
 ~~~~
 
-The `VerificationKeyID` message contains fields:
+The `VerificationKeyID` message contains the following REQUIRED fields:
 
   - `isd_as`: The ISD-AS number of the current AS.
   - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
