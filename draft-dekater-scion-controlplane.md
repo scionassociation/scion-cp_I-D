@@ -873,6 +873,7 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 
 
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
+
 - `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
@@ -895,6 +896,7 @@ The `Header` protobuf message definition is:
 ~~~~
 
 The `VerificationKeyID` message contains fields:
+
   - `isd_as`: The ISD-AS number of the current AS.
   - `subject_key_id`: Refers to the certificate that contains the public key needed to verify this PCB's signature.
   - `trc_base`: Defines the *base* number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.
