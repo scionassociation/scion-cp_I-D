@@ -1611,7 +1611,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 28</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -1883,7 +1883,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-1.8" class="section-number selfRef">1.8. </a><a href="#name-communication-protocol" class="section-name selfRef">Communication Protocol</a>
         </h3>
 <p id="section-1.8-1">All communication between the Control Services in different ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.8-1" class="pilcrow">¶</a></p>
-<p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)) which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
+<p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)), which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
 <p id="section-1.8-3"><a href="#app-a" class="auto internal xref">Appendix "Full Control Service RPC API"</a> provides the entire Control Service API definition in protobuf format.<a href="#section-1.8-3" class="pilcrow">¶</a></p>
 <p id="section-1.8-4"><a href="#app-b" class="auto internal xref">Appendix "Use of the SCION Data Plane"</a> provides details about the establishment of the underlying QUIC connections through the data plane.<a href="#section-1.8-4" class="pilcrow">¶</a></p>
 </section>
@@ -2198,7 +2198,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#name-top-down-composition-of-a-p" class="selfRef">Top-down composition of a PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-2">Note: For a full example of a PCB in the Protobuf message format, please see <a href="#_figure-34" class="auto internal xref">Figure 28</a>.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-2">Note: For a full example of a PCB in the Protobuf message format, please see <a href="#_figure-34" class="auto internal xref">Figure 26</a>.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
@@ -2341,7 +2341,7 @@ Path Segment 4 |             |     |             |     |             |
                 <p id="section-2.2.1.3-7.1.1"><code>SignedMessage</code>: The signed component of an AS entry. For the specification of this part of the AS entry, see <a href="#signed-compo" class="auto internal xref">Section 2.2.1.4</a> below.<a href="#section-2.2.1.3-7.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.3-7.2">
-                <p id="section-2.2.1.3-7.2.1"><code>PathSegmentUnsignedExtensions</code>: The unsigned and thus unprotected part of the AS entry. These are extensions with metadata that need no explicit protection.<a href="#section-2.2.1.3-7.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.3-7.2.1"><code>PathSegmentUnsignedExtensions</code>: Optional unsigned PCB extensions, further described in <a href="#pcb-ext" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2.1.3-7.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2394,13 +2394,11 @@ Path Segment 4 |             |     |             |     |             |
    }
 </pre><a href="#section-2.2.1.4-6" class="pilcrow">¶</a>
 </div>
-<p id="section-2.2.1.4-7">The following code block shows the low level representation of the <code>HeaderAndBodyInternal</code> message used for signature computation input. This message <span class="bcp14">SHOULD NOT</span> be used by external code.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4-7">Protobuf definition of the <code>HeaderAndBody</code> message used for signature computation input.<a href="#section-2.2.1.4-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4-8">
 <pre>
-   message HeaderAndBodyInternal {
-       // Encoded header suitable for signature computation.
+   message HeaderAndBody {
        bytes header = 1;
-       // Raw payload suitable for signature computation.
        bytes body = 2;
    }
 </pre><a href="#section-2.2.1.4-8" class="pilcrow">¶</a>
@@ -2449,19 +2447,25 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#name-as-entry-signed-header-2" class="selfRef">AS Entry Signed Header</a>
                 </figcaption></figure>
 </div>
-<p id="section-2.2.1.4.1-2">The header part defines metadata that is relevant to the computation and verification of the signature. It <span class="bcp14">MUST</span> include at least the following metadata:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-2">The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-3.1">
-                  <p id="section-2.2.1.4.1-3.1.1">The algorithm to compute the signature<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-3.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-3.2">
-                  <p id="section-2.2.1.4.1-3.2.1">The subjectKeyIdentifier of the public key to be used to verify the signature (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>)<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-3.2.1"><code>verification_key_id</code>: Contains a <code>VerificationKeyID</code> message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-3.3">
-                  <p id="section-2.2.1.4.1-3.3.1">The ISD-AS number of the AS<a href="#section-2.2.1.4.1-3.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-3.3.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.4">
+                  <p id="section-2.2.1.4.1-3.4.1"><code>metadata</code>: it may include metadata. This field is <span class="bcp14">OPTIONAL</span>. While it is part of the generic <code>Header</code> message format, it <span class="bcp14">MUST</span> be empty in an AS entry signed header.<a href="#section-2.2.1.4.1-3.4.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-3.5">
+                  <p id="section-2.2.1.4.1-3.5.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
-<p id="section-2.2.1.4.1-4">The following code block defines the signed header of an AS entry in Protobuf message format (called the <code>Header</code> message).<a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-4">The <code>Header</code> protobuf message definition is:<a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.1-5">
 <pre>
    message Header {
@@ -2473,49 +2477,35 @@ Path Segment 4 |             |     |             |     |             |
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
-
+</pre><a href="#section-2.2.1.4.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2.1.4.1-6">The <code>VerificationKeyID</code> message contains the following <span class="bcp14">REQUIRED</span> fields:<a href="#section-2.2.1.4.1-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.2.1.4.1-7.1">
+                  <p id="section-2.2.1.4.1-7.1.1"><code>isd_as</code>: The ISD-AS number of the current AS.<a href="#section-2.2.1.4.1-7.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.2">
+                  <p id="section-2.2.1.4.1-7.2.1"><code>subject_key_id</code>: Refers to the certificate that contains the public key needed to verify this PCB's signature.<a href="#section-2.2.1.4.1-7.2.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.3">
+                  <p id="section-2.2.1.4.1-7.3.1"><code>trc_base</code>: Defines the <em>base</em> number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-7.3.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-2.2.1.4.1-7.4">
+                  <p id="section-2.2.1.4.1-7.4.1"><code>trc_serial</code>: Defines the <em>serial</em> number of the latest TRC available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-7.4.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+<p id="section-2.2.1.4.1-8">Its protobuf message definition is:<a href="#section-2.2.1.4.1-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.1.4.1-9">
+<pre>
    message VerificationKeyID {
        uint64 isd_as = 1;
        bytes subject_key_id = 2;
        uint64 trc_base = 3;
        uint64 trc_serial = 4;
    }
-</pre><a href="#section-2.2.1.4.1-5" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.1.4.1-9" class="pilcrow">¶</a>
 </div>
-<ul class="normal">
-<li class="normal" id="section-2.2.1.4.1-6.1">
-                  <p id="section-2.2.1.4.1-6.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature.<a href="#section-2.2.1.4.1-6.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-2.2.1.4.1-6.2">
-                  <p id="section-2.2.1.4.1-6.2.1"><code>verification_key_id</code>: Contains information that is relevant to signing and verifying PCBs and other control-plane messages. It includes the following fields (see also the above code block):<a href="#section-2.2.1.4.1-6.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.2.1.4.1-6.2.2.1">
-                      <p id="section-2.2.1.4.1-6.2.2.1.1"><code>isd_as</code>: The ISD-AS number of the current AS.<a href="#section-2.2.1.4.1-6.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                    <li class="normal" id="section-2.2.1.4.1-6.2.2.2">
-                      <p id="section-2.2.1.4.1-6.2.2.2.1"><code>subject_key_id</code>: Refers to the certificate that contains the public key needed to verify this PCB's signature.<a href="#section-2.2.1.4.1-6.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                    <li class="normal" id="section-2.2.1.4.1-6.2.2.3">
-                      <p id="section-2.2.1.4.1-6.2.2.3.1"><code>trc_base</code>: Defines the <em>base</em> number of the latest Trust Root Configuration (TRC) available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-6.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                    <li class="normal" id="section-2.2.1.4.1-6.2.2.4">
-                      <p id="section-2.2.1.4.1-6.2.2.4.1"><code>trc_serial</code>: Defines the <em>serial</em> number of the latest TRC available to the signer at the time of the signature creation.<a href="#section-2.2.1.4.1-6.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                  </ul>
-</li>
-              </ul>
-<p id="section-2.2.1.4.1-7"><strong>Note:</strong> For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-7" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.2.1.4.1-8.1">
-                  <p id="section-2.2.1.4.1-8.1.1"><code>timestamp</code>: Defines the signature creation timestamp. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-2.2.1.4.1-8.2">
-                  <p id="section-2.2.1.4.1-8.2.1"><code>metadata</code>: Can be used to include arbitrary per-protocol metadata. This field is <span class="bcp14">OPTIONAL</span>.<a href="#section-2.2.1.4.1-8.2.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-2.2.1.4.1-8.3">
-                  <p id="section-2.2.1.4.1-8.3.1"><code>associated_data_length</code>: Specifies the length of associated data that is covered by the signature, but is not included in the header and body. The value of this field is zero, if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-8.3.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
+<p id="section-2.2.1.4.1-10">For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ase-sign">
@@ -2600,9 +2590,9 @@ Path Segment 4 |             |     |             |     |             |
               </ul>
 <p id="section-2.2.1.4.3-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.1.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-5">Sig<sub>i</sub> =
-K<sub>i</sub>( SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> || ASE<sub>i</sub><sup>(signed)</sup> )<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
+K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )<a href="#section-2.2.1.4.3-5" class="pilcrow">¶</a></p>
 <p id="section-2.2.1.4.3-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.2.1.4.3-7">The following code block shows how the signature input is defined in the SCION Protobuf implementation ("ps" stands for path segment). Note that the signature has a nested structure.<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.3-7">Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:<a href="#section-2.2.1.4.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.3-8">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
@@ -2698,11 +2688,16 @@ associated_data(ps, i) = ps.segment_info ||
 <div class="alignLeft art-text artwork" id="section-2.2.1.6-5">
 <pre>
    message HopField {
+       // Ingress interface identifier
        uint64 ingress = 1;
+       // Egress interface identifier.
        uint64 egress = 2;
+       // 8-bit encoded expiration offset relative to the segment creation timestamp.
        uint32 exp_time = 3;
+       // MAC used in the dataplane to verify the Hop Field.
        bytes mac = 4;
    }
+
 </pre><a href="#section-2.2.1.6-5" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
@@ -2822,17 +2817,24 @@ associated_data(ps, i) = ps.segment_info ||
           <h4 id="name-pcb-extensions">
 <a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-pcb-extensions" class="section-name selfRef">PCB Extensions</a>
           </h4>
-<p id="section-2.2.2-1">In addition to basic routing information such a hop entries and peer entries, PCBs can be used to communicate additional metadata in extensions. Extensions can be signed and unsigned: signed extensions are protected by the AS signature, whereas unsigned extensions are not.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">In Protobuf, extensions are specified as follows:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-1">AS entries in PCBs may carry a number of optional extensions that accumulate information while traveling across ASes. Extensions can be:<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.2-3.1">
-              <p id="section-2.2.2-3.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code> are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#as-entry" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2-2.1">
+              <p id="section-2.2.2-2.1.1">Unsigned extensions <code>PathSegmentUnsignedExtensions</code>. They are part of the AS entry component (the <code>ASEntry</code> message, see also <a href="#as-entry" class="auto internal xref">Section 2.2.1.3</a>).<a href="#section-2.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.2.2-3.2">
-              <p id="section-2.2.2-3.2.1">Signed extensions <code>PathSegmentExtensions</code> are part of the signed body component of an AS entry (the <code>ASEntrySignedBody</code> message, see also <a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>).<a href="#section-2.2.2-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.2.2-2.2">
+              <p id="section-2.2.2-2.2.1">Signed extensions <code>PathSegmentExtensions</code>. They are part of the signed body component of an AS entry (the <code>ASEntrySignedBody</code> message, see also <a href="#ase-sign" class="auto internal xref">Section 2.2.1.4.2</a>).<a href="#section-2.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.2-4"><strong>Note:</strong> SCION also supports so-called "detachable extensions". The detachable extension is part of a PCB's unsigned extensions, but a cryptographic hash of the detachable extension data is added to the signed extensions. Thus, a PCB with a detachable extension can be signed and verified without actually including the detachable extension in the signature. This prevents a possible processing overhead caused by large cryptographically-protected extensions.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-4">The example below contains the Protobuf definition of the <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental. We therefore omit definitions of the <code>StaticInfoExtension</code> message format and refer to <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span>.<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2-5">
+<pre>
+  message PathSegmentExtensions {
+    StaticInfoExtension static_info = 1;
+  }
+</pre><a href="#section-2.2.2-5" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="pcb-validity">
@@ -2896,7 +2898,7 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
 <li id="section-2.3.1-2.1">
-              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 28</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.1-2.2">
               <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
@@ -2958,23 +2960,22 @@ Naturally, an AS's policy selects PCBs corresponding to paths that are commercia
           <h4 id="name-propagation-interval-and-be">
 <a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-propagation-interval-and-be" class="section-name selfRef">Propagation Interval and Best PCBs Set Size</a>
           </h4>
-<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing and core beaconing. At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set <span class="bcp14">SHOULD</span> have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-2">The <em>best PCBs set size</em> <span class="bcp14">SHOULD</span> be:<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing (<a href="#intra-isd-beaconing" class="auto internal xref">Section 3.3.1</a>) and core beaconing (<a href="#inter-isd-beaconing" class="auto internal xref">Section 3.3.2</a>). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the <em>best PCBs set size</em>.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The <em>best PCBs set size</em> should be:<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.4-3.1">
               <p id="section-2.3.4-3.1.1">For intra-AS beaconing (i.e. propagating to children ASes): at most 50.<a href="#section-2.3.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.3.4-3.2">
-              <p id="section-2.3.4-3.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set of 5 is chosen among the PCBs received from each neighbor.<a href="#section-2.3.4-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.4-3.2.1">For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.<a href="#section-2.3.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.4-4">Note that the PCBs set size should not be too low, in order to make sure that beaconing can discover a wide amount of paths.
-Values above are <span class="bcp14">RECOMMENDED</span> maxima which represent a tradeoff between scalability and amount of paths discovered.
-In current practice the intra-ISD set size is typically 20.<a href="#section-2.3.4-4" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-5">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS <span class="bcp14">SHOULD</span> have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-4">These values reflect a tradeoff between scalability —limited by the computational overhead of signature verification—and the amount of paths discovered. The PCBs set size should not be too low, to make sure that beaconing can discover a wide amount of paths. Further discussion on these trade-offs is provided in <a href="#scalability" class="auto internal xref">Section 3.3</a>.
+In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core best PCBs set size (e.g., 20) can be used.<a href="#section-2.3.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-5">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.4-6.1">
-              <p id="section-2.3.4-6.1.1">The <em>propagation interval</em> <span class="bcp14">SHOULD</span> be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.4-6.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.4-6.1.1">The <em>propagation interval</em> should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.4-6.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.3.4-7">Note that to ensure establish quick connectivity, an AS <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:<a href="#section-2.3.4-7" class="pilcrow">¶</a></p>
@@ -2986,7 +2987,6 @@ In current practice the intra-ISD set size is typically 20.<a href="#section-2.3
               <p id="section-2.3.4-8.2.1">or because no beacon was available to propagate.<a href="#section-2.3.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.4-9">The scalability implications of such parameters are further discussed in <a href="#scalability" class="auto internal xref">Section 3.3</a>.<a href="#section-2.3.4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-segment-prop">
@@ -3194,7 +3194,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-3.3-3.3.1">Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-4">All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These, in turn, depend on the configured best PCBs set size (<a href="#propagation-interval-size" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <p id="section-3.3-5">Interesting metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery".<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 <p id="section-3.3-6">At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).<a href="#section-3.3-6" class="pilcrow">¶</a></p>
 <p id="section-3.3-7">Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Handling Link Failures").<a href="#section-3.3-7" class="pilcrow">¶</a></p>
@@ -3206,7 +3206,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
           </h4>
 <p id="section-3.3.1-1">In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-2">This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will have a large number of children, while they only have a small number of parents and the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-3">Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCBs set size of 50, ASes <span class="bcp14">SHOULD</span> trim the set of PCBs propagated.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3">Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes <span class="bcp14">SHOULD</span> trim the set of PCBs propagated.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-4">Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily manageable even for highly connected ASes.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-5">To illustrate this, an AS with a rather large number of 100 parent links receives at most 5000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50000 AS entries.<a href="#section-3.3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-6">Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10000 signature verifications per second.<a href="#section-3.3.1-6" class="pilcrow">¶</a></p>
@@ -4893,7 +4893,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-security-properties" class="section-name selfRef">Security Properties</a>
         </h3>
 <p id="section-7.1-1">The SCION control plane provides various security properties, as discussed below.
-Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">Security properties are:<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-3.1">
@@ -4917,8 +4917,11 @@ Here, an AS is described as 'honest' if its private keys are unknown to the atta
             <p id="section-7.1-3.4.1">Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.<a href="#section-7.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.1-4">To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
-A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">To ensure that the properties hold across the overall SCION network, these are the prerequisites to follow:
+  - all core ASes <span class="bcp14">MUST</span> be able to reach each other with some sequence of core links
+  - and all non-core ASes <span class="bcp14">MUST</span> have at least one path up to a core AS.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">Furthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD <span class="bcp14">MUST</span> be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.
+A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topdown-manipulate">
@@ -5112,6 +5115,14 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
         <dd>
 <span class="refTitle">"SCION ISD and AS Assignments"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">https://docs.anapaya.net/en/latest/resources/isd-as-assignments/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="PCBExtensions">[PCBExtensions]</dt>
+        <dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"PCB Path Metadata Extension"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/beacon-metadata.html">https://docs.scion.org/en/latest/beacon-metadata.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PEREIRA2025">[PEREIRA2025]</dt>
+        <dd>
+<span class="refAuthor">Pereira, J.</span>, <span class="refAuthor">Klenze, T.</span>, <span class="refAuthor">Giampietro, S.</span>, <span class="refAuthor">Limbeck, M.</span>, <span class="refAuthor">Dionysios Spiliopoulos</span>, <span class="refAuthor">Wolf, F.</span>, <span class="refAuthor">Eilers, M.</span>, <span class="refAuthor">Sprenger, C.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Müller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
+<dd class="break"></dd>
 <dt id="RFC1122">[RFC1122]</dt>
         <dd>
 <span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
@@ -5142,7 +5153,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 <dd class="break"></dd>
 <dt id="SCMP">[SCMP]</dt>
       <dd>
-<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -5154,7 +5165,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION <span>[<a href="#PEREIRA2025" class="cite xref">PEREIRA2025</a>]</span>. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="deployment-testing-scionlab">
@@ -5188,17 +5199,6 @@ message SegmentsRequest {
     uint64 dst_isd_as = 2;
 }
 
-enum SegmentType {
-    // Unknown segment type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
-
 message SegmentsResponse {
     message Segments {
         // List of path segments.
@@ -5216,78 +5216,10 @@ message SegmentsResponse {
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
-<span id="name-control-service-rpc-api-segm"></span><div id="_figure-32">
+<span id="name-control-service-rpc-api-segm"></span><div id="_figure-34">
 <figure id="figure-26">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
-service SegmentRegistrationService {
-    // SegmentsRegistration registers segments at the remote.
-    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-        SegmentsRegistrationResponse) {}
-}
-
-message SegmentsRegistrationRequest {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map&lt;int32, Segments&gt; segments = 1;
-}
-
-message SegmentsRegistrationResponse {}
-</pre>
-</div>
-<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
-<a href="#name-control-service-rpc-api-segm" class="selfRef">Control Service RPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-C-5"><br></p>
-<span id="name-control-service-rpc-api-segme"></span><div id="_figure-33">
-<figure id="figure-27">
-        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
-<pre>
-service SegmentCreationService {
-    // Beacon sends a beacon to the remote control service.
-    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
-}
-
-message BeaconRequest {
-    // Beacon in form of a partial path segment.
-    PathSegment segment = 1;
-}
-
-message BeaconResponse {}
-</pre>
-</div>
-<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
-<a href="#name-control-service-rpc-api-segme" class="selfRef">Control Service RPC API - Segment creation</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-C-7"><br></p>
-<span id="name-control-service-rpc-api-segmen"></span><div id="_figure-34">
-<figure id="figure-28">
-        <div class="alignLeft art-text artwork" id="appendix-C-8.1">
-<pre>
-message PathSegment {
-    // The encoded SegmentInformation. It is used for signature input.
-    bytes segment_info = 1;
-    // Entries of ASes on the path.
-    repeated ASEntry as_entries = 2;
-}
-
-message SegmentInformation {
-    // Segment creation time set by the originating AS. Segment
-    // expiration time is computed relative to this timestamp.
-    // The timestamp is encoded as the number of seconds elapsed
-    // since January 1, 1970 UTC.
-    int64 timestamp = 1;
-    // The 16-bit segment ID integer used for MAC computation.
-    uint32 segment_id = 2;
-}
-
 message ASEntry {
     // The signed part of the AS entry. The body of the SignedMessage
     // is the serialized ASEntrySignedBody. The signature input is
@@ -5308,56 +5240,16 @@ message ASEntry {
     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
 }
 
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
-}
-
-message HopEntry {
-    // Material to create the data-plane Hop Field.
-    HopField hop_field = 1;
-    // MTU on the ingress link.
-    uint32 ingress_mtu = 2;
-}
-
-message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments
-    // during path construction.
-    uint64 peer_isd_as = 1;
-    // Remote peer interface identifier. This is used to match
-    // peering segments
-    // during path construction.
-    uint64 peer_interface = 2;
-    // MTU on the peering link.
-    uint32 peer_mtu = 3;
-    // Material to create the data-plane Hop Field
-    HopField hop_field = 4;
-}
-
-message HopField {
-    // Ingress interface identifier.
-    uint64 ingress = 1;
-    // Egress interface identifier.
-    uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment
-    // creation timestamp.
-    uint32 exp_time = 3;
-    // MAC used in the dataplane to verify the Hop Field.
-    bytes mac = 4;
-}
 </pre>
 </div>
-<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
-<a href="#name-control-service-rpc-api-segmen" class="selfRef">Control Service RPC API - Segment representation</a>
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
+<a href="#name-control-service-rpc-api-segm" class="selfRef">Control Service RPC API - Segment representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-9"><br></p>
+<p id="appendix-C-5"><br></p>
 <span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
-<figure id="figure-29">
-        <div class="alignLeft art-text artwork" id="appendix-C-10.1">
+<figure id="figure-27">
+        <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 enum SignatureAlgorithm {
     // Unspecified signature algorithm. This value is never valid.
@@ -5370,61 +5262,16 @@ enum SignatureAlgorithm {
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
 }
 
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Encoded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
-}
-
-message Header {
-    // Algorithm used to compute the signature.
-    SignatureAlgorithm signature_algorithm = 1;
-    // Optional arbitrary per-protocol key identifier.
-    bytes verification_key_id = 2;
-    // Optional signature creation timestamp.
-    google.protobuf.Timestamp timestamp = 3;
-    // Optional arbitrary per-protocol metadata.
-    bytes metadata = 4;
-    // Length of associated data that is covered by the signature, but
-    // is not included in the header and body. This is zero, if no
-    // associated data is covered by the signature.
-    int32 associated_data_length = 5;
-}
-
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
-}
-
-message VerificationKeyID {
-    uint64 isd_as = 1;
-    bytes subject_key_id = 2;
-    uint64 trc_base = 3;
-    uint64 trc_serial = 4;
-}
 </pre>
 </div>
-<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-control-service-rpc-api-sig" class="selfRef">Control Service RPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-11"><br></p>
+<p id="appendix-C-7"><br></p>
 <span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
-<figure id="figure-30">
-        <div class="alignLeft art-text artwork" id="appendix-C-12.1">
+<figure id="figure-28">
+        <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 service TrustMaterialService {
     // Return the certificate chains that match the request.
@@ -5472,28 +5319,14 @@ message TRCResponse {
     bytes trc = 1;
 }
 
-// VerificationKeyID is used to identify certificates that authenticate the
-// verification key used to verify signatures.
-message VerificationKeyID {
-    // ISD-AS of the subject.
-    uint64 isd_as = 1;
-    // SubjectKeyID referenced in the certificate.
-    bytes subject_key_id = 2;
-    // Base number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_base = 3;
-    // Serial number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_serial = 4;
-}
 </pre>
 </div>
-<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-control-service-rpc-api-tru" class="selfRef">Control Service RPC API - Trust Material representation</a>
         </figcaption></figure>
 </div>
-<p id="appendix-C-13"><br></p>
-<p id="appendix-C-14">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-14" class="pilcrow">¶</a></p>
+<p id="appendix-C-9"><br></p>
+<p id="appendix-C-10">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="app-b">
@@ -5568,7 +5401,7 @@ message VerificationKeyID {
       </ul>
 <p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
-<figure id="figure-31">
+<figure id="figure-29">
         <div class="alignLeft art-text artwork" id="appendix-D-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -5605,7 +5438,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-service-resolution-rpc-api-" class="selfRef">Service Resolution RPC API definition</a>
         </figcaption></figure>
 </div>
@@ -5617,9 +5450,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 32</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 33</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 34</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
+<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 30</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 31</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 32</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
-<figure id="figure-32">
+<figure id="figure-30">
         <div class="alignLeft art-text artwork" id="appendix-E-2.1">
 <pre>
 +----------------------------+     +----------------------------+
@@ -5649,12 +5482,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
-<figure id="figure-33">
+<figure id="figure-31">
         <div class="alignLeft art-text artwork" id="appendix-E-3.1">
 <pre>
 +---------+          +---------+          +---------+         +---------+
@@ -5712,12 +5545,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-33" class="selfRef">Figure 33</a>:
+<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
-<figure id="figure-34">
+<figure id="figure-32">
         <div class="alignLeft art-text artwork" id="appendix-E-4.1">
 <pre>
 
@@ -5776,7 +5609,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-34" class="selfRef">Figure 34</a>:
+<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
@@ -5793,9 +5626,18 @@ message Transport {
         <h3 id="name-draft-dekater-scion-control">
 <a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-10</a>
         </h3>
-<p id="appendix-F.1-1">Major changes:
-- Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-F.1-2">Minor changes:<a href="#appendix-F.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-2.1">
+            <p id="appendix-F.1-2.1.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-F.1-4.1">
+            <p id="appendix-F.1-4.1.1">AS Entry Signature: fix order of terms in one formula<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-09">
