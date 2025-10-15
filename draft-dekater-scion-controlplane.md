@@ -2028,7 +2028,7 @@ To ensure that the properties hold across the overall SCION network, these are t
   - all core ASes MUST be able to reach each other with some sequence of core links
   - and all non-core ASes MUST have at least one path up to a core AS.
 
-Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+Furthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.
 A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
