@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 April 2026                                           S. Hitz
+Expires: 18 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         14 October 2025
+                                                         15 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 April 2026.
+   This Internet-Draft will expire on 18 April 2026.
 
 Copyright Notice
 
@@ -1810,33 +1810,37 @@ Table of Contents
 
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
-   intra-ISD beaconing and core beaconing.  At each propagation event,
-   each AS selects a set of the best PCBs from the candidates in the
-   Beacon Store according to the AS's selection policy.  This set SHOULD
-   have a fixed size, the _best PCBs set size_.
+   intra-ISD beaconing (Section 3.3.1) and core beaconing
+   (Section 3.3.2).  At each propagation event, each AS selects a set of
+   the best PCBs from the candidates in the Beacon Store according to
+   the AS's selection policy.  This set should have a fixed size, the
+   _best PCBs set size_.
 
-   The _best PCBs set size_ SHOULD be:
+   The _best PCBs set size_ should be:
 
    *  For intra-AS beaconing (i.e. propagating to children ASes): at
       most 50.
 
    *  For core beaconing (i.e. propagation between core ASes): at most 5
       per immediate neighbor core AS.  Current practice is that each set
-      of 5 is chosen among the PCBs received from each neighbor.
+      is chosen among the PCBs received from each neighbor.
 
-   Note that the PCBs set size should not be too low, in order to make
-   sure that beaconing can discover a wide amount of paths.  Values
-   above are RECOMMENDED maxima which represent a tradeoff between
-   scalability and amount of paths discovered.  In current practice the
-   intra-ISD set size is typically 20.
+   These values reflect a tradeoff between scalability —limited by the
+   computational overhead of signature verification—and the amount of
+   paths discovered.  The PCBs set size should not be too low, to make
+   sure that beaconing can discover a wide amount of paths.  Further
+   discussion on these trade-offs is provided in Section 3.3.  In
+   current practice the intra-ISD set size is typically 20.  Current
+   practice also showed that in small SCION core networks, higher values
+   of the core best PCBs set size (e.g., 20) can be used.
 
    Depending on the selection criteria, it may be necessary to keep more
    candidate PCBs than the _best PCBs set size_ in the Beacon Store in
    order to determine the best set of PCBs.  If this is the case, an AS
-   SHOULD have a suitable pre-selection of candidate PCBs in place in
+   should have a suitable pre-selection of candidate PCBs in place in
    order to keep the Beacon Store capacity limited.
 
-   *  The _propagation interval_ SHOULD be at least "5" (seconds) for
+   *  The _propagation interval_ should be at least "5" (seconds) for
       intra-ISD beaconing and at least "60" (seconds) for core
       beaconing.
 
@@ -1848,9 +1852,6 @@ Table of Contents
    *  because the corresponding RPC failed;
 
    *  or because no beacon was available to propagate.
-
-   The scalability implications of such parameters are further discussed
-   in Section 3.3.
 
 2.3.5.  Propagation of Selected PCBs
 
@@ -2048,7 +2049,8 @@ Table of Contents
 
    All of these are dependent on the number and length of the discovered
    path segments, i.e. the total number of AS entries of the discovered
-   path segments.
+   path segments.  These, in turn, depend on the configured best PCBs
+   set size (Section 2.3.4).
 
    Interesting metrics for scalability and speed of path discovery are
    the time until all discoverable path segments have been discovered
@@ -2094,7 +2096,7 @@ Table of Contents
    core to itself.  While the number of distinct provider chains to the
    core is typically moderate, the multiplicity of links between
    provider ASes has multiplicative effect on the number of PCBs.  Once
-   this number grows above the maximum recommended best PCBs set size of
+   this number grows above the maximum recommended best PCB set size of
    50, ASes SHOULD trim the set of PCBs propagated.
 
    Ultimately, the number of PCBs received by an AS per propagation
