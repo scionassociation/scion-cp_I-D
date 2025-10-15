@@ -3187,11 +3187,11 @@ Table of Contents
    core ASes MUST have at least one path up to a core AS.
 
    Furthermore, to ensure that the properties hold within a single ISD,
-   all cores ASes of the ISD MUST be able to reach each other without
-   leaving the ISD, i.e., for every pair of cores in an ISD there is a
-   sequence of SCION links that only traverses ISD members.  A core AS
-   may reach other core ASes in the same ISD via other ISDs.  This may
-   be permitted, depending on the ISD's policies.
+   all core ASes of the ISD MUST be able to reach each other without
+   leaving the ISD, i.e, for every pair of cores in an ISD there is a
+   sequence of SCION links that only traverse the ISD members.  A core
+   AS may reach other core ASes in the same ISD via other ISDs.  This
+   may be permitted, depending on the ISD's policies.
 
 7.2.  Manipulation of the Beaconing Process by a Core Adversary
 
