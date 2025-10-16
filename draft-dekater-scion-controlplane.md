@@ -1666,7 +1666,7 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 
 ### Lookup Requests Message Format
 
-Control Services provide paths to endpoints through the `TrustMaterialService`, which returns a list of `Segments` that match the request:
+Control Services provide paths to endpoints through the `SegmentLookupService` RPC. This API is exposed on the SCION dataplane by the control services of core ASes and exposed on the intra-domain protocol network.
 
 ~~~~
 service SegmentLookupService {
@@ -1681,7 +1681,7 @@ They use the following protobuf messages: a `SegmentsRequest`, which includes:
 
 The corresponding `SegmentsResponse` returns:
 
-- `segments`: a list of `PathSegment`
+- `segments`: a list of `PathSegment` matching the request.
 - a mapping from path segment type to path segments, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
 
 ~~~~
@@ -1697,10 +1697,7 @@ message SegmentsResponse {
     map<int32, Segments> segments = 1;
 }
 ~~~~
-{: #figure-31 title="Control Service RPC API - Segment lookup.
-   This API is exposed on the SCION dataplane by the control
-   services of core ASes and exposed on the intra-domain protocol
-   network."}
+
 
 ### Caching
 
