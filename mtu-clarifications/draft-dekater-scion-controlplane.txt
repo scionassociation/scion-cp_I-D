@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 April 2026                                           S. Hitz
+Expires: 19 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         12 October 2025
+                                                         16 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2026.
+   This Internet-Draft will expire on 19 April 2026.
 
 Copyright Notice
 
@@ -2401,9 +2401,10 @@ Table of Contents
    endpoint does not receive such information, therefore when using path
    reversibility, it should use mechanisms to estimate the reverse path
    MTU (e.g., MTU discovery or estimate MTU from the largest packet
-   received).  SCION endpoints are oblivious to the topology of
-   intermediate ASes and when looking up a path they assume that all
-   hops are constrained by the intra-AS MTU of each AS traversed.
+   received).  SCION endpoints are oblivious to the internal topology of
+   intermediate ASes.  When looking up a path they should therefore
+   assume that all hops are also constrained by the intra-AS MTU of each
+   AS traversed.
 
 5.  Path Lookup
 
