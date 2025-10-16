@@ -3659,15 +3659,27 @@ service SegmentLookupService {
 }
 </pre><a href="#section-5.1.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.2-3">They use the following protobuf messages: a <code>SegmentsRequest</code>, which includes:
-- <code>src_isd_as</code>: The source ISD-AS of the segment.
-- <code>dst_isd_as</code>: The destination ISD-AS of the segment.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-4">The corresponding <code>SegmentsResponse</code> returns:
-- <code>segments</code>: a list of <code>PathSegment</code>
-- a mapping from path segment type to path segments, where the key is the integer representation of the <code>SegmentType</code> enum defined in <a href="#reg-proto" class="auto internal xref">Section 4.3</a>.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-3">They use the following protobuf messages: a <code>SegmentsRequest</code>, which includes:<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.2-4.1">
+              <p id="section-5.1.2-4.1.1"><code>src_isd_as</code>: The source ISD-AS of the segment.<a href="#section-5.1.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-4.2">
+              <p id="section-5.1.2-4.2.1"><code>dst_isd_as</code>: The destination ISD-AS of the segment.<a href="#section-5.1.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-5.1.2-5">The corresponding <code>SegmentsResponse</code> returns:<a href="#section-5.1.2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.2-6.1">
+              <p id="section-5.1.2-6.1.1"><code>segments</code>: a list of <code>PathSegment</code><a href="#section-5.1.2-6.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-6.2">
+              <p id="section-5.1.2-6.2.1">a mapping from path segment type to path segments, where the key is the integer representation of the <code>SegmentType</code> enum defined in <a href="#reg-proto" class="auto internal xref">Section 4.3</a>.<a href="#section-5.1.2-6.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 <span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
 <figure id="figure-17">
-            <div class="alignLeft art-text artwork" id="section-5.1.2-5.1">
+            <div class="alignLeft art-text artwork" id="section-5.1.2-7.1">
 <pre>
 message SegmentsRequest {
     uint64 src_isd_as = 1;
