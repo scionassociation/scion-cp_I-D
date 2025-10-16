@@ -2105,7 +2105,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
 
 **Rogue SCMP Error Messages**  <br>
-SCMP External Interface Down[](#external-interface-down) and Internal Connectivity Down[](#internal-connectivity-down) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
+SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
 Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
 
 ## Denial of Service Attacks {#dos-cp}
