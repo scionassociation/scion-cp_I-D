@@ -3509,13 +3509,6 @@ Table of Contents
               2025,
               <https://docs.scion.org/en/latest/beacon-metadata.html>.
 
-   [PEREIRA2025]
-              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
-              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
-              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
-              Code: Formal Verification of a Secure Next-Generation
-              Internet Router", 2025.
-
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -3558,14 +3551,14 @@ Acknowledgments
    Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing
    this document.  We also thank Daniel Galán Pascual and Christoph
    Sprenger from the Information Security Group at ETH Zurich for their
-   inputs based on their formal verification work on SCION
-   [PEREIRA2025].  We are also very grateful to Adrian Perrig (ETH
-   Zurich), for providing guidance and feedback about every aspect of
-   SCION.  Finally, we are indebted to the SCION development teams of
-   Anapaya, ETH Zurich, and the SCION Association for their practical
-   knowledge and for the documentation about the SCION Control Plane, as
-   well as to the authors of [CHUAT22] - the book is an important source
-   of input and inspiration for this draft.
+   inputs based on their formal verification work on SCION.  We are also
+   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
+   and feedback about every aspect of SCION.  Finally, we are indebted
+   to the SCION development teams of Anapaya, ETH Zurich, and the SCION
+   Association for their practical knowledge and for the documentation
+   about the SCION Control Plane, as well as to the authors of [CHUAT22]
+   - the book is an important source of input and inspiration for this
+   draft.
 
 Deployment Testing: SCIONLab
 
