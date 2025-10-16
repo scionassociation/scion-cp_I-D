@@ -1799,8 +1799,12 @@ Table of Contents
    otherwise operationally viable.
 
    Care should be taken to avoid a PCB selection policy that
-   accidentally isolates the AS from the network (e.g. blocking
-   connectivity to parent providers).
+   accidentally isolates the AS from the network, especially in a core
+   AS.  One case is a triangle of 3 core ASes where two may prefer each
+   other to reach the third one.  In this edge case, a members of the
+   "triangle" without other core links may become isolated.  In
+   practice, this scenario is unlikely.  In addition, policies based on
+   disjointness have proven to work well in existing deployments.
 
 2.3.4.  Propagation Interval and Best PCBs Set Size
 
