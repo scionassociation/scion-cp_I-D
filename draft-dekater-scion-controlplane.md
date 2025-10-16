@@ -1672,10 +1672,12 @@ service SegmentLookupService {
 ~~~~
 
 They use the following protobuf messages: a `SegmentsRequest`, which includes:
+
 - `src_isd_as`: The source ISD-AS of the segment.
 - `dst_isd_as`: The destination ISD-AS of the segment.
 
 The corresponding `SegmentsResponse` returns:
+
 - `segments`: a list of `PathSegment`
 - a mapping from path segment type to path segments, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
 
