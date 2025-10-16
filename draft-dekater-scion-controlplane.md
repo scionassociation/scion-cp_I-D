@@ -1663,27 +1663,32 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 
 ### Lookup Requests Message Format
 
+Control Services provide paths to endpoints through the `TrustMaterialService`, which returns a list of `Segments` that match the request:
+
 ~~~~
 service SegmentLookupService {
-    // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
 }
+~~~~
 
+They use the following protobuf messages: a `SegmentsRequest`, which includes:
+- `src_isd_as`: The source ISD-AS of the segment.
+- `dst_isd_as`: The destination ISD-AS of the segment.
+
+The corresponding `SegmentsResponse` returns:
+- `segments`: a list of `PathSegment`
+- a mapping from path segment type to path segments, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
+
+~~~~
 message SegmentsRequest {
-    // The source ISD-AS of the segment.
     uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
     uint64 dst_isd_as = 2;
 }
 
 message SegmentsResponse {
     message Segments {
-        // List of path segments.
         repeated PathSegment segments = 1;
     }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
     map<int32, Segments> segments = 1;
 }
 ~~~~
