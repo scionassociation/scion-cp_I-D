@@ -3101,53 +3101,25 @@ In current practice the intra-ISD set size is typically 20. Current practice als
         <h3 id="name-distribution-of-cryptograph">
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-distribution-of-cryptograph" class="section-name selfRef">Distribution of Cryptographic Material</a>
         </h3>
-<p id="section-2.4-1">Control Services distribute cryptographic material for the PKI (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>) using the following protobuf messages through the <code>TrustMaterialService</code>:<a href="#section-2.4-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.4-2.1">
-            <p id="section-2.4-2.1.1"><code>Chains(ChainsRequest)</code>: Returns the certificate chains that match the request.<a href="#section-2.4-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.4-2.2">
-            <p id="section-2.4-2.2.1"><code>TRC(TRCRequest)</code>: Returns a specific TRC that matches the request.<a href="#section-2.4-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<div class="alignLeft art-text artwork" id="section-2.4-3">
+<p id="section-2.4-1">Control Services distribute cryptographic material for the PKI (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>) using the following protobuf messages through the <code>TrustMaterialService</code> RPCs:<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4-2">
 <pre>
 service TrustMaterialService {
     rpc Chains(ChainsRequest) returns (ChainsResponse) {}
     rpc TRC(TRCRequest) returns (TRCResponse) {}
 }
-</pre><a href="#section-2.4-3" class="pilcrow">¶</a>
+</pre><a href="#section-2.4-2" class="pilcrow">¶</a>
 </div>
-<p id="section-2.4-4">A <code>ChainsRequest</code> message includes following fields:<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.4-5.1">
-            <p id="section-2.4-5.1.1"><code>isd_as</code>: Returns ISD-AS of Subject in the AS certificate.<a href="#section-2.4-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.4-3.1">
+            <p id="section-2.4-3.1.1"><code>Chains(ChainsRequest)</code>: Returns the certificate chains that match the request.<a href="#section-2.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-5.2">
-            <p id="section-2.4-5.2.1"><code>subject_key_id</code>: Returns SubjectKeyID in the AS certificate.<a href="#section-2.4-5.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.4-5.3">
-            <p id="section-2.4-5.3.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.<a href="#section-2.4-5.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.4-5.4">
-            <p id="section-2.4-5.4.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-5.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-3.2">
+            <p id="section-2.4-3.2.1"><code>TRC(TRCRequest)</code>: Returns a specific TRC that matches the request.<a href="#section-2.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.4-6">A <code>ChainsResponse</code> includes following fields:<a href="#section-2.4-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.4-7.1">
-            <p id="section-2.4-7.1.1"><code>chains</code>: Lists the certificate chains that match the request. A <code>Chain</code> contains:<a href="#section-2.4-7.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.4-7.1.2.1">
-                <p id="section-2.4-7.1.2.1.1"><code>as_cert</code>: Returns the AS certificate in the chain.<a href="#section-2.4-7.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.4-7.1.2.2">
-                <p id="section-2.4-7.1.2.2.1"><code>ca_cert</code>: Returns the CA certificate in the chain.<a href="#section-2.4-7.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
-<div class="alignLeft art-text artwork" id="section-2.4-8">
+<p id="section-2.4-4">The corresponding protobuf message formats are:<a href="#section-2.4-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4-5">
 <pre>
 message ChainsRequest {
     uint64 isd_as = 1;
@@ -3164,22 +3136,51 @@ message Chain {
     bytes as_cert = 1;
     bytes ca_cert = 2;
 }
-</pre><a href="#section-2.4-8" class="pilcrow">¶</a>
+</pre><a href="#section-2.4-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.4-9">A <code>TRCRequest</code> includes following fields:<a href="#section-2.4-9" class="pilcrow">¶</a></p>
+<p id="section-2.4-6">A <code>ChainsRequest</code> message includes following fields:<a href="#section-2.4-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.4-10.1">
-            <p id="section-2.4-10.1.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-10.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.4-7.1">
+            <p id="section-2.4-7.1.1"><code>isd_as</code>: Returns ISD-AS of Subject in the AS certificate.<a href="#section-2.4-7.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-10.2">
-            <p id="section-2.4-10.2.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-10.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-7.2">
+            <p id="section-2.4-7.2.1"><code>subject_key_id</code>: Returns SubjectKeyID in the AS certificate.<a href="#section-2.4-7.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-10.3">
-            <p id="section-2.4-10.3.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-10.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-7.3">
+            <p id="section-2.4-7.3.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.<a href="#section-2.4-7.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-7.4">
+            <p id="section-2.4-7.4.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-7.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.4-11">The returned <code>trc</code> contains the raw TRC.<a href="#section-2.4-11" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4-12">
+<p id="section-2.4-8">A <code>ChainsResponse</code> includes following fields:<a href="#section-2.4-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-9.1">
+            <p id="section-2.4-9.1.1"><code>chains</code>: Lists the certificate chains that match the request. A <code>Chain</code> contains:<a href="#section-2.4-9.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-9.1.2.1">
+                <p id="section-2.4-9.1.2.1.1"><code>as_cert</code>: Returns the AS certificate in the chain.<a href="#section-2.4-9.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.4-9.1.2.2">
+                <p id="section-2.4-9.1.2.2.1"><code>ca_cert</code>: Returns the CA certificate in the chain.<a href="#section-2.4-9.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+        </ul>
+<p id="section-2.4-10">A <code>TRCRequest</code> includes following fields:<a href="#section-2.4-10" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-11.1">
+            <p id="section-2.4-11.1.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-11.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-11.2">
+            <p id="section-2.4-11.2.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-11.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-11.3">
+            <p id="section-2.4-11.3.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-11.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-2.4-12">The returned <code>trc</code> contains the raw TRC.<a href="#section-2.4-12" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4-13">
 <pre>
 message TRCRequest {
     uint32 isd = 1;
@@ -3190,7 +3191,7 @@ message TRCRequest {
 message TRCResponse {
     bytes trc = 1;
 }
-</pre><a href="#section-2.4-12" class="pilcrow">¶</a>
+</pre><a href="#section-2.4-13" class="pilcrow">¶</a>
 </div>
 </section>
 </div>

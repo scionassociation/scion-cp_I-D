@@ -1960,16 +1960,34 @@ Table of Contents
 
    Control Services distribute cryptographic material for the PKI (see
    [I-D.dekater-scion-pki]) using the following protobuf messages
-   through the TrustMaterialService:
+   through the TrustMaterialService RPCs:
+
+   service TrustMaterialService {
+       rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+       rpc TRC(TRCRequest) returns (TRCResponse) {}
+   }
 
    *  Chains(ChainsRequest): Returns the certificate chains that match
       the request.
 
    *  TRC(TRCRequest): Returns a specific TRC that matches the request.
 
-   service TrustMaterialService {
-       rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-       rpc TRC(TRCRequest) returns (TRCResponse) {}
+   The corresponding protobuf message formats are:
+
+   message ChainsRequest {
+       uint64 isd_as = 1;
+       bytes subject_key_id = 2;
+       google.protobuf.Timestamp at_least_valid_until = 3;
+       google.protobuf.Timestamp at_least_valid_since = 4;
+   }
+
+   message ChainsResponse {
+       repeated Chain chains = 1;
+   }
+
+   message Chain {
+       bytes as_cert = 1;
+       bytes ca_cert = 2;
    }
 
    A ChainsRequest message includes following fields:
@@ -1992,22 +2010,6 @@ Table of Contents
       -  as_cert: Returns the AS certificate in the chain.
 
       -  ca_cert: Returns the CA certificate in the chain.
-
-   message ChainsRequest {
-       uint64 isd_as = 1;
-       bytes subject_key_id = 2;
-       google.protobuf.Timestamp at_least_valid_until = 3;
-       google.protobuf.Timestamp at_least_valid_since = 4;
-   }
-
-   message ChainsResponse {
-       repeated Chain chains = 1;
-   }
-
-   message Chain {
-       bytes as_cert = 1;
-       bytes ca_cert = 2;
-   }
 
    A TRCRequest includes following fields:
 
