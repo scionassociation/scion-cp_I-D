@@ -148,7 +148,6 @@ Table of Contents
        6.6.2.  Echo Reply
        6.6.3.  Traceroute Request
        6.6.4.  Traceroute Reply
-     6.7.  SCMP Authentication
    7.  Security Considerations
      7.1.  Security Properties
      7.2.  Manipulation of the Beaconing Process by a Core Adversary
@@ -2768,8 +2767,9 @@ Table of Contents
    all devices and/or may be subject to rate limiting.
 
    This document only specifies the messages used for the purposes of
-   path diagnosis and recovery.  An extended specification, still a work
-   in progress, can be found in [SCMP].
+   path diagnosis and recovery.  An extended specification can be found
+   in [SCMP].  Its security considerations are discussed in
+   Section 7.3.4.
 
 6.1.  General Format
 
@@ -2994,10 +2994,8 @@ Table of Contents
    in response to a packet that cannot be forwarded because the link to
    an external AS is broken.  The ISD and AS identifier are set to the
    ISD-AS of the originating router.  The Interface ID identifies the
-   link of the originating AS that is down.
-
-   Recipients can use this information to route around broken data-plane
-   links.
+   link of the originating AS that is down.  Recipients can use this
+   information to route around broken data-plane links.
 
 6.5.3.  Internal Connectivity Down
 
@@ -3228,15 +3226,6 @@ Table of Contents
    Request message (Section 6.6.3).  The ISD and AS identifiers are set
    to the ISD-AS of the originating border router.
 
-6.7.  SCMP Authentication
-
-   Authentication of SCMP packets is not specified here.  It is
-   currently still experimental so endpoints should validate link down
-   messages (External Interface Down (Section 6.5.2) and Internal
-   Connectivity Down (Section 6.5.3)) with additional signals for
-   reliable operations.  These additional signals are outside the scope
-   of this specification.
-
 7.  Security Considerations
 
    As described previously, the goal of SCION’s beaconing process in the
@@ -3459,7 +3448,9 @@ Table of Contents
    have a policy of preferring paths with many peering links and thus
    are more likely to disseminate PCBs from the adversary.  Endpoints
    are also more likely to choose short paths that make use of peering
-   links.  In the data plane, whenever the adversary receives a packet
+   links.
+
+   In the data plane, whenever the adversary receives a packet
    containing a fake peering link, it can transparently exchange the
    fake peering Hop Fields with valid Hop Fields to the colluding AS.
    To avoid detection of the path alteration by the receiver, the
@@ -3471,6 +3462,17 @@ Table of Contents
    the wormhole and render the fake peering link suspicious or
    unattractive.  Without specific detection mechanisms these so-called
    wormhole attacks are unavoidable in routing.
+
+   *Rogue SCMP Error Messages*
+   SCMP External Interface Down (Section 6.5.2) and Internal
+   Connectivity Down (Section 6.5.3) can potentially be abused by an
+   attacker to to disrupt forwarding of information and/or force the
+   traffic through a different paths.  Endpoints should therefore
+   consider them weak hints and apply heuristics to detect fraudulent
+   SCMP messages (e.g. by actively probing whether the affected path is
+   actually down).  Note that this would be mitigated through
+   authentication of SCMP messages.  Authentication is not specified
+   here since it is currently still experimental.
 
 7.4.  Denial of Service Attacks
 

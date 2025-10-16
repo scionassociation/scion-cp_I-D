@@ -1384,9 +1384,6 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.7">
-                <p id="section-toc.1-1.6.2.7.1"><a href="#section-6.7" class="auto internal xref">6.7</a>.  <a href="#name-scmp-authentication" class="internal xref">SCMP Authentication</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
@@ -3881,7 +3878,7 @@ message SegmentsResponse {
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-scmp" class="section-name selfRef">SCMP</a>
       </h2>
 <p id="section-6-1">The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-2">This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>. Its security considerations are discussed in <a href="#manipulate-selection" class="auto internal xref">Section 7.3.4</a>.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="general-format">
 <section id="section-6.1">
         <h3 id="name-general-format">
@@ -4390,8 +4387,8 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.5.2-3">A <strong>External Interface Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response
 to a packet that cannot be forwarded because the link to an external AS is broken.
 The ISD and AS identifier are set to the ISD-AS of the originating router.
-The Interface ID identifies the link of the originating AS that is down.<a href="#section-6.5.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.5.2-4">Recipients can use this information to route around broken data-plane links.<a href="#section-6.5.2-4" class="pilcrow">¶</a></p>
+The Interface ID identifies the link of the originating AS that is down.
+Recipients can use this information to route around broken data-plane links.<a href="#section-6.5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="internal-connectivity-down">
@@ -5008,14 +5005,6 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
-<div id="scmp-authentication">
-<section id="section-6.7">
-        <h3 id="name-scmp-authentication">
-<a href="#section-6.7" class="section-number selfRef">6.7. </a><a href="#name-scmp-authentication" class="section-name selfRef">SCMP Authentication</a>
-        </h3>
-<p id="section-6.7-1">Authentication of SCMP packets is not specified here. It is currently still experimental so endpoints should validate link down messages (<span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>)</span>) with additional signals for reliable operations. These additional signals are outside the scope of this specification.<a href="#section-6.7-1" class="pilcrow">¶</a></p>
-</section>
-</div>
 </section>
 </div>
 <div id="security-considerations">
@@ -5141,9 +5130,12 @@ This attack is possible if the adversary controls at least two ASes. The adversa
 <p id="section-7.3.4-5">In general, the number of PCBs that an adversary can announce this way scales exponentially with the number of consecutive ASes the adversary controls. However, this also decreases their chance of being chosen by a downstream AS for PCB dissemination or by an endpoint for path construction as these relatively long paths have to compete with other shorter paths. Furthermore, both endpoints and downstream ASes can detect poorer quality paths in the data plane and switch to better paths.<a href="#section-7.3.4-5" class="pilcrow">¶</a></p>
 <p id="section-7.3.4-6"><strong>Wormhole Attack</strong> <br>
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.<a href="#section-7.3.4-6" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
-In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-7.3.4-7" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-8">To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-7.3.4-8" class="pilcrow">¶</a></p>
+<p id="section-7.3.4-7">Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.<a href="#section-7.3.4-7" class="pilcrow">¶</a></p>
+<p id="section-7.3.4-8">In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-7.3.4-8" class="pilcrow">¶</a></p>
+<p id="section-7.3.4-9">To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-7.3.4-9" class="pilcrow">¶</a></p>
+<p id="section-7.3.4-10"><strong>Rogue SCMP Error Messages</strong>  <br>
+SCMP External Interface Down (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>) and Internal Connectivity Down (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
+Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.<a href="#section-7.3.4-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
