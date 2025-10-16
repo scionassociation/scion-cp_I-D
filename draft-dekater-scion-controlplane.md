@@ -1347,10 +1347,7 @@ The propagation procedure includes the following elements:
 
 ## Distribution of Cryptographic Material {#crypto-api}
 
-Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `TrustMaterialService`:
-
-- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
-- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
+Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `TrustMaterialService` RPCs:
 
 ~~~~~
 service TrustMaterialService {
@@ -1359,18 +1356,10 @@ service TrustMaterialService {
 }
 ~~~~~
 
-A `ChainsRequest` message includes following fields:
+- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
+- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
 
-- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
-- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
-- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
-- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
-
-A `ChainsResponse` includes following fields:
-
-- `chains`: Lists the certificate chains that match the request. A `Chain` contains:
-  - `as_cert`: Returns the AS certificate in the chain.
-  - `ca_cert`: Returns the CA certificate in the chain.
+The corresponding protobuf message formats are:
 
 ~~~~~
 message ChainsRequest {
@@ -1389,6 +1378,20 @@ message Chain {
     bytes ca_cert = 2;
 }
 ~~~~~
+
+A `ChainsRequest` message includes following fields:
+
+- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
+- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
+
+A `ChainsResponse` includes following fields:
+
+- `chains`: Lists the certificate chains that match the request. A `Chain` contains:
+  - `as_cert`: Returns the AS certificate in the chain.
+  - `ca_cert`: Returns the CA certificate in the chain.
+
 
 A `TRCRequest` includes following fields:
 
