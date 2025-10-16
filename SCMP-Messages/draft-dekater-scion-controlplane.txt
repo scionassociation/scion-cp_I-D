@@ -3352,15 +3352,15 @@ Table of Contents
    wormhole attacks are unavoidable in routing.
 
    *Rogue SCMP Error Messages*
-   SCMP External Interface DownSection 6.5.2 and Internal Connectivity
-   DownSection 6.5.3 can potentially be abused by an attacker to to
-   disrupt forwarding of information and/or force the traffic through a
-   different paths.  Endpoints should therefore consider them weak hints
-   and apply heuristics to detect fraudulent SCMP messages (e.g. by
-   actively probing whether the affected path is actually down).  Note
-   that this would be mitigated through authentication of SCMP messages.
-   Authentication is not specified here since it is currently still
-   experimental.
+   SCMP External Interface Down (Section 6.5.2) and Internal
+   Connectivity Down (Section 6.5.3) can potentially be abused by an
+   attacker to to disrupt forwarding of information and/or force the
+   traffic through a different paths.  Endpoints should therefore
+   consider them weak hints and apply heuristics to detect fraudulent
+   SCMP messages (e.g. by actively probing whether the affected path is
+   actually down).  Note that this would be mitigated through
+   authentication of SCMP messages.  Authentication is not specified
+   here since it is currently still experimental.
 
 7.4.  Denial of Service Attacks
 
