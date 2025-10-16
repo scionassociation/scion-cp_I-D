@@ -1716,10 +1716,11 @@ Table of Contents
        because core beaconing is based on propagating PCBs to all AS
        neighbors.  Additionally, core ASes SHOULD discard PCBs that were
        propagated at any point by a non-core AS.  Ultimately, core ASes
-       MAY make a policy decision not to propagate beacons containing
-       path segments that traverse the same ISD more than once as this
-       can be legitimate, e.g. if the ISD spans a large geographical
-       area, a path transiting another ISD may constitute a shortcut.
+       MAY make a policy decision to propagate beacons containing path
+       segments that traverse the same ISD more than once as this can be
+       legitimate, e.g. if the ISD spans a large geographical area, a
+       path between different ASes transiting another ISD may constitute
+       a shortcut.
 
    3.  Incoming Interface: the last ISD-AS entry in a received PCB (in
        its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor
