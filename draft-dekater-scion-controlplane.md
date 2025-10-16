@@ -175,6 +175,55 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  PEREIRA2025:
+    title: "Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"
+    date: 2025
+    author:
+      -
+        ins: J. Pereira
+        name: João Pereira
+        org: ETH Zürich
+      -
+        ins: T. Klenze
+        name: Tobias Klenze
+        org: Independent
+      -
+        ins: S. Giampietro
+        name: Sofia Giampietro
+        org: ETH Zürich
+      -
+        ins:  M. Limbeck
+        name:  Markus Limbeck
+        org: ETH Zürich
+      -
+        ins: Dionysios Spiliopoulos
+        name: D. Spiliopoulos
+        org: ETH Zürich
+      -
+        ins:  F. Wolf
+        name:  Felix Wolf
+        org: ETH Zürich
+      -
+        ins:  M. Eilers
+        name:  Marco Eilers
+        org: ETH Zürich
+      -
+        ins:  C. Sprenger
+        name:  Christoph Sprenger
+        org: ETH Zürich
+      -
+        ins:  D. Basin
+        name:  David Basin
+        org: ETH Zürich
+      -
+        ins:  P. Müller
+        name:  Peter Müller
+        org: ETH Zürich
+      -
+        ins:  A. Perrig
+        name:  Adrian Perrig
+        org: ETH Zürich
+
 
 --- abstract
 
@@ -1979,7 +2028,7 @@ This section discusses three kinds of threats to the control plane:
 ## Security Properties {#security-properties}
 
 The SCION control plane provides various security properties, as discussed below.
-Here, an AS is described as 'honest' if its private keys are unknown to the attacker and if it uses a unique interface identifier for each link. An honest path is one that only traverses honest ASes. A honest segment is the one created by an honest AS.
+Here, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.
 
 Security properties are:
 
@@ -1990,7 +2039,11 @@ Security properties are:
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
 - Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
-To ensure that the properties hold across the overall SCION network, all core ASes should be able to reach each other with some sequence of core links, and all non-core ASes should have at least one path up to a core AS. Furthermore, to ensure that the properties hold within a single ISD, all cores ASes of the ISD should be able to reach each other without leaving the ISD, i.e., for every pair of cores in an ISD there is a sequence of SCION links that only traverses ISD members.
+To ensure that the properties hold across the overall SCION network, these are the prerequisites to follow:
+  - all core ASes MUST be able to reach each other with some sequence of core links
+  - and all non-core ASes MUST have at least one path up to a core AS.
+
+Furthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.
 A core AS may reach other core ASes in the same ISD via other ISDs. This may be permitted, depending on the ISD's policies.
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
@@ -2083,7 +2136,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION [PEREIRA2025]. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
