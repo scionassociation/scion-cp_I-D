@@ -2593,8 +2593,9 @@ Table of Contents
 5.1.2.  Lookup Requests Message Format
 
    Control Services provide paths to endpoints through the
-   TrustMaterialService, which returns a list of Segments that match the
-   request:
+   SegmentLookupService RPC.  This API is exposed on the SCION dataplane
+   by the control services of core ASes and exposed on the intra-domain
+   protocol network.
 
    service SegmentLookupService {
        rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -2609,7 +2610,7 @@ Table of Contents
 
    The corresponding SegmentsResponse returns:
 
-   *  segments: a list of PathSegment
+   *  segments: a list of PathSegment matching the request.
 
    *  a mapping from path segment type to path segments, where the key
       is the integer representation of the SegmentType enum defined in
@@ -2626,10 +2627,6 @@ Table of Contents
        }
        map<int32, Segments> segments = 1;
    }
-
-     Figure 17: Control Service RPC API - Segment lookup.  This API is
-       exposed on the SCION dataplane by the control services of core
-           ASes and exposed on the intra-domain protocol network.
 
 5.1.3.  Caching
 
@@ -2803,7 +2800,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 18: SCMP message format
+                       Figure 17: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2944,7 +2941,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 19: Packet Too Big format
+                      Figure 18: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2984,7 +2981,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 20: External Interface Down format
+                 Figure 19: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3034,7 +3031,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 21: Internal Connectivity Down format
+                Figure 20: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -3080,7 +3077,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 22: Echo Request format
+                       Figure 21: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3116,7 +3113,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 23: Echo Reply format
+                        Figure 22: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3158,7 +3155,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 24: Traceroute Request format
+                    Figure 23: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3213,7 +3210,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 25: Traceroute Reply format
+                     Figure 24: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3800,7 +3797,7 @@ message Transport {
     string address = 1;
 }
 
-           Figure 26: Service Resolution RPC API definition
+           Figure 25: Service Resolution RPC API definition
 
 
 
@@ -3808,10 +3805,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 27 below.  In both examples, the source
-   endpoint is in AS A.  Figure 28 shows the sequence diagram for the
+   is represented in Figure 26 below.  In both examples, the source
+   endpoint is in AS A.  Figure 27 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 29 shows the path lookup sequence diagram if the destination
+   Figure 28 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3842,7 +3839,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 27: Topology used in the path lookup examples
+            Figure 26: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -3897,7 +3894,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 28: Sequence diagram illustrating a path lookup for a
+     Figure 27: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3957,7 +3954,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 29: Sequence diagram illustrating a path lookup for a
+     Figure 28: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
