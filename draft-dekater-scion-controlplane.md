@@ -1487,7 +1487,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
-3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.
+3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment MUST be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
