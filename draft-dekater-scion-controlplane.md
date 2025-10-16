@@ -1344,76 +1344,73 @@ The propagation procedure includes the following elements:
 
 ## Distribution of Cryptographic Material
 
-The following code blocks provide, in protobuf format, the entire API by which control services interact.
-
-
-
+The Control Services request cryptographic material from the PKI (see {{I-D.dekater-scion-pki}}) using the following API, in protobuf format:
 
 ~~~~~
 enum SignatureAlgorithm {
-    // Unspecified signature algorithm. This value is never valid.
     SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    // ECDS with SHA256.
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    // ECDS with SHA384.
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    // ECDS with SHA512.
     SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
 }
 
 ~~~~~
 {: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
+
+Requests the signature algorithm. Valid types are ECDS with SHA256, ECDS with SHA384, and ECDS with SHA512. An unspecified signature algorithm is never valid. 
 <br>
 
 ~~~~~
 service TrustMaterialService {
-    // Return the certificate chains that match the request.
     rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-    // Return a specific TRC that matches the request.
     rpc TRC(TRCRequest) returns (TRCResponse) {}
 }
 
 message ChainsRequest {
-    // ISD-AS of Subject in the AS certificate.
     uint64 isd_as = 1;
-    // SubjectKeyID in the AS certificate.
     bytes subject_key_id = 2;
-    // Point in time at which the AS certificate must still be valid. In seconds
-    // since UNIX epoch.
     google.protobuf.Timestamp at_least_valid_until = 3;
-    // Point in time at which the AS certificate must be or must have been
-    // valid. In seconds since UNIX epoch.
     google.protobuf.Timestamp at_least_valid_since = 4;
 }
 
 message ChainsResponse {
-    // List of chains that match the request.
     repeated Chain chains = 1;
 }
 
 message Chain {
-    // AS certificate in the chain.
     bytes as_cert = 1;
-    // CA certificate in the chain.
     bytes ca_cert = 2;
 }
 
 message TRCRequest {
-    // ISD of the TRC.
     uint32 isd = 1;
-    // BaseNumber of the TRC.
     uint64 base = 2;
-    // SerialNumber of the TRC.
     uint64 serial = 3;
 }
 
 message TRCResponse {
-    // Raw TRC.
     bytes trc = 1;
 }
 
 ~~~~~
 {: #figure-36 title="Control Service RPC API - Trust Material representation"}
+
+The request procedure includes the following elements:
+
+- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
+- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
+- `SegmentCreationService`: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
+- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
+- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
+- `chains`: Lists the chains that match the request.
+- `as_cert`: Returns the AS certificate in the chain.
+- `ca_cert`: Returns the CA certificate in the chain.
+- `isd`: Returns the ISD number of the TRC.
+- `base`: Returns the base number of the TRC.
+- `serial`: Returns the serial number of the TRC.
+- `trc`: Returns the raw TRC.
 
 
 # Deployment Considerations
