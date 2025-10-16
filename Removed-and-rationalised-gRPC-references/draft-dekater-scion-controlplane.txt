@@ -483,7 +483,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 17.
+      AS that sent the PCB through the API described in Section 2.4.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1717,7 +1717,8 @@ Table of Contents
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 17.
+       Service of the sending AS through the API described in
+       Section 2.4.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -1958,12 +1959,39 @@ Table of Contents
 2.4.  Distribution of Cryptographic Material
 
    Control Services distribute cryptographic material for the PKI (see
-   [I-D.dekater-scion-pki]) using the following protobuf messages:
+   [I-D.dekater-scion-pki]) using the following protobuf messages
+   through the TrustMaterialService:
+
+   *  Chains(ChainsRequest): Returns the certificate chains that match
+      the request.
+
+   *  TRC(TRCRequest): Returns a specific TRC that matches the request.
 
    service TrustMaterialService {
        rpc Chains(ChainsRequest) returns (ChainsResponse) {}
        rpc TRC(TRCRequest) returns (TRCResponse) {}
    }
+
+   A ChainsRequest message includes following fields:
+
+   *  isd_as: Returns ISD-AS of Subject in the AS certificate.
+
+   *  subject_key_id: Returns SubjectKeyID in the AS certificate.
+
+   *  at_least_valid_until: Point in time at which the AS certificate
+      must still be valid - in seconds since UNIX epoch.
+
+   *  at_least_valid_since: Point in time at which the AS certificate
+      must be or must have been valid - in seconds since UNIX epoch.
+
+   A ChainsResponse includes following fields:
+
+   *  chains: Lists the certificate chains that match the request.  A
+      Chain contains:
+
+      -  as_cert: Returns the AS certificate in the chain.
+
+      -  ca_cert: Returns the CA certificate in the chain.
 
    message ChainsRequest {
        uint64 isd_as = 1;
@@ -1981,6 +2009,16 @@ Table of Contents
        bytes ca_cert = 2;
    }
 
+   A TRCRequest includes following fields:
+
+   *  isd: Returns the ISD number of the TRC.
+
+   *  base: Returns the base number of the TRC.
+
+   *  serial: Returns the serial number of the TRC.
+
+   The returned trc contains the raw TRC.
+
    message TRCRequest {
        uint32 isd = 1;
        uint64 base = 2;
@@ -1990,43 +2028,6 @@ Table of Contents
    message TRCResponse {
        bytes trc = 1;
    }
-
-     Figure 17: Control Service RPC API - Trust Material representation
-
-   The request procedure includes the following elements:
-
-   *  Chains(ChainsRequest): Returns the certificate chains that match
-      the request.
-
-   *  TRC(TRCRequest): Returns a specific TRC that matches the request.
-
-   *  SegmentCreationService: Specifies the service via which the
-      extended PCB is propagated to the Control Service of the
-      neighboring AS.
-
-   *  at_least_valid_until: Point in time at which the AS certificate
-      must still be valid - in seconds since UNIX epoch.
-
-   *  at_least_valid_since: Point in time at which the AS certificate
-      must be or must have been valid - in seconds since UNIX epoch.
-
-   *  isd_as: Returns ISD-AS of Subject in the AS certificate.
-
-   *  subject_key_id: Returns SubjectKeyID in the AS certificate.
-
-   *  chains: Lists the chains that match the request.
-
-   *  as_cert: Returns the AS certificate in the chain.
-
-   *  ca_cert: Returns the CA certificate in the chain.
-
-   *  isd: Returns the ISD number of the TRC.
-
-   *  base: Returns the base number of the TRC.
-
-   *  serial: Returns the serial number of the TRC.
-
-   *  trc: Returns the raw TRC.
 
 3.  Deployment Considerations
 
@@ -2612,7 +2613,7 @@ Table of Contents
        map<int32, Segments> segments = 1;
    }
 
-     Figure 18: Control Service RPC API - Segment lookup.  This API is
+     Figure 17: Control Service RPC API - Segment lookup.  This API is
        exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -2788,7 +2789,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 19: SCMP message format
+                       Figure 18: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2929,7 +2930,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 20: Packet Too Big format
+                      Figure 19: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2969,7 +2970,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 21: External Interface Down format
+                 Figure 20: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3019,7 +3020,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 22: Internal Connectivity Down format
+                Figure 21: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -3065,7 +3066,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 23: Echo Request format
+                       Figure 22: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3101,7 +3102,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 24: Echo Reply format
+                        Figure 23: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3143,7 +3144,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 25: Traceroute Request format
+                    Figure 24: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3198,7 +3199,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 26: Traceroute Reply format
+                     Figure 25: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3785,7 +3786,7 @@ message Transport {
     string address = 1;
 }
 
-           Figure 27: Service Resolution RPC API definition
+           Figure 26: Service Resolution RPC API definition
 
 
 
@@ -3793,10 +3794,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 28 below.  In both examples, the source
-   endpoint is in AS A.  Figure 29 shows the sequence diagram for the
+   is represented in Figure 27 below.  In both examples, the source
+   endpoint is in AS A.  Figure 28 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 30 shows the path lookup sequence diagram if the destination
+   Figure 29 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3827,7 +3828,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 28: Topology used in the path lookup examples
+            Figure 27: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -3882,7 +3883,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 29: Sequence diagram illustrating a path lookup for a
+     Figure 28: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3942,7 +3943,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 30: Sequence diagram illustrating a path lookup for a
+     Figure 29: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
