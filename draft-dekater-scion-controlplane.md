@@ -175,54 +175,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  PEREIRA2025:
-    title: "Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"
-    date: 2025
-    author:
-      -
-        ins: J. Pereira
-        name: João Pereira
-        org: ETH Zürich
-      -
-        ins: T. Klenze
-        name: Tobias Klenze
-        org: Independent
-      -
-        ins: S. Giampietro
-        name: Sofia Giampietro
-        org: ETH Zürich
-      -
-        ins:  M. Limbeck
-        name:  Markus Limbeck
-        org: ETH Zürich
-      -
-        ins: Dionysios Spiliopoulos
-        name: D. Spiliopoulos
-        org: ETH Zürich
-      -
-        ins:  F. Wolf
-        name:  Felix Wolf
-        org: ETH Zürich
-      -
-        ins:  M. Eilers
-        name:  Marco Eilers
-        org: ETH Zürich
-      -
-        ins:  C. Sprenger
-        name:  Christoph Sprenger
-        org: ETH Zürich
-      -
-        ins:  D. Basin
-        name:  David Basin
-        org: ETH Zürich
-      -
-        ins:  P. Müller
-        name:  Peter Müller
-        org: ETH Zürich
-      -
-        ins:  A. Perrig
-        name:  Adrian Perrig
-        org: ETH Zürich
 
 
 --- abstract
@@ -1242,7 +1194,7 @@ This section describes how PCBs are received, selected and further propagated in
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
 1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
-2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
+2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
 3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
 4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
@@ -2245,7 +2197,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION [PEREIRA2025]. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
