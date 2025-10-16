@@ -364,7 +364,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 - Generating, receiving, and propagating PCBs. Periodically, the Control Service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - Selecting and registering the set of path segments via which the AS wants to be reached.
-- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in {{#figure-36}}.
+- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in [](#crypto-api).
 
 **Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
@@ -1241,7 +1241,7 @@ This section describes how PCBs are received, selected and further propagated in
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
-1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-36}}.
+1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
 2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.
 3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
 4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
@@ -1345,16 +1345,34 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
-## Distribution of Cryptographic Material
+## Distribution of Cryptographic Material {#crypto-api}
 
-Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages:
+Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `TrustMaterialService`:
+
+- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
+- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
 
 ~~~~~
 service TrustMaterialService {
     rpc Chains(ChainsRequest) returns (ChainsResponse) {}
     rpc TRC(TRCRequest) returns (TRCResponse) {}
 }
+~~~~~
 
+A `ChainsRequest` message includes following fields:
+
+- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
+- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
+
+A `ChainsResponse` includes following fields:
+
+- `chains`: Lists the certificate chains that match the request. A `Chain` contains:
+  - `as_cert`: Returns the AS certificate in the chain.
+  - `ca_cert`: Returns the CA certificate in the chain.
+
+~~~~~
 message ChainsRequest {
     uint64 isd_as = 1;
     bytes subject_key_id = 2;
@@ -1370,7 +1388,17 @@ message Chain {
     bytes as_cert = 1;
     bytes ca_cert = 2;
 }
+~~~~~
 
+A `TRCRequest` includes following fields:
+
+- `isd`: Returns the ISD number of the TRC.
+- `base`: Returns the base number of the TRC.
+- `serial`: Returns the serial number of the TRC.
+
+The returned `trc` contains the raw TRC.
+
+~~~~~
 message TRCRequest {
     uint32 isd = 1;
     uint64 base = 2;
@@ -1380,26 +1408,8 @@ message TRCRequest {
 message TRCResponse {
     bytes trc = 1;
 }
-
 ~~~~~
-{: #figure-36 title="Control Service RPC API - Trust Material representation"}
 
-The request procedure includes the following elements:
-
-- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
-- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
-- `SegmentCreationService`: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.
-- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
-- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
-- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
-- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
-- `chains`: Lists the chains that match the request.
-- `as_cert`: Returns the AS certificate in the chain.
-- `ca_cert`: Returns the CA certificate in the chain.
-- `isd`: Returns the ISD number of the TRC.
-- `base`: Returns the base number of the TRC.
-- `serial`: Returns the serial number of the TRC.
-- `trc`: Returns the raw TRC.
 
 
 # Deployment Considerations
