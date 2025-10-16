@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-14T00:22:19.553694+00:00",
+  "timestamp": "2025-10-16T00:23:44.094090+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -761,7 +761,7 @@
       "id": "I_kwDOJx2-rs6OtOg6",
       "title": "Clarifications in introduction and beaconing (Til's feedback)",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/46",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -772,8 +772,8 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-10-11T19:30:14Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T11:58:25Z",
+      "closedAt": "2025-10-15T11:58:25Z",
       "comments": [
         {
           "author": "matzf",
@@ -1148,7 +1148,7 @@
       ],
       "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2025-10-13T21:13:35Z",
+      "updatedAt": "2025-10-14T13:09:02Z",
       "closedAt": null,
       "comments": [
         {
@@ -1171,6 +1171,13 @@
           "body": "Reopening this because in #125 I bumped into some oddities that are partially due to duplicated definitions. Before remembering of this issue, I even re-analyzed the draft for duplicates, highlighted: [SCION Control Plane-08-grpc.pdf](https://github.com/user-attachments/files/21021922/SCION.Control.Plane-08-grpc.pdf)\n\nI will also ask Alvaro what he thinks about removing duplicates..",
           "createdAt": "2025-07-02T16:20:40Z",
           "updatedAt": "2025-07-02T16:20:40Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We need to decide how to rehome some of the now orphaned protobuf code blocks.",
+          "createdAt": "2025-10-14T13:09:01Z",
+          "updatedAt": "2025-10-14T13:09:01Z"
         }
       ]
     },
@@ -1378,19 +1385,19 @@
       "authorAssociation": "MEMBER",
       "assignees": [
         "nicorusti",
-        "jiceatscion"
+        "knmeynell"
       ],
       "labels": [
         "enhancement",
-        "needs-discussion"
+        "Prio 3"
       ],
       "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [x] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-07-09T10:24:45Z",
+      "updatedAt": "2025-10-15T13:49:25Z",
       "closedAt": null,
       "comments": [
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "\n>     * (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n>       \n>       * (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n\nNo. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n\n>       * (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n\nYes. This is implemented. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L55, https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/control/beaconing/handler.go#L105)\n\n>       * (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\nYes. This is implemented at pretty low level. (https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#L100 -> https://github.com/scionproto/scion/blob/17a6ae17acea14f7fb9c546ce5e4da1187908bb6/pkg/segment/seg.go#173)\n\n>     * (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).\n\nNo. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n\n\n",
           "createdAt": "2025-02-21T15:03:30Z",
@@ -1404,7 +1411,7 @@
           "updatedAt": "2025-02-25T16:51:40Z"
         },
         {
-          "author": "jiceatscion",
+          "author": "jiceathome",
           "authorAssociation": "CONTRIBUTOR",
           "body": "> > No. I do not think we check that anywhere. I am not even sure how can tell that a distant AS is or is not a core AS. In fact, is this not a locally chosen role?\n> \n> I think it makes sense that a core AS should never receive a beacon from a non-core AS on a core link. It could check this, as core ASes are in the TRC. I think we could add this as a SHOULD, what do you think?\n\nSHOULD is good. It might not be so easy: yes, a collection of accurately implemented and honest ASes will automatically prevent a non-core AS from beaconing a core segment. However when receiving a beacon from a properly core AS neighbor, it is not obvious that all ASes earlier in the beacon are all properly core ASes.\n\n> > No. I do not think we do that. I have found the verifications of the sender's signature, but not that down segments have been initiated locally. That would have been on the same code path. I looked hard but I might still have missed it. Not sure we actually consider this necessary.\n> \n> I think this is necessary to guarantee what we call path authorization. So I think this should be checked somewhere.\n\nAh, ok. I didn't realize that it added security. After all the whole segment's validity can be verified independently from how it was obtained, is it not? How does the fact that a segment is only served by its legitimate originator add any guarantee?\nI can imagine a CS not wanting to devote resources to storing segments that it has no business serving, but can't it?\n\nThat said, I take your word for it. Under that assumption, your writing is fine and I have approved the PR. I am only curious.\n",
           "createdAt": "2025-02-26T16:41:21Z",
@@ -1464,7 +1471,7 @@
       ],
       "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
       "createdAt": "2025-02-25T15:53:49Z",
-      "updatedAt": "2025-10-09T16:16:53Z",
+      "updatedAt": "2025-10-15T14:58:58Z",
       "closedAt": null,
       "comments": [
         {
@@ -1484,9 +1491,16 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "> Does this depend on the outcome of discussions on https://github.com/scionassociation/scion-cp_I-D/issues/105 ?\n\nI don't think it does. What matters is that we have all the needed protobuf definitions from [here](https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55) to somewhere in one of the two drafts. Right now this is in the CP appendix, I'm not sure this is the best location..",
+          "body": "> Does this depend on the outcome of discussions on https://github.com/scionassociation/scion-cp_I-D/issues/105 ?\n\nI don't think it does. What matters is that we have all the needed protobuf definitions from [here](https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55) to somewhere in one of the two drafts. Right now this is in the CP appendix, I'm not sure this is the best location..\n\nTODO: \n- [ ] Update reference in pKI draft [[I-D.dekater-scion-controlplane](https://scionassociation.github.io/scion-cppki_I-D/draft-dekater-scion-pki.html#I-D.dekater-scion-controlplane)], section \"Control Service gRPC API - Trust Material\".",
           "createdAt": "2025-10-09T16:15:36Z",
-          "updatedAt": "2025-10-09T16:16:53Z"
+          "updatedAt": "2025-10-15T14:26:11Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "P.S. @knmeynell and I discussed this once more, and we feel this best fits the CP draft.",
+          "createdAt": "2025-10-15T14:30:23Z",
+          "updatedAt": "2025-10-15T14:30:23Z"
         }
       ]
     },
@@ -1523,7 +1537,7 @@
       "id": "I_kwDOJx2-rs6uqj7d",
       "title": "Can we learn something from SRv6 security considerations?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/103",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1536,8 +1550,8 @@
       ],
       "body": "The SPRING WG is working on [SRv6 security considerations](https://datatracker.ietf.org/doc/draft-ietf-spring-srv6-security/). Can we learn something from this document? Or the other way around?",
       "createdAt": "2025-03-19T04:09:41Z",
-      "updatedAt": "2025-10-08T09:38:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-14T10:34:11Z",
+      "closedAt": "2025-10-14T10:34:10Z",
       "comments": []
     },
     {
@@ -1552,12 +1566,12 @@
         "knmeynell"
       ],
       "labels": [
-        "Prio 2",
+        "Prio 3",
         "editorial"
       ],
-      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n- [ ] Make figures 1-15 work with aasvg\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-10-08T09:38:07Z",
+      "updatedAt": "2025-10-15T09:28:27Z",
       "closedAt": null,
       "comments": [
         {
@@ -1601,6 +1615,13 @@
           "body": "I rolled abck SVGs in https://github.com/scionassociation/scion-cp_I-D/pull/130 ",
           "createdAt": "2025-07-07T18:11:29Z",
           "updatedAt": "2025-07-07T18:11:29Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Current status: figures 1-15 still need to be transformed in SVG with aasvg",
+          "createdAt": "2025-10-15T09:27:56Z",
+          "updatedAt": "2025-10-15T09:27:56Z"
         }
       ]
     },
@@ -1609,7 +1630,7 @@
       "id": "I_kwDOJx2-rs6xZ8E_",
       "title": "Control plane: clarify relationship between gRPC/Connect RPC",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/105",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1619,10 +1640,10 @@
         "question",
         "Prio 1"
       ],
-      "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [ ] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
+      "body": "Keep an eye on changes to the CP gRPC API discussed in\n-  https://github.com/scionproto/scion/issues/4552\n-  https://github.com/scionproto/scion/issues/4434 \n\n\n- [x] Adapt text in the draft, e.g. `All communication between the Control Services in different ASes is expressed in terms of gRPC remote procedure calls` and \n\nThis is not deployed yet, but we should decide ASAP if changes need to be in the draft.\nCC: @oncilla\n",
       "createdAt": "2025-04-07T10:18:34Z",
-      "updatedAt": "2025-10-13T13:43:33Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-14T14:22:32Z",
+      "closedAt": "2025-10-14T14:22:17Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1645,7 +1666,7 @@
       "id": "I_kwDOJx2-rs63XRtk",
       "title": "Add Path metadata extensions specification or reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/107",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1657,10 +1678,10 @@
         "question",
         "needs-discussion"
       ],
-      "body": "- [ ] Clarify \"arbitrary per-protocol metadata\" in the draft (this relates to AS Entry Signed Header) \n- [x] Decide how much to include regarding PCB extensions (e.g. Path metadata) with ETH & Anapaya\n- [x] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [x] 2.2.2  - explain what PCB extensions are\n\nOS implementation currently supports path metadata extensions (e.g. BW), Anapaya's propagates it but typically does not configure them in their routers.\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
+      "body": "- [x] Clarify \"arbitrary per-protocol metadata\" in the draft (this relates to AS Entry Signed Header) \n- [x] Decide how much to include regarding PCB extensions (e.g. Path metadata) with ETH & Anapaya\n- [x] If not adding this, perhaps add a reference (e.g. scionproto doc page?)\n- [x] 2.2.2  - explain what PCB extensions are\n\nOS implementation currently supports path metadata extensions (e.g. BW), Anapaya's propagates it but typically does not configure them in their routers.\n- https://docs.scion.org/en/latest/beacon-metadata.html#metadata-types \n- https://github.com/scionproto/scion/pull/4761 \n\n@tzaeschke is also supervising a thesis using dynamic metadata to improve beaconing \n\nThis topic was also raised by Alvaro's review: \n```\n1301   *  metadata: Can be used to include arbitrary per-protocol metadata.\n1302      This field is OPTIONAL.\n```\n> \"arbitrary per-protocol\". What is the format?  What does \"per-protocol\" mean?\n\n\n```\n1358\t   *  extensions: List of (signed) extensions (optional).  PCB\n1359\t      extensions defined here are part of the signed AS entry.  This\n1360\t      field SHOULD therefore only contain extensions that include\n1361\t      important metadata for which cryptographic protection is required.\n1362\t      For more information on PCB extensions, see Section 2.2.2.\n```\n> [] \u00a72.2.2 doesn't explain what these extensions are.  Are they specified anywhere?\n\n```\n1594\t2.2.2.  PCB Extensions\n\n1596\t   In addition to basic routing information such a hop entries and peer\n1597\t   entries, PCBs can be used to communicate additional metadata in\n1598\t   extensions.  Extensions can be signed and unsigned: signed extensions\n1599\t   are protected by the AS signature, whereas unsigned extensions are\n1600\t   not.\n```\n> [] What type of additional metadata?  Is it specified anywhere, or are these provisions for future use?",
       "createdAt": "2025-05-20T09:26:18Z",
-      "updatedAt": "2025-10-13T20:07:42Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T13:26:37Z",
+      "closedAt": "2025-10-15T13:26:36Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2206,9 +2227,31 @@
       ],
       "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-10-13T20:31:32Z",
+      "updatedAt": "2025-10-14T14:41:27Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Regarding 2.3.5.1. I am honestly a bit confused about the cases when we use inter- and intra- in the different places of the draft. The draft says `Inter-ISD or core beaconing is the process of constructing path segments between core ASes in the same or in different ISDs` and `Intra-ISD beaconing creates path segments from core ASes to non-core ASes` in 2.1. But in 1.4, it says `SCION inter-domain routing operates on two levels: within a ISD which is called intra-ISD routing, and between ISD which is called inter-ISD routing`. So, when we speak about routing, everything that happens inside an ISD is intra-ISD routing. But with beaconing, the beaconing between two core ASes in the same ISD is inter-ISD beaconing. If I had to choose, I wouldn't use intra- and intra- in the case of beaconing. We have a term for core beaconing and don't have the term for another kind of beaconing though.\n\nOther than that, I agree that `to propagate to its neighboring child ASes` is cleaner. I don't think that \"neighboring\" is needed though: looks like in the other places of this draft we already say \"its child ASes\" implying that it's just a child and not a \"grandchild\" or any other descendant",
+          "createdAt": "2025-10-14T14:30:19Z",
+          "updatedAt": "2025-10-14T14:30:19Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "More checks in 2.3.1 is OK, but what's the purpose? If it's about safety against misbehaving ASes which for any reasons try to send PCBs to their peers, then more cases should be covered as well, like checking that a child didn't send a PCB to parent, beaconing between core and non-core ASes is happening only inside of an ISD and so on",
+          "createdAt": "2025-10-14T14:40:36Z",
+          "updatedAt": "2025-10-14T14:40:36Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What do you mean by \"impact of all possible link mismatches\"? ",
+          "createdAt": "2025-10-14T14:41:27Z",
+          "updatedAt": "2025-10-14T14:41:27Z"
+        }
+      ]
     },
     {
       "number": 120,
@@ -2269,23 +2312,40 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [
         "enhancement",
         "Prio 2"
       ],
-      "body": "We briefly discuss this in 6.7.  SCMP Authentication, perhaps we could move and extend this paragraph to the security considerations section. \n\n\nFeedback Alvaro: \n```\n2921\t   Recipients can use this information to route around a broken data\n2922\t   plane inside an AS.\n```\n\n[] A rogue router can send this message (or the External Interface Down message) to disrupt the forwarding of information and/or force the traffic through a different path. This type of potential attack should be listed in the Security Considerations.",
+      "body": "We briefly discuss this in 6.7.  SCMP Authentication, perhaps we could move and extend this paragraph to the security considerations section. \n\n\nFeedback Alvaro: \n```\n2921\t   Recipients can use this information to route around a broken data\n2922\t   plane inside an AS.\n```\n\n[] A rogue router can send this message (or the External Interface Down message) to disrupt the forwarding of information and/or force the traffic through a different path. This type of potential attack should be listed in the Security Considerations.\n\nRelated work pointers: \n* https://docs.scion.org/en/latest/dev/design/scmp-authentication.html \n* https://github.com/scionproto/scion/issues/3969 ",
       "createdAt": "2025-06-26T16:08:59Z",
-      "updatedAt": "2025-10-08T09:38:11Z",
+      "updatedAt": "2025-10-15T12:38:16Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've moved the text from the SCMP Authentication sub-section into the SCMP introduction, and removed the sub-section.\n\nI've also added a new sub-section 'SCMP messages' under 'Manipulation of the Path-Selection Process' in the Security Considerations. \n\nThe problem is explained, but I'm missing what can be done to mitigate this. ",
+          "createdAt": "2025-10-14T13:45:23Z",
+          "updatedAt": "2025-10-14T13:45:23Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've added some mitigating actions - namely SCMP Authentication if (and as) available, and 'other signalling'. Is there anything else that should be added.",
+          "createdAt": "2025-10-15T12:38:16Z",
+          "updatedAt": "2025-10-15T12:38:16Z"
+        }
+      ]
     },
     {
       "number": 122,
       "id": "I_kwDOJx2-rs69hds6",
       "title": "Security considerations: language on security properties",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/122",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2295,10 +2355,10 @@
         "Prio 2",
         "needs-discussion"
       ],
-      "body": "- [ ] Discuss definition of honest ASes with @dgalan7\n- [ ] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
+      "body": "- [x] Discuss definition of honest ASes with @dgalan7\n- [x] Eventually extend definition\n- [ ] Evaluate normative language on connnectedness\n\n#### Feedback Alvaro\n...\n3127\t7.1.  Security Properties\n\n3129\t   The SCION control plane provides various security properties, as\n3130\t   discussed below.  Here, an AS is described as 'honest' if its private\n3131\t   keys are unknown to the attacker and if it uses a unique interface\n3132\t   identifier for each link.  An honest path is one that only traverses\n3133\t   honest ASes.  A honest segment is the one created by an honest AS.\n\n[] As characterized, an honest AS can still provide false information; for example, including a false Key ID, incorrect interface IDs, etc.  In the case of incorrect interface IDs, the PCBs may look ok and pass the consistency and connectivity tests, but forwarding may fail.\n\n@dgalan7 this text comes as a result of your feedback. Did you model what would happen if an AS sends incorrect data in a beacon (e.g. interface IDs)? We might need to extend the definition of honest ASes\n\n\n```\n...\n3160\t   To ensure that the properties hold across the overall SCION network,\n3161\t   all core ASes should be able to reach each other with some sequence\n3162\t   of core links, and all non-core ASes should have at least one path up\n3163\t   to a core AS.  Furthermore, to ensure that the properties hold within\n3164\t   a single ISD, all cores ASes of the ISD should be able to reach each\n3165\t   other without leaving the ISD, i.e., for every pair of cores in an\n3166\t   ISD there is a sequence of SCION links that only traverses ISD\n3167\t   members.  A core AS may reach other core ASes in the same ISD via\n3168\t   other ISDs.  This may be permitted, depending on the ISD's policies.\n```\n\n>> [] Should the conditions in this paragraph be described using Normative language?\n\n> I\u2019m thorn on this. A SCION network might also be deployed isolated from\n> others. Would it then be appropriate to use normative language (e.g. all core\n> ASes SHOULD be able to reach each other with some sequence of core links)? \n> I\u2019m not sure.\n> \n> This text also comes from the assumptions made on the formal model of SCION.\n\nIn this case I was thinking more s/should/MUST.  The conditions should still be valid regardless of the size of the SCION network: if isolated from others then the conditions apply only to what is deployed.\n",
       "createdAt": "2025-06-26T16:28:10Z",
-      "updatedAt": "2025-10-09T13:15:25Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T13:46:30Z",
+      "closedAt": "2025-10-15T13:46:29Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2328,19 +2388,29 @@
       "id": "I_kwDOJx2-rs6-g5yz",
       "title": "Clarify associated_data and PCB signing",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/125",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "nicorusti"
+      ],
       "labels": [
         "enhancement",
         "Prio 2"
       ],
-      "body": "The purpose and use of associated_data is now not clear and consistent in the draft.\n\n\n#### Comments from Alvaro:\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n\n#### Some thoughts:\n\nThe figure in [2.2.1.4.3.  AS Entry Signature](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#sign) is IMHO not right. It does not match with the definition that we give of associated data _\"data that is covered by the signature, but is not included in the header and body\"_. It contains the text below, which comes from a [comment in the segment definition](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/proto/control_plane/v1/seg.proto#L108). Associated data seems to be used in the same way [here](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/scrypto/signed/msg.go#L144) in the code.\n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n\nassociated_data(ps, i) = ps.segment_info ||\n                         ps.as_entries[1].signed.header_and_body ||\n                         ps.as_entries[1].signed.signature ||\n                         ...\n                         ps.as_entries[i-1].signed.header_and_body ||\n                         ps.as_entries[i-1].signed.signature\n```\n\nThe problems I see with this are:\n\n- [x] Should Associated data length be part of header figure in [2.2.1.4.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.1)[AS Entry Signed Header](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry-signed-header)?  --> Already fixed in v-09\n- [ ] Which formula is correct for signature calculation? Does the [formula in the text](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.3-5) correspond to what the code actually does in terms of signature calculation ([here? ](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/segment/seg.go#L327))? Right now we have this formula where the AS own entry _ASE_i^(signed)_ is at the end  : \n```\n   Sig_i = K_i( SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )\n```\nThen we have  this text, that I think does not match the order in the previous formula : \n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n```\nI think it one of the two should change: \n```\n  input(ps, i) =  associated_data(ps, i) || signed.header_and_body\nor \n  Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) )\n```\n([Slack discussion](https://scionproto.slack.com/archives/C07EDUQSE6L/p1760258044184369))\n- [ ] `header_and_body` is explained, but its content is not specified in protobuf. We only define `HeaderAndBodyInternal` in the appendix. Should we change `HeaderAndBodyInternal`  to `HeaderAndBody` ?\n- [ ] `message ASEntry` in protobuf is defined twice, once in [2.2.1.3. AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.3)[AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry) and once in [Figure 20](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-control-service-grpc-api-si) in the appendix. --> To be handled in #67 ",
+      "body": "The purpose and use of associated_data is now not clear and consistent in the draft.\n\n\n#### Comments from Alvaro:\n   Clarify associated_data\n   ```1304   *  associated_data_length: Specifies the length of associated data\n   1305      that is covered by the signature, but is not included in the\n   1306      header and body.  The value of this field is zero, if no\n   1307      associated data is covered by the signature.\n   ```\n   > Where is that associated data carried?  The descriptions don't seem to\ninclude anything (beyond the PathSegmentUnsignedExtensions) that could also\nbe signed.\n\n#### Some thoughts:\n\nThe figure in [2.2.1.4.3.  AS Entry Signature](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#sign) is IMHO not right. It does not match with the definition that we give of associated data _\"data that is covered by the signature, but is not included in the header and body\"_. It contains the text below, which comes from a [comment in the segment definition](https://github.com/scionproto/scion/blob/379c6c7db20695a53b758190cd6c4302d0c3ab20/proto/control_plane/v1/seg.proto#L108). Associated data seems to be used in the same way [here](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/scrypto/signed/msg.go#L144) in the code.\n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n\nassociated_data(ps, i) = ps.segment_info ||\n                         ps.as_entries[1].signed.header_and_body ||\n                         ps.as_entries[1].signed.signature ||\n                         ...\n                         ps.as_entries[i-1].signed.header_and_body ||\n                         ps.as_entries[i-1].signed.signature\n```\n\nThe problems I see with this are:\n\n- [x] Should Associated data length be part of header figure in [2.2.1.4.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.1)[AS Entry Signed Header](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry-signed-header)?  --> Already fixed in v-09\n- [x] Which formula is correct for signature calculation? Does the [formula in the text](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.4.3-5) correspond to what the code actually does in terms of signature calculation ([here? ](https://github.com/scionproto/scion/blob/771c63e390f81bcaf7c10c828f40e191c49af1af/pkg/segment/seg.go#L327))? Right now we have this formula where the AS own entry _ASE_i^(signed)_ is at the end  : \n```\n   Sig_i = K_i( SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) || ASE_i^(signed) )\n```\nThen we have  this text, that I think does not match the order in the previous formula : \n```\ninput(ps, i) = signed.header_and_body || associated_data(ps, i)\n```\nI think it one of the two should change: \n```\n  input(ps, i) =  associated_data(ps, i) || signed.header_and_body\nor \n  Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 || ... || ASE_(i-1)^(signed) || Sig_(i-1) )\n```\n([Slack discussion](https://scionproto.slack.com/archives/C07EDUQSE6L/p1760258044184369))\n- [x] `header_and_body` is explained, but its content is not specified in protobuf. We only define `HeaderAndBodyInternal` in the appendix. Should we change `HeaderAndBodyInternal`  to `HeaderAndBody` ?\n- [ ] `message ASEntry` in protobuf is defined twice, once in [2.2.1.3. AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.1.3)[AS Entry](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-as-entry) and once in [Figure 20](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-control-service-grpc-api-si) in the appendix. --> To be handled in #67 ",
       "createdAt": "2025-07-02T15:22:20Z",
-      "updatedAt": "2025-10-12T19:50:07Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-10-15T12:10:46Z",
+      "closedAt": "2025-10-15T12:10:46Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed this with @oncilla, we have to move this:\n<img width=\"780\" height=\"379\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/616ae2a9-e695-4800-b9bc-03b6f5ed583c\" />",
+          "createdAt": "2025-10-14T13:24:34Z",
+          "updatedAt": "2025-10-14T13:24:34Z"
+        }
+      ]
     },
     {
       "number": 127,
@@ -2383,7 +2453,7 @@
       "id": "I_kwDOJx2-rs7Jm1zG",
       "title": "Add reference for formal verification work",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/135",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2392,8 +2462,8 @@
       "labels": [],
       "body": " Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router (CCS 2025)\n\nJo\u00e3o Pereira (ETH Zurich), Tobias Klenze (Independent Researcher), Sofia Giampietro (ETH Zurich), Markus Limbeck (ETH Zurich), Dionysios Spiliopoulos (ETH Zurich), Felix Wolf (ETH Zurich), Marco Eilers (ETH Zurich), Christoph Sprenger (ETH Zurich), David Basin (ETH Zurich), Peter M\u00fcller (ETH Zurich), Adrian Perrig (ETH Zurich)\n\nhttps://pm.inf.ethz.ch/publications/ScionOverview2024.pdf",
       "createdAt": "2025-09-04T06:49:46Z",
-      "updatedAt": "2025-10-09T12:57:01Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T13:46:30Z",
+      "closedAt": "2025-10-15T13:46:30Z",
       "comments": []
     }
   ],
@@ -10425,26 +10495,122 @@
       "id": "PR_kwDOJx2-rs6eICGV",
       "title": "security considerations: use normative wording on connectedness",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/132",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #122\r\nResolves #135\r\n",
+      "body": "Resolves #122\r\nResolves #135 \r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/security-considerations/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/security-considerations/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/security-considerations/draft-dekater-scion-controlplane.txt)\r\n",
       "createdAt": "2025-07-09T13:22:07Z",
-      "updatedAt": "2025-10-09T13:13:44Z",
+      "updatedAt": "2025-10-15T13:46:37Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "baseRefOid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "security-considerations",
-      "headRefOid": "e78a74da94c6ef8ba6060f654b3719af24151afd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "441405380d9b201260489303054a6a5b4fec548e",
+      "closedAt": "2025-10-15T13:46:28Z",
+      "mergedAt": "2025-10-15T13:46:28Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "f5c7cb528fa703076a50c245852f07d8ab977c46"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HFf_e",
+          "commit": {
+            "abbreviatedOid": "9cd7e3d"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T12:27:07Z",
+          "updatedAt": "2025-10-15T12:27:07Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "Suggest the following formulation\r\n\r\nHere, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.\r\n\r\nFor me, the use of \"specification's MUST clauses\" sounds clumsy and it should be sufficient to simply say that operations should be performed in accordance with the specification. \r\n\r\nBTW - this is an example where 'a' rather than 'an' is used before a vowel (i.e. 'unique'), but 'an' is used before a consonant as the 'honest' as the h is silent.",
+              "createdAt": "2025-10-15T12:27:07Z",
+              "updatedAt": "2025-10-15T12:29:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HFkiK",
+          "commit": {
+            "abbreviatedOid": "9cd7e3d"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-10-15T12:31:54Z",
+          "updatedAt": "2025-10-15T12:32:15Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "Suggest the following:\r\n\r\nFurthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.",
+              "createdAt": "2025-10-15T12:31:54Z",
+              "updatedAt": "2025-10-15T12:32:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HG7ok",
+          "commit": {
+            "abbreviatedOid": "9cd7e3d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T13:42:22Z",
+          "updatedAt": "2025-10-15T13:42:22Z",
+          "comments": [
+            {
+              "originalPosition": 61,
+              "body": "```suggestion\r\nHere, an AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is the one created by an honest AS.\r\n```",
+              "createdAt": "2025-10-15T13:42:22Z",
+              "updatedAt": "2025-10-15T13:42:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HG9hY",
+          "commit": {
+            "abbreviatedOid": "9cd7e3d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T13:43:52Z",
+          "updatedAt": "2025-10-15T13:43:52Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "```suggestion\r\nFurthermore, to ensure that the properties hold within a single ISD, all core ASes of the ISD MUST be able to reach each other without leaving the ISD, i.e, for every pair of cores in an ISD there is a sequence of SCION links that only traverse the ISD members.\r\n```",
+              "createdAt": "2025-10-15T13:43:52Z",
+              "updatedAt": "2025-10-15T13:43:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HHAMk",
+          "commit": {
+            "abbreviatedOid": "4414053"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T13:46:14Z",
+          "updatedAt": "2025-10-15T13:46:14Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 133,
@@ -10539,24 +10705,26 @@
       "id": "PR_kwDOJx2-rs6svkUO",
       "title": "Rewrite PCB extensions section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/136",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #107 \r\n[SCION CP](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/metadata-extension/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-08T17:01:33Z",
-      "updatedAt": "2025-10-13T20:07:29Z",
+      "updatedAt": "2025-10-15T12:01:15Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "metadata-extension",
       "headRefOid": "b77343bbc44418e74a24e581d9381915eca926db",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-15T12:01:09Z",
+      "mergedAt": "2025-10-15T12:01:09Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "cf3ecd3ee147958eaa8fb2445398348ef28186f3"
+      },
       "comments": [],
       "reviews": [
         {
@@ -10664,6 +10832,19 @@
               "updatedAt": "2025-10-13T19:52:26Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HFIFQ",
+          "commit": {
+            "abbreviatedOid": "b77343b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T12:00:49Z",
+          "updatedAt": "2025-10-15T12:00:49Z",
+          "comments": []
         }
       ]
     },
@@ -10672,76 +10853,118 @@
       "id": "PR_kwDOJx2-rs6tRFHO",
       "title": "PCB best set size: rewording",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/137",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #46  ",
       "createdAt": "2025-10-11T19:04:27Z",
-      "updatedAt": "2025-10-11T19:28:25Z",
+      "updatedAt": "2025-10-15T11:58:50Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "pcb_set_size_language",
       "headRefOid": "a7e64f13839fda19524e464b0b5019bed96dd59d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-15T11:58:24Z",
+      "mergedAt": "2025-10-15T11:58:24Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "61a5ba4d6ff88348c2d0e35ac7b6fff5e0220f05"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HFGD2",
+          "commit": {
+            "abbreviatedOid": "a7e64f1"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T11:58:10Z",
+          "updatedAt": "2025-10-15T11:58:10Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 138,
       "id": "PR_kwDOJx2-rs6tSvef",
       "title": "clarify associated data",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/138",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #125\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/associated_data/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-12T08:04:47Z",
-      "updatedAt": "2025-10-12T08:48:32Z",
+      "updatedAt": "2025-10-15T12:10:57Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "baseRefOid": "cf3ecd3ee147958eaa8fb2445398348ef28186f3",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "associated_data",
-      "headRefOid": "31479eb39eaee287c1401cbb82c774fce40fd81e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "bdb817a907253bdb8ab8df07386af6b138bf59f4",
+      "closedAt": "2025-10-15T12:10:45Z",
+      "mergedAt": "2025-10-15T12:10:45Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "b2b37be0f6aa2394e5b678ffde84ba94ef54ea58"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you 4 eye check the text? all questions in the issue are addressed\r\n\r\n",
+          "createdAt": "2025-10-14T14:02:21Z",
+          "updatedAt": "2025-10-14T14:02:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HFN-s",
+          "commit": {
+            "abbreviatedOid": "9de0d83"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Okay",
+          "createdAt": "2025-10-15T12:07:15Z",
+          "updatedAt": "2025-10-15T12:07:15Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 139,
       "id": "PR_kwDOJx2-rs6td1Qv",
       "title": "Sorted out gRPC inconsistencies",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/139",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #105",
       "createdAt": "2025-10-13T13:34:18Z",
-      "updatedAt": "2025-10-13T21:12:20Z",
+      "updatedAt": "2025-10-15T14:00:35Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Removed-and-rationalised-gRPC-references",
-      "headRefOid": "eadfd1071acc61bb9dd241483f3f241e4e30a9e0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "bda96d3554e29bfaf57b5778536e41473590a5c6",
+      "closedAt": "2025-10-14T14:22:15Z",
+      "mergedAt": "2025-10-14T14:22:15Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "803405daf33c15a671734dadda41b771b56cbb4d"
+      },
       "comments": [],
       "reviews": [
         {
@@ -10769,6 +10992,39 @@
               "updatedAt": "2025-10-13T21:12:20Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7G1tdn",
+          "commit": {
+            "abbreviatedOid": "4493043"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-14T14:20:57Z",
+          "updatedAt": "2025-10-14T14:20:57Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Discussed, it can be deprecated.",
+              "createdAt": "2025-10-14T14:20:57Z",
+              "updatedAt": "2025-10-14T14:20:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7G1t6I",
+          "commit": {
+            "abbreviatedOid": "bda96d3"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-14T14:21:22Z",
+          "updatedAt": "2025-10-14T14:21:22Z",
+          "comments": []
         }
       ]
     },
@@ -10791,6 +11047,190 @@
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "pcb_policy",
       "headRefOid": "37a6175c9ec84ac6c941fdf2a29edcb2a572d7eb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 141,
+      "id": "PR_kwDOJx2-rs6tqdXX",
+      "title": "Removed gRPC API Appendix",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/141",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-14T13:04:11Z",
+      "updatedAt": "2025-10-15T14:00:46Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f5c7cb528fa703076a50c245852f07d8ab977c46",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Removed-gRPC-API-Appendix",
+      "headRefOid": "e8909617d84f137ce12c885996ae77428654af88",
+      "closedAt": "2025-10-15T14:00:42Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 142,
+      "id": "PR_kwDOJx2-rs6tq6EQ",
+      "title": "SCMP interface down security considerations",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/142",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #121",
+      "createdAt": "2025-10-14T13:33:20Z",
+      "updatedAt": "2025-10-15T13:36:06Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "fc244b8f9a2dcc2312ff55a97a7de70066040b9c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "SCMP-Messages",
+      "headRefOid": "89914ed0d850c9e7cd96434ed3cc282cdc32be56",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HFI7H",
+          "commit": {
+            "abbreviatedOid": "0311e28"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Okay",
+          "createdAt": "2025-10-15T12:01:55Z",
+          "updatedAt": "2025-10-15T12:01:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 143,
+      "id": "PR_kwDOJx2-rs6t3vZC",
+      "title": "Fixed reference",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/143",
+      "state": "MERGED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-15T12:17:27Z",
+      "updatedAt": "2025-10-15T13:14:38Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "b2b37be0f6aa2394e5b678ffde84ba94ef54ea58",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Fixed-reference",
+      "headRefOid": "e18fcd199568786dba793e52f544634db096cbe2",
+      "closedAt": "2025-10-15T13:14:35Z",
+      "mergedAt": "2025-10-15T13:14:35Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "e3ce8ce158e6f7c278a8f81ef7cd57968106f797"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HGcFS",
+          "commit": {
+            "abbreviatedOid": "e18fcd1"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T13:14:29Z",
+          "updatedAt": "2025-10-15T13:14:29Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 144,
+      "id": "PR_kwDOJx2-rs6t4Zjp",
+      "title": "Clarify AS entry metadata and reorganize section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/144",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #107 (one last point)\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/as-entry-metadata/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-10-15T13:04:03Z",
+      "updatedAt": "2025-10-15T13:26:50Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e3ce8ce158e6f7c278a8f81ef7cd57968106f797",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "as-entry-metadata",
+      "headRefOid": "d0f1f2554cf12164dcb5bd73d811482fb9dd21c2",
+      "closedAt": "2025-10-15T13:26:35Z",
+      "mergedAt": "2025-10-15T13:26:35Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "fc244b8f9a2dcc2312ff55a97a7de70066040b9c"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you review?",
+          "createdAt": "2025-10-15T13:19:26Z",
+          "updatedAt": "2025-10-15T13:19:26Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HGpbc",
+          "commit": {
+            "abbreviatedOid": "d0f1f25"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T13:26:26Z",
+          "updatedAt": "2025-10-15T13:26:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 145,
+      "id": "PR_kwDOJx2-rs6t5PVY",
+      "title": "Remove duplicate gRPC definitions",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/145",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #67 ",
+      "createdAt": "2025-10-15T14:02:07Z",
+      "updatedAt": "2025-10-15T14:42:46Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f5c7cb528fa703076a50c245852f07d8ab977c46",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Removed-and-rationalised-gRPC-references",
+      "headRefOid": "a0c084d4008a167e7b9631e6bb2b41d8bab70955",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
