@@ -1608,9 +1608,7 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
-This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}.
-
-SCMP packet authentication is also not specified here. It is currently still experimental so endpoints should validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations. These additional signals are outside the scope of this specification.
+This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
 
 ## General Format
 
@@ -1775,7 +1773,6 @@ A **External Interface Down** message SHOULD be originated by a router in respon
 to a packet that cannot be forwarded because the link to an external AS is broken.
 The ISD and AS identifier are set to the ISD-AS of the originating router.
 The Interface ID identifies the link of the originating AS that is down.
-
 Recipients can use this information to route around broken data-plane links.
 
 ### Internal Connectivity Down {#internal-connectivity-down}
@@ -2054,10 +2051,9 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
 
-**SCMP Error Messages** <br>
-([SCMP error messages](#scmp-notification)) can potentially be abused by an attacker to signal spurious network errors, attempting to degrade or deny a victim's use of a service or network path, and/or attempt to force traffic through a different path.
-
-The validity of such messages could be authenticated with SCMP authentication if available, or validated with additional signals.
+**Rogue SCMP Error Messages**  <br>
+SCMP External Interface Down[](#external-interface-down) and Internal Connectivity Down[](#internal-connectivity-down) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
+Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
 
 ## Denial of Service Attacks {#dos-cp}
 
