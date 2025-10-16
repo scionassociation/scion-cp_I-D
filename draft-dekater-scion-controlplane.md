@@ -1357,7 +1357,7 @@ enum SignatureAlgorithm {
 ~~~~~
 {: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
 
-Requests the signature algorithm. Valid types are ECDS with SHA256, ECDS with SHA384, and ECDS with SHA512. An unspecified signature algorithm is never valid. 
+Requests the signature algorithm. Valid types are ECDS with SHA256, ECDS with SHA384, and ECDS with SHA512. An unspecified signature algorithm is never valid.
 <br>
 
 ~~~~~
