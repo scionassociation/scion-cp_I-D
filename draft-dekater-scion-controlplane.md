@@ -922,14 +922,14 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
-- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED.
+- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED. Possible types are defined by the `SignatureAlgorithm` definition. An unspecified signature algorithm is never valid. Other algorithms or curves MAY be used in the future. Signature algorithms are further discussed in {{I-D.dekater-scion-pki}}.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: it may include metadata. This field is OPTIONAL. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header.
 - `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 
-The `Header` protobuf message definition is:
+The `Header` and `SignatureAlgorithm` protobuf message definition are:
 
 ~~~~
    message Header {
@@ -941,6 +941,13 @@ The `Header` protobuf message definition is:
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
+
+  enum SignatureAlgorithm {
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+  }
 ~~~~
 
 The `VerificationKeyID` message contains the following REQUIRED fields:
@@ -1340,21 +1347,7 @@ The propagation procedure includes the following elements:
 
 ## Distribution of Cryptographic Material
 
-The Control Services request cryptographic material from the PKI (see {{I-D.dekater-scion-pki}}) using the following API, in protobuf format:
-
-~~~~~
-enum SignatureAlgorithm {
-    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-}
-
-~~~~~
-{: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
-
-Requests the signature algorithm. Valid types are ECDS with SHA256, ECDS with SHA384, and ECDS with SHA512. An unspecified signature algorithm is never valid.
-<br>
+Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages:
 
 ~~~~~
 service TrustMaterialService {
