@@ -3651,30 +3651,33 @@ In comparison to these time scales, clock offsets in the order of minutes are im
           <h4 id="name-lookup-requests-message-for">
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-lookup-requests-message-for" class="section-name selfRef">Lookup Requests Message Format</a>
           </h4>
-<span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
-<figure id="figure-17">
-            <div class="alignLeft art-text artwork" id="section-5.1.2-1.1">
+<p id="section-5.1.2-1">Control Services provide paths to endpoints through the <code>TrustMaterialService</code>, which returns a list of <code>Segments</code> that match the request:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.2-2">
 <pre>
 service SegmentLookupService {
-    // Segments returns all segments that match the request.
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
 }
-
+</pre><a href="#section-5.1.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.2-3">They use the following protobuf messages: a <code>SegmentsRequest</code>, which includes:
+- <code>src_isd_as</code>: The source ISD-AS of the segment.
+- <code>dst_isd_as</code>: The destination ISD-AS of the segment.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-4">The corresponding <code>SegmentsResponse</code> returns:
+- <code>segments</code>: a list of <code>PathSegment</code>
+- a mapping from path segment type to path segments, where the key is the integer representation of the <code>SegmentType</code> enum defined in <a href="#reg-proto" class="auto internal xref">Section 4.3</a>.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
+<span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
+<figure id="figure-17">
+            <div class="alignLeft art-text artwork" id="section-5.1.2-5.1">
+<pre>
 message SegmentsRequest {
-    // The source ISD-AS of the segment.
     uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
     uint64 dst_isd_as = 2;
 }
 
 message SegmentsResponse {
     message Segments {
-        // List of path segments.
         repeated PathSegment segments = 1;
     }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
     map&lt;int32, Segments&gt; segments = 1;
 }
 </pre>
