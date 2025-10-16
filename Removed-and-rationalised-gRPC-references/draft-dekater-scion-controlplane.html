@@ -1611,7 +1611,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 18</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 17</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -2449,7 +2449,7 @@ Path Segment 4 |             |     |             |     |             |
 <p id="section-2.2.1.4.1-2">The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:<a href="#section-2.2.1.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1.4.1-3.1">
-                  <p id="section-2.2.1.4.1-3.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.1.4.1-3.1.1"><code>signature_algorithm</code>: Specifies the algorithm to compute the signature. This field is <span class="bcp14">REQUIRED</span>. Possible types are defined by the <code>SignatureAlgorithm</code> definition. An unspecified signature algorithm is never valid. Other algorithms or curves <span class="bcp14">MAY</span> be used in the future. Signature algorithms are further discussed in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.1.4.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.1.4.1-3.2">
                   <p id="section-2.2.1.4.1-3.2.1"><code>verification_key_id</code>: Contains a <code>VerificationKeyID</code> message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is <span class="bcp14">REQUIRED</span>.<a href="#section-2.2.1.4.1-3.2.1" class="pilcrow">¶</a></p>
@@ -2464,7 +2464,7 @@ Path Segment 4 |             |     |             |     |             |
                   <p id="section-2.2.1.4.1-3.5.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.1.4.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.1.4.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
-<p id="section-2.2.1.4.1-4">The <code>Header</code> protobuf message definition is:<a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.1.4.1-4">The <code>Header</code> and <code>SignatureAlgorithm</code> protobuf message definition are:<a href="#section-2.2.1.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.1.4.1-5">
 <pre>
    message Header {
@@ -2476,6 +2476,13 @@ Path Segment 4 |             |     |             |     |             |
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
+
+  enum SignatureAlgorithm {
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+  }
 </pre><a href="#section-2.2.1.4.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2.1.4.1-6">The <code>VerificationKeyID</code> message contains the following <span class="bcp14">REQUIRED</span> fields:<a href="#section-2.2.1.4.1-6" class="pilcrow">¶</a></p>
@@ -2893,7 +2900,7 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
 <li id="section-2.3.1-2.1">
-              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 18</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 17</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.1-2.2">
               <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
@@ -3094,29 +3101,10 @@ In current practice the intra-ISD set size is typically 20. Current practice als
         <h3 id="name-distribution-of-cryptograph">
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-distribution-of-cryptograph" class="section-name selfRef">Distribution of Cryptographic Material</a>
         </h3>
-<p id="section-2.4-1">The Control Services request cryptographic material from the PKI (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>) using the following API, in protobuf format:<a href="#section-2.4-1" class="pilcrow">¶</a></p>
-<span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
+<p id="section-2.4-1">Control Services distribute cryptographic material for the PKI (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>) using the following protobuf messages:<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
 <figure id="figure-17">
           <div class="alignLeft art-text artwork" id="section-2.4-2.1">
-<pre>
-enum SignatureAlgorithm {
-    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-}
-
-</pre>
-</div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
-<a href="#name-control-service-rpc-api-sig" class="selfRef">Control Service RPC API - Signed ASEntry representation</a>
-          </figcaption></figure>
-</div>
-<p id="section-2.4-3">Requests the signature algorithm. Valid types are ECDS with SHA256, ECDS with SHA384, and ECDS with SHA512. An unspecified signature algorithm is never valid.
-<br><a href="#section-2.4-3" class="pilcrow">¶</a></p>
-<span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
-<figure id="figure-18">
-          <div class="alignLeft art-text artwork" id="section-2.4-4.1">
 <pre>
 service TrustMaterialService {
     rpc Chains(ChainsRequest) returns (ChainsResponse) {}
@@ -3151,53 +3139,53 @@ message TRCResponse {
 
 </pre>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-control-service-rpc-api-tru" class="selfRef">Control Service RPC API - Trust Material representation</a>
           </figcaption></figure>
 </div>
-<p id="section-2.4-5">The request procedure includes the following elements:<a href="#section-2.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">The request procedure includes the following elements:<a href="#section-2.4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.4-6.1">
-            <p id="section-2.4-6.1.1"><code>Chains(ChainsRequest)</code>: Returns the certificate chains that match the request.<a href="#section-2.4-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.4-4.1">
+            <p id="section-2.4-4.1.1"><code>Chains(ChainsRequest)</code>: Returns the certificate chains that match the request.<a href="#section-2.4-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.2">
-            <p id="section-2.4-6.2.1"><code>TRC(TRCRequest)</code>: Returns a specific TRC that matches the request.<a href="#section-2.4-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.2">
+            <p id="section-2.4-4.2.1"><code>TRC(TRCRequest)</code>: Returns a specific TRC that matches the request.<a href="#section-2.4-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.3">
-            <p id="section-2.4-6.3.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.4-6.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.3">
+            <p id="section-2.4-4.3.1"><code>SegmentCreationService</code>: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.<a href="#section-2.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.4">
-            <p id="section-2.4-6.4.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.<a href="#section-2.4-6.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.4">
+            <p id="section-2.4-4.4.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.<a href="#section-2.4-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.5">
-            <p id="section-2.4-6.5.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-6.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.5">
+            <p id="section-2.4-4.5.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.6">
-            <p id="section-2.4-6.6.1"><code>isd_as</code>: Returns ISD-AS of Subject in the AS certificate.<a href="#section-2.4-6.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.6">
+            <p id="section-2.4-4.6.1"><code>isd_as</code>: Returns ISD-AS of Subject in the AS certificate.<a href="#section-2.4-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.7">
-            <p id="section-2.4-6.7.1"><code>subject_key_id</code>: Returns SubjectKeyID in the AS certificate.<a href="#section-2.4-6.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.7">
+            <p id="section-2.4-4.7.1"><code>subject_key_id</code>: Returns SubjectKeyID in the AS certificate.<a href="#section-2.4-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.8">
-            <p id="section-2.4-6.8.1"><code>chains</code>: Lists the chains that match the request.<a href="#section-2.4-6.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.8">
+            <p id="section-2.4-4.8.1"><code>chains</code>: Lists the chains that match the request.<a href="#section-2.4-4.8.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.9">
-            <p id="section-2.4-6.9.1"><code>as_cert</code>: Returns the AS certificate in the chain.<a href="#section-2.4-6.9.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.9">
+            <p id="section-2.4-4.9.1"><code>as_cert</code>: Returns the AS certificate in the chain.<a href="#section-2.4-4.9.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.10">
-            <p id="section-2.4-6.10.1"><code>ca_cert</code>: Returns the CA certificate in the chain.<a href="#section-2.4-6.10.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.10">
+            <p id="section-2.4-4.10.1"><code>ca_cert</code>: Returns the CA certificate in the chain.<a href="#section-2.4-4.10.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.11">
-            <p id="section-2.4-6.11.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-6.11.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.11">
+            <p id="section-2.4-4.11.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-4.11.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.12">
-            <p id="section-2.4-6.12.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-6.12.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.12">
+            <p id="section-2.4-4.12.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-4.12.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.13">
-            <p id="section-2.4-6.13.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-6.13.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.13">
+            <p id="section-2.4-4.13.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-4.13.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-2.4-6.14">
-            <p id="section-2.4-6.14.1"><code>trc</code>: Returns the raw TRC.<a href="#section-2.4-6.14.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.4-4.14">
+            <p id="section-2.4-4.14.1"><code>trc</code>: Returns the raw TRC.<a href="#section-2.4-4.14.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3660,7 +3648,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-lookup-requests-message-for" class="section-name selfRef">Lookup Requests Message Format</a>
           </h4>
 <span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
-<figure id="figure-19">
+<figure id="figure-18">
             <div class="alignLeft art-text artwork" id="section-5.1.2-1.1">
 <pre>
 service SegmentLookupService {
@@ -3687,7 +3675,7 @@ message SegmentsResponse {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-control-service-rpc-api-seg" class="selfRef">Control Service RPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
             </figcaption></figure>
 </div>
@@ -3887,7 +3875,7 @@ message SegmentsResponse {
 <p id="section-6.1-1">Every SCMP message is preceded by a SCION header and zero or more SCION extension headers (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification"). The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <span id="name-scmp-message-format"></span><div id="scmp-format">
-<figure id="figure-20">
+<figure id="figure-19">
           <div id="section-6.1-3.1">
             <div class="alignLeft art-svg artwork" id="section-6.1-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3948,7 +3936,7 @@ message SegmentsResponse {
               </svg><a href="#section-6.1-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
           </figcaption></figure>
 </div>
@@ -4153,7 +4141,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
 <span id="name-packet-too-big-format"></span><div id="_figure-21">
-<figure id="figure-21">
+<figure id="figure-20">
             <div id="section-6.5.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="528" viewBox="0 0 528 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4226,7 +4214,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
                 </svg><a href="#section-6.5.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-packet-too-big-format" class="selfRef">Packet Too Big format</a>
             </figcaption></figure>
 </div>
@@ -4269,7 +4257,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-22">
+<figure id="figure-21">
             <div id="section-6.5.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="528" viewBox="0 0 528 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4346,7 +4334,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.5.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-external-interface-down-for" class="selfRef">External Interface Down format</a>
             </figcaption></figure>
 </div>
@@ -4397,7 +4385,7 @@ Recipients can use this information to route around broken data-plane links.<a h
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-23">
+<figure id="figure-22">
             <div id="section-6.5.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="384" width="528" viewBox="0 0 528 384" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4479,7 +4467,7 @@ Recipients can use this information to route around broken data-plane links.<a h
                 </svg><a href="#section-6.5.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-internal-connectivity-down-" class="selfRef">Internal Connectivity Down format</a>
             </figcaption></figure>
 </div>
@@ -4545,7 +4533,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
           </h4>
 <span id="name-echo-request-format"></span><div id="_figure-24">
-<figure id="figure-24">
+<figure id="figure-23">
             <div id="section-6.6.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4609,7 +4597,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-echo-request-format" class="selfRef">Echo Request format</a>
             </figcaption></figure>
 </div>
@@ -4656,7 +4644,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
           </h4>
 <span id="name-echo-reply-format"></span><div id="_figure-25">
-<figure id="figure-25">
+<figure id="figure-24">
             <div id="section-6.6.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4720,7 +4708,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-echo-reply-format" class="selfRef">Echo Reply format</a>
             </figcaption></figure>
 </div>
@@ -4768,7 +4756,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
 <span id="name-traceroute-request-format"></span><div id="_figure-26">
-<figure id="figure-26">
+<figure id="figure-25">
             <div id="section-6.6.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4833,7 +4821,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute Request format</a>
             </figcaption></figure>
 </div>
@@ -4889,7 +4877,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
 <span id="name-traceroute-reply-format"></span><div id="_figure-27">
-<figure id="figure-27">
+<figure id="figure-26">
             <div id="section-6.6.4-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.4-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4954,7 +4942,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.4-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
 <a href="#name-traceroute-reply-format" class="selfRef">Traceroute Reply format</a>
             </figcaption></figure>
 </div>
@@ -5390,7 +5378,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
       </ul>
 <p id="appendix-C-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
-<figure id="figure-28">
+<figure id="figure-27">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 package proto.control_plane.v1;
@@ -5427,7 +5415,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-service-resolution-rpc-api-" class="selfRef">Service Resolution RPC API definition</a>
         </figcaption></figure>
 </div>
@@ -5439,9 +5427,9 @@ message Transport {
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 29</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 30</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 31</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 28</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 29</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 30</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
-<figure id="figure-29">
+<figure id="figure-28">
         <div class="alignLeft art-text artwork" id="appendix-D-2.1">
 <pre>
 +----------------------------+     +----------------------------+
@@ -5471,12 +5459,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
-<figure id="figure-30">
+<figure id="figure-29">
         <div class="alignLeft art-text artwork" id="appendix-D-3.1">
 <pre>
 +---------+          +---------+          +---------+         +---------+
@@ -5534,12 +5522,12 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
-<figure id="figure-31">
+<figure id="figure-30">
         <div class="alignLeft art-text artwork" id="appendix-D-4.1">
 <pre>
 
@@ -5598,7 +5586,7 @@ message Transport {
 
 </pre>
 </div>
-<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>

@@ -483,7 +483,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 18.
+      AS that sent the PCB through the API described in Figure 17.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -1261,7 +1261,11 @@ Table of Contents
    following fields:
 
    *  signature_algorithm: Specifies the algorithm to compute the
-      signature.  This field is REQUIRED.
+      signature.  This field is REQUIRED.  Possible types are defined by
+      the SignatureAlgorithm definition.  An unspecified signature
+      algorithm is never valid.  Other algorithms or curves MAY be used
+      in the future.  Signature algorithms are further discussed in
+      [I-D.dekater-scion-pki].
 
    *  verification_key_id: Contains a VerificationKeyID message,
       carrying information relevant to signing and verifying PCBs and
@@ -1280,7 +1284,7 @@ Table of Contents
       in Section 2.2.1.4.3.  The value of this field is zero if no
       associated data is covered by the signature.
 
-   The Header protobuf message definition is:
+   The Header and SignatureAlgorithm protobuf message definition are:
 
       message Header {
           SignatureAlgorithm signature_algorithm = 1;
@@ -1291,6 +1295,13 @@ Table of Contents
           bytes metadata = 4;
           int32 associated_data_length = 5;
       }
+
+     enum SignatureAlgorithm {
+       SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+     }
 
    The VerificationKeyID message contains the following REQUIRED fields:
 
@@ -1706,7 +1717,7 @@ Table of Contents
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 18.
+       Service of the sending AS through the API described in Figure 17.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -1946,21 +1957,8 @@ Table of Contents
 
 2.4.  Distribution of Cryptographic Material
 
-   The Control Services request cryptographic material from the PKI (see
-   [I-D.dekater-scion-pki]) using the following API, in protobuf format:
-
-   enum SignatureAlgorithm {
-       SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-   }
-
-     Figure 17: Control Service RPC API - Signed ASEntry representation
-
-   Requests the signature algorithm.  Valid types are ECDS with SHA256,
-   ECDS with SHA384, and ECDS with SHA512.  An unspecified signature
-   algorithm is never valid.
+   Control Services distribute cryptographic material for the PKI (see
+   [I-D.dekater-scion-pki]) using the following protobuf messages:
 
    service TrustMaterialService {
        rpc Chains(ChainsRequest) returns (ChainsResponse) {}
@@ -1993,7 +1991,7 @@ Table of Contents
        bytes trc = 1;
    }
 
-     Figure 18: Control Service RPC API - Trust Material representation
+     Figure 17: Control Service RPC API - Trust Material representation
 
    The request procedure includes the following elements:
 
@@ -2614,7 +2612,7 @@ Table of Contents
        map<int32, Segments> segments = 1;
    }
 
-     Figure 19: Control Service RPC API - Segment lookup.  This API is
+     Figure 18: Control Service RPC API - Segment lookup.  This API is
        exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -2790,7 +2788,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 20: SCMP message format
+                       Figure 19: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2931,7 +2929,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 21: Packet Too Big format
+                      Figure 20: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2971,7 +2969,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 22: External Interface Down format
+                 Figure 21: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3021,7 +3019,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 23: Internal Connectivity Down format
+                Figure 22: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -3067,7 +3065,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 24: Echo Request format
+                       Figure 23: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3103,7 +3101,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 25: Echo Reply format
+                        Figure 24: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3145,7 +3143,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 26: Traceroute Request format
+                    Figure 25: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3200,7 +3198,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 27: Traceroute Reply format
+                     Figure 26: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3787,7 +3785,7 @@ message Transport {
     string address = 1;
 }
 
-           Figure 28: Service Resolution RPC API definition
+           Figure 27: Service Resolution RPC API definition
 
 
 
@@ -3795,10 +3793,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 29 below.  In both examples, the source
-   endpoint is in AS A.  Figure 30 shows the sequence diagram for the
+   is represented in Figure 28 below.  In both examples, the source
+   endpoint is in AS A.  Figure 29 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 31 shows the path lookup sequence diagram if the destination
+   Figure 30 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3829,7 +3827,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 29: Topology used in the path lookup examples
+            Figure 28: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -3884,7 +3882,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 30: Sequence diagram illustrating a path lookup for a
+     Figure 29: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3944,7 +3942,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 31: Sequence diagram illustrating a path lookup for a
+     Figure 30: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
