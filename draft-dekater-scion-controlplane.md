@@ -435,11 +435,10 @@ The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.de
 * Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
 * Constructed multi-hop paths are registered with the Control Service at the origin core AS.
 * Control Services respond to requests from remote ASes by reversing the path via which the request came.
-* Clients find the relevant Control Service by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.dekater-scion-dataplane}}).
 
-Service addresses are resolved as follows:
+Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
 
-* To resolve the address of the Control Service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
+* A client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address in the format:
   * Common Header:
     * Path type: SCION (0x01)
     * DT/DL: "Service" (0b0100)
