@@ -1250,7 +1250,7 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 
 The propagation process in intra-ISD beaconing includes the following steps:
 
-1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
+1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)), including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
