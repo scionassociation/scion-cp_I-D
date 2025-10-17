@@ -427,9 +427,6 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
-
-
 ## Control Service Discovery
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}} which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
