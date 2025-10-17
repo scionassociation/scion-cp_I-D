@@ -1724,8 +1724,9 @@ Table of Contents
 
    3.  Incoming Interface: the last ISD-AS entry in a received PCB (in
        its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor
-       of the interface where the PCB was received.  If not, the PCB
-       MUST be discarded.
+       of the interface where the PCB was received.  In addition, the
+       corresponding link MUST be core or parent.  If not, the PCB MUST
+       be discarded.
 
    4.  Continuity: when a PCB contains two or more AS entries, the
        receiver Control Service MUST check every AS entry except the
