@@ -1783,13 +1783,13 @@ Table of Contents
       resilience in case of link failure.  Both criteria can be used
       depending on the objective of the AS.
 
-   The relative disjointness of two PCBs A and B may be calculated by
-   assigning a disjointness score, calculated as the number of links in
-   A that don't appear in B.  For example, the beacon that has the
-   highest disjointness score and is not the shortest path should be
-   selected, but if this not better than what has already been selected,
-   then the beacon with the shortest path yet to be selected should be
-   chosen instead.
+      The relative disjointness of two PCBs A and B may be calculated by
+      assigning a disjointness score, calculated as the number of links
+      in A that don't appear in B.  For example, the beacon that has the
+      highest disjointness score and is not the shortest path should be
+      selected, but if this not better than what has already been
+      selected, then the beacon with the shortest path yet to be
+      selected should be chosen instead.
 
    A PCB Selection Policy can be expressed as a stateful filter of
    segments, i.e., a function which indicates whether to accept or deny
