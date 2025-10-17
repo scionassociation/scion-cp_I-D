@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 April 2026                                           S. Hitz
+Expires: 20 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         16 October 2025
+                                                         17 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2026.
+   This Internet-Draft will expire on 20 April 2026.
 
 Copyright Notice
 
@@ -1798,13 +1798,10 @@ Table of Contents
    selects PCBs corresponding to paths that are commercially or
    otherwise operationally viable.
 
-   Care should be taken to avoid a PCB selection policy that
-   accidentally isolates the AS from the network, especially in a core
-   AS.  One case is a triangle of 3 core ASes where two may prefer each
-   other to reach the third one.  In this edge case, a members of the
-   "triangle" without other core links may become isolated.  In
-   practice, this scenario is unlikely.  In addition, policies based on
-   disjointness have proven to work well in existing deployments.
+   To ensure reachability, PCB selection policies should forward as many
+   PCBs as possible.  PCB selection is not intended as a mechanism for
+   traffic engineering (e.g., by excluding specific PCBs for that
+   purpose).
 
 2.3.4.  Propagation Interval and Best PCBs Set Size
 
