@@ -431,7 +431,7 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}} which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
-* Neighboring ASes craft one-hop paths directly. 
+* Neighboring ASes craft one-hop paths directly.
 * Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
 * Constructed multi-hop paths are registered with the Control Service at the origin core AS.
 * Control Services respond to requests from remote ASes by reversing the path via which the request came.
