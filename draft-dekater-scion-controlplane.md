@@ -1218,7 +1218,7 @@ The relative disjointness of two PCBs A and B may be calculated by assigning a d
 A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
-Care should be taken to avoid a PCB selection policy that accidentally isolates the AS from the network, especially in a core AS. One case is a triangle of 3 core ASes where two may prefer each other to reach the third one. In this edge case, a members of the "triangle" without other core links may become isolated. In practice, this scenario is unlikely. In addition, policies based on disjointness have proven to work well in existing deployments.
+To ensure reachability, PCB selection policies should forward as many PCBs as possible. PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
