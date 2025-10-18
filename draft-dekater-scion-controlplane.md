@@ -881,7 +881,7 @@ The header part carries information that is relevant to the computation and veri
 - `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 
-The `Header` and `SignatureAlgorithm` protobuf message definition are:
+The `Header` and `SignatureAlgorithm` protobuf message definitions are:
 
 ~~~~
    message Header {
