@@ -13,22 +13,21 @@
        The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
-<meta content="xml2rfc 3.30.2" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-controlplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.2
-    Python 3.12.11
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.4.0
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.5
-    setuptools 80.9.0
     wcwidth 0.2.14
 -->
 <link href="draft-dekater-scion-controlplane.xml" rel="alternate" type="application/rfc+xml">
@@ -1052,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 20 April 2026</td>
+<td class="center">Expires 21 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-17" class="published">17 October 2025</time>
+<time datetime="2025-10-18" class="published">18 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-20">20 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-21">21 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1193,6 +1192,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.8">
                 <p id="section-toc.1-1.1.2.8.1"><a href="#section-1.8" class="auto internal xref">1.8</a>.  <a href="#name-communication-protocol" class="internal xref">Communication Protocol</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.9">
+                <p id="section-toc.1-1.1.2.9.1"><a href="#section-1.9" class="auto internal xref">1.9</a>.  <a href="#name-control-service-discovery" class="internal xref">Control Service Discovery</a></p>
 </li>
             </ul>
 </li>
@@ -1435,39 +1437,36 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-full-control-service-rpc-ap" class="internal xref">Full Control Service RPC API</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-use-of-the-scion-data-plane" class="internal xref">Use of the SCION Data Plane</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-path-lookup-examples" class="internal xref">Path-Lookup Examples</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
-                <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-F.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-10</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
+                <p id="section-toc.1-1.14.2.1.1"><a href="#appendix-E.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-control" class="internal xref">draft-dekater-scion-controlplane-10</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
-                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-F.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-09</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
+                <p id="section-toc.1-1.14.2.2.1"><a href="#appendix-E.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlp" class="internal xref">draft-dekater-scion-controlplane-09</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
-                <p id="section-toc.1-1.15.2.3.1"><a href="#appendix-F.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-08</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.3">
+                <p id="section-toc.1-1.14.2.3.1"><a href="#appendix-E.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpl" class="internal xref">draft-dekater-scion-controlplane-08</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.4">
-                <p id="section-toc.1-1.15.2.4.1"><a href="#appendix-F.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpla" class="internal xref">draft-dekater-scion-controlplane-07</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.4">
+                <p id="section-toc.1-1.14.2.4.1"><a href="#appendix-E.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlpla" class="internal xref">draft-dekater-scion-controlplane-07</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.5">
-                <p id="section-toc.1-1.15.2.5.1"><a href="#appendix-F.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplan" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.5">
+                <p id="section-toc.1-1.14.2.5.1"><a href="#appendix-E.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplan" class="internal xref">draft-dekater-scion-controlplane-06</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.6">
-                <p id="section-toc.1-1.15.2.6.1"><a href="#appendix-F.6" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplane" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.6">
+                <p id="section-toc.1-1.14.2.6.1"><a href="#appendix-E.6" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplane" class="internal xref">draft-dekater-scion-controlplane-05</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.7">
-                <p id="section-toc.1-1.15.2.7.1"><a href="#appendix-F.7" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplane-" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.7">
+                <p id="section-toc.1-1.14.2.7.1"><a href="#appendix-E.7" class="auto internal xref"></a><a href="#name-draft-dekater-scion-controlplane-" class="internal xref">draft-dekater-scion-controlplane-04</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-G" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-F" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1608,7 +1607,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.2.1">Selecting and registering the set of path segments via which the AS wants to be reached.<a href="#section-1.4-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-8.3">
-            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-8.3.1">Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#_figure-36" class="auto internal xref">Figure 31</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for <em>finding and registering suitable paths</em>, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to <em>forward data packets</em>.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
@@ -1881,8 +1880,119 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </h3>
 <p id="section-1.8-1">All communication between the Control Services in different ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.8-1" class="pilcrow">¶</a></p>
 <p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)), which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
-<p id="section-1.8-3"><a href="#app-a" class="auto internal xref">Appendix "Full Control Service RPC API"</a> provides the entire Control Service API definition in protobuf format.<a href="#section-1.8-3" class="pilcrow">¶</a></p>
-<p id="section-1.8-4"><a href="#app-b" class="auto internal xref">Appendix "Use of the SCION Data Plane"</a> provides details about the establishment of the underlying QUIC connections through the data plane.<a href="#section-1.8-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="control-service-discovery">
+<section id="section-1.9">
+        <h3 id="name-control-service-discovery">
+<a href="#section-1.9" class="section-number selfRef">1.9. </a><a href="#name-control-service-discovery" class="section-name selfRef">Control Service Discovery</a>
+        </h3>
+<p id="section-1.9-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-1.9-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-2.1">
+            <p id="section-1.9-2.1.1">Neighboring ASes craft one-hop paths directly.<a href="#section-1.9-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-2.2">
+            <p id="section-1.9-2.2.1">Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.<a href="#section-1.9-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-2.3">
+            <p id="section-1.9-2.3.1">Constructed multi-hop paths are registered with the Control Service at the origin core AS.<a href="#section-1.9-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-2.4">
+            <p id="section-1.9-2.4.1">Control Services respond to requests from remote ASes by reversing the path via which the request came.<a href="#section-1.9-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-1.9-3">Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:<a href="#section-1.9-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1">
+            <p id="section-1.9-4.1.1">A client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address in the format:<a href="#section-1.9-4.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.1">
+                <p id="section-1.9-4.1.2.1.1">Common Header:<a href="#section-1.9-4.1.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.1.2.1">
+                    <p id="section-1.9-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#section-1.9-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-1.9-4.1.2.1.2.2">
+                    <p id="section-1.9-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#section-1.9-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-1.9-4.1.2.2">
+                <p id="section-1.9-4.1.2.2.1">Address Header:<a href="#section-1.9-4.1.2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.2.2.1">
+                    <p id="section-1.9-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#section-1.9-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-1.9-4.1.2.3">
+                <p id="section-1.9-4.1.2.3.1">UDP Header:<a href="#section-1.9-4.1.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.3.2.1">
+                    <p id="section-1.9-4.1.2.3.2.1.1">DstPort: 0<a href="#section-1.9-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-1.9-4.2">
+            <p id="section-1.9-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#section-1.9-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-4.3">
+            <p id="section-1.9-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#section-1.9-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-4.4">
+            <p id="section-1.9-4.4.1">The destination service responds to the client with a ServiceResolutionResponse which contains one or more transport options.<a href="#section-1.9-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.9-4.5">
+            <p id="section-1.9-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#section-1.9-4.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-1.9-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#section-1.9-5" class="pilcrow">¶</a></p>
+<span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
+<figure id="figure-2">
+          <div class="alignLeft art-text artwork" id="section-1.9-6.1">
+<pre>
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map&lt;string, Transport&gt; transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.0.2.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-service-resolution-rpc-api-" class="selfRef">Service Resolution RPC API definition</a>
+          </figcaption></figure>
+</div>
+<p id="section-1.9-7"><br></p>
 </section>
 </div>
 </section>
@@ -1940,9 +2050,9 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-pcb-propagation-illustrated" class="section-name selfRef">PCB Propagation - Illustrated Examples</a>
           </h4>
 <p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.1.3-2">In <a href="#_figure-3a" class="auto internal xref">Figure 2</a> below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "<em>Core - Out:2</em>" and "<em>Core - Out:1</em>", respectively).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-2">In <a href="#_figure-3a" class="auto internal xref">Figure 3</a> below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "<em>Core - Out:2</em>" and "<em>Core - Out:1</em>", respectively).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-f"></span><div id="_figure-3a">
-<figure id="figure-2">
+<figure id="figure-3">
             <div class="alignLeft art-text artwork" id="section-2.1.3-3.1">
 <pre>
                            +-------------+
@@ -1961,13 +2071,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                            |    AS Y     |
 </pre>
 </div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-intra-isd-pcb-propagation-f" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 1</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-4">AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see <a href="#_figure-3b" class="auto internal xref">Figure 3</a> below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-4">AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see <a href="#_figure-3b" class="auto internal xref">Figure 4</a> below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-fr"></span><div id="_figure-3b">
-<figure id="figure-3">
+<figure id="figure-4">
             <div class="alignLeft art-text artwork" id="section-2.1.3-5.1">
 <pre>
                         +-----+ |   | +-----+
@@ -2005,13 +2115,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                            |    AS Z     |
 </pre>
 </div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-intra-isd-pcb-propagation-fr" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 2</a>
             </figcaption></figure>
 </div>
 <p id="section-2.1.3-6">The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.<a href="#section-2.1.3-6" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-fro"></span><div id="_figure-3c">
-<figure id="figure-4">
+<figure id="figure-5">
             <div class="alignLeft art-text artwork" id="section-2.1.3-7.1">
 <pre>
                    +-----+      |   |      +-----+
@@ -2052,13 +2162,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 
 </pre>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-intra-isd-pcb-propagation-fro" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 3</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-8">Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by <a href="#_figure-4" class="auto internal xref">Figure 5</a>. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from <a href="#_figure-3c" class="auto internal xref">Figure 4</a> above. It is up to AS Z to use all of these path segments or just a selection of them.<a href="#section-2.1.3-8" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-8">Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by <a href="#_figure-4" class="auto internal xref">Figure 6</a>. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from <a href="#_figure-3c" class="auto internal xref">Figure 5</a> above. It is up to AS Z to use all of these path segments or just a selection of them.<a href="#section-2.1.3-8" class="pilcrow">¶</a></p>
 <span id="name-possible-up-or-down-segment"></span><div id="_figure-4">
-<figure id="figure-5">
+<figure id="figure-6">
             <div class="alignLeft art-text artwork" id="section-2.1.3-9.1">
 <pre>
                 AS Entry Core        AS Entry Y          AS Entry Z
@@ -2107,7 +2217,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-possible-up-or-down-segment" class="selfRef">Possible up- or down segments for AS Z</a>
             </figcaption></figure>
 </div>
@@ -2126,7 +2236,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-pcb-message-format" class="section-name selfRef">PCB Message Format</a>
           </h4>
 <span id="name-top-down-composition-of-a-p"></span><div id="_figure-5">
-<figure id="figure-6">
+<figure id="figure-7">
             <div class="alignLeft art-text artwork" id="section-2.2.1-1.1">
 <pre>
                            PCB/Path Segment
@@ -2191,18 +2301,18 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-top-down-composition-of-a-p" class="selfRef">Top-down composition of a PCB</a>
             </figcaption></figure>
 </div>
-<p id="section-2.2.1-2">Note: For a full example of a PCB in the Protobuf message format, please see <a href="#_figure-34" class="auto internal xref">Figure 28</a>.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-2">Note: For a full example of a PCB in the Protobuf message format, please see <a href="#_figure-34" class="auto internal xref">Figure 29</a>.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
 <div id="segment">
 <section id="section-2.2.1.1">
             <h5 id="name-pcb-top-level-message-forma">
 <a href="#section-2.2.1.1" class="section-number selfRef">2.2.1.1. </a><a href="#name-pcb-top-level-message-forma" class="section-name selfRef">PCB Top-Level Message Format</a>
             </h5>
 <span id="name-pcb-top-level-message-format"></span><div id="_figure-6">
-<figure id="figure-7">
+<figure id="figure-8">
               <div class="alignLeft art-text artwork" id="section-2.2.1.1-1.1">
 <pre>
 +-------------+------------+------------+-----+------------+
@@ -2211,7 +2321,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-pcb-top-level-message-format" class="selfRef">PCB Top-Level Message Format</a>
               </figcaption></figure>
 </div>
@@ -2254,7 +2364,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1.2" class="section-number selfRef">2.2.1.2. </a><a href="#name-segment-information" class="section-name selfRef">Segment Information</a>
             </h5>
 <span id="name-segment-information-compone"></span><div id="_figure-7">
-<figure id="figure-8">
+<figure id="figure-9">
               <div class="alignLeft art-text artwork" id="section-2.2.1.2-1.1">
 <pre>
 +----------------------------+
@@ -2270,7 +2380,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-segment-information-compone" class="selfRef">Segment Information Component</a>
               </figcaption></figure>
 </div>
@@ -2301,7 +2411,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1.3" class="section-number selfRef">2.2.1.3. </a><a href="#name-as-entry" class="section-name selfRef">AS Entry</a>
             </h5>
 <span id="name-as-entry-2"></span><div id="_figure-8">
-<figure id="figure-9">
+<figure id="figure-10">
               <div class="alignLeft art-text artwork" id="section-2.2.1.3-1.1">
 <pre>
                            +--------------+
@@ -2317,7 +2427,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-as-entry-2" class="selfRef">AS Entry</a>
               </figcaption></figure>
 </div>
@@ -2349,7 +2459,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1.4" class="section-number selfRef">2.2.1.4. </a><a href="#name-as-entry-signed-component" class="section-name selfRef">AS Entry Signed Component</a>
             </h5>
 <span id="name-as-entry-signed-component-2"></span><div id="_figure-9">
-<figure id="figure-10">
+<figure id="figure-11">
               <div class="alignLeft art-text artwork" id="section-2.2.1.4-1.1">
 <pre>
         +------------------------------------------------------+
@@ -2365,7 +2475,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-as-entry-signed-component-2" class="selfRef">AS Entry Signed Component</a>
               </figcaption></figure>
 </div>
@@ -2417,7 +2527,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1.4.1" class="section-number selfRef">2.2.1.4.1. </a><a href="#name-as-entry-signed-header" class="section-name selfRef">AS Entry Signed Header</a>
               </h6>
 <span id="name-as-entry-signed-header-2"></span><div id="_figure-10">
-<figure id="figure-11">
+<figure id="figure-12">
                 <div class="alignLeft art-text artwork" id="section-2.2.1.4.1-1.1">
 <pre>
                       +-----------------+
@@ -2440,7 +2550,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-as-entry-signed-header-2" class="selfRef">AS Entry Signed Header</a>
                 </figcaption></figure>
 </div>
@@ -2511,7 +2621,7 @@ Path Segment 4 |             |     |             |     |             |
 <a href="#section-2.2.1.4.2" class="section-number selfRef">2.2.1.4.2. </a><a href="#name-as-entry-signed-body" class="section-name selfRef">AS Entry Signed Body</a>
               </h6>
 <span id="name-as-entry-signed-body-2"></span><div id="_figure-11">
-<figure id="figure-12">
+<figure id="figure-13">
                 <div class="alignLeft art-text artwork" id="section-2.2.1.4.2-1.1">
 <pre>
                 +--------------------------------------+
@@ -2527,7 +2637,7 @@ Path Segment 4 |             |     |             |     |             |
 
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-as-entry-signed-body-2" class="selfRef">AS Entry Signed Body</a>
                 </figcaption></figure>
 </div>
@@ -2612,7 +2722,7 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.2.1.5" class="section-number selfRef">2.2.1.5. </a><a href="#name-hop-entry" class="section-name selfRef">Hop Entry</a>
             </h5>
 <span id="name-hop-entry-2"></span><div id="_figure-12">
-<figure id="figure-13">
+<figure id="figure-14">
               <div class="alignLeft art-text artwork" id="section-2.2.1.5-1.1">
 <pre>
         +-----------+
@@ -2628,7 +2738,7 @@ associated_data(ps, i) = ps.segment_info ||
 
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-hop-entry-2" class="selfRef">Hop Entry</a>
               </figcaption></figure>
 </div>
@@ -2659,7 +2769,7 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.2.1.6" class="section-number selfRef">2.2.1.6. </a><a href="#name-hop-field" class="section-name selfRef">Hop Field</a>
             </h5>
 <span id="name-hop-field-2"></span><div id="_figure-13">
-<figure id="figure-14">
+<figure id="figure-15">
               <div class="alignLeft art-text artwork" id="section-2.2.1.6-1.1">
 <pre>
                       +-----------+
@@ -2675,7 +2785,7 @@ associated_data(ps, i) = ps.segment_info ||
 
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-hop-field-2" class="selfRef">Hop Field</a>
               </figcaption></figure>
 </div>
@@ -2717,7 +2827,7 @@ associated_data(ps, i) = ps.segment_info ||
 <a href="#section-2.2.1.7" class="section-number selfRef">2.2.1.7. </a><a href="#name-peer-entry" class="section-name selfRef">Peer Entry</a>
             </h5>
 <span id="name-peer-entry-2"></span><div id="_figure-14">
-<figure id="figure-15">
+<figure id="figure-16">
               <div class="alignLeft art-text artwork" id="section-2.2.1.7-1.1">
 <pre>
                       +--------------+
@@ -2733,7 +2843,7 @@ associated_data(ps, i) = ps.segment_info ||
 
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-peer-entry-2" class="selfRef">Peer Entry</a>
               </figcaption></figure>
 </div>
@@ -2760,12 +2870,12 @@ associated_data(ps, i) = ps.segment_info ||
                 <p id="section-2.2.1.7-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.1.7-5.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.1.7-5.4">
-                <p id="section-2.2.1.7-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 7</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.7-5.4.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.1.7-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 8</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.1.6</a>.<a href="#section-2.2.1.7-5.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-2.2.1.7-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.1.7-6" class="pilcrow">¶</a></p>
 <span id="name-peer-entry-information-in-t"></span><div id="_figure-15">
-<figure id="figure-16">
+<figure id="figure-17">
               <div class="alignLeft art-text artwork" id="section-2.2.1.7-7.1">
 <pre>
    +-----------+
@@ -2796,7 +2906,7 @@ associated_data(ps, i) = ps.segment_info ||
 
 </pre>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-peer-entry-information-in-t" class="selfRef">Peer entry information, in the direction of beaconing</a>
               </figcaption></figure>
 </div>
@@ -2871,7 +2981,6 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
           </ul>
 <p id="section-2.2.4-3">The maximum MTU supported by all intra-AS links <span class="bcp14">MAY</span> also be configured.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.4-4">The AS <span class="bcp14">SHOULD</span> adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-2.2.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2890,7 +2999,7 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.3.1-1">Upon receiving a PCB, the Control Service of an AS performs the following checks:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.1-2">
 <li id="section-2.3.1-2.1">
-              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 30</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.1-2.1.1">PCB validity: It verifies the validity of the PCB (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.3</a>) and invalid PCBs <span class="bcp14">MUST</span> be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that <span class="bcp14">MUST</span> be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in <a href="#_figure-36" class="auto internal xref">Figure 31</a>.<a href="#section-2.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.1-2.2">
               <p id="section-2.3.1-2.2.1">Loop avoidance: If it is a core AS, the Control Service <span class="bcp14">MUST</span> check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB <span class="bcp14">MUST</span> be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes <span class="bcp14">SHOULD</span> discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes <span class="bcp14">MAY</span> make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.<a href="#section-2.3.1-2.2.1" class="pilcrow">¶</a></p>
@@ -2940,11 +3049,13 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
             <li class="normal" id="section-2.3.3-4.6">
               <p id="section-2.3.3-4.6.1">Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.<a href="#section-2.3.3-4.6.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-4.6.2">
+The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.<a href="#section-2.3.3-4.6.2" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.3-5">The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-6">A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
-Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.<a href="#section-2.3.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-5">A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
+Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-6">To ensure reachability, PCB selection policies should forward as many PCBs as possible. PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).<a href="#section-2.3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="propagation-interval-size">
@@ -3536,7 +3647,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-5.1.1-2.3.1">Request down segments starting at core ASes in the destination ISD.<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-5.1.1-3">The segment lookup API RPC definition can be found in <a href="#_figure-31" class="auto internal xref">Figure 25</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">The segment lookup API RPC definition can be found in <a href="#_figure-31" class="auto internal xref">Figure 26</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="caching">
@@ -3733,7 +3844,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
 <p id="section-6.1-1">Every SCMP message is preceded by a SCION header and zero or more SCION extension headers (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification"). The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The messages have the following general format:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <span id="name-scmp-message-format"></span><div id="scmp-format">
-<figure id="figure-17">
+<figure id="figure-18">
           <div id="section-6.1-3.1">
             <div class="alignLeft art-svg artwork" id="section-6.1-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3794,7 +3905,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               </svg><a href="#section-6.1-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
           </figcaption></figure>
 </div>
@@ -3999,7 +4110,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
 <a href="#section-6.5.1" class="section-number selfRef">6.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
 <span id="name-packet-too-big-format"></span><div id="_figure-21">
-<figure id="figure-18">
+<figure id="figure-19">
             <div id="section-6.5.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="528" viewBox="0 0 528 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4072,7 +4183,7 @@ protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class=
                 </svg><a href="#section-6.5.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-packet-too-big-format" class="selfRef">Packet Too Big format</a>
             </figcaption></figure>
 </div>
@@ -4115,7 +4226,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-6.5.2" class="section-number selfRef">6.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-19">
+<figure id="figure-20">
             <div id="section-6.5.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="528" viewBox="0 0 528 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4192,7 +4303,7 @@ underlay.<a href="#section-6.5.1-3" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.5.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-external-interface-down-for" class="selfRef">External Interface Down format</a>
             </figcaption></figure>
 </div>
@@ -4243,7 +4354,7 @@ Recipients can use this information to route around broken data-plane links.<a h
 <a href="#section-6.5.3" class="section-number selfRef">6.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-20">
+<figure id="figure-21">
             <div id="section-6.5.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.5.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="384" width="528" viewBox="0 0 528 384" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4325,7 +4436,7 @@ Recipients can use this information to route around broken data-plane links.<a h
                 </svg><a href="#section-6.5.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-internal-connectivity-down-" class="selfRef">Internal Connectivity Down format</a>
             </figcaption></figure>
 </div>
@@ -4391,7 +4502,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.1" class="section-number selfRef">6.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
           </h4>
 <span id="name-echo-request-format"></span><div id="_figure-24">
-<figure id="figure-21">
+<figure id="figure-22">
             <div id="section-6.6.1-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4455,7 +4566,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-echo-request-format" class="selfRef">Echo Request format</a>
             </figcaption></figure>
 </div>
@@ -4502,7 +4613,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.2" class="section-number selfRef">6.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
           </h4>
 <span id="name-echo-reply-format"></span><div id="_figure-25">
-<figure id="figure-22">
+<figure id="figure-23">
             <div id="section-6.6.2-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.2-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4566,7 +4677,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.2-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-echo-reply-format" class="selfRef">Echo Reply format</a>
             </figcaption></figure>
 </div>
@@ -4614,7 +4725,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.3" class="section-number selfRef">6.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
 <span id="name-traceroute-request-format"></span><div id="_figure-26">
-<figure id="figure-23">
+<figure id="figure-24">
             <div id="section-6.6.3-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.3-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4679,7 +4790,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.3-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute Request format</a>
             </figcaption></figure>
 </div>
@@ -4735,7 +4846,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
 <a href="#section-6.6.4" class="section-number selfRef">6.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
 <span id="name-traceroute-reply-format"></span><div id="_figure-27">
-<figure id="figure-24">
+<figure id="figure-25">
             <div id="section-6.6.4-1.1">
               <div class="alignLeft art-svg artwork" id="section-6.6.4-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4800,7 +4911,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 </svg><a href="#section-6.6.4-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-traceroute-reply-format" class="selfRef">Traceroute Reply format</a>
             </figcaption></figure>
 </div>
@@ -5167,7 +5278,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
       </h2>
 <p id="appendix-C-1">The following code blocks provide, in protobuf format, the entire API by which control services interact.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <span id="name-control-service-rpc-api-seg"></span><div id="_figure-31">
-<figure id="figure-25">
+<figure id="figure-26">
         <div class="alignLeft art-text artwork" id="appendix-C-2.1">
 <pre>
 service SegmentLookupService {
@@ -5205,13 +5316,13 @@ message SegmentsResponse {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
 <a href="#name-control-service-rpc-api-seg" class="selfRef">Control Service RPC API - Segment lookup.    This API is exposed on the SCION dataplane by the control    services of core ASes and exposed on the intra-domain protocol    network.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-3"><br></p>
 <span id="name-control-service-rpc-api-segm"></span><div id="_figure-32">
-<figure id="figure-26">
+<figure id="figure-27">
         <div class="alignLeft art-text artwork" id="appendix-C-4.1">
 <pre>
 service SegmentRegistrationService {
@@ -5234,13 +5345,13 @@ message SegmentsRegistrationRequest {
 message SegmentsRegistrationResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-control-service-rpc-api-segm" class="selfRef">Control Service RPC API - Segment registration.    This API is only exposed by core ASes and only on the SCION    dataplane.</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-5"><br></p>
 <span id="name-control-service-rpc-api-segme"></span><div id="_figure-33">
-<figure id="figure-27">
+<figure id="figure-28">
         <div class="alignLeft art-text artwork" id="appendix-C-6.1">
 <pre>
 service SegmentCreationService {
@@ -5256,13 +5367,13 @@ message BeaconRequest {
 message BeaconResponse {}
 </pre>
 </div>
-<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-control-service-rpc-api-segme" class="selfRef">Control Service RPC API - Segment creation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-7"><br></p>
 <span id="name-control-service-rpc-api-segmen"></span><div id="_figure-34">
-<figure id="figure-28">
+<figure id="figure-29">
         <div class="alignLeft art-text artwork" id="appendix-C-8.1">
 <pre>
 message PathSegment {
@@ -5344,13 +5455,13 @@ message HopField {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-control-service-rpc-api-segmen" class="selfRef">Control Service RPC API - Segment representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-9"><br></p>
 <span id="name-control-service-rpc-api-sig"></span><div id="_figure-35">
-<figure id="figure-29">
+<figure id="figure-30">
         <div class="alignLeft art-text artwork" id="appendix-C-10.1">
 <pre>
 enum SignatureAlgorithm {
@@ -5411,13 +5522,13 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-control-service-rpc-api-sig" class="selfRef">Control Service RPC API - Signed ASEntry representation</a>
         </figcaption></figure>
 </div>
 <p id="appendix-C-11"><br></p>
 <span id="name-control-service-rpc-api-tru"></span><div id="_figure-36">
-<figure id="figure-30">
+<figure id="figure-31">
         <div class="alignLeft art-text artwork" id="appendix-C-12.1">
 <pre>
 service TrustMaterialService {
@@ -5482,7 +5593,7 @@ message VerificationKeyID {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
+<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
 <a href="#name-control-service-rpc-api-tru" class="selfRef">Control Service RPC API - Trust Material representation</a>
         </figcaption></figure>
 </div>
@@ -5490,131 +5601,15 @@ message VerificationKeyID {
 <p id="appendix-C-14">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#appendix-C-14" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="app-b">
-<section id="appendix-D">
-      <h2 id="name-use-of-the-scion-data-plane">
-<a href="#name-use-of-the-scion-data-plane" class="section-name selfRef">Use of the SCION Data Plane</a>
-      </h2>
-<p id="appendix-D-1">The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping strategies apply:<a href="#appendix-D-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-2.1">
-          <p id="appendix-D-2.1.1">Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.<a href="#appendix-D-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-2.2">
-          <p id="appendix-D-2.2.1">Constructed multihop paths are registered with the Control Service at the origin core AS. The path to that AS is the very path being registered.<a href="#appendix-D-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-2.3">
-          <p id="appendix-D-2.3.1">Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local Control Service.<a href="#appendix-D-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-2.4">
-          <p id="appendix-D-2.4.1">Control services respond to requests from remote ASes by reversing the path via which the request came.<a href="#appendix-D-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-2.5">
-          <p id="appendix-D-2.5.1">Clients find the relevant Control Service endpoint by resolving a "service address" (that is an address where the <code>DT/DL</code> field of the common header is set to 1/0 (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>).<a href="#appendix-D-2.5.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="appendix-D-3">The mechanics of service address resolution are the following:<a href="#appendix-D-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-4.1">
-          <p id="appendix-D-4.1.1">To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:<a href="#appendix-D-4.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-4.1.2.1">
-              <p id="appendix-D-4.1.2.1.1">Common Header:<a href="#appendix-D-4.1.2.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-4.1.2.1.2.1">
-                  <p id="appendix-D-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#appendix-D-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="appendix-D-4.1.2.1.2.2">
-                  <p id="appendix-D-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#appendix-D-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-            <li class="normal" id="appendix-D-4.1.2.2">
-              <p id="appendix-D-4.1.2.2.1">Address Header:<a href="#appendix-D-4.1.2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-4.1.2.2.2.1">
-                  <p id="appendix-D-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#appendix-D-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-            <li class="normal" id="appendix-D-4.1.2.3">
-              <p id="appendix-D-4.1.2.3.1">UDP Header:<a href="#appendix-D-4.1.2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-D-4.1.2.3.2.1">
-                  <p id="appendix-D-4.1.2.3.2.1.1">DstPort: 0<a href="#appendix-D-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-          </ul>
-</li>
-        <li class="normal" id="appendix-D-4.2">
-          <p id="appendix-D-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#appendix-D-4.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-4.3">
-          <p id="appendix-D-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#appendix-D-4.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-4.4">
-          <p id="appendix-D-4.4.1">The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.<a href="#appendix-D-4.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-D-4.5">
-          <p id="appendix-D-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#appendix-D-4.5.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="appendix-D-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
-<span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
-<figure id="figure-31">
-        <div class="alignLeft art-text artwork" id="appendix-D-6.1">
-<pre>
-package proto.control_plane.v1;
-
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
-    map&lt;string, Transport&gt; transports = 1;
-}
-
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.168.0.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
-    string address = 1;
-}
-
-</pre>
-</div>
-<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
-<a href="#name-service-resolution-rpc-api-" class="selfRef">Service Resolution RPC API definition</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-D-7"><br></p>
-</section>
-</div>
 <div id="app-c">
-<section id="appendix-E">
+<section id="appendix-D">
       <h2 id="name-path-lookup-examples">
 <a href="#name-path-lookup-examples" class="section-name selfRef">Path-Lookup Examples</a>
       </h2>
-<p id="appendix-E-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 32</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 33</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 34</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 32</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 33</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 34</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
 <figure id="figure-32">
-        <div class="alignLeft art-text artwork" id="appendix-E-2.1">
+        <div class="alignLeft art-text artwork" id="appendix-D-2.1">
 <pre>
 +----------------------------+     +----------------------------+
 |                            |     |                            |
@@ -5649,7 +5644,7 @@ message Transport {
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
 <figure id="figure-33">
-        <div class="alignLeft art-text artwork" id="appendix-E-3.1">
+        <div class="alignLeft art-text artwork" id="appendix-D-3.1">
 <pre>
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -5712,7 +5707,7 @@ message Transport {
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
 <figure id="figure-34">
-        <div class="alignLeft art-text artwork" id="appendix-E-4.1">
+        <div class="alignLeft art-text artwork" id="appendix-D-4.1">
 <pre>
 
 +---------+     +---------+     +---------+     +---------+     +---------+
@@ -5777,231 +5772,231 @@ message Transport {
 </section>
 </div>
 <div id="change-log">
-<section id="appendix-F">
+<section id="appendix-E">
       <h2 id="name-change-log">
 <a href="#name-change-log" class="section-name selfRef">Change Log</a>
       </h2>
-<p id="appendix-F-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-F-1" class="pilcrow">¶</a></p>
+<p id="appendix-E-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <div id="draft-dekater-scion-controlplane-10">
-<section id="appendix-F.1">
+<section id="appendix-E.1">
         <h3 id="name-draft-dekater-scion-control">
 <a href="#name-draft-dekater-scion-control" class="section-name selfRef">draft-dekater-scion-controlplane-10</a>
         </h3>
-<p id="appendix-F.1-1">Major changes:<a href="#appendix-F.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.1-1">Major changes:<a href="#appendix-E.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.1-2.1">
-            <p id="appendix-F.1-2.1.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-F.1-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.1-2.1">
+            <p id="appendix-E.1-2.1.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-E.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.1-3">Minor changes:<a href="#appendix-F.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-E.1-3">Minor changes:<a href="#appendix-E.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.1-4.1">
-            <p id="appendix-F.1-4.1.1">AS Entry Signature: fix order of terms in one formula<a href="#appendix-F.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.1-4.1">
+            <p id="appendix-E.1-4.1.1">AS Entry Signature: fix order of terms in one formula<a href="#appendix-E.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-09">
-<section id="appendix-F.2">
+<section id="appendix-E.2">
         <h3 id="name-draft-dekater-scion-controlp">
 <a href="#name-draft-dekater-scion-controlp" class="section-name selfRef">draft-dekater-scion-controlplane-09</a>
         </h3>
-<p id="appendix-F.2-1">Major changes:<a href="#appendix-F.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.2-1">Major changes:<a href="#appendix-E.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.2-2.1">
-            <p id="appendix-F.2-2.1.1">"SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation<a href="#appendix-F.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.2-2.1">
+            <p id="appendix-E.2-2.1.1">"SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation<a href="#appendix-E.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.2-3">Minor changes:<a href="#appendix-F.2-3" class="pilcrow">¶</a></p>
+<p id="appendix-E.2-3">Minor changes:<a href="#appendix-E.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.2-4.1">
-            <p id="appendix-F.2-4.1.1">Nits and wording improvements<a href="#appendix-F.2-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.2-4.1">
+            <p id="appendix-E.2-4.1.1">Nits and wording improvements<a href="#appendix-E.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-4.2">
-            <p id="appendix-F.2-4.2.1">Reviewed use of normative language<a href="#appendix-F.2-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-4.2">
+            <p id="appendix-E.2-4.2.1">Reviewed use of normative language<a href="#appendix-E.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-4.3">
-            <p id="appendix-F.2-4.3.1">Figures: redraw and use aasvg when possible<a href="#appendix-F.2-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-4.3">
+            <p id="appendix-E.2-4.3.1">Figures: redraw and use aasvg when possible<a href="#appendix-E.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-4.4">
-            <p id="appendix-F.2-4.4.1">"Paths and Links": clarify relationship between path segments and links<a href="#appendix-F.2-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-4.4">
+            <p id="appendix-E.2-4.4.1">"Paths and Links": clarify relationship between path segments and links<a href="#appendix-E.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.2-4.5">
-            <p id="appendix-F.2-4.5.1">Ensure consistent use of example ranges<a href="#appendix-F.2-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-4.5">
+            <p id="appendix-E.2-4.5.1">Ensure consistent use of example ranges<a href="#appendix-E.2-4.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-08">
-<section id="appendix-F.3">
+<section id="appendix-E.3">
         <h3 id="name-draft-dekater-scion-controlpl">
 <a href="#name-draft-dekater-scion-controlpl" class="section-name selfRef">draft-dekater-scion-controlplane-08</a>
         </h3>
-<p id="appendix-F.3-1">Major changes:<a href="#appendix-F.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.3-1">Major changes:<a href="#appendix-E.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-2.1">
-            <p id="appendix-F.3-2.1.1">Abstract: reword, mention goal and that document is not an Internet Standard<a href="#appendix-F.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.3-2.1">
+            <p id="appendix-E.3-2.1.1">Abstract: reword, mention goal and that document is not an Internet Standard<a href="#appendix-E.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.2">
-            <p id="appendix-F.3-2.2.1">"Propagation of PCBs" section:<a href="#appendix-F.3-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-2.2">
+            <p id="appendix-E.3-2.2.1">"Propagation of PCBs" section:<a href="#appendix-E.3-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-2.2.2.1">
-                <p id="appendix-F.3-2.2.2.1.1">clarify checks at reception<a href="#appendix-F.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.3-2.2.2.1">
+                <p id="appendix-E.3-2.2.2.1.1">clarify checks at reception<a href="#appendix-E.3-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="appendix-F.3-2.2.2.2">
-                <p id="appendix-F.3-2.2.2.2.1">introduce criteria for PCB selection policies<a href="#appendix-F.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="appendix-E.3-2.2.2.2">
+                <p id="appendix-E.3-2.2.2.2.1">introduce criteria for PCB selection policies<a href="#appendix-E.3-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="appendix-F.3-2.2.2.3">
-                <p id="appendix-F.3-2.2.2.3.1">remove superfluous policy example figure<a href="#appendix-F.3-2.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="appendix-E.3-2.2.2.3">
+                <p id="appendix-E.3-2.2.2.3.1">remove superfluous policy example figure<a href="#appendix-E.3-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="appendix-F.3-2.2.2.4">
-                <p id="appendix-F.3-2.2.2.4.1">Propagation Interval and Best PCBs Set Size: mention tradeoff between scalability and amount of paths discovered.<a href="#appendix-F.3-2.2.2.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="appendix-E.3-2.2.2.4">
+                <p id="appendix-E.3-2.2.2.4.1">Propagation Interval and Best PCBs Set Size: mention tradeoff between scalability and amount of paths discovered.<a href="#appendix-E.3-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="appendix-F.3-2.2.2.5">
-                <p id="appendix-F.3-2.2.2.5.1">reorganize order of paragraphs<a href="#appendix-F.3-2.2.2.5.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="appendix-E.3-2.2.2.5">
+                <p id="appendix-E.3-2.2.2.5.1">reorganize order of paragraphs<a href="#appendix-E.3-2.2.2.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="appendix-F.3-2.3">
-            <p id="appendix-F.3-2.3.1">New section "Security Properties" in Security considerations, based on formal model of SCION<a href="#appendix-F.3-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-2.3">
+            <p id="appendix-E.3-2.3.1">New section "Security Properties" in Security considerations, based on formal model of SCION<a href="#appendix-E.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-2.4">
-            <p id="appendix-F.3-2.4.1">New figure: Control Service RPC API - Trust Material definitions<a href="#appendix-F.3-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-2.4">
+            <p id="appendix-E.3-2.4.1">New figure: Control Service RPC API - Trust Material definitions<a href="#appendix-E.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.3-3">Minor changes:<a href="#appendix-F.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-E.3-3">Minor changes:<a href="#appendix-E.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.3-4.1">
-            <p id="appendix-F.3-4.1.1">Moved "Special-Purpose SCION AS Numbers" table later in text<a href="#appendix-F.3-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.3-4.1">
+            <p id="appendix-E.3-4.1.1">Moved "Special-Purpose SCION AS Numbers" table later in text<a href="#appendix-E.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.2">
-            <p id="appendix-F.3-4.2.1">Split "Circular dependencies and partitioning" into two sections: "Bootstrapping ability" and "Resistance to partitioning".<a href="#appendix-F.3-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-4.2">
+            <p id="appendix-E.3-4.2.1">Split "Circular dependencies and partitioning" into two sections: "Bootstrapping ability" and "Resistance to partitioning".<a href="#appendix-E.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.3">
-            <p id="appendix-F.3-4.3.1">Explain why PCBs have a next_isd_as field<a href="#appendix-F.3-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-4.3">
+            <p id="appendix-E.3-4.3.1">Explain why PCBs have a next_isd_as field<a href="#appendix-E.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.3-4.4">
-            <p id="appendix-F.3-4.4.1">Qualified better the choice of time allowance in the definition of segment from the future in section "PCB Validity".<a href="#appendix-F.3-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-4.4">
+            <p id="appendix-E.3-4.4.1">Qualified better the choice of time allowance in the definition of segment from the future in section "PCB Validity".<a href="#appendix-E.3-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-07">
-<section id="appendix-F.4">
+<section id="appendix-E.4">
         <h3 id="name-draft-dekater-scion-controlpla">
 <a href="#name-draft-dekater-scion-controlpla" class="section-name selfRef">draft-dekater-scion-controlplane-07</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-F.4-1.1">
-            <p id="appendix-F.4-1.1.1">Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document<a href="#appendix-F.4-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.4-1.1">
+            <p id="appendix-E.4-1.1.1">Moved SCMP specification from draft-dekater-scion-dataplane-03 to this document<a href="#appendix-E.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-06">
-<section id="appendix-F.5">
+<section id="appendix-E.5">
         <h3 id="name-draft-dekater-scion-controlplan">
 <a href="#name-draft-dekater-scion-controlplan" class="section-name selfRef">draft-dekater-scion-controlplane-06</a>
         </h3>
-<p id="appendix-F.5-1">Major changes:<a href="#appendix-F.5-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.5-1">Major changes:<a href="#appendix-E.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.5-2.1">
-            <p id="appendix-F.5-2.1.1">New section: Path MTU<a href="#appendix-F.5-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.5-2.1">
+            <p id="appendix-E.5-2.1.1">New section: Path MTU<a href="#appendix-E.5-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-2.2">
-            <p id="appendix-F.5-2.2.1">New section: Monitoring Considerations<a href="#appendix-F.5-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-2.2">
+            <p id="appendix-E.5-2.2.1">New section: Monitoring Considerations<a href="#appendix-E.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-2.3">
-            <p id="appendix-F.5-2.3.1">Completed description of Control Services RPC API in appendix<a href="#appendix-F.5-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-2.3">
+            <p id="appendix-E.5-2.3.1">Completed description of Control Services RPC API in appendix<a href="#appendix-E.5-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.5-3">Minor changes:<a href="#appendix-F.5-3" class="pilcrow">¶</a></p>
+<p id="appendix-E.5-3">Minor changes:<a href="#appendix-E.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.5-4.1">
-            <p id="appendix-F.5-4.1.1">Introduction: clarify goal of the document<a href="#appendix-F.5-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.5-4.1">
+            <p id="appendix-E.5-4.1.1">Introduction: clarify goal of the document<a href="#appendix-E.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-4.2">
-            <p id="appendix-F.5-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-F.5-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-4.2">
+            <p id="appendix-E.5-4.2.1">Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.<a href="#appendix-E.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-4.3">
-            <p id="appendix-F.5-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-F.5-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-4.3">
+            <p id="appendix-E.5-4.3.1">Clarify text representation of ISD-AS<a href="#appendix-E.5-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-4.4">
-            <p id="appendix-F.5-4.4.1">General rewording<a href="#appendix-F.5-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-4.4">
+            <p id="appendix-E.5-4.4.1">General rewording<a href="#appendix-E.5-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-4.5">
-            <p id="appendix-F.5-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-F.5-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-4.5">
+            <p id="appendix-E.5-4.5.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-E.5-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.5-4.6">
-            <p id="appendix-F.5-4.6.1">Introduced this change log<a href="#appendix-F.5-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-4.6">
+            <p id="appendix-E.5-4.6.1">Introduced this change log<a href="#appendix-E.5-4.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-05">
-<section id="appendix-F.6">
+<section id="appendix-E.6">
         <h3 id="name-draft-dekater-scion-controlplane">
 <a href="#name-draft-dekater-scion-controlplane" class="section-name selfRef">draft-dekater-scion-controlplane-05</a>
         </h3>
-<p id="appendix-F.6-1">Minor changes:<a href="#appendix-F.6-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.6-1">Minor changes:<a href="#appendix-E.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.6-2.1">
-            <p id="appendix-F.6-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-F.6-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.6-2.1">
+            <p id="appendix-E.6-2.1.1">Clarify beaconing fast retry at bootstrapping<a href="#appendix-E.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-controlplane-04">
-<section id="appendix-F.7">
+<section id="appendix-E.7">
         <h3 id="name-draft-dekater-scion-controlplane-">
 <a href="#name-draft-dekater-scion-controlplane-" class="section-name selfRef">draft-dekater-scion-controlplane-04</a>
         </h3>
-<p id="appendix-F.7-1">Major changes:<a href="#appendix-F.7-1" class="pilcrow">¶</a></p>
+<p id="appendix-E.7-1">Major changes:<a href="#appendix-E.7-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.7-2.1">
-            <p id="appendix-F.7-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-F.7-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.7-2.1">
+            <p id="appendix-E.7-2.1.1">Clarified selection of MAC including a default algorithm<a href="#appendix-E.7-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-2.2">
-            <p id="appendix-F.7-2.2.1">New section: PCB validity<a href="#appendix-F.7-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-2.2">
+            <p id="appendix-E.7-2.2.1">New section: PCB validity<a href="#appendix-E.7-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-2.3">
-            <p id="appendix-F.7-2.3.1">New section: configuration<a href="#appendix-F.7-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-2.3">
+            <p id="appendix-E.7-2.3.1">New section: configuration<a href="#appendix-E.7-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-2.4">
-            <p id="appendix-F.7-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-F.7-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-2.4">
+            <p id="appendix-E.7-2.4.1">New section: Path Discovery Time and Scalability<a href="#appendix-E.7-2.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-2.5">
-            <p id="appendix-F.7-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-F.7-2.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-2.5">
+            <p id="appendix-E.7-2.5.1">New section: Effects of Clock Inaccuracy<a href="#appendix-E.7-2.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-2.6">
-            <p id="appendix-F.7-2.6.1">New appendix: Control Service RPC API<a href="#appendix-F.7-2.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-2.6">
+            <p id="appendix-E.7-2.6.1">New appendix: Control Service RPC API<a href="#appendix-E.7-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="appendix-F.7-3">Minor changes:<a href="#appendix-F.7-3" class="pilcrow">¶</a></p>
+<p id="appendix-E.7-3">Minor changes:<a href="#appendix-E.7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-F.7-4.1">
-            <p id="appendix-F.7-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-F.7-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.7-4.1">
+            <p id="appendix-E.7-4.1.1">Introduction: Added overview of SCION components<a href="#appendix-E.7-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.2">
-            <p id="appendix-F.7-4.2.1">Clarified path reversibility, link types, Interface IDs<a href="#appendix-F.7-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.2">
+            <p id="appendix-E.7-4.2.1">Clarified path reversibility, link types, Interface IDs<a href="#appendix-E.7-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.3">
-            <p id="appendix-F.7-4.3.1">Fixed private AS range typo<a href="#appendix-F.7-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.3">
+            <p id="appendix-E.7-4.3.1">Fixed private AS range typo<a href="#appendix-E.7-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.4">
-            <p id="appendix-F.7-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-F.7-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.4">
+            <p id="appendix-E.7-4.4.1">Clarified PCB selection policies and endpoint requirements<a href="#appendix-E.7-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.5">
-            <p id="appendix-F.7-4.5.1">Clarified PCB propagation<a href="#appendix-F.7-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.5">
+            <p id="appendix-E.7-4.5.1">Clarified PCB propagation<a href="#appendix-E.7-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.6">
-            <p id="appendix-F.7-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-F.7-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.6">
+            <p id="appendix-E.7-4.6.1">General edits to make terminology consistent, remove duplication and rationalize text<a href="#appendix-E.7-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.7">
-            <p id="appendix-F.7-4.7.1">Removed forward references<a href="#appendix-F.7-4.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.7">
+            <p id="appendix-E.7-4.7.1">Removed forward references<a href="#appendix-E.7-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-F.7-4.8">
-            <p id="appendix-F.7-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-F.7-4.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-4.8">
+            <p id="appendix-E.7-4.8.1">Added RFC2119 compliant terminology<a href="#appendix-E.7-4.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -6009,7 +6004,7 @@ message Transport {
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-G">
+<section id="appendix-F">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>

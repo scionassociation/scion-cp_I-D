@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 20 April 2026                                           S. Hitz
+Expires: 21 April 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         17 October 2025
+                                                         18 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2026.
+   This Internet-Draft will expire on 21 April 2026.
 
 Copyright Notice
 
@@ -94,6 +94,7 @@ Table of Contents
      1.6.  Bootstrapping ability
      1.7.  Resistance to partitioning
      1.8.  Communication Protocol
+     1.9.  Control Service Discovery
    2.  Path Exploration or Beaconing
      2.1.  Introduction and Overview
        2.1.1.  Peering Links
@@ -163,7 +164,6 @@ Table of Contents
    Acknowledgments
    Deployment Testing: SCIONLab
    Full Control Service RPC API
-   Use of the SCION Data Plane
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-10
@@ -482,7 +482,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 30.
+      AS that sent the PCB through the API described in Figure 31.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -723,12 +723,100 @@ Table of Contents
    QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
    compatible with [gRPC] which is supported but deprecated.
 
-   Appendix "Full Control Service RPC API" provides the entire Control
-   Service API definition in protobuf format.
+1.9.  Control Service Discovery
 
-   Appendix "Use of the SCION Data Plane" provides details about the
-   establishment of the underlying QUIC connections through the data
-   plane.
+   The Control Plane RPC APIs rely on QUIC connections over UDP/SCION
+   (see [I-D.dekater-scion-dataplane] which requires a connection to be
+   initiated to identify the relevant peer (service resolution) and to
+   select a path to it.  Since the Control Service is itself the source
+   of path segment information, the following bootstrapping processes
+   apply:
+
+   *  Neighboring ASes craft one-hop paths directly.
+
+   *  Paths to non-neighboring ASes are obtained from neighboring ASes
+      which allows multihop paths to be constructed and propagated
+      incrementally.
+
+   *  Constructed multi-hop paths are registered with the Control
+      Service at the origin core AS.
+
+   *  Control Services respond to requests from remote ASes by reversing
+      the path via which the request came.
+
+   Clients find the relevant Control Service at a given AS by resolving
+   a 'service address' as follows:
+
+   *  A client sends a ServiceResolutionRequest RPC (which has no
+      parameters) to an endpoint address in the format:
+
+      -  Common Header:
+
+         o  Path type: SCION (0x01)
+
+         o  DT/DL: "Service" (0b0100)
+
+      -  Address Header:
+
+         o  DstHostAddr: "SVC_CS" (0x0002)
+
+      -  UDP Header:
+
+         o  DstPort: 0
+
+   *  The ingress border router at the destination AS resolves the
+      service destination to an actual endpoint address.  This document
+      does not mandate any specific method for this resolution.
+
+   *  The ingress border router forwards the message to the resolved
+      address.
+
+   *  The destination service responds to the client with a
+      ServiceResolutionResponse which contains one or more transport
+      options.
+
+   *  The client uses the address and port from the "QUIC" option to
+      establish a QUIC connection, which can then be used for regular
+      RPCs.
+
+   The following code block provides the full service resolution API in
+   the Protobuf message format.
+
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map<string, Transport> transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.0.2.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+           Figure 2: Service Resolution RPC API definition
+
+
 
 2.  Path Exploration or Beaconing
 
@@ -811,7 +899,7 @@ Table of Contents
    each AS are numbered with integer values while ASes are described
    with an upper case letter for the sake of illustration.
 
-   In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
+   In Figure 3 below, core AS X sends the two different PCBs "a" and "b"
    via two different links to child AS Y: PCB "a" leaves core AS X via
    egress interface "2", whereas PCB "b" is sent over egress interface
    "1".  Core AS X adds the respective egress information to the PCBs
@@ -833,11 +921,11 @@ Table of Contents
                               +----+---+----+
                               |    AS Y     |
 
-       Figure 2: Intra-ISD PCB propagation from the ISD core to child
+       Figure 3: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
 
    AS Y receives the two PCBs "a" and "b" through two different
-   (ingress) interfaces, namely "2" and "3", respectively (see Figure 3
+   (ingress) interfaces, namely "2" and "3", respectively (see Figure 4
    below).  Additionally, AS Y forwards to AS Z four PCBs that were
    previously sent by core AS X.  For this, AS Y uses the two different
    (egress) links "5" and "6".  AS Y appends the corresponding ingress
@@ -881,7 +969,7 @@ Table of Contents
                               +----+---+----+
                               |    AS Z     |
 
-       Figure 3: Intra-ISD PCB propagation from the ISD core to child
+       Figure 4: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 2
 
    The following figure shows how the four PCBs "c", "d", "e", and "f",
@@ -929,7 +1017,7 @@ Table of Contents
                                v     |     v
                                      v
 
-       Figure 4: Intra-ISD PCB propagation from the ISD core to child
+       Figure 5: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 3
 
    Based on the figures above, one could say that a PCB represents a
@@ -938,9 +1026,9 @@ Table of Contents
    path segment" that accumulates AS entries when traversing the
    Internet.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
-   particular AS A.  This is illustrated by Figure 5.  This figure shows
+   particular AS A.  This is illustrated by Figure 6.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
-   "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use all
+   "h", "i", and "j" from Figure 5 above.  It is up to AS Z to use all
    of these path segments or just a selection of them.
 
                   AS Entry Core        AS Entry Y          AS Entry Z
@@ -987,7 +1075,7 @@ Table of Contents
                  +-------------+     +-------------+     +-------------+
                     Egress 1       Ingress 3 - Egress 5      Ingress 1
 
-             Figure 5: Possible up- or down segments for AS Z
+             Figure 6: Possible up- or down segments for AS Z
 
 2.2.  Path-Segment Construction Beacons (PCBs)
 
@@ -1053,10 +1141,10 @@ Table of Contents
 |  Ingress   |    Egress   |  Expiration Time  |    MAC    |
 +------------+-------------+-------------------+-----------+
 
-               Figure 6: Top-down composition of a PCB
+               Figure 7: Top-down composition of a PCB
 
    Note: For a full example of a PCB in the Protobuf message format,
-   please see Figure 28.
+   please see Figure 29.
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1064,7 +1152,7 @@ Table of Contents
    |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
    +-------------+------------+------------+-----+------------+
 
-                   Figure 7: PCB Top-Level Message Format
+                   Figure 8: PCB Top-Level Message Format
 
    Each PCB MUST consists of at least:
 
@@ -1107,7 +1195,7 @@ Table of Contents
    |  Timestamp  |    Seg ID    |
    +-------------+--------------+
 
-                  Figure 8: Segment Information Component
+                  Figure 9: Segment Information Component
 
    Each PCB MUST include an information component with basic information
    about the PCB.
@@ -1153,7 +1241,7 @@ Table of Contents
    |  Unsigned Extension   |             Signed AS Entry              |
    +-----------------------+------------------------------------------+
 
-                             Figure 9: AS Entry
+                            Figure 10: AS Entry
 
    Each PCB MUST also contain the entries of all ASes included in the
    corresponding path segment.  This means that the originating core AS
@@ -1194,7 +1282,7 @@ Table of Contents
  |     Signature      |      Header      |             Body            |
  +--------------------+------------------+-----------------------------+
 
-                  Figure 10: AS Entry Signed Component
+                  Figure 11: AS Entry Signed Component
 
    Each AS entry of a PCB MUST include a signed component as well as a
    signature computed over the signed component.  Each AS entry MUST be
@@ -1255,7 +1343,7 @@ Table of Contents
         | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
         +---------+---------+------------+--------------+
 
-                     Figure 11: AS Entry Signed Header
+                     Figure 12: AS Entry Signed Header
 
    The header part carries information that is relevant to the
    computation and verification of the signature.  It contains the
@@ -1335,7 +1423,7 @@ Table of Contents
  |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
  +------+-----------+---------+-------------+---+-------------+---+----+
 
-                    Figure 12: AS Entry Signed Body
+                    Figure 13: AS Entry Signed Body
 
    The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all ASes in the path segment represented by the
@@ -1437,7 +1525,7 @@ Table of Contents
    | Ingress MTU |  Hop Field  |
    +-------------+-------------+
 
-                            Figure 13: Hop Entry
+                            Figure 14: Hop Entry
 
    Each body of an AS entry MUST contain exactly one hop entry
    component.  The hop entry component specifies forwarding information
@@ -1483,7 +1571,7 @@ Table of Contents
    |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
    +-------------+-------------+-------------------+----------+
 
-                            Figure 14: Hop Field
+                            Figure 15: Hop Field
 
    The Hop Field, part of both hop entries and peer entries, is used
    directly in the data plane for packet forwarding and specifies the
@@ -1546,7 +1634,7 @@ Table of Contents
    |  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
    +-------------+------------+--------------+----------------+
 
-                           Figure 15: Peer Entry
+                           Figure 16: Peer Entry
 
    By means of a peer entry, an AS can announce that it has a peering
    link to another AS.  A peer entry is an optional component of a PCB -
@@ -1578,7 +1666,7 @@ Table of Contents
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 7).
+      peering link, in the direction of beaconing - see also Figure 8).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
 
@@ -1613,7 +1701,7 @@ Table of Contents
        |           |
        +-----------+
 
-      Figure 16: Peer entry information, in the direction of beaconing
+      Figure 17: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -1686,11 +1774,6 @@ Table of Contents
    The maximum MTU supported by all intra-AS links MAY also be
    configured.
 
-   The AS SHOULD adopt a PCB selection policy that does not accidentally
-   isolate the AS from the network, i.e. such that it does not block
-   connectivity to parent providers and ensures downstream connectivity
-   for children.  For more details, see Section 2.3.3.
-
 2.3.  Propagation of PCBs
 
    This section describes how PCBs are received, selected and further
@@ -1707,7 +1790,7 @@ Table of Contents
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 30.
+       Service of the sending AS through the API described in Figure 31.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -1789,13 +1872,13 @@ Table of Contents
       resilience in case of link failure.  Both criteria can be used
       depending on the objective of the AS.
 
-   The relative disjointness of two PCBs A and B may be calculated by
-   assigning a disjointness score, calculated as the number of links in
-   A that don't appear in B.  For example, the beacon that has the
-   highest disjointness score and is not the shortest path should be
-   selected, but if this not better than what has already been selected,
-   then the beacon with the shortest path yet to be selected should be
-   chosen instead.
+      The relative disjointness of two PCBs A and B may be calculated by
+      assigning a disjointness score, calculated as the number of links
+      in A that don't appear in B.  For example, the beacon that has the
+      highest disjointness score and is not the shortest path should be
+      selected, but if this not better than what has already been
+      selected, then the beacon with the shortest path yet to be
+      selected should be chosen instead.
 
    A PCB Selection Policy can be expressed as a stateful filter of
    segments, i.e., a function which indicates whether to accept or deny
@@ -1803,6 +1886,11 @@ Table of Contents
    each time its AS registers a new segment.  Naturally, an AS's policy
    selects PCBs corresponding to paths that are commercially or
    otherwise operationally viable.
+
+   To ensure reachability, PCB selection policies should forward as many
+   PCBs as possible.  PCB selection is not intended as a mechanism for
+   traffic engineering (e.g., by excluding specific PCBs for that
+   purpose).
 
 2.3.4.  Propagation Interval and Best PCBs Set Size
 
@@ -2505,7 +2593,7 @@ Table of Contents
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API RPC definition can be found in Figure 25.
+   The segment lookup API RPC definition can be found in Figure 26.
 
 5.1.2.  Caching
 
@@ -2679,7 +2767,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 17: SCMP message format
+                       Figure 18: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2820,7 +2908,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 18: Packet Too Big format
+                      Figure 19: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2860,7 +2948,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 19: External Interface Down format
+                 Figure 20: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2910,7 +2998,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 20: Internal Connectivity Down format
+                Figure 21: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2956,7 +3044,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 21: Echo Request format
+                       Figure 22: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -2992,7 +3080,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 22: Echo Reply format
+                        Figure 23: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3034,7 +3122,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 23: Traceroute Request format
+                    Figure 24: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3089,7 +3177,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 24: Traceroute Reply format
+                     Figure 25: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3611,7 +3699,7 @@ Full Control Service RPC API
        map<int32, Segments> segments = 1;
    }
 
-     Figure 25: Control Service RPC API - Segment lookup.  This API is
+     Figure 26: Control Service RPC API - Segment lookup.  This API is
        exposed on the SCION dataplane by the control services of core
            ASes and exposed on the intra-domain protocol network.
 
@@ -3636,7 +3724,7 @@ Full Control Service RPC API
 
    message SegmentsRegistrationResponse {}
 
-      Figure 26: Control Service RPC API - Segment registration.  This
+      Figure 27: Control Service RPC API - Segment registration.  This
      API is only exposed by core ASes and only on the SCION dataplane.
 
 
@@ -3653,7 +3741,7 @@ Full Control Service RPC API
 
    message BeaconResponse {}
 
-           Figure 27: Control Service RPC API - Segment creation
+           Figure 28: Control Service RPC API - Segment creation
 
 
 
@@ -3735,7 +3823,7 @@ Full Control Service RPC API
      bytes mac = 4;
  }
 
-      Figure 28: Control Service RPC API - Segment representation
+      Figure 29: Control Service RPC API - Segment representation
 
 
 
@@ -3796,7 +3884,7 @@ Full Control Service RPC API
       uint64 trc_serial = 4;
   }
 
-    Figure 29: Control Service RPC API - Signed ASEntry representation
+    Figure 30: Control Service RPC API - Signed ASEntry representation
 
 
 
@@ -3861,114 +3949,13 @@ message VerificationKeyID {
     uint64 trc_serial = 4;
 }
 
-  Figure 30: Control Service RPC API - Trust Material representation
+  Figure 31: Control Service RPC API - Trust Material representation
 
 
 
    In case of failure, RPC calls return an error as specified by the RPC
    framework.  That is, a non-zero status code and an explanatory
    string.
-
-Use of the SCION Data Plane
-
-   The SCION Control Plane RPC APIs rely on QUIC connections carried by
-   the SCION dataplane.  The main difference between QUIC over native
-   UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection
-   initiator to identify the relevant peer (service resolution) and to
-   select a path to it.  Since the Control Service is itself the source
-   of path segment information, the following bootstrapping strategies
-   apply:
-
-   *  Neighboring ASes craft one-hop-paths directly.  This allows
-      multihop paths to be constructed and propagated incrementally.
-
-   *  Constructed multihop paths are registered with the Control Service
-      at the origin core AS.  The path to that AS is the very path being
-      registered.
-
-   *  Paths to far ASes are available from neighboring ASes.  Clients
-      obtain paths to remote ASes from their local Control Service.
-
-   *  Control services respond to requests from remote ASes by reversing
-      the path via which the request came.
-
-   *  Clients find the relevant Control Service endpoint by resolving a
-      "service address" (that is an address where the DT/DL field of the
-      common header is set to 1/0 (see [I-D.dekater-scion-dataplane]).
-
-   The mechanics of service address resolution are the following:
-
-   *  To resolve the address of the control service at a given AS, a
-      client sends a ServiceResolutionRequest RPC (which has no
-      parameters) to an endpoint address constructed as follows:
-
-      -  Common Header:
-
-         o  Path type: SCION (0x01)
-
-         o  DT/DL: "Service" (0b0100)
-
-      -  Address Header:
-
-         o  DstHostAddr: "SVC_CS" (0x0002)
-
-      -  UDP Header:
-
-         o  DstPort: 0
-
-   *  The ingress border router at the destination AS resolves the
-      service destination to an actual endpoint address.  This document
-      does not mandate any specific method for this resolution.
-
-   *  The ingress border router forwards the message to the resolved
-      address.
-
-   *  The destination service responds to the client with a
-      ServiceResolutionResponse.  That response contain one or more
-      transport options.
-
-   *  The client uses the address and port from the "QUIC" option to
-      establish a QUIC connection, which can then be used for regular
-      RPCs.
-
-   The following code block provides the full service resolution API in
-   the Protobuf message format.
-
-package proto.control_plane.v1;
-
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
-    map<string, Transport> transports = 1;
-}
-
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.168.0.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
-    string address = 1;
-}
-
-           Figure 31: Service Resolution RPC API definition
-
-
 
 Path-Lookup Examples
 
