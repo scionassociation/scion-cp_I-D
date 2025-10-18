@@ -1183,7 +1183,6 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 
 The maximum MTU supported by all intra-AS links MAY also be configured.
 
-The AS SHOULD adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1221,11 +1220,12 @@ As SCION does not provide any in-band signal about the intentions of endpoints n
 - Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
 - Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
 
-The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
+    The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
 
 A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
+To ensure reachability, PCB selection policies should forward as many PCBs as possible. PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
