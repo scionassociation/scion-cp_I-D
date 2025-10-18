@@ -1696,11 +1696,6 @@ Table of Contents
    The maximum MTU supported by all intra-AS links MAY also be
    configured.
 
-   The AS SHOULD adopt a PCB selection policy that does not accidentally
-   isolate the AS from the network, i.e. such that it does not block
-   connectivity to parent providers and ensures downstream connectivity
-   for children.  For more details, see Section 2.3.3.
-
 2.3.  Propagation of PCBs
 
    This section describes how PCBs are received, selected and further
@@ -1800,13 +1795,13 @@ Table of Contents
       resilience in case of link failure.  Both criteria can be used
       depending on the objective of the AS.
 
-   The relative disjointness of two PCBs A and B may be calculated by
-   assigning a disjointness score, calculated as the number of links in
-   A that don't appear in B.  For example, the beacon that has the
-   highest disjointness score and is not the shortest path should be
-   selected, but if this not better than what has already been selected,
-   then the beacon with the shortest path yet to be selected should be
-   chosen instead.
+      The relative disjointness of two PCBs A and B may be calculated by
+      assigning a disjointness score, calculated as the number of links
+      in A that don't appear in B.  For example, the beacon that has the
+      highest disjointness score and is not the shortest path should be
+      selected, but if this not better than what has already been
+      selected, then the beacon with the shortest path yet to be
+      selected should be chosen instead.
 
    A PCB Selection Policy can be expressed as a stateful filter of
    segments, i.e., a function which indicates whether to accept or deny
@@ -1814,6 +1809,11 @@ Table of Contents
    each time its AS registers a new segment.  Naturally, an AS's policy
    selects PCBs corresponding to paths that are commercially or
    otherwise operationally viable.
+
+   To ensure reachability, PCB selection policies should forward as many
+   PCBs as possible.  PCB selection is not intended as a mechanism for
+   traffic engineering (e.g., by excluding specific PCBs for that
+   purpose).
 
 2.3.4.  Propagation Interval and Best PCBs Set Size
 
