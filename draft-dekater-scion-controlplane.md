@@ -427,9 +427,69 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-{{app-a}} provides the entire Control Service API definition in protobuf format.
+## Control Service Discovery
 
-{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
+The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}} which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
+
+* Neighboring ASes craft one-hop paths directly.
+* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
+* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
+* Control Services respond to requests from remote ASes by reversing the path via which the request came.
+
+Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
+
+* A client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address in the format:
+  * Common Header:
+    * Path type: SCION (0x01)
+    * DT/DL: "Service" (0b0100)
+  * Address Header:
+    * DstHostAddr: "SVC_CS" (0x0002)
+  * UDP Header:
+    * DstPort: 0
+* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
+* The ingress border router forwards the message to the resolved address.
+* The destination service responds to the client with a ServiceResolutionResponse which contains one or more transport options.
+* The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
+
+The following code block provides the full service resolution API in the Protobuf message format.
+
+~~~~~
+
+package proto.control_plane.v1;
+
+// A ServiceResolutionRequest must always fit within a UDP datagram. If
+// the request does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionRequest {}
+
+// A ServiceResolutionResponse must always fit within a UDP datagram. If
+// the response does not fit, there is no mechanism for clients and
+// servers to establish control-plane reachability.
+message ServiceResolutionResponse {
+    // Supported transports to reach the service,
+    //
+    // List of known transports:
+    // - QUIC
+    //
+    // Unknown values should be ignored by clients.
+    map<string, Transport> transports = 1;
+}
+
+message Transport {
+    // Protocol specific server address descriptor.
+    //
+    // Supported address format for QUIC:
+    //  192.0.2.1:80
+    //  [2001:db8::1]:80
+    //
+    //  Missing ports / zero port / invalid port values should be
+    // treated by clients as errors.
+    string address = 1;
+}
+
+~~~~~
+{: #figure-40 title="Service Resolution RPC API definition"}
+<br>
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -1439,7 +1499,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
-3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment MUST be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.
+3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
@@ -2393,72 +2453,6 @@ message VerificationKeyID {
 <br>
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
-
-# Use of the SCION Data Plane {#app-b}
-{:numbered="false"}
-
-The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping strategies apply:
-
-* Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.
-* Constructed multihop paths are registered with the Control Service at the origin core AS. The path to that AS is the very path being registered.
-* Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local Control Service.
-* Control services respond to requests from remote ASes by reversing the path via which the request came.
-* Clients find the relevant Control Service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.dekater-scion-dataplane}}).
-
-The mechanics of service address resolution are the following:
-
-* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
-  * Common Header:
-    * Path type: SCION (0x01)
-    * DT/DL: "Service" (0b0100)
-  * Address Header:
-    * DstHostAddr: "SVC_CS" (0x0002)
-  * UDP Header:
-    * DstPort: 0
-* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
-* The ingress border router forwards the message to the resolved address.
-* The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.
-* The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
-
-The following code block provides the full service resolution API in the Protobuf message format.
-
-~~~~~
-
-package proto.control_plane.v1;
-
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
-    map<string, Transport> transports = 1;
-}
-
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.168.0.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
-    string address = 1;
-}
-
-~~~~~
-{: #figure-40 title="Service Resolution RPC API definition"}
-<br>
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
