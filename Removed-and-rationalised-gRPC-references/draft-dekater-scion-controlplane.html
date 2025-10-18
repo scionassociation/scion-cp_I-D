@@ -3138,7 +3138,7 @@ message Chain {
 }
 </pre><a href="#section-2.4-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.4-6">A <code>ChainsRequest</code> message includes following fields:<a href="#section-2.4-6" class="pilcrow">¶</a></p>
+<p id="section-2.4-6">A <code>ChainsRequest</code> message includes the following fields:<a href="#section-2.4-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.4-7.1">
             <p id="section-2.4-7.1.1"><code>isd_as</code>: Returns ISD-AS of Subject in the AS certificate.<a href="#section-2.4-7.1.1" class="pilcrow">¶</a></p>
@@ -3153,7 +3153,7 @@ message Chain {
             <p id="section-2.4-7.4.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-7.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.4-8">A <code>ChainsResponse</code> includes following fields:<a href="#section-2.4-8" class="pilcrow">¶</a></p>
+<p id="section-2.4-8">A <code>ChainsResponse</code> includes the following fields:<a href="#section-2.4-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.4-9.1">
             <p id="section-2.4-9.1.1"><code>chains</code>: Lists the certificate chains that match the request. A <code>Chain</code> contains:<a href="#section-2.4-9.1.1" class="pilcrow">¶</a></p>
@@ -3167,20 +3167,8 @@ message Chain {
             </ul>
 </li>
         </ul>
-<p id="section-2.4-10">A <code>TRCRequest</code> includes following fields:<a href="#section-2.4-10" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.4-11.1">
-            <p id="section-2.4-11.1.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-11.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.4-11.2">
-            <p id="section-2.4-11.2.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-11.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.4-11.3">
-            <p id="section-2.4-11.3.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-11.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-2.4-12">The returned <code>trc</code> contains the raw TRC.<a href="#section-2.4-12" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4-13">
+<p id="section-2.4-10">For requesting TRCs, the protobuf messages are:<a href="#section-2.4-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4-11">
 <pre>
 message TRCRequest {
     uint32 isd = 1;
@@ -3191,8 +3179,21 @@ message TRCRequest {
 message TRCResponse {
     bytes trc = 1;
 }
-</pre><a href="#section-2.4-13" class="pilcrow">¶</a>
+</pre><a href="#section-2.4-11" class="pilcrow">¶</a>
 </div>
+<p id="section-2.4-12">A <code>TRCRequest</code> includes the following fields:<a href="#section-2.4-12" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-13.1">
+            <p id="section-2.4-13.1.1"><code>isd</code>: Returns the ISD number of the TRC.<a href="#section-2.4-13.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-13.2">
+            <p id="section-2.4-13.2.1"><code>base</code>: Returns the base number of the TRC.<a href="#section-2.4-13.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-13.3">
+            <p id="section-2.4-13.3.1"><code>serial</code>: Returns the serial number of the TRC.<a href="#section-2.4-13.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-2.4-14">The returned <code>trc</code> contains the raw TRC.<a href="#section-2.4-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
