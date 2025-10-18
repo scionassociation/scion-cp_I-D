@@ -1331,27 +1331,20 @@ message Chain {
 }
 ~~~~~
 
-A `ChainsRequest` message includes following fields:
+A `ChainsRequest` message includes the following fields:
 
 - `isd_as`: Returns ISD-AS of Subject in the AS certificate.
 - `subject_key_id`: Returns SubjectKeyID in the AS certificate.
 - `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
 - `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
 
-A `ChainsResponse` includes following fields:
+A `ChainsResponse` includes the following fields:
 
 - `chains`: Lists the certificate chains that match the request. A `Chain` contains:
   - `as_cert`: Returns the AS certificate in the chain.
   - `ca_cert`: Returns the CA certificate in the chain.
 
-
-A `TRCRequest` includes following fields:
-
-- `isd`: Returns the ISD number of the TRC.
-- `base`: Returns the base number of the TRC.
-- `serial`: Returns the serial number of the TRC.
-
-The returned `trc` contains the raw TRC.
+For requesting TRCs, the protobuf messages are:
 
 ~~~~~
 message TRCRequest {
@@ -1364,6 +1357,15 @@ message TRCResponse {
     bytes trc = 1;
 }
 ~~~~~
+
+A `TRCRequest` includes the following fields:
+
+- `isd`: Returns the ISD number of the TRC.
+- `base`: Returns the base number of the TRC.
+- `serial`: Returns the serial number of the TRC.
+
+The returned `trc` contains the raw TRC.
+
 
 
 
