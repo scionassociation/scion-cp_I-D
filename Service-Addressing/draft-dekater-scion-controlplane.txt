@@ -112,11 +112,12 @@ Table of Contents
        2.3.5.  Propagation of Selected PCBs
      2.4.  Distribution of Cryptographic Material
    3.  Deployment Considerations
-     3.1.  Monitoring Considerations
-     3.2.  Effects of Clock Inaccuracy
-     3.3.  Path Discovery Time and Scalability
-       3.3.1.  Intra-ISD Beaconing
-       3.3.2.  Core Beaconing
+     3.1.  Destination Mapping
+     3.2.  Monitoring Considerations
+     3.3.  Effects of Clock Inaccuracy
+     3.4.  Path Discovery Time and Scalability
+       3.4.1.  Intra-ISD Beaconing
+       3.4.2.  Core Beaconing
    4.  Registration of Path Segments
      4.1.  Intra-ISD Path Segment Registration
        4.1.1.  Terminating a PCB
@@ -709,7 +710,7 @@ Table of Contents
    Recovering from a partitioned network is also seamless as only coarse
    time synchronization between the partitions is required to resume
    normal operation and move forward with updates of the cryptographic
-   material.  Section 3.2 further describes the impact of time
+   material.  Section 3.3 further describes the impact of time
    synchronization and path discovery time.
 
 1.8.  Communication Protocol
@@ -1818,8 +1819,8 @@ Table of Contents
 
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
-   intra-ISD beaconing (Section 3.3.1) and core beaconing
-   (Section 3.3.2).  At each propagation event, each AS selects a set of
+   intra-ISD beaconing (Section 3.4.1) and core beaconing
+   (Section 3.4.2).  At each propagation event, each AS selects a set of
    the best PCBs from the candidates in the Beacon Store according to
    the AS's selection policy.  This set should have a fixed size, the
    _best PCBs set size_.
@@ -1837,7 +1838,7 @@ Table of Contents
    computational overhead of signature verification—and the amount of
    paths discovered.  The PCBs set size should not be too low, to make
    sure that beaconing can discover a wide amount of paths.  Further
-   discussion on these trade-offs is provided in Section 3.3.  In
+   discussion on these trade-offs is provided in Section 3.4.  In
    current practice the intra-ISD set size is typically 20.  Current
    practice also showed that in small SCION core networks, higher values
    of the core best PCBs set size (e.g., 20) can be used.
@@ -2035,7 +2036,20 @@ Table of Contents
 
 3.  Deployment Considerations
 
-3.1.  Monitoring Considerations
+3.1.  Destination Mapping
+
+   The mechanism by which endpoints determine the destination ISD-AS
+   corresponding to a given destination address is outside the scope of
+   this document.  One option, still experimental in existing
+   deployments, is that SCION-aware endpoints may resolve destination
+   SCION addresses using a naming system (e.g. DNS).  SCION-unaware
+   endpoints may interface with a SCION network through a SCION IP
+   Gateway (SIG), which tunnels IP traffic over SCION.  In such cases,
+   the source SIG is responsible for mapping destination IPs to the
+   appropriate destination ISD-AS and gateway.  More information can be
+   found at [SIG].
+
+3.2.  Monitoring Considerations
 
    In order to maintain service availability, an AS SHOULD monitor the
    following aspects when deploying the SCION control plane:
@@ -2047,7 +2061,7 @@ Table of Contents
 
       -  Fraction of path lookups served successfully (see Section 5)
 
-      -  Time synchronization offset with other ASes (see Section 3.2)
+      -  Time synchronization offset with other ASes (see Section 3.3)
 
       -  Fraction of ASes found in non-expired segments for which a non-
          expired certificate exists
@@ -2076,7 +2090,7 @@ Table of Contents
          link is up) whereto a beacon was propagated during the last
          propagation interval
 
-3.2.  Effects of Clock Inaccuracy
+3.3.  Effects of Clock Inaccuracy
 
    A PCB originated by a given Control Service is validated by all the
    Control Services that receive it.  All have different clocks and
@@ -2113,7 +2127,7 @@ Table of Contents
    maintaining sufficient clock accuracy.  No particular method is
    assumed by this specification.
 
-3.3.  Path Discovery Time and Scalability
+3.4.  Path Discovery Time and Scalability
 
    The path discovery mechanism balances the number of discovered paths
    and the time it takes to discover them versus resource overhead of
@@ -2164,7 +2178,7 @@ Table of Contents
    moderate size.  For more specific observations, we distinguish
    between intra-ISD and core beaconing.
 
-3.3.1.  Intra-ISD Beaconing
+3.4.1.  Intra-ISD Beaconing
 
    In the intra-ISD beaconing, PCBs are propagated top down along
    parent-child links from core to leaf ASes.  Each AS discovers path
@@ -2227,7 +2241,7 @@ Table of Contents
    child ASes at distance D below the new link, learn of the new link
    after at worst D further propagation intervals.
 
-3.3.2.  Core Beaconing
+3.4.2.  Core Beaconing
 
    In core beaconing (typically inter-ISD), PCBs are propagated
    omnidirectionally along core links.  Each AS discovers path segments
@@ -3753,6 +3767,9 @@ Table of Contents
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
+   [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
+              2024, <https://docs.scion.org/en/latest/sig.html>.
+
 Acknowledgments
 
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
@@ -3949,6 +3966,8 @@ draft-dekater-scion-controlplane-10
    Major changes:
 
    *  Mention ConnectRPC as main RPC method instead of gRPC
+
+   *  Add small section about destination mapping
 
    Minor changes:
 
