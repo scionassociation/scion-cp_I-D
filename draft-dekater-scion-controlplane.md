@@ -1293,6 +1293,12 @@ The propagation procedure includes the following elements:
 
 # Deployment Considerations
 
+## Destination Mapping
+
+How endpoints map a destination address to the corresponding destination ISD-AS is outside of the scope of this document.
+One option, still experimental in existing deployments, is that SCION-enabled endpoints resolve the destination SCION address via a naming system (e.g. DNS).
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), that tunnel IP traffic over SCION. In this case, the source gateway maps destination IPs to a corresponding destination ISD-AS and gateway.
+
 ## Monitoring Considerations
 
 In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
