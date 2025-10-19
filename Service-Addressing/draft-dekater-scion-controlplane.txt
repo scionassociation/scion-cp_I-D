@@ -768,9 +768,11 @@ Table of Contents
 
        *  UDP Header:
 
-          -  DstPort: 0 A ServiceResolutionRequest MUST fit within a UDP
-             datagram, otherwise clients and servers won't be able to
-             establish control-plane reachability.
+          -  DstPort: 0
+
+       A ServiceResolutionRequest MUST fit within a UDP datagram,
+       otherwise clients and servers won't be able to establish control-
+       plane reachability.
 
    2.  The ingress border router at the destination AS resolves the
        service destination to an actual endpoint address.  This document
