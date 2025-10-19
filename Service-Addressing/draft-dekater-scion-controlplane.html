@@ -1891,7 +1891,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-control-service-discovery">
 <a href="#section-1.9" class="section-number selfRef">1.9. </a><a href="#name-control-service-discovery" class="section-name selfRef">Control Service Discovery</a>
         </h3>
-<p id="section-1.9-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-1.9-1" class="pilcrow">¶</a></p>
+<p id="section-1.9-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-1.9-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.9-2.1">
             <p id="section-1.9-2.1.1">Neighboring ASes craft one-hop paths directly. They are described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-1.9-2.1.1" class="pilcrow">¶</a></p>
