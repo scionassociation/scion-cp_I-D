@@ -5605,16 +5605,58 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 <p id="appendix-D.1-1">Major changes:<a href="#appendix-D.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-D.1-2.1">
-            <p id="appendix-D.1-2.1.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-D.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-2.1.1">New section "Distribution of Cryptographic Material" containing definitions formerly in the gRPC API appendix<a href="#appendix-D.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-2.2">
-            <p id="appendix-D.1-2.2.1">Add small section about destination mapping<a href="#appendix-D.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-2.2.1">New section "Destination Mapping" including a SIG reference<a href="#appendix-D.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-2.3">
+            <p id="appendix-D.1-2.3.1">New section "Lookup Requests Message Format" containing definitions formerly in the gRPC API appendix<a href="#appendix-D.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-2.4">
+            <p id="appendix-D.1-2.4.1">Move appendix "Use of the SCION Data Plane" to new section "Control Service Discovery"<a href="#appendix-D.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-2.5">
+            <p id="appendix-D.1-2.5.1">Mention ConnectRPC as main RPC method instead of gRPC<a href="#appendix-D.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-2.6">
+            <p id="appendix-D.1-2.6.1">Remove appendix "Full Control Service gRPC API" and move corresponding protobuf definitions in new sections mentioned above<a href="#appendix-D.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="appendix-D.1-3">Minor changes:<a href="#appendix-D.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-D.1-4.1">
-            <p id="appendix-D.1-4.1.1">AS Entry Signature: fix order of terms in one formula<a href="#appendix-D.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-4.1.1">Rename Inter-ISD Beaconing into Core Beaconing for consistency<a href="#appendix-D.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.2">
+            <p id="appendix-D.1-4.2.1">Clarify descriptions of fields in the <code>HeaderAndBody</code> message and that metadata must be empty<a href="#appendix-D.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.3">
+            <p id="appendix-D.1-4.3.1">AS Entry Signature: fix order of terms in one formula, clarify validity and meaning of associated data<a href="#appendix-D.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.4">
+            <p id="appendix-D.1-4.4.1">PCB Extensions: clarified text, added example of the <code>StaticInfoExtension</code> and informative reference<a href="#appendix-D.1-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.5">
+            <p id="appendix-D.1-4.5.1">PCB Validity: clarify text on timestamp validity and time allowances<a href="#appendix-D.1-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.6">
+            <p id="appendix-D.1-4.6.1">Reception of PCBs: mention that incoming link <span class="bcp14">MUST</span> be core or parent<a href="#appendix-D.1-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.7">
+            <p id="appendix-D.1-4.7.1">PCB selection policies: discourage use for traffic engineering<a href="#appendix-D.1-4.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.8">
+            <p id="appendix-D.1-4.8.1">Best PCBs Set Size: clarify tradeoffs and avoid normative language when unnecessary<a href="#appendix-D.1-4.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.9">
+            <p id="appendix-D.1-4.9.1">Path reversibility: mention that destination endpoints should estimate MTU<a href="#appendix-D.1-4.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.10">
+            <p id="appendix-D.1-4.10.1">Move considerations on SCMP Authentication to the security considerations section (Rogue SCMP Error Messages)<a href="#appendix-D.1-4.10.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-4.11">
+            <p id="appendix-D.1-4.11.1">Security Properties: use normative language to clarify assumptions<a href="#appendix-D.1-4.11.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
