@@ -175,6 +175,21 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  SIG:
+    title: SCION IP Gateway Documentation
+    date: 2024
+    target: https://docs.scion.org/en/latest/sig.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
+
 
 
 --- abstract
@@ -1369,6 +1384,12 @@ The returned `trc` contains the raw TRC.
 
 # Deployment Considerations
 
+## Destination Mapping
+
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document.
+One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
+
 ## Monitoring Considerations
 
 In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
@@ -2417,6 +2438,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 Major changes:
 
 - Mention ConnectRPC as main RPC method instead of gRPC
+- Add small section about destination mapping
 
 Minor changes:
 
