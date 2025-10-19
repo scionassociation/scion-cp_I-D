@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T00:23:44.094090+00:00",
+  "timestamp": "2025-10-19T00:26:13.841402+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -292,7 +292,7 @@
       "id": "I_kwDOJx2-rs6I_TuN",
       "title": "Beaconing: Clarify PCB selection policies and how they meet endpoint's needs ",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/16",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -306,8 +306,8 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> There seems to be a philosophical contradiction in section 2.3.1 (Selection of PCBs to propagate) of the control plane document. Given the philosophy of SCION, the goal should be to propagate PCBs with the highest probability of collectively meeting the needs of the end hosts that will perform path construction.  Of course, this AS doesn't know that.   But the text ignores this distinction.\r\n\r\nTis also relates to [rfc9217 section-2.8](https://www.rfc-editor.org/rfc/rfc9217.html#section-2.8):\r\n```how can the incentives of network operators and end users be aligned to realize the vision of path-aware networking, ...```\r\n",
       "createdAt": "2024-05-15T15:57:30Z",
-      "updatedAt": "2025-10-13T20:44:25Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-17T16:47:07Z",
+      "closedAt": "2025-10-17T16:47:07Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -340,9 +340,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening due to feedback from Alvaro. TODO\n\n- [x] Move text '[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\nfrom  [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.4)[Configuration](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-configuration)  to 2.3.3. and remove SHOULD\n- [ ] Update text in 2.1.3 to mention potentially conflicting policies \n\n\n\n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n```\n[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\n```\n\nWhen is it ok to adopt a policy that isolates the AS from the network? ;-)   The use of \"SHOULD\" implies that there are cases where it is ok not to do what is specified.  In this case, I assume it is never ok to select a policy that isolates the AS -- and if it were done, then it wouldn't be accidental.\n\nThis is to say that this sentence has no Normative value here.  It may be better if something similar (\"care should be taken to avoid...\", maybe with an example) were included in \u00a72.3.3.\n\n\nCC @katyatitkova ",
+          "body": "Reopening due to feedback from Alvaro. TODO\n\n- [ ] Move text '[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\nfrom  [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.2.4)[Configuration](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-configuration)  to 2.3.3. and remove SHOULD -->  I discussed this with Til and we decided to directly recommend avoiding using PCB selection for traffic engineering. So we don't need to mention this\n- [x] Update text in 2.1.3 to mention potentially conflicting policies \n\n\n\n```\n782 2.1.2.  Appending Entries to a PCB\n\n784   Every propagation interval (as configured by the AS), the Control\n785   Service:\n\n787   *  selects the best combinations of PCBs and interfaces connecting to\n788      a neighboring AS (i.e. a child AS or a core AS).  This is\n789      described in Section 2.3.3.\n```\n>  What is the criteria used to determine the \"best\"?  \u00a72.3.3 lists some\nfactors, and \u00a72.3.4 recommends the size of the PCB set.  However, it looks\nlike the selection of the \"best\" is not deterministic; instead, it is\nlocally determined based on policy -- is that correct?\nThere is then a possibility of \"conflicting\" policies.  I'm thinking\nespecially of the core where (in a triangle configuration, for example) two\nISDs may prefer each other to reach the third one...  Is this possible?\nLook at rfc7789; it is the best example I can think of right now.  I\nunderstand the differences, but the effect of filtering prefixes (rfc7789)\nmay be similar to \"filtering\" PCBs using policy.\n\n\n```\n[] \"SHOULD adopt a PCB selection policy...does not accidentally isolate the AS from the network\"\n```\n\nWhen is it ok to adopt a policy that isolates the AS from the network? ;-)   The use of \"SHOULD\" implies that there are cases where it is ok not to do what is specified.  In this case, I assume it is never ok to select a policy that isolates the AS -- and if it were done, then it wouldn't be accidental.\n\nThis is to say that this sentence has no Normative value here.  It may be better if something similar (\"care should be taken to avoid...\", maybe with an example) were included in \u00a72.3.3.\n\n\nCC @katyatitkova ",
           "createdAt": "2025-06-12T09:06:11Z",
-          "updatedAt": "2025-10-13T20:44:25Z"
+          "updatedAt": "2025-10-17T11:53:15Z"
         },
         {
           "author": "nicorusti",
@@ -1136,7 +1136,7 @@
       "id": "I_kwDOJx2-rs6Y82gT",
       "title": "protobuf RPC API - remove duplicated definitions in appendix",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/67",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1146,10 +1146,10 @@
       "labels": [
         "Prio 2"
       ],
-      "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \r\n \r\nTODO: \r\n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\r\n- [ ] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\r\n  - `SegmentType`\r\n  - `SegmentsRegistrationRequest`\r\n  - `SegmentCreationService`\r\n  - `BeaconRequest`\r\n  - `BeaconResponse`\r\n  - `PathSegment`\r\n  - `SegmentInformation`\r\n  - `ASEntry`\r\n  - `ASEntrySignedBody`\r\n  - `HopEntry`\r\n  - `PeerEntry`\r\n  - `HopField`\r\n  - `SignedMessage`\r\n  - `Header`\r\n  - `HeaderAndBodyInternal`\r\n  - `VerificationKeyID`\r\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \r\n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\r\n  - `SegmentsResponse`\r\n  - `SignatureAlgorithm`\r\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\r\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
+      "body": "With #24 we introduced a description of the gRPC CP API in the appendix.  However, with this, some definitions are duplicated. For example, `ASEntrySignedBody` is defined in both `2.2.1.4.2.  AS Entry Signed Body` and in the appendix. \n \nTODO: \n- [x] evaluate wether we leave the gRPC API descriptions all in the appendix or in various paragraphs --> we leave them in both places\n- [x] ~some gRPC definitions are duplicated, duplicates should be removed (preferably, leave them in the respective chapters rather than in appendix). A non-exhaustive list:~\n  - `SegmentType`\n  - `SegmentsRegistrationRequest`\n  - `SegmentCreationService`\n  - `BeaconRequest`\n  - `BeaconResponse`\n  - `PathSegment`\n  - `SegmentInformation`\n  - `ASEntry`\n  - `ASEntrySignedBody`\n  - `HopEntry`\n  - `PeerEntry`\n  - `HopField`\n  - `SignedMessage`\n  - `Header`\n  - `HeaderAndBodyInternal`\n  - `VerificationKeyID`\n- [x] make sure there are proper cross-references to the respective gRPC requests For example: \n  - `SegmentsRequest` right now it is not clear which requests are used for path lookups by endpoints, e.g. we should mention that an endpoint sends a `SegmentsRequest` to its path server.\n  - `SegmentsResponse`\n  - `SignatureAlgorithm`\n- [x] We sometimes call the API descritpions in the text \"on Code-Level\", we should use a better wording (e.g. gRPC API)\n- [x] check descriptions and typos  (e.g. `// This API is exposed by the control services of core ASes expose this on the SCION dataplane and also by all`",
       "createdAt": "2024-10-04T10:58:56Z",
-      "updatedAt": "2025-10-14T13:09:02Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T13:15:50Z",
+      "closedAt": "2025-10-16T13:15:50Z",
       "comments": [
         {
           "author": "jiceathome",
@@ -1178,6 +1178,20 @@
           "body": "We need to decide how to rehome some of the now orphaned protobuf code blocks.",
           "createdAt": "2025-10-14T13:09:01Z",
           "updatedAt": "2025-10-14T13:09:01Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "For the records, we sat together and found them a home in the CP ID. We also feel that also the trust material API definitons belong to the CP.",
+          "createdAt": "2025-10-16T07:19:50Z",
+          "updatedAt": "2025-10-16T07:19:50Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The reference in the PKI draft to the former (now removed) gRPC Appendix has been updated to the 'Distribution of Cryptographic Material' section where the protobuf definitions were moved. ",
+          "createdAt": "2025-10-16T13:15:50Z",
+          "updatedAt": "2025-10-16T13:15:50Z"
         }
       ]
     },
@@ -1380,7 +1394,7 @@
       "id": "I_kwDOJx2-rs6ou9Jm",
       "title": "Beaconing: clarify checks",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/90",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1393,8 +1407,8 @@
       ],
       "body": "- [x] Check if these checks are implemented @jiceatscion \n- [x] Do changes proposed in draft\n- [x] Clarify if last check (remote registration) is actually needed\n\nWork on checks at beaconing was previously done in #18 \n\n___ \nFeedback David Galan: \n3.  We propose that the local checks performed by each AS, necessary to ensure protocol correctness, are clarified. Currently, the draft requires that honest ASes validate the signatures in PCBs. However, honest ASes may accept malformed PCBs, even after a successful signature validation, unless they also perform some additional local checks. These local checks occur mainly in two key moments of the protocol:\n\n- (Reception) Subsection 2.3.2.1 \"Reception of PCBs\" details the local checks performed when an AS received a beacon propagated by another AS. We have synthesized a minimal set of additional checks that are required for protocol correctness, and we propose their inclusion in the I-D:\n\n    - (Cores) During core beaconing, the receiver Control Service must check every AS entry and discard PCBs that were propagated at any point (according to the `signed.header_and_body.body.isd_as' field) by a non-core AS.\n    - (Interfaces) If the received PCB was (a) last propagated by AS X (according to the `signed.header_and_body.body.isd_as' field of the last AS entry), and (b) was received through the local AS interface i (according to local knowledge of the Control Service), then the local knowledge of the receiver Control Service MUST agree that the link behind interface i indeed leads to AS X.\n    - (Continuity) When a PCB contains two or more AS entries, the receiver Control Service must check every AS entry except the last and discard beacons where the field `signed.header_and_body.body.next_isd_as' of an entry does not equal the field `signed.header_and_body.body.isd_as' of the next entry\n\n- (Remote registration) In subsection 4.1 \"Intra-ISD Path Segment Registration\" consider mentioning that, during remote registration (a phase of intra-ISD beaconing) of a PCB from an AS X into the database of an AS Y, AS Y must not accept the PCB if an AS other than Y generated it (field `signed.header_and_body.body.isd_as' of the first AS entry).",
       "createdAt": "2025-02-04T17:32:39Z",
-      "updatedAt": "2025-10-15T13:49:25Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T17:59:20Z",
+      "closedAt": "2025-10-16T17:59:20Z",
       "comments": [
         {
           "author": "jiceathome",
@@ -1441,9 +1455,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Reopening following new feedback received from Alvaro on exactly this wording:\n\n- [ ] Decide if to change this into a MUST: `\"SHOULD discard PCBs that were propagated at any point by a non-core AS\"` or else lowercase it ([Slack thread](https://scionproto.slack.com/archives/C8ADA9CEP/p1752056667859509))\n- [ ] @nicorusti Respond to Alvaro\n- [ ] Clarify text ` MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more..` by specifying that it refers to the same ISD bud different ASes\n- [ ] MAY make a policy decision ~not~ to propagate \n\n\n### Feedback Alvaro\n\n```\n1684\t   2.  Loop avoidance: If it is a core AS, the Control Service MUST\n1685\t       check whether the PCB includes duplicate hop entries created by\n1686\t       the core AS itself or by other ASes.  If so, the PCB MUST be\n1687\t       discarded in order to avoid loops.  This step is necessary\n1688\t       because core beaconing is based on propagating PCBs to all AS\n1689\t       neighbors.  Additionally, core ASes SHOULD discard PCBs that were\n1690\t       propagated at any point by a non-core AS.  Ultimately, core ASes\n1691\t       MAY make a policy decision not to propagate beacons containing\n1692\t       path segments that traverse the same ISD more than once as this\n1693\t       can be legitimate, e.g. if the ISD spans a large geographical\n1694\t       area, a path transiting another ISD may constitute a shortcut.\n```\n[] \"SHOULD discard PCBs that were propagated at any point by a non-core AS\"\n\nWhen is it ok not to discard these PCBs?  IOW, why is it not a requirement?\n> @nicorusti: The reason for a SHOULD here is implementation complexity. To complete this check, a core AS would need to look at the TRC of the corresponding iSD to get a list of all core ASes, then use it to verify that all ASes on the PCB are actually core. AFAIK we don\u2019t have such check in the current implementation. But let me double check this, and think a bit more on the relevance of this check. \n\n[] \"If...the PCB includes duplicate hop entries...MUST be discarded...[but]...MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once\"\n\nI assume you meant \"decision to propagate\". ??\n\nThe MAY and MUST are in Normative contradiction.  Use SHOULD (instead of MUST).\n\n> \n> I don\u2019t think this is a contradiction, because the MUST refers to a path\n> traversing the same AS twice, while the MAY refers to a path traversing the\n> same ISD twice (but a different AS). We can clarify it in the text that the\n> MAY refers to the same ISD but a different AS.\n> \n> https://github.com/scionassociation/scion-cp_I-D/issues/90\n\nYup, you're right.",
+          "body": "Reopening following new feedback received from Alvaro on exactly this wording:\n\n- [x] Decide if to change this into a MUST: `\"SHOULD discard PCBs that were propagated at any point by a non-core AS\"` or else lowercase it ([Slack thread](https://scionproto.slack.com/archives/C8ADA9CEP/p1752056667859509))\n- [ ] @nicorusti Respond to Alvaro\n- [x] Clarify text ` MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more..` by specifying that it refers to the same ISD bud different ASes\n- [x] MAY make a policy decision ~not~ to propagate \n\n\n### Feedback Alvaro\n\n```\n1684\t   2.  Loop avoidance: If it is a core AS, the Control Service MUST\n1685\t       check whether the PCB includes duplicate hop entries created by\n1686\t       the core AS itself or by other ASes.  If so, the PCB MUST be\n1687\t       discarded in order to avoid loops.  This step is necessary\n1688\t       because core beaconing is based on propagating PCBs to all AS\n1689\t       neighbors.  Additionally, core ASes SHOULD discard PCBs that were\n1690\t       propagated at any point by a non-core AS.  Ultimately, core ASes\n1691\t       MAY make a policy decision not to propagate beacons containing\n1692\t       path segments that traverse the same ISD more than once as this\n1693\t       can be legitimate, e.g. if the ISD spans a large geographical\n1694\t       area, a path transiting another ISD may constitute a shortcut.\n```\n[] \"SHOULD discard PCBs that were propagated at any point by a non-core AS\"\n\nWhen is it ok not to discard these PCBs?  IOW, why is it not a requirement?\n> @nicorusti: The reason for a SHOULD here is implementation complexity. To complete this check, a core AS would need to look at the TRC of the corresponding iSD to get a list of all core ASes, then use it to verify that all ASes on the PCB are actually core. AFAIK we don\u2019t have such check in the current implementation. But let me double check this, and think a bit more on the relevance of this check. \n\n[] \"If...the PCB includes duplicate hop entries...MUST be discarded...[but]...MAY make a policy decision not to propagate beacons containing path segments that traverse the same ISD more than once\"\n\nI assume you meant \"decision to propagate\". ??\n\nThe MAY and MUST are in Normative contradiction.  Use SHOULD (instead of MUST).\n\n> \n> I don\u2019t think this is a contradiction, because the MUST refers to a path\n> traversing the same AS twice, while the MAY refers to a path traversing the\n> same ISD twice (but a different AS). We can clarify it in the text that the\n> MAY refers to the same ISD but a different AS.\n> \n> https://github.com/scionassociation/scion-cp_I-D/issues/90\n\nYup, you're right.",
           "createdAt": "2025-06-25T13:42:12Z",
-          "updatedAt": "2025-07-09T10:24:45Z"
+          "updatedAt": "2025-10-16T13:48:04Z"
         },
         {
           "author": "nicorusti",
@@ -1451,6 +1465,13 @@
           "body": "Discussed with @jiceatscion this wording: \n> The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered. \n\nHe feels there is no harm if a segment is register, sh he feels MUST is not needed. TODO: think whether we need normative language.",
           "createdAt": "2025-06-27T09:11:10Z",
           "updatedAt": "2025-06-27T09:12:43Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> He feels there is no harm if a segment is register, sh he feels MUST is not needed. TODO: think whether we need normative language.\n\nThis point was discussed a while ago here  [slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1740680003084829?thread_ts=1740679917.948679&cid=C8ADA9CEP)  and then changed to MUST [here](https://github.com/scionassociation/scion-cp_I-D/commit/d4d48e7076664469e4dacef247381647c148d2b1) after [this](https://github.com/scionassociation/scion-cp_I-D/issues/113#issuecomment-3008894826) suggestion by Alvaro.\nSo we can keep it like this.",
+          "createdAt": "2025-10-16T16:54:29Z",
+          "updatedAt": "2025-10-16T17:04:18Z"
         }
       ]
     },
@@ -1459,7 +1480,7 @@
       "id": "I_kwDOJx2-rs6rl7tK",
       "title": "The PKI protobuf API should be specified",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/96",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1471,8 +1492,8 @@
       ],
       "body": "We do not specify how certificates are requested between ASes. Right now we reference the PKI draft, but also there we don't say anything. We should add this somehwere (e.g. together with the gRPC API)\n\n\nPointers:\n- Documentation https://docs.scion.org/en/latest/cryptography/interactions.html#messages \n- Implementation: https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55 \n",
       "createdAt": "2025-02-25T15:53:49Z",
-      "updatedAt": "2025-10-15T14:58:58Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T15:42:14Z",
+      "closedAt": "2025-10-16T15:42:14Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1491,9 +1512,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "> Does this depend on the outcome of discussions on https://github.com/scionassociation/scion-cp_I-D/issues/105 ?\n\nI don't think it does. What matters is that we have all the needed protobuf definitions from [here](https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55) to somewhere in one of the two drafts. Right now this is in the CP appendix, I'm not sure this is the best location..\n\nTODO: \n- [ ] Update reference in pKI draft [[I-D.dekater-scion-controlplane](https://scionassociation.github.io/scion-cppki_I-D/draft-dekater-scion-pki.html#I-D.dekater-scion-controlplane)], section \"Control Service gRPC API - Trust Material\".",
+          "body": "> Does this depend on the outcome of discussions on https://github.com/scionassociation/scion-cp_I-D/issues/105 ?\n\nI don't think it does. What matters is that we have all the needed protobuf definitions from [here](https://github.com/scionproto/scion/blob/abd39afe0a83199aca5ad59d6cc4cc383c89d4cf/proto/control_plane/v1/cppki.proto#L55) to somewhere in one of the two drafts. Right now this is in the CP appendix, I'm not sure this is the best location..\n\nTODO: \n- [x] Update reference in pKI draft [[I-D.dekater-scion-controlplane](https://scionassociation.github.io/scion-cppki_I-D/draft-dekater-scion-pki.html#I-D.dekater-scion-controlplane)], section \"Control Service gRPC API - Trust Material\".",
           "createdAt": "2025-10-09T16:15:36Z",
-          "updatedAt": "2025-10-15T14:26:11Z"
+          "updatedAt": "2025-10-16T13:16:25Z"
         },
         {
           "author": "nicorusti",
@@ -1751,16 +1772,15 @@
       "authorAssociation": "MEMBER",
       "assignees": [
         "nicorusti",
-        "knmeynell",
-        "jiceathome"
+        "knmeynell"
       ],
       "labels": [
         "enhancement",
         "Prio 1"
       ],
-      "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [ ] Move section to a dedicated paragraph\n- [ ] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [ ] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [ ] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [ ] Explicitly indicate how the information is used.\n- [ ] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
+      "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [x] Move section to a dedicated paragraph\n- [x] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [x] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [x] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [x] Explicitly indicate how the information is used.\n- [x] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
       "createdAt": "2025-06-09T19:13:09Z",
-      "updatedAt": "2025-10-08T09:38:08Z",
+      "updatedAt": "2025-10-17T16:21:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -1797,6 +1817,13 @@
           "body": "@knmeynell this issue has a bunch of editorial stuff, could you perhaps start with some of these? \n",
           "createdAt": "2025-07-16T09:06:04Z",
           "updatedAt": "2025-07-16T09:06:04Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've moved the 'Use of the SCION Data Plane' Appendix to a new section at the end of the Introduction section. I've also renamed it 'Control Service Discovery' as I think this specifically relates to the Control Services, whilst the use of QUIC/UDP/SCION is already described in the previous sub-section. \n\nI've rationalised the introduction to how Control Services are discovered as this was unnecessarily verbose, and I've also clarified and slightly re-ordered the bootstrapping process. \n\nThe relevant information about the bootstrapping process seems to be described, although the protobuf definitions could probably be better rationalised and the comments broken out into description as with other sections. I suspect we could also better integrate the 'service address' description with the protobuf code, but perhaps we should discuss this further. \n",
+          "createdAt": "2025-10-17T16:21:33Z",
+          "updatedAt": "2025-10-17T16:21:33Z"
         }
       ]
     },
@@ -2093,11 +2120,12 @@
       ],
       "labels": [
         "enhancement",
+        "Prio 1",
         "needs-discussion"
       ],
       "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [ ] Add some text on mapping \n- [ ] Mapping is also sort of a CP task. Shall we add a reference to the SIG also in this draft? \n- [ ] https://github.com/scionproto/scion/issues/4787 \n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
       "createdAt": "2025-06-13T16:04:15Z",
-      "updatedAt": "2025-10-08T09:38:09Z",
+      "updatedAt": "2025-10-16T07:35:35Z",
       "closedAt": null,
       "comments": []
     },
@@ -2225,9 +2253,9 @@
         "editorial",
         "needs-discussion"
       ],
-      "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [ ] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [ ] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [ ] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
+      "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [x] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [x] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [x] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-10-14T14:41:27Z",
+      "updatedAt": "2025-10-17T16:31:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -2250,6 +2278,20 @@
           "body": "What do you mean by \"impact of all possible link mismatches\"? ",
           "createdAt": "2025-10-14T14:41:27Z",
           "updatedAt": "2025-10-14T14:41:27Z"
+        },
+        {
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So regarding the link mismatches, at least within the scope of my understanding of the issue. I don't understand why the type of mismatch matters (be it parent/parent or parent/peer - it's still a mismatch). Right now, when receiving beacon, we [check](https://github.com/scionproto/scion/blob/6787965828cd69474da8b8da0473ffe975846bde/control/beaconing/handler.go#L108) if the link type is core or parent. AS which receives the beacon has no idea what others think about the types of its links, and it shouldn't matter: if for any reason the AS that sent the beacon sent it via incorrect link, it still will be caught on receiving.",
+          "createdAt": "2025-10-16T12:52:46Z",
+          "updatedAt": "2025-10-16T12:52:46Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> when we speak about routing, everything that happens inside an ISD is intra-ISD routing. But with beaconing, the beaconing between two core ASes in the same ISD is inter-ISD beaconing.  \n\n@katyatitkova you're right, we  should call core beaconing as such (and not inter-ISD beaconing). I renamed it in #148.  \n\n> We don't have the term for another kind of beaconing though.\n\nRight, for this one, I leave it as it is.\n\n> More checks in 2.3.1 is OK, but what's the purpose? \n\nThe purpose is to limit the impact of misconfiguration. This is why I believe our reviewer Alvaro was asking \"Is there a check anywhere for the types to match?\". I think you actually answered his question:\n\n> Right now, when receiving beacon, we [check](https://github.com/scionproto/scion/blob/6787965828cd69474da8b8da0473ffe975846bde/control/beaconing/handler.go#L108) if the link type is core or parent.\n\nI will shortly propose some edits based on your suggestion.. It would great if early Monday you could review #148 if not yet merged\n\n\n\n",
+          "createdAt": "2025-10-17T15:49:49Z",
+          "updatedAt": "2025-10-17T15:49:49Z"
         }
       ]
     },
@@ -2309,7 +2351,7 @@
       "id": "I_kwDOJx2-rs69hSWf",
       "title": "Security considerations: add discussion about SCMP External Interface Down messages",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/121",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2321,8 +2363,8 @@
       ],
       "body": "We briefly discuss this in 6.7.  SCMP Authentication, perhaps we could move and extend this paragraph to the security considerations section. \n\n\nFeedback Alvaro: \n```\n2921\t   Recipients can use this information to route around a broken data\n2922\t   plane inside an AS.\n```\n\n[] A rogue router can send this message (or the External Interface Down message) to disrupt the forwarding of information and/or force the traffic through a different path. This type of potential attack should be listed in the Security Considerations.\n\nRelated work pointers: \n* https://docs.scion.org/en/latest/dev/design/scmp-authentication.html \n* https://github.com/scionproto/scion/issues/3969 ",
       "createdAt": "2025-06-26T16:08:59Z",
-      "updatedAt": "2025-10-15T12:38:16Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-16T07:24:14Z",
+      "closedAt": "2025-10-16T07:24:14Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -10435,18 +10477,26 @@
       "labels": [],
       "body": "Resolves #57\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\r\n",
       "createdAt": "2025-07-09T10:09:24Z",
-      "updatedAt": "2025-10-13T19:33:07Z",
+      "updatedAt": "2025-10-16T16:29:36Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "mtu-clarifications",
-      "headRefOid": "d11ffe9fda27274b8e083dd479604f52076ad91c",
+      "headRefOid": "a5b75de356a64609637b005ff89e3c1d61cbfabb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you 4 eye check and merge? \r\n\r\n",
+          "createdAt": "2025-10-16T16:29:35Z",
+          "updatedAt": "2025-10-16T16:29:35Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs7GhA29",
@@ -11033,26 +11083,150 @@
       "id": "PR_kwDOJx2-rs6tiZXJ",
       "title": "Clarify conflicting beaconing policies",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/140",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #16",
+      "body": "Resolves #16 (some remaining points)\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/pcb_policy/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/pcb_policy/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/pcb_policy/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-13T20:46:01Z",
-      "updatedAt": "2025-10-13T20:46:01Z",
+      "updatedAt": "2025-10-17T16:47:12Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "4f7e5cf55397a5a2650f14e1648f99bbb36a4e3a",
+      "baseRefOid": "17e858b80ab2ce69f175fc4f32d71780facaacee",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "pcb_policy",
-      "headRefOid": "37a6175c9ec84ac6c941fdf2a29edcb2a572d7eb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "aaf6fdde4e2a026379c574779c76e993565c5973",
+      "closedAt": "2025-10-17T16:47:06Z",
+      "mergedAt": "2025-10-17T16:47:06Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell feel free to have a look, but do not merge yet.. Waiting for feedback on [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1760635807946379) \r\n",
+          "createdAt": "2025-10-16T17:41:33Z",
+          "updatedAt": "2025-10-16T17:41:33Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell could you 4 eye check and merge? ",
+          "createdAt": "2025-10-17T16:39:33Z",
+          "updatedAt": "2025-10-17T16:39:33Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HnrfV",
+          "commit": {
+            "abbreviatedOid": "2b4808b"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T09:20:08Z",
+          "updatedAt": "2025-10-17T09:20:08Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I would just remove the whole paragraph.\n\nI think the scenario seems a bit artificial. Either two AS agree to have a link and to use it, or they decide not to use it.\n\nThe one exception I see is that ASes try to implement traffic engineering through PCB policies.\nSo, if anything, we could write a clarification:\n\n`To ensure reachability, PCB Selection policies should always forward as many PCBs as possible. PCB Selection policies must not be used as a means for traffic engineering, for example, by excluding PCBs, `\n",
+              "createdAt": "2025-10-17T09:20:08Z",
+              "updatedAt": "2025-10-17T09:20:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HpUuo",
+          "commit": {
+            "abbreviatedOid": "2b4808b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T10:56:31Z",
+          "updatedAt": "2025-10-17T10:56:32Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "But this conflicts with what we say above [in the draft](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-09.html#section-2.3.3-4.3.1):\r\n> ISD or AS exclusion lists: certain ASes or ISD that may not appear in a segment. \r\n",
+              "createdAt": "2025-10-17T10:56:32Z",
+              "updatedAt": "2025-10-17T10:56:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HpbK_",
+          "commit": {
+            "abbreviatedOid": "2b4808b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T11:00:45Z",
+          "updatedAt": "2025-10-17T11:00:46Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "P.S. I discussed this scenario back then here [on slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1750792582215319)",
+              "createdAt": "2025-10-17T11:00:45Z",
+              "updatedAt": "2025-10-17T11:00:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Hp5kb",
+          "commit": {
+            "abbreviatedOid": "2b4808b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T11:22:37Z",
+          "updatedAt": "2025-10-17T11:22:38Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "As discussed with @tzaeschke we should say PCB filters should not be used for traffic engineering in the core.\r\n```suggestion\r\nTo ensure reachability, PCB selection policies should forward as many PCBs as possible. PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).\r\n```",
+              "createdAt": "2025-10-17T11:22:38Z",
+              "updatedAt": "2025-10-17T11:46:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Hq53K",
+          "commit": {
+            "abbreviatedOid": "aaf6fdd"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-10-17T12:04:51Z",
+          "updatedAt": "2025-10-17T12:04:51Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HvhNn",
+          "commit": {
+            "abbreviatedOid": "aaf6fdd"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T16:46:55Z",
+          "updatedAt": "2025-10-17T16:46:55Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 141,
@@ -11085,24 +11259,26 @@
       "id": "PR_kwDOJx2-rs6tq6EQ",
       "title": "SCMP interface down security considerations",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/142",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #121",
+      "body": "Resolves #121\r\n\r\n[Diff with Main ](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/SCMP-Messages/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-14T13:33:20Z",
-      "updatedAt": "2025-10-15T13:36:06Z",
+      "updatedAt": "2025-10-16T07:24:18Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "fc244b8f9a2dcc2312ff55a97a7de70066040b9c",
+      "baseRefOid": "f5c7cb528fa703076a50c245852f07d8ab977c46",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "SCMP-Messages",
-      "headRefOid": "89914ed0d850c9e7cd96434ed3cc282cdc32be56",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "14beea53b0e896fc9d18fd075c0bfc85e58bcb84",
+      "closedAt": "2025-10-16T07:24:13Z",
+      "mergedAt": "2025-10-16T07:24:13Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "d98a416bca68f567fb2d77fc4e54f7aae0631a39"
+      },
       "comments": [],
       "reviews": [
         {
@@ -11116,6 +11292,19 @@
           "body": "Okay",
           "createdAt": "2025-10-15T12:01:55Z",
           "updatedAt": "2025-10-15T12:01:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HSBvo",
+          "commit": {
+            "abbreviatedOid": "14beea5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "@knmeynell I did some rewording. Can you give it one last look before merging?",
+          "createdAt": "2025-10-16T07:18:23Z",
+          "updatedAt": "2025-10-16T07:18:23Z",
           "comments": []
         }
       ]
@@ -11222,20 +11411,300 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #67 ",
+      "body": "Resolves #67 \r\nResolves #96 \r\n[Diff with Main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Removed-and-rationalised-gRPC-references/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-15T14:02:07Z",
-      "updatedAt": "2025-10-15T14:42:46Z",
+      "updatedAt": "2025-10-18T15:08:18Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "f5c7cb528fa703076a50c245852f07d8ab977c46",
+      "baseRefOid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Removed-and-rationalised-gRPC-references",
-      "headRefOid": "a0c084d4008a167e7b9631e6bb2b41d8bab70955",
+      "headRefOid": "a240f362b9a400541aa3061804d51eaf723908fb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell Can you give it one last look and merge?\r\n ",
+          "createdAt": "2025-10-18T14:40:48Z",
+          "updatedAt": "2025-10-18T14:40:48Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7HUnj-",
+          "commit": {
+            "abbreviatedOid": "7e6194b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I reordered fields a bit, what do you think? I want to give it another look. \r\n\r\nAlso, can you update the reference in the PKI ID? ",
+          "createdAt": "2025-10-16T10:15:08Z",
+          "updatedAt": "2025-10-16T10:15:08Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7HXT9j",
+          "commit": {
+            "abbreviatedOid": "7e6194b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-10-16T13:12:06Z",
+          "updatedAt": "2025-10-16T13:12:10Z",
+          "comments": [
+            {
+              "originalPosition": 181,
+              "body": "@knmeynell could we use the same format as for the other section? \r\n\r\n- Service definition first\r\n- then explanation of fields \r\n- then protobuf of SegmentsRequest and response",
+              "createdAt": "2025-10-16T13:12:06Z",
+              "updatedAt": "2025-10-16T13:12:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7H5As8",
+          "commit": {
+            "abbreviatedOid": "7e6194b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-18T14:40:23Z",
+          "updatedAt": "2025-10-18T14:40:23Z",
+          "comments": [
+            {
+              "originalPosition": 181,
+              "body": "I did it",
+              "createdAt": "2025-10-18T14:40:23Z",
+              "updatedAt": "2025-10-18T14:40:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7H5EGn",
+          "commit": {
+            "abbreviatedOid": "a240f36"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-18T15:08:18Z",
+          "updatedAt": "2025-10-18T15:08:18Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 146,
+      "id": "PR_kwDOJx2-rs6uF-iq",
+      "title": "Beaconing Clarifications",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/146",
+      "state": "MERGED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #90 ([these](https://github.com/scionassociation/scion-cp_I-D/issues/90#issuecomment-3004831347) points)",
+      "createdAt": "2025-10-16T13:56:29Z",
+      "updatedAt": "2025-10-16T17:59:19Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d98a416bca68f567fb2d77fc4e54f7aae0631a39",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Beaconing-Clarifications",
+      "headRefOid": "42613033445382c6da1047fdb1f4e8dd2faf5ba8",
+      "closedAt": "2025-10-16T17:59:19Z",
+      "mergedAt": "2025-10-16T17:59:19Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "17e858b80ab2ce69f175fc4f32d71780facaacee"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell what issue is this addressing? We already have #140 to address the last point of #16",
+          "createdAt": "2025-10-16T17:50:04Z",
+          "updatedAt": "2025-10-16T17:51:02Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I see, these are some of the points in #90 ([here](https://github.com/scionassociation/scion-cp_I-D/issues/90#issuecomment-3004831347))",
+          "createdAt": "2025-10-16T17:54:30Z",
+          "updatedAt": "2025-10-16T17:54:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7Hc-n-",
+          "commit": {
+            "abbreviatedOid": "4261303"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-16T17:58:36Z",
+          "updatedAt": "2025-10-16T17:58:36Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 147,
+      "id": "PR_kwDOJx2-rs6uH1iP",
+      "title": "remove formal verification reference",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/147",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Unresolves scionassociation/scion-dp_I-D#109 ",
+      "createdAt": "2025-10-16T16:12:36Z",
+      "updatedAt": "2025-10-16T16:23:16Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d98a416bca68f567fb2d77fc4e54f7aae0631a39",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "remove-reference",
+      "headRefOid": "b49deaca56f5c5bcb0071cb348189e76e5f76eb5",
+      "closedAt": "2025-10-16T16:23:13Z",
+      "mergedAt": "2025-10-16T16:23:13Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d8227154af5f9bcee682f118cadfb1a1c8b19ffd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 148,
+      "id": "PR_kwDOJx2-rs6uSrvk",
+      "title": "Clarify link misconfigurations and propagation to child ASes",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/148",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #119\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-10-17T11:43:52Z",
+      "updatedAt": "2025-10-17T16:37:32Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "17e858b80ab2ce69f175fc4f32d71780facaacee",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "link-mismatch",
+      "headRefOid": "b33df772479ac12815c5450a5c571cdcb7b2d478",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 149,
+      "id": "PR_kwDOJx2-rs6uUP5x",
+      "title": "Beaconing clarifications",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/149",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-17T13:45:19Z",
+      "updatedAt": "2025-10-17T16:45:24Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "17e858b80ab2ce69f175fc4f32d71780facaacee",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Beaconing-Clarifications",
+      "headRefOid": "42613033445382c6da1047fdb1f4e8dd2faf5ba8",
+      "closedAt": "2025-10-17T16:45:23Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Duplicate of #146 ",
+          "createdAt": "2025-10-17T16:45:23Z",
+          "updatedAt": "2025-10-17T16:45:23Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 150,
+      "id": "PR_kwDOJx2-rs6uURwz",
+      "title": "Service Addressing ",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/150",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #109 ",
+      "createdAt": "2025-10-17T13:48:10Z",
+      "updatedAt": "2025-10-18T15:22:47Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Service-Addressing",
+      "headRefOid": "522f1d105771e85ab3e419d558ef08af7ab32e2b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 151,
+      "id": "PR_kwDOJx2-rs6udEeH",
+      "title": "test - grammar review with copilot",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/151",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-18T15:00:24Z",
+      "updatedAt": "2025-10-18T15:02:00Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "Removed-and-rationalised-gRPC-references",
+      "baseRefOid": "a240f362b9a400541aa3061804d51eaf723908fb",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "grammar-fixes/crypto-and-rpc",
+      "headRefOid": "65ab7476ffb1be3218c7dd7aefa77d113d809053",
+      "closedAt": "2025-10-18T15:01:49Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "A failure, copilot nearly deleted the entire draft ",
+          "createdAt": "2025-10-18T15:01:49Z",
+          "updatedAt": "2025-10-18T15:01:49Z"
+        }
+      ],
       "reviews": []
     }
   ]
