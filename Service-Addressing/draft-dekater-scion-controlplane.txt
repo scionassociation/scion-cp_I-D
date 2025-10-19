@@ -2474,7 +2474,7 @@ Table of Contents
        SegmentRegistrationService.SegmentsRegistration remote procedure
        call (RPC) in the Control Services of the relevant core ASes (see
        also Section 4.3).  The first ISD-AS entry of the path segment
-       SHOULD be equal to the core ISD-AS where the segment is being
+       MUST be equal to the core ISD-AS where the segment is being
        registered.  If not, the core AS MUST reject the segment.
 
    *Note:* For more information on possible selection strategies of
