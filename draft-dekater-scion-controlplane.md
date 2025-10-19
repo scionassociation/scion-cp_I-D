@@ -441,13 +441,13 @@ The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.de
 Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
 
 1. A client sends a `ServiceResolutionRequest` RPC (which has no parameters) to an endpoint address in the format:
-  * Common Header:
-    * Path type: SCION (0x01)
-    * DT/DL: "Service" (0b0100)
-  * Address Header:
-    * DstHostAddr: "SVC_CS" (0x0002)
-  * UDP Header:
-    * DstPort: 0
+    * Common Header:
+      * Path type: SCION (0x01)
+      * DT/DL: "Service" (0b0100)
+    * Address Header:
+      * DstHostAddr: "SVC_CS" (0x0002)
+    * UDP Header:
+      * DstPort: 0
   A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
 2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
 3. The ingress border router forwards the message to the resolved address.
