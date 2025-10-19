@@ -471,9 +471,6 @@ The following code block provides the service resolution API Protobuf messages.
     string address = 1;
   }
 ~~~~~
-{: #figure-40 title="Service Resolution RPC API definition"}
-<br>
-
 
 # Path Exploration or Beaconing {#beaconing}
 
