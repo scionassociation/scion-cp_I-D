@@ -1894,7 +1894,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.9-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-1.9-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.9-2.1">
-            <p id="section-1.9-2.1.1">Neighboring ASes craft one-hop paths directly.<a href="#section-1.9-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.9-2.1.1">Neighboring ASes craft one-hop paths directly. They are described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-1.9-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.9-2.2">
             <p id="section-1.9-2.2.1">Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.<a href="#section-1.9-2.2.1" class="pilcrow">¶</a></p>
@@ -1907,89 +1907,58 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </li>
         </ul>
 <p id="section-1.9-3">Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:<a href="#section-1.9-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.9-4.1">
-            <p id="section-1.9-4.1.1">A client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address in the format:<a href="#section-1.9-4.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.9-4">
+<li id="section-1.9-4.1">
+            <p id="section-1.9-4.1.1">A client sends a <code>ServiceResolutionRequest</code> RPC (which has no parameters) to an endpoint address in the format:
+  * Common Header:<a href="#section-1.9-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.9-4.1.2.1">
-                <p id="section-1.9-4.1.2.1.1">Common Header:<a href="#section-1.9-4.1.2.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.9-4.1.2.1.2.1">
-                    <p id="section-1.9-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#section-1.9-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                  <li class="normal" id="section-1.9-4.1.2.1.2.2">
-                    <p id="section-1.9-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#section-1.9-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
+                <p id="section-1.9-4.1.2.1.1">Path type: SCION (0x01)<a href="#section-1.9-4.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-1.9-4.1.2.2">
-                <p id="section-1.9-4.1.2.2.1">Address Header:<a href="#section-1.9-4.1.2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.9-4.1.2.2.2.1">
-                    <p id="section-1.9-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#section-1.9-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
+                <p id="section-1.9-4.1.2.2.1">DT/DL: "Service" (0b0100)
+      * Address Header:<a href="#section-1.9-4.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-1.9-4.1.2.3">
-                <p id="section-1.9-4.1.2.3.1">UDP Header:<a href="#section-1.9-4.1.2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.9-4.1.2.3.2.1">
-                    <p id="section-1.9-4.1.2.3.2.1.1">DstPort: 0<a href="#section-1.9-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-1.9-4.1.2.3.1">DstHostAddr: "SVC_CS" (0x0002)
+      * UDP Header:<a href="#section-1.9-4.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                </ul>
+              <li class="normal" id="section-1.9-4.1.2.4">
+                <p id="section-1.9-4.1.2.4.1">DstPort: 0
+  A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.<a href="#section-1.9-4.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-1.9-4.2">
+          <li id="section-1.9-4.2">
             <p id="section-1.9-4.2.1">The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.<a href="#section-1.9-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.9-4.3">
+          <li id="section-1.9-4.3">
             <p id="section-1.9-4.3.1">The ingress border router forwards the message to the resolved address.<a href="#section-1.9-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.9-4.4">
-            <p id="section-1.9-4.4.1">The destination service responds to the client with a ServiceResolutionResponse which contains one or more transport options.<a href="#section-1.9-4.4.1" class="pilcrow">¶</a></p>
+          <li id="section-1.9-4.4">
+            <p id="section-1.9-4.4.1">The destination service responds to the client with a <code>ServiceResolutionResponse</code>. It contains one or more transport options and it <span class="bcp14">MUST</span> fit within a UDP datagram.
+  Known transports are "QUIC". Unknown values <span class="bcp14">MUST</span> be ignored by clients. The response includes a <code>Transport</code> message containing supported addresses and port to reach the service.
+  Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
+  <code>192.0.2.1:80</code> and <code>[2001:db8::1]:80</code>. A missing, zero or non-existent port value <span class="bcp14">MUST</span> be treated by clients as an error.<a href="#section-1.9-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.9-4.5">
-            <p id="section-1.9-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.<a href="#section-1.9-4.5.1" class="pilcrow">¶</a></p>
+          <li id="section-1.9-4.5">
+            <p id="section-1.9-4.5.1">The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.<a href="#section-1.9-4.5.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-1.9-5">The following code block provides the full service resolution API in the Protobuf message format.<a href="#section-1.9-5" class="pilcrow">¶</a></p>
+        </ol>
+<p id="section-1.9-5">The following code block provides the service resolution API Protobuf messages.<a href="#section-1.9-5" class="pilcrow">¶</a></p>
 <span id="name-service-resolution-rpc-api-"></span><div id="_figure-40">
 <figure id="figure-2">
           <div class="alignLeft art-text artwork" id="section-1.9-6.1">
 <pre>
-package proto.control_plane.v1;
+  message ServiceResolutionRequest {}
 
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
+  message ServiceResolutionResponse {
     map&lt;string, Transport&gt; transports = 1;
-}
+  }
 
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.0.2.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
+  message Transport {
     string address = 1;
-}
-
+  }
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
