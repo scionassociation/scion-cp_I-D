@@ -175,6 +175,21 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  SIG:
+    title: SCION IP Gateway Documentation
+    date: 2024
+    target: https://docs.scion.org/en/latest/sig.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
+
 
 
 --- abstract
@@ -1295,9 +1310,9 @@ The propagation procedure includes the following elements:
 
 ## Destination Mapping
 
-How endpoints map a destination address to the corresponding destination ISD-AS is outside of the scope of this document.
-One option, still experimental in existing deployments, is that SCION-enabled endpoints resolve the destination SCION address via a naming system (e.g. DNS).
-SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), that tunnel IP traffic over SCION. In this case, the source gateway maps destination IPs to a corresponding destination ISD-AS and gateway.
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document.
+One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
 
 ## Monitoring Considerations
 
@@ -2633,6 +2648,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 Major changes:
 
 - Mention ConnectRPC as main RPC method instead of gRPC
+- Add small section about destination mapping
 
 Minor changes:
 
