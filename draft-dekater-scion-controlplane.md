@@ -448,7 +448,8 @@ Clients find the relevant Control Service at a given AS by resolving a 'service 
       * DstHostAddr: "SVC_CS" (0x0002)
     * UDP Header:
       * DstPort: 0
-  A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
+
+    A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
 2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
 3. The ingress border router forwards the message to the resolved address.
 4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
