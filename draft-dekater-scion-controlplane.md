@@ -441,9 +441,9 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 In SCION, the *Control Service* of each AS is responsible for the beaconing process. The Control Service generates, receives, and propagates the *Path Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
-PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
+PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *core* or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
-- *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
+- *Core or Inter-ISD beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
 
 On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs). PCBs are used to construct path segments. ASes register them to make them available to other ASes, as described in [](#path-segment-reg).
@@ -1187,7 +1187,7 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 
 1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-36}}.
 2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
-3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
+3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. In addition, the corresponding link MUST be core or parent. If not, the PCB MUST be discarded.
 4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
@@ -1222,7 +1222,7 @@ To ensure reachability, PCB selection policies should forward as many PCBs as po
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#inter-isd-beaconing)). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
 
 The *best PCBs set size* should be:
 
@@ -1250,7 +1250,7 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 
 The propagation process in intra-ISD beaconing includes the following steps:
 
-1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
+1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)), including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
@@ -1346,7 +1346,7 @@ At each AS, the PCB will be processed and propagated at the subsequent propagati
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see {{I-D.dekater-scion-dataplane}} section "Handling Link Failures").
 
-To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and inter-ISD beaconing.
+To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and core beaconing.
 
 ### Intra-ISD Beaconing {#intra-isd-beaconing}
 
@@ -1368,9 +1368,9 @@ On a network bootstrap, path segments to each AS are discovered within a number 
 
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
-### Inter-ISD Beaconing {#inter-isd-beaconing}
+### Core Beaconing {#core-beaconing}
 
-In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
+In core beaconing (typically inter-ISD), PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
