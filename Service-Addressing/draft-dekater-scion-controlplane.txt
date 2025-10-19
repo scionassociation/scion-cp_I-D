@@ -754,18 +754,23 @@ Table of Contents
    a 'service address' as follows:
 
    1.  A client sends a ServiceResolutionRequest RPC (which has no
-       parameters) to an endpoint address in the format: * Common
-       Header:
+       parameters) to an endpoint address in the format:
 
-       *  Path type: SCION (0x01)
+       *  Common Header:
 
-       *  DT/DL: "Service" (0b0100) * Address Header:
+          -  Path type: SCION (0x01)
 
-       *  DstHostAddr: "SVC_CS" (0x0002) * UDP Header:
+          -  DT/DL: "Service" (0b0100)
 
-       *  DstPort: 0 A ServiceResolutionRequest MUST fit within a UDP
-          datagram, otherwise clients and servers won't be able to
-          establish control-plane reachability.
+       *  Address Header:
+
+          -  DstHostAddr: "SVC_CS" (0x0002)
+
+       *  UDP Header:
+
+          -  DstPort: 0 A ServiceResolutionRequest MUST fit within a UDP
+             datagram, otherwise clients and servers won't be able to
+             establish control-plane reachability.
 
    2.  The ingress border router at the destination AS resolves the
        service destination to an actual endpoint address.  This document

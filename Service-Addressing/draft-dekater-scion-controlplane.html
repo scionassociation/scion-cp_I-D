@@ -1909,23 +1909,35 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.9-3">Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:<a href="#section-1.9-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.9-4">
 <li id="section-1.9-4.1">
-            <p id="section-1.9-4.1.1">A client sends a <code>ServiceResolutionRequest</code> RPC (which has no parameters) to an endpoint address in the format:
-  * Common Header:<a href="#section-1.9-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.9-4.1.1">A client sends a <code>ServiceResolutionRequest</code> RPC (which has no parameters) to an endpoint address in the format:<a href="#section-1.9-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.9-4.1.2.1">
-                <p id="section-1.9-4.1.2.1.1">Path type: SCION (0x01)<a href="#section-1.9-4.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-1.9-4.1.2.1.1">Common Header:<a href="#section-1.9-4.1.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.1.2.1">
+                    <p id="section-1.9-4.1.2.1.2.1.1">Path type: SCION (0x01)<a href="#section-1.9-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-1.9-4.1.2.1.2.2">
+                    <p id="section-1.9-4.1.2.1.2.2.1">DT/DL: "Service" (0b0100)<a href="#section-1.9-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
 </li>
               <li class="normal" id="section-1.9-4.1.2.2">
-                <p id="section-1.9-4.1.2.2.1">DT/DL: "Service" (0b0100)
-      * Address Header:<a href="#section-1.9-4.1.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-1.9-4.1.2.2.1">Address Header:<a href="#section-1.9-4.1.2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.2.2.1">
+                    <p id="section-1.9-4.1.2.2.2.1.1">DstHostAddr: "SVC_CS" (0x0002)<a href="#section-1.9-4.1.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
 </li>
               <li class="normal" id="section-1.9-4.1.2.3">
-                <p id="section-1.9-4.1.2.3.1">DstHostAddr: "SVC_CS" (0x0002)
-      * UDP Header:<a href="#section-1.9-4.1.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-1.9-4.1.2.3.1">UDP Header:<a href="#section-1.9-4.1.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.9-4.1.2.3.2.1">
+                    <p id="section-1.9-4.1.2.3.2.1.1">DstPort: 0
+A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.<a href="#section-1.9-4.1.2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-1.9-4.1.2.4">
-                <p id="section-1.9-4.1.2.4.1">DstPort: 0
-  A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.<a href="#section-1.9-4.1.2.4.1" class="pilcrow">¶</a></p>
+                </ul>
 </li>
             </ul>
 </li>
