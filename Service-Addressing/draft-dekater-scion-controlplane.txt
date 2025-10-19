@@ -809,10 +809,6 @@ Table of Contents
        string address = 1;
      }
 
-              Figure 2: Service Resolution RPC API definition
-
-
-
 2.  Path Exploration or Beaconing
 
 2.1.  Introduction and Overview
@@ -894,7 +890,7 @@ Table of Contents
    each AS are numbered with integer values while ASes are described
    with an upper case letter for the sake of illustration.
 
-   In Figure 3 below, core AS X sends the two different PCBs "a" and "b"
+   In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
    via two different links to child AS Y: PCB "a" leaves core AS X via
    egress interface "2", whereas PCB "b" is sent over egress interface
    "1".  Core AS X adds the respective egress information to the PCBs
@@ -916,11 +912,11 @@ Table of Contents
                               +----+---+----+
                               |    AS Y     |
 
-       Figure 3: Intra-ISD PCB propagation from the ISD core to child
+       Figure 2: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
 
    AS Y receives the two PCBs "a" and "b" through two different
-   (ingress) interfaces, namely "2" and "3", respectively (see Figure 4
+   (ingress) interfaces, namely "2" and "3", respectively (see Figure 3
    below).  Additionally, AS Y forwards to AS Z four PCBs that were
    previously sent by core AS X.  For this, AS Y uses the two different
    (egress) links "5" and "6".  AS Y appends the corresponding ingress
@@ -964,7 +960,7 @@ Table of Contents
                               +----+---+----+
                               |    AS Z     |
 
-       Figure 4: Intra-ISD PCB propagation from the ISD core to child
+       Figure 3: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 2
 
    The following figure shows how the four PCBs "c", "d", "e", and "f",
@@ -1012,7 +1008,7 @@ Table of Contents
                                v     |     v
                                      v
 
-       Figure 5: Intra-ISD PCB propagation from the ISD core to child
+       Figure 4: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 3
 
    Based on the figures above, one could say that a PCB represents a
@@ -1021,9 +1017,9 @@ Table of Contents
    path segment" that accumulates AS entries when traversing the
    Internet.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
-   particular AS A.  This is illustrated by Figure 6.  This figure shows
+   particular AS A.  This is illustrated by Figure 5.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
-   "h", "i", and "j" from Figure 5 above.  It is up to AS Z to use all
+   "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use all
    of these path segments or just a selection of them.
 
                   AS Entry Core        AS Entry Y          AS Entry Z
@@ -1070,7 +1066,7 @@ Table of Contents
                  +-------------+     +-------------+     +-------------+
                     Egress 1       Ingress 3 - Egress 5      Ingress 1
 
-             Figure 6: Possible up- or down segments for AS Z
+             Figure 5: Possible up- or down segments for AS Z
 
 2.2.  Path-Segment Construction Beacons (PCBs)
 
@@ -1136,7 +1132,7 @@ Table of Contents
 |  Ingress   |    Egress   |  Expiration Time  |    MAC    |
 +------------+-------------+-------------------+-----------+
 
-               Figure 7: Top-down composition of a PCB
+               Figure 6: Top-down composition of a PCB
 
 2.2.1.1.  PCB Top-Level Message Format
 
@@ -1144,7 +1140,7 @@ Table of Contents
    |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
    +-------------+------------+------------+-----+------------+
 
-                   Figure 8: PCB Top-Level Message Format
+                   Figure 7: PCB Top-Level Message Format
 
    Each PCB MUST consists of at least:
 
@@ -1187,7 +1183,7 @@ Table of Contents
    |  Timestamp  |    Seg ID    |
    +-------------+--------------+
 
-                  Figure 9: Segment Information Component
+                  Figure 8: Segment Information Component
 
    Each PCB MUST include an information component with basic information
    about the PCB.
@@ -1233,7 +1229,7 @@ Table of Contents
    |  Unsigned Extension   |             Signed AS Entry              |
    +-----------------------+------------------------------------------+
 
-                            Figure 10: AS Entry
+                             Figure 9: AS Entry
 
    Each PCB MUST also contain the entries of all ASes included in the
    corresponding path segment.  This means that the originating core AS
@@ -1274,7 +1270,7 @@ Table of Contents
  |     Signature      |      Header      |             Body            |
  +--------------------+------------------+-----------------------------+
 
-                  Figure 11: AS Entry Signed Component
+                  Figure 10: AS Entry Signed Component
 
    Each AS entry of a PCB MUST include a signed component as well as a
    signature computed over the signed component.  Each AS entry MUST be
@@ -1335,7 +1331,7 @@ Table of Contents
         | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
         +---------+---------+------------+--------------+
 
-                     Figure 12: AS Entry Signed Header
+                     Figure 11: AS Entry Signed Header
 
    The header part carries information that is relevant to the
    computation and verification of the signature.  It contains the
@@ -1426,7 +1422,7 @@ Table of Contents
  |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
  +------+-----------+---------+-------------+---+-------------+---+----+
 
-                    Figure 13: AS Entry Signed Body
+                    Figure 12: AS Entry Signed Body
 
    The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all ASes in the path segment represented by the
@@ -1528,7 +1524,7 @@ Table of Contents
    | Ingress MTU |  Hop Field  |
    +-------------+-------------+
 
-                            Figure 14: Hop Entry
+                            Figure 13: Hop Entry
 
    Each body of an AS entry MUST contain exactly one hop entry
    component.  The hop entry component specifies forwarding information
@@ -1575,7 +1571,7 @@ Table of Contents
    |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
    +-------------+-------------+-------------------+----------+
 
-                            Figure 15: Hop Field
+                            Figure 14: Hop Field
 
    The Hop Field, part of both hop entries and peer entries, is used
    directly in the data plane for packet forwarding and specifies the
@@ -1638,7 +1634,7 @@ Table of Contents
    |  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
    +-------------+------------+--------------+----------------+
 
-                           Figure 16: Peer Entry
+                           Figure 15: Peer Entry
 
    By means of a peer entry, an AS can announce that it has a peering
    link to another AS.  A peer entry is an optional component of a PCB -
@@ -1670,7 +1666,7 @@ Table of Contents
 
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 8).
+      peering link, in the direction of beaconing - see also Figure 7).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see Section 2.2.1.6.
 
@@ -1705,7 +1701,7 @@ Table of Contents
        |           |
        +-----------+
 
-      Figure 17: Peer entry information, in the direction of beaconing
+      Figure 16: Peer entry information, in the direction of beaconing
 
 2.2.2.  PCB Extensions
 
@@ -2890,7 +2886,7 @@ Table of Contents
    |                        ( variable length )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 18: SCMP message format
+                       Figure 17: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -3031,7 +3027,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 19: Packet Too Big format
+                      Figure 18: Packet Too Big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -3071,7 +3067,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 20: External Interface Down format
+                 Figure 19: External Interface Down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3121,7 +3117,7 @@ Table of Contents
    |                    exceeding 1232 bytes.                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 21: Internal Connectivity Down format
+                Figure 20: Internal Connectivity Down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -3167,7 +3163,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 22: Echo Request format
+                       Figure 21: Echo Request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -3203,7 +3199,7 @@ Table of Contents
    |                     Data ( variable Len. )                    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 23: Echo Reply format
+                        Figure 22: Echo Reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -3245,7 +3241,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 24: Traceroute Request format
+                    Figure 23: Traceroute Request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -3300,7 +3296,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 25: Traceroute Reply format
+                     Figure 24: Traceroute Reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3787,10 +3783,10 @@ Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 26 below.  In both examples, the source
-   endpoint is in AS A.  Figure 27 shows the sequence diagram for the
+   is represented in Figure 25 below.  In both examples, the source
+   endpoint is in AS A.  Figure 26 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 28 shows the path lookup sequence diagram if the destination
+   Figure 27 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3821,7 +3817,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 26: Topology used in the path lookup examples
+            Figure 25: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -3876,7 +3872,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 27: Sequence diagram illustrating a path lookup for a
+     Figure 26: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -3936,7 +3932,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 28: Sequence diagram illustrating a path lookup for a
+     Figure 27: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
