@@ -427,7 +427,7 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
+In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -1714,7 +1714,7 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 [](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
 
-# Control Service Discovery
+# Control Service Discovery {#service-discovery}
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
