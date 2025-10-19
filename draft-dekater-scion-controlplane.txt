@@ -1473,7 +1473,8 @@ Table of Contents
       beacon is necessarily less than or equal to this value.  How the
       control service obtains the MTU of an inter-AS link is
       implementation dependent.  It may be discovered or configured.
-      Current practice to make it a configuration item.
+      Current practice to make it a configuration item.  Path MTU is
+      further discussed in Section 4.4.
 
    In this description, MTU and packet size are to be understood in the
    same sense as in [RFC1122].  That is, exclusive of any layer 2
@@ -1693,8 +1694,8 @@ Table of Contents
 
    *  Neighbor interface underlay address
 
-   The maximum MTU supported by all intra-AS links MAY also be
-   configured.
+   The maximum MTU supported by all intra-AS links may also be
+   configured by the operator.
 
 2.3.  Propagation of PCBs
 
@@ -2484,11 +2485,15 @@ Table of Contents
       ingress_mtu field of each Section 2.2.1.5 or the peer_mtu field of
       each Section 2.2.1.7 used)
 
-   Such information is then made available to endpoints during the path
-   lookup process (See Section 5).  SCION endpoints are oblivious to the
-   topology of intermediate ASes and when looking up a path they assume
-   that all hops are constrained by the intra-AS MTU of each AS
-   traversed.
+   Such information is then made available to source endpoints during
+   the path lookup process (See Section 5).  Note that the destination
+   endpoint does not receive such information, therefore when using path
+   reversibility, it should use mechanisms to estimate the reverse path
+   MTU (e.g., MTU discovery or estimate MTU from the largest packet
+   received).  SCION endpoints are oblivious to the internal topology of
+   intermediate ASes.  When looking up a path they should therefore
+   assume that all hops are also constrained by the intra-AS MTU of each
+   AS traversed.
 
 5.  Path Lookup
 
