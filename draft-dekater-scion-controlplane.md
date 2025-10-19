@@ -431,7 +431,7 @@ In case of failure, RPC calls return an error as specified by the RPC framework.
 
 ## Control Service Discovery
 
-The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}} which requires a connection to be initiated to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
+The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
 * Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
 * Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
