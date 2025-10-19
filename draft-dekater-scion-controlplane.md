@@ -2437,12 +2437,26 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- New section "Distribution of Cryptographic Material" containing definitions formerly in the gRPC API appendix
+- New section "Destination Mapping" including a SIG reference
+- New section "Lookup Requests Message Format" containing definitions formerly in the gRPC API appendix
+- Move appendix "Use of the SCION Data Plane" to new section "Control Service Discovery"
 - Mention ConnectRPC as main RPC method instead of gRPC
-- Add small section about destination mapping
+- Remove appendix "Full Control Service gRPC API" and move corresponding protobuf definitions in new sections mentioned above
 
 Minor changes:
 
-- AS Entry Signature: fix order of terms in one formula
+- Rename Inter-ISD Beaconing into Core Beaconing for consistency
+- Clarify descriptions of fields in the `HeaderAndBody` message and that metadata must be empty
+- AS Entry Signature: fix order of terms in one formula, clarify validity and meaning of associated data
+- PCB Extensions: clarified text, added example of the `StaticInfoExtension` and informative reference
+- PCB Validity: clarify text on timestamp validity and time allowances
+- Reception of PCBs: mention that incoming link MUST be core or parent
+- PCB selection policies: discourage use for traffic engineering
+- Best PCBs Set Size: clarify tradeoffs and avoid normative language when unnecessary
+- Path reversibility: mention that destination endpoints should estimate MTU
+- Move considerations on SCMP Authentication to the security considerations section (Rogue SCMP Error Messages)
+- Security Properties: use normative language to clarify assumptions
 
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
