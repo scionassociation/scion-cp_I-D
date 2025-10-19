@@ -1883,7 +1883,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </h3>
 <p id="section-1.8-1">All communication between the Control Services in different ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see <span>[<a href="#proto3" class="cite xref">proto3</a>]</span>).<a href="#section-1.8-1" class="pilcrow">¶</a></p>
 <p id="section-1.8-2">The RPC messages are transported via <span>[<a href="#Connect" class="cite xref">Connect</a>]</span>'s RPC protocol that carries messages over HTTP/3 (see <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>)), which in turn uses QUIC/UDP (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) as a transport layer. Connect is backwardly compatible with <span>[<a href="#gRPC" class="cite xref">gRPC</a>]</span> which is supported but deprecated.<a href="#section-1.8-2" class="pilcrow">¶</a></p>
-<p id="section-1.8-3">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.<a href="#section-1.8-3" class="pilcrow">¶</a></p>
+<p id="section-1.8-3">In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. <a href="#service-discovery" class="auto internal xref">Section 6</a> provides details about the establishment of the underlying QUIC connections.<a href="#section-1.8-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3874,7 +3874,7 @@ message SegmentsResponse {
 </div>
 </section>
 </div>
-<div id="control-service-discovery">
+<div id="service-discovery">
 <section id="section-6">
       <h2 id="name-control-service-discovery">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-control-service-discovery" class="section-name selfRef">Control Service Discovery</a>

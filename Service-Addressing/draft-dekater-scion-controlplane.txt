@@ -726,7 +726,8 @@ Table of Contents
 
    In case of failure, RPC calls return an error as specified by the RPC
    framework.  That is, a non-zero status code and an explanatory
-   string.
+   string.  Section 6 provides details about the establishment of the
+   underlying QUIC connections.
 
 2.  Path Exploration or Beaconing
 
