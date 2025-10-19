@@ -429,48 +429,6 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
 
-## Control Service Discovery
-
-The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
-
-* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
-* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
-* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
-* Control Services respond to requests from remote ASes by reversing the path via which the request came.
-
-Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
-
-1. A client sends a `ServiceResolutionRequest` RPC (which has no parameters) to an endpoint address in the format:
-    * Common Header:
-      * Path type: SCION (0x01)
-      * DT/DL: "Service" (0b0100)
-    * Address Header:
-      * DstHostAddr: "SVC_CS" (0x0002)
-    * UDP Header:
-      * DstPort: 0
-
-    A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
-2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
-3. The ingress border router forwards the message to the resolved address.
-4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
-  Known transports are "QUIC". Unknown values MUST be ignored by clients. The response includes a `Transport` message containing supported addresses and port to reach the service.
-  Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
-  `192.0.2.1:80` and `[2001:db8::1]:80`. A missing, zero or non-existent port value MUST be treated by clients as an error.
-5. The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.
-
-The following code block provides the service resolution API Protobuf messages.
-
-~~~~~
-  message ServiceResolutionRequest {}
-
-  message ServiceResolutionResponse {
-    map<string, Transport> transports = 1;
-  }
-
-  message Transport {
-    string address = 1;
-  }
-~~~~~
 
 # Path Exploration or Beaconing {#beaconing}
 
@@ -1755,6 +1713,49 @@ When the segment request handler of a *core AS* Control Service receives a path 
 3. Otherwise, load the matching down segments from the path database and return.
 
 [](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
+
+# Control Service Discovery
+
+The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
+
+* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
+* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
+* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
+* Control Services respond to requests from remote ASes by reversing the path via which the request came.
+
+Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
+
+1. A client sends a `ServiceResolutionRequest` RPC (which has no parameters) to an endpoint address in the format:
+    * Common Header:
+      * Path type: SCION (0x01)
+      * DT/DL: "Service" (0b0100)
+    * Address Header:
+      * DstHostAddr: "SVC_CS" (0x0002)
+    * UDP Header:
+      * DstPort: 0
+
+    A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
+2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
+3. The ingress border router forwards the message to the resolved address.
+4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
+  Known transports are "QUIC". Unknown values MUST be ignored by clients. The response includes a `Transport` message containing supported addresses and port to reach the service.
+  Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
+  `192.0.2.1:80` and `[2001:db8::1]:80`. A missing, zero or non-existent port value MUST be treated by clients as an error.
+5. The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.
+
+The following code block provides the service resolution API Protobuf messages.
+
+~~~~~
+  message ServiceResolutionRequest {}
+
+  message ServiceResolutionResponse {
+    map<string, Transport> transports = 1;
+  }
+
+  message Transport {
+    string address = 1;
+  }
+~~~~~
 
 # SCMP {#scmp}
 
