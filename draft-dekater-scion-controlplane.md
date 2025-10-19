@@ -442,9 +442,7 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
-
-{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
+In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -1737,6 +1735,49 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 [](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
 
+# Control Service Discovery {#service-discovery}
+
+The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
+
+* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
+* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
+* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
+* Control Services respond to requests from remote ASes by reversing the path via which the request came.
+
+Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
+
+1. A client sends a `ServiceResolutionRequest` RPC (which has no parameters) to an endpoint address in the format:
+    * Common Header:
+      * Path type: SCION (0x01)
+      * DT/DL: "Service" (0b0100)
+    * Address Header:
+      * DstHostAddr: "SVC_CS" (0x0002)
+    * UDP Header:
+      * DstPort: 0
+
+    A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
+2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
+3. The ingress border router forwards the message to the resolved address.
+4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
+  Known transports are "QUIC". Unknown values MUST be ignored by clients. The response includes a `Transport` message containing supported addresses and port to reach the service.
+  Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
+  `192.0.2.1:80` and `[2001:db8::1]:80`. A missing, zero or non-existent port value MUST be treated by clients as an error.
+5. The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.
+
+The following code block provides the service resolution API Protobuf messages.
+
+~~~~~
+  message ServiceResolutionRequest {}
+
+  message ServiceResolutionResponse {
+    map<string, Transport> transports = 1;
+  }
+
+  message Transport {
+    string address = 1;
+  }
+~~~~~
+
 # SCMP {#scmp}
 
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
@@ -2230,72 +2271,6 @@ SCIONLab is a global research network that is available to test the SCION archit
 More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
 
 
-# Use of the SCION Data Plane {#app-b}
-{:numbered="false"}
-
-The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping strategies apply:
-
-* Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.
-* Constructed multihop paths are registered with the Control Service at the origin core AS. The path to that AS is the very path being registered.
-* Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local Control Service.
-* Control services respond to requests from remote ASes by reversing the path via which the request came.
-* Clients find the relevant Control Service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.dekater-scion-dataplane}}).
-
-The mechanics of service address resolution are the following:
-
-* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
-  * Common Header:
-    * Path type: SCION (0x01)
-    * DT/DL: "Service" (0b0100)
-  * Address Header:
-    * DstHostAddr: "SVC_CS" (0x0002)
-  * UDP Header:
-    * DstPort: 0
-* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
-* The ingress border router forwards the message to the resolved address.
-* The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.
-* The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
-
-The following code block provides the full service resolution API in the Protobuf message format.
-
-~~~~~
-
-package proto.control_plane.v1;
-
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
-    map<string, Transport> transports = 1;
-}
-
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.168.0.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
-    string address = 1;
-}
-
-~~~~~
-{: #figure-40 title="Service Resolution RPC API definition"}
-<br>
-
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
 
@@ -2462,12 +2437,26 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- New section "Distribution of Cryptographic Material" containing definitions formerly in the gRPC API appendix
+- New section "Destination Mapping" including a SIG reference
+- New section "Lookup Requests Message Format" containing definitions formerly in the gRPC API appendix
+- Move appendix "Use of the SCION Data Plane" to new section "Control Service Discovery"
 - Mention ConnectRPC as main RPC method instead of gRPC
-- Add small section about destination mapping
+- Remove appendix "Full Control Service gRPC API" and move corresponding protobuf definitions in new sections mentioned above
 
 Minor changes:
 
-- AS Entry Signature: fix order of terms in one formula
+- Rename Inter-ISD Beaconing into Core Beaconing for consistency
+- Clarify descriptions of fields in the `HeaderAndBody` message and that metadata must be empty
+- AS Entry Signature: fix order of terms in one formula, clarify validity and meaning of associated data
+- PCB Extensions: clarified text, added example of the `StaticInfoExtension` and informative reference
+- PCB Validity: clarify text on timestamp validity and time allowances
+- Reception of PCBs: mention that incoming link MUST be core or parent
+- PCB selection policies: discourage use for traffic engineering
+- Best PCBs Set Size: clarify tradeoffs and avoid normative language when unnecessary
+- Path reversibility: mention that destination endpoints should estimate MTU
+- Move considerations on SCMP Authentication to the security considerations section (Rogue SCMP Error Messages)
+- Security Properties: use normative language to clarify assumptions
 
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
