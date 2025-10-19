@@ -111,12 +111,13 @@ Table of Contents
        2.3.3.  PCB Selection Policies
        2.3.4.  Propagation Interval and Best PCBs Set Size
        2.3.5.  Propagation of Selected PCBs
+     2.4.  Distribution of Cryptographic Material
    3.  Deployment Considerations
      3.1.  Monitoring Considerations
      3.2.  Effects of Clock Inaccuracy
      3.3.  Path Discovery Time and Scalability
        3.3.1.  Intra-ISD Beaconing
-       3.3.2.  Inter-ISD Beaconing
+       3.3.2.  Core Beaconing
    4.  Registration of Path Segments
      4.1.  Intra-ISD Path Segment Registration
        4.1.1.  Terminating a PCB
@@ -128,7 +129,8 @@ Table of Contents
    5.  Path Lookup
      5.1.  Lookup Process
        5.1.1.  Sequence of Lookup Requests
-       5.1.2.  Caching
+       5.1.2.  Lookup Requests Message Format
+       5.1.3.  Caching
      5.2.  Behavior of Actors in the Lookup Process
        5.2.1.  Use of Wildcard Addresses in the Lookup Process
        5.2.2.  Segment-Request Handler of a Non-Core Source AS
@@ -163,7 +165,6 @@ Table of Contents
      9.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
-   Full Control Service RPC API
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-10
@@ -482,7 +483,7 @@ Table of Contents
       Control Service of an AS receives a PCB, it validates the PCB's
       authenticity.  When the Control Service lacks an intermediate
       certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Figure 31.
+      AS that sent the PCB through the API described in Section 2.4.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -723,6 +724,10 @@ Table of Contents
    QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backwardly
    compatible with [gRPC] which is supported but deprecated.
 
+   In case of failure, RPC calls return an error as specified by the RPC
+   framework.  That is, a non-zero status code and an explanatory
+   string.
+
 1.9.  Control Service Discovery
 
    The Control Plane RPC APIs rely on QUIC connections over UDP/SCION
@@ -834,13 +839,13 @@ message Transport {
    PCBs contain inter-domain topology and authentication information,
    and can also include additional metadata that helps with path
    management and selection.  The beaconing process itself is divided
-   into routing processes on two levels, where _inter-ISD_ or core
-   beaconing is based on the (selective) sending of PCBs without a
-   defined direction, and _intra-ISD_ beaconing on top-to-bottom
-   propagation.  Beaconing is initiated by core ASes, therefore each ISD
-   MUST have at least one core AS.
+   into routing processes on two levels, where _core_ or inter-ISD is
+   based on the (selective) sending of PCBs without a defined direction,
+   and _intra-ISD_ beaconing on top-to-bottom propagation.  Beaconing is
+   initiated by core ASes, therefore each ISD MUST have at least one
+   core AS.
 
-   *  _Inter-ISD or core beaconing_ is the process of constructing path
+   *  _Core or Inter-ISD beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
       During core beaconing, the Control Service of a core AS either
       initiates PCBs or propagates PCBs received from neighboring core
@@ -1143,9 +1148,6 @@ message Transport {
 
                Figure 7: Top-down composition of a PCB
 
-   Note: For a full example of a PCB in the Protobuf message format,
-   please see Figure 29.
-
 2.2.1.1.  PCB Top-Level Message Format
 
    +-------------+------------+------------+-----+------------+
@@ -1350,7 +1352,11 @@ message Transport {
    following fields:
 
    *  signature_algorithm: Specifies the algorithm to compute the
-      signature.  This field is REQUIRED.
+      signature.  This field is REQUIRED.  Possible types are defined by
+      the SignatureAlgorithm definition.  An unspecified signature
+      algorithm is never valid.  Other algorithms or curves MAY be used
+      in the future.  Signature algorithms are further discussed in
+      [I-D.dekater-scion-pki].
 
    *  verification_key_id: Contains a VerificationKeyID message,
       carrying information relevant to signing and verifying PCBs and
@@ -1369,7 +1375,7 @@ message Transport {
       in Section 2.2.1.4.3.  The value of this field is zero if no
       associated data is covered by the signature.
 
-   The Header protobuf message definition is:
+   The Header and SignatureAlgorithm protobuf message definitions are:
 
       message Header {
           SignatureAlgorithm signature_algorithm = 1;
@@ -1380,6 +1386,13 @@ message Transport {
           bytes metadata = 4;
           int32 associated_data_length = 5;
       }
+
+     enum SignatureAlgorithm {
+       SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+       SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+     }
 
    The VerificationKeyID message contains the following REQUIRED fields:
 
@@ -1551,7 +1564,8 @@ message Transport {
       beacon is necessarily less than or equal to this value.  How the
       control service obtains the MTU of an inter-AS link is
       implementation dependent.  It may be discovered or configured.
-      Current practice to make it a configuration item.
+      Current practice to make it a configuration item.  Path MTU is
+      further discussed in Section 4.4.
 
    In this description, MTU and packet size are to be understood in the
    same sense as in [RFC1122].  That is, exclusive of any layer 2
@@ -1771,8 +1785,8 @@ message Transport {
 
    *  Neighbor interface underlay address
 
-   The maximum MTU supported by all intra-AS links MAY also be
-   configured.
+   The maximum MTU supported by all intra-AS links may also be
+   configured by the operator.
 
 2.3.  Propagation of PCBs
 
@@ -1790,7 +1804,8 @@ message Transport {
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
        certificate(s).  If not, they can be requested from the Control
-       Service of the sending AS through the API described in Figure 31.
+       Service of the sending AS through the API described in
+       Section 2.4.
 
    2.  Loop avoidance: If it is a core AS, the Control Service MUST
        check whether the PCB includes duplicate hop entries created by
@@ -1807,8 +1822,9 @@ message Transport {
 
    3.  Incoming Interface: the last ISD-AS entry in a received PCB (in
        its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor
-       of the interface where the PCB was received.  If not, the PCB
-       MUST be discarded.
+       of the interface where the PCB was received.  In addition, the
+       corresponding link MUST be core or parent.  If not, the PCB MUST
+       be discarded.
 
    4.  Continuity: when a PCB contains two or more AS entries, the
        receiver Control Service MUST check every AS entry except the
@@ -1956,8 +1972,8 @@ message Transport {
 
    1.  From the candidate PCBs stored in the Beacon Store, the Control
        Service of an AS selects the best PCBs to propagate to its
-       downstream neighboring ASes, based on a selection algorithm
-       specific for this AS.
+       neighboring child ASes, based on a selection algorithm specific
+       for this AS.
 
    2.  The Control Service MUST add a new AS entry (see
        Section 2.2.1.3), including any Peer Entry information (see
@@ -2033,6 +2049,83 @@ message Transport {
 
    *  BeaconResponse: An empty message returned as an acknowledgement
       upon success.
+
+2.4.  Distribution of Cryptographic Material
+
+   Control Services distribute cryptographic material for the PKI (see
+   [I-D.dekater-scion-pki]) using the following protobuf messages
+   through the TrustMaterialService RPCs:
+
+   service TrustMaterialService {
+       rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+       rpc TRC(TRCRequest) returns (TRCResponse) {}
+   }
+
+   *  Chains(ChainsRequest): Returns the certificate chains that match
+      the request.
+
+   *  TRC(TRCRequest): Returns a specific TRC that matches the request.
+
+   The corresponding protobuf message formats are:
+
+   message ChainsRequest {
+       uint64 isd_as = 1;
+       bytes subject_key_id = 2;
+       google.protobuf.Timestamp at_least_valid_until = 3;
+       google.protobuf.Timestamp at_least_valid_since = 4;
+   }
+
+   message ChainsResponse {
+       repeated Chain chains = 1;
+   }
+
+   message Chain {
+       bytes as_cert = 1;
+       bytes ca_cert = 2;
+   }
+
+   A ChainsRequest message includes the following fields:
+
+   *  isd_as: Returns ISD-AS of Subject in the AS certificate.
+
+   *  subject_key_id: Returns SubjectKeyID in the AS certificate.
+
+   *  at_least_valid_until: Point in time at which the AS certificate
+      must still be valid - in seconds since UNIX epoch.
+
+   *  at_least_valid_since: Point in time at which the AS certificate
+      must be or must have been valid - in seconds since UNIX epoch.
+
+   A ChainsResponse includes the following fields:
+
+   *  chains: Lists the certificate chains that match the request.  A
+      Chain contains:
+
+      -  as_cert: Returns the AS certificate in the chain.
+
+      -  ca_cert: Returns the CA certificate in the chain.
+
+   For requesting TRCs, the protobuf messages are:
+
+   message TRCRequest {
+       uint32 isd = 1;
+       uint64 base = 2;
+       uint64 serial = 3;
+   }
+
+   message TRCResponse {
+       bytes trc = 1;
+   }
+
+   A TRCRequest includes the following fields:
+
+   *  isd: Returns the ISD number of the TRC.
+
+   *  base: Returns the base number of the TRC.
+
+   *  serial: Returns the serial number of the TRC.
+
+   The returned trc contains the raw TRC.
 
 3.  Deployment Considerations
 
@@ -2163,7 +2256,7 @@ message Transport {
    To achieve scalability, SCION partitions ASes into ISDs and in an
    ideal topology the inter-ISD core network should be kept to a
    moderate size.  For more specific observations, we distinguish
-   between intra-ISD and inter-ISD beaconing.
+   between intra-ISD and core beaconing.
 
 3.3.1.  Intra-ISD Beaconing
 
@@ -2228,9 +2321,9 @@ message Transport {
    child ASes at distance D below the new link, learn of the new link
    after at worst D further propagation intervals.
 
-3.3.2.  Inter-ISD Beaconing
+3.3.2.  Core Beaconing
 
-   In the inter-ISD core beaconing, PCBs are propagated
+   In core beaconing (typically inter-ISD), PCBs are propagated
    omnidirectionally along core links.  Each AS discovers path segments
    from itself to any other core AS.
 
@@ -2483,11 +2576,15 @@ message Transport {
       ingress_mtu field of each Section 2.2.1.5 or the peer_mtu field of
       each Section 2.2.1.7 used)
 
-   Such information is then made available to endpoints during the path
-   lookup process (See Section 5).  SCION endpoints are oblivious to the
-   topology of intermediate ASes and when looking up a path they assume
-   that all hops are constrained by the intra-AS MTU of each AS
-   traversed.
+   Such information is then made available to source endpoints during
+   the path lookup process (See Section 5).  Note that the destination
+   endpoint does not receive such information, therefore when using path
+   reversibility, it should use mechanisms to estimate the reverse path
+   MTU (e.g., MTU discovery or estimate MTU from the largest packet
+   received).  SCION endpoints are oblivious to the internal topology of
+   intermediate ASes.  When looking up a path they should therefore
+   assume that all hops are also constrained by the intra-AS MTU of each
+   AS traversed.
 
 5.  Path Lookup
 
@@ -2593,9 +2690,45 @@ message Transport {
    3.  Request down segments starting at core ASes in the destination
        ISD.
 
-   The segment lookup API RPC definition can be found in Figure 26.
+5.1.2.  Lookup Requests Message Format
 
-5.1.2.  Caching
+   Control Services provide paths to endpoints through the
+   SegmentLookupService RPC.  This API is exposed on the SCION dataplane
+   by the control services of core ASes and exposed on the intra-domain
+   protocol network.
+
+   service SegmentLookupService {
+       rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+   }
+
+   They use the following protobuf messages: a SegmentsRequest, which
+   includes:
+
+   *  src_isd_as: The source ISD-AS of the segment.
+
+   *  dst_isd_as: The destination ISD-AS of the segment.
+
+   The corresponding SegmentsResponse returns:
+
+   *  segments: a list of PathSegment matching the request.
+
+   *  a mapping from path segment type to path segments, where the key
+      is the integer representation of the SegmentType enum defined in
+      Section 4.3.
+
+   message SegmentsRequest {
+       uint64 src_isd_as = 1;
+       uint64 dst_isd_as = 2;
+   }
+
+   message SegmentsResponse {
+       message Segments {
+           repeated PathSegment segments = 1;
+       }
+       map<int32, Segments> segments = 1;
+   }
+
+5.1.3.  Caching
 
    For the sake of efficiency, the Control Service of the source AS
    SHOULD cache each returned path segment request.  Caching ensures
@@ -3660,311 +3793,14 @@ Deployment Testing: SCIONLab
    More information can be found on the SCIONLab website and in the
    [SCIONLAB] paper.
 
-Full Control Service RPC API
-
-   The following code blocks provide, in protobuf format, the entire API
-   by which control services interact.
-
-   service SegmentLookupService {
-       // Segments returns all segments that match the request.
-       rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
-   }
-
-   message SegmentsRequest {
-       // The source ISD-AS of the segment.
-       uint64 src_isd_as = 1;
-       // The destination ISD-AS of the segment.
-       uint64 dst_isd_as = 2;
-   }
-
-   enum SegmentType {
-       // Unknown segment type.
-       SEGMENT_TYPE_UNSPECIFIED = 0;
-       // Up segment.
-       SEGMENT_TYPE_UP = 1;
-       // Down segment.
-       SEGMENT_TYPE_DOWN = 2;
-       // Core segment.
-       SEGMENT_TYPE_CORE = 3;
-   }
-
-   message SegmentsResponse {
-       message Segments {
-           // List of path segments.
-           repeated PathSegment segments = 1;
-       }
-
-       // Mapping from path segment type to path segments.
-       // The key is the integer representation of the SegmentType enum.
-       map<int32, Segments> segments = 1;
-   }
-
-     Figure 26: Control Service RPC API - Segment lookup.  This API is
-       exposed on the SCION dataplane by the control services of core
-           ASes and exposed on the intra-domain protocol network.
-
-
-
-   service SegmentRegistrationService {
-       // SegmentsRegistration registers segments at the remote.
-       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-           SegmentsRegistrationResponse) {}
-   }
-
-   message SegmentsRegistrationRequest {
-       message Segments {
-           // List of path segments.
-           repeated PathSegment segments = 1;
-       }
-
-       // Mapping from path segment type to path segments.
-       // The key is the integer representation of the SegmentType enum.
-       map<int32, Segments> segments = 1;
-   }
-
-   message SegmentsRegistrationResponse {}
-
-      Figure 27: Control Service RPC API - Segment registration.  This
-     API is only exposed by core ASes and only on the SCION dataplane.
-
-
-
-   service SegmentCreationService {
-       // Beacon sends a beacon to the remote control service.
-       rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
-   }
-
-   message BeaconRequest {
-       // Beacon in form of a partial path segment.
-       PathSegment segment = 1;
-   }
-
-   message BeaconResponse {}
-
-           Figure 28: Control Service RPC API - Segment creation
-
-
-
- message PathSegment {
-     // The encoded SegmentInformation. It is used for signature input.
-     bytes segment_info = 1;
-     // Entries of ASes on the path.
-     repeated ASEntry as_entries = 2;
- }
-
- message SegmentInformation {
-     // Segment creation time set by the originating AS. Segment
-     // expiration time is computed relative to this timestamp.
-     // The timestamp is encoded as the number of seconds elapsed
-     // since January 1, 1970 UTC.
-     int64 timestamp = 1;
-     // The 16-bit segment ID integer used for MAC computation.
-     uint32 segment_id = 2;
- }
-
- message ASEntry {
-     // The signed part of the AS entry. The body of the SignedMessage
-     // is the serialized ASEntrySignedBody. The signature input is
-     // defined as follows:
-     //
-     //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-     //
-     //  associated_data(ps, i) =
-     //          ps.segment_info ||
-     //          ps.as_entries[1].signed.header_and_body ||
-     //          ps.as_entries[1].signed.signature ||
-     //          ...
-     //          ps.as_entries[i-1].signed.header_and_body ||
-     //          ps.as_entries[i-1].signed.signature
-     //
-     proto.crypto.v1.SignedMessage signed = 1;
-     // The unsigned part of the AS entry.
-     proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
- }
-
- message SignedMessage {
-     // Encoded header and body.
-     bytes header_and_body = 1;
-     // Raw signature. The signature is computed over the concatenation
-     // of the header and body, and the optional associated data.
-     bytes signature = 2;
- }
-
- message HopEntry {
-     // Material to create the data-plane Hop Field.
-     HopField hop_field = 1;
-     // MTU on the ingress link.
-     uint32 ingress_mtu = 2;
- }
-
- message PeerEntry {
-     // ISD-AS of peer AS. This is used to match peering segments
-     // during path construction.
-     uint64 peer_isd_as = 1;
-     // Remote peer interface identifier. This is used to match
-     // peering segments
-     // during path construction.
-     uint64 peer_interface = 2;
-     // MTU on the peering link.
-     uint32 peer_mtu = 3;
-     // Material to create the data-plane Hop Field
-     HopField hop_field = 4;
- }
-
- message HopField {
-     // Ingress interface identifier.
-     uint64 ingress = 1;
-     // Egress interface identifier.
-     uint64 egress = 2;
-     // 8-bit encoded expiration offset relative to the segment
-     // creation timestamp.
-     uint32 exp_time = 3;
-     // MAC used in the dataplane to verify the Hop Field.
-     bytes mac = 4;
- }
-
-      Figure 29: Control Service RPC API - Segment representation
-
-
-
-  enum SignatureAlgorithm {
-      // Unspecified signature algorithm. This value is never valid.
-      SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-      // ECDS with SHA256.
-      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-      // ECDS with SHA384.
-      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-      // ECDS with SHA512.
-      SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-  }
-
-  // Low-level representation of HeaderAndBody used for signature
-  // computation input. This should not be used by external code.
-  message HeaderAndBodyInternal {
-      // Encoded header suitable for signature computation.
-      bytes header = 1;
-      // Raw payload suitable for signature computation.
-      bytes body = 2;
-  }
-
-  message Header {
-      // Algorithm used to compute the signature.
-      SignatureAlgorithm signature_algorithm = 1;
-      // Optional arbitrary per-protocol key identifier.
-      bytes verification_key_id = 2;
-      // Optional signature creation timestamp.
-      google.protobuf.Timestamp timestamp = 3;
-      // Optional arbitrary per-protocol metadata.
-      bytes metadata = 4;
-      // Length of associated data that is covered by the signature, but
-      // is not included in the header and body. This is zero, if no
-      // associated data is covered by the signature.
-      int32 associated_data_length = 5;
-  }
-
-  message ASEntrySignedBody {
-      // ISD-AS of the AS that created this AS entry.
-      uint64 isd_as = 1;
-      // ISD-AS of the downstream AS.
-      uint64 next_isd_as = 2;
-      // The required regular hop entry.
-      HopEntry hop_entry = 3;
-      // Optional peer entries.
-      repeated PeerEntry peer_entries = 4;
-      // Intra AS MTU.
-      uint32 mtu = 5;
-      // Optional extensions.
-      proto.control_plane.v1.PathSegmentExtensions extensions = 6;
-  }
-
-  message VerificationKeyID {
-      uint64 isd_as = 1;
-      bytes subject_key_id = 2;
-      uint64 trc_base = 3;
-      uint64 trc_serial = 4;
-  }
-
-    Figure 30: Control Service RPC API - Signed ASEntry representation
-
-
-
-service TrustMaterialService {
-    // Return the certificate chains that match the request.
-    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-    // Return a specific TRC that matches the request.
-    rpc TRC(TRCRequest) returns (TRCResponse) {}
-}
-
-message ChainsRequest {
-    // ISD-AS of Subject in the AS certificate.
-    uint64 isd_as = 1;
-    // SubjectKeyID in the AS certificate.
-    bytes subject_key_id = 2;
-    // Point in time at which the AS certificate must still be valid. In seconds
-    // since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_until = 3;
-    // Point in time at which the AS certificate must be or must have been
-    // valid. In seconds since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_since = 4;
-}
-
-message ChainsResponse {
-    // List of chains that match the request.
-    repeated Chain chains = 1;
-}
-
-message Chain {
-    // AS certificate in the chain.
-    bytes as_cert = 1;
-    // CA certificate in the chain.
-    bytes ca_cert = 2;
-}
-
-message TRCRequest {
-    // ISD of the TRC.
-    uint32 isd = 1;
-    // BaseNumber of the TRC.
-    uint64 base = 2;
-    // SerialNumber of the TRC.
-    uint64 serial = 3;
-}
-
-message TRCResponse {
-    // Raw TRC.
-    bytes trc = 1;
-}
-
-// VerificationKeyID is used to identify certificates that authenticate the
-// verification key used to verify signatures.
-message VerificationKeyID {
-    // ISD-AS of the subject.
-    uint64 isd_as = 1;
-    // SubjectKeyID referenced in the certificate.
-    bytes subject_key_id = 2;
-    // Base number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_base = 3;
-    // Serial number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_serial = 4;
-}
-
-  Figure 31: Control Service RPC API - Trust Material representation
-
-
-
-   In case of failure, RPC calls return an error as specified by the RPC
-   framework.  That is, a non-zero status code and an explanatory
-   string.
-
 Path-Lookup Examples
 
    To illustrate how the path lookup works, we show two path-lookup
    examples in sequence diagrams.  The network topology of the examples
-   is represented in Figure 32 below.  In both examples, the source
-   endpoint is in AS A.  Figure 33 shows the sequence diagram for the
+   is represented in Figure 26 below.  In both examples, the source
+   endpoint is in AS A.  Figure 27 shows the sequence diagram for the
    path lookup process in case the destination is in AS D, whereas
-   Figure 34 shows the path lookup sequence diagram if the destination
+   Figure 28 shows the path lookup sequence diagram if the destination
    is in AS G.  ASes B and C are core ASes in the source ISD, while E
    and F are core ASes in a remote ISD.  Core AS B is a provider of the
    local AS, but AS C is not, i.e. there is no up-segment from A to C.
@@ -3995,7 +3831,7 @@ Path-Lookup Examples
    |            ISD 1           |     |            ISD 2           |
    +----------------------------+     +----------------------------+
 
-            Figure 32: Topology used in the path lookup examples
+            Figure 26: Topology used in the path lookup examples
 
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
@@ -4050,7 +3886,7 @@ Path-Lookup Examples
      |                    |                    |                   |
      |                    |                    |                   |
 
-     Figure 33: Sequence diagram illustrating a path lookup for a
+     Figure 27: Sequence diagram illustrating a path lookup for a
   destination D in the source ISD.  The request (core, x, x) is for
    all pairs of core ASes in the source ISD.  Similarly, (down, x,
   D) is for down segments between any core AS in the source ISD and
@@ -4110,7 +3946,7 @@ Path-Lookup Examples
      |               |               |               |               |
      |               |               |               |               |
 
-     Figure 34: Sequence diagram illustrating a path lookup for a
+     Figure 28: Sequence diagram illustrating a path lookup for a
    destination G in a remote ISD.  The request (core, x, (2, x)) is
    for all path segments between a core AS in the source ISD and a
      core AS in ISD 2.  Similarly, (down, (2, x), G) is for down
