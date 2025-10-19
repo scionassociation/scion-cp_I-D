@@ -1025,7 +1025,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
@@ -1181,7 +1181,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
-The maximum MTU supported by all intra-AS links MAY also be configured.
+The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
 
 ## Propagation of PCBs {#path-prop}
@@ -1574,7 +1574,7 @@ SCION paths represent a sequence of ASes and inter-AS links; each with possibly 
 * The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 
-Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path they assume that all hops are constrained by the intra-AS MTU of each AS traversed.
+Such information is then made available to source endpoints during the path lookup process (See [](#lookup)). Note that the destination endpoint does not receive such information, therefore when using path reversibility, it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes. When looking up a path they should therefore assume that all hops are also constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
