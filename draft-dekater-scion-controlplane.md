@@ -2463,7 +2463,7 @@ Minor changes:
 
 Major changes:
 
-- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation
+- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation.
 
 Minor changes:
 
