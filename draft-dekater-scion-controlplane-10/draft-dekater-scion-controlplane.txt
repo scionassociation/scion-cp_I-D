@@ -3658,9 +3658,9 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-06, 7 July 2025,
+              draft-dekater-scion-dataplane-07, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-06>.
+              scion-dataplane-07>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
