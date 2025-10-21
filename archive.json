@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-19T00:26:13.841402+00:00",
+  "timestamp": "2025-10-21T00:23:34.066224+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1767,7 +1767,7 @@
       "id": "I_kwDOJx2-rs66om_L",
       "title": "Service addressing - rewrite and move to dedicated section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/109",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1778,10 +1778,10 @@
         "enhancement",
         "Prio 1"
       ],
-      "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [x] Move section to a dedicated paragraph\n- [x] Update text so that it clearly answers questions form Alvaro\n- [ ] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [x] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [ ] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [x] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [x] Explicitly indicate how the information is used.\n- [x] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
+      "body": "Service discovery was introduced in the draft in #15 & #24, however its description is not complete  \n\nTODO: \n\n- [x] Move section to a dedicated paragraph\n- [x] Update text so that it clearly answers questions form Alvaro\n- [x] Service discovery now runs on UDP port 30252, we discussed in #7 why we do not specify it (because it is in the AS-local config). However, we need to write a bit more text about how each AS is doing the mapping\n- [x] We should use proper example IPs instead of these\n```    \n// Supported address format for QUIC:\n//  192.168.0.1:80\n//  [2001:db8::1]:80\n```\n- [x] Add missing cross references from other sections (e.g. path lookup, registration, ?, etc...) \n- [x] Clarify that service addresses  are used to discover the CP service, but be mindful of not confusing it with what was called service discovery.\n- [x] Explicitly indicate how the information is used.\n- [x] Should we also move `Figure 21: Control Service gRPC API - Trust Material representation` to a dedicated section?\n\nFeedback from  Alvaro Retana: \n\n>   How is the location of the Control Service discovered?  It is the main control plane component, but it is not clear to me how, for example, the non-core ASes know where to register, or who the PCBs should come from, etc.\n  The Appendix (SCION Data Plane use by the SCION Control Plane) contains  information about it.  Consider \"upgrading\" the appendix to a section in the main text.\n\n\n>> Yes, this is based ons service discovery that is currently described in the\n> appendix. There is some text thad describes how service addresses are used \n> for control service discovery. It uses a reserved destination host address\n> (0x0002), which gets then forwarded by the destination AS SCION border router\n> to the right endpoint running the control service.\n...\n\n> I'm assuming that once the Control Service in an AS is found, the communication with it is direct (and not using the border router as a relay), right?\nAlso, the information from the discovery is used to establish the QUIC/H3 connection and authenticate that the PCBs originate from the correct source, right?",
       "createdAt": "2025-06-09T19:13:09Z",
-      "updatedAt": "2025-10-17T16:21:33Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-19T17:27:57Z",
+      "closedAt": "2025-10-19T17:26:05Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2123,11 +2123,26 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [ ] Add some text on mapping \n- [ ] Mapping is also sort of a CP task. Shall we add a reference to the SIG also in this draft? \n- [ ] https://github.com/scionproto/scion/issues/4787 \n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
+      "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [x] Mapping is also sort of a CP task. Add some text about it. Evaluate adding a reference to the SIG also in this draft? --> Introduced new section\n- [ ] https://github.com/scionproto/scion/issues/4787 \n- [ ] Optionally, add some references. Some ideas are: \n    - [SBAS 2022 paper](https://www.usenix.org/conference/usenixsecurity22/presentation/birge-lee)\n    - [SCION-IP Translation in eBPF (2024)](https://dl.acm.org/doi/10.1145/3672197.3673437)\n    - Some documentation on use of TXT / SVCB addresses\n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
       "createdAt": "2025-06-13T16:04:15Z",
-      "updatedAt": "2025-10-16T07:35:35Z",
+      "updatedAt": "2025-10-19T15:11:33Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I'm not sure we have anywhere referencing how endpoints obtain SCION addresses with DNS records. Asked on [scionproto slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1760863947012099).",
+          "createdAt": "2025-10-19T08:53:18Z",
+          "updatedAt": "2025-10-19T08:53:18Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I leave this open to track the remaining points (which we can address after the draft submission)",
+          "createdAt": "2025-10-19T15:11:33Z",
+          "updatedAt": "2025-10-19T15:11:33Z"
+        }
+      ]
     },
     {
       "number": 117,
@@ -2241,7 +2256,7 @@
       "id": "I_kwDOJx2-rs69Qy3R",
       "title": "Beaconing - clarify checks and impact of link type misconfigurations",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/119",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2255,8 +2270,8 @@
       ],
       "body": "Relates to  #90 \n\n- [x] Double check that link types are drawn correctly in figures 3-5\n- [x] Think about the impact of all possible link mismatches (parent/parent, parent/peer, parent/core, core/peer, core/child, child/peer) and eventually add some text\n- [x] Do we need to add more checks in 2.3.1? (e.g. you don't expect to receive a PCB on a peer interface).\n- [x] in 2.3.5.1.  should we change `to propagate to its downstream neighboring ASes` to `to propagate to its neighboring child ASes`? \n\n  \n### Alvaro's feedback\n```\n...\n1651\t   *  Neighbor type (core, parent, child, peer), depending on link type\n1652\t      (see Section 1.3).  Link type depends on mutual agreements between\n1653\t      the organizations operating the ASes at each end of each link.\n``` \n\n[] Is there a check anywhere for the types to match?  IOW, if the local AS indicates that the neighbor is a child, they should indicate parent... ??\n\nI'm asking because the relationship can be derived from the contents of the PCB.  But then I guess this is for internal use only, right?\n> Nico: These different relations (core, parent-child, peer) only relate to two direct neighbors. So in figure 3 AS W is a peer of Y and NOT a child of X/Y. They affect how PCBs are propagated. For example, peering links are a \u201cshortcut\" where no PCBs are propagated.\n\nWhat happens if (looking at Figure 3), for example, AS Y is configured with AS W as a peer, but AS W (which presumably is also a child of AS X) is configured with AS Y as a child?  In this case, AS W would propagate the PCB to AS Y -- will AS Y detect the misconfiguration?\n\n\u00a72.3.1 includes a check of the incoming interface, but not its type.  Is it needed?\n\nAlso, if AS Y lost its links to AS X, then the topology would change so that AS W would become a parent.  How is this type of change detected so that the configuration is adjusted?  Is the change dynamic?",
       "createdAt": "2025-06-25T11:31:43Z",
-      "updatedAt": "2025-10-17T16:31:24Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-20T07:40:55Z",
+      "closedAt": "2025-10-20T07:40:55Z",
       "comments": [
         {
           "author": "katyatitkova",
@@ -10470,24 +10485,26 @@
       "id": "PR_kwDOJx2-rs6eGC-x",
       "title": "MTU - clarifications",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/131",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #57\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/mtu-clarifications/draft-dekater-scion-controlplane.txt)\r\n",
       "createdAt": "2025-07-09T10:09:24Z",
-      "updatedAt": "2025-10-16T16:29:36Z",
+      "updatedAt": "2025-10-19T15:00:18Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
+      "baseRefOid": "ac8a3e56621578519e102ca60231e68febe7f37d",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "mtu-clarifications",
-      "headRefOid": "a5b75de356a64609637b005ff89e3c1d61cbfabb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "3fe2a585d5a1f3851aa2044681932f988afa23df",
+      "closedAt": "2025-10-19T15:00:13Z",
+      "mergedAt": "2025-10-19T15:00:13Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "286d7085957f5128c5393341239015d84624b464"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -10537,6 +10554,19 @@
               "updatedAt": "2025-10-13T19:35:11Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7H8oYl",
+          "commit": {
+            "abbreviatedOid": "3fe2a58"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-19T15:00:03Z",
+          "updatedAt": "2025-10-19T15:00:03Z",
+          "comments": []
         }
       ]
     },
@@ -11406,24 +11436,26 @@
       "id": "PR_kwDOJx2-rs6t5PVY",
       "title": "Remove duplicate gRPC definitions",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/145",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #67 \r\nResolves #96 \r\n[Diff with Main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Removed-and-rationalised-gRPC-references/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-15T14:02:07Z",
-      "updatedAt": "2025-10-18T15:08:18Z",
+      "updatedAt": "2025-10-19T12:14:37Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Removed-and-rationalised-gRPC-references",
       "headRefOid": "a240f362b9a400541aa3061804d51eaf723908fb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-19T12:14:31Z",
+      "mergedAt": "2025-10-19T12:14:31Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "ac8a3e56621578519e102ca60231e68febe7f37d"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -11592,26 +11624,42 @@
       "id": "PR_kwDOJx2-rs6uSrvk",
       "title": "Clarify link misconfigurations and propagation to child ASes",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/148",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #119\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/link-mismatch/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-17T11:43:52Z",
-      "updatedAt": "2025-10-17T16:37:32Z",
+      "updatedAt": "2025-10-19T12:10:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "17e858b80ab2ce69f175fc4f32d71780facaacee",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "link-mismatch",
       "headRefOid": "b33df772479ac12815c5450a5c571cdcb7b2d478",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-19T12:10:48Z",
+      "mergedAt": "2025-10-19T12:10:48Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "8befc0f8f6fa55d922ede5d191f1e8fe415e51a2"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7H8Z0f",
+          "commit": {
+            "abbreviatedOid": "b33df77"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-19T12:10:40Z",
+          "updatedAt": "2025-10-19T12:10:40Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 149,
@@ -11650,28 +11698,78 @@
     {
       "number": 150,
       "id": "PR_kwDOJx2-rs6uURwz",
-      "title": "Service Addressing ",
+      "title": "Move Service Addressing from appendix to dedicated section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/150",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #109 ",
+      "body": "Resolves #109 \r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/Service-Addressing/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/Service-Addressing/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Service-Addressing/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-17T13:48:10Z",
-      "updatedAt": "2025-10-18T15:22:47Z",
+      "updatedAt": "2025-10-19T17:27:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011",
+      "baseRefOid": "c9fb9148f83c94bad8b368d8836dbc8f9920bc09",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Service-Addressing",
-      "headRefOid": "522f1d105771e85ab3e419d558ef08af7ab32e2b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "00c38aaa1f0e21ff53bb8c63fe3d72d4f7245c7b",
+      "closedAt": "2025-10-19T17:26:04Z",
+      "mergedAt": "2025-10-19T17:26:04Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "706e1374d88e992d9ad49d1940483267c5bb6222"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "For the records, this is the ID diff\r\n[Diff_ draft-dekater-scion-controlplane.txt - draft-dekater-scion-controlplane.txt.html](https://github.com/user-attachments/files/22991564/Diff_.draft-dekater-scion-controlplane.txt.-.draft-dekater-scion-controlplane.txt.html)\r\n",
+          "createdAt": "2025-10-19T17:27:13Z",
+          "updatedAt": "2025-10-19T17:27:13Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7H8p-H",
+          "commit": {
+            "abbreviatedOid": "9608743"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Can you review my proposal and changes I did directly in the text?",
+          "createdAt": "2025-10-19T15:20:35Z",
+          "updatedAt": "2025-10-19T15:47:34Z",
+          "comments": [
+            {
+              "originalPosition": 76,
+              "body": "Leave it as it is: \r\n```suggestion\r\n3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment MUST be equal to the core ISD-AS where the segment is being registered. If not, the core AS MUST reject the segment.\r\n```",
+              "createdAt": "2025-10-19T15:20:36Z",
+              "updatedAt": "2025-10-19T15:47:34Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "> ... requires a connection to be initiated to identify the relevant peer .... \r\n\r\nThis sentence is not really clear and IMHO too long. \r\n\r\n```suggestion\r\nThe Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:\r\n```\r\n",
+              "createdAt": "2025-10-19T15:27:05Z",
+              "updatedAt": "2025-10-19T15:47:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7H8y3J",
+          "commit": {
+            "abbreviatedOid": "00c38aa"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-19T17:25:39Z",
+          "updatedAt": "2025-10-19T17:25:39Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 151,
@@ -11705,6 +11803,84 @@
           "updatedAt": "2025-10-18T15:01:49Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 152,
+      "id": "PR_kwDOJx2-rs6ugJDM",
+      "title": "Add section about Destination Mapping & reference SIG",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/152",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #116 ",
+      "createdAt": "2025-10-19T09:53:51Z",
+      "updatedAt": "2025-10-19T15:09:48Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1fb53b6400c3a3371c89e78224a69c7ea5e9b011",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "sig",
+      "headRefOid": "469bdc344c3f65b5cbff9429cd4a6d067ffa1271",
+      "closedAt": "2025-10-19T15:09:41Z",
+      "mergedAt": "2025-10-19T15:09:41Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "c9fb9148f83c94bad8b368d8836dbc8f9920bc09"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell feel free to have a look",
+          "createdAt": "2025-10-19T14:55:44Z",
+          "updatedAt": "2025-10-19T14:55:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7H8pJn",
+          "commit": {
+            "abbreviatedOid": "469bdc3"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-19T15:09:34Z",
+          "updatedAt": "2025-10-19T15:09:34Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 153,
+      "id": "PR_kwDOJx2-rs6ulzGD",
+      "title": "Dummy change",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/153",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-20T09:12:55Z",
+      "updatedAt": "2025-10-20T09:18:46Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "706e1374d88e992d9ad49d1940483267c5bb6222",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "dummy-change",
+      "headRefOid": "823b9b29a40c3386beb8262e259ec109a37e4e2a",
+      "closedAt": "2025-10-20T09:18:44Z",
+      "mergedAt": "2025-10-20T09:18:44Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "977dbe124361ff17919b0605cb63750757f6b154"
+      },
+      "comments": [],
       "reviews": []
     }
   ]
