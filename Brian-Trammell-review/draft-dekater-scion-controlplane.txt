@@ -191,7 +191,7 @@ Table of Contents
    _Availability_ - to provide highly available communication that can
    send traffic over paths with optimal or required characteristics,
    quickly handle inter-domain link or router failures (both on the last
-   hop or anywhere along the path) and provide continuity in the
+   hop or anywhere along the path), and provide continuity in the
    presence of adversaries.
 
    _Security_ - to introduce a new approach to inter-domain path
@@ -1063,7 +1063,7 @@ Table of Contents
 
                    Figure 7: PCB Top-Level Message Format
 
-   Each PCB MUST consists of at least:
+   Each PCB MUST consist of at least:
 
    *  An information field with an identifier and a timestamp.
 
