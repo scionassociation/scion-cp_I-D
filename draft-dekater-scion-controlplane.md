@@ -175,6 +175,21 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  SIG:
+    title: SCION IP Gateway Documentation
+    date: 2024
+    target: https://docs.scion.org/en/latest/sig.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
+
 
 
 --- abstract
@@ -316,7 +331,7 @@ The **Control Service** is responsible for the path exploration and registration
 
 - Generating, receiving, and propagating PCBs. Periodically, the Control Service of a core AS generates a set of PCBs, which are forwarded to the child ASes or neighboring core ASes. In the latter case, the PCBs are sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - Selecting and registering the set of path segments via which the AS wants to be reached.
-- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in {{#figure-36}}.
+- Managing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in [](#crypto-api).
 
 **Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
 
@@ -427,9 +442,7 @@ All communication between the Control Services in different ASes is expressed in
 
 The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
 
-{{app-a}} provides the entire Control Service API definition in protobuf format.
-
-{{app-b}} provides details about the establishment of the underlying QUIC connections through the data plane.
+In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
 
 # Path Exploration or Beaconing {#beaconing}
@@ -441,9 +454,9 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 In SCION, the *Control Service* of each AS is responsible for the beaconing process. The Control Service generates, receives, and propagates the *Path Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
-PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *inter-ISD* or core beaconing is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
+PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *core* or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
-- *Inter-ISD or core beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
+- *Core or Inter-ISD beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
 - *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children (leaf AS). As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
 
 On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs). PCBs are used to construct path segments. ASes register them to make them available to other ASes, as described in [](#path-segment-reg).
@@ -694,7 +707,6 @@ Path Segment 4 |             |     |             |     |             |
 {: #figure-5 title="Top-down composition of a PCB"}
 
 
-Note: For a full example of a PCB in the Protobuf message format, please see {{figure-34}}.
 
 #### PCB Top-Level Message Format {#segment}
 
@@ -875,14 +887,14 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
-- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED.
+- `signature_algorithm`: Specifies the algorithm to compute the signature. This field is REQUIRED. Possible types are defined by the `SignatureAlgorithm` definition. An unspecified signature algorithm is never valid. Other algorithms or curves MAY be used in the future. Signature algorithms are further discussed in {{I-D.dekater-scion-pki}}.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: it may include metadata. This field is OPTIONAL. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header.
 - `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 
-The `Header` protobuf message definition is:
+The `Header` and `SignatureAlgorithm` protobuf message definitions are:
 
 ~~~~
    message Header {
@@ -894,6 +906,13 @@ The `Header` protobuf message definition is:
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
+
+  enum SignatureAlgorithm {
+    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
+    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
+  }
 ~~~~
 
 The `VerificationKeyID` message contains the following REQUIRED fields:
@@ -1019,7 +1038,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item.
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
@@ -1055,6 +1074,7 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
        uint32 exp_time = 3;
        bytes mac = 4;
    }
+
 ~~~~
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).
@@ -1174,9 +1194,8 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
-The maximum MTU supported by all intra-AS links MAY also be configured.
+The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
-The AS SHOULD adopt a PCB selection policy that does not accidentally isolate the AS from the network, i.e. such that it does not block connectivity to parent providers and ensures downstream connectivity for children. For more details, see [](#selection).	
 
 ## Propagation of PCBs {#path-prop}
 
@@ -1186,9 +1205,9 @@ This section describes how PCBs are received, selected and further propagated in
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
-1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in {{#figure-36}}.
+1. PCB validity: It verifies the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
 2. Loop avoidance: If it is a core AS, the Control Service MUST check whether the PCB includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops. This step is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate, e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
-3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. If not, the PCB MUST be discarded.
+3. Incoming Interface: the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) MUST coincide with the ISD-AS neighbor of the interface where the PCB was received. In addition, the corresponding link MUST be core or parent. If not, the PCB MUST be discarded.
 4. Continuity: when a PCB contains two or more AS entries, the receiver Control Service MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
@@ -1214,15 +1233,16 @@ As SCION does not provide any in-band signal about the intentions of endpoints n
 - Availability of peering links: that is the number of different peering ASes from all non-core ASes on the PCB or path segment. A greater number of peering ASes increases the likelihood of finding a shortcut on the path segment.
 - Path disjointness: Paths can be either AS disjointed or link disjointed. AS disjointed paths have no common upstream/core AS for the current AS, whereas link disjointed paths do not share any AS-to-AS link. AS disjointness allows path diversity in the event that an AS becomes unresponsive, and link disjointness provides resilience in case of link failure. Both criteria can be used depending on the objective of the AS.
 
-The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
+    The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
 
 A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 Naturally, an AS's policy selects PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
+To ensure reachability, PCB selection policies should forward as many PCBs as possible. PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#inter-isd-beaconing)). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, each AS selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
 
 The *best PCBs set size* should be:
 
@@ -1250,7 +1270,7 @@ To bootstrap the initial communication with a neighboring beacon service, ASes u
 
 The propagation process in intra-ISD beaconing includes the following steps:
 
-1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its downstream neighboring ASes, based on a selection algorithm specific for this AS.
+1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)), including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
@@ -1290,8 +1310,85 @@ The propagation procedure includes the following elements:
    - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
+## Distribution of Cryptographic Material {#crypto-api}
+
+Control Services distribute cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `TrustMaterialService` RPCs:
+
+~~~~~
+service TrustMaterialService {
+    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
+    rpc TRC(TRCRequest) returns (TRCResponse) {}
+}
+~~~~~
+
+- `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
+- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
+
+The corresponding protobuf message formats are:
+
+~~~~~
+message ChainsRequest {
+    uint64 isd_as = 1;
+    bytes subject_key_id = 2;
+    google.protobuf.Timestamp at_least_valid_until = 3;
+    google.protobuf.Timestamp at_least_valid_since = 4;
+}
+
+message ChainsResponse {
+    repeated Chain chains = 1;
+}
+
+message Chain {
+    bytes as_cert = 1;
+    bytes ca_cert = 2;
+}
+~~~~~
+
+A `ChainsRequest` message includes the following fields:
+
+- `isd_as`: Returns ISD-AS of Subject in the AS certificate.
+- `subject_key_id`: Returns SubjectKeyID in the AS certificate.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
+
+A `ChainsResponse` includes the following fields:
+
+- `chains`: Lists the certificate chains that match the request. A `Chain` contains:
+  - `as_cert`: Returns the AS certificate in the chain.
+  - `ca_cert`: Returns the CA certificate in the chain.
+
+For requesting TRCs, the protobuf messages are:
+
+~~~~~
+message TRCRequest {
+    uint32 isd = 1;
+    uint64 base = 2;
+    uint64 serial = 3;
+}
+
+message TRCResponse {
+    bytes trc = 1;
+}
+~~~~~
+
+A `TRCRequest` includes the following fields:
+
+- `isd`: Returns the ISD number of the TRC.
+- `base`: Returns the base number of the TRC.
+- `serial`: Returns the serial number of the TRC.
+
+The returned `trc` contains the raw TRC.
+
+
+
 
 # Deployment Considerations
+
+## Destination Mapping
+
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document.
+One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
 
 ## Monitoring Considerations
 
@@ -1346,7 +1443,7 @@ At each AS, the PCB will be processed and propagated at the subsequent propagati
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see {{I-D.dekater-scion-dataplane}} section "Handling Link Failures").
 
-To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and inter-ISD beaconing.
+To achieve scalability, SCION partitions ASes into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. For more specific observations, we distinguish between intra-ISD and core beaconing.
 
 ### Intra-ISD Beaconing {#intra-isd-beaconing}
 
@@ -1368,9 +1465,9 @@ On a network bootstrap, path segments to each AS are discovered within a number 
 
 When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is thus complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
-### Inter-ISD Beaconing {#inter-isd-beaconing}
+### Core Beaconing {#core-beaconing}
 
-In the inter-ISD core beaconing, PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
+In core beaconing (typically inter-ISD), PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
 
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
@@ -1496,7 +1593,7 @@ SCION paths represent a sequence of ASes and inter-AS links; each with possibly 
 * The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 
-Such information is then made available to endpoints during the path lookup process (See [](#lookup)). SCION endpoints are oblivious to the topology of intermediate ASes and when looking up a path they assume that all hops are constrained by the intra-AS MTU of each AS traversed.
+Such information is then made available to source endpoints during the path lookup process (See [](#lookup)). Note that the destination endpoint does not receive such information, therefore when using path reversibility, it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes. When looking up a path they should therefore assume that all hops are also constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
@@ -1540,7 +1637,40 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 2. Request core segments, which start at the core ASes that are reachable with up segments, and end at the core ASes in the destination ISD. If the destination ISD coincides with the source ISD, this step requests core segments to core ASes that the source endpoint cannot directly reach with an up segment.
 3. Request down segments starting at core ASes in the destination ISD.
 
-The segment lookup API RPC definition can be found in {{figure-31}}.
+### Lookup Requests Message Format
+
+Control Services provide paths to endpoints through the `SegmentLookupService` RPC. This API is exposed on the SCION dataplane by the control services of core ASes and exposed on the intra-domain protocol network.
+
+~~~~
+service SegmentLookupService {
+    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
+}
+~~~~
+
+They use the following protobuf messages: a `SegmentsRequest`, which includes:
+
+- `src_isd_as`: The source ISD-AS of the segment.
+- `dst_isd_as`: The destination ISD-AS of the segment.
+
+The corresponding `SegmentsResponse` returns:
+
+- `segments`: a list of `PathSegment` matching the request.
+- a mapping from path segment type to path segments, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
+
+~~~~
+message SegmentsRequest {
+    uint64 src_isd_as = 1;
+    uint64 dst_isd_as = 2;
+}
+
+message SegmentsResponse {
+    message Segments {
+        repeated PathSegment segments = 1;
+    }
+    map<int32, Segments> segments = 1;
+}
+~~~~
+
 
 ### Caching
 
@@ -1604,6 +1734,49 @@ When the segment request handler of a *core AS* Control Service receives a path 
 3. Otherwise, load the matching down segments from the path database and return.
 
 [](#app-c) shows by means of an illustration how the lookup of path segments in SCION works.
+
+# Control Service Discovery {#service-discovery}
+
+The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
+
+* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
+* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
+* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
+* Control Services respond to requests from remote ASes by reversing the path via which the request came.
+
+Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
+
+1. A client sends a `ServiceResolutionRequest` RPC (which has no parameters) to an endpoint address in the format:
+    * Common Header:
+      * Path type: SCION (0x01)
+      * DT/DL: "Service" (0b0100)
+    * Address Header:
+      * DstHostAddr: "SVC_CS" (0x0002)
+    * UDP Header:
+      * DstPort: 0
+
+    A `ServiceResolutionRequest` MUST fit within a UDP datagram, otherwise clients and servers won't be able to establish control-plane reachability.
+2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
+3. The ingress border router forwards the message to the resolved address.
+4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
+  Known transports are "QUIC". Unknown values MUST be ignored by clients. The response includes a `Transport` message containing supported addresses and port to reach the service.
+  Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
+  `192.0.2.1:80` and `[2001:db8::1]:80`. A missing, zero or non-existent port value MUST be treated by clients as an error.
+5. The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.
+
+The following code block provides the service resolution API Protobuf messages.
+
+~~~~~
+  message ServiceResolutionRequest {}
+
+  message ServiceResolutionResponse {
+    map<string, Transport> transports = 1;
+  }
+
+  message Transport {
+    string address = 1;
+  }
+~~~~~
 
 # SCMP {#scmp}
 
@@ -2097,368 +2270,6 @@ SCIONLab is a global research network that is available to test the SCION archit
 
 More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
 
-# Full Control Service RPC API {#app-a}
-{:numbered="false"}
-
-The following code blocks provide, in protobuf format, the entire API by which control services interact.
-
-~~~~
-service SegmentLookupService {
-    // Segments returns all segments that match the request.
-    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
-}
-
-message SegmentsRequest {
-    // The source ISD-AS of the segment.
-    uint64 src_isd_as = 1;
-    // The destination ISD-AS of the segment.
-    uint64 dst_isd_as = 2;
-}
-
-enum SegmentType {
-    // Unknown segment type.
-    SEGMENT_TYPE_UNSPECIFIED = 0;
-    // Up segment.
-    SEGMENT_TYPE_UP = 1;
-    // Down segment.
-    SEGMENT_TYPE_DOWN = 2;
-    // Core segment.
-    SEGMENT_TYPE_CORE = 3;
-}
-
-message SegmentsResponse {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
-~~~~
-{: #figure-31 title="Control Service RPC API - Segment lookup.
-   This API is exposed on the SCION dataplane by the control
-   services of core ASes and exposed on the intra-domain protocol
-   network."}
-<br>
-
-~~~~
-service SegmentRegistrationService {
-    // SegmentsRegistration registers segments at the remote.
-    rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (
-        SegmentsRegistrationResponse) {}
-}
-
-message SegmentsRegistrationRequest {
-    message Segments {
-        // List of path segments.
-        repeated PathSegment segments = 1;
-    }
-
-    // Mapping from path segment type to path segments.
-    // The key is the integer representation of the SegmentType enum.
-    map<int32, Segments> segments = 1;
-}
-
-message SegmentsRegistrationResponse {}
-~~~~
-{: #figure-32 title="Control Service RPC API - Segment registration.
-   This API is only exposed by core ASes and only on the SCION
-   dataplane."}
-<br>
-
-~~~~
-service SegmentCreationService {
-    // Beacon sends a beacon to the remote control service.
-    rpc Beacon(BeaconRequest) returns (BeaconResponse) {}
-}
-
-message BeaconRequest {
-    // Beacon in form of a partial path segment.
-    PathSegment segment = 1;
-}
-
-message BeaconResponse {}
-~~~~
-{: #figure-33 title="Control Service RPC API - Segment creation"}
-<br>
-
-~~~~~
-message PathSegment {
-    // The encoded SegmentInformation. It is used for signature input.
-    bytes segment_info = 1;
-    // Entries of ASes on the path.
-    repeated ASEntry as_entries = 2;
-}
-
-message SegmentInformation {
-    // Segment creation time set by the originating AS. Segment
-    // expiration time is computed relative to this timestamp.
-    // The timestamp is encoded as the number of seconds elapsed
-    // since January 1, 1970 UTC.
-    int64 timestamp = 1;
-    // The 16-bit segment ID integer used for MAC computation.
-    uint32 segment_id = 2;
-}
-
-message ASEntry {
-    // The signed part of the AS entry. The body of the SignedMessage
-    // is the serialized ASEntrySignedBody. The signature input is
-    // defined as follows:
-    //
-    //  input(ps, i) = signed.header_and_body || associated_data(ps, i)
-    //
-    //  associated_data(ps, i) =
-    //          ps.segment_info ||
-    //          ps.as_entries[1].signed.header_and_body ||
-    //          ps.as_entries[1].signed.signature ||
-    //          ...
-    //          ps.as_entries[i-1].signed.header_and_body ||
-    //          ps.as_entries[i-1].signed.signature
-    //
-    proto.crypto.v1.SignedMessage signed = 1;
-    // The unsigned part of the AS entry.
-    proto.control_plane.v1.PathSegmentUnsignedExtensions unsigned = 2;
-}
-
-message SignedMessage {
-    // Encoded header and body.
-    bytes header_and_body = 1;
-    // Raw signature. The signature is computed over the concatenation
-    // of the header and body, and the optional associated data.
-    bytes signature = 2;
-}
-
-message HopEntry {
-    // Material to create the data-plane Hop Field.
-    HopField hop_field = 1;
-    // MTU on the ingress link.
-    uint32 ingress_mtu = 2;
-}
-
-message PeerEntry {
-    // ISD-AS of peer AS. This is used to match peering segments
-    // during path construction.
-    uint64 peer_isd_as = 1;
-    // Remote peer interface identifier. This is used to match
-    // peering segments
-    // during path construction.
-    uint64 peer_interface = 2;
-    // MTU on the peering link.
-    uint32 peer_mtu = 3;
-    // Material to create the data-plane Hop Field
-    HopField hop_field = 4;
-}
-
-message HopField {
-    // Ingress interface identifier.
-    uint64 ingress = 1;
-    // Egress interface identifier.
-    uint64 egress = 2;
-    // 8-bit encoded expiration offset relative to the segment
-    // creation timestamp.
-    uint32 exp_time = 3;
-    // MAC used in the dataplane to verify the Hop Field.
-    bytes mac = 4;
-}
-~~~~~
-{: #figure-34 title="Control Service RPC API - Segment representation"}
-<br>
-
-~~~~~
-enum SignatureAlgorithm {
-    // Unspecified signature algorithm. This value is never valid.
-    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
-    // ECDS with SHA256.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;
-    // ECDS with SHA384.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;
-    // ECDS with SHA512.
-    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;
-}
-
-// Low-level representation of HeaderAndBody used for signature
-// computation input. This should not be used by external code.
-message HeaderAndBodyInternal {
-    // Encoded header suitable for signature computation.
-    bytes header = 1;
-    // Raw payload suitable for signature computation.
-    bytes body = 2;
-}
-
-message Header {
-    // Algorithm used to compute the signature.
-    SignatureAlgorithm signature_algorithm = 1;
-    // Optional arbitrary per-protocol key identifier.
-    bytes verification_key_id = 2;
-    // Optional signature creation timestamp.
-    google.protobuf.Timestamp timestamp = 3;
-    // Optional arbitrary per-protocol metadata.
-    bytes metadata = 4;
-    // Length of associated data that is covered by the signature, but
-    // is not included in the header and body. This is zero, if no
-    // associated data is covered by the signature.
-    int32 associated_data_length = 5;
-}
-
-message ASEntrySignedBody {
-    // ISD-AS of the AS that created this AS entry.
-    uint64 isd_as = 1;
-    // ISD-AS of the downstream AS.
-    uint64 next_isd_as = 2;
-    // The required regular hop entry.
-    HopEntry hop_entry = 3;
-    // Optional peer entries.
-    repeated PeerEntry peer_entries = 4;
-    // Intra AS MTU.
-    uint32 mtu = 5;
-    // Optional extensions.
-    proto.control_plane.v1.PathSegmentExtensions extensions = 6;
-}
-
-message VerificationKeyID {
-    uint64 isd_as = 1;
-    bytes subject_key_id = 2;
-    uint64 trc_base = 3;
-    uint64 trc_serial = 4;
-}
-~~~~~
-{: #figure-35 title="Control Service RPC API - Signed ASEntry representation"}
-<br>
-
-~~~~~
-service TrustMaterialService {
-    // Return the certificate chains that match the request.
-    rpc Chains(ChainsRequest) returns (ChainsResponse) {}
-    // Return a specific TRC that matches the request.
-    rpc TRC(TRCRequest) returns (TRCResponse) {}
-}
-
-message ChainsRequest {
-    // ISD-AS of Subject in the AS certificate.
-    uint64 isd_as = 1;
-    // SubjectKeyID in the AS certificate.
-    bytes subject_key_id = 2;
-    // Point in time at which the AS certificate must still be valid. In seconds
-    // since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_until = 3;
-    // Point in time at which the AS certificate must be or must have been
-    // valid. In seconds since UNIX epoch.
-    google.protobuf.Timestamp at_least_valid_since = 4;
-}
-
-message ChainsResponse {
-    // List of chains that match the request.
-    repeated Chain chains = 1;
-}
-
-message Chain {
-    // AS certificate in the chain.
-    bytes as_cert = 1;
-    // CA certificate in the chain.
-    bytes ca_cert = 2;
-}
-
-message TRCRequest {
-    // ISD of the TRC.
-    uint32 isd = 1;
-    // BaseNumber of the TRC.
-    uint64 base = 2;
-    // SerialNumber of the TRC.
-    uint64 serial = 3;
-}
-
-message TRCResponse {
-    // Raw TRC.
-    bytes trc = 1;
-}
-
-// VerificationKeyID is used to identify certificates that authenticate the
-// verification key used to verify signatures.
-message VerificationKeyID {
-    // ISD-AS of the subject.
-    uint64 isd_as = 1;
-    // SubjectKeyID referenced in the certificate.
-    bytes subject_key_id = 2;
-    // Base number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_base = 3;
-    // Serial number of the latest TRC available to the signer at the time of
-    // signature creation.
-    uint64 trc_serial = 4;
-}
-~~~~~
-{: #figure-36 title="Control Service RPC API - Trust Material representation"}
-<br>
-
-In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string.
-
-# Use of the SCION Data Plane {#app-b}
-{:numbered="false"}
-
-The SCION Control Plane RPC APIs rely on QUIC connections carried by the SCION dataplane. The main difference between QUIC over native UDP and QUIC over UDP/SCION is the need for a UDP/SCION connection initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping strategies apply:
-
-* Neighboring ASes craft one-hop-paths directly. This allows multihop paths to be constructed and propagated incrementally.
-* Constructed multihop paths are registered with the Control Service at the origin core AS. The path to that AS is the very path being registered.
-* Paths to far ASes are available from neighboring ASes. Clients obtain paths to remote ASes from their local Control Service.
-* Control services respond to requests from remote ASes by reversing the path via which the request came.
-* Clients find the relevant Control Service endpoint by resolving a "service address" (that is an address where the `DT/DL` field of the common header is set to 1/0 (see {{I-D.dekater-scion-dataplane}}).
-
-The mechanics of service address resolution are the following:
-
-* To resolve the address of the control service at a given AS, a client sends a ServiceResolutionRequest RPC (which has no parameters) to an endpoint address constructed as follows:
-  * Common Header:
-    * Path type: SCION (0x01)
-    * DT/DL: "Service" (0b0100)
-  * Address Header:
-    * DstHostAddr: "SVC_CS" (0x0002)
-  * UDP Header:
-    * DstPort: 0
-* The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
-* The ingress border router forwards the message to the resolved address.
-* The destination service responds to the client with a ServiceResolutionResponse. That response contain one or more transport options.
-* The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for regular RPCs.
-
-The following code block provides the full service resolution API in the Protobuf message format.
-
-~~~~~
-
-package proto.control_plane.v1;
-
-// A ServiceResolutionRequest must always fit within a UDP datagram. If
-// the request does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionRequest {}
-
-// A ServiceResolutionResponse must always fit within a UDP datagram. If
-// the response does not fit, there is no mechanism for clients and
-// servers to establish control-plane reachability.
-message ServiceResolutionResponse {
-    // Supported transports to reach the service,
-    //
-    // List of known transports:
-    // - QUIC
-    //
-    // Unknown values should be ignored by clients.
-    map<string, Transport> transports = 1;
-}
-
-message Transport {
-    // Protocol specific server address descriptor.
-    //
-    // Supported address format for QUIC:
-    //  192.168.0.1:80
-    //  [2001:db8::1]:80
-    //
-    //  Missing ports / zero port / invalid port values should be
-    // treated by clients as errors.
-    string address = 1;
-}
-
-~~~~~
-{: #figure-40 title="Service Resolution RPC API definition"}
-<br>
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
@@ -2626,18 +2437,33 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- New section "Distribution of Cryptographic Material" containing definitions formerly in the gRPC API appendix
+- New section "Destination Mapping" including a SIG reference
+- New section "Lookup Requests Message Format" containing definitions formerly in the gRPC API appendix
+- Move appendix "Use of the SCION Data Plane" to new section "Control Service Discovery"
 - Mention ConnectRPC as main RPC method instead of gRPC
+- Remove appendix "Full Control Service gRPC API" and move corresponding protobuf definitions in new sections mentioned above
 
 Minor changes:
 
-- AS Entry Signature: fix order of terms in one formula
+- Rename Inter-ISD Beaconing into Core Beaconing for consistency
+- Clarify descriptions of fields in the `HeaderAndBody` message and that metadata must be empty
+- AS Entry Signature: fix order of terms in one formula, clarify validity and meaning of associated data
+- PCB Extensions: clarified text, added example of the `StaticInfoExtension` and informative reference
+- PCB Validity: clarify text on timestamp validity and time allowances
+- Reception of PCBs: mention that incoming link MUST be core or parent
+- PCB selection policies: discourage use for traffic engineering
+- Best PCBs Set Size: clarify tradeoffs and avoid normative language when unnecessary
+- Path reversibility: mention that destination endpoints should estimate MTU
+- Move considerations on SCMP Authentication to the security considerations section (Rogue SCMP Error Messages)
+- Security Properties: use normative language to clarify assumptions
 
 ## draft-dekater-scion-controlplane-09
 {:numbered="false"}
 
 Major changes:
 
-- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation
+- "SCION AS numbers": make text representation for lower 32-bit ASes consistent with PKI draft, add reference to allocation.
 
 Minor changes:
 
