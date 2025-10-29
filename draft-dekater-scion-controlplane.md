@@ -209,7 +209,7 @@ SCION is a path-aware internetworking routing architecture as described in {{RFC
 
 SCION has been developed with the following goals:
 
-*Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
+*Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path), and provide continuity in the presence of adversaries.
 
 *Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing. Security properties are further discussed in [](#security-properties).
 
@@ -719,7 +719,7 @@ Path Segment 4 |             |     |             |     |             |
 ~~~
 {: #figure-6 title="PCB Top-Level Message Format"}
 
-Each PCB MUST consists of at least:
+Each PCB MUST consist of at least:
 
 - An information field with an identifier and a timestamp.
 - Entries of all ASes on the path segment represented by this PCB.
