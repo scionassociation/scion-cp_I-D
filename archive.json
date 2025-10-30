@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T00:23:34.066224+00:00",
+  "timestamp": "2025-10-30T00:24:35.789889+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2522,6 +2522,54 @@
       "updatedAt": "2025-10-15T13:46:30Z",
       "closedAt": "2025-10-15T13:46:30Z",
       "comments": []
+    },
+    {
+      "number": 154,
+      "id": "I_kwDOJx2-rs7UizTm",
+      "title": "Brian Trammell's review CP",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/154",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "This document is the one most directly answering questions posed in RFC 9217, so I look forward to future pre-standardization work on the control plane to be discussed in PANRG.\n\n## Technical Issues\n\n- Section 2.3.4: I'm interested in the derivation of the parameters given here, in that there are a few system parameters that emerge from them that in turn dictate the performance and operational characteristics of a SCION internet. Were these derived from simulation, or from experience with the existing (much smaller than the big-I Internet) Anapaya and SCIONlab networks?\n\n- Have the PCB set sizes been tested against realisitic reference interdomain topologies? The intra-AS (editorial: shouldn't this be inter-AS, since it's leafward?) PCB size seems reasonable in a transit-customer-heavy topology (like the relationships that IIUC SCION was originally designed for), but in a realistic peering-heavy topology with fairly decentralized peering points (cf. the internet in Europe), I could see the peering links dominate PCBs such that viable peering shortcuts would be lost at the leaves with only 50 available per PCB. 3.3.2 points to a small diameter assumption following Barabasi... but I'm not sure the dynamics driving that model are the same that lead to Internet interdomain connectivity.\n\n- The core beacon size similarly seems to have a core AS model in mind (that of a small coterie of completely connected providers, analogous to \"Tier 1\" in the 20th century Internet topology) that may not apply in every ISD.\n\n- Similarly, propagation delay is related to the availability risk of a link outage. The 60 second core beaconing interval implies that the maximum time that a disconnect event (i.e., links between one core AS and the others, or an inter-ISD link, being commpletely down) would lead to packet loss is 60 seconds; this is long enough that it would probably trigger application and transport layer session resets in the absence of widespread peering shortcuts (which the PCB size seems to limit, see above)\n\n_KM - the above would all seem to be philosophical questions._ \n\n- [ ] Section 7, general question: are there any rules for converting an ICMP message to SCMP, or vice versa? The protocol seems designed to support this, so I was missing a mention of it in this section.\n\n## Editorial Issues\n\n- [x] I found at least one missing Oxford comma with a clarity impact (Section 1 para 2 \"and provide continuity\".)\n_KM - there are inconsistencies between US and British stylisation in various places (not all introduced by me!). I'm a proponent of the Oxford comma (Adrian may not be), but also 'e.g.' (British style) compared to 'e.g.,' (US style). For me, 'e.g.' uses less characters and looks cleaner, although I don't know what the RFC Editor style guide says about it._ \n\n- [ ] Section 1.4.1: what about path segments between non-core ASs? I understand that coreward segments are up and leafward down, but that's not what this list says.\n\n- [ ] Section 1.5.1: it's not clear here why I'd ever use the wildcard ISD, unless there is inter-ISD coordination on AS number assignments, except where ASNs are ported from the Internet. There should at least be a forward ref.\n\n- [ ] Section 1.5.3: is there any interoperability concern with respect to non-wire representations of ISD/AS numbers? I'm confused about the 2119 language here. Some explanatory text in the frontmatter of 1.5.3 about why we care about text representation would be useful.\n\n- [ ] Section 2.2.1: Figure 6, the top-down composition of a PCB, would be easier to read if it were broken up and interspersed through the text as a series of smaller, more focused diagrams.\n\n- [x] Section 2.2.2.1 (and maybe elsewhere): \"MUST consists\".",
+      "createdAt": "2025-10-29T13:05:52Z",
+      "updatedAt": "2025-10-29T20:45:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm a bit confused about what's unclear in Section 1.4.1? This sub-section does state \"Each path segment starts and/or ends at a core AS.\"",
+          "createdAt": "2025-10-29T20:26:23Z",
+          "updatedAt": "2025-10-29T20:26:23Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What is the ISD wildcard used for? I've wondered this myself, and whilst it's stated for SCION AS numbers, it's not explicitly for ISD numbers. \n\nThis is covered by \"5.2.1. Use of Wildcard Addresses in the Lookup Process\"?",
+          "createdAt": "2025-10-29T20:30:29Z",
+          "updatedAt": "2025-10-29T20:30:29Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "With respect to \"1.5.3 Text Representation\", I'm guessing these notations are required because that's the way implementations expect to process them? ",
+          "createdAt": "2025-10-29T20:34:21Z",
+          "updatedAt": "2025-10-29T20:34:21Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "With respect to Figure 6, I think its constituent elements are already broken up and interspersed into more focused into smaller diagrams in the following text. However, it is essentially a duplication of what follows and I must admit that I didn't initially realise that when I first came to it. \n\nI'll have a go at re-organising that section as I think there's also an opportunity to reduce the number of levels as well. ",
+          "createdAt": "2025-10-29T20:45:53Z",
+          "updatedAt": "2025-10-29T20:45:53Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -11880,6 +11928,32 @@
       "mergeCommit": {
         "oid": "977dbe124361ff17919b0605cb63750757f6b154"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 155,
+      "id": "PR_kwDOJx2-rs6wdn7U",
+      "title": "Brian trammell review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/155",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-29T20:19:49Z",
+      "updatedAt": "2025-10-29T20:22:45Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "977dbe124361ff17919b0605cb63750757f6b154",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Brian-Trammell-review",
+      "headRefOid": "e091b18f00d028a8545e2dc6c45c40b677459e44",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
