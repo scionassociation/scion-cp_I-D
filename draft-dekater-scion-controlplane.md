@@ -639,7 +639,7 @@ Path Segment 4 |             |     |             |     |             |
 
 ## Path-Segment Construction Beacons (PCBs) {#pcbs}
 
-### PCB Message Format {#pcb-compos}
+### PCB Message Format {#pcb-message}
 
 Each PCB is comprised of a message containing the following top-level fields:
 
@@ -1236,8 +1236,9 @@ The propagation procedure includes the following elements:
 - `SegmentCreationService`: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.
    - `Beacon`: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.
 - `BeaconRequest`: Specifies the request message sent by the `Beacon` method to the Control Service of the neighboring AS. It contains the following element:
-   - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#segment).
+   - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#pcb-message).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
+
 
 ## Distribution of Cryptographic Material {#crypto-api}
 
