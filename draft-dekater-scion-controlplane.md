@@ -1246,7 +1246,7 @@ PCBs are propagated in batches to each neighboring AS at a fixed frequency known
 
 The *best PCBs set size* should be:
 
-  - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
+  - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
 
 These values reflect a tradeoff between scalability —limited by the computational overhead of signature verification—and the amount of paths discovered. The PCBs set size should not be too low, to make sure that beaconing can discover a wide amount of paths. Further discussion on these trade-offs is provided in [](#scalability).
