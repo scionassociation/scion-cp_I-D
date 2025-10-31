@@ -343,7 +343,7 @@ SCION distinguishes the following types of path segments:
 - A path segment from a core AS to a non-core AS is a *down segment*.
 - A path segment between core ASes is a *core segment*.
 
-Each path segment starts and/or ends at a core AS.
+Each path segment starts and/or ends at a core AS. Path segments are not created between non-core ASes.
 
 All path segments may be reversed: a core segment can be used bidirectionally, an up segment can be converted into a down segment, and a down segment can be converted into an up segment depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
@@ -372,6 +372,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
+The wildcard ISD is not directly used by the control or data plane. It may, however, be used by implementations to represent any ISD, for example in path filters.
 ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
@@ -415,7 +416,7 @@ The text representation of SCION AS numbers is as follows:
 
 #### <ISD, AS> tuples
 
-The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
+The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D. This text representation is used for the ISD-AS number attribute in the certificates (see {{I-D.dekater-scion-pki}}).
 
 For example, the text representation of AS number ff00:0:1 in ISD number 15 is `15-ff00:0:1`.
 
@@ -1173,7 +1174,7 @@ PCBs are propagated in batches to each neighboring AS at a fixed frequency known
 
 The *best PCBs set size* should be:
 
-  - For intra-AS beaconing (i.e. propagating to children ASes): at most 50.
+  - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
 
 These values reflect a tradeoff between scalability —limited by the computational overhead of signature verification—and the amount of paths discovered. The PCBs set size should not be too low, to make sure that beaconing can discover a wide amount of paths. Further discussion on these trade-offs is provided in [](#scalability).
@@ -1711,6 +1712,8 @@ The following code block provides the service resolution API Protobuf messages.
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
+
+**Note:** There is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
 
@@ -2359,6 +2362,11 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-11
+{:numbered="false"}
+
+- Clarify use of wildcard ISD and ISD-AS text representation
 
 ## draft-dekater-scion-controlplane-10
 {:numbered="false"}
