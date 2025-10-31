@@ -564,10 +564,12 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   ISD numbers are currently allocated by Anapaya, a provider of SCION-
-   based networking software and solutions (see
-   [ISD-AS-assignments-Anapaya]).  This function is being transitioned
-   to the SCION Association ([ISD-AS-assignments]).
+   The wildcard ISD is not directly used by the control or data plane.
+   It may, however, be used by implementations to represent any ISD, for
+   example in path filters.  ISD numbers are currently allocated by
+   Anapaya, a provider of SCION-based networking software and solutions
+   (see [ISD-AS-assignments-Anapaya]).  This function is being
+   transitioned to the SCION Association ([ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
