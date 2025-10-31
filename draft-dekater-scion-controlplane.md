@@ -637,9 +637,7 @@ Path Segment 4 |             |     |             |     |             |
 {: #figure-4 title="Possible up- or down segments for AS Z"}
 
 
-## Path-Segment Construction Beacons (PCBs) {#pcbs}
-
-### PCB Message Format {#pcb-message}
+## Path-Segment Construction Beacons (PCBs) Message Format {#pcbs}
 
 Each PCB is comprised of a message containing the following top-level fields:
 
@@ -672,7 +670,7 @@ The following code block defines the PCB at the top level in Protobuf message fo
 
 The information to be included in each of these fields is described below.
 
-#### Segment Information {#seginfo}
+### Segment Information {#seginfo}
 
 ~~~
 
@@ -707,7 +705,7 @@ In the Protobuf message format, the information component of a PCB is called the
 
 **Note:** See [](#hopfield) for more information on the Hop Field message format. {{I-D.dekater-scion-dataplane}} provides a detailed description of the computation of the MAC and the verification of the Hop Field in the data plane.
 
-#### AS Entry {#as-entry}
+### AS Entry {#as-entry}
 
 ~~~
 
@@ -740,7 +738,7 @@ The code block below defines an AS entry `ASEntry` in Protobuf message format.
 
 It includes the following components:
 
-- `SignedMessage`: The signed component of an AS entry.
+- `SignedMessage`: The AS entry signed component.
 - `PathSegmentUnsignedExtensions`: Optional unsigned PCB extensions, further described in [](#pcb-ext).
 
 ~~~
@@ -790,7 +788,7 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 - For the specification of the signed body, see [](#ase-sign).
 - For the specification of the `signature` field, see [](#sign).
 
-##### AS Entry Signed Header {#ase-header}
+#### AS Entry Signed Header {#ase-header}
 
 ~~~
 
@@ -866,7 +864,7 @@ Its protobuf message definition is:
 
 For more information on signing and verifying control plane messages (such as PCBs), see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}. For more information on the TRC base and serial number, see 'Trust Root Configuration Specification' in {{I-D.dekater-scion-pki}}.
 
-##### AS Entry Signed Body {#ase-sign}
+#### AS Entry Signed Body {#ase-sign}
 
 ~~~
 
@@ -907,7 +905,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.
 - `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
-###### Hop Entry {#hopentry}
+##### Hop Entry {#hopentry}
 
 ~~~
 
@@ -942,7 +940,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
-###### Peer Entry {#peerentry}
+##### Peer Entry {#peerentry}
 
 ~~~
 
@@ -1012,7 +1010,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 ~~~
 {: #figure-15 title="Peer entry information, in the direction of beaconing"}
 
-###### Hop Field {#hopfield}
+##### Hop Field {#hopfield}
 
 ~~~
 
@@ -1054,7 +1052,7 @@ The following code block defines the Hop Field component `HopField` in Protobuf 
 - `exp_time`: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)`. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)). Therefore, the absolute expiration time of the Hop Field is the sum of these two values.
 - `mac`: The message authentication code (MAC) used in the data plane to verify the Hop Field, as described in {{I-D.dekater-scion-dataplane}}.
 
-##### AS Entry Signature {#sign}
+#### AS Entry Signature {#sign}
 
 Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield)). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
@@ -1236,7 +1234,7 @@ The propagation procedure includes the following elements:
 - `SegmentCreationService`: Specifies the service via which the extended PCB is propagated to the Control Service of the neighboring AS.
    - `Beacon`: Specifies the method that calls the Control Service at the neighboring AS in order to propagate the extended PCB.
 - `BeaconRequest`: Specifies the request message sent by the `Beacon` method to the Control Service of the neighboring AS. It contains the following element:
-   - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#pcb-message).
+   - `PathSegment`: Specifies the path segment to propagate to the neighboring AS. For more information on the Protobuf message type `PathSegment`, see [](#pcbs).
 - `BeaconResponse`: An empty message returned as an acknowledgement upon success.
 
 
