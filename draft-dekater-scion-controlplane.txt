@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 April 2026                                           S. Hitz
+Expires: 4 May 2026                                              S. Hitz
                                                          Anapaya Systems
-                                                         20 October 2025
+                                                         31 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 4 May 2026.
 
 Copyright Notice
 
@@ -168,6 +168,7 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-11
      draft-dekater-scion-controlplane-10
      draft-dekater-scion-controlplane-09
      draft-dekater-scion-controlplane-08
@@ -191,7 +192,7 @@ Table of Contents
    _Availability_ - to provide highly available communication that can
    send traffic over paths with optimal or required characteristics,
    quickly handle inter-domain link or router failures (both on the last
-   hop or anywhere along the path) and provide continuity in the
+   hop or anywhere along the path), and provide continuity in the
    presence of adversaries.
 
    _Security_ - to introduce a new approach to inter-domain path
@@ -504,7 +505,8 @@ Table of Contents
 
    *  A path segment between core ASes is a _core segment_.
 
-   Each path segment starts and/or ends at a core AS.
+   Each path segment starts and/or ends at a core AS.  Path segments are
+   not created between non-core ASes.
 
    All path segments may be reversed: a core segment can be used
    bidirectionally, an up segment can be converted into a down segment,
@@ -563,10 +565,12 @@ Table of Contents
 
                       Table 1: ISD number allocations
 
-   ISD numbers are currently allocated by Anapaya, a provider of SCION-
-   based networking software and solutions (see
-   [ISD-AS-assignments-Anapaya]).  This function is being transitioned
-   to the SCION Association ([ISD-AS-assignments]).
+   The wildcard ISD is not directly used by the control or data plane.
+   It may, however, be used by implementations to represent any ISD, for
+   example in path filters.  ISD numbers are currently allocated by
+   Anapaya, a provider of SCION-based networking software and solutions
+   (see [ISD-AS-assignments-Anapaya]).  This function is being
+   transitioned to the SCION Association ([ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -656,7 +660,8 @@ Table of Contents
    The text representation of SCION addresses MUST be <ISD>-<AS>, where
    <ISD> is the text representation of the ISD number, <AS> is the text
    representation of the AS number, and - is the literal ASCII character
-   0x2D.
+   0x2D.  This text representation is used for the ISD-AS number
+   attribute in the certificates (see [I-D.dekater-scion-pki]).
 
    For example, the text representation of AS number ff00:0:1 in ISD
    number 15 is 15-ff00:0:1.
@@ -1063,7 +1068,7 @@ Table of Contents
 
                    Figure 7: PCB Top-Level Message Format
 
-   Each PCB MUST consists of at least:
+   Each PCB MUST consist of at least:
 
    *  An information field with an identifier and a timestamp.
 
@@ -1827,7 +1832,7 @@ Table of Contents
 
    The _best PCBs set size_ should be:
 
-   *  For intra-AS beaconing (i.e. propagating to children ASes): at
+   *  For intra-ISD beaconing (i.e. propagating to children ASes): at
       most 50.
 
    *  For core beaconing (i.e. propagation between core ASes): at most 5
@@ -2881,6 +2886,9 @@ Table of Contents
    path diagnosis and recovery.  An extended specification can be found
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
+
+   *Note:* There is not currently a defined mechanism for converting
+   ICMP messages to SCMP messages, or vice-versa.
 
 7.1.  General Format
 
@@ -3960,6 +3968,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-11
+
+   *  Clarify use of wildcard ISD and ISD-AS text representation
 
 draft-dekater-scion-controlplane-10
 
