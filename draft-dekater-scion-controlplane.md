@@ -372,6 +372,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
+The wildcard ISD is not directly used by the control or data plane. It may, however, be used by implementations to represent any ISD, for example in path filters.
 ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
