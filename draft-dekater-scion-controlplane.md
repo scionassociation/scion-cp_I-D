@@ -343,7 +343,7 @@ SCION distinguishes the following types of path segments:
 - A path segment from a core AS to a non-core AS is a *down segment*.
 - A path segment between core ASes is a *core segment*.
 
-Each path segment starts and/or ends at a core AS.
+Each path segment starts and/or ends at a core AS. Path segments are not created between non-core ASes.
 
 All path segments may be reversed: a core segment can be used bidirectionally, an up segment can be converted into a down segment, and a down segment can be converted into an up segment depending on the direction of the end-to-end path. This means that all path segments can be used to send data traffic in both directions.
 
@@ -415,7 +415,7 @@ The text representation of SCION AS numbers is as follows:
 
 #### <ISD, AS> tuples
 
-The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D.
+The text representation of SCION addresses MUST be `<ISD>-<AS>`, where `<ISD>` is the text representation of the ISD number, `<AS>` is the text representation of the AS number, and `-` is the literal ASCII character 0x2D. This text representation is used for the ISD-AS number attribute in the certificates (see {{I-D.dekater-scion-pki}}).
 
 For example, the text representation of AS number ff00:0:1 in ISD number 15 is `15-ff00:0:1`.
 
@@ -1783,6 +1783,8 @@ The following code block provides the service resolution API Protobuf messages.
 The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
+
+**Note:** There is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
 
