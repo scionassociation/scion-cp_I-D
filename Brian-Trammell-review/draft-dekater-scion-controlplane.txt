@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 May 2026                                              S. Hitz
+Expires: 4 May 2026                                              S. Hitz
                                                          Anapaya Systems
-                                                         29 October 2025
+                                                         31 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 May 2026.
+   This Internet-Draft will expire on 4 May 2026.
 
 Copyright Notice
 
@@ -504,7 +504,8 @@ Table of Contents
 
    *  A path segment between core ASes is a _core segment_.
 
-   Each path segment starts and/or ends at a core AS.
+   Each path segment starts and/or ends at a core AS.  Path segments are
+   not created between non-core ASes.
 
    All path segments may be reversed: a core segment can be used
    bidirectionally, an up segment can be converted into a down segment,
@@ -656,7 +657,8 @@ Table of Contents
    The text representation of SCION addresses MUST be <ISD>-<AS>, where
    <ISD> is the text representation of the ISD number, <AS> is the text
    representation of the AS number, and - is the literal ASCII character
-   0x2D.
+   0x2D.  This text representation is used for the ISD-AS number
+   attribute in the certificates (see [I-D.dekater-scion-pki]).
 
    For example, the text representation of AS number ff00:0:1 in ISD
    number 15 is 15-ff00:0:1.
@@ -2881,6 +2883,9 @@ Table of Contents
    path diagnosis and recovery.  An extended specification can be found
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
+
+   *Note:* There is not currently a defined mechanism for converting
+   ICMP messages to SCMP messages, or vice-versa.
 
 7.1.  General Format
 
