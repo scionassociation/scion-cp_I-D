@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 May 2026                                              S. Hitz
+Expires: 4 May 2026                                              S. Hitz
                                                          Anapaya Systems
-                                                         30 October 2025
+                                                         31 October 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 May 2026.
+   This Internet-Draft will expire on 4 May 2026.
 
 Copyright Notice
 
@@ -99,11 +99,12 @@ Table of Contents
        2.1.1.  Peering Links
        2.1.2.  Appending Entries to a PCB
        2.1.3.  PCB Propagation - Illustrated Examples
-     2.2.  Path-Segment Construction Beacons (PCBs)
-       2.2.1.  PCB Message Format
-       2.2.2.  PCB Extensions
-       2.2.3.  PCB Validity
-       2.2.4.  Configuration
+     2.2.  Path-Segment Construction Beacons (PCBs) Message Format
+       2.2.1.  Segment Information
+       2.2.2.  AS Entry
+       2.2.3.  PCB Extensions
+       2.2.4.  PCB Validity
+       2.2.5.  Configuration
      2.3.  Propagation of PCBs
        2.3.1.  Reception of PCBs
        2.3.2.  Storing Candidate PCBs
@@ -987,9 +988,7 @@ Table of Contents
 
              Figure 5: Possible up- or down segments for AS Z
 
-2.2.  Path-Segment Construction Beacons (PCBs)
-
-2.2.1.  PCB Message Format
+2.2.  Path-Segment Construction Beacons (PCBs) Message Format
 
    Each PCB is comprised of a message containing the following top-level
    fields:
@@ -1018,7 +1017,7 @@ Table of Contents
       It is the encoded version of the component SegmentInformation,
       which provides basic information about the PCB.  The
       SegmentInformation component is specified in detail in
-      Section 2.2.1.1.
+      Section 2.2.1.
 
    *  as_entries: Contains the ASEntry component of all ASes on the path
       segment represented by this PCB.
@@ -1026,12 +1025,12 @@ Table of Contents
       -  ASEntry: The ASEntry component contains the complete path
          information of a specific AS that is part of the path segment
          represented by the PCB.  The ASEntry component is specified in
-         detail in Section 2.2.1.2.
+         detail in Section 2.2.2.
 
    The information to be included in each of these fields is described
    below.
 
-2.2.1.1.  Segment Information
+2.2.1.  Segment Information
 
    +----------------------------+
    |         Segment Info       |
@@ -1072,12 +1071,12 @@ Table of Contents
       plane and the originating core AS MUST fill this field with a
       cryptographically random number.
 
-   *Note:* See Section 2.2.1.2.2.3 for more information on the Hop Field
+   *Note:* See Section 2.2.2.2.3 for more information on the Hop Field
    message format.  [I-D.dekater-scion-dataplane] provides a detailed
    description of the computation of the MAC and the verification of the
    Hop Field in the data plane.
 
-2.2.1.2.  AS Entry
+2.2.2.  AS Entry
 
                               +--------------+
                               |   AS Entry   |
@@ -1111,10 +1110,10 @@ Table of Contents
 
    It includes the following components:
 
-   *  SignedMessage: The signed component of an AS entry.
+   *  SignedMessage: The AS entry signed component.
 
    *  PathSegmentUnsignedExtensions: Optional unsigned PCB extensions,
-      further described in Section 2.2.2.
+      further described in Section 2.2.3.
 
          +------------------------------------------------------+
          |                   Signed AS Entry                    |
@@ -1161,14 +1160,13 @@ Table of Contents
           bytes body = 2;
       }
 
-   *  For the specification of the signed header, see Section 2.2.1.2.1.
+   *  For the specification of the signed header, see Section 2.2.2.1.
 
-   *  For the specification of the signed body, see Section 2.2.1.2.2.
+   *  For the specification of the signed body, see Section 2.2.2.2.
 
-   *  For the specification of the signature field, see
-      Section 2.2.1.2.3.
+   *  For the specification of the signature field, see Section 2.2.2.3.
 
-2.2.1.2.1.  AS Entry Signed Header
+2.2.2.1.  AS Entry Signed Header
 
                          +-----------------+
                          |     Header      |
@@ -1215,7 +1213,7 @@ Table of Contents
    *  associated_data_length: Specifies the length of the data covered
       by the signature but not included within the header or body.  This
       data contains information about preceding AS entries, as described
-      in Section 2.2.1.2.3.  The value of this field is zero if no
+      in Section 2.2.2.3.  The value of this field is zero if no
       associated data is covered by the signature.
 
    The Header and SignatureAlgorithm protobuf message definitions are:
@@ -1266,7 +1264,7 @@ Table of Contents
    serial number, see 'Trust Root Configuration Specification' in
    [I-D.dekater-scion-pki].
 
-2.2.1.2.2.  AS Entry Signed Body
+2.2.2.2.  AS Entry Signed Body
 
                  +--------------------------------------+
                  |                 Body                 |
@@ -1306,10 +1304,10 @@ Table of Contents
    *  hop_entry: The hop entry (HopEntry) with the information required
       to forward this PCB through the current AS to the next AS.  This
       information is used in the data plane.  For a specification of the
-      hop entry, see Section 2.2.1.2.2.1.
+      hop entry, see Section 2.2.2.2.1.
 
    *  peer_entries: The list of optional peer entries (PeerEntry).  For
-      a specification of one peer entry, see Section 2.2.1.2.2.2.
+      a specification of one peer entry, see Section 2.2.2.2.2.
 
    *  mtu: The maximum transmission unit (MTU) that is supported by all
       intra-domain links within the current AS.  This value is set by
@@ -1321,9 +1319,9 @@ Table of Contents
       extensions defined here are part of the signed AS entry.  This
       field SHOULD therefore only contain extensions that include
       important metadata for which cryptographic protection is required.
-      For more information on PCB extensions, see Section 2.2.2.
+      For more information on PCB extensions, see Section 2.2.3.
 
-2.2.1.2.2.1.  Hop Entry
+2.2.2.2.1.  Hop Entry
 
            +-----------+
            | Hop Entry |
@@ -1354,7 +1352,7 @@ Table of Contents
    *  hop_field: Contains the authenticated information about the
       ingress and egress interfaces in the direction of beaconing.
       Routers need this information to forward packets through the
-      current AS.  For further specifications, see Section 2.2.1.2.2.3.
+      current AS.  For further specifications, see Section 2.2.2.2.3.
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
       ingress interface (in beaconing direction) of the hop being
@@ -1370,7 +1368,7 @@ Table of Contents
    framing or packet encapsulation (for links using an underlay
    network).
 
-2.2.1.2.2.2.  Peer Entry
+2.2.2.2.2.  Peer Entry
 
                          +--------------+
                          |  Peer Entry  |
@@ -1418,7 +1416,7 @@ Table of Contents
       peering link, in the direction of beaconing - see also Figure 6).
       The data plane needs this information to forward packets through
       the current AS.  For further specifications, see
-      Section 2.2.1.2.2.3.
+      Section 2.2.2.2.3.
 
    In this description, MTU and packet size are to be understood in the
    same sense as in [RFC1122].  That is, exclusive of any layer 2
@@ -1453,7 +1451,7 @@ Table of Contents
 
       Figure 14: Peer entry information, in the direction of beaconing
 
-2.2.1.2.2.3.  Hop Field
+2.2.2.2.3.  Hop Field
 
                          +-----------+
                          | Hop Entry |
@@ -1508,7 +1506,7 @@ Table of Contents
       seconds according to the formula: duration = (1 + exp_time) *
       (24*60*60/256).  The minimum duration is therefore 337.5 s.  This
       duration is relative to the PCB creation timestamp set in the
-      PCB's segment information component (see also Section 2.2.1.1).
+      PCB's segment information component (see also Section 2.2.1).
       Therefore, the absolute expiration time of the Hop Field is the
       sum of these two values.
 
@@ -1516,12 +1514,12 @@ Table of Contents
       to verify the Hop Field, as described in
       [I-D.dekater-scion-dataplane].
 
-2.2.1.2.3.  AS Entry Signature
+2.2.2.3.  AS Entry Signature
 
    Each AS entry MUST be signed with the AS certificate's private key
    K_i.  The certificate MUST have a validity period that is longer than
    the Hop Field absolute expiration time (described in
-   Section 2.2.1.2.2.3).  The signature Sig_i of an AS entry ASE_i is
+   Section 2.2.2.2.3).  The signature Sig_i of an AS entry ASE_i is
    computed over the AS entry's signed component.
 
    This is the input for the computation of the signature:
@@ -1531,7 +1529,7 @@ Table of Contents
    *  The segment_info component of the current AS.  This is the encoded
       version of the SegmentInformation component containing basic
       information about the path segment represented by the PCB.  For
-      the specification of SegmentInformation, see Section 2.2.1.1.
+      the specification of SegmentInformation, see Section 2.2.1.
 
    *  The signed header_and_body/signature combination of each previous
       AS on this specific path segment.
@@ -1561,7 +1559,7 @@ Table of Contents
                             ps.as_entries[i-1].signed.header_and_body ||
                             ps.as_entries[i-1].signed.signature
 
-2.2.2.  PCB Extensions
+2.2.3.  PCB Extensions
 
    AS entries in PCBs may carry a number of optional extensions that
    accumulate information while traveling across ASes.  Extensions can
@@ -1569,11 +1567,11 @@ Table of Contents
 
    *  Unsigned extensions PathSegmentUnsignedExtensions.  They are part
       of the AS entry component (the ASEntry message, see also
-      Section 2.2.1.2).
+      Section 2.2.2).
 
    *  Signed extensions PathSegmentExtensions.  They are part of the
       signed body component of an AS entry (the ASEntrySignedBody
-      message, see also Section 2.2.1.2.2).
+      message, see also Section 2.2.2.2).
 
    It is recommended to keep the size of signed extensions small, since
    they are an integral part of the input to every AS’s signature.
@@ -1590,28 +1588,28 @@ Table of Contents
        StaticInfoExtension static_info = 1;
      }
 
-2.2.3.  PCB Validity
+2.2.4.  PCB Validity
 
    To be valid (that is, usable to construct a valid path), a PCB MUST:
 
-   *  Contain valid AS Entry signatures (Section 2.2.1.2.3).
+   *  Contain valid AS Entry signatures (Section 2.2.2.3).
 
-   *  Have a timestamp (Section 2.2.1.1) that is not later than the
+   *  Have a timestamp (Section 2.2.1) that is not later than the
       current time at the point of validation, plus an allowance for
       differences between the clocks of the validator and originator.
 
-   *  Contain only unexpired hops (Section 2.2.1.2.2.3).
+   *  Contain only unexpired hops (Section 2.2.2.2.3).
 
    It is recommend to use the hopfield expiration time (that is 337.5
-   seconds, see Section 2.2.1.2.2.3) as the allowance for differences
+   seconds, see Section 2.2.2.2.3) as the allowance for differences
    between the clocks of the validator and originator.
 
    For the purpose of validation, a hop is considered expired if its
-   absolute expiration time, calculated as defined in
-   Section 2.2.1.2.2.3, is later than the current time + allowance at
-   the point of validation.
+   absolute expiration time, calculated as defined in Section 2.2.2.2.3,
+   is later than the current time + allowance at the point of
+   validation.
 
-2.2.4.  Configuration
+2.2.5.  Configuration
 
    For the purpose of constructing and propagating path segments, an AS
    Control Service must be configured with links to neighboring ASes.
@@ -1643,7 +1641,7 @@ Table of Contents
    following checks:
 
    1.  PCB validity: It verifies the validity of the PCB (see
-       Section 2.2.3) and invalid PCBs MUST be discarded.  The PCB
+       Section 2.2.4) and invalid PCBs MUST be discarded.  The PCB
        contains the version numbers of the TRC(s) and certificate(s)
        that MUST be used to verify its signatures which enables the
        Control Service to check whether it has the relevant TRC(s) and
@@ -1819,10 +1817,9 @@ Table of Contents
        neighboring child ASes, based on a selection algorithm specific
        for this AS.
 
-   2.  The Control Service MUST add a new AS entry (see
-       Section 2.2.1.2), including any Peer Entry information (see
-       Section 2.2.1.2.2.2) the AS is configured to advertise to every
-       selected PCB.
+   2.  The Control Service MUST add a new AS entry (see Section 2.2.2),
+       including any Peer Entry information (see Section 2.2.2.2.2) the
+       AS is configured to advertise to every selected PCB.
 
    3.  The Control Service MUST sign each selected, extended PCB and
        append the computed signature.
@@ -1889,7 +1886,7 @@ Table of Contents
 
       -  PathSegment: Specifies the path segment to propagate to the
          neighboring AS.  For more information on the Protobuf message
-         type PathSegment, see Section 2.2.1.
+         type PathSegment, see Section 2.2.
 
    *  BeaconResponse: An empty message returned as an acknowledgement
       upon success.
@@ -2047,8 +2044,8 @@ Table of Contents
    PCBs with N hops may be validated up to N intervals (so maximally N
    minutes) after origination which creates a constraint on the
    expiration of hops.  Hops of the minimal expiration time (337.5
-   seconds - see Section 2.2.1.2.2.3) would make any PCB describing a
-   path longer than 5 hops expire.  For this reason it is unadvisable to
+   seconds - see Section 2.2.2.2.3) would make any PCB describing a path
+   longer than 5 hops expire.  For this reason it is unadvisable to
    create hops with a short expiration time - they SHOULD be around 6
    hours.
 
@@ -2299,15 +2296,14 @@ Table of Contents
    *Note:*
 
    *  For more information on the signed body component of an AS entry,
-      see Section 2.2.1.2.2.
+      see Section 2.2.2.2.
 
-   *  For more information on a peer entry, see Section 2.2.1.2.2.2.
+   *  For more information on a peer entry, see Section 2.2.2.2.2.
 
    *  For more information on the Hop Field component, see
-      Section 2.2.1.2.2.3.
+      Section 2.2.2.2.3.
 
-   *  For more information on signing an AS entry, see
-      Section 2.2.1.2.3.
+   *  For more information on signing an AS entry, see Section 2.2.2.3.
 
 4.1.2.  Transforming a PCB into an Up Segment
 
@@ -2427,11 +2423,11 @@ Table of Contents
    construction:
 
    *  The MTU of each intra-AS network traversed (represented by the MTU
-      field of the corresponding AS Entries (Section 2.2.1.2.2))
+      field of the corresponding AS Entries (Section 2.2.2.2))
 
    *  The MTU of each inter-AS link or peering link (indicated by the
-      ingress_mtu field of each Section 2.2.1.2.2.1 or the peer_mtu
-      field of each Section 2.2.1.2.2.2 used)
+      ingress_mtu field of each Section 2.2.2.2.1 or the peer_mtu field
+      of each Section 2.2.2.2.2 used)
 
    Such information is then made available to source endpoints during
    the path lookup process (See Section 5).  Note that the destination
