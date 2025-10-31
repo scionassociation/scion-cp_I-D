@@ -1829,7 +1829,7 @@ Table of Contents
 
    The _best PCBs set size_ should be:
 
-   *  For intra-AS beaconing (i.e. propagating to children ASes): at
+   *  For intra-ISD beaconing (i.e. propagating to children ASes): at
       most 50.
 
    *  For core beaconing (i.e. propagation between core ASes): at most 5
