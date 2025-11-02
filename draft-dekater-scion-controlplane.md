@@ -2216,11 +2216,10 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 
 
-~~~
-
+~~~aasvg
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
-|         |          | CS (A)  |          | CS (B)  |         | CS (C)  |
+|         |          | CS  (A) |          | CS  (B) |         | CS  (C) |
 +--+-+-+--+          +----+----+          +----+----+         +----+----+
    | | |                  |                    |                   |
    | | |                  |                    |                   |
@@ -2235,9 +2234,9 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (up,[A->B])|                    |                   |
    | | |                  |                    |                   |
    | | |                  |                    |                   |
-   | | |request (core,*,*)|                    |                   |
+   | | |request (core,0,0)|                    |                   |
    | +------------------->|                    |                   |
-   | | |                  |request (core,B,*)  |                   |
+   | | |                  |request (core,B,0)  |                   |
    | | |                  +------------------->|                   |
    | | |                  |<-- -- -- -- -- -- -+                   |
    | | |                  |  reply(core,[B->C])|                   |
@@ -2245,7 +2244,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (core,[B->C])                   |                   |
    | | |                  |                    |                   |
    | | |                  |                    |                   |
-   | | |request (down,*,D)|                    |                   |
+   | | |request (down,0,D)|                    |                   |
    | | |           +------+------+             |                   |
    | | +---------->|send requests|             |                   |
    | | |           | in parallel |             |                   |
@@ -2261,8 +2260,8 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | |                 | |<-- -- -- -- -- -- -- -- -- -- -- -- --+
    | | |                 | |                   | reply(down,[C->D])|
    | | |                 | |                   |                   |
-   | | |<-- -- -- -- -- -+++                   |                   |
-   | | | reply (down,[B->D, C->D])             |                   |
+   | | |<--- -- -- -- -- +-+                   |                   |
+   | | |  reply (down,[B->D, C->D])            |                   |
    | | |                  |                    |                   |
 +--+-+-+---------+        |                    |                   |
 |Combine Segments|        |                    |                   |
@@ -2270,17 +2269,15 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |                    |                    |                   |
      |                    |                    |                   |
      |                    |                    |                   |
+~~~
+{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, 0, 0) is for all pairs of core ASes in the source ISD. Similarly, (down, 0, D) is for down segments between any core AS in the source ISD and destination D."}
+
+
 
 ~~~
-{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
-
-
-
-~~~
-	
 +---------+     +---------+     +---------+     +---------+     +---------+
 |Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
-|         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
+|         |     | CS  (A) |     | CS  (B) |     | CS  (E) |     | CS  (F) |
 +--+-+-+--+     +----+----+     +----+----+     +----+----+     +----+----+
    | | |             |               |               |               |
    | | |             |               |               |               |
@@ -2330,7 +2327,6 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |               |               |               |               |
      |               |               |               |               |
      |               |               |               |               |
-
 ~~~
 {: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
 
