@@ -1213,7 +1213,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
-                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-path-segment-construction-b" class="internal xref">Path-Segment Construction Beacons (PCBs) Message Format</a></p>
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-pcb-message-format" class="internal xref">PCB Message Format</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.1">
                     <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="auto internal xref">2.2.1</a>.  <a href="#name-segment-information" class="internal xref">Segment Information</a></p>
@@ -2128,8 +2128,8 @@ Path Segment 4 |             |     |             |     |             |
 </div>
 <div id="pcbs">
 <section id="section-2.2">
-        <h3 id="name-path-segment-construction-b">
-<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-segment-construction-b" class="section-name selfRef">Path-Segment Construction Beacons (PCBs) Message Format</a>
+        <h3 id="name-pcb-message-format">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-pcb-message-format" class="section-name selfRef">PCB Message Format</a>
         </h3>
 <p id="section-2.2-1">Each PCB is comprised of a message containing the following top-level fields:<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <span id="name-pcb-top-level-message-forma"></span><div id="_figure-6">
@@ -2222,7 +2222,7 @@ Path Segment 4 |             |     |             |     |             |
               <p id="section-2.2.1-5.2.1"><code>segment_id</code>: The 16-bit identifier of this PCB and the corresponding path segment. The segment ID is <span class="bcp14">REQUIRED</span> for the computation of the message authentication code (MAC) of an AS's Hop Field. The MAC is used for Hop Field verification in the data plane and the originating core AS <span class="bcp14">MUST</span> fill this field with a cryptographically random number.<a href="#section-2.2.1-5.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.1-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a> for more information on the Hop Field message format. <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> provides a detailed description of the computation of the MAC and the verification of the Hop Field in the data plane.<a href="#section-2.2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-6"><strong>Note:</strong> See <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a> for more information on the Hop Field message format. <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> provides a detailed description of the computation of the MAC and the verification of the Hop Field in the data plane.<a href="#section-2.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="as-entry">
@@ -2331,7 +2331,7 @@ Path Segment 4 |             |     |             |     |             |
               <p id="section-2.2.2-16.2.1">For the specification of the signed body, see <a href="#ase-sign" class="auto internal xref">Section 2.2.2.2</a>.<a href="#section-2.2.2-16.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.2-16.3">
-              <p id="section-2.2.2-16.3.1">For the specification of the <code>signature</code> field, see <a href="#sign" class="auto internal xref">Section 2.2.2.3</a>.<a href="#section-2.2.2-16.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-16.3.1">For the specification of the <code>signature</code> field, see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>.<a href="#section-2.2.2-16.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <div id="ase-header">
@@ -2382,7 +2382,7 @@ Path Segment 4 |             |     |             |     |             |
                 <p id="section-2.2.2.1-3.4.1"><code>metadata</code>: it may include metadata. This field is <span class="bcp14">OPTIONAL</span>. While it is part of the generic <code>Header</code> message format, it <span class="bcp14">MUST</span> be empty in an AS entry signed header.<a href="#section-2.2.2.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.1-3.5">
-                <p id="section-2.2.2.1-3.5.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.2.3</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.2.1-3.5.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.1-3.5.1"><code>associated_data_length</code>: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>. The value of this field is zero if no associated data is covered by the signature.<a href="#section-2.2.2.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-2.2.2.1-4">The <code>Header</code> and <code>SignatureAlgorithm</code> protobuf message definitions are:<a href="#section-2.2.2.1-4" class="pilcrow">¶</a></p>
@@ -2483,10 +2483,10 @@ Path Segment 4 |             |     |             |     |             |
                 <p id="section-2.2.2.2-5.2.1"><code>next_isd_as</code>: The ISD-AS number of the downstream AS to which the PCB <span class="bcp14">MUST</span> be forwarded. The presence of this field prevents path hijacking attacks, as further discussed in <a href="#path-hijack" class="auto internal xref">Section 8.3.1</a>.<a href="#section-2.2.2.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.2-5.3">
-                <p id="section-2.2.2.2-5.3.1"><code>hop_entry</code>: The hop entry (<code>HopEntry</code>) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see <a href="#hopentry" class="auto internal xref">Section 2.2.2.2.1</a>.<a href="#section-2.2.2.2-5.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.2-5.3.1"><code>hop_entry</code>: The hop entry (<code>HopEntry</code>) with the information required to forward this PCB through the current AS to the next AS. This information is used in the data plane. For a specification of the hop entry, see <a href="#hopentry" class="auto internal xref">Section 2.2.2.3</a>.<a href="#section-2.2.2.2-5.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.2-5.4">
-                <p id="section-2.2.2.2-5.4.1"><code>peer_entries</code>: The list of optional peer entries (<code>PeerEntry</code>). For a specification of one peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.2.2.2</a>.<a href="#section-2.2.2.2-5.4.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.2-5.4.1"><code>peer_entries</code>: The list of optional peer entries (<code>PeerEntry</code>). For a specification of one peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a>.<a href="#section-2.2.2.2-5.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.2-5.5">
                 <p id="section-2.2.2.2-5.5.1"><code>mtu</code>: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.<a href="#section-2.2.2.2-5.5.1" class="pilcrow">¶</a></p>
@@ -2495,14 +2495,16 @@ Path Segment 4 |             |     |             |     |             |
                 <p id="section-2.2.2.2-5.6.1"><code>extensions</code>: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field <span class="bcp14">SHOULD</span> therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see <a href="#pcb-ext" class="auto internal xref">Section 2.2.3</a>.<a href="#section-2.2.2.2-5.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+</section>
+</div>
 <div id="hopentry">
-<section id="section-2.2.2.2.1">
-              <h6 id="name-hop-entry">
-<a href="#section-2.2.2.2.1" class="section-number selfRef">2.2.2.2.1. </a><a href="#name-hop-entry" class="section-name selfRef">Hop Entry</a>
-              </h6>
+<section id="section-2.2.2.3">
+            <h5 id="name-hop-entry">
+<a href="#section-2.2.2.3" class="section-number selfRef">2.2.2.3. </a><a href="#name-hop-entry" class="section-name selfRef">Hop Entry</a>
+            </h5>
 <span id="name-hop-entry-2"></span><div id="_figure-12">
 <figure id="figure-12">
-                <div class="alignLeft art-text artwork" id="section-2.2.2.2.1-1.1">
+              <div class="alignLeft art-text artwork" id="section-2.2.2.3-1.1">
 <pre>
         +-----------+
         | Hop Entry |
@@ -2519,37 +2521,37 @@ Path Segment 4 |             |     |             |     |             |
 </div>
 <figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-hop-entry-2" class="selfRef">Hop Entry</a>
-                </figcaption></figure>
+              </figcaption></figure>
 </div>
-<p id="section-2.2.2.2.1-2">Each body of an AS entry <span class="bcp14">MUST</span> contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).<a href="#section-2.2.2.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.2.1-3">The following code block defines the hop entry component <code>HopEntry</code> in Protobuf message format:<a href="#section-2.2.2.2.1-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.2.2.1-4">
+<p id="section-2.2.2.3-2">Each body of an AS entry <span class="bcp14">MUST</span> contain exactly one hop entry component. The hop entry component specifies forwarding information which the data plane requires to create the hop through the current AS (in the direction of the beaconing).<a href="#section-2.2.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.3-3">The following code block defines the hop entry component <code>HopEntry</code> in Protobuf message format:<a href="#section-2.2.2.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2.3-4">
 <pre>
    message HopEntry {
        HopField hop_field = 1;
        uint32 ingress_mtu = 2;
    }
-</pre><a href="#section-2.2.2.2.1-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.2.3-4" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-2.2.2.2.1-5.1">
-                  <p id="section-2.2.2.2.1-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>.<a href="#section-2.2.2.2.1-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2.3-5.1">
+                <p id="section-2.2.2.3-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>.<a href="#section-2.2.2.3-5.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.1-5.2">
-                  <p id="section-2.2.2.2.1-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item. Path MTU is further discussed in <a href="#path-mtu" class="auto internal xref">Section 4.4</a>.<a href="#section-2.2.2.2.1-5.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.3-5.2">
+                <p id="section-2.2.2.3-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured. Current practice to make it a configuration item. Path MTU is further discussed in <a href="#path-mtu" class="auto internal xref">Section 4.4</a>.<a href="#section-2.2.2.3-5.2.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
-<p id="section-2.2.2.2.1-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.2.1-6" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-2.2.2.3-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="peerentry">
-<section id="section-2.2.2.2.2">
-              <h6 id="name-peer-entry">
-<a href="#section-2.2.2.2.2" class="section-number selfRef">2.2.2.2.2. </a><a href="#name-peer-entry" class="section-name selfRef">Peer Entry</a>
-              </h6>
+<section id="section-2.2.2.4">
+            <h5 id="name-peer-entry">
+<a href="#section-2.2.2.4" class="section-number selfRef">2.2.2.4. </a><a href="#name-peer-entry" class="section-name selfRef">Peer Entry</a>
+            </h5>
 <span id="name-peer-entry-2"></span><div id="_figure-14">
 <figure id="figure-13">
-                <div class="alignLeft art-text artwork" id="section-2.2.2.2.2-1.1">
+              <div class="alignLeft art-text artwork" id="section-2.2.2.4-1.1">
 <pre>
                       +--------------+
                       |  Peer Entry  |
@@ -2566,11 +2568,11 @@ Path Segment 4 |             |     |             |     |             |
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-peer-entry-2" class="selfRef">Peer Entry</a>
-                </figcaption></figure>
+              </figcaption></figure>
 </div>
-<p id="section-2.2.2.2.2-2">By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.<a href="#section-2.2.2.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.2.2-3">The following code block defines the peer entry component <code>PeerEntry</code> in Protobuf message format:<a href="#section-2.2.2.2.2-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.2.2.2-4">
+<p id="section-2.2.2.4-2">By means of a peer entry, an AS can announce that it has a peering link to another AS. A peer entry is an optional component of a PCB - it is only included if there is a peering link to a peer AS.<a href="#section-2.2.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.4-3">The following code block defines the peer entry component <code>PeerEntry</code> in Protobuf message format:<a href="#section-2.2.2.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2.4-4">
 <pre>
    message PeerEntry {
        uint64 peer_isd_as = 1;
@@ -2578,26 +2580,26 @@ Path Segment 4 |             |     |             |     |             |
        uint32 peer_mtu = 3;
        HopField hop_field = 4;
    }
-</pre><a href="#section-2.2.2.2.2-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.2.4-4" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-2.2.2.2.2-5.1">
-                  <p id="section-2.2.2.2.2-5.1.1"><code>peer_isd_as</code>: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.<a href="#section-2.2.2.2.2-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2.4-5.1">
+                <p id="section-2.2.2.4-5.1.1"><code>peer_isd_as</code>: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.<a href="#section-2.2.2.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.2-5.2">
-                  <p id="section-2.2.2.2.2-5.2.1"><code>peer_interface</code>: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.<a href="#section-2.2.2.2.2-5.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.4-5.2">
+                <p id="section-2.2.2.4-5.2.1"><code>peer_interface</code>: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.<a href="#section-2.2.2.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.2-5.3">
-                  <p id="section-2.2.2.2.2-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.2.2.2-5.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.4-5.3">
+                <p id="section-2.2.2.4-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.2.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.2-5.4">
-                  <p id="section-2.2.2.2.2-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 6</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>.<a href="#section-2.2.2.2.2-5.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.4-5.4">
+                <p id="section-2.2.2.4-5.4.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 6</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>.<a href="#section-2.2.2.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
-<p id="section-2.2.2.2.2-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.2.2-6" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-2.2.2.4-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.4-6" class="pilcrow">¶</a></p>
 <span id="name-peer-entry-information-in-t"></span><div id="_figure-15">
 <figure id="figure-14">
-                <div class="alignLeft art-text artwork" id="section-2.2.2.2.2-7.1">
+              <div class="alignLeft art-text artwork" id="section-2.2.2.4-7.1">
 <pre>
    +-----------+
    |           |
@@ -2629,18 +2631,18 @@ Path Segment 4 |             |     |             |     |             |
 </div>
 <figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-peer-entry-information-in-t" class="selfRef">Peer entry information, in the direction of beaconing</a>
-                </figcaption></figure>
+              </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="hopfield">
-<section id="section-2.2.2.2.3">
-              <h6 id="name-hop-field">
-<a href="#section-2.2.2.2.3" class="section-number selfRef">2.2.2.2.3. </a><a href="#name-hop-field" class="section-name selfRef">Hop Field</a>
-              </h6>
+<section id="section-2.2.2.5">
+            <h5 id="name-hop-field">
+<a href="#section-2.2.2.5" class="section-number selfRef">2.2.2.5. </a><a href="#name-hop-field" class="section-name selfRef">Hop Field</a>
+            </h5>
 <span id="name-hop-field-2"></span><div id="_figure-13">
 <figure id="figure-15">
-                <div class="alignLeft art-text artwork" id="section-2.2.2.2.3-1.1">
+              <div class="alignLeft art-text artwork" id="section-2.2.2.5-1.1">
 <pre>
                       +-----------+
                       | Hop Entry |
@@ -2657,12 +2659,12 @@ Path Segment 4 |             |     |             |     |             |
 </div>
 <figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-hop-field-2" class="selfRef">Hop Field</a>
-                </figcaption></figure>
+              </figcaption></figure>
 </div>
-<p id="section-2.2.2.2.3-2">The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.<a href="#section-2.2.2.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.2.3-3">The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS <span class="bcp14">MUST</span> use the same algorithm. Implementations <span class="bcp14">MUST</span> also support the Default Hop Field MAC algorithm. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.<a href="#section-2.2.2.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.2.3-4">The following code block defines the Hop Field component <code>HopField</code> in Protobuf message format:<a href="#section-2.2.2.2.3-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.2.2.3-5">
+<p id="section-2.2.2.5-2">The Hop Field, part of both hop entries and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.<a href="#section-2.2.2.5-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.5-3">The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS <span class="bcp14">MUST</span> use the same algorithm. Implementations <span class="bcp14">MUST</span> also support the Default Hop Field MAC algorithm. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.<a href="#section-2.2.2.5-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.5-4">The following code block defines the Hop Field component <code>HopField</code> in Protobuf message format:<a href="#section-2.2.2.5-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2.5-5">
 <pre>
    message HopField {
        uint64 ingress = 1;
@@ -2671,53 +2673,51 @@ Path Segment 4 |             |     |             |     |             |
        bytes mac = 4;
    }
 
-</pre><a href="#section-2.2.2.2.3-5" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.2.5-5" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-2.2.2.2.3-6.1">
-                  <p id="section-2.2.2.2.3-6.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).<a href="#section-2.2.2.2.3-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2.5-6.1">
+                <p id="section-2.2.2.5-6.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction, that is, in the direction of beaconing through the current AS).<a href="#section-2.2.2.5-6.1.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
-<p id="section-2.2.2.2.3-7"><strong>Note:</strong> For the core AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST</span> be set to the "unspecified" value (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section Terminology).<a href="#section-2.2.2.2.3-7" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-2.2.2.5-7"><strong>Note:</strong> For the core AS that initiates the PCB, the ingress interface identifier <span class="bcp14">MUST</span> be set to the "unspecified" value (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section Terminology).<a href="#section-2.2.2.5-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.2.2.3-8.1">
-                  <p id="section-2.2.2.2.3-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.2.2.3-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2.5-8.1">
+                <p id="section-2.2.2.5-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.2.5-8.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.3-8.2">
-                  <p id="section-2.2.2.2.3-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1</a>). Therefore, the absolute expiration time of the Hop Field is the sum of these two values.<a href="#section-2.2.2.2.3-8.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.5-8.2">
+                <p id="section-2.2.2.5-8.2.1"><code>exp_time</code>: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: <code>duration = (1 + exp_time) * (24*60*60/256)</code>. The minimum duration is therefore 337.5 s. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also <a href="#seginfo" class="auto internal xref">Section 2.2.1</a>). Therefore, the absolute expiration time of the Hop Field is the sum of these two values.<a href="#section-2.2.2.5-8.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-2.2.2.2.3-8.3">
-                  <p id="section-2.2.2.2.3-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the Hop Field, as described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.2.2.2.3-8.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.5-8.3">
+                <p id="section-2.2.2.5-8.3.1"><code>mac</code>: The message authentication code (MAC) used in the data plane to verify the Hop Field, as described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.2.2.5-8.3.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
-</section>
-</div>
+            </ul>
 </section>
 </div>
 <div id="sign">
-<section id="section-2.2.2.3">
+<section id="section-2.2.2.6">
             <h5 id="name-as-entry-signature">
-<a href="#section-2.2.2.3" class="section-number selfRef">2.2.2.3. </a><a href="#name-as-entry-signature" class="section-name selfRef">AS Entry Signature</a>
+<a href="#section-2.2.2.6" class="section-number selfRef">2.2.2.6. </a><a href="#name-as-entry-signature" class="section-name selfRef">AS Entry Signature</a>
             </h5>
-<p id="section-2.2.2.3-1">Each AS entry <span class="bcp14">MUST</span> be signed with the AS certificate's private key K<sub>i</sub>. The certificate <span class="bcp14">MUST</span> have a validity period that is longer than the Hop Field absolute expiration time (described in <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.<a href="#section-2.2.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.3-2">This is the input for the computation of the signature:<a href="#section-2.2.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-1">Each AS entry <span class="bcp14">MUST</span> be signed with the AS certificate's private key K<sub>i</sub>. The certificate <span class="bcp14">MUST</span> have a validity period that is longer than the Hop Field absolute expiration time (described in <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.<a href="#section-2.2.2.6-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-2">This is the input for the computation of the signature:<a href="#section-2.2.2.6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.2.3-3.1">
-                <p id="section-2.2.2.3-3.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.2.3-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.2.6-3.1">
+                <p id="section-2.2.2.6-3.1.1">The signed header and body of the current AS (<code>header_and_body</code>).<a href="#section-2.2.2.6-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.2.2.3-3.2">
-                <p id="section-2.2.2.3-3.2.1">The <code>segment_info</code> component of the current AS. This is the encoded version of the <code>SegmentInformation</code> component containing basic information about the path segment represented by the PCB. For the specification of <code>SegmentInformation</code>, see <a href="#seginfo" class="auto internal xref">Section 2.2.1</a>.<a href="#section-2.2.2.3-3.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.6-3.2">
+                <p id="section-2.2.2.6-3.2.1">The <code>segment_info</code> component of the current AS. This is the encoded version of the <code>SegmentInformation</code> component containing basic information about the path segment represented by the PCB. For the specification of <code>SegmentInformation</code>, see <a href="#seginfo" class="auto internal xref">Section 2.2.1</a>.<a href="#section-2.2.2.6-3.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.2.2.3-3.3">
-                <p id="section-2.2.2.3-3.3.1">The signed <code>header_and_body</code>/<code>signature</code> combination of each previous AS on this specific path segment.<a href="#section-2.2.2.3-3.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2.2.6-3.3">
+                <p id="section-2.2.2.6-3.3.1">The signed <code>header_and_body</code>/<code>signature</code> combination of each previous AS on this specific path segment.<a href="#section-2.2.2.6-3.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.2.3-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.2.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.3-5">Sig<sub>i</sub> =
-K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )<a href="#section-2.2.2.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.3-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.2.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.3-7">Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:<a href="#section-2.2.2.3-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.2.2.3-8">
+<p id="section-2.2.2.6-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.2.6-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-5">Sig<sub>i</sub> =
+K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )<a href="#section-2.2.2.6-5" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.2.6-6" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-7">Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:<a href="#section-2.2.2.6-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2.2.6-8">
 <pre>
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
@@ -2727,7 +2727,7 @@ associated_data(ps, i) = ps.segment_info ||
                          ...
                          ps.as_entries[i-1].signed.header_and_body ||
                          ps.as_entries[i-1].signed.signature
-</pre><a href="#section-2.2.2.3-8" class="pilcrow">¶</a>
+</pre><a href="#section-2.2.2.6-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2766,17 +2766,17 @@ associated_data(ps, i) = ps.segment_info ||
 <p id="section-2.2.4-1">To be valid (that is, usable to construct a valid path), a PCB <span class="bcp14">MUST</span>:<a href="#section-2.2.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.4-2.1">
-              <p id="section-2.2.4-2.1.1">Contain valid AS Entry signatures (<a href="#sign" class="auto internal xref">Section 2.2.2.3</a>).<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.4-2.1.1">Contain valid AS Entry signatures (<a href="#sign" class="auto internal xref">Section 2.2.2.6</a>).<a href="#section-2.2.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.4-2.2">
               <p id="section-2.2.4-2.2.1">Have a timestamp (<a href="#seginfo" class="auto internal xref">Section 2.2.1</a>) that is not later than the current time at the point of validation, plus an allowance for differences between the clocks of the validator and originator.<a href="#section-2.2.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.4-2.3">
-              <p id="section-2.2.4-2.3.1">Contain only unexpired hops (<a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>).<a href="#section-2.2.4-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.4-2.3.1">Contain only unexpired hops (<a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-2.2.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.4-3">It is recommend to use the hopfield expiration time (that is 337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>) as the allowance for differences between the clocks of the validator and originator.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.4-4">For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>, is later than the current time + allowance at the point of validation.<a href="#section-2.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.4-3">It is recommend to use the hopfield expiration time (that is 337.5 seconds, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) as the allowance for differences between the clocks of the validator and originator.<a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.4-4">For the purpose of validation, a hop is considered expired if its absolute expiration time, calculated as defined in <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>, is later than the current time + allowance at the point of validation.<a href="#section-2.2.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="configuration">
@@ -2928,7 +2928,7 @@ In current practice the intra-ISD set size is typically 20. Current practice als
                 <p id="section-2.3.5.1-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.5.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.5.1-2.2">
-                <p id="section-2.3.5.1-2.2.1">The Control Service <span class="bcp14">MUST</span> add a new AS entry (see <a href="#as-entry" class="auto internal xref">Section 2.2.2</a>), including any Peer Entry information (see <a href="#peerentry" class="auto internal xref">Section 2.2.2.2.2</a>) the AS is configured to advertise to every selected PCB.<a href="#section-2.3.5.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.5.1-2.2.1">The Control Service <span class="bcp14">MUST</span> add a new AS entry (see <a href="#as-entry" class="auto internal xref">Section 2.2.2</a>), including any Peer Entry information (see <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a>) the AS is configured to advertise to every selected PCB.<a href="#section-2.3.5.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-2.3.5.1-2.3">
                 <p id="section-2.3.5.1-2.3.1">The Control Service <span class="bcp14">MUST</span> sign each selected, extended PCB and append the computed signature.<a href="#section-2.3.5.1-2.3.1" class="pilcrow">¶</a></p>
@@ -3202,7 +3202,7 @@ SCION-unaware endpoints may interface with a SCION network through a SCION IP Ga
             <p id="section-3.3-2.2.1">A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <p id="section-3.3-5">Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
@@ -3335,13 +3335,13 @@ In comparison to these time scales, clock offsets in the order of minutes are im
               <p id="section-4.1.1-5.1.1">For more information on the signed body component of an AS entry, see <a href="#ase-sign" class="auto internal xref">Section 2.2.2.2</a>.<a href="#section-4.1.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.1-5.2">
-              <p id="section-4.1.1-5.2.1">For more information on a peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.2.2.2</a>.<a href="#section-4.1.1-5.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-5.2.1">For more information on a peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a>.<a href="#section-4.1.1-5.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.1-5.3">
-              <p id="section-4.1.1-5.3.1">For more information on the Hop Field component, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.2.3</a>.<a href="#section-4.1.1-5.3.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-5.3.1">For more information on the Hop Field component, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>.<a href="#section-4.1.1-5.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.1-5.4">
-              <p id="section-4.1.1-5.4.1">For more information on signing an AS entry, see <a href="#sign" class="auto internal xref">Section 2.2.2.3</a>.<a href="#section-4.1.1-5.4.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-5.4.1">For more information on signing an AS entry, see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>.<a href="#section-4.1.1-5.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -3469,7 +3469,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-4.4-2.1.1">The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding <span><a href="#ase-sign" class="internal xref">AS Entries</a> (<a href="#ase-sign" class="auto internal xref">Section 2.2.2.2</a>)</span>)<a href="#section-4.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.4-2.2">
-            <p id="section-4.4-2.2.1">The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each <a href="#hopentry" class="auto internal xref">Section 2.2.2.2.1</a> or the peer_mtu field of each <a href="#peerentry" class="auto internal xref">Section 2.2.2.2.2</a> used)<a href="#section-4.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.4-2.2.1">The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each <a href="#hopentry" class="auto internal xref">Section 2.2.2.3</a> or the peer_mtu field of each <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a> used)<a href="#section-4.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-4.4-3">Such information is then made available to source endpoints during the path lookup process (See <a href="#lookup" class="auto internal xref">Section 5</a>). Note that the destination endpoint does not receive such information, therefore when using path reversibility, it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes. When looking up a path they should therefore assume that all hops are also constrained by the intra-AS MTU of each AS traversed.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
