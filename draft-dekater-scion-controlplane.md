@@ -2274,7 +2274,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
 
 
 
-~~~
+~~~aasvg
 +---------+     +---------+     +---------+     +---------+     +---------+
 |Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
 |         |     | CS  (A) |     | CS  (B) |     | CS  (E) |     | CS  (F) |
@@ -2293,9 +2293,9 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (up,[A->B])           |               |               |
    | | |             |               |               |               |
    | | |             |               |               |               |
-   | | |request (core,*,(2,*))       |               |               |
+   | | |request (core,0,(2,0))       |               |               |
    | +-------------->|               |               |               |
-   | | |             |request (core,*,(2,*))         |               |
+   | | |             |request (core,0,(2,0))         |               |
    | | |             +-------------->|               |               |
    | | |             |<- -- -- -- -- +               |               |
    | | |             | reply (core,[B->E,B->F])      |               |
@@ -2303,8 +2303,8 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (core,[B->E,B->F])    |               |               |
    | | |             |               |               |               |
    | | |             |               |               |               |
-   | | |request (down,(2,*),G)       |               |               |
-   | | |      +------+------+        |               |               |
+   | | | request (down,(2,0),G)      |               |               |
+   | | |      +-------------.        |               |               |
    | | +----->|send requests|        |               |               |
    | | |      | in parallel |        |               |               |
    | | |      +-----+-+-----+        |               |               |
@@ -2318,7 +2318,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | |            | +--------------------------------------------->|
    | | |            | |<- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -+
    | | |            | |              |               | reply (down,[F->G])
-   | | |<- -- -- -- +++              |               |               |
+   | | |<- -- -- -- +-+              |               |               |
    | | | reply (down,[E->G,F->G])    |               |               |
    | | |             |               |               |               |
 +--+-+-+---------+   |               |               |               |
@@ -2328,7 +2328,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |               |               |               |               |
      |               |               |               |               |
 ~~~
-{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
+{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, 0, (2, 0)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, 0), G) is for down segments between any core AS in ISD 2 and destination G."}
 
 
 # Change Log
@@ -2342,7 +2342,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Clarify use of wildcard ISD and ISD-AS text representation
 - Remove redundant PCB overview figure 6 and reorganized paragraphs in 2.2. PCBs
 - Small clarifications and nits
-- Figures: small changes to use aasvg
+- Figures: small changes to use aasvg in all figures
+- Appendix "Path-Lookup Examples": use wildcard AS 0 instead of * in figures in
 
 ## draft-dekater-scion-controlplane-10
 {:numbered="false"}
