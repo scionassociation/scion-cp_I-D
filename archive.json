@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-30T00:24:35.789889+00:00",
+  "timestamp": "2025-11-02T00:26:02.129866+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -772,7 +772,7 @@
       ],
       "body": "Copied over from feeedbac received by @tzaeschke  in https://github.com/scionassociation/scion-cp_I-D/pull/42#issuecomment-2211084556\r\n\r\n\r\n# Introduction\r\n## Avoiding Circular Dependencies and Partitioning\r\n- Does this section (title) make sense as it is? The two topics (circular dependencies and partitioning) appear unrelated. Partitioning is discussed in a separate subsection\r\n- Also, this section claims to contain a list that explains how circular dependencies are avoided.\r\n  However, I am not sure how anything in the list explains anything about circular dependencies?\r\n\r\n### Partition and Healing\r\n- `ASes could always switch to otherwise unused links`. \r\n\r\n  - What are `unused` links? `Unused` indicates that they are not in the \"Best PCB\" set. \r\n  If that is the case, then we cannot simply \"switch\" to use them, we first need to have them discovered by beacons. This takes time, see `propagation interval` (unless PCB are forwarded immediately) and beacon `origination interval`.\r\n  - Also: Does \"Healing\" include \"adding new links\"? In this case we also need to wait for the `propagation interval` and the `origination interval`.\r\n  As I understand, with propagation interval being set to e.g. 10Minutes, this adds up to 5hops*1/2*10min= 25minutes for 5 hops.\r\n\r\n# Path Exploration or Beaconing {#beaconing}\r\n## Introduction and Overview\r\n\r\n- `Intra-ISD beaconing`: Isn't this incomplete? How are DOWN segments created? I think leaf ASes need to propagate paths back to the COREs? -> Link to #intra-reg ?\r\n- `Inter-ISD beaconing`: Similarily, I think there is a step where CORE beacons share their path DB with other CORE ASes in the same ISD?\r\n\r\n### Extending a PCB\r\n- `selects the best combinations`: Maybe link to a section that explains how this works? And what \"best\" means?\r\n\r\n## Path-Segment Construction Beacons\r\n### PCB Validity\r\n- `For the purpose of validation, a timestamp is considered \"future\" if it is later than the current time at the point of validation plus the minimum expiration time of a hop field (337.5 seconds, see ).`\r\nMaybe add an explanation why we add the minimum expiration time here?\r\nShouldn't \"future\" simply be timestamp + some_delta_to_account_for_server_time_inaccuracies, where the delta is maybe a few seconds rather than 5.5 minutes?\r\n\r\n\r\n\r\n\r\n## Propagation of PCBs {#path-prop}\r\n### Selection of PCBs to Propagate {#selection}\r\n#### Storing and Selecting Candidate PCBs\r\n\r\n- `temporary storage`: Maybe clarify what \"temporary\" means. \r\n  - How long are PCBs stored? \r\n  - Under what circumstances are they removed, e.g. when they expire? \r\n  - Or possibly replaced with a new version? What if the new version has an earlier expiration date?\r\n\r\n\r\n- `At each propagation event, each AS selects a set of the best PCBs from the candidates in the beacon store`\r\n\r\n\r\n- `The best PCBs set size SHOULD be at most \"50\" (PCBs) for intra-ISD beaconing and at most \"5\" (PCBs) for core beaconing.`\r\n  - I found this a bit confusing: the \"50\" appears to be the total number of beacons forwarded for non-core ASes, whereas the \"5\" refers to the number of \r\n    PCBs _per_ remote CORE AS. Maybe clarify this?\r\n\r\n- `Note that during bootstrapping and if the AS obtains a PCB containing a previously unknown path, the AS SHOULD forward the PCB immediately, [...].`\r\n  - Is this true? It appears to conflict with many other parts of the document that talk about propagation intervals in the contect of cold-start.\r\n  - Is there a difference between \"bootstrapping\" (used here) and \"cold-start\" (used in other places)? Maybe stick to one term or explicitly declare equality?\r\n  - Is this subject to the \"Best 5 PCB\" rule? -> If a new path is immediately forwarded, does it count towards th \"best 5\"? If not, then we are effectively\r\n    forwarding >5 paths, correct? If yes, then the first 5 paths are always the best until they expire and can be replaced with other paths? \r\n  - What means \"unknown path\"? Does it refer to all links in the segment or just the remote AS? If it is all links in the segment, then there may be many new paths\r\n    coming in all the time that need to be forwarded immediately, or not?\r\n    \r\n\r\n\r\n\r\n\r\n",
       "createdAt": "2024-07-07T21:02:16Z",
-      "updatedAt": "2025-10-15T11:58:25Z",
+      "updatedAt": "2025-10-31T16:01:46Z",
       "closedAt": "2025-10-15T11:58:25Z",
       "comments": [
         {
@@ -865,6 +865,13 @@
           "body": "@jeltevanbommel thanks a lot for your clarifications.\n\n> Small sidenote, the draft assumes 5 path segments to every destination AS are discovered, in the current scionproto the default limit is set to 20 PCBs for each destination that are selected for propagation:\n\nThis was discussed [here](https://github.com/scionassociation/scion-cp_I-D/issues/50), it was the result of some calculations that Matthias Frei did. I think that means that the current value in scionproto would not scale too well in a large core network (but it works well in the networks that are deployed today). I wrote that this  can be higher in small networks, see #137 .\n\n\n> To continue with the example in the draft, an AS receiving 1.5 million PCBs per 60s propagation interval, would thus need at least 10 dedicated cores for the signature verifications.\n\n> Note that this is assuming all AS certs are already at the local AS, if these need to be fetched first, the throughput would obviously be lower. It should be taken into account that a control service will have other tasks, and will have to create the signatures too, requiring more compute than the 10 cores.\n\nI think this roughly coincides with the calculations Matthias Frei did back then, and it does not seem to unrealistic to me. I see the Intel 155H i7 you tested is a high-end 2023 laptop CPU. I think there is quite some more room if you take a server CPU. For that reason, I'd not touch the numbers in that section of the draft, unless you have strong feelings about them..  ",
           "createdAt": "2025-10-11T19:03:23Z",
           "updatedAt": "2025-10-11T19:30:14Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This topic popped up again in #154 \n> Section 2.3.4: I'm interested in the derivation of the parameters given here, in that there are a few system parameters that emerge from them that in turn dictate the performance and operational characteristics of a SCION internet. Were these derived from simulation, or from experience with the existing (much smaller than the big-I Internet) Anapaya and SCIONlab networks?",
+          "createdAt": "2025-10-31T16:01:46Z",
+          "updatedAt": "2025-10-31T16:01:46Z"
         }
       ]
     },
@@ -2112,7 +2119,7 @@
       "id": "I_kwDOJx2-rs67ZlW2",
       "title": "SIG and address resolution reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/116",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2123,10 +2130,10 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [x] Mapping is also sort of a CP task. Add some text about it. Evaluate adding a reference to the SIG also in this draft? --> Introduced new section\n- [ ] https://github.com/scionproto/scion/issues/4787 \n- [ ] Optionally, add some references. Some ideas are: \n    - [SBAS 2022 paper](https://www.usenix.org/conference/usenixsecurity22/presentation/birge-lee)\n    - [SCION-IP Translation in eBPF (2024)](https://dl.acm.org/doi/10.1145/3672197.3673437)\n    - Some documentation on use of TXT / SVCB addresses\n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
+      "body": "How do endpoints know to which ISD-AS to send a packet? Here there are two cases: \n\n- the full SCION Address is provided (e.g. by a naming system)\n- Traffic goes via SIG, which is exchanging routing info with other SIGs\n\nTODOs: \n- [x] Mapping is also sort of a CP task. Add some text about it. Evaluate adding a reference to the SIG also in this draft? --> Introduced new section\n- [x] https://github.com/scionproto/scion/issues/4787 \n- [ ] Optionally, add some references. Some ideas are: \n    - [SBAS 2022 paper](https://www.usenix.org/conference/usenixsecurity22/presentation/birge-lee)\n    - [SCION-IP Translation in eBPF (2024)](https://dl.acm.org/doi/10.1145/3672197.3673437)\n    - Some documentation on use of TXT / SVCB addresses\n\nFeedback Alvaro \n>>>  (3) Destination Mapping\n  This specification is about path advertising, registration, and lookup --\n  the paths contain AS/ISD information, not prefixes.  How does an endpoint\n  map the destination address to the destination AS/ISD so it can query the\n  Control Service?\n\n>> Nico: This is handled not by the control plane directly, but by the SCION-IP gateways, which are currently not described by the the current spec, as they deal with the non-path aware part of the network (from a SCION point of view, they represent an application, which is doing tunneling of IP over SCION). We briefly describe this in the data plane draft in [5.3. SCION IP Gateway](https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-05#name-scion-ip-gateway). \n\n>That text didn't discuss mapping or resolution, but rather tunneling.\nI think it's ok to leave the mapping/resolution out of the control plane spec, but it would be ideal to point to a place where it is explained (as an Informative reference). \n",
       "createdAt": "2025-06-13T16:04:15Z",
-      "updatedAt": "2025-10-19T15:11:33Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-31T11:33:09Z",
+      "closedAt": "2025-10-31T11:33:09Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2528,7 +2535,7 @@
       "id": "I_kwDOJx2-rs7UizTm",
       "title": "Brian Trammell's review CP",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/154",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -2536,10 +2543,10 @@
         "knmeynell"
       ],
       "labels": [],
-      "body": "This document is the one most directly answering questions posed in RFC 9217, so I look forward to future pre-standardization work on the control plane to be discussed in PANRG.\n\n## Technical Issues\n\n- Section 2.3.4: I'm interested in the derivation of the parameters given here, in that there are a few system parameters that emerge from them that in turn dictate the performance and operational characteristics of a SCION internet. Were these derived from simulation, or from experience with the existing (much smaller than the big-I Internet) Anapaya and SCIONlab networks?\n\n- Have the PCB set sizes been tested against realisitic reference interdomain topologies? The intra-AS (editorial: shouldn't this be inter-AS, since it's leafward?) PCB size seems reasonable in a transit-customer-heavy topology (like the relationships that IIUC SCION was originally designed for), but in a realistic peering-heavy topology with fairly decentralized peering points (cf. the internet in Europe), I could see the peering links dominate PCBs such that viable peering shortcuts would be lost at the leaves with only 50 available per PCB. 3.3.2 points to a small diameter assumption following Barabasi... but I'm not sure the dynamics driving that model are the same that lead to Internet interdomain connectivity.\n\n- The core beacon size similarly seems to have a core AS model in mind (that of a small coterie of completely connected providers, analogous to \"Tier 1\" in the 20th century Internet topology) that may not apply in every ISD.\n\n- Similarly, propagation delay is related to the availability risk of a link outage. The 60 second core beaconing interval implies that the maximum time that a disconnect event (i.e., links between one core AS and the others, or an inter-ISD link, being commpletely down) would lead to packet loss is 60 seconds; this is long enough that it would probably trigger application and transport layer session resets in the absence of widespread peering shortcuts (which the PCB size seems to limit, see above)\n\n_KM - the above would all seem to be philosophical questions._ \n\n- [ ] Section 7, general question: are there any rules for converting an ICMP message to SCMP, or vice versa? The protocol seems designed to support this, so I was missing a mention of it in this section.\n\n## Editorial Issues\n\n- [x] I found at least one missing Oxford comma with a clarity impact (Section 1 para 2 \"and provide continuity\".)\n_KM - there are inconsistencies between US and British stylisation in various places (not all introduced by me!). I'm a proponent of the Oxford comma (Adrian may not be), but also 'e.g.' (British style) compared to 'e.g.,' (US style). For me, 'e.g.' uses less characters and looks cleaner, although I don't know what the RFC Editor style guide says about it._ \n\n- [ ] Section 1.4.1: what about path segments between non-core ASs? I understand that coreward segments are up and leafward down, but that's not what this list says.\n\n- [ ] Section 1.5.1: it's not clear here why I'd ever use the wildcard ISD, unless there is inter-ISD coordination on AS number assignments, except where ASNs are ported from the Internet. There should at least be a forward ref.\n\n- [ ] Section 1.5.3: is there any interoperability concern with respect to non-wire representations of ISD/AS numbers? I'm confused about the 2119 language here. Some explanatory text in the frontmatter of 1.5.3 about why we care about text representation would be useful.\n\n- [ ] Section 2.2.1: Figure 6, the top-down composition of a PCB, would be easier to read if it were broken up and interspersed through the text as a series of smaller, more focused diagrams.\n\n- [x] Section 2.2.2.1 (and maybe elsewhere): \"MUST consists\".",
+      "body": "This document is the one most directly answering questions posed in RFC 9217, so I look forward to future pre-standardization work on the control plane to be discussed in PANRG.\n\n## Technical Issues\n\n- Section 2.3.4: I'm interested in the derivation of the parameters given here, in that there are a few system parameters that emerge from them that in turn dictate the performance and operational characteristics of a SCION internet. Were these derived from simulation, or from experience with the existing (much smaller than the big-I Internet) Anapaya and SCIONlab networks?\n\n- Have the PCB set sizes been tested against realisitic reference interdomain topologies? The intra-AS (editorial: shouldn't this be inter-AS, since it's leafward?) PCB size seems reasonable in a transit-customer-heavy topology (like the relationships that IIUC SCION was originally designed for), but in a realistic peering-heavy topology with fairly decentralized peering points (cf. the internet in Europe), I could see the peering links dominate PCBs such that viable peering shortcuts would be lost at the leaves with only 50 available per PCB. 3.3.2 points to a small diameter assumption following Barabasi... but I'm not sure the dynamics driving that model are the same that lead to Internet interdomain connectivity.\n\n- The core beacon size similarly seems to have a core AS model in mind (that of a small coterie of completely connected providers, analogous to \"Tier 1\" in the 20th century Internet topology) that may not apply in every ISD.\n\n- Similarly, propagation delay is related to the availability risk of a link outage. The 60 second core beaconing interval implies that the maximum time that a disconnect event (i.e., links between one core AS and the others, or an inter-ISD link, being commpletely down) would lead to packet loss is 60 seconds; this is long enough that it would probably trigger application and transport layer session resets in the absence of widespread peering shortcuts (which the PCB size seems to limit, see above)\n\n_KM - the above would all seem to be philosophical questions._ \n\n- [x] Section 7, general question: are there any rules for converting an ICMP message to SCMP, or vice versa? The protocol seems designed to support this, so I was missing a mention of it in this section.\n\n## Editorial Issues\n\n- [x] I found at least one missing Oxford comma with a clarity impact (Section 1 para 2 \"and provide continuity\".)\n_KM - there are inconsistencies between US and British stylisation in various places (not all introduced by me!). I'm a proponent of the Oxford comma (Adrian may not be), but also 'e.g.' (British style) compared to 'e.g.,' (US style). For me, 'e.g.' uses less characters and looks cleaner, although I don't know what the RFC Editor style guide says about it._ \n\n- [x] Section 1.4.1: what about path segments between non-core ASs? I understand that coreward segments are up and leafward down, but that's not what this list says. --> we can say \"There are no segments starting and ending at non-core ASes. IN these situations, several segments are combined during path lookup (REF to 5.1.  Lookup Process)\" \n\n\n- [x] Section 1.5.3: is there any interoperability concern with respect to non-wire representations of ISD/AS numbers? I'm confused about the 2119 language here. Some explanatory text in the frontmatter of 1.5.3 about why we care about text representation would be useful.\n\n- [x] Section 2.2.1: Figure 6, the top-down composition of a PCB, would be easier to read if it were broken up and interspersed through the text as a series of smaller, more focused diagrams.\n\n- [x] Section 2.2.2.1 (and maybe elsewhere): \"MUST consists\".",
       "createdAt": "2025-10-29T13:05:52Z",
-      "updatedAt": "2025-10-29T20:45:53Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-31T16:58:15Z",
+      "closedAt": "2025-10-31T16:58:15Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -2551,9 +2558,9 @@
         {
           "author": "knmeynell",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "What is the ISD wildcard used for? I've wondered this myself, and whilst it's stated for SCION AS numbers, it's not explicitly for ISD numbers. \n\nThis is covered by \"5.2.1. Use of Wildcard Addresses in the Lookup Process\"?",
+          "body": "What is the ISD wildcard used for? I've wondered this myself, and whilst it's stated for SCION AS numbers, it's not explicitly for ISD numbers. \n\nIs this is covered by \"5.2.1. Use of Wildcard Addresses in the Lookup Process\"?\nhttps://github.com/scionassociation/scion-cp_I-D/issues/157",
           "createdAt": "2025-10-29T20:30:29Z",
-          "updatedAt": "2025-10-29T20:30:29Z"
+          "updatedAt": "2025-10-31T15:47:55Z"
         },
         {
           "author": "knmeynell",
@@ -2565,9 +2572,47 @@
         {
           "author": "knmeynell",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "With respect to Figure 6, I think its constituent elements are already broken up and interspersed into more focused into smaller diagrams in the following text. However, it is essentially a duplication of what follows and I must admit that I didn't initially realise that when I first came to it. \n\nI'll have a go at re-organising that section as I think there's also an opportunity to reduce the number of levels as well. ",
+          "body": "With respect to Figure 6, I think its constituent elements are already broken up and interspersed into more focused into smaller diagrams in the following text. However, it is essentially a duplication of what follows and I must admit that I didn't initially realise that when I first came to it in the past.\n\nI'll have a go at re-organising that section.",
           "createdAt": "2025-10-29T20:45:53Z",
-          "updatedAt": "2025-10-29T20:45:53Z"
+          "updatedAt": "2025-10-30T10:41:16Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> With respect to Figure 6, I think its constituent elements are already broken up and interspersed into more focused into smaller diagrams in the following text. However, it is essentially a duplication of what follows and I must admit that I didn't initially realise that when I first came to it.\n> \n> I'll have a go at re-organising that section as I think there's also an opportunity to reduce the number of levels as well.\n\nI've removed Figure 6 and re-organised Section 2.2.1 into a more logical order with appropriate cascading headings. I don't like using sixth (or even fifth) level headings but I think it makes it clearer under which field each element belongs compared to before. I don't see any way around it unless we move \"PCB Message Format' to a second rather than third-level sub-section. \n\nI also moved 'Hop Entry',  'Peer Entry' and 'Hop Field' under 'AS Entry Signed Body' which is where they belong, and this way they also mentioned before they're referenced in the next sub-section 'AS Entry Signature'. ",
+          "createdAt": "2025-10-30T10:27:51Z",
+          "updatedAt": "2025-10-30T10:27:51Z"
+        }
+      ]
+    },
+    {
+      "number": 157,
+      "id": "I_kwDOJx2-rs7Uy5wS",
+      "title": "Clarify use of Wildcard ISD",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/157",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From Brian T review: \n\nSection 1.5.1: it's not clear here why I'd ever use the wildcard ISD, unless there is inter-ISD coordination on AS number assignments, except where ASNs are ported from the Internet. There should at least be a forward ref.",
+      "createdAt": "2025-10-30T10:42:25Z",
+      "updatedAt": "2025-10-31T16:58:16Z",
+      "closedAt": "2025-10-31T16:58:16Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Juan wrote: \n> The intention of the wildcard ISD identifier is to make an ISD placeholder possible, e.g. for questions such as \"paths to this AS ID on any ISD\".\n ",
+          "createdAt": "2025-10-31T09:24:45Z",
+          "updatedAt": "2025-10-31T09:24:45Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Clarified in [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1761902846077369)",
+          "createdAt": "2025-10-31T16:31:32Z",
+          "updatedAt": "2025-10-31T16:31:32Z"
         }
       ]
     }
@@ -11936,20 +11981,62 @@
       "id": "PR_kwDOJx2-rs6wdn7U",
       "title": "Brian trammell review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/155",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Resolves #154 \r\nResolves #157 \r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/Brian-Trammell-review/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/Brian-Trammell-review/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Brian-Trammell-review/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-29T20:19:49Z",
-      "updatedAt": "2025-10-29T20:22:45Z",
+      "updatedAt": "2025-10-31T16:58:33Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "977dbe124361ff17919b0605cb63750757f6b154",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Brian-Trammell-review",
-      "headRefOid": "e091b18f00d028a8545e2dc6c45c40b677459e44",
+      "headRefOid": "cbba0805c7ac8ab84be6cb2b5d290ca5cfa10973",
+      "closedAt": "2025-10-31T16:58:14Z",
+      "mergedAt": "2025-10-31T16:58:14Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "63d8ea0dfc8de3d521a73e78c29393ce05bfdea0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7K9l4h",
+          "commit": {
+            "abbreviatedOid": "b49a032"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-31T16:36:52Z",
+          "updatedAt": "2025-10-31T16:36:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 156,
+      "id": "PR_kwDOJx2-rs6wlA6v",
+      "title": "Reorganised PCB message format section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/156",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "resolves #154\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-10-30T10:13:39Z",
+      "updatedAt": "2025-10-31T17:10:12Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "63d8ea0dfc8de3d521a73e78c29393ce05bfdea0",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Reorganised-PCB-Message-Format",
+      "headRefOid": "cb913c1d3f830b7ddd769344ff97eb88a42512de",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
