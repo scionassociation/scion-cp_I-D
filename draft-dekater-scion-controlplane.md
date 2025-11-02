@@ -2367,6 +2367,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Clarify use of wildcard ISD and ISD-AS text representation
+- Remove redundant PCB overview figure 6 and reorganized paragraphs in 2.2. PCBs
+- Small clarifications and nits
 
 ## draft-dekater-scion-controlplane-10
 {:numbered="false"}
