@@ -638,7 +638,7 @@ Path Segment 4 |             |     |             |     |             |
 {: #figure-4 title="Possible up- or down segments for AS Z"}
 
 
-## Path-Segment Construction Beacons (PCBs) Message Format {#pcbs}
+## PCB Message Format {#pcbs}
 
 Each PCB is comprised of a message containing the following top-level fields:
 
@@ -906,7 +906,7 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 - `mtu`: The maximum transmission unit (MTU) that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent. Current practice is to make it a configuration item.
 - `extensions`: List of (signed) extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
-##### Hop Entry {#hopentry}
+#### Hop Entry {#hopentry}
 
 ~~~
 
@@ -941,7 +941,7 @@ The following code block defines the hop entry component `HopEntry` in Protobuf 
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
-##### Peer Entry {#peerentry}
+#### Peer Entry {#peerentry}
 
 ~~~
 
@@ -1011,7 +1011,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 ~~~
 {: #figure-15 title="Peer entry information, in the direction of beaconing"}
 
-##### Hop Field {#hopfield}
+#### Hop Field {#hopfield}
 
 ~~~
 
