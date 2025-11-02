@@ -2016,7 +2016,6 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="272" width="424" viewBox="0 0 424 272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,112 L 8,192" fill="none" stroke="black"></path>
                   <path d="M 80,112 L 80,192" fill="none" stroke="black"></path>
-                  <path d="M 104,160 L 104,176" fill="none" stroke="black"></path>
                   <path d="M 128,128 L 128,160" fill="none" stroke="black"></path>
                   <path d="M 152,32 L 152,96" fill="none" stroke="black"></path>
                   <path d="M 152,160 L 152,192" fill="none" stroke="black"></path>
@@ -2029,36 +2028,29 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
                   <path d="M 264,160 L 264,192" fill="none" stroke="black"></path>
                   <path d="M 264,224 L 264,240" fill="none" stroke="black"></path>
                   <path d="M 288,128 L 288,160" fill="none" stroke="black"></path>
-                  <path d="M 320,160 L 320,176" fill="none" stroke="black"></path>
                   <path d="M 344,112 L 344,192" fill="none" stroke="black"></path>
                   <path d="M 416,112 L 416,192" fill="none" stroke="black"></path>
                   <path d="M 152,32 L 264,32" fill="none" stroke="black"></path>
                   <path d="M 152,96 L 264,96" fill="none" stroke="black"></path>
-                  <path d="M 8,112 L 88,112" fill="none" stroke="black"></path>
-                  <path d="M 336,112 L 416,112" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 80,112" fill="none" stroke="black"></path>
+                  <path d="M 344,112 L 416,112" fill="none" stroke="black"></path>
                   <path d="M 128,128 L 176,128" fill="none" stroke="black"></path>
                   <path d="M 240,128 L 288,128" fill="none" stroke="black"></path>
                   <path d="M 8,142 L 80,142" fill="none" stroke="black"></path>
                   <path d="M 8,146 L 80,146" fill="none" stroke="black"></path>
-                  <path d="M 120,144 L 128,144" fill="none" stroke="black"></path>
-                  <path d="M 288,144 L 304,144" fill="none" stroke="black"></path>
+                  <path d="M 96,144 L 120,144" fill="none" stroke="black"></path>
+                  <path d="M 296,144 L 328,144" fill="none" stroke="black"></path>
                   <path d="M 344,142 L 416,142" fill="none" stroke="black"></path>
                   <path d="M 344,146 L 416,146" fill="none" stroke="black"></path>
                   <path d="M 128,160 L 176,160" fill="none" stroke="black"></path>
                   <path d="M 240,160 L 288,160" fill="none" stroke="black"></path>
-                  <path d="M 8,192 L 88,192" fill="none" stroke="black"></path>
-                  <path d="M 336,192 L 416,192" fill="none" stroke="black"></path>
+                  <path d="M 8,192 L 80,192" fill="none" stroke="black"></path>
+                  <path d="M 344,192 L 416,192" fill="none" stroke="black"></path>
                   <path d="M 152,224 L 264,224" fill="none" stroke="black"></path>
-                  <path d="M 88,112 C 96.83064,112 104,119.16936 104,128" fill="none" stroke="black"></path>
-                  <path d="M 336,112 C 327.16936,112 320,119.16936 320,128" fill="none" stroke="black"></path>
-                  <path d="M 120,144 C 111.16936,144 104,151.16936 104,160" fill="none" stroke="black"></path>
-                  <path d="M 120,144 C 111.16936,144 104,136.83064 104,128" fill="none" stroke="black"></path>
-                  <path d="M 304,144 C 312.83064,144 320,151.16936 320,160" fill="none" stroke="black"></path>
-                  <path d="M 304,144 C 312.83064,144 320,136.83064 320,128" fill="none" stroke="black"></path>
-                  <path d="M 88,192 C 96.83064,192 104,184.83064 104,176" fill="none" stroke="black"></path>
-                  <path d="M 336,192 C 327.16936,192 320,184.83064 320,176" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="336,144 324,138.4 324,149.6" fill="black" transform="rotate(0,328,144)"></polygon>
                   <polygon class="arrowhead" points="272,192 260,186.4 260,197.6" fill="black" transform="rotate(90,264,192)"></polygon>
                   <polygon class="arrowhead" points="160,192 148,186.4 148,197.6" fill="black" transform="rotate(90,152,192)"></polygon>
+                  <polygon class="arrowhead" points="104,144 92,138.4 92,149.6" fill="black" transform="rotate(180,96,144)"></polygon>
                   <circle cx="192" cy="208" r="6" class="opendot" fill="white" stroke="black"></circle>
                   <circle cx="224" cy="208" r="6" class="opendot" fill="white" stroke="black"></circle>
                   <g class="text">
@@ -2094,42 +2086,186 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
 <p id="section-2.1.3-4">AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see <a href="#_figure-3b" class="auto internal xref">Figure 3</a> below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-fr"></span><div id="_figure-3b">
 <figure id="figure-3">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-5.1">
-<pre>
-                        +-----+ |   | +-----+
-                        |PCB a| |   | |PCB b|
-                        +--+--+ |   | +--+--+
-                           |    |   |    |
-                           v    |   |    v
-                                *   *
-       +-------------+     +----+---+----+     +-------------+
-       |             |     |    2   3    |     |             |
-       |             +p---p+ 1           |     |             |
-       |    AS V     |     |    AS Y     |     |    AS W     |
-       |             |     |           4 +p---p+             |
-       |             |     |    6   5    |     |             |
-       +-------------+     +----+---+----+     +-------------+
-            +--------+          #   #          +--------+
-            | PCB c  │          |   |          | PCB d  |
-            +========+          |   |          +========+
-            |Core X  |          |   |          |Core X  |
-            |- Out:2 |          |   |          |- Out:2 |
-+--------+  +--------+   +-----+|   |+-----+   +--------+  +--------+
-| PCB e  |  |AS Y    | &lt;-|PCB c||   ||PCB d|-&gt; |AS Y    |  | PCB f  │
-+========+  |-In:2   |   +--+--+|   |+--+--+   |-In:2   |  +========+
-|Core X  |  |-Out:6  |      |   |   |   |      |-Out:5  |  |Core X  |
-|- Out:1 |  |-PeerV:1|      v   |   |   v      |-PeerV:1|  |- Out:1 |
-+--------+  |-PeerW:4|          |   |          |-PeerW:4|  +--------+
-|AS Y    |  +--------+.         |   |          +--------+  |AS Y    |
-|-In:3   |              +-----+ |   | +-----+              |-In:3   |
-|-Out:6  | &lt;------------|PCB e| |   | |PCB f|------------&gt; |-Out:5  |
-|-PeerV:1|              +--+--+ |   | +--+--+              |-PeerV:1|
-|-PeerW:4|                 |    |   |    |                 |-PeerW:4|
-+--------+                 v    |   |    v                 +--------+
-                                *   *
-                           +----+---+----+
-                           |    AS Z     |
-</pre>
+            <div id="section-2.1.3-5.1">
+              <div class="alignLeft art-svg artwork" id="section-2.1.3-5.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="560" width="560" viewBox="0 0 560 560" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,320 L 8,496" fill="none" stroke="black"></path>
+                  <path d="M 64,128 L 64,208" fill="none" stroke="black"></path>
+                  <path d="M 80,320 L 80,496" fill="none" stroke="black"></path>
+                  <path d="M 104,240 L 104,416" fill="none" stroke="black"></path>
+                  <path d="M 176,128 L 176,208" fill="none" stroke="black"></path>
+                  <path d="M 176,240 L 176,416" fill="none" stroke="black"></path>
+                  <path d="M 200,32 L 200,64" fill="none" stroke="black"></path>
+                  <path d="M 200,320 L 200,352" fill="none" stroke="black"></path>
+                  <path d="M 200,432 L 200,464" fill="none" stroke="black"></path>
+                  <path d="M 224,64 L 224,96" fill="none" stroke="black"></path>
+                  <path d="M 224,128 L 224,224" fill="none" stroke="black"></path>
+                  <path d="M 224,352 L 224,384" fill="none" stroke="black"></path>
+                  <path d="M 224,464 L 224,496" fill="none" stroke="black"></path>
+                  <path d="M 224,528 L 224,544" fill="none" stroke="black"></path>
+                  <path d="M 248,32 L 248,64" fill="none" stroke="black"></path>
+                  <path d="M 248,320 L 248,352" fill="none" stroke="black"></path>
+                  <path d="M 248,432 L 248,464" fill="none" stroke="black"></path>
+                  <path d="M 264,32 L 264,128" fill="none" stroke="black"></path>
+                  <path d="M 264,224 L 264,528" fill="none" stroke="black"></path>
+                  <path d="M 296,32 L 296,128" fill="none" stroke="black"></path>
+                  <path d="M 296,224 L 296,528" fill="none" stroke="black"></path>
+                  <path d="M 312,32 L 312,64" fill="none" stroke="black"></path>
+                  <path d="M 312,320 L 312,352" fill="none" stroke="black"></path>
+                  <path d="M 312,432 L 312,464" fill="none" stroke="black"></path>
+                  <path d="M 336,64 L 336,96" fill="none" stroke="black"></path>
+                  <path d="M 336,128 L 336,224" fill="none" stroke="black"></path>
+                  <path d="M 336,352 L 336,384" fill="none" stroke="black"></path>
+                  <path d="M 336,464 L 336,496" fill="none" stroke="black"></path>
+                  <path d="M 336,528 L 336,544" fill="none" stroke="black"></path>
+                  <path d="M 360,32 L 360,64" fill="none" stroke="black"></path>
+                  <path d="M 360,320 L 360,352" fill="none" stroke="black"></path>
+                  <path d="M 360,432 L 360,464" fill="none" stroke="black"></path>
+                  <path d="M 384,128 L 384,208" fill="none" stroke="black"></path>
+                  <path d="M 384,240 L 384,416" fill="none" stroke="black"></path>
+                  <path d="M 456,240 L 456,416" fill="none" stroke="black"></path>
+                  <path d="M 480,320 L 480,496" fill="none" stroke="black"></path>
+                  <path d="M 496,128 L 496,208" fill="none" stroke="black"></path>
+                  <path d="M 552,320 L 552,496" fill="none" stroke="black"></path>
+                  <path d="M 200,32 L 248,32" fill="none" stroke="black"></path>
+                  <path d="M 312,32 L 360,32" fill="none" stroke="black"></path>
+                  <path d="M 200,64 L 248,64" fill="none" stroke="black"></path>
+                  <path d="M 312,64 L 360,64" fill="none" stroke="black"></path>
+                  <path d="M 64,128 L 176,128" fill="none" stroke="black"></path>
+                  <path d="M 224,128 L 336,128" fill="none" stroke="black"></path>
+                  <path d="M 384,128 L 496,128" fill="none" stroke="black"></path>
+                  <path d="M 192,160 L 208,160" fill="none" stroke="black"></path>
+                  <path d="M 352,192 L 368,192" fill="none" stroke="black"></path>
+                  <path d="M 64,208 L 176,208" fill="none" stroke="black"></path>
+                  <path d="M 384,208 L 496,208" fill="none" stroke="black"></path>
+                  <path d="M 224,224 L 336,224" fill="none" stroke="black"></path>
+                  <path d="M 104,240 L 176,240" fill="none" stroke="black"></path>
+                  <path d="M 384,240 L 456,240" fill="none" stroke="black"></path>
+                  <path d="M 104,270 L 176,270" fill="none" stroke="black"></path>
+                  <path d="M 104,274 L 176,274" fill="none" stroke="black"></path>
+                  <path d="M 384,270 L 456,270" fill="none" stroke="black"></path>
+                  <path d="M 384,274 L 456,274" fill="none" stroke="black"></path>
+                  <path d="M 8,320 L 80,320" fill="none" stroke="black"></path>
+                  <path d="M 104,320 L 176,320" fill="none" stroke="black"></path>
+                  <path d="M 200,320 L 248,320" fill="none" stroke="black"></path>
+                  <path d="M 312,320 L 360,320" fill="none" stroke="black"></path>
+                  <path d="M 384,320 L 456,320" fill="none" stroke="black"></path>
+                  <path d="M 480,320 L 552,320" fill="none" stroke="black"></path>
+                  <path d="M 8,350 L 80,350" fill="none" stroke="black"></path>
+                  <path d="M 8,354 L 80,354" fill="none" stroke="black"></path>
+                  <path d="M 200,352 L 248,352" fill="none" stroke="black"></path>
+                  <path d="M 312,352 L 360,352" fill="none" stroke="black"></path>
+                  <path d="M 480,350 L 552,350" fill="none" stroke="black"></path>
+                  <path d="M 480,354 L 552,354" fill="none" stroke="black"></path>
+                  <path d="M 8,400 L 80,400" fill="none" stroke="black"></path>
+                  <path d="M 480,400 L 552,400" fill="none" stroke="black"></path>
+                  <path d="M 104,416 L 176,416" fill="none" stroke="black"></path>
+                  <path d="M 384,416 L 456,416" fill="none" stroke="black"></path>
+                  <path d="M 200,432 L 248,432" fill="none" stroke="black"></path>
+                  <path d="M 312,432 L 360,432" fill="none" stroke="black"></path>
+                  <path d="M 96,448 L 192,448" fill="none" stroke="black"></path>
+                  <path d="M 368,448 L 464,448" fill="none" stroke="black"></path>
+                  <path d="M 200,464 L 248,464" fill="none" stroke="black"></path>
+                  <path d="M 312,464 L 360,464" fill="none" stroke="black"></path>
+                  <path d="M 8,496 L 80,496" fill="none" stroke="black"></path>
+                  <path d="M 480,496 L 552,496" fill="none" stroke="black"></path>
+                  <path d="M 224,528 L 336,528" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="472,448 460,442.4 460,453.6" fill="black" transform="rotate(0,464,448)"></polygon>
+                  <polygon class="arrowhead" points="344,496 332,490.4 332,501.6" fill="black" transform="rotate(90,336,496)"></polygon>
+                  <polygon class="arrowhead" points="344,384 332,378.4 332,389.6" fill="black" transform="rotate(90,336,384)"></polygon>
+                  <polygon class="arrowhead" points="344,96 332,90.4 332,101.6" fill="black" transform="rotate(90,336,96)"></polygon>
+                  <polygon class="arrowhead" points="232,496 220,490.4 220,501.6" fill="black" transform="rotate(90,224,496)"></polygon>
+                  <polygon class="arrowhead" points="232,384 220,378.4 220,389.6" fill="black" transform="rotate(90,224,384)"></polygon>
+                  <polygon class="arrowhead" points="232,96 220,90.4 220,101.6" fill="black" transform="rotate(90,224,96)"></polygon>
+                  <polygon class="arrowhead" points="104,448 92,442.4 92,453.6" fill="black" transform="rotate(180,96,448)"></polygon>
+                  <circle cx="264" cy="112" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="264" cy="512" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="296" cy="112" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="296" cy="512" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <g class="text">
+                    <text x="216" y="52">PCB</text>
+                    <text x="240" y="52">a</text>
+                    <text x="328" y="52">PCB</text>
+                    <text x="352" y="52">b</text>
+                    <text x="264" y="148">2</text>
+                    <text x="296" y="148">3</text>
+                    <text x="184" y="164">p</text>
+                    <text x="216" y="164">p</text>
+                    <text x="240" y="164">1</text>
+                    <text x="108" y="180">AS</text>
+                    <text x="128" y="180">V</text>
+                    <text x="268" y="180">AS</text>
+                    <text x="288" y="180">Y</text>
+                    <text x="428" y="180">AS</text>
+                    <text x="448" y="180">W</text>
+                    <text x="320" y="196">4</text>
+                    <text x="344" y="196">p</text>
+                    <text x="376" y="196">p</text>
+                    <text x="264" y="212">6</text>
+                    <text x="296" y="212">5</text>
+                    <text x="128" y="260">PCB</text>
+                    <text x="152" y="260">c</text>
+                    <text x="408" y="260">PCB</text>
+                    <text x="432" y="260">d</text>
+                    <text x="124" y="292">Core</text>
+                    <text x="152" y="292">X</text>
+                    <text x="404" y="292">Core</text>
+                    <text x="432" y="292">X</text>
+                    <text x="112" y="308">-</text>
+                    <text x="144" y="308">Out:2</text>
+                    <text x="392" y="308">-</text>
+                    <text x="424" y="308">Out:2</text>
+                    <text x="32" y="340">PCB</text>
+                    <text x="56" y="340">e</text>
+                    <text x="116" y="340">AS</text>
+                    <text x="136" y="340">Y</text>
+                    <text x="188" y="340">&lt;-</text>
+                    <text x="216" y="340">PCB</text>
+                    <text x="240" y="340">c</text>
+                    <text x="328" y="340">PCB</text>
+                    <text x="352" y="340">d</text>
+                    <text x="372" y="340">-&gt;</text>
+                    <text x="396" y="340">AS</text>
+                    <text x="416" y="340">Y</text>
+                    <text x="504" y="340">PCB</text>
+                    <text x="528" y="340">f</text>
+                    <text x="128" y="356">-In:2</text>
+                    <text x="408" y="356">-In:2</text>
+                    <text x="28" y="372">Core</text>
+                    <text x="56" y="372">X</text>
+                    <text x="132" y="372">-Out:6</text>
+                    <text x="412" y="372">-Out:5</text>
+                    <text x="500" y="372">Core</text>
+                    <text x="528" y="372">X</text>
+                    <text x="16" y="388">-</text>
+                    <text x="48" y="388">Out:1</text>
+                    <text x="140" y="388">-PeerV:1</text>
+                    <text x="420" y="388">-PeerV:1</text>
+                    <text x="488" y="388">-</text>
+                    <text x="520" y="388">Out:1</text>
+                    <text x="140" y="404">-PeerW:4</text>
+                    <text x="420" y="404">-PeerW:4</text>
+                    <text x="20" y="420">AS</text>
+                    <text x="40" y="420">Y</text>
+                    <text x="492" y="420">AS</text>
+                    <text x="512" y="420">Y</text>
+                    <text x="32" y="436">-In:3</text>
+                    <text x="504" y="436">-In:3</text>
+                    <text x="36" y="452">-Out:6</text>
+                    <text x="216" y="452">PCB</text>
+                    <text x="240" y="452">e</text>
+                    <text x="328" y="452">PCB</text>
+                    <text x="352" y="452">f</text>
+                    <text x="508" y="452">-Out:5</text>
+                    <text x="44" y="468">-PeerV:1</text>
+                    <text x="516" y="468">-PeerV:1</text>
+                    <text x="44" y="484">-PeerW:4</text>
+                    <text x="516" y="484">-PeerW:4</text>
+                    <text x="268" y="548">AS</text>
+                    <text x="288" y="548">Z</text>
+                  </g>
+                </svg><a href="#section-2.1.3-5.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-intra-isd-pcb-propagation-fr" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 2</a>
@@ -2138,45 +2274,194 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
 <p id="section-2.1.3-6">The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.<a href="#section-2.1.3-6" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-fro"></span><div id="_figure-3c">
 <figure id="figure-4">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-7.1">
-<pre>
-                   +-----+      |   |      +-----+
-                   |PCB c|      |   |      |PCB d|
-                   +-+---+      |   |      +---+-+
-                     |  +-----+ |   | +-----+  |
-                     v  |PCB e| |   | |PCB f|  v
-                        +--+--+ |   | +--+--+
-                           |    |   |    |
-                           v    |   |    v
-                                *   *
-                           +----+---+----+
-                           |    5   1    |
-                           |             |
-                           |    AS Z     |
-            +--------+     |             |     +--------+
-            │ PCB g  |     |      3      |     | PCB h  |
-            +========+     +------+------+     +========+
-            │Core X  |            #            |Core X  |
-+--------+  │- Out:2 |            |            |- Out:2 |  +--------+
-| PCB i  |  +--------+            |            +--------+  | PCB j  |
-+========+  │AS Y    |            |            |AS Y    |  +========+
-|Core X  |  │-In:2   |            |            |-In:2   |  |Core X  |
-|- Out:1 |  │-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
-+--------+  │-PeerV:1| &lt;-|PCB g│  |  |PCB h|-&gt; |-PeerV:1|  +--------+
-|AS Y    |  │-PeerW:4|   +--+--+  |  +--+--+   |-PeerW:4|  |AS Y    |
-|-In:3   |  +--------+      |     |     |      +--------+  |-In:3   |
-|-Out:6  |  │AS Z    |      v     |     v      |AS Z    |  |Out:5   |
-|-PeerV:1|  │-In:5   |            |            |-In:1   |  |-PeerV:1|
-|-PeerW:4|  │-Out:3  |            |            |-Out:3  |  |-PeerW:4|
-+--------+  +--------+            |            +--------+  +--------+
-|AS Z    |               +-----+  |  +-----+               |AS Z    |
-|-In:5   | &lt;-------------|PCB i|  |  |PCB j|------------&gt;  |-In:1   |
-|-Out:3  |               +--+--+  |  +--+--+               |-Out:3  |
-+--------+                  |     |     |                  +--------+
-                            v     |     v
-                                  v
-
-</pre>
+            <div id="section-2.1.3-7.1">
+              <div class="alignLeft art-svg artwork" id="section-2.1.3-7.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="608" width="560" viewBox="0 0 560 608" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,304 L 8,544" fill="none" stroke="black"></path>
+                  <path d="M 80,304 L 80,544" fill="none" stroke="black"></path>
+                  <path d="M 104,240 L 104,480" fill="none" stroke="black"></path>
+                  <path d="M 160,32 L 160,64" fill="none" stroke="black"></path>
+                  <path d="M 176,64 L 176,96" fill="none" stroke="black"></path>
+                  <path d="M 176,240 L 176,480" fill="none" stroke="black"></path>
+                  <path d="M 200,80 L 200,112" fill="none" stroke="black"></path>
+                  <path d="M 208,32 L 208,64" fill="none" stroke="black"></path>
+                  <path d="M 208,368 L 208,400" fill="none" stroke="black"></path>
+                  <path d="M 208,496 L 208,528" fill="none" stroke="black"></path>
+                  <path d="M 224,112 L 224,144" fill="none" stroke="black"></path>
+                  <path d="M 224,176 L 224,272" fill="none" stroke="black"></path>
+                  <path d="M 232,400 L 232,432" fill="none" stroke="black"></path>
+                  <path d="M 232,528 L 232,560" fill="none" stroke="black"></path>
+                  <path d="M 248,80 L 248,112" fill="none" stroke="black"></path>
+                  <path d="M 256,368 L 256,400" fill="none" stroke="black"></path>
+                  <path d="M 256,496 L 256,528" fill="none" stroke="black"></path>
+                  <path d="M 264,32 L 264,176" fill="none" stroke="black"></path>
+                  <path d="M 280,272 L 280,576" fill="none" stroke="black"></path>
+                  <path d="M 296,32 L 296,176" fill="none" stroke="black"></path>
+                  <path d="M 304,368 L 304,400" fill="none" stroke="black"></path>
+                  <path d="M 304,496 L 304,528" fill="none" stroke="black"></path>
+                  <path d="M 312,80 L 312,112" fill="none" stroke="black"></path>
+                  <path d="M 328,400 L 328,432" fill="none" stroke="black"></path>
+                  <path d="M 328,528 L 328,560" fill="none" stroke="black"></path>
+                  <path d="M 336,112 L 336,144" fill="none" stroke="black"></path>
+                  <path d="M 336,176 L 336,272" fill="none" stroke="black"></path>
+                  <path d="M 352,32 L 352,64" fill="none" stroke="black"></path>
+                  <path d="M 352,368 L 352,400" fill="none" stroke="black"></path>
+                  <path d="M 352,496 L 352,528" fill="none" stroke="black"></path>
+                  <path d="M 360,80 L 360,112" fill="none" stroke="black"></path>
+                  <path d="M 384,64 L 384,96" fill="none" stroke="black"></path>
+                  <path d="M 384,240 L 384,480" fill="none" stroke="black"></path>
+                  <path d="M 400,32 L 400,64" fill="none" stroke="black"></path>
+                  <path d="M 456,240 L 456,480" fill="none" stroke="black"></path>
+                  <path d="M 480,304 L 480,544" fill="none" stroke="black"></path>
+                  <path d="M 552,304 L 552,544" fill="none" stroke="black"></path>
+                  <path d="M 160,32 L 208,32" fill="none" stroke="black"></path>
+                  <path d="M 352,32 L 400,32" fill="none" stroke="black"></path>
+                  <path d="M 160,64 L 208,64" fill="none" stroke="black"></path>
+                  <path d="M 352,64 L 400,64" fill="none" stroke="black"></path>
+                  <path d="M 200,80 L 248,80" fill="none" stroke="black"></path>
+                  <path d="M 312,80 L 360,80" fill="none" stroke="black"></path>
+                  <path d="M 200,112 L 248,112" fill="none" stroke="black"></path>
+                  <path d="M 312,112 L 360,112" fill="none" stroke="black"></path>
+                  <path d="M 224,176 L 336,176" fill="none" stroke="black"></path>
+                  <path d="M 104,240 L 176,240" fill="none" stroke="black"></path>
+                  <path d="M 384,240 L 456,240" fill="none" stroke="black"></path>
+                  <path d="M 104,270 L 176,270" fill="none" stroke="black"></path>
+                  <path d="M 104,274 L 176,274" fill="none" stroke="black"></path>
+                  <path d="M 224,272 L 336,272" fill="none" stroke="black"></path>
+                  <path d="M 384,270 L 456,270" fill="none" stroke="black"></path>
+                  <path d="M 384,274 L 456,274" fill="none" stroke="black"></path>
+                  <path d="M 8,304 L 80,304" fill="none" stroke="black"></path>
+                  <path d="M 480,304 L 552,304" fill="none" stroke="black"></path>
+                  <path d="M 104,320 L 176,320" fill="none" stroke="black"></path>
+                  <path d="M 384,320 L 456,320" fill="none" stroke="black"></path>
+                  <path d="M 8,334 L 80,334" fill="none" stroke="black"></path>
+                  <path d="M 8,338 L 80,338" fill="none" stroke="black"></path>
+                  <path d="M 480,334 L 552,334" fill="none" stroke="black"></path>
+                  <path d="M 480,338 L 552,338" fill="none" stroke="black"></path>
+                  <path d="M 208,368 L 256,368" fill="none" stroke="black"></path>
+                  <path d="M 304,368 L 352,368" fill="none" stroke="black"></path>
+                  <path d="M 8,384 L 80,384" fill="none" stroke="black"></path>
+                  <path d="M 480,384 L 552,384" fill="none" stroke="black"></path>
+                  <path d="M 208,400 L 256,400" fill="none" stroke="black"></path>
+                  <path d="M 304,400 L 352,400" fill="none" stroke="black"></path>
+                  <path d="M 104,416 L 176,416" fill="none" stroke="black"></path>
+                  <path d="M 384,416 L 456,416" fill="none" stroke="black"></path>
+                  <path d="M 8,480 L 80,480" fill="none" stroke="black"></path>
+                  <path d="M 104,480 L 176,480" fill="none" stroke="black"></path>
+                  <path d="M 384,480 L 456,480" fill="none" stroke="black"></path>
+                  <path d="M 480,480 L 552,480" fill="none" stroke="black"></path>
+                  <path d="M 208,496 L 256,496" fill="none" stroke="black"></path>
+                  <path d="M 304,496 L 352,496" fill="none" stroke="black"></path>
+                  <path d="M 96,512 L 200,512" fill="none" stroke="black"></path>
+                  <path d="M 360,512 L 456,512" fill="none" stroke="black"></path>
+                  <path d="M 208,528 L 256,528" fill="none" stroke="black"></path>
+                  <path d="M 304,528 L 352,528" fill="none" stroke="black"></path>
+                  <path d="M 8,544 L 80,544" fill="none" stroke="black"></path>
+                  <path d="M 480,544 L 552,544" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="464,512 452,506.4 452,517.6" fill="black" transform="rotate(0,456,512)"></polygon>
+                  <polygon class="arrowhead" points="392,96 380,90.4 380,101.6" fill="black" transform="rotate(90,384,96)"></polygon>
+                  <polygon class="arrowhead" points="344,144 332,138.4 332,149.6" fill="black" transform="rotate(90,336,144)"></polygon>
+                  <polygon class="arrowhead" points="336,560 324,554.4 324,565.6" fill="black" transform="rotate(90,328,560)"></polygon>
+                  <polygon class="arrowhead" points="336,432 324,426.4 324,437.6" fill="black" transform="rotate(90,328,432)"></polygon>
+                  <polygon class="arrowhead" points="240,560 228,554.4 228,565.6" fill="black" transform="rotate(90,232,560)"></polygon>
+                  <polygon class="arrowhead" points="240,432 228,426.4 228,437.6" fill="black" transform="rotate(90,232,432)"></polygon>
+                  <polygon class="arrowhead" points="232,144 220,138.4 220,149.6" fill="black" transform="rotate(90,224,144)"></polygon>
+                  <polygon class="arrowhead" points="184,96 172,90.4 172,101.6" fill="black" transform="rotate(90,176,96)"></polygon>
+                  <polygon class="arrowhead" points="104,512 92,506.4 92,517.6" fill="black" transform="rotate(180,96,512)"></polygon>
+                  <circle cx="264" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="280" cy="560" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="296" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <g class="text">
+                    <text x="176" y="52">PCB</text>
+                    <text x="200" y="52">c</text>
+                    <text x="368" y="52">PCB</text>
+                    <text x="392" y="52">d</text>
+                    <text x="216" y="100">PCB</text>
+                    <text x="240" y="100">e</text>
+                    <text x="328" y="100">PCB</text>
+                    <text x="352" y="100">f</text>
+                    <text x="264" y="196">5</text>
+                    <text x="296" y="196">1</text>
+                    <text x="268" y="228">AS</text>
+                    <text x="288" y="228">Z</text>
+                    <text x="128" y="260">PCB</text>
+                    <text x="152" y="260">g</text>
+                    <text x="280" y="260">3</text>
+                    <text x="408" y="260">PCB</text>
+                    <text x="432" y="260">h</text>
+                    <text x="124" y="292">Core</text>
+                    <text x="152" y="292">X</text>
+                    <text x="404" y="292">Core</text>
+                    <text x="432" y="292">X</text>
+                    <text x="112" y="308">-</text>
+                    <text x="144" y="308">Out:2</text>
+                    <text x="392" y="308">-</text>
+                    <text x="424" y="308">Out:2</text>
+                    <text x="32" y="324">PCB</text>
+                    <text x="56" y="324">i</text>
+                    <text x="504" y="324">PCB</text>
+                    <text x="528" y="324">j</text>
+                    <text x="116" y="340">AS</text>
+                    <text x="136" y="340">Y</text>
+                    <text x="396" y="340">AS</text>
+                    <text x="416" y="340">Y</text>
+                    <text x="28" y="356">Core</text>
+                    <text x="56" y="356">X</text>
+                    <text x="128" y="356">-In:2</text>
+                    <text x="408" y="356">-In:2</text>
+                    <text x="500" y="356">Core</text>
+                    <text x="528" y="356">X</text>
+                    <text x="16" y="372">-</text>
+                    <text x="48" y="372">Out:1</text>
+                    <text x="132" y="372">-Out:6</text>
+                    <text x="412" y="372">-Out:5</text>
+                    <text x="488" y="372">-</text>
+                    <text x="520" y="372">Out:1</text>
+                    <text x="140" y="388">-PeerV:1</text>
+                    <text x="196" y="388">&lt;-</text>
+                    <text x="224" y="388">PCB</text>
+                    <text x="248" y="388">g</text>
+                    <text x="320" y="388">PCB</text>
+                    <text x="344" y="388">h</text>
+                    <text x="364" y="388">-&gt;</text>
+                    <text x="420" y="388">-PeerV:1</text>
+                    <text x="20" y="404">AS</text>
+                    <text x="40" y="404">Y</text>
+                    <text x="140" y="404">-PeerW:4</text>
+                    <text x="420" y="404">-PeerW:4</text>
+                    <text x="492" y="404">AS</text>
+                    <text x="512" y="404">Y</text>
+                    <text x="32" y="420">-In:3</text>
+                    <text x="504" y="420">-In:3</text>
+                    <text x="36" y="436">-Out:6</text>
+                    <text x="116" y="436">AS</text>
+                    <text x="136" y="436">Z</text>
+                    <text x="396" y="436">AS</text>
+                    <text x="416" y="436">Z</text>
+                    <text x="504" y="436">Out:5</text>
+                    <text x="44" y="452">-PeerV:1</text>
+                    <text x="128" y="452">-In:5</text>
+                    <text x="408" y="452">-In:1</text>
+                    <text x="516" y="452">-PeerV:1</text>
+                    <text x="44" y="468">-PeerW:4</text>
+                    <text x="132" y="468">-Out:3</text>
+                    <text x="412" y="468">-Out:3</text>
+                    <text x="516" y="468">-PeerW:4</text>
+                    <text x="20" y="500">AS</text>
+                    <text x="40" y="500">Z</text>
+                    <text x="492" y="500">AS</text>
+                    <text x="512" y="500">Z</text>
+                    <text x="32" y="516">-In:5</text>
+                    <text x="224" y="516">PCB</text>
+                    <text x="248" y="516">i</text>
+                    <text x="320" y="516">PCB</text>
+                    <text x="344" y="516">j</text>
+                    <text x="504" y="516">-In:1</text>
+                    <text x="36" y="532">-Out:3</text>
+                    <text x="508" y="532">-Out:3</text>
+                  </g>
+                </svg><a href="#section-2.1.3-7.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-intra-isd-pcb-propagation-fro" class="selfRef">Intra-ISD PCB propagation from the ISD core to child ASes - Part 3</a>
@@ -2185,53 +2470,214 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
 <p id="section-2.1.3-8">Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by <a href="#_figure-4" class="auto internal xref">Figure 5</a>. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from <a href="#_figure-3c" class="auto internal xref">Figure 4</a> above. It is up to AS Z to use all of these path segments or just a selection of them.<a href="#section-2.1.3-8" class="pilcrow">¶</a></p>
 <span id="name-possible-up-or-down-segment"></span><div id="_figure-4">
 <figure id="figure-5">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-9.1">
-<pre>
-                AS Entry Core        AS Entry Y          AS Entry Z
-
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |    AS Z     |
-Path Segment 1 |            1+     +3           5+     +1            |
-               |             |     |             |     |             |
-               |            2+#---*+2-----------6+#---*+5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                  Egress 2       Ingress 2 - Egress 6     Ingress 5
-
-----------------------------------------------------------------------
-
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+     +3     +-----5+#---*+1            |
-Path Segment 2 |             |     |      |      |     |             |
-               |            2+#---*+2-----+     6+     +5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                  Egress 2       Ingress 2 - Egress 5     Ingress 1
-
-----------------------------------------------------------------------
-
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+#---*+3-----+     5+     +1            |
-Path Segment 3 |             |     |      |      |     |             |
-               |            2+     +2     +-----6+#---*+5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                  Egress 1       Ingress 3 - Egress 6     Ingress 5
-
-----------------------------------------------------------------------
-
-               +-------------+     +-------------+     +-------------+
-               |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+#---*+3-----------5+#---*+1            |
-Path Segment 4 |             |     |             |     |             |
-               |            2+     +2           6+     +5            |
-               |             |     |             |     |             |
-               +-------------+     +-------------+     +-------------+
-                  Egress 1       Ingress 3 - Egress 5      Ingress 1
-
-</pre>
+            <div id="section-2.1.3-9.1">
+              <div class="alignLeft art-svg artwork" id="section-2.1.3-9.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="736" width="568" viewBox="0 0 568 736" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 128,64 L 128,160" fill="none" stroke="black"></path>
+                  <path d="M 128,240 L 128,336" fill="none" stroke="black"></path>
+                  <path d="M 128,416 L 128,512" fill="none" stroke="black"></path>
+                  <path d="M 128,592 L 128,688" fill="none" stroke="black"></path>
+                  <path d="M 240,64 L 240,160" fill="none" stroke="black"></path>
+                  <path d="M 240,240 L 240,336" fill="none" stroke="black"></path>
+                  <path d="M 240,416 L 240,512" fill="none" stroke="black"></path>
+                  <path d="M 240,592 L 240,688" fill="none" stroke="black"></path>
+                  <path d="M 288,64 L 288,160" fill="none" stroke="black"></path>
+                  <path d="M 288,240 L 288,336" fill="none" stroke="black"></path>
+                  <path d="M 288,416 L 288,512" fill="none" stroke="black"></path>
+                  <path d="M 288,592 L 288,688" fill="none" stroke="black"></path>
+                  <path d="M 344,272 L 344,304" fill="none" stroke="black"></path>
+                  <path d="M 344,448 L 344,480" fill="none" stroke="black"></path>
+                  <path d="M 400,64 L 400,160" fill="none" stroke="black"></path>
+                  <path d="M 400,240 L 400,336" fill="none" stroke="black"></path>
+                  <path d="M 400,416 L 400,512" fill="none" stroke="black"></path>
+                  <path d="M 400,592 L 400,688" fill="none" stroke="black"></path>
+                  <path d="M 448,64 L 448,160" fill="none" stroke="black"></path>
+                  <path d="M 448,240 L 448,264" fill="none" stroke="black"></path>
+                  <path d="M 448,280 L 448,336" fill="none" stroke="black"></path>
+                  <path d="M 448,416 L 448,512" fill="none" stroke="black"></path>
+                  <path d="M 448,592 L 448,688" fill="none" stroke="black"></path>
+                  <path d="M 560,64 L 560,160" fill="none" stroke="black"></path>
+                  <path d="M 560,240 L 560,336" fill="none" stroke="black"></path>
+                  <path d="M 560,416 L 560,512" fill="none" stroke="black"></path>
+                  <path d="M 560,592 L 560,688" fill="none" stroke="black"></path>
+                  <path d="M 128,64 L 240,64" fill="none" stroke="black"></path>
+                  <path d="M 288,64 L 400,64" fill="none" stroke="black"></path>
+                  <path d="M 448,64 L 560,64" fill="none" stroke="black"></path>
+                  <path d="M 240,128 L 264,128" fill="none" stroke="black"></path>
+                  <path d="M 280,128 L 288,128" fill="none" stroke="black"></path>
+                  <path d="M 304,128 L 384,128" fill="none" stroke="black"></path>
+                  <path d="M 400,128 L 424,128" fill="none" stroke="black"></path>
+                  <path d="M 440,128 L 448,128" fill="none" stroke="black"></path>
+                  <path d="M 128,160 L 240,160" fill="none" stroke="black"></path>
+                  <path d="M 288,160 L 400,160" fill="none" stroke="black"></path>
+                  <path d="M 448,160 L 560,160" fill="none" stroke="black"></path>
+                  <path d="M 8,208 L 560,208" fill="none" stroke="black"></path>
+                  <path d="M 128,240 L 240,240" fill="none" stroke="black"></path>
+                  <path d="M 288,240 L 400,240" fill="none" stroke="black"></path>
+                  <path d="M 448,240 L 560,240" fill="none" stroke="black"></path>
+                  <path d="M 344,272 L 384,272" fill="none" stroke="black"></path>
+                  <path d="M 400,272 L 432,272" fill="none" stroke="black"></path>
+                  <path d="M 448,272 L 456,272" fill="none" stroke="black"></path>
+                  <path d="M 240,304 L 264,304" fill="none" stroke="black"></path>
+                  <path d="M 280,304 L 288,304" fill="none" stroke="black"></path>
+                  <path d="M 304,304 L 344,304" fill="none" stroke="black"></path>
+                  <path d="M 128,336 L 240,336" fill="none" stroke="black"></path>
+                  <path d="M 288,336 L 400,336" fill="none" stroke="black"></path>
+                  <path d="M 448,336 L 560,336" fill="none" stroke="black"></path>
+                  <path d="M 8,384 L 560,384" fill="none" stroke="black"></path>
+                  <path d="M 128,416 L 240,416" fill="none" stroke="black"></path>
+                  <path d="M 288,416 L 400,416" fill="none" stroke="black"></path>
+                  <path d="M 448,416 L 560,416" fill="none" stroke="black"></path>
+                  <path d="M 240,448 L 264,448" fill="none" stroke="black"></path>
+                  <path d="M 280,448 L 288,448" fill="none" stroke="black"></path>
+                  <path d="M 304,448 L 344,448" fill="none" stroke="black"></path>
+                  <path d="M 344,480 L 384,480" fill="none" stroke="black"></path>
+                  <path d="M 400,480 L 424,480" fill="none" stroke="black"></path>
+                  <path d="M 440,480 L 448,480" fill="none" stroke="black"></path>
+                  <path d="M 128,512 L 240,512" fill="none" stroke="black"></path>
+                  <path d="M 288,512 L 400,512" fill="none" stroke="black"></path>
+                  <path d="M 448,512 L 560,512" fill="none" stroke="black"></path>
+                  <path d="M 8,560 L 560,560" fill="none" stroke="black"></path>
+                  <path d="M 128,592 L 240,592" fill="none" stroke="black"></path>
+                  <path d="M 288,592 L 400,592" fill="none" stroke="black"></path>
+                  <path d="M 448,592 L 560,592" fill="none" stroke="black"></path>
+                  <path d="M 240,624 L 264,624" fill="none" stroke="black"></path>
+                  <path d="M 280,624 L 288,624" fill="none" stroke="black"></path>
+                  <path d="M 304,624 L 384,624" fill="none" stroke="black"></path>
+                  <path d="M 400,624 L 424,624" fill="none" stroke="black"></path>
+                  <path d="M 440,624 L 448,624" fill="none" stroke="black"></path>
+                  <path d="M 128,688 L 240,688" fill="none" stroke="black"></path>
+                  <path d="M 288,688 L 400,688" fill="none" stroke="black"></path>
+                  <path d="M 448,688 L 560,688" fill="none" stroke="black"></path>
+                  <circle cx="272" cy="128" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="272" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="272" cy="448" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="272" cy="624" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="432" cy="128" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="432" cy="480" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="432" cy="624" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="440" cy="272" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <g class="text">
+                    <text x="140" y="36">AS</text>
+                    <text x="176" y="36">Entry</text>
+                    <text x="220" y="36">Core</text>
+                    <text x="308" y="36">AS</text>
+                    <text x="344" y="36">Entry</text>
+                    <text x="376" y="36">Y</text>
+                    <text x="468" y="36">AS</text>
+                    <text x="504" y="36">Entry</text>
+                    <text x="536" y="36">Z</text>
+                    <text x="164" y="84">Core</text>
+                    <text x="196" y="84">AS</text>
+                    <text x="216" y="84">X</text>
+                    <text x="332" y="84">AS</text>
+                    <text x="352" y="84">Y</text>
+                    <text x="492" y="84">AS</text>
+                    <text x="512" y="84">Z</text>
+                    <text x="20" y="100">Path</text>
+                    <text x="72" y="100">Segment</text>
+                    <text x="112" y="100">1</text>
+                    <text x="232" y="100">1</text>
+                    <text x="296" y="100">3</text>
+                    <text x="392" y="100">5</text>
+                    <text x="456" y="100">1</text>
+                    <text x="232" y="132">2</text>
+                    <text x="296" y="132">2</text>
+                    <text x="392" y="132">6</text>
+                    <text x="456" y="132">5</text>
+                    <text x="172" y="180">Egress</text>
+                    <text x="208" y="180">2</text>
+                    <text x="296" y="180">Ingress</text>
+                    <text x="336" y="180">2</text>
+                    <text x="352" y="180">-</text>
+                    <text x="388" y="180">Egress</text>
+                    <text x="424" y="180">6</text>
+                    <text x="496" y="180">Ingress</text>
+                    <text x="536" y="180">5</text>
+                    <text x="164" y="260">Core</text>
+                    <text x="196" y="260">AS</text>
+                    <text x="216" y="260">X</text>
+                    <text x="332" y="260">AS</text>
+                    <text x="352" y="260">Y</text>
+                    <text x="492" y="260">AS</text>
+                    <text x="512" y="260">Z</text>
+                    <text x="232" y="276">1</text>
+                    <text x="296" y="276">3</text>
+                    <text x="392" y="276">5</text>
+                    <text x="464" y="276">1</text>
+                    <text x="20" y="292">Path</text>
+                    <text x="72" y="292">Segment</text>
+                    <text x="112" y="292">2</text>
+                    <text x="232" y="308">2</text>
+                    <text x="296" y="308">2</text>
+                    <text x="392" y="308">6</text>
+                    <text x="456" y="308">5</text>
+                    <text x="172" y="356">Egress</text>
+                    <text x="208" y="356">2</text>
+                    <text x="296" y="356">Ingress</text>
+                    <text x="336" y="356">2</text>
+                    <text x="352" y="356">-</text>
+                    <text x="388" y="356">Egress</text>
+                    <text x="424" y="356">5</text>
+                    <text x="496" y="356">Ingress</text>
+                    <text x="536" y="356">1</text>
+                    <text x="164" y="436">Core</text>
+                    <text x="196" y="436">AS</text>
+                    <text x="216" y="436">X</text>
+                    <text x="332" y="436">AS</text>
+                    <text x="352" y="436">Y</text>
+                    <text x="492" y="436">AS</text>
+                    <text x="512" y="436">Z</text>
+                    <text x="232" y="452">1</text>
+                    <text x="296" y="452">3</text>
+                    <text x="392" y="452">5</text>
+                    <text x="456" y="452">1</text>
+                    <text x="20" y="468">Path</text>
+                    <text x="72" y="468">Segment</text>
+                    <text x="112" y="468">3</text>
+                    <text x="232" y="484">2</text>
+                    <text x="296" y="484">2</text>
+                    <text x="392" y="484">6</text>
+                    <text x="456" y="484">5</text>
+                    <text x="172" y="532">Egress</text>
+                    <text x="208" y="532">1</text>
+                    <text x="296" y="532">Ingress</text>
+                    <text x="336" y="532">3</text>
+                    <text x="352" y="532">-</text>
+                    <text x="388" y="532">Egress</text>
+                    <text x="424" y="532">6</text>
+                    <text x="496" y="532">Ingress</text>
+                    <text x="536" y="532">5</text>
+                    <text x="164" y="612">Core</text>
+                    <text x="196" y="612">AS</text>
+                    <text x="216" y="612">X</text>
+                    <text x="332" y="612">AS</text>
+                    <text x="352" y="612">Y</text>
+                    <text x="492" y="612">AS</text>
+                    <text x="512" y="612">Z</text>
+                    <text x="232" y="628">1</text>
+                    <text x="296" y="628">3</text>
+                    <text x="392" y="628">5</text>
+                    <text x="456" y="628">1</text>
+                    <text x="20" y="644">Path</text>
+                    <text x="72" y="644">Segment</text>
+                    <text x="112" y="644">4</text>
+                    <text x="232" y="660">2</text>
+                    <text x="296" y="660">2</text>
+                    <text x="392" y="660">6</text>
+                    <text x="456" y="660">5</text>
+                    <text x="172" y="708">Egress</text>
+                    <text x="208" y="708">1</text>
+                    <text x="296" y="708">Ingress</text>
+                    <text x="336" y="708">3</text>
+                    <text x="352" y="708">-</text>
+                    <text x="388" y="708">Egress</text>
+                    <text x="424" y="708">5</text>
+                    <text x="504" y="708">Ingress</text>
+                    <text x="544" y="708">1</text>
+                  </g>
+                </svg><a href="#section-2.1.3-9.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-possible-up-or-down-segment" class="selfRef">Possible up- or down segments for AS Z</a>
@@ -2249,13 +2695,33 @@ Path Segment 4 |             |     |             |     |             |
 <p id="section-2.2-1">Each PCB is comprised of a message containing the following top-level fields:<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <span id="name-pcb-top-level-message-forma"></span><div id="_figure-6">
 <figure id="figure-6">
-          <div class="alignLeft art-text artwork" id="section-2.2-2.1">
-<pre>
-+-------------+------------+------------+-----+------------+
-|Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
-+-------------+------------+------------+-----+------------+
-
-</pre>
+          <div id="section-2.2-2.1">
+            <div class="alignLeft art-svg artwork" id="section-2.2-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="96" width="488" viewBox="0 0 488 96" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
+                <path d="M 120,32 L 120,64" fill="none" stroke="black"></path>
+                <path d="M 224,32 L 224,64" fill="none" stroke="black"></path>
+                <path d="M 328,32 L 328,64" fill="none" stroke="black"></path>
+                <path d="M 376,32 L 376,64" fill="none" stroke="black"></path>
+                <path d="M 480,32 L 480,64" fill="none" stroke="black"></path>
+                <path d="M 8,32 L 480,32" fill="none" stroke="black"></path>
+                <path d="M 8,64 L 480,64" fill="none" stroke="black"></path>
+                <g class="text">
+                  <text x="40" y="52">Segment</text>
+                  <text x="92" y="52">Info</text>
+                  <text x="140" y="52">AS</text>
+                  <text x="176" y="52">Entry</text>
+                  <text x="208" y="52">0</text>
+                  <text x="244" y="52">AS</text>
+                  <text x="280" y="52">Entry</text>
+                  <text x="312" y="52">1</text>
+                  <text x="352" y="52">...</text>
+                  <text x="396" y="52">AS</text>
+                  <text x="432" y="52">Entry</text>
+                  <text x="464" y="52">N</text>
+                </g>
+              </svg><a href="#section-2.2-2.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-pcb-top-level-message-forma" class="selfRef">PCB Top-Level Message Format</a>
@@ -2300,20 +2766,34 @@ Path Segment 4 |             |     |             |     |             |
           </h4>
 <span id="name-segment-information-compone"></span><div id="_figure-7">
 <figure id="figure-7">
-            <div class="alignLeft art-text artwork" id="section-2.2.1-1.1">
-<pre>
-+----------------------------+
-|         Segment Info       |
-+----------------------------+
-+-------------+--------------+
-              |
-              v
-+----------------------------+
-+-------------+--------------+
-|  Timestamp  |    Seg ID    |
-+-------------+--------------+
-
-</pre>
+            <div id="section-2.2.1-1.1">
+              <div class="alignLeft art-svg artwork" id="section-2.2.1-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="248" viewBox="0 0 248 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                  <path d="M 120,64 L 120,80" fill="none" stroke="black"></path>
+                  <path d="M 120,112 L 120,144" fill="none" stroke="black"></path>
+                  <path d="M 240,32 L 240,64" fill="none" stroke="black"></path>
+                  <path d="M 240,112 L 240,144" fill="none" stroke="black"></path>
+                  <path d="M 8,32 L 240,32" fill="none" stroke="black"></path>
+                  <path d="M 8,64 L 240,64" fill="none" stroke="black"></path>
+                  <path d="M 24,96 L 104,96" fill="none" stroke="black"></path>
+                  <path d="M 136,96 L 224,96" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 240,112" fill="none" stroke="black"></path>
+                  <path d="M 8,144 L 240,144" fill="none" stroke="black"></path>
+                  <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                  <path d="M 104,96 C 112.83064,96 120,88.83064 120,80" fill="none" stroke="black"></path>
+                  <path d="M 136,96 C 127.16936,96 120,88.83064 120,80" fill="none" stroke="black"></path>
+                  <path d="M 224,96 C 232.83064,96 240,103.16936 240,112" fill="none" stroke="black"></path>
+                  <g class="text">
+                    <text x="112" y="52">Segment</text>
+                    <text x="164" y="52">Info</text>
+                    <text x="64" y="132">Timestamp</text>
+                    <text x="168" y="132">Seg</text>
+                    <text x="196" y="132">ID</text>
+                  </g>
+                </svg><a href="#section-2.2.1-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-segment-information-compone" class="selfRef">Segment Information Component</a>
@@ -2347,20 +2827,36 @@ Path Segment 4 |             |     |             |     |             |
           </h4>
 <span id="name-as-entry-2"></span><div id="_figure-8">
 <figure id="figure-8">
-            <div class="alignLeft art-text artwork" id="section-2.2.2-1.1">
-<pre>
-                           +--------------+
-                           |   AS Entry   |
-                           +--------------+
-                           +------+-------+
-                                  |
-                                  v
-+------------------------------------------------------------------+
-+-----------------------+------------------------------------------+
-|  Unsigned Extension   |             Signed AS Entry              |
-+-----------------------+------------------------------------------+
-
-</pre>
+            <div id="section-2.2.2-1.1">
+              <div class="alignLeft art-svg artwork" id="section-2.2.2-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="552" viewBox="0 0 552 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                  <path d="M 200,112 L 200,144" fill="none" stroke="black"></path>
+                  <path d="M 224,32 L 224,64" fill="none" stroke="black"></path>
+                  <path d="M 280,64 L 280,80" fill="none" stroke="black"></path>
+                  <path d="M 344,32 L 344,64" fill="none" stroke="black"></path>
+                  <path d="M 544,112 L 544,144" fill="none" stroke="black"></path>
+                  <path d="M 224,32 L 344,32" fill="none" stroke="black"></path>
+                  <path d="M 224,64 L 344,64" fill="none" stroke="black"></path>
+                  <path d="M 24,96 L 264,96" fill="none" stroke="black"></path>
+                  <path d="M 296,96 L 528,96" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 544,112" fill="none" stroke="black"></path>
+                  <path d="M 8,144 L 544,144" fill="none" stroke="black"></path>
+                  <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                  <path d="M 264,96 C 272.83064,96 280,88.83064 280,80" fill="none" stroke="black"></path>
+                  <path d="M 296,96 C 287.16936,96 280,88.83064 280,80" fill="none" stroke="black"></path>
+                  <path d="M 528,96 C 536.83064,96 544,103.16936 544,112" fill="none" stroke="black"></path>
+                  <g class="text">
+                    <text x="260" y="52">AS</text>
+                    <text x="296" y="52">Entry</text>
+                    <text x="60" y="132">Unsigned</text>
+                    <text x="136" y="132">Extension</text>
+                    <text x="332" y="132">Signed</text>
+                    <text x="372" y="132">AS</text>
+                    <text x="408" y="132">Entry</text>
+                  </g>
+                </svg><a href="#section-2.2.2-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-as-entry-2" class="selfRef">AS Entry</a>
@@ -2388,20 +2884,36 @@ Path Segment 4 |             |     |             |     |             |
           </ul>
 <span id="name-as-entry-signed-component"></span><div id="_figure-9">
 <figure id="figure-9">
-            <div class="alignLeft art-text artwork" id="section-2.2.2-8.1">
-<pre>
-        +------------------------------------------------------+
-        |                   Signed AS Entry                    |
-        +------------------------------------------------------+
-        +--------------------------+---------------------------+
-                                   |
-                                   v
-+---------------------------------------------------------------------+
-+--------------------+------------------+-----------------------------+
-|     Signature      |      Header      |             Body            |
-+--------------------+------------------+-----------------------------+
-
-</pre>
+            <div id="section-2.2.2-8.1">
+              <div class="alignLeft art-svg artwork" id="section-2.2.2-8.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="576" viewBox="0 0 576 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                  <path d="M 72,32 L 72,64" fill="none" stroke="black"></path>
+                  <path d="M 176,112 L 176,144" fill="none" stroke="black"></path>
+                  <path d="M 288,64 L 288,80" fill="none" stroke="black"></path>
+                  <path d="M 328,112 L 328,144" fill="none" stroke="black"></path>
+                  <path d="M 512,32 L 512,64" fill="none" stroke="black"></path>
+                  <path d="M 568,112 L 568,144" fill="none" stroke="black"></path>
+                  <path d="M 72,32 L 512,32" fill="none" stroke="black"></path>
+                  <path d="M 72,64 L 512,64" fill="none" stroke="black"></path>
+                  <path d="M 24,96 L 272,96" fill="none" stroke="black"></path>
+                  <path d="M 304,96 L 552,96" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 568,112" fill="none" stroke="black"></path>
+                  <path d="M 8,144 L 568,144" fill="none" stroke="black"></path>
+                  <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                  <path d="M 272,96 C 280.83064,96 288,88.83064 288,80" fill="none" stroke="black"></path>
+                  <path d="M 304,96 C 295.16936,96 288,88.83064 288,80" fill="none" stroke="black"></path>
+                  <path d="M 552,96 C 560.83064,96 568,103.16936 568,112" fill="none" stroke="black"></path>
+                  <g class="text">
+                    <text x="252" y="52">Signed</text>
+                    <text x="292" y="52">AS</text>
+                    <text x="328" y="52">Entry</text>
+                    <text x="88" y="132">Signature</text>
+                    <text x="252" y="132">Header</text>
+                    <text x="452" y="132">Body</text>
+                  </g>
+                </svg><a href="#section-2.2.2-8.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-as-entry-signed-component" class="selfRef">AS Entry Signed Component</a>
@@ -2456,27 +2968,62 @@ Path Segment 4 |             |     |             |     |             |
             </h5>
 <span id="name-as-entry-signed-header-2"></span><div id="_figure-10">
 <figure id="figure-10">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.1-1.1">
-<pre>
-                      +-----------------+
-                      |     Header      |
-                      +-----------------+
-                      +--------+--------+
-                               |
-                               v
-+-------------------------------------------------------------+
-+---------+-------------------+---------+--------+------------+
-|Sig. Alg.|Verification Key ID|Timestamp|Metadata|AssocDataLen|
-+---------+-------------------+---------+--------+------------+
-          +---------+---------+
-                    |
-                    v
-     +-----------------------------------------------+
-     +---------+---------+------------+--------------+
-     | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
-     +---------+---------+------------+--------------+
-
-</pre>
+              <div id="section-2.2.2.1-1.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.1-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="512" viewBox="0 0 512 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                    <path d="M 48,192 L 48,224" fill="none" stroke="black"></path>
+                    <path d="M 88,112 L 88,160" fill="none" stroke="black"></path>
+                    <path d="M 128,192 L 128,224" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 184,64" fill="none" stroke="black"></path>
+                    <path d="M 208,192 L 208,224" fill="none" stroke="black"></path>
+                    <path d="M 248,112 L 248,160" fill="none" stroke="black"></path>
+                    <path d="M 256,64 L 256,80" fill="none" stroke="black"></path>
+                    <path d="M 312,192 L 312,224" fill="none" stroke="black"></path>
+                    <path d="M 328,32 L 328,64" fill="none" stroke="black"></path>
+                    <path d="M 328,112 L 328,144" fill="none" stroke="black"></path>
+                    <path d="M 400,112 L 400,144" fill="none" stroke="black"></path>
+                    <path d="M 432,192 L 432,224" fill="none" stroke="black"></path>
+                    <path d="M 504,112 L 504,144" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 328,32" fill="none" stroke="black"></path>
+                    <path d="M 184,64 L 328,64" fill="none" stroke="black"></path>
+                    <path d="M 24,96 L 240,96" fill="none" stroke="black"></path>
+                    <path d="M 272,96 L 488,96" fill="none" stroke="black"></path>
+                    <path d="M 8,112 L 504,112" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 504,144" fill="none" stroke="black"></path>
+                    <path d="M 64,176 L 72,176" fill="none" stroke="black"></path>
+                    <path d="M 264,176 L 416,176" fill="none" stroke="black"></path>
+                    <path d="M 48,192 L 432,192" fill="none" stroke="black"></path>
+                    <path d="M 48,224 L 432,224" fill="none" stroke="black"></path>
+                    <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                    <path d="M 240,96 C 248.83064,96 256,88.83064 256,80" fill="none" stroke="black"></path>
+                    <path d="M 272,96 C 263.16936,96 256,88.83064 256,80" fill="none" stroke="black"></path>
+                    <path d="M 488,96 C 496.83064,96 504,103.16936 504,112" fill="none" stroke="black"></path>
+                    <path d="M 64,176 C 55.16936,176 48,183.16936 48,192" fill="none" stroke="black"></path>
+                    <path d="M 72,176 C 80.83064,176 88,168.83064 88,160" fill="none" stroke="black"></path>
+                    <path d="M 264,176 C 255.16936,176 248,168.83064 248,160" fill="none" stroke="black"></path>
+                    <path d="M 416,176 C 424.83064,176 432,183.16936 432,192" fill="none" stroke="black"></path>
+                    <g class="text">
+                      <text x="252" y="52">Header</text>
+                      <text x="28" y="132">Sig.</text>
+                      <text x="68" y="132">Alg.</text>
+                      <text x="140" y="132">Verification</text>
+                      <text x="208" y="132">Key</text>
+                      <text x="236" y="132">ID</text>
+                      <text x="288" y="132">Timestamp</text>
+                      <text x="364" y="132">Metadata</text>
+                      <text x="452" y="132">AssocDataLen</text>
+                      <text x="84" y="212">ISD-AS</text>
+                      <text x="144" y="212">TRC</text>
+                      <text x="180" y="212">Base</text>
+                      <text x="232" y="212">TRC</text>
+                      <text x="276" y="212">Serial</text>
+                      <text x="344" y="212">Subject</text>
+                      <text x="392" y="212">Key</text>
+                      <text x="420" y="212">ID</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.1-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-as-entry-signed-header-2" class="selfRef">AS Entry Signed Header</a>
@@ -2557,20 +3104,50 @@ Path Segment 4 |             |     |             |     |             |
             </h5>
 <span id="name-as-entry-signed-body-2"></span><div id="_figure-11">
 <figure id="figure-11">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.2-1.1">
-<pre>
-                +--------------------------------------+
-                |                 Body                 |
-                +--------------------------------------+
-                +------------------+-------------------+
-                                   |
-                                   v
-+---------------------------------------------------------------------+
-+------+-----------+---------+-------------+---+-------------+---+----+
-|ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
-+------+-----------+---------+-------------+---+-------------+---+----+
-
-</pre>
+              <div id="section-2.2.2.2-1.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.2-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="576" viewBox="0 0 576 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                    <path d="M 64,112 L 64,144" fill="none" stroke="black"></path>
+                    <path d="M 136,32 L 136,64" fill="none" stroke="black"></path>
+                    <path d="M 160,112 L 160,144" fill="none" stroke="black"></path>
+                    <path d="M 240,112 L 240,144" fill="none" stroke="black"></path>
+                    <path d="M 288,64 L 288,80" fill="none" stroke="black"></path>
+                    <path d="M 352,112 L 352,144" fill="none" stroke="black"></path>
+                    <path d="M 384,112 L 384,144" fill="none" stroke="black"></path>
+                    <path d="M 448,32 L 448,64" fill="none" stroke="black"></path>
+                    <path d="M 496,112 L 496,144" fill="none" stroke="black"></path>
+                    <path d="M 528,112 L 528,144" fill="none" stroke="black"></path>
+                    <path d="M 568,112 L 568,144" fill="none" stroke="black"></path>
+                    <path d="M 136,32 L 448,32" fill="none" stroke="black"></path>
+                    <path d="M 136,64 L 448,64" fill="none" stroke="black"></path>
+                    <path d="M 24,96 L 272,96" fill="none" stroke="black"></path>
+                    <path d="M 304,96 L 552,96" fill="none" stroke="black"></path>
+                    <path d="M 8,112 L 568,112" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 568,144" fill="none" stroke="black"></path>
+                    <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                    <path d="M 272,96 C 280.83064,96 288,88.83064 288,80" fill="none" stroke="black"></path>
+                    <path d="M 304,96 C 295.16936,96 288,88.83064 288,80" fill="none" stroke="black"></path>
+                    <path d="M 552,96 C 560.83064,96 568,103.16936 568,112" fill="none" stroke="black"></path>
+                    <g class="text">
+                      <text x="292" y="52">Body</text>
+                      <text x="36" y="132">ISD-AS</text>
+                      <text x="84" y="132">Next</text>
+                      <text x="132" y="132">ISD-AS</text>
+                      <text x="176" y="132">Hop</text>
+                      <text x="216" y="132">Entry</text>
+                      <text x="260" y="132">Peer</text>
+                      <text x="304" y="132">Entry</text>
+                      <text x="336" y="132">0</text>
+                      <text x="368" y="132">...</text>
+                      <text x="404" y="132">Peer</text>
+                      <text x="448" y="132">Entry</text>
+                      <text x="480" y="132">N</text>
+                      <text x="512" y="132">MTU</text>
+                      <text x="548" y="132">Ext.</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.2-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-as-entry-signed-body-2" class="selfRef">AS Entry Signed Body</a>
@@ -2619,20 +3196,35 @@ Path Segment 4 |             |     |             |     |             |
             </h5>
 <span id="name-hop-entry-2"></span><div id="_figure-12">
 <figure id="figure-12">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.3-1.1">
-<pre>
-        +-----------+
-        | Hop Entry |
-        +-----------+
-        +-----+-----+
-              |
-              v
-+---------------------------+
-+-------------+-------------+
-| Ingress MTU |  Hop Field  |
-+-------------+-------------+
-
-</pre>
+              <div id="section-2.2.2.3-1.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.3-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="240" viewBox="0 0 240 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                    <path d="M 72,32 L 72,64" fill="none" stroke="black"></path>
+                    <path d="M 120,64 L 120,80" fill="none" stroke="black"></path>
+                    <path d="M 120,112 L 120,144" fill="none" stroke="black"></path>
+                    <path d="M 168,32 L 168,64" fill="none" stroke="black"></path>
+                    <path d="M 232,112 L 232,144" fill="none" stroke="black"></path>
+                    <path d="M 72,32 L 168,32" fill="none" stroke="black"></path>
+                    <path d="M 72,64 L 168,64" fill="none" stroke="black"></path>
+                    <path d="M 24,96 L 104,96" fill="none" stroke="black"></path>
+                    <path d="M 136,96 L 216,96" fill="none" stroke="black"></path>
+                    <path d="M 8,112 L 232,112" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 232,144" fill="none" stroke="black"></path>
+                    <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                    <path d="M 104,96 C 112.83064,96 120,88.83064 120,80" fill="none" stroke="black"></path>
+                    <path d="M 136,96 C 127.16936,96 120,88.83064 120,80" fill="none" stroke="black"></path>
+                    <path d="M 216,96 C 224.83064,96 232,103.16936 232,112" fill="none" stroke="black"></path>
+                    <g class="text">
+                      <text x="96" y="52">Hop</text>
+                      <text x="136" y="52">Entry</text>
+                      <text x="48" y="132">Ingress</text>
+                      <text x="96" y="132">MTU</text>
+                      <text x="152" y="132">Hop</text>
+                      <text x="192" y="132">Field</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.3-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-hop-entry-2" class="selfRef">Hop Entry</a>
@@ -2666,20 +3258,41 @@ Path Segment 4 |             |     |             |     |             |
             </h5>
 <span id="name-peer-entry-2"></span><div id="_figure-14">
 <figure id="figure-13">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.4-1.1">
-<pre>
-                      +--------------+
-                      |  Peer Entry  |
-                      +--------------+
-                      +------+-------+
-                             |
-                             v
-+----------------------------------------------------------+
-+-------------+------------+--------------+----------------+
-|  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
-+-------------+------------+--------------+----------------+
-
-</pre>
+              <div id="section-2.2.2.4-1.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.4-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="488" viewBox="0 0 488 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                    <path d="M 120,112 L 120,144" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 184,64" fill="none" stroke="black"></path>
+                    <path d="M 224,112 L 224,144" fill="none" stroke="black"></path>
+                    <path d="M 248,64 L 248,80" fill="none" stroke="black"></path>
+                    <path d="M 304,32 L 304,64" fill="none" stroke="black"></path>
+                    <path d="M 344,112 L 344,144" fill="none" stroke="black"></path>
+                    <path d="M 480,112 L 480,144" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 304,32" fill="none" stroke="black"></path>
+                    <path d="M 184,64 L 304,64" fill="none" stroke="black"></path>
+                    <path d="M 24,96 L 232,96" fill="none" stroke="black"></path>
+                    <path d="M 264,96 L 464,96" fill="none" stroke="black"></path>
+                    <path d="M 8,112 L 480,112" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 480,144" fill="none" stroke="black"></path>
+                    <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                    <path d="M 232,96 C 240.83064,96 248,88.83064 248,80" fill="none" stroke="black"></path>
+                    <path d="M 264,96 C 255.16936,96 248,88.83064 248,80" fill="none" stroke="black"></path>
+                    <path d="M 464,96 C 472.83064,96 480,103.16936 480,112" fill="none" stroke="black"></path>
+                    <g class="text">
+                      <text x="220" y="52">Peer</text>
+                      <text x="264" y="52">Entry</text>
+                      <text x="40" y="132">Hop</text>
+                      <text x="80" y="132">Field</text>
+                      <text x="156" y="132">Peer</text>
+                      <text x="192" y="132">MTU</text>
+                      <text x="252" y="132">Peer</text>
+                      <text x="300" y="132">ISD-AS</text>
+                      <text x="372" y="132">Peer</text>
+                      <text x="432" y="132">Interface</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.4-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-peer-entry-2" class="selfRef">Peer Entry</a>
@@ -2714,35 +3327,53 @@ Path Segment 4 |             |     |             |     |             |
 <p id="section-2.2.2.4-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.4-6" class="pilcrow">¶</a></p>
 <span id="name-peer-entry-information-in-t"></span><div id="_figure-15">
 <figure id="figure-14">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.4-7.1">
-<pre>
-   +-----------+
-   |           |
-   | Parent AS |
-   |           |
-   +-----+-----+
-         #
-         |
-         * ASE.HF.ingress_interface
-+--------+-----------+
-|        |           |        PE.peer_  +-----------+
-|        |           |        interface |           |
-|        | +---------+p----------------p+  Peer AS  |
-|        | |         | PE.HF.ingress_   |           |
-|        | |         | interface        +-----------+
-|        | |         |
-|        v v         |
-+---------+----------+
-          # PE.HF.egress_interface
-          │ ASE.HF.egress_interface
-          *
-    +-----+-----+
-    |           |
-    | Child AS  |
-    |           |
-    +-----------+
-
-</pre>
+              <div id="section-2.2.2.4-7.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.4-7.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="432" width="432" viewBox="0 0 432 432" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,160 L 8,288" fill="none" stroke="black"></path>
+                    <path d="M 32,32 L 32,96" fill="none" stroke="black"></path>
+                    <path d="M 40,352 L 40,416" fill="none" stroke="black"></path>
+                    <path d="M 80,96 L 80,280" fill="none" stroke="black"></path>
+                    <path d="M 88,288 L 88,352" fill="none" stroke="black"></path>
+                    <path d="M 96,208 L 96,280" fill="none" stroke="black"></path>
+                    <path d="M 128,32 L 128,96" fill="none" stroke="black"></path>
+                    <path d="M 136,352 L 136,416" fill="none" stroke="black"></path>
+                    <path d="M 176,160 L 176,288" fill="none" stroke="black"></path>
+                    <path d="M 328,176 L 328,240" fill="none" stroke="black"></path>
+                    <path d="M 424,176 L 424,240" fill="none" stroke="black"></path>
+                    <path d="M 32,32 L 128,32" fill="none" stroke="black"></path>
+                    <path d="M 32,96 L 128,96" fill="none" stroke="black"></path>
+                    <path d="M 8,160 L 176,160" fill="none" stroke="black"></path>
+                    <path d="M 328,176 L 424,176" fill="none" stroke="black"></path>
+                    <path d="M 96,208 L 176,208" fill="none" stroke="black"></path>
+                    <path d="M 192,208 L 312,208" fill="none" stroke="black"></path>
+                    <path d="M 328,240 L 424,240" fill="none" stroke="black"></path>
+                    <path d="M 8,288 L 176,288" fill="none" stroke="black"></path>
+                    <path d="M 40,352 L 136,352" fill="none" stroke="black"></path>
+                    <path d="M 40,416 L 136,416" fill="none" stroke="black"></path>
+                    <polygon class="arrowhead" points="104,280 92,274.4 92,285.6" fill="black" transform="rotate(90,96,280)"></polygon>
+                    <polygon class="arrowhead" points="88,280 76,274.4 76,285.6" fill="black" transform="rotate(90,80,280)"></polygon>
+                    <circle cx="80" cy="144" r="6" class="opendot" fill="white" stroke="black"></circle>
+                    <circle cx="88" cy="336" r="6" class="opendot" fill="white" stroke="black"></circle>
+                    <g class="text">
+                      <text x="68" y="68">Parent</text>
+                      <text x="108" y="68">AS</text>
+                      <text x="188" y="148">ASE.HF.ingress_interface</text>
+                      <text x="276" y="180">PE.peer_</text>
+                      <text x="280" y="196">interface</text>
+                      <text x="184" y="212">p</text>
+                      <text x="320" y="212">p</text>
+                      <text x="364" y="212">Peer</text>
+                      <text x="396" y="212">AS</text>
+                      <text x="244" y="228">PE.HF.ingress_</text>
+                      <text x="224" y="244">interface</text>
+                      <text x="188" y="308">PE.HF.egress_interface</text>
+                      <text x="192" y="324">ASE.HF.egress_interface</text>
+                      <text x="72" y="388">Child</text>
+                      <text x="108" y="388">AS</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.4-7.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-peer-entry-information-in-t" class="selfRef">Peer entry information, in the direction of beaconing</a>
@@ -2757,20 +3388,38 @@ Path Segment 4 |             |     |             |     |             |
             </h5>
 <span id="name-hop-field-2"></span><div id="_figure-13">
 <figure id="figure-15">
-              <div class="alignLeft art-text artwork" id="section-2.2.2.5-1.1">
-<pre>
-                      +-----------+
-                      | Hop Entry |
-                      +-----------+
-                      +-----+-----+
-                            |
-                            V
-+----------------------------------------------------------+
-+-------------+-------------+-------------------+----------+
-|   Ingress   |    Egress   |  Expiration Time  |   MAC    |
-+-------------+-------------+-------------------+----------+
-
-</pre>
+              <div id="section-2.2.2.5-1.1">
+                <div class="alignLeft art-svg artwork" id="section-2.2.2.5-1.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="488" viewBox="0 0 488 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,112 L 8,144" fill="none" stroke="black"></path>
+                    <path d="M 120,112 L 120,144" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 184,64" fill="none" stroke="black"></path>
+                    <path d="M 232,64 L 232,80" fill="none" stroke="black"></path>
+                    <path d="M 232,112 L 232,144" fill="none" stroke="black"></path>
+                    <path d="M 280,32 L 280,64" fill="none" stroke="black"></path>
+                    <path d="M 392,112 L 392,144" fill="none" stroke="black"></path>
+                    <path d="M 480,112 L 480,144" fill="none" stroke="black"></path>
+                    <path d="M 184,32 L 280,32" fill="none" stroke="black"></path>
+                    <path d="M 184,64 L 280,64" fill="none" stroke="black"></path>
+                    <path d="M 24,96 L 216,96" fill="none" stroke="black"></path>
+                    <path d="M 248,96 L 464,96" fill="none" stroke="black"></path>
+                    <path d="M 8,112 L 480,112" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 480,144" fill="none" stroke="black"></path>
+                    <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+                    <path d="M 216,96 C 224.83064,96 232,88.83064 232,80" fill="none" stroke="black"></path>
+                    <path d="M 248,96 C 239.16936,96 232,88.83064 232,80" fill="none" stroke="black"></path>
+                    <path d="M 464,96 C 472.83064,96 480,103.16936 480,112" fill="none" stroke="black"></path>
+                    <g class="text">
+                      <text x="208" y="52">Hop</text>
+                      <text x="248" y="52">Entry</text>
+                      <text x="64" y="132">Ingress</text>
+                      <text x="180" y="132">Egress</text>
+                      <text x="292" y="132">Expiration</text>
+                      <text x="356" y="132">Time</text>
+                      <text x="432" y="132">MAC</text>
+                    </g>
+                  </svg><a href="#section-2.2.2.5-1.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-hop-field-2" class="selfRef">Hop Field</a>
@@ -5463,34 +6112,121 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 <p id="appendix-C-1">To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in <a href="#_figure-41" class="auto internal xref">Figure 24</a> below. In both examples, the source endpoint is in AS A. <a href="#_figure-42" class="auto internal xref">Figure 25</a> shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas <a href="#_figure-43" class="auto internal xref">Figure 26</a> shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <span id="name-topology-used-in-the-path-l"></span><div id="_figure-41">
 <figure id="figure-24">
-        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
-<pre>
-+----------------------------+     +----------------------------+
-|                            |     |                            |
-|                            |     |                            |
-|    +------------------+    |     |    +------------------+    |
-|    |       Core       |    |     |    |       Core       |    |
-|    |                  |    |     |    |                  |    |
-|    | +-----+  +-----+ |    |     |    |          +-----+ |    |
-|    | |AS C +--+AS B +----------------------------+AS F | |    |
-|    | +-+---+  ++-+-++ |    |     |    |          +-+-+-+ |    |
-|    |   |       | | |  |    |     |    | +-----+    | |   |    |
-|    |   |       | | +--------------------+AS E +----+ |   |    |
-|    |   |       | |    |    |     |    | +--+--+      |   |    |
-|    +---|-------|-|----+    |     |    +----│---------|---+    |
-|        |       | |         |     |         │         |        |
-|        |       | |         |     |         │         |        |
-|        | +-----+ |         |     |         │         |        |
-|        | |       |         |     |         │         |        |
-|        | |       |         |     |         │         |        |
-|      +-+-+-+  +--+--+      |     |      +--+--+      |        |
-|      |AS D |  |AS A |      |     |      |AS G +------+        |
-|      +-----+  +-----+      |     |      +-----+               |
-|                            |     |                            |
-|            ISD 1           |     |            ISD 2           |
-+----------------------------+     +----------------------------+
-
-</pre>
+        <div id="appendix-C-2.1">
+          <div class="alignLeft art-svg artwork" id="appendix-C-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="416" width="528" viewBox="0 0 528 416" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,32 L 8,400" fill="none" stroke="black"></path>
+              <path d="M 32,80 L 32,224" fill="none" stroke="black"></path>
+              <path d="M 48,128 L 48,160" fill="none" stroke="black"></path>
+              <path d="M 64,320 L 64,352" fill="none" stroke="black"></path>
+              <path d="M 80,160 L 80,320" fill="none" stroke="black"></path>
+              <path d="M 96,128 L 96,160" fill="none" stroke="black"></path>
+              <path d="M 96,272 L 96,320" fill="none" stroke="black"></path>
+              <path d="M 112,320 L 112,352" fill="none" stroke="black"></path>
+              <path d="M 128,192 L 128,272" fill="none" stroke="black"></path>
+              <path d="M 144,128 L 144,160" fill="none" stroke="black"></path>
+              <path d="M 144,320 L 144,352" fill="none" stroke="black"></path>
+              <path d="M 168,160 L 168,320" fill="none" stroke="black"></path>
+              <path d="M 192,128 L 192,160" fill="none" stroke="black"></path>
+              <path d="M 192,320 L 192,352" fill="none" stroke="black"></path>
+              <path d="M 208,80 L 208,136" fill="none" stroke="black"></path>
+              <path d="M 208,152 L 208,184" fill="none" stroke="black"></path>
+              <path d="M 208,200 L 208,224" fill="none" stroke="black"></path>
+              <path d="M 240,32 L 240,136" fill="none" stroke="black"></path>
+              <path d="M 240,152 L 240,184" fill="none" stroke="black"></path>
+              <path d="M 240,200 L 240,400" fill="none" stroke="black"></path>
+              <path d="M 288,32 L 288,136" fill="none" stroke="black"></path>
+              <path d="M 288,152 L 288,184" fill="none" stroke="black"></path>
+              <path d="M 288,200 L 288,400" fill="none" stroke="black"></path>
+              <path d="M 328,80 L 328,136" fill="none" stroke="black"></path>
+              <path d="M 328,152 L 328,184" fill="none" stroke="black"></path>
+              <path d="M 328,200 L 328,224" fill="none" stroke="black"></path>
+              <path d="M 344,176 L 344,208" fill="none" stroke="black"></path>
+              <path d="M 352,320 L 352,352" fill="none" stroke="black"></path>
+              <path d="M 368,208 L 368,320" fill="none" stroke="black"></path>
+              <path d="M 376,128 L 376,144" fill="none" stroke="black"></path>
+              <path d="M 384,272 L 384,320" fill="none" stroke="black"></path>
+              <path d="M 392,176 L 392,208" fill="none" stroke="black"></path>
+              <path d="M 400,320 L 400,352" fill="none" stroke="black"></path>
+              <path d="M 416,112 L 416,144" fill="none" stroke="black"></path>
+              <path d="M 432,176 L 432,192" fill="none" stroke="black"></path>
+              <path d="M 448,144 L 448,272" fill="none" stroke="black"></path>
+              <path d="M 464,112 L 464,144" fill="none" stroke="black"></path>
+              <path d="M 480,80 L 480,224" fill="none" stroke="black"></path>
+              <path d="M 520,32 L 520,400" fill="none" stroke="black"></path>
+              <path d="M 8,32 L 240,32" fill="none" stroke="black"></path>
+              <path d="M 288,32 L 520,32" fill="none" stroke="black"></path>
+              <path d="M 32,80 L 208,80" fill="none" stroke="black"></path>
+              <path d="M 328,80 L 480,80" fill="none" stroke="black"></path>
+              <path d="M 416,112 L 464,112" fill="none" stroke="black"></path>
+              <path d="M 48,128 L 96,128" fill="none" stroke="black"></path>
+              <path d="M 144,128 L 192,128" fill="none" stroke="black"></path>
+              <path d="M 376,128 L 400,128" fill="none" stroke="black"></path>
+              <path d="M 112,144 L 128,144" fill="none" stroke="black"></path>
+              <path d="M 208,144 L 376,144" fill="none" stroke="black"></path>
+              <path d="M 416,144 L 464,144" fill="none" stroke="black"></path>
+              <path d="M 48,160 L 96,160" fill="none" stroke="black"></path>
+              <path d="M 144,160 L 192,160" fill="none" stroke="black"></path>
+              <path d="M 344,176 L 392,176" fill="none" stroke="black"></path>
+              <path d="M 200,192 L 328,192" fill="none" stroke="black"></path>
+              <path d="M 408,192 L 432,192" fill="none" stroke="black"></path>
+              <path d="M 344,208 L 392,208" fill="none" stroke="black"></path>
+              <path d="M 32,224 L 72,224" fill="none" stroke="black"></path>
+              <path d="M 88,224 L 120,224" fill="none" stroke="black"></path>
+              <path d="M 136,224 L 160,224" fill="none" stroke="black"></path>
+              <path d="M 176,224 L 208,224" fill="none" stroke="black"></path>
+              <path d="M 328,224 L 360,224" fill="none" stroke="black"></path>
+              <path d="M 376,224 L 440,224" fill="none" stroke="black"></path>
+              <path d="M 456,224 L 480,224" fill="none" stroke="black"></path>
+              <path d="M 96,272 L 128,272" fill="none" stroke="black"></path>
+              <path d="M 384,272 L 448,272" fill="none" stroke="black"></path>
+              <path d="M 64,320 L 112,320" fill="none" stroke="black"></path>
+              <path d="M 144,320 L 192,320" fill="none" stroke="black"></path>
+              <path d="M 352,320 L 400,320" fill="none" stroke="black"></path>
+              <path d="M 64,352 L 112,352" fill="none" stroke="black"></path>
+              <path d="M 144,352 L 192,352" fill="none" stroke="black"></path>
+              <path d="M 352,352 L 400,352" fill="none" stroke="black"></path>
+              <path d="M 8,400 L 240,400" fill="none" stroke="black"></path>
+              <path d="M 288,400 L 520,400" fill="none" stroke="black"></path>
+              <path d="M 188,168 L 200,192" fill="none" stroke="black"></path>
+              <path d="M 128,192 L 144,160" fill="none" stroke="black"></path>
+              <circle cx="80" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+              <circle cx="96" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+              <circle cx="168" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+              <circle cx="368" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+              <circle cx="384" cy="304" r="6" class="opendot" fill="white" stroke="black"></circle>
+              <g class="text">
+                <text x="124" y="100">Core</text>
+                <text x="404" y="100">Core</text>
+                <text x="408" y="132">c</text>
+                <text x="428" y="132">AS</text>
+                <text x="448" y="132">F</text>
+                <text x="60" y="148">AS</text>
+                <text x="80" y="148">C</text>
+                <text x="104" y="148">c</text>
+                <text x="136" y="148">c</text>
+                <text x="156" y="148">AS</text>
+                <text x="176" y="148">B</text>
+                <text x="200" y="148">c</text>
+                <text x="432" y="164">c</text>
+                <text x="184" y="180">c</text>
+                <text x="336" y="196">c</text>
+                <text x="356" y="196">AS</text>
+                <text x="376" y="196">E</text>
+                <text x="400" y="196">c</text>
+                <text x="76" y="340">AS</text>
+                <text x="96" y="340">D</text>
+                <text x="156" y="340">AS</text>
+                <text x="176" y="340">A</text>
+                <text x="364" y="340">AS</text>
+                <text x="384" y="340">G</text>
+                <text x="120" y="388">ISD</text>
+                <text x="144" y="388">1</text>
+                <text x="400" y="388">ISD</text>
+                <text x="424" y="388">2</text>
+              </g>
+            </svg><a href="#appendix-C-2.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-topology-used-in-the-path-l" class="selfRef">Topology used in the path lookup examples</a>
@@ -5498,129 +6234,366 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 </div>
 <span id="name-sequence-diagram-illustrati"></span><div id="_figure-42">
 <figure id="figure-25">
-        <div class="alignLeft art-text artwork" id="appendix-C-3.1">
-<pre>
-+---------+          +---------+          +---------+         +---------+
-|Endpoint |          |Source AS|          | Core AS |         | Core AS |
-|         |          | CS (A)  |          | CS (B)  |         | CS (C)  |
-+--+-+-+--+          +----+----+          +----+----+         +----+----+
-   | | |                  |                    |                   |
-   | | |                  |                    |                   |
-+--+-+-+------+           |                    |                   |
-|Send Requests|           |                    |                   |
-| in parallel |           |                    |                   |
-+--+-+-+------+           |                    |                   |
-   | | |                  |                    |                   |
-   | | |request (up)      |                    |                   |
-   +---------------------&gt;|                    |                   |
-   |&lt;-- -- -- -- -- -- -- +                    |                   |
-   | | | reply (up,[A-&gt;B])|                    |                   |
-   | | |                  |                    |                   |
-   | | |                  |                    |                   |
-   | | |request (core,*,*)|                    |                   |
-   | +-------------------&gt;|                    |                   |
-   | | |                  |request (core,B,*)  |                   |
-   | | |                  +-------------------&gt;|                   |
-   | | |                  |&lt;-- -- -- -- -- -- -+                   |
-   | | |                  |  reply(core,[B-&gt;C])|                   |
-   | |&lt;-- -- -- -- -- -- -+                    |                   |
-   | | | reply (core,[B-&gt;C])                   |                   |
-   | | |                  |                    |                   |
-   | | |                  |                    |                   |
-   | | |request (down,*,D)|                    |                   |
-   | | |           +------+------+             |                   |
-   | | +----------&gt;|send requests|             |                   |
-   | | |           | in parallel |             |                   |
-   | | |           +-----+-+-----+             |                   |
-   | | |                 | |                   |                   |
-   | | |                 | |request (down,B,D) |                   |
-   | | |                 +--------------------&gt;|                   |
-   | | |                 |&lt;-- -- -- -- -- -- --+                   |
-   | | |                 | | reply(down,[B-&gt;D])|                   |
-   | | |                 | |                   |                   |
-   | | |                 | |                   |request (down,C,D) |
-   | | |                 | +--------------------------------------&gt;|
-   | | |                 | |&lt;-- -- -- -- -- -- -- -- -- -- -- -- --+
-   | | |                 | |                   | reply(down,[C-&gt;D])|
-   | | |                 | |                   |                   |
-   | | |&lt;-- -- -- -- -- -+++                   |                   |
-   | | | reply (down,[B-&gt;D, C-&gt;D])             |                   |
-   | | |                  |                    |                   |
-+--+-+-+---------+        |                    |                   |
-|Combine Segments|        |                    |                   |
-+----+-----------+        |                    |                   |
-     |                    |                    |                   |
-     |                    |                    |                   |
-     |                    |                    |                   |
-
-</pre>
+        <div id="appendix-C-3.1">
+          <div class="alignLeft art-svg artwork" id="appendix-C-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="592" viewBox="0 0 592 864" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,32 L 8,80" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 8,176" fill="none" stroke="black"></path>
+              <path d="M 8,768 L 8,800" fill="none" stroke="black"></path>
+              <path d="M 32,80 L 32,128" fill="none" stroke="black"></path>
+              <path d="M 32,176 L 32,768" fill="none" stroke="black"></path>
+              <path d="M 48,80 L 48,128" fill="none" stroke="black"></path>
+              <path d="M 48,176 L 48,216" fill="none" stroke="black"></path>
+              <path d="M 48,248 L 48,768" fill="none" stroke="black"></path>
+              <path d="M 48,800 L 48,848" fill="none" stroke="black"></path>
+              <path d="M 64,80 L 64,128" fill="none" stroke="black"></path>
+              <path d="M 64,176 L 64,216" fill="none" stroke="black"></path>
+              <path d="M 64,256 L 64,312" fill="none" stroke="black"></path>
+              <path d="M 64,328 L 64,392" fill="none" stroke="black"></path>
+              <path d="M 64,408 L 64,768" fill="none" stroke="black"></path>
+              <path d="M 88,32 L 88,80" fill="none" stroke="black"></path>
+              <path d="M 120,128 L 120,176" fill="none" stroke="black"></path>
+              <path d="M 144,768 L 144,800" fill="none" stroke="black"></path>
+              <path d="M 160,480 L 160,528" fill="none" stroke="black"></path>
+              <path d="M 176,32 L 176,80" fill="none" stroke="black"></path>
+              <path d="M 208,528 L 208,720" fill="none" stroke="black"></path>
+              <path d="M 216,80 L 216,400" fill="none" stroke="black"></path>
+              <path d="M 216,432 L 216,480" fill="none" stroke="black"></path>
+              <path d="M 216,752 L 216,848" fill="none" stroke="black"></path>
+              <path d="M 224,528 L 224,568" fill="none" stroke="black"></path>
+              <path d="M 224,600 L 224,720" fill="none" stroke="black"></path>
+              <path d="M 256,32 L 256,80" fill="none" stroke="black"></path>
+              <path d="M 272,480 L 272,528" fill="none" stroke="black"></path>
+              <path d="M 344,32 L 344,80" fill="none" stroke="black"></path>
+              <path d="M 384,80 L 384,648" fill="none" stroke="black"></path>
+              <path d="M 384,680 L 384,848" fill="none" stroke="black"></path>
+              <path d="M 424,32 L 424,80" fill="none" stroke="black"></path>
+              <path d="M 504,32 L 504,80" fill="none" stroke="black"></path>
+              <path d="M 544,80 L 544,848" fill="none" stroke="black"></path>
+              <path d="M 584,32 L 584,80" fill="none" stroke="black"></path>
+              <path d="M 8,32 L 88,32" fill="none" stroke="black"></path>
+              <path d="M 176,32 L 256,32" fill="none" stroke="black"></path>
+              <path d="M 344,32 L 424,32" fill="none" stroke="black"></path>
+              <path d="M 504,32 L 584,32" fill="none" stroke="black"></path>
+              <path d="M 8,80 L 88,80" fill="none" stroke="black"></path>
+              <path d="M 176,80 L 256,80" fill="none" stroke="black"></path>
+              <path d="M 344,80 L 424,80" fill="none" stroke="black"></path>
+              <path d="M 504,80 L 584,80" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 120,128" fill="none" stroke="black"></path>
+              <path d="M 8,176 L 120,176" fill="none" stroke="black"></path>
+              <path d="M 32,224 L 208,224" fill="none" stroke="black"></path>
+              <path d="M 40,240 L 56,240" fill="none" stroke="black"></path>
+              <path d="M 48,320 L 208,320" fill="none" stroke="black"></path>
+              <path d="M 216,352 L 376,352" fill="none" stroke="black"></path>
+              <path d="M 224,368 L 240,368" fill="none" stroke="black"></path>
+              <path d="M 56,400 L 72,400" fill="none" stroke="black"></path>
+              <path d="M 160,480 L 272,480" fill="none" stroke="black"></path>
+              <path d="M 64,496 L 152,496" fill="none" stroke="black"></path>
+              <path d="M 160,528 L 272,528" fill="none" stroke="black"></path>
+              <path d="M 208,576 L 376,576" fill="none" stroke="black"></path>
+              <path d="M 216,592 L 232,592" fill="none" stroke="black"></path>
+              <path d="M 368,592 L 384,592" fill="none" stroke="black"></path>
+              <path d="M 224,656 L 536,656" fill="none" stroke="black"></path>
+              <path d="M 232,672 L 248,672" fill="none" stroke="black"></path>
+              <path d="M 528,672 L 544,672" fill="none" stroke="black"></path>
+              <path d="M 72,720 L 96,720" fill="none" stroke="black"></path>
+              <path d="M 208,720 L 224,720" fill="none" stroke="black"></path>
+              <path d="M 8,768 L 144,768" fill="none" stroke="black"></path>
+              <path d="M 8,800 L 144,800" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="544,656 532,650.4 532,661.6" fill="black" transform="rotate(0,536,656)"></polygon>
+              <polygon class="arrowhead" points="384,576 372,570.4 372,581.6" fill="black" transform="rotate(0,376,576)"></polygon>
+              <polygon class="arrowhead" points="384,352 372,346.4 372,357.6" fill="black" transform="rotate(0,376,352)"></polygon>
+              <polygon class="arrowhead" points="240,672 228,666.4 228,677.6" fill="black" transform="rotate(180,232,672)"></polygon>
+              <polygon class="arrowhead" points="232,368 220,362.4 220,373.6" fill="black" transform="rotate(180,224,368)"></polygon>
+              <polygon class="arrowhead" points="224,592 212,586.4 212,597.6" fill="black" transform="rotate(180,216,592)"></polygon>
+              <polygon class="arrowhead" points="216,320 204,314.4 204,325.6" fill="black" transform="rotate(0,208,320)"></polygon>
+              <polygon class="arrowhead" points="216,224 204,218.4 204,229.6" fill="black" transform="rotate(0,208,224)"></polygon>
+              <polygon class="arrowhead" points="160,496 148,490.4 148,501.6" fill="black" transform="rotate(0,152,496)"></polygon>
+              <polygon class="arrowhead" points="80,720 68,714.4 68,725.6" fill="black" transform="rotate(180,72,720)"></polygon>
+              <polygon class="arrowhead" points="64,400 52,394.4 52,405.6" fill="black" transform="rotate(180,56,400)"></polygon>
+              <polygon class="arrowhead" points="48,240 36,234.4 36,245.6" fill="black" transform="rotate(180,40,240)"></polygon>
+              <g class="text">
+                <text x="44" y="52">Endpoint</text>
+                <text x="204" y="52">Source</text>
+                <text x="244" y="52">AS</text>
+                <text x="372" y="52">Core</text>
+                <text x="404" y="52">AS</text>
+                <text x="532" y="52">Core</text>
+                <text x="564" y="52">AS</text>
+                <text x="196" y="68">CS</text>
+                <text x="232" y="68">(A)</text>
+                <text x="364" y="68">CS</text>
+                <text x="400" y="68">(B)</text>
+                <text x="524" y="68">CS</text>
+                <text x="560" y="68">(C)</text>
+                <text x="28" y="148">Send</text>
+                <text x="84" y="148">Requests</text>
+                <text x="28" y="164">in</text>
+                <text x="76" y="164">parallel</text>
+                <text x="96" y="212">request</text>
+                <text x="148" y="212">(up)</text>
+                <text x="76" y="244">--</text>
+                <text x="100" y="244">--</text>
+                <text x="124" y="244">--</text>
+                <text x="148" y="244">--</text>
+                <text x="172" y="244">--</text>
+                <text x="196" y="244">--</text>
+                <text x="96" y="260">reply</text>
+                <text x="168" y="260">(up,[A-&gt;B])</text>
+                <text x="96" y="308">request</text>
+                <text x="172" y="308">(core,0,0)</text>
+                <text x="248" y="340">request</text>
+                <text x="324" y="340">(core,B,0)</text>
+                <text x="260" y="372">--</text>
+                <text x="284" y="372">--</text>
+                <text x="308" y="372">--</text>
+                <text x="332" y="372">--</text>
+                <text x="356" y="372">--</text>
+                <text x="376" y="372">-</text>
+                <text x="308" y="388">reply(core,[B-&gt;C])</text>
+                <text x="92" y="404">--</text>
+                <text x="116" y="404">--</text>
+                <text x="140" y="404">--</text>
+                <text x="164" y="404">--</text>
+                <text x="188" y="404">--</text>
+                <text x="208" y="404">-</text>
+                <text x="96" y="420">reply</text>
+                <text x="176" y="420">(core,[B-&gt;C])</text>
+                <text x="96" y="468">request</text>
+                <text x="172" y="468">(down,0,D)</text>
+                <text x="180" y="500">send</text>
+                <text x="236" y="500">requests</text>
+                <text x="180" y="516">in</text>
+                <text x="228" y="516">parallel</text>
+                <text x="256" y="564">request</text>
+                <text x="332" y="564">(down,B,D)</text>
+                <text x="252" y="596">--</text>
+                <text x="276" y="596">--</text>
+                <text x="300" y="596">--</text>
+                <text x="324" y="596">--</text>
+                <text x="348" y="596">--</text>
+                <text x="308" y="612">reply(down,[B-&gt;D])</text>
+                <text x="416" y="644">request</text>
+                <text x="492" y="644">(down,C,D)</text>
+                <text x="268" y="676">--</text>
+                <text x="292" y="676">--</text>
+                <text x="316" y="676">--</text>
+                <text x="340" y="676">--</text>
+                <text x="364" y="676">--</text>
+                <text x="388" y="676">--</text>
+                <text x="412" y="676">--</text>
+                <text x="436" y="676">--</text>
+                <text x="460" y="676">--</text>
+                <text x="484" y="676">--</text>
+                <text x="508" y="676">--</text>
+                <text x="468" y="692">reply(down,[C-&gt;D])</text>
+                <text x="116" y="724">--</text>
+                <text x="140" y="724">--</text>
+                <text x="164" y="724">--</text>
+                <text x="188" y="724">--</text>
+                <text x="104" y="740">reply</text>
+                <text x="180" y="740">(down,[B-&gt;D,</text>
+                <text x="260" y="740">C-&gt;D])</text>
+                <text x="40" y="788">Combine</text>
+                <text x="108" y="788">Segments</text>
+              </g>
+            </svg><a href="#appendix-C-3.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
-<a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D.</a>
+<a href="#name-sequence-diagram-illustrati" class="selfRef">Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, 0, 0) is for all pairs of core ASes in the source ISD. Similarly, (down, 0, D) is for down segments between any core AS in the source ISD and destination D.</a>
         </figcaption></figure>
 </div>
 <span id="name-sequence-diagram-illustratin"></span><div id="_figure-43">
 <figure id="figure-26">
-        <div class="alignLeft art-text artwork" id="appendix-C-4.1">
-<pre>
-
-+---------+     +---------+     +---------+     +---------+     +---------+
-|Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
-|         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
-+--+-+-+--+     +----+----+     +----+----+     +----+----+     +----+----+
-   | | |             |               |               |               |
-   | | |             |               |               |               |
-+--+-+-+------+      |               |               |               |
-|Send Requests|      |               |               |               |
-| in parallel |      |               |               |               |
-+--+-+-+------+      |               |               |               |
-   | | |             |               |               |               |
-   | | |request (up) |               |               |               |
-   +----------------&gt;|               |               |               |
-   | | |             |               |               |               |
-   |&lt;-- -- -- -- -- -+               |               |               |
-   | | | reply (up,[A-&gt;B])           |               |               |
-   | | |             |               |               |               |
-   | | |             |               |               |               |
-   | | |request (core,*,(2,*))       |               |               |
-   | +--------------&gt;|               |               |               |
-   | | |             |request (core,*,(2,*))         |               |
-   | | |             +--------------&gt;|               |               |
-   | | |             |&lt;- -- -- -- -- +               |               |
-   | | |             | reply (core,[B-&gt;E,B-&gt;F])      |               |
-   | |&lt;- -- -- -- -- +               |               |               |
-   | | | reply (core,[B-&gt;E,B-&gt;F])    |               |               |
-   | | |             |               |               |               |
-   | | |             |               |               |               |
-   | | |request (down,(2,*),G)       |               |               |
-   | | |      +------+------+        |               |               |
-   | | +-----&gt;|send requests|        |               |               |
-   | | |      | in parallel |        |               |               |
-   | | |      +-----+-+-----+        |               |               |
-   | | |            | |              |request (down,E,G)             |
-   | | |            +-------------------------------&gt;|               |
-   | | |            |&lt;-- -- -- -- -- -- -- -- -- -- -+               |
-   | | |            | |              | reply (down,[E-&gt;G])           |
-   | | |            | |              |               |               |
-   | | |            | |              |               |               |
-   | | |            | |              |               |request (down,F,G)
-   | | |            | +---------------------------------------------&gt;|
-   | | |            | |&lt;- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -+
-   | | |            | |              |               | reply (down,[F-&gt;G])
-   | | |&lt;- -- -- -- +++              |               |               |
-   | | | reply (down,[E-&gt;G,F-&gt;G])    |               |               |
-   | | |             |               |               |               |
-+--+-+-+---------+   |               |               |               |
-|Combine Segments|   |               |               |               |
-+----+-----------+   |               |               |               |
-     |               |               |               |               |
-     |               |               |               |               |
-     |               |               |               |               |
-
-</pre>
+        <div id="appendix-C-4.1">
+          <div class="alignLeft art-svg artwork" id="appendix-C-4.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="864" width="608" viewBox="0 0 608 864" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,32 L 8,80" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 8,176" fill="none" stroke="black"></path>
+              <path d="M 8,768 L 8,800" fill="none" stroke="black"></path>
+              <path d="M 32,80 L 32,128" fill="none" stroke="black"></path>
+              <path d="M 32,176 L 32,768" fill="none" stroke="black"></path>
+              <path d="M 48,80 L 48,128" fill="none" stroke="black"></path>
+              <path d="M 48,176 L 48,216" fill="none" stroke="black"></path>
+              <path d="M 48,264 L 48,768" fill="none" stroke="black"></path>
+              <path d="M 48,800 L 48,848" fill="none" stroke="black"></path>
+              <path d="M 64,80 L 64,128" fill="none" stroke="black"></path>
+              <path d="M 64,176 L 64,216" fill="none" stroke="black"></path>
+              <path d="M 64,272 L 64,328" fill="none" stroke="black"></path>
+              <path d="M 64,344 L 64,408" fill="none" stroke="black"></path>
+              <path d="M 64,424 L 64,768" fill="none" stroke="black"></path>
+              <path d="M 88,32 L 88,80" fill="none" stroke="black"></path>
+              <path d="M 120,128 L 120,176" fill="none" stroke="black"></path>
+              <path d="M 120,496 L 120,544" fill="none" stroke="black"></path>
+              <path d="M 136,32 L 136,80" fill="none" stroke="black"></path>
+              <path d="M 144,768 L 144,800" fill="none" stroke="black"></path>
+              <path d="M 168,544 L 168,720" fill="none" stroke="black"></path>
+              <path d="M 176,80 L 176,256" fill="none" stroke="black"></path>
+              <path d="M 176,280 L 176,416" fill="none" stroke="black"></path>
+              <path d="M 176,448 L 176,464" fill="none" stroke="black"></path>
+              <path d="M 176,752 L 176,848" fill="none" stroke="black"></path>
+              <path d="M 184,544 L 184,568" fill="none" stroke="black"></path>
+              <path d="M 184,600 L 184,720" fill="none" stroke="black"></path>
+              <path d="M 216,32 L 216,80" fill="none" stroke="black"></path>
+              <path d="M 232,496 L 232,544" fill="none" stroke="black"></path>
+              <path d="M 264,32 L 264,80" fill="none" stroke="black"></path>
+              <path d="M 304,80 L 304,384" fill="none" stroke="black"></path>
+              <path d="M 304,408 L 304,568" fill="none" stroke="black"></path>
+              <path d="M 304,600 L 304,664" fill="none" stroke="black"></path>
+              <path d="M 304,704 L 304,848" fill="none" stroke="black"></path>
+              <path d="M 344,32 L 344,80" fill="none" stroke="black"></path>
+              <path d="M 392,32 L 392,80" fill="none" stroke="black"></path>
+              <path d="M 432,80 L 432,592" fill="none" stroke="black"></path>
+              <path d="M 432,616 L 432,664" fill="none" stroke="black"></path>
+              <path d="M 432,696 L 432,848" fill="none" stroke="black"></path>
+              <path d="M 472,32 L 472,80" fill="none" stroke="black"></path>
+              <path d="M 520,32 L 520,80" fill="none" stroke="black"></path>
+              <path d="M 560,80 L 560,688" fill="none" stroke="black"></path>
+              <path d="M 560,712 L 560,848" fill="none" stroke="black"></path>
+              <path d="M 600,32 L 600,80" fill="none" stroke="black"></path>
+              <path d="M 8,32 L 88,32" fill="none" stroke="black"></path>
+              <path d="M 136,32 L 216,32" fill="none" stroke="black"></path>
+              <path d="M 264,32 L 344,32" fill="none" stroke="black"></path>
+              <path d="M 392,32 L 472,32" fill="none" stroke="black"></path>
+              <path d="M 520,32 L 600,32" fill="none" stroke="black"></path>
+              <path d="M 8,80 L 88,80" fill="none" stroke="black"></path>
+              <path d="M 136,80 L 216,80" fill="none" stroke="black"></path>
+              <path d="M 264,80 L 344,80" fill="none" stroke="black"></path>
+              <path d="M 392,80 L 472,80" fill="none" stroke="black"></path>
+              <path d="M 520,80 L 600,80" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 120,128" fill="none" stroke="black"></path>
+              <path d="M 8,176 L 120,176" fill="none" stroke="black"></path>
+              <path d="M 32,224 L 168,224" fill="none" stroke="black"></path>
+              <path d="M 40,256 L 56,256" fill="none" stroke="black"></path>
+              <path d="M 48,336 L 168,336" fill="none" stroke="black"></path>
+              <path d="M 176,368 L 296,368" fill="none" stroke="black"></path>
+              <path d="M 120,496 L 232,496" fill="none" stroke="black"></path>
+              <path d="M 64,512 L 112,512" fill="none" stroke="black"></path>
+              <path d="M 120,544 L 232,544" fill="none" stroke="black"></path>
+              <path d="M 168,576 L 424,576" fill="none" stroke="black"></path>
+              <path d="M 176,592 L 192,592" fill="none" stroke="black"></path>
+              <path d="M 184,672 L 552,672" fill="none" stroke="black"></path>
+              <path d="M 168,720 L 184,720" fill="none" stroke="black"></path>
+              <path d="M 8,768 L 144,768" fill="none" stroke="black"></path>
+              <path d="M 8,800 L 144,800" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="560,672 548,666.4 548,677.6" fill="black" transform="rotate(0,552,672)"></polygon>
+              <polygon class="arrowhead" points="432,576 420,570.4 420,581.6" fill="black" transform="rotate(0,424,576)"></polygon>
+              <polygon class="arrowhead" points="304,368 292,362.4 292,373.6" fill="black" transform="rotate(0,296,368)"></polygon>
+              <polygon class="arrowhead" points="184,592 172,586.4 172,597.6" fill="black" transform="rotate(180,176,592)"></polygon>
+              <polygon class="arrowhead" points="176,336 164,330.4 164,341.6" fill="black" transform="rotate(0,168,336)"></polygon>
+              <polygon class="arrowhead" points="176,224 164,218.4 164,229.6" fill="black" transform="rotate(0,168,224)"></polygon>
+              <polygon class="arrowhead" points="120,512 108,506.4 108,517.6" fill="black" transform="rotate(0,112,512)"></polygon>
+              <polygon class="arrowhead" points="48,256 36,250.4 36,261.6" fill="black" transform="rotate(180,40,256)"></polygon>
+              <g class="text">
+                <text x="44" y="52">Endpoint</text>
+                <text x="164" y="52">Source</text>
+                <text x="204" y="52">AS</text>
+                <text x="292" y="52">Core</text>
+                <text x="324" y="52">AS</text>
+                <text x="420" y="52">Core</text>
+                <text x="452" y="52">AS</text>
+                <text x="548" y="52">Core</text>
+                <text x="580" y="52">AS</text>
+                <text x="156" y="68">CS</text>
+                <text x="192" y="68">(A)</text>
+                <text x="284" y="68">CS</text>
+                <text x="320" y="68">(B)</text>
+                <text x="412" y="68">CS</text>
+                <text x="448" y="68">(E)</text>
+                <text x="540" y="68">CS</text>
+                <text x="576" y="68">(F)</text>
+                <text x="28" y="148">Send</text>
+                <text x="84" y="148">Requests</text>
+                <text x="28" y="164">in</text>
+                <text x="76" y="164">parallel</text>
+                <text x="96" y="212">request</text>
+                <text x="148" y="212">(up)</text>
+                <text x="48" y="244">|</text>
+                <text x="64" y="244">|</text>
+                <text x="76" y="260">--</text>
+                <text x="100" y="260">--</text>
+                <text x="124" y="260">--</text>
+                <text x="148" y="260">--</text>
+                <text x="168" y="260">-</text>
+                <text x="96" y="276">reply</text>
+                <text x="168" y="276">(up,[A-&gt;B])</text>
+                <text x="96" y="324">request</text>
+                <text x="152" y="324">(core</text>
+                <text x="212" y="324">0,(2,0))</text>
+                <text x="208" y="356">request</text>
+                <text x="272" y="356">(core,0</text>
+                <text x="332" y="356">(2,0))</text>
+                <text x="188" y="388">&lt;-</text>
+                <text x="212" y="388">--</text>
+                <text x="236" y="388">--</text>
+                <text x="260" y="388">--</text>
+                <text x="284" y="388">--</text>
+                <text x="208" y="404">reply</text>
+                <text x="308" y="404">(core,[B-&gt;E,B-&gt;F])</text>
+                <text x="60" y="420">&lt;-</text>
+                <text x="84" y="420">--</text>
+                <text x="108" y="420">--</text>
+                <text x="132" y="420">--</text>
+                <text x="156" y="420">--</text>
+                <text x="96" y="436">reply</text>
+                <text x="196" y="436">(core,[B-&gt;E,B-&gt;F])</text>
+                <text x="104" y="484">request</text>
+                <text x="196" y="484">(down,(2,0),G)</text>
+                <text x="140" y="516">send</text>
+                <text x="196" y="516">requests</text>
+                <text x="140" y="532">in</text>
+                <text x="188" y="532">parallel</text>
+                <text x="336" y="564">request</text>
+                <text x="400" y="564">(down,E</text>
+                <text x="444" y="564">G)</text>
+                <text x="212" y="596">--</text>
+                <text x="236" y="596">--</text>
+                <text x="260" y="596">--</text>
+                <text x="284" y="596">--</text>
+                <text x="308" y="596">--</text>
+                <text x="332" y="596">--</text>
+                <text x="356" y="596">--</text>
+                <text x="380" y="596">--</text>
+                <text x="404" y="596">--</text>
+                <text x="424" y="596">-</text>
+                <text x="336" y="612">reply</text>
+                <text x="416" y="612">(down,[E-&gt;G])</text>
+                <text x="464" y="660">request</text>
+                <text x="528" y="660">(down,F</text>
+                <text x="572" y="660">G)</text>
+                <text x="196" y="692">&lt;-</text>
+                <text x="220" y="692">--</text>
+                <text x="244" y="692">--</text>
+                <text x="268" y="692">--</text>
+                <text x="292" y="692">--</text>
+                <text x="316" y="692">--</text>
+                <text x="340" y="692">--</text>
+                <text x="364" y="692">--</text>
+                <text x="388" y="692">--</text>
+                <text x="412" y="692">--</text>
+                <text x="436" y="692">--</text>
+                <text x="460" y="692">--</text>
+                <text x="484" y="692">--</text>
+                <text x="508" y="692">--</text>
+                <text x="532" y="692">--</text>
+                <text x="552" y="692">-</text>
+                <text x="464" y="708">reply</text>
+                <text x="544" y="708">(down,[F-&gt;G])</text>
+                <text x="76" y="724">&lt;-</text>
+                <text x="100" y="724">--</text>
+                <text x="124" y="724">--</text>
+                <text x="148" y="724">--</text>
+                <text x="96" y="740">reply</text>
+                <text x="196" y="740">(down,[E-&gt;G,F-&gt;G])</text>
+                <text x="40" y="788">Combine</text>
+                <text x="108" y="788">Segments</text>
+              </g>
+            </svg><a href="#appendix-C-4.1.1" class="pilcrow">¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
-<a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G.</a>
+<a href="#name-sequence-diagram-illustratin" class="selfRef">Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, 0, (2, 0)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, 0), G) is for down segments between any core AS in ISD 2 and destination G.</a>
         </figcaption></figure>
 </div>
 </section>
@@ -5645,6 +6618,12 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 </li>
           <li class="normal" id="appendix-D.1-1.3">
             <p id="appendix-D.1-1.3.1">Small clarifications and nits<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.4">
+            <p id="appendix-D.1-1.4.1">Figures: small changes to use aasvg in all figures<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.5">
+            <p id="appendix-D.1-1.5.1">Appendix "Path-Lookup Examples": use wildcard AS 0 instead of * in figures in<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
