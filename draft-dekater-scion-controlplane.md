@@ -286,23 +286,23 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
 
-~~~
+~~~aasvg
 +-------------------------+
-|                         |       #
+|                         |       |
 |        ISD Core         |       |      parent-child
 | +-----+         +-----+ |       |      link
-| |AS A +c-------c+AS C | |       |
-| +--+--+         +--+--+ |       *
-|    #               #    |
+| |AS A +c-------c+AS C | |       o
+| +--+--+         +--+--+ |       |
+|    |               |    |
 +----|---------------|----+   c-------c  core link
      |               |
-     *               *        p-------p  peering link
+     o               o        p-------p  peering link
   +--+--+         +--+--+
   |AS D +p-------p+AS E |
   +--+--+         +--+--+
-     #               #
      |               |
-     *               *
+     |               |
+     o               o
   +--+--+         +--+--+
   |AS G |         |AS F |
   +-----+         +-----+
@@ -483,20 +483,19 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
-~~~
-
+~~~aasvg
                            +-------------+
                            |  Core AS X  |
                            |             |
                            |    2   1    |
                            +----+---+----+
-           +--------+           #   #           +--------+
-           | PCB a  |   +-----+ |   | +-----+   | PCB b  |
-           +========+ <-+PCB a| |   | |PCB b|-> +========+
-           | Core   |   +--+--+ |   | +--+--+   |Core    |
-           |- Out:2 |      |    |   |    │      |- Out:1 |
-           +--------+      v    |   |    v      +--------+
-                                *   *
+         +--------+-.           |   |            .-+--------+
+         | PCB a  |  |  +-----+ |   | +-----+   |  | PCB b  |
+         +========+   +-+PCB a| |   | |PCB b+--+   +========+
+         | Core   |  |  +--+--+ |   | +--+--+   |  |Core    |
+         |- Out:2 |  |     |    |   |    |      |  |- Out:1 |
+         +--------+-'      v    |   |    v       '-+--------+
+                                o   o
                            +----+---+----+
                            |    AS Y     |
 ~~~
