@@ -286,23 +286,23 @@ SCION paths are always "valley free" whereby a child AS does not carry transit t
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
 
-~~~
+~~~aasvg
 +-------------------------+
-|                         |       #
+|                         |       |
 |        ISD Core         |       |      parent-child
 | +-----+         +-----+ |       |      link
-| |AS A +c-------c+AS C | |       |
-| +--+--+         +--+--+ |       *
-|    #               #    |
+| |AS A +c-------c+AS C | |       o
+| +--+--+         +--+--+ |       |
+|    |               |    |
 +----|---------------|----+   c-------c  core link
      |               |
-     *               *        p-------p  peering link
+     o               o        p-------p  peering link
   +--+--+         +--+--+
   |AS D +p-------p+AS E |
   +--+--+         +--+--+
-     #               #
      |               |
-     *               *
+     |               |
+     o               o
   +--+--+         +--+--+
   |AS G |         |AS F |
   +-----+         +-----+
@@ -483,20 +483,19 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
-~~~
-
+~~~aasvg
                            +-------------+
                            |  Core AS X  |
                            |             |
                            |    2   1    |
                            +----+---+----+
-           +--------+           #   #           +--------+
-           | PCB a  |   +-----+ |   | +-----+   | PCB b  |
-           +========+ <-+PCB a| |   | |PCB b|-> +========+
-           | Core   |   +--+--+ |   | +--+--+   |Core    |
-           |- Out:2 |      |    |   |    │      |- Out:1 |
-           +--------+      v    |   |    v      +--------+
-                                *   *
+         +--------+             |   |              +--------+
+         | PCB a  |     +-----+ |   | +-----+      | PCB b  |
+         +========+ <---|PCB a| |   | |PCB b|----> +========+
+         | Core   |     +--+--+ |   | +--+--+      |Core    |
+         |- Out:2 |        |    |   |    |         |- Out:1 |
+         +--------+        v    |   |    v         +--------+
+                                o   o
                            +----+---+----+
                            |    AS Y     |
 ~~~
@@ -504,38 +503,38 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
 
 AS Y receives the two PCBs "a" and "b" through two different (ingress) interfaces, namely "2" and "3", respectively (see {{figure-3b}} below). Additionally, AS Y forwards to AS Z four PCBs that were previously sent by core AS X. For this, AS Y uses the two different (egress) links "5" and "6". AS Y appends the corresponding ingress and egress interface information to the four PCBs. As can be seen in the figure, AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4", respectively - AS Y includes this information in the PCBs, as well. Thus, each forwarded PCB cumulates path information on its way "down" from core AS X.
 
-~~~
+~~~aasvg
                         +-----+ |   | +-----+
                         |PCB a| |   | |PCB b|
                         +--+--+ |   | +--+--+
                            |    |   |    |
                            v    |   |    v
-                                *   *
+                                o   o
        +-------------+     +----+---+----+     +-------------+
        |             |     |    2   3    |     |             |
        |             +p---p+ 1           |     |             |
        |    AS V     |     |    AS Y     |     |    AS W     |
        |             |     |           4 +p---p+             |
-       |             |     |    6   5    |     |             |
-       +-------------+     +----+---+----+     +-------------+
-            +--------+          #   #          +--------+
-            | PCB c  │          |   |          | PCB d  |
+       +-------------+     |    6   5    |     +-------------+
+                           +----+---+----+
+            +--------+          |   |          +--------+
+            | PCB c  |          |   |          | PCB d  |
             +========+          |   |          +========+
             |Core X  |          |   |          |Core X  |
             |- Out:2 |          |   |          |- Out:2 |
-+--------+  +--------+   +-----+|   |+-----+   +--------+  +--------+
-| PCB e  |  |AS Y    | <-|PCB c||   ||PCB d|-> |AS Y    |  | PCB f  │
-+========+  |-In:2   |   +--+--+|   |+--+--+   |-In:2   |  +========+
-|Core X  |  |-Out:6  |      |   |   |   |      |-Out:5  |  |Core X  |
-|- Out:1 |  |-PeerV:1|      v   |   |   v      |-PeerV:1|  |- Out:1 |
++--------+  +--------+  +-----+ |   | +-----+  +--------+  +--------+
+| PCB e  |  |AS Y    |<-|PCB c| |   | |PCB d|->|AS Y    |  | PCB f  |
++========+  |-In:2   |  +--+--+ |   | +--+--+  |-In:2   |  +========+
+|Core X  |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core X  |
+|- Out:1 |  |-PeerV:1|     v    |   |    v     |-PeerV:1|  |- Out:1 |
 +--------+  |-PeerW:4|          |   |          |-PeerW:4|  +--------+
-|AS Y    |  +--------+.         |   |          +--------+  |AS Y    |
+|AS Y    |  +--------+          |   |          +--------+  |AS Y    |
 |-In:3   |              +-----+ |   | +-----+              |-In:3   |
 |-Out:6  | <------------|PCB e| |   | |PCB f|------------> |-Out:5  |
 |-PeerV:1|              +--+--+ |   | +--+--+              |-PeerV:1|
 |-PeerW:4|                 |    |   |    |                 |-PeerW:4|
 +--------+                 v    |   |    v                 +--------+
-                                *   *
+                                o   o
                            +----+---+----+
                            |    AS Z     |
 ~~~
@@ -544,7 +543,7 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
 
 The following figure shows how the four PCBs "c", "d", "e", and "f", coming from AS Y, are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further down, all over the same link (egress interface "3"). AS Z extends the PCBs with the relevant information, so that each of these PCBs now includes AS hop entries from core AS X, AS Y, and AS Z.
 
-~~~
+~~~aasvg
 
                    +-----+      |   |      +-----+
                    |PCB c|      |   |      |PCB d|
@@ -554,33 +553,33 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
                         +--+--+ |   | +--+--+
                            |    |   |    |
                            v    |   |    v
-                                *   *
+                                o   o
                            +----+---+----+
                            |    5   1    |
                            |             |
                            |    AS Z     |
             +--------+     |             |     +--------+
-            │ PCB g  |     |      3      |     | PCB h  |
+            | PCB g  |     |      3      |     | PCB h  |
             +========+     +------+------+     +========+
-            │Core X  |            #            |Core X  |
-+--------+  │- Out:2 |            |            |- Out:2 |  +--------+
+            |Core X  |            |            |Core X  |
++--------+  |- Out:2 |            |            |- Out:2 |  +--------+
 | PCB i  |  +--------+            |            +--------+  | PCB j  |
-+========+  │AS Y    |            |            |AS Y    |  +========+
-|Core X  |  │-In:2   |            |            |-In:2   |  |Core X  |
-|- Out:1 |  │-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
-+--------+  │-PeerV:1| <-|PCB g│  |  |PCB h|-> |-PeerV:1|  +--------+
-|AS Y    |  │-PeerW:4|   +--+--+  |  +--+--+   |-PeerW:4|  |AS Y    |
++========+  |AS Y    |            |            |AS Y    |  +========+
+|Core X  |  |-In:2   |            |            |-In:2   |  |Core X  |
+|- Out:1 |  |-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
++--------+  |-PeerV:1| <-|PCB g|  |  |PCB h|-> |-PeerV:1|  +--------+
+|AS Y    |  |-PeerW:4|   +--+--+  |  +--+--+   |-PeerW:4|  |AS Y    |
 |-In:3   |  +--------+      |     |     |      +--------+  |-In:3   |
-|-Out:6  |  │AS Z    |      v     |     v      |AS Z    |  |Out:5   |
-|-PeerV:1|  │-In:5   |            |            |-In:1   |  |-PeerV:1|
-|-PeerW:4|  │-Out:3  |            |            |-Out:3  |  |-PeerW:4|
+|-Out:6  |  |AS Z    |      v     |     v      |AS Z    |  |Out:5   |
+|-PeerV:1|  |-In:5   |            |            |-In:1   |  |-PeerV:1|
+|-PeerW:4|  |-Out:3  |            |            |-Out:3  |  |-PeerW:4|
 +--------+  +--------+            |            +--------+  +--------+
 |AS Z    |               +-----+  |  +-----+               |AS Z    |
 |-In:5   | <-------------|PCB i|  |  |PCB j|------------>  |-In:1   |
 |-Out:3  |               +--+--+  |  +--+--+               |-Out:3  |
 +--------+                  |     |     |                  +--------+
-                            v     |     v
-                                  v
+                            v     o     v
+                                  |
 
 ~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
@@ -588,7 +587,7 @@ The following figure shows how the four PCBs "c", "d", "e", and "f", coming from
 
 Based on the figures above, one could say that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing the Internet. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}}. This figure shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
 
-~~~
+~~~aasvg
 
                 AS Entry Core        AS Entry Y          AS Entry Z
 
@@ -596,7 +595,7 @@ Based on the figures above, one could say that a PCB represents a single path se
                |  Core AS X  |     |    AS Y     |     |    AS Z     |
 Path Segment 1 |            1+     +3           5+     +1            |
                |             |     |             |     |             |
-               |            2+#---*+2-----------6+#---*+5            |
+               |            2+---o-+2-----------6+---o-+5            |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                   Egress 2       Ingress 2 - Egress 6     Ingress 5
@@ -605,9 +604,9 @@ Path Segment 1 |            1+     +3           5+     +1            |
 
                +-------------+     +-------------+     +-------------+
                |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+     +3     +-----5+#---*+1            |
+               |            1+     +3     +-----5+----o-+1           |
 Path Segment 2 |             |     |      |      |     |             |
-               |            2+#---*+2-----+     6+     +5            |
+               |            2+---o-+2-----+     6+     +5            |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                   Egress 2       Ingress 2 - Egress 5     Ingress 1
@@ -616,9 +615,9 @@ Path Segment 2 |             |     |      |      |     |             |
 
                +-------------+     +-------------+     +-------------+
                |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+#---*+3-----+     5+     +1            |
+               |            1+---o-+3-----+     5+     +1            |
 Path Segment 3 |             |     |      |      |     |             |
-               |            2+     +2     +-----6+#---*+5            |
+               |            2+     +2     +-----6+---o-+5            |
                |             |     |             |     |             |
                +-------------+     +-------------+     +-------------+
                   Egress 1       Ingress 3 - Egress 6     Ingress 5
@@ -627,7 +626,7 @@ Path Segment 3 |             |     |      |      |     |             |
 
                +-------------+     +-------------+     +-------------+
                |  Core AS X  |     |    AS Y     |     |    AS Z     |
-               |            1+#---*+3-----------5+#---*+1            |
+               |            1+---o-+3-----------5+---o-+1            |
 Path Segment 4 |             |     |             |     |             |
                |            2+     +2           6+     +5            |
                |             |     |             |     |             |
@@ -642,7 +641,7 @@ Path Segment 4 |             |     |             |     |             |
 
 Each PCB is comprised of a message containing the following top-level fields:
 
-~~~
+~~~aasvg
 
 +-------------+------------+------------+-----+------------+
 |Segment Info | AS Entry 0 | AS Entry 1 | ... | AS Entry N |
@@ -673,15 +672,13 @@ The information to be included in each of these fields is described below.
 
 ### Segment Information {#seginfo}
 
-~~~
+~~~aasvg
 
 +----------------------------+
 |         Segment Info       |
-+----------------------------+
 +-------------+--------------+
               |
-              v
-+----------------------------+
+ .-----------' '------------.
 +-------------+--------------+
 |  Timestamp  |    Seg ID    |
 +-------------+--------------+
@@ -708,15 +705,13 @@ In the Protobuf message format, the information component of a PCB is called the
 
 ### AS Entry {#as-entry}
 
-~~~
+~~~aasvg
 
                            +--------------+
                            |   AS Entry   |
-                           +--------------+
                            +------+-------+
                                   |
-                                  v
-+------------------------------------------------------------------+
+ .-------------------------------' '------------------------------.
 +-----------------------+------------------------------------------+
 |  Unsigned Extension   |             Signed AS Entry              |
 +-----------------------+------------------------------------------+
@@ -742,15 +737,13 @@ It includes the following components:
 - `SignedMessage`: The AS entry signed component.
 - `PathSegmentUnsignedExtensions`: Optional unsigned PCB extensions, further described in [](#pcb-ext).
 
-~~~
+~~~aasvg
 
         +------------------------------------------------------+
         |                   Signed AS Entry                    |
-        +------------------------------------------------------+
         +--------------------------+---------------------------+
                                    |
-                                   v
-+---------------------------------------------------------------------+
+ .--------------------------------' '--------------------------------.
 +--------------------+------------------+-----------------------------+
 |     Signature      |      Header      |             Body            |
 +--------------------+------------------+-----------------------------+
@@ -791,22 +784,18 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 
 #### AS Entry Signed Header {#ase-header}
 
-~~~
+~~~aasvg
 
                       +-----------------+
                       |     Header      |
-                      +-----------------+
                       +--------+--------+
                                |
-                               v
-+-------------------------------------------------------------+
+ .----------------------------' '----------------------------.
 +---------+-------------------+---------+--------+------------+
 |Sig. Alg.|Verification Key ID|Timestamp|Metadata|AssocDataLen|
 +---------+-------------------+---------+--------+------------+
-          +---------+---------+
-                    |
-                    v
-     +-----------------------------------------------+
+          |                   |
+      .--'                     '--------------------.
      +---------+---------+------------+--------------+
      | ISD-AS  |TRC Base | TRC Serial |Subject Key ID|
      +---------+---------+------------+--------------+
@@ -867,15 +856,13 @@ For more information on signing and verifying control plane messages (such as PC
 
 #### AS Entry Signed Body {#ase-sign}
 
-~~~
+~~~aasvg
 
                 +--------------------------------------+
                 |                 Body                 |
-                +--------------------------------------+
                 +------------------+-------------------+
                                    |
-                                   v
-+---------------------------------------------------------------------+
+ .--------------------------------' '--------------------------------.
 +------+-----------+---------+-------------+---+-------------+---+----+
 |ISD-AS|Next ISD-AS|Hop Entry|Peer Entry 0 |...|Peer Entry N |MTU|Ext.|
 +------+-----------+---------+-------------+---+-------------+---+----+
@@ -908,15 +895,13 @@ The following code block defines the signed body of one AS entry in Protobuf mes
 
 #### Hop Entry {#hopentry}
 
-~~~
+~~~aasvg
 
         +-----------+
         | Hop Entry |
-        +-----------+
         +-----+-----+
               |
-              v
-+---------------------------+
+ .-----------' '-----------.
 +-------------+-------------+
 | Ingress MTU |  Hop Field  |
 +-------------+-------------+
@@ -943,17 +928,15 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 #### Peer Entry {#peerentry}
 
-~~~
+~~~aasvg
 
                       +--------------+
                       |  Peer Entry  |
-                      +--------------+
-                      +------+-------+
-                             |
-                             v
-+----------------------------------------------------------+
+                      +-------+------+
+                              |
+ .---------------------------' '--------------------------.
 +-------------+------------+--------------+----------------+
-|  Hop Field  │  Peer MTU  │ Peer ISD-AS  │ Peer Interface |
+|  Hop Field  |  Peer MTU  | Peer ISD-AS  | Peer Interface |
 +-------------+------------+--------------+----------------+
 
 ~~~
@@ -980,16 +963,15 @@ The following code block defines the peer entry component `PeerEntry` in Protobu
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
-~~~
-
+~~~aasvg
    +-----------+
    |           |
    | Parent AS |
    |           |
    +-----+-----+
-         #
          |
-         * ASE.HF.ingress_interface
+         |
+         o ASE.HF.ingress_interface
 +--------+-----------+
 |        |           |        PE.peer_  +-----------+
 |        |           |        interface |           |
@@ -999,29 +981,26 @@ In this description, MTU and packet size are to be understood in the same sense 
 |        | |         |
 |        v v         |
 +---------+----------+
-          # PE.HF.egress_interface
-          │ ASE.HF.egress_interface
-          *
+          | PE.HF.egress_interface
+          | ASE.HF.egress_interface
+          o
     +-----+-----+
     |           |
     | Child AS  |
     |           |
     +-----------+
-
 ~~~
 {: #figure-15 title="Peer entry information, in the direction of beaconing"}
 
 #### Hop Field {#hopfield}
 
-~~~
+~~~aasvg
 
                       +-----------+
                       | Hop Entry |
-                      +-----------+
                       +-----+-----+
                             |
-                            V
-+----------------------------------------------------------+
+ .-------------------------' '----------------------------.
 +-------------+-------------+-------------------+----------+
 |   Ingress   |    Egress   |  Expiration Time  |   MAC    |
 +-------------+-------------+-------------------+----------+
@@ -2207,43 +2186,40 @@ More information can be found on the SCIONLab website and in the {{SCIONLAB}} pa
 
 To illustrate how the path lookup works, we show two path-lookup examples in sequence diagrams. The network topology of the examples is represented in {{figure-41}} below. In both examples, the source endpoint is in AS A. {{figure-42}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-43}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not, i.e. there is no up-segment from A to C. "CS" stands for Control Service.
 
-~~~
-
+~~~aasvg
 +----------------------------+     +----------------------------+
 |                            |     |                            |
 |                            |     |                            |
-|    +------------------+    |     |    +------------------+    |
-|    |       Core       |    |     |    |       Core       |    |
-|    |                  |    |     |    |                  |    |
-|    | +-----+  +-----+ |    |     |    |          +-----+ |    |
-|    | |AS C +--+AS B +----------------------------+AS F | |    |
-|    | +-+---+  ++-+-++ |    |     |    |          +-+-+-+ |    |
-|    |   |       | | |  |    |     |    | +-----+    | |   |    |
-|    |   |       | | +--------------------+AS E +----+ |   |    |
-|    |   |       | |    |    |     |    | +--+--+      |   |    |
-|    +---|-------|-|----+    |     |    +----│---------|---+    |
-|        |       | |         |     |         │         |        |
-|        |       | |         |     |         │         |        |
-|        | +-----+ |         |     |         │         |        |
-|        | |       |         |     |         │         |        |
-|        | |       |         |     |         │         |        |
-|      +-+-+-+  +--+--+      |     |      +--+--+      |        |
-|      |AS D |  |AS A |      |     |      |AS G +------+        |
-|      +-----+  +-----+      |     |      +-----+               |
+|  +---------------------+   |     |    +------------------+    |
+|  |         Core        |   |     |    |       Core       |    |
+|  |                     |   |     |    |          +-----+ |    |
+|  | +-----+     +-----+ |   |     |    |     +---c+AS F | |    |
+|  | |AS C +c---c+AS B +c---------------------+    +-+-+-+ |    |
+|  | +---+-+     +--+--+ |   |     |    |            c |   |    |
+|  |     |      /   | c\ |   |     |    | +-----+    | |   |    |
+|  |     |     |    |   '----------------c+AS E +c---+ |   |    |
+|  |     |     |    |    |   |     |    | +--+--+      |   |    |
+|  +-----|-----|----|----+   |     |    +----|---------|---+    |
+|        |     |    |        |     |         |         |        |
+|        |     |    |        |     |         |         |        |
+|        | +---+    |        |     |         | +-------+        |
+|        | |        |        |     |         | |                |
+|        o o        o        |     |         o o                |
+|      +-+-+-+   +--+--+     |     |       +-+-+-+              |
+|      |AS D |   |AS A |     |     |       |AS G |              |
+|      +-----+   +-----+     |     |       +-----+              |
 |                            |     |                            |
 |            ISD 1           |     |            ISD 2           |
 +----------------------------+     +----------------------------+
-
 ~~~
 {: #figure-41 title="Topology used in the path lookup examples"}
 
 
 
-~~~
-
+~~~aasvg
 +---------+          +---------+          +---------+         +---------+
 |Endpoint |          |Source AS|          | Core AS |         | Core AS |
-|         |          | CS (A)  |          | CS (B)  |         | CS (C)  |
+|         |          | CS  (A) |          | CS  (B) |         | CS  (C) |
 +--+-+-+--+          +----+----+          +----+----+         +----+----+
    | | |                  |                    |                   |
    | | |                  |                    |                   |
@@ -2258,9 +2234,9 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (up,[A->B])|                    |                   |
    | | |                  |                    |                   |
    | | |                  |                    |                   |
-   | | |request (core,*,*)|                    |                   |
+   | | |request (core,0,0)|                    |                   |
    | +------------------->|                    |                   |
-   | | |                  |request (core,B,*)  |                   |
+   | | |                  |request (core,B,0)  |                   |
    | | |                  +------------------->|                   |
    | | |                  |<-- -- -- -- -- -- -+                   |
    | | |                  |  reply(core,[B->C])|                   |
@@ -2268,7 +2244,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (core,[B->C])                   |                   |
    | | |                  |                    |                   |
    | | |                  |                    |                   |
-   | | |request (down,*,D)|                    |                   |
+   | | |request (down,0,D)|                    |                   |
    | | |           +------+------+             |                   |
    | | +---------->|send requests|             |                   |
    | | |           | in parallel |             |                   |
@@ -2284,8 +2260,8 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | |                 | |<-- -- -- -- -- -- -- -- -- -- -- -- --+
    | | |                 | |                   | reply(down,[C->D])|
    | | |                 | |                   |                   |
-   | | |<-- -- -- -- -- -+++                   |                   |
-   | | | reply (down,[B->D, C->D])             |                   |
+   | | |<--- -- -- -- -- +-+                   |                   |
+   | | |  reply (down,[B->D, C->D])            |                   |
    | | |                  |                    |                   |
 +--+-+-+---------+        |                    |                   |
 |Combine Segments|        |                    |                   |
@@ -2293,17 +2269,15 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |                    |                    |                   |
      |                    |                    |                   |
      |                    |                    |                   |
-
 ~~~
-{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, x, x) is for all pairs of core ASes in the source ISD. Similarly, (down, x, D) is for down segments between any core AS in the source ISD and destination D."}
+{: #figure-42 title="Sequence diagram illustrating a path lookup for a destination D in the source ISD. The request (core, 0, 0) is for all pairs of core ASes in the source ISD. Similarly, (down, 0, D) is for down segments between any core AS in the source ISD and destination D."}
 
 
 
-~~~
-	
+~~~aasvg
 +---------+     +---------+     +---------+     +---------+     +---------+
 |Endpoint |     |Source AS|     | Core AS |     | Core AS |     | Core AS |
-|         |     | CS (A)  |     | CS (B)  |     | CS (E)  |     | CS (F)  |
+|         |     | CS  (A) |     | CS  (B) |     | CS  (E) |     | CS  (F) |
 +--+-+-+--+     +----+----+     +----+----+     +----+----+     +----+----+
    | | |             |               |               |               |
    | | |             |               |               |               |
@@ -2319,9 +2293,9 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (up,[A->B])           |               |               |
    | | |             |               |               |               |
    | | |             |               |               |               |
-   | | |request (core,*,(2,*))       |               |               |
+   | | |request (core,0,(2,0))       |               |               |
    | +-------------->|               |               |               |
-   | | |             |request (core,*,(2,*))         |               |
+   | | |             |request (core,0,(2,0))         |               |
    | | |             +-------------->|               |               |
    | | |             |<- -- -- -- -- +               |               |
    | | |             | reply (core,[B->E,B->F])      |               |
@@ -2329,8 +2303,8 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | | reply (core,[B->E,B->F])    |               |               |
    | | |             |               |               |               |
    | | |             |               |               |               |
-   | | |request (down,(2,*),G)       |               |               |
-   | | |      +------+------+        |               |               |
+   | | | request (down,(2,0),G)      |               |               |
+   | | |      +-------------.        |               |               |
    | | +----->|send requests|        |               |               |
    | | |      | in parallel |        |               |               |
    | | |      +-----+-+-----+        |               |               |
@@ -2344,7 +2318,7 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
    | | |            | +--------------------------------------------->|
    | | |            | |<- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -+
    | | |            | |              |               | reply (down,[F->G])
-   | | |<- -- -- -- +++              |               |               |
+   | | |<- -- -- -- +-+              |               |               |
    | | | reply (down,[E->G,F->G])    |               |               |
    | | |             |               |               |               |
 +--+-+-+---------+   |               |               |               |
@@ -2353,9 +2327,8 @@ To illustrate how the path lookup works, we show two path-lookup examples in seq
      |               |               |               |               |
      |               |               |               |               |
      |               |               |               |               |
-
 ~~~
-{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, x, (2, x)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, x), G) is for down segments between any core AS in ISD 2 and destination G."}
+{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, 0, (2, 0)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, 0), G) is for down segments between any core AS in ISD 2 and destination G."}
 
 
 # Change Log
@@ -2369,6 +2342,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Clarify use of wildcard ISD and ISD-AS text representation
 - Remove redundant PCB overview figure 6 and reorganized paragraphs in 2.2. PCBs
 - Small clarifications and nits
+- Figures: small changes to use aasvg in all figures
+- Appendix "Path-Lookup Examples": use wildcard AS 0 instead of * in figures in
 
 ## draft-dekater-scion-controlplane-10
 {:numbered="false"}
