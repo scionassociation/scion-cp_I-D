@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-02T00:26:02.129866+00:00",
+  "timestamp": "2025-11-04T00:24:00.530746+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -1587,7 +1587,7 @@
       "id": "I_kwDOJx2-rs6w7tdb",
       "title": "Add SVG figures and small corrections",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/104",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1597,10 +1597,10 @@
         "Prio 3",
         "editorial"
       ],
-      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n- [ ] Make figures 1-15 work with aasvg\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "body": "- [x] Improve ASCII art\n- [x] Add SVG to each figure (or enable aasvg)\n- [x] [nit] Number *all* the figures. `PCB Top-Level Message Format` is not numbered now\n- [x] Protobuf: follow same order as in figures if it does not matter\n- [x]  AS Entry Signed Component - check order\n- [x] 2.2.1.4.1. AS Entry Signed Header - add optional fields in the figure\n- [x] Make figures 1-15 work with aasvg\n\n\n\n> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:32Z",
-      "updatedAt": "2025-10-15T09:28:27Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-03T01:54:10Z",
+      "closedAt": "2025-11-03T01:54:09Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1837,7 +1837,7 @@
     {
       "number": 110,
       "id": "I_kwDOJx2-rs66psQe",
-      "title": "Security considerations: discuss Impact of gRPC/HTTP",
+      "title": "Security considerations: discuss Impact of gRPC/HTTP?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/110",
       "state": "OPEN",
       "author": "nicorusti",
@@ -1852,7 +1852,7 @@
       ],
       "body": "- [ ] Do we write in the drafts what certs are used for the HTTPS requests for the gRPC API? \n- [ ] Do we clarify the overall layers used? Is the text clear enough?\n- [ ] Think about it and eventually update security considerations\n\n> From Alvaro Retana:\n(1) gRPC/HTTP3/QUIC\n  I'm not deeply familiar with gRPC.  I wonder whether it can be exploited by an attacker -- are there any security considerations that are SCION-related from its use?  I know the messages are transported over QUIC/H3 -- same question.",
       "createdAt": "2025-06-09T21:05:55Z",
-      "updatedAt": "2025-10-08T09:38:09Z",
+      "updatedAt": "2025-11-03T01:52:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -2615,6 +2615,24 @@
           "updatedAt": "2025-10-31T16:31:32Z"
         }
       ]
+    },
+    {
+      "number": 159,
+      "id": "I_kwDOJx2-rs7VZ14m",
+      "title": "resolve idnits",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/159",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "- [ ] Terminology cannot be a child of the Introduction --> Move to a dedicated section and reorganize following paragraphs?  \n- [ ] ... \n\n```\nmake idnits\n\n\u274c Review the 3 errors, 2 warnings, 1 comment listed below.\n\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\n ERROR  3 nits of \u26d4 error severity\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\n\n 1  INVALID_INTRODUCTION_SECTION_CHILD\n \u2514- Desc - The introduction section must consist of <artwork>, <aside>, <blockquote>, <dl>, <figure>, <iref>, <ol>, <sourcecode>, <t>, <table>, <texttable>, <ul> elements only.\n \u2514- Ref  - https://www.rfc-editor.org/rfc/rfc7991.html#section-2.46\n \u2514- Path - rfc.middle.section[name=Introduction]\n\n 2  INVALID_SECURITY_CONSIDERATIONS_SECTION_CHILD\n \u2514- Desc - The security considerations section must consist of <artwork>, <aside>, <blockquote>, <dl>, <figure>, <iref>, <ol>, <sourcecode>, <t>, <table>, <texttable>, <ul> elements only.\n \u2514- Ref  - https://www.rfc-editor.org/rfc/rfc7991.html#section-2.46\n\n 3  INVALID_REFERENCES_NAME\n \u2514- Desc - The references section <name> element should be either Normative or Informative.\n \u2514- Ref  - https://authors.ietf.org/required-content#references\n \u2514- Path - rfc.back.references[0].name\n\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\n WARNING  2 nits of \u26a0\ufe0f warning severity\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\n\n 4  LINE_PI\n \u2514- Desc - Document contains <?line 123?> processing instruction tags.\n\n 5  TEXT_DOC_REF\n \u2514- Desc - Text occurs that looks like a text-document reference (e.g. [1] or [RFC...]). A reference should instead use an <eref> tag.\n \u2514- Ref  - https://authors.ietf.org/en/references-in-rfcxml\n \u2514- Path - rfc.rfc.middle.section[1].section[1].section[1].section[5].artwork\n\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\n COMMENT  1 nit of \u2139\ufe0f comment severity\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\u2584\n\n 6  NON_ASCII_UTF8\n \u2514- Desc - Review RFC7997 to ensure your document respects UTF-8 rules for non-ASCII.\n \u2514- Ref  - https://datatracker.ietf.org/doc/html/rfc7997#section-3\n\n----------------------------------------------------------------\n\n\u274c Review the 3 errors, 2 warnings, 1 comment listed above.\n```",
+      "createdAt": "2025-11-03T02:25:49Z",
+      "updatedAt": "2025-11-03T02:28:42Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -12023,24 +12041,68 @@
       "id": "PR_kwDOJx2-rs6wlA6v",
       "title": "Reorganised PCB message format section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/156",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "resolves #154\r\n\r\n<br class=\"Apple-interchange-newline\">[SCION CP](https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.html)\t[plain text](https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.txt)\t[diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Reorganised-PCB-Message-Format/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-10-30T10:13:39Z",
-      "updatedAt": "2025-10-31T17:10:12Z",
+      "updatedAt": "2025-11-02T17:01:48Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "63d8ea0dfc8de3d521a73e78c29393ce05bfdea0",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Reorganised-PCB-Message-Format",
-      "headRefOid": "cb913c1d3f830b7ddd769344ff97eb88a42512de",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "d895c83be299e383101d58db04d08af4d0483dd0",
+      "closedAt": "2025-11-02T17:01:43Z",
+      "mergedAt": "2025-11-02T17:01:43Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "b8db3162b7b95837afe1d2dc927feeeae2073a9f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7LLX3k",
+          "commit": {
+            "abbreviatedOid": "d895c83"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I removed one level of indentation and reduced a bit other nested indentations that are IMHO a bit hard to follow. \r\nLGTM, @knmeynell can you have one last look and merge? ",
+          "createdAt": "2025-11-02T11:50:11Z",
+          "updatedAt": "2025-11-02T11:50:11Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 158,
+      "id": "PR_kwDOJx2-rs6xDult",
+      "title": "Aasvg",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/158",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #104 ",
+      "createdAt": "2025-11-02T12:25:49Z",
+      "updatedAt": "2025-11-03T01:54:14Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "b8db3162b7b95837afe1d2dc927feeeae2073a9f",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "aasvg",
+      "headRefOid": "33012f27a2eb0aa667aa2937189821f9355ac288",
+      "closedAt": "2025-11-03T01:54:09Z",
+      "mergedAt": "2025-11-03T01:54:09Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "e60759c1ec4f9683d5a54ec0ba35205c5c597774"
+      },
       "comments": [],
       "reviews": []
     }
