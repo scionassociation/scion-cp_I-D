@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 May 2026                                              S. Hitz
+Expires: 15 May 2026                                             S. Hitz
                                                          Anapaya Systems
-                                                         3 November 2025
+                                                        11 November 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 May 2026.
+   This Internet-Draft will expire on 15 May 2026.
 
 Copyright Notice
 
@@ -169,6 +169,7 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-12
      draft-dekater-scion-controlplane-11
      draft-dekater-scion-controlplane-10
      draft-dekater-scion-controlplane-09
@@ -215,29 +216,32 @@ Table of Contents
 
    SCION relies on three main components:
 
-   _PKI_ - To achieve scalability and trust, SCION organizes existing
-   ASes into logical groups of independent routing planes called
-   _Isolation Domains (ISDs)_. All ASes in an ISD agree on a set of
-   trust roots called the _Trust Root Configuration (TRC)_ which is a
-   collection of signed root certificates in X.509 v3 format [RFC5280].
-   The ISD is governed by a set of _core ASes_ which typically manage
-   the trust roots and provide connectivity to other ISDs.  This is the
-   basis of the public key infrastructure used for the authentication of
-   messages used by the SCION Control Plane.
+   _PKI_ - described in [I-D.dekater-scion-pki].  To achieve scalability
+   and trust, SCION organizes existing ASes into logical groups of
+   independent routing planes called _Isolation Domains (ISDs)_. All
+   ASes in an ISD agree on a set of trust roots called the _Trust Root
+   Configuration (TRC)_ which is a collection of signed root
+   certificates in X.509 v3 format [RFC5280].  The ISD is governed by a
+   set of _core ASes_ which typically manage the trust roots and provide
+   connectivity to other ISDs.  This is the basis of the public key
+   infrastructure used for the authentication of messages used by the
+   SCION Control Plane.
 
-   _Control Plane_ - performs inter-domain routing by discovering and
-   securely disseminating path information between ASes.  The core ASes
-   use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.
+   _Control Plane_ - described in this document.  It performs inter-
+   domain routing by discovering and securely disseminating path
+   information between ASes.  The core ASes use Path-segment
+   Construction Beacons (PCBs) to explore intra-ISD paths, or to explore
+   paths across different ISDs.
 
-   _Data Plane_ - carries out secure packet forwarding between SCION-
-   enabled ASes over paths selected by endpoints.  A SCION border router
-   reuses existing intra-domain infrastructure to communicate to other
-   SCION routers or SCION endpoints within its AS.
+   _Data Plane_ - described in [I-D.dekater-scion-dataplane].  It
+   carries out secure packet forwarding between SCION-enabled ASes over
+   paths selected by endpoints.  A SCION border router reuses existing
+   intra-domain infrastructure to communicate to other SCION routers or
+   SCION endpoints within its AS.
 
-   This document describes the SCION Control Plane component.  It should
-   be read in conjunction with the other components
-   [I-D.dekater-scion-pki] and [I-D.dekater-scion-dataplane].
+   This document should be read in conjunction with the other components
+   mentioned above.  Readers are encouraged to read the introduction in
+   this document first.
 
    The SCION architecture was initially developed outside of the IETF by
    ETH Zurich with significant contributions from Anapaya Systems.  It
@@ -250,11 +254,6 @@ Table of Contents
    This document is not an Internet Standards Track specification; it
    does not have IETF consensus and it is published for informational
    purposes.
-
-   Note (to be removed before publication): this document, together with
-   the other components [I-D.dekater-scion-pki] and
-   [I-D.dekater-scion-dataplane], deprecates
-   [I-D.dekater-panrg-scion-overview].
 
 1.1.  Terminology
 
@@ -3580,9 +3579,9 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-07, 20 October 2025,
+              draft-dekater-scion-dataplane-08, 2 November 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-07>.
+              scion-dataplane-08>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -3881,6 +3880,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-12
+
+   *  Security considerations: add section on time synchronization
 
 draft-dekater-scion-controlplane-11
 
