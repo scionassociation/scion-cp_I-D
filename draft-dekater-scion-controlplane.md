@@ -2150,7 +2150,7 @@ Care should be taken to maintain coarse time synchronization among Control Servi
 
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
 - An endpoint: the endpoint may fail to verify path segments during path lookup.
-- A router: packets may be dropped if the time offset exceeds the Hop Field expiration time (between 337.5s and a day, see [](#hopfield)).
+- A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
 ## Denial of Service Attacks {#dos-cp}
 
