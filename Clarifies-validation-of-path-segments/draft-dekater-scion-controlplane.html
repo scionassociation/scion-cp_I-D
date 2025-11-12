@@ -4290,7 +4290,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-5.1-5.4.1">The Control Service of the source AS returns all retrieved path segments to the source endpoint.<a href="#section-5.1-5.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.5">
-            <p id="section-5.1-5.5.1">As the source endpoint receives each path segment, it checks the timestamp is not later than the current time (see []#pcb-validity), verifies the AS entry signature (see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>) and requests any missing intermediate certificates from the Control Service (see <span><a href=""></a></span>#crypto-api)).<a href="#section-5.1-5.5.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-5.5.1">As the source endpoint receives each path segment, it verifies the <code>SegmentInformation</code> timestamp validity (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>), the AS entry signature (see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>) and requests any missing intermediate certificates from the Control  Service (see <a href="#crypto-api" class="auto internal xref">Section 2.4</a>).<a href="#section-5.1-5.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.6">
             <p id="section-5.1-5.6.1">Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-5.1-5.6.1" class="pilcrow">¶</a></p>
@@ -6617,6 +6617,9 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 <ul class="normal">
 <li class="normal" id="appendix-D.1-1.1">
             <p id="appendix-D.1-1.1.1">Security considerations: add section on time synchronization<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.2">
+            <p id="appendix-D.1-1.2.1">Path Lookup Process: mention checks at endpoint<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

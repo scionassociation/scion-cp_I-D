@@ -2486,11 +2486,11 @@ Table of Contents
    4.  The Control Service of the source AS returns all retrieved path
        segments to the source endpoint.
 
-   5.  As the source endpoint receives each path segment, it checks the
-       timestamp is not later than the current time (see []#pcb-
-       validity), verifies the AS entry signature (see Section 2.2.2.6)
-       and requests any missing intermediate certificates from the
-       Control Service (see #crypto-api)).
+   5.  As the source endpoint receives each path segment, it verifies
+       the SegmentInformation timestamp validity (see Section 2.2.4),
+       the AS entry signature (see Section 2.2.2.6) and requests any
+       missing intermediate certificates from the Control Service (see
+       Section 2.4).
 
    6.  Once it has obtained all path segments, the source endpoint
        combines them into an end-to-end path in the data plane.
@@ -3890,6 +3890,8 @@ Change Log
 draft-dekater-scion-controlplane-12
 
    *  Security considerations: add section on time synchronization
+
+   *  Path Lookup Process: mention checks at endpoint
 
 draft-dekater-scion-controlplane-11
 
