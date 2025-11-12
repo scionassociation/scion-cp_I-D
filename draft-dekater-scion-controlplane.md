@@ -1506,7 +1506,7 @@ Such information is then made available to source endpoints during the path look
 
 The *path lookup* is a fundamental building block of SCION's path management as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
 
-## Lookup Process
+## Lookup Process {#lookup-process}
 
 An endpoint (source) that wants to start communication with another endpoint (destination) requires up to three path segments:
 
@@ -1524,7 +1524,7 @@ The process to look up and fetch path segments consists of the following steps:
 2. If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.
 3. The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.
 4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
-5. As the source endpoint receives each path segment, it checks the timestamp is not later than the current time (see []#pcb-validity), verifies the AS entry signature (see [](#sign)) and requests any missing intermediate certificates from the Control Service (see []()#crypto-api)).
+5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature (see [](#sign)) and requests any missing intermediate certificates from the Control  Service (see [](#crypto-api)).
 6. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
@@ -2340,7 +2340,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Security considerations: add section on time synchronization
-
+- Path Lookup Process: mention checks at endpoint
 
 ## draft-dekater-scion-controlplane-11
 {:numbered="false"}
