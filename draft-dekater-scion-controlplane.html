@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 15 May 2026</td>
+<td class="center">Expires 16 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-11" class="published">11 November 2025</time>
+<time datetime="2025-11-12" class="published">12 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-15">15 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-16">16 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1421,7 +1421,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-denial-of-service-attacks" class="internal xref">Denial of Service Attacks</a></p>
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-attacks-on-time-sources" class="internal xref">Attacks on time sources</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-denial-of-service-attacks" class="internal xref">Denial of Service Attacks</a></p>
 </li>
             </ul>
 </li>
@@ -1987,7 +1990,7 @@ ISD numbers are currently allocated by Anapaya, a provider of SCION-based networ
 <p id="section-2.1.1-1">PCBs do not traverse peering links. Instead, peering links are announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this peering link during segment combination to create the end-to-end path.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="appending-entries-to-a-pcb">
+<div id="pcb-appending">
 <section id="section-2.1.2">
           <h4 id="name-appending-entries-to-a-pcb">
 <a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-appending-entries-to-a-pcb" class="section-name selfRef">Appending Entries to a PCB</a>
@@ -3971,7 +3974,8 @@ SCION-unaware endpoints may interface with a SCION network through a SCION IP Ga
 <p id="section-3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.3-5">Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS.
+The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in <a href="#time-security" class="auto internal xref">Section 8.4</a>.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scalability">
@@ -5810,7 +5814,7 @@ AS.<a href="#section-7.5.3-4" class="pilcrow">¶</a></p>
           <p id="section-8-3.2.1">When "ordinary" (non-core) adversaries try to manipulate the beaconing process (see <a href="#manipulate-beaconing" class="auto internal xref">Section 8.3</a>).<a href="#section-8-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-8-3.3">
-          <p id="section-8-3.3.1">Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 8.4</a>).<a href="#section-8-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-8-3.3.1">Denial of Services (DoS) attacks where attackers overload different parts of the infrastructure (see <a href="#dos-cp" class="auto internal xref">Section 8.5</a>).<a href="#section-8-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <div id="security-properties">
@@ -5928,25 +5932,44 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 </div>
 </section>
 </div>
-<div id="dos-cp">
+<div id="time-security">
 <section id="section-8.4">
-        <h3 id="name-denial-of-service-attacks">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
+        <h3 id="name-attacks-on-time-sources">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-attacks-on-time-sources" class="section-name selfRef">Attacks on time sources</a>
         </h3>
-<p id="section-8.4-1">The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
-<p id="section-8.4-2">SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
-<p id="section-8.4-3">Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet, e.g. filtering, geo-blocking or using cookies.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
-<p id="section-8.4-4">Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.<a href="#section-8.4-4" class="pilcrow">¶</a></p>
-<p id="section-8.4-5">For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:<a href="#section-8.4-5" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in <a href="#clock-inaccuracy" class="auto internal xref">Section 3.3</a>. An adversary that significantly alters the system time of a component can disrupt SCION operations:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.4-6.1">
-            <p id="section-8.4-6.1.1"><code>SegmentCreationService.Beacon</code> can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.<a href="#section-8.4-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.4-2.1">
+            <p id="section-8.4-2.1.1">A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>) or correctly add timestamps to propagated PCBs (see <a href="#pcb-appending" class="auto internal xref">Section 2.1.2</a>).<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.4-6.2">
-            <p id="section-8.4-6.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address <span class="bcp14">MUST</span> match the local ISD and the number of path segments <span class="bcp14">MUST</span> be 1.<a href="#section-8.4-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.4-2.2">
+            <p id="section-8.4-2.2.1">An endpoint: the endpoint may fail to verify path segments during path lookup.<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-2.3">
+            <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-8.4-7">A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service <span class="bcp14">SHOULD</span> be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-8.4-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dos-cp">
+<section id="section-8.5">
+        <h3 id="name-denial-of-service-attacks">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-denial-of-service-attacks" class="section-name selfRef">Denial of Service Attacks</a>
+        </h3>
+<p id="section-8.5-1">The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.5-3">Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet, e.g. filtering, geo-blocking or using cookies.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
+<p id="section-8.5-4">Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
+<p id="section-8.5-5">For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:<a href="#section-8.5-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.5-6.1">
+            <p id="section-8.5-6.1.1"><code>SegmentCreationService.Beacon</code> can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.<a href="#section-8.5-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.5-6.2">
+            <p id="section-8.5-6.2.1"><code>SegmentRegistrationService.SegmentsRegistration</code> can only be called from within the same ISD, thus the source address <span class="bcp14">MUST</span> match the local ISD and the number of path segments <span class="bcp14">MUST</span> be 1.<a href="#section-8.5-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.5-7">A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service <span class="bcp14">SHOULD</span> be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.<a href="#section-8.5-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
