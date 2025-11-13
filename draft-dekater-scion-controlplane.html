@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 16 May 2026</td>
+<td class="center">Expires 17 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-12" class="published">12 November 2025</time>
+<time datetime="2025-11-13" class="published">13 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-16">16 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-17">17 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3974,7 +3974,7 @@ SCION-unaware endpoints may interface with a SCION network through a SCION IP Ga
 <p id="section-3.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval - typically around one minute. As a result of this and the way they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS.
+<p id="section-3.3-5">Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
 The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in <a href="#time-security" class="auto internal xref">Section 8.4</a>.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4294,10 +4294,13 @@ The specific methods used to achieve this synchronization are outside the scope 
             <p id="section-5.1-5.4.1">The Control Service of the source AS returns all retrieved path segments to the source endpoint.<a href="#section-5.1-5.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.5">
-            <p id="section-5.1-5.5.1">Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-5.1-5.5.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-5.5.1">As the source endpoint receives each path segment, it verifies the <code>SegmentInformation</code> timestamp validity (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>), the AS entry signature for each AS entry (see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>) and requests any missing AS or intermediate certificates from the Control  Service (see <a href="#crypto-api" class="auto internal xref">Section 2.4</a>).<a href="#section-5.1-5.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.6">
-            <p id="section-5.1-5.6.1">The destination endpoint, once it receives the first packet, <span class="bcp14">MAY</span> revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.<a href="#section-5.1-5.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-5.6.1">Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-5.1-5.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.1-5.7">
+            <p id="section-5.1-5.7.1">The destination endpoint, once it receives the first packet, <span class="bcp14">MAY</span> revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.<a href="#section-5.1-5.7.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-5.1-6"><a href="#_table-3" class="auto internal xref">Table 3</a> below shows which Control Service provides the source endpoint with which type of path segment.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
@@ -5943,7 +5946,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
             <p id="section-8.4-2.1.1">A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>) or correctly add timestamps to propagated PCBs (see <a href="#pcb-appending" class="auto internal xref">Section 2.1.2</a>).<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.2">
-            <p id="section-8.4-2.2.1">An endpoint: the endpoint may fail to verify path segments during path lookup.<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-2.2.1">An endpoint: the endpoint may fail to verify path segments during path lookup (see <a href="#lookup-process" class="auto internal xref">Section 5.1</a>).<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.3">
             <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
@@ -6636,7 +6639,10 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-D.1-1.1">
-            <p id="appendix-D.1-1.1.1">Security considerations: add section on time synchronization<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.1.1">Security considerations: new section "Attacks on time sources"<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.2">
+            <p id="appendix-D.1-1.2.1">Path Lookup Process: mention checks at endpoint<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 May 2026                                             S. Hitz
+Expires: 17 May 2026                                             S. Hitz
                                                          Anapaya Systems
-                                                        12 November 2025
+                                                        13 November 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 May 2026.
+   This Internet-Draft will expire on 17 May 2026.
 
 Copyright Notice
 
@@ -2045,10 +2045,11 @@ Table of Contents
 
    Each administrator of a SCION Control Service is responsible for
    maintaining coarse time synchronization with SCION routers within the
-   AS, neighbor ASes control services, and endpoints within the AS.  The
-   specific methods used to achieve this synchronization are outside the
-   scope of this document.  Security considerations on time
-   synchronization are discussed in Section 8.4.
+   AS, neighbor ASes control services, and endpoints within the AS.  In
+   typical deployments, clock deviations on the order of several minutes
+   are acceptable.  The specific methods used to achieve this
+   synchronization are outside the scope of this document.  Security
+   considerations on time synchronization are discussed in Section 8.4.
 
 3.4.  Path Discovery Time and Scalability
 
@@ -2490,10 +2491,16 @@ Table of Contents
    4.  The Control Service of the source AS returns all retrieved path
        segments to the source endpoint.
 
-   5.  Once it has obtained all path segments, the source endpoint
-       combines them into an end-to-end path in the data plane.
+   5.  As the source endpoint receives each path segment, it verifies
+       the SegmentInformation timestamp validity (see Section 2.2.4),
+       the AS entry signature for each AS entry (see Section 2.2.2.6)
+       and requests any missing AS or intermediate certificates from the
+       Control Service (see Section 2.4).
 
-   6.  The destination endpoint, once it receives the first packet, MAY
+   6.  Once it has obtained some valid path segments, the source
+       endpoint combines them into an end-to-end path in the data plane.
+
+   7.  The destination endpoint, once it receives the first packet, MAY
        revert the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
@@ -3522,7 +3529,7 @@ Table of Contents
       correctly add timestamps to propagated PCBs (see Section 2.1.2).
 
    *  An endpoint: the endpoint may fail to verify path segments during
-      path lookup.
+      path lookup (see Section 5.1).
 
    *  A router: packets may be dropped ahead of the control service
       intended expiration time (see Section 2.2.2.5).
@@ -3904,7 +3911,9 @@ Change Log
 
 draft-dekater-scion-controlplane-12
 
-   *  Security considerations: add section on time synchronization
+   *  Security considerations: new section "Attacks on time sources"
+
+   *  Path Lookup Process: mention checks at endpoint
 
 draft-dekater-scion-controlplane-11
 
