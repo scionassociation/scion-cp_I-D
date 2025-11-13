@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 May 2026                                             S. Hitz
+Expires: 17 May 2026                                             S. Hitz
                                                          Anapaya Systems
-                                                        12 November 2025
+                                                        13 November 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 May 2026.
+   This Internet-Draft will expire on 17 May 2026.
 
 Copyright Notice
 
@@ -2488,9 +2488,9 @@ Table of Contents
 
    5.  As the source endpoint receives each path segment, it verifies
        the SegmentInformation timestamp validity (see Section 2.2.4),
-       the AS entry signature (see Section 2.2.2.6) and requests any
-       missing intermediate certificates from the Control Service (see
-       Section 2.4).
+       the AS entry signature for each AS entry (see Section 2.2.2.6)
+       and requests any missing AS or intermediate certificates from the
+       Control Service (see Section 2.4).
 
    6.  Once it has obtained all path segments, the source endpoint
        combines them into an end-to-end path in the data plane.
