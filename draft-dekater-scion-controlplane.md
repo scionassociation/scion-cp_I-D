@@ -1330,7 +1330,7 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS.
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
 The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
 
 ## Path Discovery Time and Scalability {#scalability}
@@ -1507,7 +1507,7 @@ Such information is then made available to source endpoints during the path look
 
 The *path lookup* is a fundamental building block of SCION's path management as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
 
-## Lookup Process
+## Lookup Process {#lookup-process}
 
 An endpoint (source) that wants to start communication with another endpoint (destination) requires up to three path segments:
 
@@ -1525,8 +1525,9 @@ The process to look up and fetch path segments consists of the following steps:
 2. If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.
 3. The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.
 4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
-5. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
-6. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
+5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)) and requests any missing AS or intermediate certificates from the Control  Service (see [](#crypto-api)).
+6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
+7. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which Control Service provides the source endpoint with which type of path segment.
 
@@ -2148,7 +2149,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
 
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
-- An endpoint: the endpoint may fail to verify path segments during path lookup.
+- An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
 ## Denial of Service Attacks {#dos-cp}
@@ -2347,8 +2348,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-12
 {:numbered="false"}
 
-- Security considerations: add section on time synchronization
-
+- Security considerations: new section "Attacks on time sources"
+- Path Lookup Process: mention checks at endpoint
 
 ## draft-dekater-scion-controlplane-11
 {:numbered="false"}
