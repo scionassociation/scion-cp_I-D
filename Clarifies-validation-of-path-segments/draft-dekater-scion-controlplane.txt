@@ -160,7 +160,8 @@ Table of Contents
        8.3.2.  Creation of Spurious ASes and ISDs
        8.3.3.  Peering Link Misuse
        8.3.4.  Manipulation of the Path-Selection Process
-     8.4.  Denial of Service Attacks
+     8.4.  Attacks on time sources
+     8.5.  Denial of Service Attacks
    9.  IANA Considerations
    10. References
      10.1.  Normative References
@@ -2043,8 +2044,12 @@ Table of Contents
    minutes are immaterial.
 
    Each administrator of a SCION Control Service is responsible for
-   maintaining sufficient clock accuracy.  No particular method is
-   assumed by this specification.
+   maintaining coarse time synchronization with SCION routers within the
+   AS, neighbor ASes control services, and endpoints within the AS.  In
+   typical deployments, clock deviations on the order of several minutes
+   are acceptable.  The specific methods used to achieve this
+   synchronization are outside the scope of this document.  Security
+   considerations on time synchronization are discussed in Section 8.4.
 
 3.4.  Path Discovery Time and Scalability
 
@@ -3284,7 +3289,7 @@ Table of Contents
        beaconing process (see Section 8.3).
 
    3.  Denial of Services (DoS) attacks where attackers overload
-       different parts of the infrastructure (see Section 8.4).
+       different parts of the infrastructure (see Section 8.5).
 
 8.1.  Security Properties
 
@@ -3512,7 +3517,24 @@ Table of Contents
    authentication of SCMP messages.  Authentication is not specified
    here since it is currently still experimental.
 
-8.4.  Denial of Service Attacks
+8.4.  Attacks on time sources
+
+   Care should be taken to maintain coarse time synchronization among
+   Control Service instances and other system components, as discussed
+   in Section 3.3.  An adversary that significantly alters the system
+   time of a component can disrupt SCION operations:
+
+   *  A control service instance: its beaconing process may halt as it
+      cannot verify the validity of received PCBs (see Section 2.2.4) or
+      correctly add timestamps to propagated PCBs (see Section 2.1.2).
+
+   *  An endpoint: the endpoint may fail to verify path segments during
+      path lookup (see Section 5.1).
+
+   *  A router: packets may be dropped ahead of the control service
+      intended expiration time (see Section 2.2.2.5).
+
+8.5.  Denial of Service Attacks
 
    The beaconing process in the SCION Control Plane relies on control
    plane communication.  ASes exchange control plane messages within
@@ -3889,7 +3911,7 @@ Change Log
 
 draft-dekater-scion-controlplane-12
 
-   *  Security considerations: add section on time synchronization
+   *  Security considerations: new section "Attacks on time sources"
 
    *  Path Lookup Process: mention checks at endpoint
 
