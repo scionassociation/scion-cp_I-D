@@ -1525,8 +1525,8 @@ The process to look up and fetch path segments consists of the following steps:
 2. If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.
 3. The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.
 4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
-5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature (see [](#sign)) and requests any missing intermediate certificates from the Control  Service (see [](#crypto-api)).
-6. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
+5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)) and requests any missing AS or intermediate certificates from the Control  Service (see [](#crypto-api)).
+6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which Control Service provides the source endpoint with which type of path segment.
