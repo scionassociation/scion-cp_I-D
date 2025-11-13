@@ -466,7 +466,7 @@ On its way, a PCB accumulates cryptographically protected path and forwarding in
 PCBs do not traverse peering links. Instead, peering links are announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this peering link during segment combination to create the end-to-end path.
 
 
-### Appending Entries to a PCB
+### Appending Entries to a PCB {#pcb-appending}
 
 Every propagation interval (as configured by the AS), the Control Service:
 
@@ -1330,7 +1330,8 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS.
+The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
 
 ## Path Discovery Time and Scalability {#scalability}
 
@@ -2142,6 +2143,14 @@ To defend against this attack, methods to detect the wormhole attack are needed.
 **Rogue SCMP Error Messages**  <br>
 SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
 Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
+
+## Attacks on time sources {#time-security}
+
+Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
+
+- A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
+- An endpoint: the endpoint may fail to verify path segments during path lookup.
+- A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
 ## Denial of Service Attacks {#dos-cp}
 
