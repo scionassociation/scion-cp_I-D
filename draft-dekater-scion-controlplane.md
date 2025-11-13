@@ -1330,7 +1330,7 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS.
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
 The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
 
 ## Path Discovery Time and Scalability {#scalability}
@@ -2149,7 +2149,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
 
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
-- An endpoint: the endpoint may fail to verify path segments during path lookup.
+- An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
 ## Denial of Service Attacks {#dos-cp}
@@ -2348,7 +2348,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-12
 {:numbered="false"}
 
-- Security considerations: add section on time synchronization
+- Security considerations: new section "Attacks on time sources"
 - Path Lookup Process: mention checks at endpoint
 
 ## draft-dekater-scion-controlplane-11
