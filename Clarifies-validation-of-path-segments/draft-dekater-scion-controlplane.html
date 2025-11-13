@@ -4293,7 +4293,7 @@ In comparison to these time scales, clock offsets in the order of minutes are im
             <p id="section-5.1-5.5.1">As the source endpoint receives each path segment, it verifies the <code>SegmentInformation</code> timestamp validity (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>), the AS entry signature for each AS entry (see <a href="#sign" class="auto internal xref">Section 2.2.2.6</a>) and requests any missing AS or intermediate certificates from the Control  Service (see <a href="#crypto-api" class="auto internal xref">Section 2.4</a>).<a href="#section-5.1-5.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.6">
-            <p id="section-5.1-5.6.1">Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-5.1-5.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-5.6.1">Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.<a href="#section-5.1-5.6.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.1-5.7">
             <p id="section-5.1-5.7.1">The destination endpoint, once it receives the first packet, <span class="bcp14">MAY</span> revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.<a href="#section-5.1-5.7.1" class="pilcrow">¶</a></p>

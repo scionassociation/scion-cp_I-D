@@ -2492,8 +2492,8 @@ Table of Contents
        and requests any missing AS or intermediate certificates from the
        Control Service (see Section 2.4).
 
-   6.  Once it has obtained all path segments, the source endpoint
-       combines them into an end-to-end path in the data plane.
+   6.  Once it has obtained some valid path segments, the source
+       endpoint combines them into an end-to-end path in the data plane.
 
    7.  The destination endpoint, once it receives the first packet, MAY
        revert the path in the received packet in order to construct a
