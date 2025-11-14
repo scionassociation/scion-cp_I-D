@@ -3713,11 +3713,13 @@ Table of Contents
               Generation Internet Testbed", 2020,
               <https://ieeexplore.ieee.org/abstract/document/9259355>.
 
-   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2025,
+   [SCMP]     Anapaya, ETH Zuerich, and SCION, "SCMP Documentation",
+              2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
-   [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
-              2024, <https://docs.scion.org/en/latest/sig.html>.
+   [SIG]      Anapaya, ETH Zuerich, and SCION, "SCION IP Gateway
+              Documentation", 2024,
+              <https://docs.scion.org/en/latest/sig.html>.
 
 Acknowledgments
 
