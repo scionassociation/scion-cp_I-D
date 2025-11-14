@@ -137,7 +137,7 @@ informative:
         ins: Anapaya
         org: Anapaya Systems
       -
-        ins: ETH
+        ins: ETH Zuerich
         org: ETH Zuerich
       -
         ins: SCION
@@ -184,7 +184,7 @@ informative:
         ins: Anapaya
         org: Anapaya Systems
       -
-        ins: ETH
+        ins: ETH Zuerich
         org: ETH Zuerich
       -
         ins: SCION
