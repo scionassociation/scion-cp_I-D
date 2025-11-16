@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 18 May 2026                                             S. Hitz
+Expires: 20 May 2026                                             S. Hitz
                                                          Anapaya Systems
-                                                        14 November 2025
+                                                        16 November 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 May 2026.
+   This Internet-Draft will expire on 20 May 2026.
 
 Copyright Notice
 
@@ -429,8 +429,8 @@ Table of Contents
    these inter-domain paths and making them available to the endpoints
    within the ASes.
 
-   SCION inter-domain routing operates on two levels: within a ISD which
-   is called _intra_-ISD routing, and between ISD which is called
+   SCION inter-domain routing operates on two levels: within an ISD
+   which is called _intra_-ISD routing, and between ISDs which is called
    _inter_-ISD routing.  Both levels use _Path Segment Construction
    Beacons (PCBs)_ to explore network paths.  A PCB is initiated by a
    core AS and then disseminated either within an ISD to explore intra-
@@ -2189,7 +2189,7 @@ Table of Contents
    With N the number of participating core ASes, an AS receives up to 5
    * N PCBs per propagation interval per core link interface.  For
    highly connected ASes, the number of PCBs received thus becomes
-   rather large and in a network of 1000 ASes, a AS with 300 core links
+   rather large and in a network of 1000 ASes, an AS with 300 core links
    receives up to 1.5 million PCBs per propagation interval.
 
    Assuming an average PCB length of 6 and the shortest propagation
@@ -2239,12 +2239,12 @@ Table of Contents
 
    *  Down segments, which allow remote entities to reach this AS.
 
-   The up segments and down segments do not have to be equal as AS may
-   want to communicate with core ASes via one or more up segments that
-   differ from the down segment(s) through which it wants to be reached.
-   Therefore, an AS can define different selection policies for the up
-   segment and down segment sets.  In addition, the processes of
-   transforming a PCB in an up segment or a down segment differ
+   The up segments and down segments do not have to be equal as an AS
+   may want to communicate with core ASes via one or more up segments
+   that differ from the down segment(s) through which it wants to be
+   reached.  Therefore, an AS can define different selection policies
+   for the up segment and down segment sets.  In addition, the processes
+   of transforming a PCB in an up segment or a down segment differ
    slightly.
 
 4.1.1.  Terminating a PCB
@@ -3607,9 +3607,9 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-08, 2 November 2025,
+              draft-dekater-scion-dataplane-09, 14 November 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-08>.
+              scion-dataplane-09>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
