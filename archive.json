@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-13T00:24:35.120604+00:00",
+  "timestamp": "2025-11-16T00:26:28.199960+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2676,7 +2676,7 @@
       "id": "I_kwDOJx2-rs7XWTkr",
       "title": "Path lookup: clarify validation of segments by endpoints",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/162",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2689,8 +2689,8 @@
       ],
       "body": "Follow up to #160.  I think we are missing some details on segment validation by endpoints in the path lookup process, in between [these two steps](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-11.html#section-5.1-5.4.1): \n```\n4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.\n5. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.\n```\n\nDoes the endpoint, between 4 and 5: \n- verify that the the timestamp in `segment_info` is not too late?  (ref to  [](#seginfo)\n- verify that the AS entry signature?  (reference to #sign)\n- request any missing intermediate certificates to the CP if they are not already available? (Ref to #crypto-api)\n\nSlack [thread](https://scionproto.slack.com/archives/C8ADA9CEP/p1762877541765009)",
       "createdAt": "2025-11-11T16:08:36Z",
-      "updatedAt": "2025-11-12T09:16:34Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-13T16:20:56Z",
+      "closedAt": "2025-11-13T16:20:56Z",
       "comments": []
     }
   ],
@@ -12307,24 +12307,26 @@
       "id": "PR_kwDOJx2-rs6y-P0t",
       "title": "Clarifies validation of path segments",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/164",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #162 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Clarifies-validation-of-path-segments/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-11-12T12:37:43Z",
-      "updatedAt": "2025-11-12T19:09:23Z",
+      "updatedAt": "2025-11-13T16:20:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "8b50d69b6d5a04accf5c66e010391cea1eb959f5",
+      "baseRefOid": "789e714b9e4938e84ae2315fef17dbb062b6ddca",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Clarifies-validation-of-path-segments",
-      "headRefOid": "5b368de060ef6bff383f1a7ae53dd898cd635d28",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1d43634f17ffe1ebe6896a4f0840a5fed4062371",
+      "closedAt": "2025-11-13T16:20:55Z",
+      "mergedAt": "2025-11-13T16:20:55Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "83e4249838db6af1305eb89846e2c6e7f4a087a8"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12339,8 +12341,88 @@
           "createdAt": "2025-11-12T19:09:23Z",
           "updatedAt": "2025-11-12T19:09:23Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7OGJiR",
+          "commit": {
+            "abbreviatedOid": "5b368de"
+          },
+          "author": "shitz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-13T06:17:18Z",
+          "updatedAt": "2025-11-13T06:17:32Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)) and requests any missing AS or intermediate certificates from the Control  Service (see [](#crypto-api)).\r\n```",
+              "createdAt": "2025-11-13T06:17:19Z",
+              "updatedAt": "2025-11-13T06:17:32Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.\r\n```",
+              "createdAt": "2025-11-13T06:17:23Z",
+              "updatedAt": "2025-11-13T06:17:32Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 165,
+      "id": "PR_kwDOJx2-rs6zcod3",
+      "title": "dummy change",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/165",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-11-14T12:35:00Z",
+      "updatedAt": "2025-11-14T12:35:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "83e4249838db6af1305eb89846e2c6e7f4a087a8",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "dummy",
+      "headRefOid": "bc515a439804b5de8efc475e51e7dc51cce4a445",
+      "closedAt": "2025-11-14T12:35:37Z",
+      "mergedAt": "2025-11-14T12:35:37Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "f36d4c283d5679c0f40eabcb55d2ec689ffc153f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 166,
+      "id": "PR_kwDOJx2-rs6zfqys",
+      "title": "Fixed minor grammar issue",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/166",
+      "state": "OPEN",
+      "author": "seadog007",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "- \"within a ISD\" -> \"within an ISD\"\r\n- \"between ISD\" -> \"between ISDs\"\r\n- \"a AS\" -> \"an AS\"\r\n- \"as AS may want\" -> \"as an AS may want\"",
+      "createdAt": "2025-11-14T16:33:48Z",
+      "updatedAt": "2025-11-14T16:33:49Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f36d4c283d5679c0f40eabcb55d2ec689ffc153f",
+      "headRepository": "seadog007/scion-cp_I-D",
+      "headRefName": "main",
+      "headRefOid": "5f1645b2541997ad83d545c2d6b035f6d6b74f1b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
