@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-16T00:26:28.199960+00:00",
+  "timestamp": "2025-11-18T00:24:26.385456+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -12403,26 +12403,50 @@
       "id": "PR_kwDOJx2-rs6zfqys",
       "title": "Fixed minor grammar issue",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/166",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "seadog007",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- \"within a ISD\" -> \"within an ISD\"\r\n- \"between ISD\" -> \"between ISDs\"\r\n- \"a AS\" -> \"an AS\"\r\n- \"as AS may want\" -> \"as an AS may want\"",
       "createdAt": "2025-11-14T16:33:48Z",
-      "updatedAt": "2025-11-14T16:33:49Z",
+      "updatedAt": "2025-11-16T21:30:12Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f36d4c283d5679c0f40eabcb55d2ec689ffc153f",
       "headRepository": "seadog007/scion-cp_I-D",
       "headRefName": "main",
       "headRefOid": "5f1645b2541997ad83d545c2d6b035f6d6b74f1b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "closedAt": "2025-11-16T21:30:01Z",
+      "mergedAt": "2025-11-16T21:30:01Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "92a4daa6e376244c04b5f65e8ee6e74acdeea966"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you for your PR @seadog007 !",
+          "createdAt": "2025-11-16T21:30:12Z",
+          "updatedAt": "2025-11-16T21:30:12Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7O2-AM",
+          "commit": {
+            "abbreviatedOid": "5f1645b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-16T21:29:00Z",
+          "updatedAt": "2025-11-16T21:29:00Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
