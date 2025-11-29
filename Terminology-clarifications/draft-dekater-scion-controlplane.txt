@@ -942,8 +942,8 @@ Table of Contents
    Based on the figures above, one could say that a PCB represents a
    single path segment.  However, there is a difference between a PCB
    and a registered path segment as a PCB is a so-called "travelling
-   path segment" that accumulates AS entries when traversing the
-   Internet.  A registered path segment is instead a "snapshot" of a
+   path segment" that accumulates AS entries when traversing a SCION
+   network.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
    particular AS A.  This is illustrated by Figure 5.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
@@ -3298,11 +3298,13 @@ Table of Contents
 8.1.  Security Properties
 
    The SCION control plane provides various security properties, as
-   discussed below.  Here, an AS is described as 'honest' if its private
-   keys are unknown to the attacker and it correctly performs operations
-   in accordance with this specification (e.g. uses a unique interface
-   identifier for each link).  An honest path is one that only traverses
-   honest ASes.  An honest segment is the one created by an honest AS.
+   discussed below.
+
+   Here, an AS is described as 'honest' if its private keys are unknown
+   to the attacker and it correctly performs operations in accordance
+   with this specification (e.g. uses a unique interface identifier for
+   each link).  An honest path is one that only traverses honest ASes.
+   An honest segment is the one created by an honest AS.
 
    Security properties are:
 
