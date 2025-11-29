@@ -137,7 +137,7 @@ informative:
         ins: Anapaya
         org: Anapaya Systems
       -
-        ins: ETH
+        ins: ETH Zuerich
         org: ETH Zuerich
       -
         ins: SCION
@@ -184,7 +184,7 @@ informative:
         ins: Anapaya
         org: Anapaya Systems
       -
-        ins: ETH
+        ins: ETH Zuerich
         org: ETH Zuerich
       -
         ins: SCION
@@ -314,7 +314,7 @@ Each link connecting SCION routers is bi-directional and is identified by its co
 
 SCION provides path-aware inter-domain routing between ASes across the Internet. The SCION Control Plane is responsible for discovering these inter-domain paths and making them available to the endpoints within the ASes.
 
-SCION inter-domain routing operates on two levels: within a ISD which is called *intra*-ISD routing, and between ISD which is called *inter*-ISD routing. Both levels use *Path Segment Construction Beacons (PCBs)* to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
+SCION inter-domain routing operates on two levels: within an ISD which is called *intra*-ISD routing, and between ISDs which is called *inter*-ISD routing. Both levels use *Path Segment Construction Beacons (PCBs)* to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
 
 The PCBs accumulate cryptographically protected path and forwarding information at an AS level and store this information in the form of *Hop Fields*. Endpoints use information from these Hop Fields to create end-to-end forwarding paths for data packets that carry this information in their headers. This also supports multi-path communication among endpoints.
 
@@ -466,7 +466,7 @@ On its way, a PCB accumulates cryptographically protected path and forwarding in
 PCBs do not traverse peering links. Instead, peering links are announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this peering link during segment combination to create the end-to-end path.
 
 
-### Appending Entries to a PCB
+### Appending Entries to a PCB {#pcb-appending}
 
 Every propagation interval (as configured by the AS), the Control Service:
 
@@ -1330,7 +1330,8 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 The Control Service and its clients authenticate each-other according to their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days. Some deployments use up to 5 days.
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION Control Service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
+The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
 
 ## Path Discovery Time and Scalability {#scalability}
 
@@ -1380,7 +1381,7 @@ The number of distinct paths through the core network is typically very large. T
 
 Without making strong assumptions on the topology of the core network, we can assume that shortest paths through real world networks are relatively short, e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst we cannot assume that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
 
-With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1000 ASes, a AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 
 Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150 thousand signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
 
@@ -1403,7 +1404,7 @@ Every *registration period* (determined by each AS), the AS's Control Service se
 - Up segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and
 - Down segments, which allow remote entities to reach this AS.
 
-The up segments and down segments do not have to be equal as AS may want to communicate with core ASes via one or more up segments that differ from the down segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up segment and down segment sets. In addition, the processes of transforming a PCB in an up segment or a down segment differ slightly.
+The up segments and down segments do not have to be equal as an AS may want to communicate with core ASes via one or more up segments that differ from the down segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up segment and down segment sets. In addition, the processes of transforming a PCB in an up segment or a down segment differ slightly.
 
 ### Terminating a PCB {#term-pcb}
 
@@ -1506,7 +1507,7 @@ Such information is then made available to source endpoints during the path look
 
 The *path lookup* is a fundamental building block of SCION's path management as it enables endpoints to obtain path segments found during path exploration and registered during path registration. This allows the endpoints to construct end-to-end paths from the set of possible path segments returned by the path lookup process. The lookup of paths still happens in the control plane, whereas the construction of the actual end-to-end paths happens in the data plane.
 
-## Lookup Process
+## Lookup Process {#lookup-process}
 
 An endpoint (source) that wants to start communication with another endpoint (destination) requires up to three path segments:
 
@@ -1524,8 +1525,9 @@ The process to look up and fetch path segments consists of the following steps:
 2. If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.
 3. The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.
 4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
-5. Once it has obtained all path segments, the source endpoint combines them into an end-to-end path in the data plane.
-6. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
+5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)) and requests any missing AS or intermediate certificates from the Control  Service (see [](#crypto-api)).
+6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
+7. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which Control Service provides the source endpoint with which type of path segment.
 
@@ -2142,6 +2144,14 @@ To defend against this attack, methods to detect the wormhole attack are needed.
 SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
 Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
 
+## Attacks on time sources {#time-security}
+
+Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
+
+- A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
+- An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
+- A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
+
 ## Denial of Service Attacks {#dos-cp}
 
 The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.
@@ -2338,8 +2348,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-12
 {:numbered="false"}
 
-- Security considerations: add section on time synchronization
-
+- Security considerations: new section "Attacks on time sources"
+- Path Lookup Process: mention checks at endpoint
 
 ## draft-dekater-scion-controlplane-11
 {:numbered="false"}
