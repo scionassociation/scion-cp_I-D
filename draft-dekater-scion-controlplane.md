@@ -230,7 +230,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 ## Terminology {#terms}
 
-**Autonomous System (AS)**: An Autonomous System is a network under a common administrative control. For example, the network of an Internet service provider, company, or university can constitute an AS.
+**Autonomous System (AS)**: An Autonomous System is a network under a common administrative control. For example, the network of an Internet service provider, company, or university can constitute an AS. Although SCION ASes have a similar role to BGP ASes, they have a different address scheme and serve as a locator in the addressing of end hosts.
 
 **Beaconing**: The Control Plane process where an AS discovers paths to other ASes.
 
