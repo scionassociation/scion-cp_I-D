@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-18T00:24:26.385456+00:00",
+  "timestamp": "2025-11-30T00:28:01.353295+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2691,6 +2691,27 @@
       "createdAt": "2025-11-11T16:08:36Z",
       "updatedAt": "2025-11-13T16:20:56Z",
       "closedAt": "2025-11-13T16:20:56Z",
+      "comments": []
+    },
+    {
+      "number": 167,
+      "id": "I_kwDOJx2-rs7bD2Z7",
+      "title": "Use of \"AS\" & Internet",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/167",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1"
+      ],
+      "body": "TODO: \n- [ ] AS --> SCION AS (in introduction, terminology & instances in text). Clarify it is distinct from BGP. \n- [ ] Internet --> SCION network where appropriate\n- [ ] Check -dataplane and -pki for similar issues\n\n### Feedback Ketan\n\n1) This document uses the term Autonomous Systems (AS) which is used on the current Internet and comes from RFC1930. AS is widely used in the BGP-4 (RFC4271) that is the inter-domain routing protocol on the Internet. But AS precedes BGP - see RFC1930. AS numbers were originally 2 bytes but since then have been updated to 4 bytes. My impression is that the SCION AS is a somewhat different concept than the AS used on the Internet with BGP based on the explanation in section 1.5.2). Can you please consider clarifying this in the introduction or terminology and perhaps calling them as SCION AS (as done in the abstract) to disambiguate from the RFC 1930 AS? Also, note that AS numbers in the IETF are not defined as BGP ASNs as this document does in section 1.5.2.\n\n2) The document uses the term \"Internet\" in a few places that I would like to get some clarifications on the following instances. This is somewhat related to the previous query.\n\n```\nFor example, the network of an Internet service provider, company, or university can constitute an AS.\n\nSCION provides path-aware inter-domain routing between ASes across the Internet.\n\nHowever, there is a difference between a PCB and a registered path segment as a PCB is a so-called \"travelling path segment\" that accumulates AS entries when traversing the Internet.\n```\n\nCan you please clarify if the word Internet word here is appropriate or whether what it refers to is a SCION service provider or SCION network?",
+      "createdAt": "2025-11-28T15:09:45Z",
+      "updatedAt": "2025-11-28T15:09:45Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -12447,6 +12468,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 168,
+      "id": "PR_kwDOJx2-rs62H2lB",
+      "title": "Terminology clarifications",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/168",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-11-29T10:36:27Z",
+      "updatedAt": "2025-11-29T11:16:15Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "92a4daa6e376244c04b5f65e8ee6e74acdeea966",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Terminology-clarifications",
+      "headRefOid": "ea2bfe292e1a72464f356b406ab2d8ddac26a61d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
