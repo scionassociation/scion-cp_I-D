@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 June 2026                                             S. Hitz
+Expires: 3 June 2026                                             S. Hitz
                                                          Anapaya Systems
-                                                        29 November 2025
+                                                        30 November 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 June 2026.
+   This Internet-Draft will expire on 3 June 2026.
 
 Copyright Notice
 
@@ -3732,7 +3732,7 @@ Acknowledgments
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
    (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
    Association), Kevin Meynell (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing
+   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing
    this document.  We also thank Daniel Galán Pascual and Christoph
    Sprenger from the Information Security Group at ETH Zurich for their
    inputs based on their formal verification work on SCION.  We are also
