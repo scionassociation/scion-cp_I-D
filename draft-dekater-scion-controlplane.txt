@@ -3922,7 +3922,7 @@ Change Log
 draft-dekater-scion-controlplane-13
 
    *  Clarify distinction between SCION ASes and BGP ASes through the
-      text
+      text.
 
 draft-dekater-scion-controlplane-12
 
