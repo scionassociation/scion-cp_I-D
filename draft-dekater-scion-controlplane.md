@@ -2347,7 +2347,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
 
-- Clarify distinction between SCION ASes and BGP ASes through the text
+- Clarify distinction between SCION ASes and BGP ASes through the text.
 
 ## draft-dekater-scion-controlplane-12
 {:numbered="false"}
