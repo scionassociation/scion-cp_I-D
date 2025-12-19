@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 May 2026                                             S. Hitz
+Expires: 22 June 2026                                            S. Hitz
                                                          Anapaya Systems
-                                                        11 November 2025
+                                                        19 December 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 May 2026.
+   This Internet-Draft will expire on 22 June 2026.
 
 Copyright Notice
 
@@ -160,7 +160,8 @@ Table of Contents
        8.3.2.  Creation of Spurious ASes and ISDs
        8.3.3.  Peering Link Misuse
        8.3.4.  Manipulation of the Path-Selection Process
-     8.4.  Denial of Service Attacks
+     8.4.  Attacks on time sources
+     8.5.  Denial of Service Attacks
    9.  IANA Considerations
    10. References
      10.1.  Normative References
@@ -169,6 +170,8 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-14
+     draft-dekater-scion-controlplane-13
      draft-dekater-scion-controlplane-12
      draft-dekater-scion-controlplane-11
      draft-dekater-scion-controlplane-10
@@ -202,10 +205,10 @@ Table of Contents
    trust model.  The goal is to provide higher levels of trustworthiness
    in routing information to prevent traffic hijacking, and enable users
    to decide where their data travels based on routing information that
-   can be unambiguously attributed to an AS, ensuring that packets are
-   only forwarded along authorized path segments.  A particular use case
-   is to enable geofencing.  Security properties are further discussed
-   in Section 8.1.
+   can be unambiguously attributed to a SCION AS, ensuring that packets
+   are only forwarded along authorized path segments.  A particular use
+   case is to enable geofencing.  Security properties are further
+   discussed in Section 8.1.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
@@ -217,7 +220,7 @@ Table of Contents
    SCION relies on three main components:
 
    _PKI_ - described in [I-D.dekater-scion-pki].  To achieve scalability
-   and trust, SCION organizes existing ASes into logical groups of
+   and trust, SCION organizes its ASes into logical groups of
    independent routing planes called _Isolation Domains (ISDs)_. All
    ASes in an ISD agree on a set of trust roots called the _Trust Root
    Configuration (TRC)_ which is a collection of signed root
@@ -229,15 +232,15 @@ Table of Contents
 
    _Control Plane_ - described in this document.  It performs inter-
    domain routing by discovering and securely disseminating path
-   information between ASes.  The core ASes use Path-segment
+   information between SCION ASes.  The core ASes use Path-segment
    Construction Beacons (PCBs) to explore intra-ISD paths, or to explore
    paths across different ISDs.
 
    _Data Plane_ - described in [I-D.dekater-scion-dataplane].  It
-   carries out secure packet forwarding between SCION-enabled ASes over
-   paths selected by endpoints.  A SCION border router reuses existing
-   intra-domain infrastructure to communicate to other SCION routers or
-   SCION endpoints within its AS.
+   carries out secure packet forwarding between SCION ASes over paths
+   selected by endpoints.  A SCION border router reuses existing intra-
+   domain infrastructure to communicate to other SCION routers or SCION
+   endpoints within its AS.
 
    This document should be read in conjunction with the other components
    mentioned above.  Readers are encouraged to read the introduction in
@@ -257,10 +260,14 @@ Table of Contents
 
 1.1.  Terminology
 
-   *Autonomous System (AS)*: An Autonomous System is a network under a
-   common administrative control.  For example, the network of an
-   Internet service provider, company, or university can constitute an
-   AS.
+   *SCION Autonomous System (AS)*: A SCION Autonomous System is a
+   network under a common administrative control.  For example, the
+   network of a SCION service provider, company, or university can
+   constitute an AS.  While functionally similar to a BGP AS, a SCION AS
+   operates within an Isolation Domain (ISD), it utilizes a different
+   address scheme and serves as a locator in the addressing of end
+   hosts.  References to ASes throughout this document refer to SCION
+   ASes.
 
    *Beaconing*: The Control Plane process where an AS discovers paths to
    other ASes.
@@ -280,8 +287,8 @@ Table of Contents
    within the Control Plane.
 
    *Core AS*: Each Isolation Domain (ISD) is administered by a set of
-   distinguished autonomous systems (ASes) called core ASes, which are
-   responsible for initiating the path-discovery and -construction
+   distinguished SCION autonomous systems (ASes) called core ASes, which
+   are responsible for initiating the path-discovery and -construction
    process (in SCION called "beaconing").  Each ISD MUST have at least
    one Core AS.
 
@@ -305,10 +312,10 @@ Table of Contents
    the PCB.  Together with Hop Fields (HFs), these are used to create
    forwarding paths.
 
-   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
-   organized into logical groups called Isolation Domains or ISDs.  Each
-   ISD consists of ASes that span an area with a uniform trust
-   environment (e.g. a common jurisdiction).
+   *Isolation Domain (ISD)*: SCION ASes are organized into logical
+   groups called Isolation Domains or ISDs.  Each ISD consists of ASes
+   that span an area with a uniform trust environment (e.g. a common
+   jurisdiction).
 
    *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
    ASes.
@@ -356,10 +363,10 @@ Table of Contents
    (e.g., router or endpoint).  A SCION path between two endpoints
    traverses one or more links.
 
-   In SCION, Autonomous Systems (ASes) are organized into logical groups
-   called Isolation Domains or ISDs.  Each ISD consists of ASes that are
-   part of a uniform trust environment (i.e. a common jurisdiction) and
-   is administered by a set of distinguished ASes called core ASes.
+   SCION ASes are organized into logical groups called Isolation Domains
+   or ISDs.  Each ISD consists of ASes that are part of a uniform trust
+   environment (i.e. a common jurisdiction) and is administered by a set
+   of distinguished ASes called core ASes.
 
    SCION distinguishes three types of links between ASes: (1) core
    links, (2) parent-child links, and (3) peering links.
@@ -423,13 +430,13 @@ Table of Contents
 
 1.4.  Routing
 
-   SCION provides path-aware inter-domain routing between ASes across
-   the Internet.  The SCION Control Plane is responsible for discovering
-   these inter-domain paths and making them available to the endpoints
-   within the ASes.
+   SCION provides path-aware inter-domain routing between SCION ASes.
+   The SCION Control Plane is responsible for discovering these inter-
+   domain paths and making them available to the endpoints within the
+   ASes.
 
-   SCION inter-domain routing operates on two levels: within a ISD which
-   is called _intra_-ISD routing, and between ISD which is called
+   SCION inter-domain routing operates on two levels: within an ISD
+   which is called _intra_-ISD routing, and between ISDs which is called
    _inter_-ISD routing.  Both levels use _Path Segment Construction
    Beacons (PCBs)_ to explore network paths.  A PCB is initiated by a
    core AS and then disseminated either within an ISD to explore intra-
@@ -575,9 +582,9 @@ Table of Contents
    A SCION AS number is the 48-bit identifier for an AS.  Although they
    play a similar role, there is no relationship between SCION AS
    numbers and BGP ASNs as defined by [RFC4271].  For historical reasons
-   some SCION Autonomous Systems use a SCION AS number where the first
-   16 bits are 0 and the remaining 32 bits are identical to their BGP
-   ASN, but there is no technical requirement for this.
+   some SCION Autonomous Systems use an AS number where the first 16
+   bits are 0 and the remaining 32 bits are identical to their BGP ASN,
+   but there is no technical requirement for this.
 
 1.5.2.1.  Wildcard Addressing
 
@@ -707,8 +714,8 @@ Table of Contents
    failures.  Partitioning of the global SCION inter-domain network is
    much less likely to happen, thanks to its path awareness that exposes
    multiple paths between SCION ASes.  Even during failures there is no
-   special failure mode required as SCION-enabled ASes can always switch
-   to already known paths that use other links.
+   special failure mode required as SCION ASes can always switch to
+   already known paths that use other links.
 
    Recovering from a partitioned network is also seamless as only coarse
    time synchronization between the partitions is required to resume
@@ -718,10 +725,10 @@ Table of Contents
 
 1.8.  Communication Protocol
 
-   All communication between the Control Services in different ASes is
-   expressed in terms of RPC remote procedure calls.  Service interfaces
-   and messages are defined in the Protocol Buffer "proto3" interface
-   definition language (for details, see [proto3]).
+   All communication between the Control Services in different SCION
+   ASes is expressed in terms of RPC remote procedure calls.  Service
+   interfaces and messages are defined in the Protocol Buffer "proto3"
+   interface definition language (for details, see [proto3]).
 
    The RPC messages are transported via [Connect]'s RPC protocol that
    carries messages over HTTP/3 (see [RFC9114])), which in turn uses
@@ -737,11 +744,11 @@ Table of Contents
 
 2.1.  Introduction and Overview
 
-   *Path Exploration* is the process where an AS discovers paths to
+   *Path Exploration* is the process where a SCION AS discovers paths to
    other ASes.  In SCION, this process is referred to as _beaconing_ and
    this section provides a detailed explanation of this.
 
-   In SCION, the _Control Service_ of each AS is responsible for the
+   The _Control Service_ of each SCION AS is responsible for the
    beaconing process.  The Control Service generates, receives, and
    propagates the _Path Segment Construction Beacons (PCBs)_ on a
    regular basis, to iteratively construct path segments.
@@ -938,8 +945,8 @@ Table of Contents
    Based on the figures above, one could say that a PCB represents a
    single path segment.  However, there is a difference between a PCB
    and a registered path segment as a PCB is a so-called "travelling
-   path segment" that accumulates AS entries when traversing the
-   Internet.  A registered path segment is instead a "snapshot" of a
+   path segment" that accumulates AS entries when traversing SCION
+   networks.  A registered path segment is instead a "snapshot" of a
    travelling PCB at a given time T and from the vantage point of a
    particular AS A.  This is illustrated by Figure 5.  This figure shows
    several possible path segments to reach AS Z, based on the PCBs "g",
@@ -1060,11 +1067,13 @@ Table of Contents
           uint32 segment_id = 2;
       }
 
-   *  timestamp: The 32-bit timestamp indicates the creation time of
-      this PCB.  It is set by the originating core AS and the expiration
-      time of each Hop Field in the PCB is computed relative to this
-      timestamp.  The timestamp is encoded as the number of seconds
-      elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
+   *  timestamp: The timestamp indicates the creation time of this PCB.
+      It is set by the originating core AS and the expiration time of
+      each Hop Field in the PCB is computed relative to this timestamp.
+      The timestamp is encoded as the number of seconds elapsed since
+      the POSIX Epoch (1970-01-01 00:00:00 UTC).  Note that this
+      timestamp is encoded as a 32-bit unsigned integer in
+      [I-D.dekater-scion-dataplane].
 
    *  segment_id: The 16-bit identifier of this PCB and the
       corresponding path segment.  The segment ID is REQUIRED for the
@@ -1961,12 +1970,13 @@ Table of Contents
    corresponding to a given destination address is outside the scope of
    this document.  One option, still experimental in existing
    deployments, is that SCION-aware endpoints may resolve destination
-   SCION addresses using a naming system (e.g. DNS).  SCION-unaware
-   endpoints may interface with a SCION network through a SCION IP
-   Gateway (SIG), which tunnels IP traffic over SCION.  In such cases,
-   the source SIG is responsible for mapping destination IPs to the
-   appropriate destination ISD-AS and gateway.  More information can be
-   found at [SIG].
+   SCION addresses using a naming system (e.g. DNS).
+
+   SCION-unaware endpoints may interface with a SCION network through a
+   SCION IP Gateway (SIG), which tunnels IP traffic over SCION.  In such
+   cases, the source SIG is responsible for mapping destination IPs to
+   the appropriate destination ISD-AS and gateway.  More information can
+   be found at [SIG].
 
 3.2.  Monitoring Considerations
 
@@ -2043,8 +2053,12 @@ Table of Contents
    minutes are immaterial.
 
    Each administrator of a SCION Control Service is responsible for
-   maintaining sufficient clock accuracy.  No particular method is
-   assumed by this specification.
+   maintaining coarse time synchronization with SCION routers within the
+   AS, neighbor ASes control services, and endpoints within the AS.  In
+   typical deployments, clock deviations on the order of several minutes
+   are acceptable.  The specific methods used to achieve this
+   synchronization are outside the scope of this document.  Security
+   considerations on time synchronization are discussed in Section 8.4.
 
 3.4.  Path Discovery Time and Scalability
 
@@ -2092,8 +2106,8 @@ Table of Contents
    different paths in the data plane (see [I-D.dekater-scion-dataplane]
    section "Handling Link Failures").
 
-   To achieve scalability, SCION partitions ASes into ISDs and in an
-   ideal topology the inter-ISD core network should be kept to a
+   To achieve scalability, SCION ASes are partitioned into ISDs and in
+   an ideal topology the inter-ISD core network should be kept to a
    moderate size.  For more specific observations, we distinguish
    between intra-ISD and core beaconing.
 
@@ -2184,7 +2198,7 @@ Table of Contents
    With N the number of participating core ASes, an AS receives up to 5
    * N PCBs per propagation interval per core link interface.  For
    highly connected ASes, the number of PCBs received thus becomes
-   rather large and in a network of 1000 ASes, a AS with 300 core links
+   rather large and in a network of 1000 ASes, an AS with 300 core links
    receives up to 1.5 million PCBs per propagation interval.
 
    Assuming an average PCB length of 6 and the shortest propagation
@@ -2203,9 +2217,9 @@ Table of Contents
 
 4.  Registration of Path Segments
 
-   *Path registration* is the process where an AS transforms selected
-   PCBs into path segments, and adding these segments to the relevant
-   path databases thereby making them available to other ASes.
+   *Path registration* is the process where a SCION AS transforms
+   selected PCBs into path segments, and adding these segments to the
+   relevant path databases thereby making them available to other ASes.
 
    As mentioned previously, a non-core AS typically receives several
    PCBs representing several path segments to the core ASes of the ISD
@@ -2234,12 +2248,12 @@ Table of Contents
 
    *  Down segments, which allow remote entities to reach this AS.
 
-   The up segments and down segments do not have to be equal as AS may
-   want to communicate with core ASes via one or more up segments that
-   differ from the down segment(s) through which it wants to be reached.
-   Therefore, an AS can define different selection policies for the up
-   segment and down segment sets.  In addition, the processes of
-   transforming a PCB in an up segment or a down segment differ
+   The up segments and down segments do not have to be equal as an AS
+   may want to communicate with core ASes via one or more up segments
+   that differ from the down segment(s) through which it wants to be
+   reached.  Therefore, an AS can define different selection policies
+   for the up segment and down segment sets.  In addition, the processes
+   of transforming a PCB in an up segment or a down segment differ
    slightly.
 
 4.1.1.  Terminating a PCB
@@ -2486,10 +2500,16 @@ Table of Contents
    4.  The Control Service of the source AS returns all retrieved path
        segments to the source endpoint.
 
-   5.  Once it has obtained all path segments, the source endpoint
-       combines them into an end-to-end path in the data plane.
+   5.  As the source endpoint receives each path segment, it verifies
+       the SegmentInformation timestamp validity (see Section 2.2.4),
+       the AS entry signature for each AS entry (see Section 2.2.2.6)
+       and requests any missing AS or intermediate certificates from the
+       Control Service (see Section 2.4).
 
-   6.  The destination endpoint, once it receives the first packet, MAY
+   6.  Once it has obtained some valid path segments, the source
+       endpoint combines them into an end-to-end path in the data plane.
+
+   7.  The destination endpoint, once it receives the first packet, MAY
        revert the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
@@ -3055,21 +3075,23 @@ Table of Contents
 
                 Figure 19: Internal Connectivity Down format
 
-     +============+==================================================+
-     | Name       | Value                                            |
-     +============+==================================================+
-     | Type       | 6                                                |
-     +------------+--------------------------------------------------+
-     | Code       | 0                                                |
-     +------------+--------------------------------------------------+
-     | ISD        | The 16-bit ISD identifier of the SCMP originator |
-     +------------+--------------------------------------------------+
-     | AS         | The 48-bit AS identifier of the SCMP originator  |
-     +------------+--------------------------------------------------+
-     | Ingress ID | The interface ID of the ingress link.            |
-     +------------+--------------------------------------------------+
-     | Egress ID  | The interface ID of the egress link.             |
-     +------------+--------------------------------------------------+
+    +=========+=======================================================+
+    | Name    | Value                                                 |
+    +=========+=======================================================+
+    | Type    | 6                                                     |
+    +---------+-------------------------------------------------------+
+    | Code    | 0                                                     |
+    +---------+-------------------------------------------------------+
+    | ISD     | The 16-bit ISD identifier of the SCMP originator      |
+    +---------+-------------------------------------------------------+
+    | AS      | The 48-bit SCION AS identifier of the SCMP originator |
+    +---------+-------------------------------------------------------+
+    | Ingress | The interface ID of the ingress link.                 |
+    | ID      |                                                       |
+    +---------+-------------------------------------------------------+
+    | Egress  | The interface ID of the egress link.                  |
+    | ID      |                                                       |
+    +---------+-------------------------------------------------------+
 
                     Table 9: Error Message field values
 
@@ -3278,16 +3300,17 @@ Table of Contents
        beaconing process (see Section 8.3).
 
    3.  Denial of Services (DoS) attacks where attackers overload
-       different parts of the infrastructure (see Section 8.4).
+       different parts of the infrastructure (see Section 8.5).
 
 8.1.  Security Properties
 
    The SCION control plane provides various security properties, as
-   discussed below.  Here, an AS is described as 'honest' if its private
-   keys are unknown to the attacker and it correctly performs operations
-   in accordance with this specification (e.g. uses a unique interface
-   identifier for each link).  An honest path is one that only traverses
-   honest ASes.  An honest segment is the one created by an honest AS.
+   discussed below.  Here, a SCION AS is described as 'honest' if its
+   private keys are unknown to the attacker and it correctly performs
+   operations in accordance with this specification (e.g. uses a unique
+   interface identifier for each link).  An honest path is one that only
+   traverses honest ASes.  An honest segment is the one created by an
+   honest AS.
 
    Security properties are:
 
@@ -3506,7 +3529,24 @@ Table of Contents
    authentication of SCMP messages.  Authentication is not specified
    here since it is currently still experimental.
 
-8.4.  Denial of Service Attacks
+8.4.  Attacks on time sources
+
+   Care should be taken to maintain coarse time synchronization among
+   Control Service instances and other system components, as discussed
+   in Section 3.3.  An adversary that significantly alters the system
+   time of a component can disrupt SCION operations:
+
+   *  A control service instance: its beaconing process may halt as it
+      cannot verify the validity of received PCBs (see Section 2.2.4) or
+      correctly add timestamps to propagated PCBs (see Section 2.1.2).
+
+   *  An endpoint: the endpoint may fail to verify path segments during
+      path lookup (see Section 5.1).
+
+   *  A router: packets may be dropped ahead of the control service
+      intended expiration time (see Section 2.2.2.5).
+
+8.5.  Denial of Service Attacks
 
    The beaconing process in the SCION Control Plane relies on control
    plane communication.  ASes exchange control plane messages within
@@ -3579,9 +3619,9 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-08, 2 November 2025,
+              draft-dekater-scion-dataplane-09, 14 November 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-08>.
+              scion-dataplane-09>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -3646,8 +3686,7 @@ Table of Contents
 
    [ISD-AS-assignments-Anapaya]
               "SCION ISD and AS Assignments", 2025,
-              <https://docs.anapaya.net/en/latest/resources/isd-as-
-              assignments/>.
+              <https://learn.anapaya.net/docs/resources/assignments/>.
 
    [PCBExtensions]
               Anapaya, ETH, and SCION, "PCB Path Metadata Extension",
@@ -3685,18 +3724,20 @@ Table of Contents
               Generation Internet Testbed", 2020,
               <https://ieeexplore.ieee.org/abstract/document/9259355>.
 
-   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2025,
+   [SCMP]     Anapaya, ETH Zuerich, and SCION, "SCMP Documentation",
+              2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
-   [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
-              2024, <https://docs.scion.org/en/latest/sig.html>.
+   [SIG]      Anapaya, ETH Zuerich, and SCION, "SCION IP Gateway
+              Documentation", 2024,
+              <https://docs.scion.org/en/latest/sig.html>.
 
 Acknowledgments
 
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
    (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
    Association), Kevin Meynell (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks), for reviewing
+   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing
    this document.  We also thank Daniel Galán Pascual and Christoph
    Sprenger from the Information Security Group at ETH Zurich for their
    inputs based on their formal verification work on SCION.  We are also
@@ -3881,9 +3922,20 @@ Change Log
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
 
+draft-dekater-scion-controlplane-14
+
+   *  Clarify bits in timestamps.
+
+draft-dekater-scion-controlplane-13
+
+   *  Clarify distinction between SCION ASes and BGP ASes through the
+      text.
+
 draft-dekater-scion-controlplane-12
 
-   *  Security considerations: add section on time synchronization
+   *  Security considerations: new section "Attacks on time sources"
+
+   *  Path Lookup Process: mention checks at endpoint
 
 draft-dekater-scion-controlplane-11
 
