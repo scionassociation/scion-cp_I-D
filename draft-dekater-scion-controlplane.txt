@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 June 2026                                             S. Hitz
+Expires: 25 June 2026                                            S. Hitz
                                                          Anapaya Systems
-                                                         4 December 2025
+                                                        22 December 2025
 
 
                           SCION Control Plane
@@ -66,7 +66,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2026.
+   This Internet-Draft will expire on 25 June 2026.
 
 Copyright Notice
 
@@ -170,6 +170,7 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-14
      draft-dekater-scion-controlplane-13
      draft-dekater-scion-controlplane-12
      draft-dekater-scion-controlplane-11
@@ -1066,11 +1067,13 @@ Table of Contents
           uint32 segment_id = 2;
       }
 
-   *  timestamp: The 32-bit timestamp indicates the creation time of
-      this PCB.  It is set by the originating core AS and the expiration
-      time of each Hop Field in the PCB is computed relative to this
-      timestamp.  The timestamp is encoded as the number of seconds
-      elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC).
+   *  timestamp: The timestamp indicates the creation time of this PCB.
+      It is set by the originating core AS and the expiration time of
+      each Hop Field in the PCB is computed relative to this timestamp.
+      The timestamp is encoded as the number of seconds elapsed since
+      the POSIX Epoch (1970-01-01 00:00:00 UTC).  Note that this
+      timestamp is encoded as a 32-bit unsigned integer in
+      [I-D.dekater-scion-dataplane].
 
    *  segment_id: The 16-bit identifier of this PCB and the
       corresponding path segment.  The segment ID is REQUIRED for the
@@ -3918,6 +3921,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-14
+
+   *  Clarify bits in timestamps.
 
 draft-dekater-scion-controlplane-13
 
