@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-21T00:28:18.125595+00:00",
+  "timestamp": "2025-12-23T00:26:05.006346+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -12516,26 +12516,42 @@
       "id": "PR_kwDOJx2-rs652_Vc",
       "title": "clarify timestamp encoding difference with -dataplane",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/169",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Contributes to https://github.com/scionassociation/scion-dp_I-D/issues/127 ",
       "createdAt": "2025-12-19T17:08:13Z",
-      "updatedAt": "2025-12-19T17:08:14Z",
+      "updatedAt": "2025-12-22T12:59:24Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "37c291963ff6026a18bb27ba232fcdca7f7a71a2",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "timestams",
       "headRefOid": "e0381f7a81e8e8caa14ab25bb7358bd745866f30",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-12-22T12:59:18Z",
+      "mergedAt": "2025-12-22T12:59:17Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7Wx_Nn",
+          "commit": {
+            "abbreviatedOid": "e0381f7"
+          },
+          "author": "romshark",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-12-22T10:01:52Z",
+          "updatedAt": "2025-12-22T10:01:52Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
