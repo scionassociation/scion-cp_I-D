@@ -55,13 +55,9 @@ normative:
 
 informative:
   I-D.dekater-panrg-scion-overview:
-  ISD-AS-assignments-Anapaya:
-    title: "SCION ISD and AS Assignments"
-    date: 2025
-    target: https://learn.anapaya.net/docs/resources/assignments/
   ISD-AS-assignments:
     title: "SCION Registry"
-    date: 2025
+    date: 2026
     target: http://scion.org/registry/
   CHUAT22:
     title: "The Complete Guide to SCION"
@@ -372,8 +368,7 @@ The following table gives an overview of the ISD number allocation:
 {: #table-1 title="ISD number allocations"}
 
 The wildcard ISD is not directly used by the control or data plane. It may, however, be used by implementations to represent any ISD, for example in path filters.
-
-ISD numbers are currently allocated by Anapaya, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This function is being transitioned to the SCION Association ({{ISD-AS-assignments}}).
+ISD numbers are allocated by the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
@@ -2165,7 +2160,7 @@ A combination of the mechanism above is used to prevent flooding attacks on the 
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
+The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see {{ISD-AS-assignments}}).
 
 --- back
 
@@ -2343,6 +2338,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Clarify bits in timestamps.
+- Remove  informative reference to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
 
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
