@@ -572,12 +572,8 @@ Table of Contents
 
    The wildcard ISD is not directly used by the control or data plane.
    It may, however, be used by implementations to represent any ISD, for
-   example in path filters.
-
-   ISD numbers are currently allocated by Anapaya, a provider of SCION-
-   based networking software and solutions (see
-   [ISD-AS-assignments-Anapaya]).  This function is being transitioned
-   to the SCION Association ([ISD-AS-assignments]).
+   example in path filters.  ISD numbers are allocated by the SCION
+   Association ([ISD-AS-assignments]).
 
 1.5.2.  SCION AS Numbers
 
@@ -3605,10 +3601,7 @@ Table of Contents
    This document has no IANA actions.
 
    The ISD and SCION AS number are SCION-specific numbers.  They are
-   currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
-   This task is being transitioned from Anapaya to the SCION Association
-   (see [ISD-AS-assignments]).
+   allocated by the SCION Association (see [ISD-AS-assignments]).
 
 10.  References
 
@@ -3686,11 +3679,7 @@ Table of Contents
               panrg-scion-overview-06>.
 
    [ISD-AS-assignments]
-              "SCION Registry", 2025, <http://scion.org/registry/>.
-
-   [ISD-AS-assignments-Anapaya]
-              "SCION ISD and AS Assignments", 2025,
-              <https://learn.anapaya.net/docs/resources/assignments/>.
+              "SCION Registry", 2026, <http://scion.org/registry/>.
 
    [PCBExtensions]
               Anapaya, ETH, and SCION, "PCB Path Metadata Extension",
@@ -3931,6 +3920,9 @@ Change Log
 draft-dekater-scion-controlplane-14
 
    *  Clarify bits in timestamps.
+
+   *  Remove informative reference to Anapaya's ISD assignments, since
+      they are taken over by SCION Association in 2026
 
 draft-dekater-scion-controlplane-13
 
