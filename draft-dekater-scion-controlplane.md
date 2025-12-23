@@ -54,7 +54,6 @@ normative:
     target: https://connectrpc.com/docs/protocol/
 
 informative:
-  I-D.dekater-panrg-scion-overview:
   ISD-AS-assignments:
     title: "SCION Registry"
     date: 2026
@@ -2338,7 +2337,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Clarify bits in timestamps.
-- Remove  informative reference to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
+- Remove  informative reference to I-D.dekater-panrg-scion-overview  and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
 
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
