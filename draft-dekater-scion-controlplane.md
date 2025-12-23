@@ -810,7 +810,7 @@ The header part carries information that is relevant to the computation and veri
 - `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
-- `metadata`: May include metadata. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header. This field is OPTIONAL. 
+- `metadata`: May include metadata. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header. This field is OPTIONAL.
 - `associated_data_length`: Specifies the length of the data covered by the signature but not included within the header or body. This data contains information about preceding AS entries, as described in [](#sign). The value of this field is zero if no associated data is covered by the signature.
 
 The `Header` and `SignatureAlgorithm` protobuf message definitions are:
