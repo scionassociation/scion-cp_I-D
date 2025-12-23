@@ -3671,13 +3671,6 @@ Table of Contents
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.dekater-panrg-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", Work in Progress, Internet-Draft, draft-
-              dekater-panrg-scion-overview-06, 7 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              panrg-scion-overview-06>.
-
    [ISD-AS-assignments]
               "SCION Registry", 2026, <http://scion.org/registry/>.
 
@@ -3921,8 +3914,9 @@ draft-dekater-scion-controlplane-14
 
    *  Clarify bits in timestamps.
 
-   *  Remove informative reference to Anapaya's ISD assignments, since
-      they are taken over by SCION Association in 2026
+   *  Remove informative reference to I-D.dekater-panrg-scion-overview
+      and to Anapaya's ISD assignments, since they are taken over by
+      SCION Association in 2026
 
 draft-dekater-scion-controlplane-13
 
