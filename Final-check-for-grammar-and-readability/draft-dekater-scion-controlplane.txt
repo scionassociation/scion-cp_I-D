@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 26 June 2026                                            S. Hitz
+Expires: 27 June 2026                                            S. Hitz
                                                          Anapaya Systems
-                                                        23 December 2025
+                                                        24 December 2025
 
 
                           SCION Control Plane
@@ -20,8 +20,9 @@ Abstract
    Isolation On Next-generation networks).  A fundamental characteristic
    of SCION is that it gives path control to SCION-capable endpoints
    that can choose between multiple path options, thereby enabling the
-   optimization of network paths.  The Control Plane is responsible for
-   discovering these paths and making them available to the endpoints.
+   optimization of network paths.  The SCION Control Plane is
+   responsible for discovering these paths and making them available to
+   the endpoints.
 
    The SCION Control Plane creates and securely disseminates path
    segments between SCION Autonomous Systems (AS) which can then be
@@ -66,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 June 2026.
+   This Internet-Draft will expire on 27 June 2026.
 
 Copyright Notice
 
@@ -295,10 +296,10 @@ Table of Contents
    *Endpoint*: An endpoint is the start or the end of a SCION path, as
    defined in [RFC9473].
 
-   *Forwarding Path*: A forwarding path is a complete end-to-end path
-   between two SCION endpoints which is used to transmit packets in the
-   data plane.  It can be created with a combination of up to three path
-   segments (an up segment, a core segment, and a down segment).
+   *Forwarding Path*: A complete end-to-end path between two SCION
+   endpoints which is used to transmit packets in the data plane.  It
+   can be created with a combination of up to three path segments (an up
+   segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, Path Segment
    Construction Beacons (PCBs) accumulate cryptographically protected
@@ -325,13 +326,12 @@ Table of Contents
    "Medium Access Control".  When "Medium Access Control address" is
    implied, the phrase "Link Layer Address" is used.
 
-   *Path Segment*: Path segments are derived from Path Segment
-   Construction Beacons (PCBs).  A path segment can be (1) an up segment
-   (i.e. a path between a non-core AS and a core AS in the same ISD),
-   (2) a down segment (i.e. the same as an up segment, but in the
-   opposite direction), or (3) a core segment (i.e. a path between core
-   ASes).  Up to three path segments can be used to create a forwarding
-   path.
+   *Path Segment*: These are derived from Path Segment Construction
+   Beacons (PCBs).  A path segment can be (1) an up segment (i.e. a path
+   between a non-core AS and a core AS in the same ISD), (2) a down
+   segment (i.e. the same as an up segment, but in the opposite
+   direction), or (3) a core segment (i.e. a path between core ASes).
+   Up to three path segments can be used to create a forwarding path.
 
    *Path Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
