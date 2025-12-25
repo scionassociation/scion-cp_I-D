@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-23T00:26:05.006346+00:00",
+  "timestamp": "2025-12-25T00:25:55.682620+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2712,6 +2712,27 @@
       "createdAt": "2025-11-28T15:09:45Z",
       "updatedAt": "2025-12-19T17:00:27Z",
       "closedAt": "2025-12-19T17:00:27Z",
+      "comments": []
+    },
+    {
+      "number": 171,
+      "id": "I_kwDOJx2-rs7f_o9S",
+      "title": "API versioning - do we need anything in draft?",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/171",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "Prio 3",
+        "needs-discussion"
+      ],
+      "body": "There is an open proposal for API versioning: https://github.com/scionproto/scion/issues/4832 \nDo we need anything in the draft? Back in the September TC we discussed with [tzaeschke](https://github.com/tzaeschke) if we should add any wording about it. We should think about it",
+      "createdAt": "2025-12-23T17:06:26Z",
+      "updatedAt": "2025-12-23T17:06:34Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -12552,6 +12573,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 170,
+      "id": "PR_kwDOJx2-rs66UIlP",
+      "title": "Final review before publication",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/170",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2025-12-23T11:40:31Z",
+      "updatedAt": "2025-12-24T05:33:36Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Final-check-for-grammar-and-readability",
+      "headRefOid": "a039a169884a131158127213b6389c4aaa6791ef",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
