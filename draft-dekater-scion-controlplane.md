@@ -1286,8 +1286,61 @@ A `TRCRequest` includes the following fields:
 
 The returned `trc` contains the raw TRC.
 
+## Renewal of Cryptographic Material {#crypto-renewal}
 
+Control Services MAY renew cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `ChainRenewalService` RPC. They MAY also renew it out of band.
 
+~~~~~
+service ChainRenewalService {
+    rpc ChainRenewal(ChainRenewalRequest) returns (ChainRenewalResponse) {}
+}
+~~~~~
+
+- `ChainRenewal(ChainRenewalRequest)`: returns a renewed certificate chain.
+
+The corresponding protobuf message formats for requests are:
+
+~~~~~
+message ChainRenewalRequest {
+    SignedMessage signed_request = 1;
+    bytes cms_signed_request = 2;
+}
+
+message ChainRenewalRequestBody {
+    bytes csr = 1;
+}
+~~~~~
+
+A `ChainRenewalRequest` message includes the following fields:
+
+- `signed_request`: The signed certificate chain renewal requests. The  (TODO: do we need a reference to Header) of the `SignedMessage` (defined in [](#as-entry)) is the serialized `ChainRenewalRequestBody` defined below.
+- `cms_signed_request`: The certificate signing request. The content is TODO? What exactly?
+
+A `ChainRenewalRequestBody` contains:
+
+- `csr`: ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request. TODO: ref to PKI?
+
+The  protobuf message formats for responses are:
+
+~~~~~
+message ChainRenewalResponse {
+    SignedMessage signed_response = 1;
+    bytes cms_signed_response = 2;
+}
+
+message ChainRenewalResponseBody {
+    Chain chain = 1;
+}
+~~~~~
+
+A `ChainRenewalResponse` message includes the following fields:
+
+- `signed_response`: he signed certificate chain renewal response. The body of the `SignedMessage` is the serialized `ChainRenewalResponseBody`
+- `cms_signed_response`: The renewed certificate chain. The content is TODO? What exactly?
+
+A `ChainRenewalResponseBody` contains:
+
+- `chain`: The renewed certificate chain. The content is an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates.
 
 # Deployment Considerations
 
@@ -2348,6 +2401,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Clarify bits in timestamps.
+- Added protobuf definitions to handle renewal of Cryptographic Material
 
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
