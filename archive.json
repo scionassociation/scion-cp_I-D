@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-25T00:25:55.682620+00:00",
+  "timestamp": "2026-01-01T00:29:58.331655+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2734,6 +2734,71 @@
       "updatedAt": "2025-12-23T17:06:34Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 172,
+      "id": "I_kwDOJx2-rs7gwDbb",
+      "title": "Clarify automated certificate renewal",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/172",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "question",
+        "Prio 1"
+      ],
+      "body": "Doubt triggered by [4791#](https://github.com/scionproto/scion/pull/4791#). \nThe PKI draft currently says: \n> Subsequent certificate renewals MAY be automated and can leverage the control plane communication infrastructure.\n\nHowever, in the CP draft there is no description of any interfaces for certificate renewal. We should either change wording, or clarify automated renewal.\n\n- [x] Are there any missing RPC definitions?\n- [x] Are there any other missing interfaces that need to be specified?\n",
+      "createdAt": "2025-06-23T15:05:35Z",
+      "updatedAt": "2025-12-30T17:21:04Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "RPC is defined here https://github.com/scionproto/scion/blob/master/proto/control_plane/v1/renewal.proto\n\nIt is important to note that this is not the only way too achieve renewal. E.e.g there can be setups where renewal is managed through an out-of-band mechanism.\n\nIn the end, it boils down to the contract that the subscriber has with the CA (and potential secondary CAs)\n\nIn practice, all public ISDs have leveraged this mechanism so far",
+          "createdAt": "2025-06-24T05:58:14Z",
+          "updatedAt": "2025-06-24T05:58:14Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot for the clarification. It could make sense to include this in the draft. Right now we have this in the CP appendix  (tracked in https://github.com/scionassociation/scion-cp_I-D/issues/96 )",
+          "createdAt": "2025-06-24T14:30:14Z",
+          "updatedAt": "2025-06-24T14:30:14Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I think we could make  the following changes: \n- [ ]  mention renewal [protobuf messages](https://github.com/scionproto/scion/blob/master/proto/control_plane/v1/renewal.proto) to section `4.3.  Creating a New Control Plane AS Certificate`. in PKI\n   - [ ]  rename the section to \"Creation and renewal of Control Plane AS Certificates\". Mention certificates MAY also be renewed out of band.\n   - [ ] Explain how a CSR is authenticated in case of renewal\n- [ ] Move `Figure 30: Control Service gRPC API` to the PKI draft (Practically, changes done in https://github.com/scionassociation/scion-cp_I-D/pull/99/files). A good place could be adding a section  4.1. , before  `Deploying a TRC`]\n   - [ ] Do we need to specify how addressing works for these certificate requests? \n   - [ ] Add cross-reference in 3.1.4 where it says ` the relying party MUST query the originator of the message for the missing material`\n   - [ ] Update reference `Control Service gRPC API - Trust Material` in 4.1.2.1.  TRC Update Discovery\n   - [ ] Update reference in CP [2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.3.1)[Reception of PCBs](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-reception-of-pcbs)  from figure to explicitly mentioning `TRCRequest ` to avoid this confusion by the reader (from Alvaro)\n      > [] If the Control Service doesn't have the relevant TRC(s) and certificate(s), are the PCBs considered invalid?  Or is the intent that when the information is received, the validity can be checked?  IOW, should the PCB be discarded (and then wait for the periodic update)...OR...should it be stored until the TRC/certificate information is received?\n   - [ ]  Update any other references\n",
+          "createdAt": "2025-06-24T14:55:36Z",
+          "updatedAt": "2025-12-30T16:38:08Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> RPC is defined here https://github.com/scionproto/scion/blob/master/proto/control_plane/v1/renewal.proto\n\n@oncilla what kind of addressing do these RPCs use? Do they use service addressing? Otherwise, how do they determine the address of the CA where to send the request? I guess we would need to clarify this in the draft too",
+          "createdAt": "2025-06-24T15:21:20Z",
+          "updatedAt": "2025-06-24T15:21:20Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Observation from Ramon Keller related to this issue (libc):\n\nSee \"Section 4.3\"\n\nAccording to the current definition, only the AS certificate is returned by the CA. However, given that the Control Place CA certificate is renewed approximately every 7\u20138 days, a new Control Place CA certificate can be expected with roughly every third AS certificate renewal. The draft does not specify how the updated CA certificate is to be disseminated, leaving this behavior to the implementation.\n\nReturning the Control Place CA certificate together with the CP AS certificate is one solution. The other option would be to provide and support the AIA extension in the certificates, but AIA is certainly not the most efficient solution.\n\nThis is already described in the CP draft in  Figure 30: Control Service gRPC API - Trust Material representation.",
+          "createdAt": "2025-08-28T09:49:21Z",
+          "updatedAt": "2025-08-28T09:49:21Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "We keep the gRPC definitions in controlplane. Updated steps\n\n- [x]  mention renewal [protobuf messages](https://github.com/scionproto/scion/blob/master/proto/control_plane/v1/renewal.proto) to section `4.3.  Creating a New Control Plane AS Certificate` in PKI. Mention certificates MAY be renewed via CP or out of band.\n - [x] Extend CP section \"Distribution of Cryptographic Material {#crypto-api}\". \n   - [ ] Explain how a CSR is authenticated in case of renewal\n \n- [x] Add cross-reference in 3.1.4 where it says ` the relying party MUST query the originator of the message for the missing material`\n   - [x] Update reference `Control Service gRPC API - Trust Material` in 4.1.2.1.  TRC Update Discovery\n   - [ ] Update reference in CP [2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.3.1)[Reception of PCBs](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-reception-of-pcbs)  from figure to explicitly mentioning `TRCRequest ` to avoid this confusion by the reader (from Alvaro)\n      > [] If the Control Service doesn't have the relevant TRC(s) and certificate(s), are the PCBs considered invalid?  Or is the intent that when the information is received, the validity can be checked?  IOW, should the PCB be discarded (and then wait for the periodic update)...OR...should it be stored until the TRC/certificate information is received?\n   - [x]  Update any other references",
+          "createdAt": "2025-12-30T16:40:33Z",
+          "updatedAt": "2025-12-30T17:21:04Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -12599,6 +12664,53 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 173,
+      "id": "PR_kwDOJx2-rs67AH-T",
+      "title": "New section:  renewal of Cryptographic Material",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/173",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #172 \r\nCross references to this section added in PKI in https://github.com/scionassociation/scion-cppki_I-D/pull/113 \r\n\r\n\r\nPending questions: \r\n- [ ] how is a CSR is authenticated in case of renewal?\r\n- [ ] Double check all fields in the text. I left some TODOs.\r\n",
+      "createdAt": "2025-12-30T17:14:34Z",
+      "updatedAt": "2025-12-30T17:24:07Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cert-renewal-api",
+      "headRefOid": "4370279972c684876a486254f8eee72849e399f5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7Xs0Q0",
+          "commit": {
+            "abbreviatedOid": "4370279"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-30T17:16:41Z",
+          "updatedAt": "2025-12-30T17:16:41Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "I don't understand how messages are put one into another. In principle, it should be: \r\n- SignedMessage --> HeaderAndBody --> Body\r\n\r\nCan someone propose a clear text? Same for `ChainRenewalResponse`",
+              "createdAt": "2025-12-30T17:16:41Z",
+              "updatedAt": "2025-12-30T17:16:41Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
