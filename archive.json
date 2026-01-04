@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-01T00:29:58.331655+00:00",
+  "timestamp": "2026-01-04T00:29:55.785209+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -12649,9 +12649,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt)",
+      "body": "[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt)\r\n[WDiff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt&wdiff=1)\r\n\r\n",
       "createdAt": "2025-12-23T11:40:31Z",
-      "updatedAt": "2025-12-24T05:33:36Z",
+      "updatedAt": "2026-01-01T10:28:33Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05",
