@@ -1753,7 +1753,7 @@ All other values are reserved for future use.
 
 ## Checksum Calculation
 
-The checksum is the 16-bit complement sum of the entire SCMP message. This is starting with the SCMP message type field, and prepended with a "pseudo-header" consisting of the SCION address header and the Layer 4 protocol type as defined in {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".
+The checksum is the 16-bit one's complement of the one's complement sum of the entire SCMP message. This is starting with the SCMP message type field, and prepended with a "pseudo-header" consisting of the SCION address header and the Layer 4 protocol type as defined in {{I-D.dekater-scion-dataplane}} section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".
 
 ## Processing Rules
 
@@ -2338,6 +2338,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Clarify bits in timestamps.
 - Remove  informative reference to I-D.dekater-panrg-scion-overview  and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
+- Overall review and wording polish
 
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
