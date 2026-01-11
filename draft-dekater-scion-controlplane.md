@@ -1345,7 +1345,7 @@ To achieve scalability, SCION ASes are partitioned into ISDs and in an ideal top
 
 In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
-Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
+This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
 
 Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
 
