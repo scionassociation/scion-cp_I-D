@@ -2570,12 +2570,12 @@ Table of Contents
 
 5.1.2.  Lookup Requests Message Format
 
-   Control Services provide paths to endpoints through the
+   Control Services provide path segments through the
    SegmentLookupService RPC.  This API is exposed:
 
    *  for core ASes, on the SCION dataplane to other ASes
 
-   *  for all ASes, on their intra-domain network to endpoints.
+   *  for all ASes, on the intra-domain network to endpoints.
 
    service SegmentLookupService {
        rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
