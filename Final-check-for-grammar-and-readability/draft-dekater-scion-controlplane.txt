@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 July 2026                                            S. Hitz
+Expires: 16 July 2026                                            S. Hitz
                                                          Anapaya Systems
-                                                         11 January 2026
+                                                         12 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 July 2026.
+   This Internet-Draft will expire on 16 July 2026.
 
 Copyright Notice
 
@@ -2919,12 +2919,12 @@ Table of Contents
 
 7.3.  Checksum Calculation
 
-   The checksum is the 16-bit complement sum of the entire SCMP message.
-   This is starting with the SCMP message type field, and prepended with
-   a "pseudo-header" consisting of the SCION address header and the
-   Layer 4 protocol type as defined in [I-D.dekater-scion-dataplane]
-   section "SCION Header Specification/Pseudo Header for Upper-Layer
-   Checksum".
+   The checksum is the 16-bit one's complement of the one's complement
+   sum of the entire SCMP message.  This is starting with the SCMP
+   message type field, and prepended with a "pseudo-header" consisting
+   of the SCION address header and the Layer 4 protocol type as defined
+   in [I-D.dekater-scion-dataplane] section "SCION Header Specification/
+   Pseudo Header for Upper-Layer Checksum".
 
 7.4.  Processing Rules
 
@@ -3919,6 +3919,8 @@ draft-dekater-scion-controlplane-14
    *  Remove informative reference to I-D.dekater-panrg-scion-overview
       and to Anapaya's ISD assignments, since they are taken over by
       SCION Association in 2026
+
+   *  Overall review and wording polish
 
 draft-dekater-scion-controlplane-13
 
