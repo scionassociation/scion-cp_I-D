@@ -1284,49 +1284,25 @@ service ChainRenewalService {
 
 - `ChainRenewal(ChainRenewalRequest)`: returns a renewed certificate chain.
 
-The corresponding protobuf message formats for requests are:
+The corresponding protobuf message format for requests is:
 
 ~~~~~
 message ChainRenewalRequest {
-    SignedMessage signed_request = 1;
     bytes cms_signed_request = 2;
-}
-
-message ChainRenewalRequestBody {
-    bytes csr = 1;
 }
 ~~~~~
 
-A `ChainRenewalRequest` message includes the following fields:
+A `ChainRenewalRequest` message contains the `cms_signed_request` field. It contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.
 
-- `signed_request`: The signed certificate chain renewal requests. The  (TODO: do we need a reference to Header) of the `SignedMessage` (defined in [](#as-entry)) is the serialized `ChainRenewalRequestBody` defined below.
-- `cms_signed_request`: The certificate signing request. The content is TODO? What exactly?
-
-A `ChainRenewalRequestBody` contains:
-
-- `csr`: ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request. TODO: ref to PKI?
-
-The  protobuf message formats for responses are:
+The  protobuf message format for responses is:
 
 ~~~~~
 message ChainRenewalResponse {
-    SignedMessage signed_response = 1;
     bytes cms_signed_response = 2;
-}
-
-message ChainRenewalResponseBody {
-    Chain chain = 1;
 }
 ~~~~~
 
-A `ChainRenewalResponse` message includes the following fields:
-
-- `signed_response`: he signed certificate chain renewal response. The body of the `SignedMessage` is the serialized `ChainRenewalResponseBody`
-- `cms_signed_response`: The renewed certificate chain. The content is TODO? What exactly?
-
-A `ChainRenewalResponseBody` contains:
-
-- `chain`: The renewed certificate chain. The content is an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates.
+A `ChainRenewalResponse` message contains the `cms_signed_response` field. It contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.
 
 # Deployment Considerations
 
@@ -2223,7 +2199,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2398,7 +2374,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Overall review and wording polish
 - `SegmentLookupService` RPC: clarify wording on API exposure
 - Peer entry figure 14 - make fields consistent with protobuf definitions
-- Mew section: Renewal of Cryptographic Material
+- New section: Renewal of Cryptographic Material
 
 ## draft-dekater-scion-controlplane-13
 {:numbered="false"}
