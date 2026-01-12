@@ -1535,10 +1535,10 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 
 ### Lookup Requests Message Format
 
-Control Services provide paths to endpoints through the `SegmentLookupService` RPC. This API is exposed:
+Control Services provide path segments through the `SegmentLookupService` RPC. This API is exposed:
 
 - for core ASes, on the SCION dataplane to other ASes
-- for all ASes, on their intra-domain network to endpoints.
+- for all ASes, on the intra-domain network to endpoints.
 
 ~~~~
 service SegmentLookupService {
