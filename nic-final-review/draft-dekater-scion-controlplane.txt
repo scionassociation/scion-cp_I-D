@@ -3943,6 +3943,8 @@ draft-dekater-scion-controlplane-14
 
    *  Overall review and wording polish
 
+   *  SegmentLookupService RPC: clarify wording on API exposure
+
    *  Peer entry figure 14 - make fields consistent with protobuf
       definitions
 
