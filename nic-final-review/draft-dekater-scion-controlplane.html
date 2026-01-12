@@ -4362,33 +4362,41 @@ On a network bootstrap, full connectivity is obtained after a number of propagat
           <h4 id="name-lookup-requests-message-for">
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-lookup-requests-message-for" class="section-name selfRef">Lookup Requests Message Format</a>
           </h4>
-<p id="section-5.1.2-1">Control Services provide paths to endpoints through the <code>SegmentLookupService</code> RPC. This API is exposed to the SCION dataplane by the control services of ASes and exposed on the intra-domain protocol network.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1.2-2">
+<p id="section-5.1.2-1">Control Services provide paths to endpoints through the <code>SegmentLookupService</code> RPC. This API is exposed:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.2-2.1">
+              <p id="section-5.1.2-2.1.1">for core ASes, on the SCION dataplane exposed to other ASes<a href="#section-5.1.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-2.2">
+              <p id="section-5.1.2-2.2.1">for all ASes, on the intra-domain protocol network exposed towards endpoints.<a href="#section-5.1.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<div class="alignLeft art-text artwork" id="section-5.1.2-3">
 <pre>
 service SegmentLookupService {
     rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
 }
-</pre><a href="#section-5.1.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-5.1.2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.2-3">They use the following protobuf messages: a <code>SegmentsRequest</code>, which includes:<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-4">They use the following protobuf messages: a <code>SegmentsRequest</code>, which includes:<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2-4.1">
-              <p id="section-5.1.2-4.1.1"><code>src_isd_as</code>: The source ISD-AS of the segment.<a href="#section-5.1.2-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-5.1">
+              <p id="section-5.1.2-5.1.1"><code>src_isd_as</code>: The source ISD-AS of the segment.<a href="#section-5.1.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5.1.2-4.2">
-              <p id="section-5.1.2-4.2.1"><code>dst_isd_as</code>: The destination ISD-AS of the segment.<a href="#section-5.1.2-4.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-5.2">
+              <p id="section-5.1.2-5.2.1"><code>dst_isd_as</code>: The destination ISD-AS of the segment.<a href="#section-5.1.2-5.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.2-5">The corresponding <code>SegmentsResponse</code> returns:<a href="#section-5.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-6">The corresponding <code>SegmentsResponse</code> returns:<a href="#section-5.1.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2-6.1">
-              <p id="section-5.1.2-6.1.1"><code>segments</code>: a list of <code>PathSegment</code> matching the request.<a href="#section-5.1.2-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-7.1">
+              <p id="section-5.1.2-7.1.1"><code>segments</code>: a list of <code>PathSegment</code> matching the request.<a href="#section-5.1.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5.1.2-6.2">
-              <p id="section-5.1.2-6.2.1">a mapping from path segment type to path segments, where the key is the integer representation of the <code>SegmentType</code> enum defined in <a href="#reg-proto" class="auto internal xref">Section 4.3</a>.<a href="#section-5.1.2-6.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.1.2-7.2">
+              <p id="section-5.1.2-7.2.1">a mapping from path segment type to path segments, where the key is the integer representation of the <code>SegmentType</code> enum defined in <a href="#reg-proto" class="auto internal xref">Section 4.3</a>.<a href="#section-5.1.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<div class="alignLeft art-text artwork" id="section-5.1.2-7">
+<div class="alignLeft art-text artwork" id="section-5.1.2-8">
 <pre>
 message SegmentsRequest {
     uint64 src_isd_as = 1;
@@ -4401,7 +4409,7 @@ message SegmentsResponse {
     }
     map&lt;int32, Segments&gt; segments = 1;
 }
-</pre><a href="#section-5.1.2-7" class="pilcrow">¶</a>
+</pre><a href="#section-5.1.2-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
