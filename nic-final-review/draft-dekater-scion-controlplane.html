@@ -4911,7 +4911,7 @@ A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit with
         <h3 id="name-checksum-calculation">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-checksum-calculation" class="section-name selfRef">Checksum Calculation</a>
         </h3>
-<p id="section-7.3-1">The checksum is the 16-bit one's complement of the one's complement sum of the entire SCMP message. This is starting with the SCMP message type field, and prepended with a "pseudo-header" consisting of the SCION address header and the Layer 4 protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">The checksum is calculated as the 16-bit one's complement of the one's complement sum of the entire SCMP message. This is starting with the SCMP message type field, and prepended with a "pseudo-header" consisting of the SCION address header and the Layer 4 protocol type as defined in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="processing-rules">
