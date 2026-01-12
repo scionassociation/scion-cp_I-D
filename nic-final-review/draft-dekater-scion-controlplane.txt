@@ -2575,7 +2575,7 @@ Table of Contents
 
    *  for core ASes, on the SCION dataplane to other ASes
 
-   *  for all ASes, on the intra-domain network to endpoints.
+   *  for all ASes, on the intra-AS network to endpoints.
 
    service SegmentLookupService {
        rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
