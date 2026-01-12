@@ -35,9 +35,9 @@ Abstract
    This document contains new approaches to secure path aware
    networking.  It is not an Internet Standard, has not received any
    formal review of the IETF, nor was the work developed through the
-   rough consensus process.  The approaches offered in this work are
-   offered to the community for its consideration in the further
-   evolution of the Internet.
+   rough consensus process.  The approaches in this work are offered to
+   the community for its consideration in the further evolution of the
+   Internet.
 
 About This Document
 
@@ -485,12 +485,13 @@ Table of Contents
    *  Selecting and registering the set of path segments via which the
       AS wants to be reached.
 
-   *  Managing certificates and keys to secure inter-AS communication.
-      Each PCB contains signatures of all on-path ASes and each time the
-      Control Service of an AS receives a PCB, it validates the PCB's
-      authenticity.  When the Control Service lacks an intermediate
-      certificate, it can query the Control Service of the neighboring
-      AS that sent the PCB through the API described in Section 2.4.
+   *  Distributing certificates and keys to secure inter-AS
+      communication.  Each PCB contains signatures of all on-path ASes
+      and each time the Control Service of an AS receives a PCB, it
+      validates the PCB's authenticity.  When the Control Service lacks
+      an intermediate certificate, it can query the Control Service of
+      the neighboring AS that sent the PCB through the API described in
+      Section 2.4.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
    routers.  The Control Service of a specific AS is part of the Control
@@ -671,12 +672,11 @@ Table of Contents
 
 1.6.  Bootstrapping ability
 
-   A secure and reliable routing architecture has to be designed
-   specifically to avoid circular dependencies during network
-   bootstrapping.  One goal is that the SCION network can start up even
-   after large outages or attacks, in addition to avoiding cascades of
-   outages caused by fragile interdependencies.  This section lists the
-   concepts SCION uses to prevent circular dependencies:
+   SCION avoids circular dependencies during network bootstrapping.  One
+   goal is that the SCION network can start up even after large outages
+   or attacks, in addition to avoiding cascades of outages caused by
+   fragile interdependencies.  This section lists the concepts SCION
+   uses to prevent circular dependencies:
 
    *  Neighbor-based path discovery: Path discovery in SCION is
       performed by the beaconing mechanism.  In order to participate in
@@ -748,8 +748,8 @@ Table of Contents
 
    The _Control Service_ of each SCION AS is responsible for the
    beaconing process.  The Control Service generates, receives, and
-   propagates the _Path Segment Construction Beacons (PCBs)_ on a
-   regular basis, to iteratively construct path segments.
+   propagates _Path Segment Construction Beacons (PCBs)_ on a regular
+   basis, to iteratively construct path segments.
 
    PCBs contain inter-domain topology and authentication information,
    and can also include additional metadata that helps with path
@@ -1015,8 +1015,7 @@ Table of Contents
 
    *  Entries of all ASes on the path segment represented by this PCB.
 
-   The following code block defines the PCB at the top level in Protobuf
-   message format.
+   The PCB top level Protobuf message format is:
 
       message PathSegment {
           bytes segment_info = 1;
@@ -1052,13 +1051,8 @@ Table of Contents
 
                   Figure 7: Segment Information Component
 
-   Each PCB MUST include an information component with basic information
-   about the PCB.
-
-   In the Protobuf message format, the information component of a PCB is
-   called the SegmentInformation message.  The following code block
-   shows the Protobuf message definition for the SegmentInformation
-   message.
+   Each PCB MUST include a SegmentInformation message with basic
+   information about the PCB.  Its Protobuf message format is:
 
       message SegmentInformation {
           int64 timestamp = 1;
@@ -1147,10 +1141,10 @@ Table of Contents
 
    *  a signature.
 
-   In the Protobuf message format implementation, the signed component
-   of an AS entry is specified by the SignedMessage.  It consists of a
-   header-and-body part (header_and_body) and a raw signature
-   (signature).  See also the code block below.
+   In the Protobuf message format, the signed component of an AS entry
+   is specified by the SignedMessage.  It consists of a header-and-body
+   part (header_and_body) and a raw signature (signature).  See also the
+   code block below.
 
       message SignedMessage {
           bytes header_and_body = 1;
@@ -1200,6 +1194,13 @@ Table of Contents
       signature algorithms or curves MAY be used in the future.  This
       field is REQUIRED.
 
+   *  signature_algorithm: Specifies the algorithm to compute the
+      signature.  Possible types are defined by the SignatureAlgorithm
+      definition and are further discussed in [I-D.dekater-scion-pki],
+      but an unspecified signature algorithm is never valid.  Other
+      signature algorithms or curves MAY be used in the future.  This
+      field is REQUIRED.
+
    *  verification_key_id: Contains a VerificationKeyID message,
       carrying information relevant to signing and verifying PCBs and
       other control-plane messages.  This field is REQUIRED.
@@ -1217,14 +1218,12 @@ Table of Contents
       in Section 2.2.2.6.  The value of this field is zero if no
       associated data is covered by the signature.
 
-   The Header and SignatureAlgorithm protobuf message definitions are:
+   The Header and SignatureAlgorithm protobuf message formats are:
 
       message Header {
           SignatureAlgorithm signature_algorithm = 1;
           bytes verification_key_id = 2;
-          // Optional
           google.protobuf.Timestamp timestamp = 3;
-          // Optional
           bytes metadata = 4;
           int32 associated_data_length = 5;
       }
@@ -1250,7 +1249,7 @@ Table of Contents
    *  trc_serial: Defines the _serial_ number of the latest TRC
       available to the signer at the time of the signature creation.
 
-   Its protobuf message definition is:
+   Its protobuf message format is:
 
       message VerificationKeyID {
           uint64 isd_as = 1;
@@ -1280,10 +1279,8 @@ Table of Contents
 
    The body of an AS entry MUST consist of the signed component
    ASEntrySignedBody of all the ASes in the path segment represented by
-   the PCB, up until and including the current AS.
-
-   The following code block defines the signed body of one AS entry in
-   Protobuf message format (called the ASEntrySignedBody message).
+   the PCB, up until and including the current AS.  Its Protobuf message
+   format is:
 
       message ASEntrySignedBody {
           uint64 isd_as = 1;
@@ -1308,18 +1305,18 @@ Table of Contents
    *  peer_entries: The list of optional peer entries (PeerEntry).  For
       a specification of one peer entry, see Section 2.2.2.4.
 
-   *  mtu: The maximum transmission unit (MTU) that is supported by all
-      intra-domain links within the current AS.  This value is set by
-      the control service when adding the AS entry to the beacon.  How
-      the control service obtains this information is implementation
-      dependent, but current practice is to make it a configuration
-      item.
+   *  mtu: The maximum transmission unit (MTU) in bytes that is
+      supported by all intra-domain links within the current AS.  This
+      value is set by the control service when adding the AS entry to
+      the beacon.  How the control service obtains this information is
+      implementation dependent, but current practice is to make it a
+      configuration item.
 
-   *  extensions: List of (signed) extensions (optional).  PCB
-      extensions defined here are part of the signed AS entry.  This
-      field SHOULD therefore only contain extensions that include
-      important metadata for which cryptographic protection is required.
-      For more information on PCB extensions, see Section 2.2.3.
+   *  extensions: List of signed extensions (optional).  PCB extensions
+      defined here are part of the signed AS entry.  This field SHOULD
+      therefore only contain extensions that include important metadata
+      for which cryptographic protection is required.  For more
+      information on PCB extensions, see Section 2.2.3.
 
 2.2.2.3.  Hop Entry
 
@@ -1334,13 +1331,12 @@ Table of Contents
 
                             Figure 12: Hop Entry
 
-   Each body of an AS entry MUST contain exactly one hop entry
-   component.  The hop entry component specifies forwarding information
-   which the data plane requires to create the hop through the current
-   AS (in the direction of the beaconing).
+   Each body of an AS entry MUST contain exactly one hop entry.  It
+   specifies forwarding information which the data plane requires to
+   create the hop through the current AS (in the direction of the
+   beaconing).
 
-   The following code block defines the hop entry component HopEntry in
-   Protobuf message format:
+   The HopEntry Protobuf message format is:
 
       message HopEntry {
           HopField hop_field = 1;
@@ -1351,6 +1347,15 @@ Table of Contents
       ingress and egress interfaces in the direction of beaconing.
       Routers need this information to forward packets through the
       current AS.  For further specifications, see Section 2.2.2.5.
+
+   *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
+      ingress interface (in beaconing direction) of the hop being
+      described.  The MTU of paths constructed from the containing
+      beacon is necessarily less than or equal to this value.  How the
+      control service obtains the MTU of an inter-AS link is
+      implementation dependent.  It may be discovered or configured, but
+      current practice to make it a configuration item.  Path MTU is
+      further discussed in Section 4.4.
 
    *  ingress_mtu: Specifies the maximum transmission unit (MTU) of the
       ingress interface (in beaconing direction) of the hop being
@@ -1383,8 +1388,7 @@ Table of Contents
    link to another AS.  A peer entry is an optional component of a PCB,
    and is only included if there is a peering link to a peer AS.
 
-   The following code block defines the peer entry component PeerEntry
-   in Protobuf message format:
+   The PeerEntry Protobuf message format is:
 
       message PeerEntry {
           uint64 peer_isd_as = 1;
@@ -1407,11 +1411,11 @@ Table of Contents
       dependent.  It may be discovered or configured, but current
       practice is to make it a configuration item.
 
-   *  hop_field: Contains the authenticated information about the
-      ingress and egress interfaces in the current AS (coming from the
-      peering link, in the direction of beaconing - see also Figure 6).
-      The data plane needs this information to forward packets through
-      the current AS.  For further specifications, see Section 2.2.2.5.
+   *  hop_field: Contains authenticated information about the ingress
+      and egress interfaces in the current AS (coming from the peering
+      link, in the direction of beaconing - see also Figure 6).  The
+      data plane needs this information to forward packets through the
+      current AS.  For further specifications, see Section 2.2.2.5.
 
    In this description, MTU and packet size are to be understood in the
    same sense as in [RFC1122].  That is, exclusive of any layer 2
@@ -1425,18 +1429,18 @@ Table of Contents
       +-----+-----+
             |
             |
-            o ASE.HF.ingress_interface
+            o ASE.HF.ingress
    +--------+-----------+
    |        |           |        PE.peer_  +-----------+
    |        |           |        interface |           |
    |        | +---------+p----------------p+  Peer AS  |
-   |        | |         | PE.HF.ingress_   |           |
-   |        | |         | interface        +-----------+
+   |        | |         | PE.HF.ingress    |           |
+   |        | |         |                  +-----------+
    |        | |         |
    |        v v         |
    +---------+----------+
-             | PE.HF.egress_interface
-             | ASE.HF.egress_interface
+             | PE.HF.egress
+             | ASE.HF.egress
              o
        +-----+-----+
        |           |
@@ -1444,7 +1448,8 @@ Table of Contents
        |           |
        +-----------+
 
-      Figure 14: Peer entry information, in the direction of beaconing
+     Figure 14: Peer entry information, in the direction of beaconing.
+         PE denotes a peer entry, ASE an AS entry, HF an hop field.
 
 2.2.2.5.  Hop Field
 
@@ -1459,12 +1464,12 @@ Table of Contents
 
                             Figure 15: Hop Field
 
-   The Hop Field, part of both hop entries and peer entries, is used
-   directly in the data plane for packet forwarding and specifies the
-   incoming and outgoing interfaces of the ASes on the forwarding path.
-   This information is authenticated with a Message Authentication Code
-   (MAC) which is used by the Control Service of an AS to authenticate
-   path segments with its border routers during packet forwarding.
+   The Hop Field, part of both hop and peer entries, is used directly in
+   the data plane for packet forwarding and specifies the incoming and
+   outgoing interfaces of the ASes on the forwarding path.  This
+   information is authenticated with a Message Authentication Code (MAC)
+   which is used by the Control Service of an AS to authenticate path
+   segments with its border routers during packet forwarding.
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
    choice, although the Control Services and border routers within an AS
@@ -1473,8 +1478,7 @@ Table of Contents
    section "Authorizing Segments through Chained MACs") for more
    information including configuration.  Endpoints do not compute MACs.
 
-   The following code block defines the Hop Field component HopField in
-   Protobuf message format:
+   The HopField Protobuf message format is:
 
       message HopField {
           uint64 ingress = 1;
@@ -1591,7 +1595,7 @@ Table of Contents
       current time at the point of validation, plus an allowance for
       differences between the clocks of the validator and originator.
 
-   *  Contain only unexpired hops (Section 2.2.2.5).
+   *  Contain only unexpired hop fields (Section 2.2.2.5).
 
    It is recommend to use the hopfield expiration time (that is 337.5
    seconds, see Section 2.2.2.5) as the allowance for differences
@@ -1746,10 +1750,10 @@ Table of Contents
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
    intra-ISD beaconing (Section 3.4.1) and core beaconing
-   (Section 3.4.2).  At each propagation event, each AS selects a set of
-   the best PCBs from the candidates in the Beacon Store according to
-   the AS's selection policy.  This set should have a fixed size, the
-   _best PCBs set size_.
+   (Section 3.4.2).  At each propagation event, the AS control service
+   selects a set of the best PCBs from the candidates in the Beacon
+   Store according to the AS's selection policy.  This set should have a
+   fixed size, the _best PCBs set size_.
 
    The _best PCBs set size_ should be:
 
@@ -1791,10 +1795,10 @@ Table of Contents
 
 2.3.5.  Propagation of Selected PCBs
 
-   To bootstrap the initial communication with a neighboring beacon
-   service, ASes use one-hop paths.  This special kind of path handles
-   beaconing between neighboring ASes for which no forwarding path may
-   be available yet.  It is the task of beaconing to discover such
+   To bootstrap initial communication with a neighboring beacon service,
+   ASes use one-hop paths.  This special kind of path handles beaconing
+   between neighboring ASes for which no forwarding path may be
+   available yet.  It is the task of beaconing to discover such
    forwarding paths and the purpose of one-hop paths is to break this
    circular dependency.  The One-Hop Path Type is described in more
    detail in [I-D.dekater-scion-dataplane].
@@ -2084,12 +2088,12 @@ Table of Contents
    path segments.  These in turn depend on the configured best PCBs set
    size (Section 2.3.4).
 
-   Interesting metrics for scalability and speed of path discovery are
-   the time until all discoverable path segments have been discovered
-   after a network bootstrap, and the time until a new link is usable.
-   In general, the time until a specific PCB is built depends on its
+   Relevant metrics for scalability and speed of path discovery are the
+   time until all discoverable path segments have been discovered after
+   a network bootstrap, and the time until a new link is usable.  In
+   general, the time until a specific PCB is built depends on its
    length, the propagation interval, and whether on-path ASes use "fast
-   recovery".
+   recovery" (see Section 2.3.4).
 
    At each AS, the PCB will be processed and propagated at the
    subsequent propagation event.  As propagation events are not
@@ -2108,7 +2112,7 @@ Table of Contents
 
    To achieve scalability, SCION ASes are partitioned into ISDs and in
    an ideal topology the inter-ISD core network should be kept to a
-   moderate size.  For more specific observations, we distinguish
+   moderate size.  More specific observations require a distinction
    between intra-ISD and core beaconing.
 
 3.4.1.  Intra-ISD Beaconing
@@ -2163,9 +2167,9 @@ Table of Contents
    path.  With a 5 second propagation interval and a generous longest
    path of length 10, all path segments are discovered after 25 seconds
    on average.  When all ASes start propagation just after they've
-   received the first PCBs from any of their upstreams (see 'fast
-   recovery'), the construction of a first path to connect each AS to
-   the ISD core is accelerated.
+   received the first PCBs from any of their upstreams (see "fast
+   recovery" in Section 2.3.4), the construction of a first path to
+   connect each AS to the ISD core is accelerated.
 
    When a new parent-child link is added to the network, the parent AS
    will propagate the available PCBs in the next propagation event.  If
@@ -2187,11 +2191,11 @@ Table of Contents
    between propagation events).
 
    Without making strong assumptions on the topology of the core
-   network, we can assume that shortest paths through real world
+   network, it can be assumed that shortest paths through real world
    networks are relatively short - e.g. the Barabási-Albert random graph
    model predicts a diameter of log(N)/log(log(N)) for a network with N
    nodes [BollRio-2000] and the average distance scales in the same way.
-   Whilst we cannot assume that the selected PCBs are strictly the
+   Whilst it cannot be assumed that the selected PCBs are strictly the
    shortest paths through the network, they are likely to be not very
    much longer than the shortest paths either.
 
@@ -2199,21 +2203,37 @@ Table of Contents
    * N PCBs per propagation interval per core link interface.  For
    highly connected ASes, the number of PCBs received thus becomes
    rather large and in a network of 1,000 ASes, an AS with 300 core
-   links receives up to 1.5 million PCBs per propagation interval.
+   links receives up to 1.5 million PCBs per propagation interval.  With
+   N the number of participating core ASes, an AS receives up to 5 * N
+   PCBs per propagation interval per core link interface.  For highly
+   connected ASes, the number of PCBs received thus becomes rather large
+   and in a network of 1,000 ASes, an AS with 300 core links receives up
+   to 1.5 million PCBs per propagation interval.
 
    Assuming an average PCB length of 6 and the shortest propagation
    interval of 60 seconds, this corresponds to roughly 150,000 signature
    validations per second or roughly 38 MB/s.  For much larger, more
    highly connected ASes, the path discovery tasks of the Control
    Service can be distributed over many instances in order to increase
-   the PCB throughput.
+   the PCB throughput.  Assuming an average PCB length of 6 and the
+   shortest propagation interval of 60 seconds, this corresponds to
+   roughly 150,000 signature validations per second or roughly 38 MB/s.
+   For much larger, more highly connected ASes, the path discovery tasks
+   of the Control Service can be distributed over many instances in
+   order to increase the PCB throughput.
 
    On a network bootstrap, full connectivity is obtained after a number
    of propagation steps corresponding to the diameter of the network.
    Assuming a network diameter of 6, this corresponds to roughly 3
    minutes on average.  When a new link is added to the network, it will
    be available to connect two ASes at distances D1 and D2 from the link
-   respectively, at worst after a mean time (D1+D2)*T/2.
+   respectively, at worst after a mean time (D1+D2)_T/2.  On a network
+   bootstrap, full connectivity is obtained after a number of
+   propagation steps corresponding to the diameter of the network.
+   Assuming a network diameter of 6, this corresponds to roughly 3
+   minutes on average.  When a new link is added to the network, it will
+   be available to connect two ASes at distances D1 and D2 from the link
+   respectively, at worst after a mean time (D1+D2)_T/2.
 
 4.  Registration of Path Segments
 
@@ -2550,10 +2570,12 @@ Table of Contents
 
 5.1.2.  Lookup Requests Message Format
 
-   Control Services provide paths to endpoints through the
-   SegmentLookupService RPC.  This API is exposed on the SCION dataplane
-   by the control services of core ASes and exposed on the intra-domain
-   protocol network.
+   Control Services provide path segments through the
+   SegmentLookupService RPC.  This API is exposed:
+
+   *  for core ASes, on the SCION dataplane to other ASes
+
+   *  for all ASes, on the intra-AS network to endpoints.
 
    service SegmentLookupService {
        rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}
@@ -2790,8 +2812,7 @@ Table of Contents
        establish a QUIC connection, which can then be used for other
        RPCs.
 
-   The following code block provides the service resolution API Protobuf
-   messages.
+   The service resolution API Protobuf message format is:
 
      message ServiceResolutionRequest {}
 
@@ -2919,12 +2940,12 @@ Table of Contents
 
 7.3.  Checksum Calculation
 
-   The checksum is the 16-bit one's complement of the one's complement
-   sum of the entire SCMP message.  This is starting with the SCMP
-   message type field, and prepended with a "pseudo-header" consisting
-   of the SCION address header and the Layer 4 protocol type as defined
-   in [I-D.dekater-scion-dataplane] section "SCION Header Specification/
-   Pseudo Header for Upper-Layer Checksum".
+   The checksum is calculated as the 16-bit one's complement of the
+   one's complement sum of the entire SCMP message.  This is starting
+   with the SCMP message type field, and prepended with a "pseudo-
+   header" consisting of the SCION address header and the Layer 4
+   protocol type as defined in [I-D.dekater-scion-dataplane] section
+   "SCION Header Specification/Pseudo Header for Upper-Layer Checksum".
 
 7.4.  Processing Rules
 
@@ -3677,8 +3698,8 @@ Table of Contents
               "SCION Registry", 2026, <http://scion.org/registry/>.
 
    [PCBExtensions]
-              Anapaya, ETH, and SCION, "PCB Path Metadata Extension",
-              2025,
+              Anapaya, ETH, and SCION Association, "PCB Path Metadata
+              Extension", 2025,
               <https://docs.scion.org/en/latest/beacon-metadata.html>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
@@ -3712,8 +3733,8 @@ Table of Contents
               Generation Internet Testbed", 2020,
               <https://ieeexplore.ieee.org/abstract/document/9259355>.
 
-   [SCMP]     Anapaya, ETH Zuerich, and SCION, "SCMP Documentation",
-              2025,
+   [SCMP]     Anapaya, ETH Zuerich, and SCION Association, "SCMP
+              Documentation", 2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
    [SIG]      Anapaya, ETH Zuerich, and SCION, "SCION IP Gateway
@@ -3921,6 +3942,11 @@ draft-dekater-scion-controlplane-14
       SCION Association in 2026
 
    *  Overall review and wording polish
+
+   *  SegmentLookupService RPC: clarify wording on API exposure
+
+   *  Peer entry figure 14 - make fields consistent with protobuf
+      definitions
 
 draft-dekater-scion-controlplane-13
 
