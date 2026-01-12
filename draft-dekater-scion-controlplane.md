@@ -1538,7 +1538,7 @@ The overall sequence of requests to resolve a path SHOULD be as follows:
 Control Services provide path segments through the `SegmentLookupService` RPC. This API is exposed:
 
 - for core ASes, on the SCION dataplane to other ASes
-- for all ASes, on the intra-domain network to endpoints.
+- for all ASes, on the intra-AS network to endpoints.
 
 ~~~~
 service SegmentLookupService {
