@@ -800,6 +800,7 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
 - `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
+- `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: May include metadata. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header. This field is OPTIONAL.
@@ -910,6 +911,7 @@ The `HopEntry` Protobuf message format is:
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 - `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
@@ -1366,9 +1368,12 @@ The number of distinct paths through the core network is typically very large. T
 Without making strong assumptions on the topology of the core network, it can be assumed that shortest paths through real world networks are relatively short - e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst it cannot be assumed that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
 
 With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 
 Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
 
+On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
 On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
 
 # Registration of Path Segments {#path-segment-reg}
