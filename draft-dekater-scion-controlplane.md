@@ -812,9 +812,7 @@ The `Header` and `SignatureAlgorithm` protobuf message formats are:
    message Header {
        SignatureAlgorithm signature_algorithm = 1;
        bytes verification_key_id = 2;
-       // Optional
        google.protobuf.Timestamp timestamp = 3;
-       // Optional
        bytes metadata = 4;
        int32 associated_data_length = 5;
    }
