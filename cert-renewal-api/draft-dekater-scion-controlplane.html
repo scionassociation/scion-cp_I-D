@@ -3911,62 +3911,24 @@ service ChainRenewalService {
             <p id="section-2.5-3.1.1"><code>ChainRenewal(ChainRenewalRequest)</code>: returns a renewed certificate chain.<a href="#section-2.5-3.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.5-4">The corresponding protobuf message formats for requests are:<a href="#section-2.5-4" class="pilcrow">¶</a></p>
+<p id="section-2.5-4">The corresponding protobuf message format for requests is:<a href="#section-2.5-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5-5">
 <pre>
 message ChainRenewalRequest {
-    SignedMessage signed_request = 1;
     bytes cms_signed_request = 2;
-}
-
-message ChainRenewalRequestBody {
-    bytes csr = 1;
 }
 </pre><a href="#section-2.5-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.5-6">A <code>ChainRenewalRequest</code> message includes the following fields:<a href="#section-2.5-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.5-7.1">
-            <p id="section-2.5-7.1.1"><code>signed_request</code>: The signed certificate chain renewal requests. The  (TODO: do we need a reference to Header) of the <code>SignedMessage</code> (defined in <a href="#as-entry" class="auto internal xref">Section 2.2.2</a>) is the serialized <code>ChainRenewalRequestBody</code> defined below.<a href="#section-2.5-7.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.5-7.2">
-            <p id="section-2.5-7.2.1"><code>cms_signed_request</code>: The certificate signing request. The content is TODO? What exactly?<a href="#section-2.5-7.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-2.5-8">A <code>ChainRenewalRequestBody</code> contains:<a href="#section-2.5-8" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.5-9.1">
-            <p id="section-2.5-9.1.1"><code>csr</code>: ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request. TODO: ref to PKI?<a href="#section-2.5-9.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-2.5-10">The  protobuf message formats for responses are:<a href="#section-2.5-10" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.5-11">
+<p id="section-2.5-6">A <code>ChainRenewalRequest</code> message contains the <code>cms_signed_request</code> field. It contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.<a href="#section-2.5-6" class="pilcrow">¶</a></p>
+<p id="section-2.5-7">The  protobuf message format for responses is:<a href="#section-2.5-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.5-8">
 <pre>
 message ChainRenewalResponse {
-    SignedMessage signed_response = 1;
     bytes cms_signed_response = 2;
 }
-
-message ChainRenewalResponseBody {
-    Chain chain = 1;
-}
-</pre><a href="#section-2.5-11" class="pilcrow">¶</a>
+</pre><a href="#section-2.5-8" class="pilcrow">¶</a>
 </div>
-<p id="section-2.5-12">A <code>ChainRenewalResponse</code> message includes the following fields:<a href="#section-2.5-12" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.5-13.1">
-            <p id="section-2.5-13.1.1"><code>signed_response</code>: he signed certificate chain renewal response. The body of the <code>SignedMessage</code> is the serialized <code>ChainRenewalResponseBody</code><a href="#section-2.5-13.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.5-13.2">
-            <p id="section-2.5-13.2.1"><code>cms_signed_response</code>: The renewed certificate chain. The content is TODO? What exactly?<a href="#section-2.5-13.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-2.5-14">A <code>ChainRenewalResponseBody</code> contains:<a href="#section-2.5-14" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.5-15.1">
-            <p id="section-2.5-15.1.1"><code>chain</code>: The renewed certificate chain. The content is an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates.<a href="#section-2.5-15.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-2.5-9">A <code>ChainRenewalResponse</code> message contains the <code>cms_signed_response</code> field. It contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.<a href="#section-2.5-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6201,7 +6163,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="deployment-testing-scionlab">
@@ -6736,7 +6698,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-D.1-1.5.1">Peer entry figure 14 - make fields consistent with protobuf definitions<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.6">
-            <p id="appendix-D.1-1.6.1">Mew section: Renewal of Cryptographic Material<a href="#appendix-D.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.6.1">New section: Renewal of Cryptographic Material<a href="#appendix-D.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
