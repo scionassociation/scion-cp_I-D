@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-04T00:29:55.785209+00:00",
+  "timestamp": "2026-01-13T00:22:53.441621+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2719,7 +2719,7 @@
       "id": "I_kwDOJx2-rs7f_o9S",
       "title": "API versioning - do we need anything in draft?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/171",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2731,9 +2731,17 @@
       ],
       "body": "There is an open proposal for API versioning: https://github.com/scionproto/scion/issues/4832 \nDo we need anything in the draft? Back in the September TC we discussed with [tzaeschke](https://github.com/tzaeschke) if we should add any wording about it. We should think about it",
       "createdAt": "2025-12-23T17:06:26Z",
-      "updatedAt": "2025-12-23T17:06:34Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-01-12T11:00:31Z",
+      "closedAt": "2026-01-12T11:00:31Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I looked through the current proposal. It is still heavily under development and not yet implemented, so I don't think this is in scope for the draft. \nSecond, we are wrapping up this draft very soon, so there wouldn't be time to wait for this proposal to evolve. I'm therefore resolving this without any changes.",
+          "createdAt": "2026-01-12T11:00:31Z",
+          "updatedAt": "2026-01-12T11:00:31Z"
+        }
+      ]
     },
     {
       "number": 172,
@@ -2753,7 +2761,7 @@
       ],
       "body": "Doubt triggered by [4791#](https://github.com/scionproto/scion/pull/4791#). \nThe PKI draft currently says: \n> Subsequent certificate renewals MAY be automated and can leverage the control plane communication infrastructure.\n\nHowever, in the CP draft there is no description of any interfaces for certificate renewal. We should either change wording, or clarify automated renewal.\n\n- [x] Are there any missing RPC definitions?\n- [x] Are there any other missing interfaces that need to be specified?\n",
       "createdAt": "2025-06-23T15:05:35Z",
-      "updatedAt": "2025-12-30T17:21:04Z",
+      "updatedAt": "2026-01-12T12:58:06Z",
       "closedAt": null,
       "comments": [
         {
@@ -2797,6 +2805,13 @@
           "body": "We keep the gRPC definitions in controlplane. Updated steps\n\n- [x]  mention renewal [protobuf messages](https://github.com/scionproto/scion/blob/master/proto/control_plane/v1/renewal.proto) to section `4.3.  Creating a New Control Plane AS Certificate` in PKI. Mention certificates MAY be renewed via CP or out of band.\n - [x] Extend CP section \"Distribution of Cryptographic Material {#crypto-api}\". \n   - [ ] Explain how a CSR is authenticated in case of renewal\n \n- [x] Add cross-reference in 3.1.4 where it says ` the relying party MUST query the originator of the message for the missing material`\n   - [x] Update reference `Control Service gRPC API - Trust Material` in 4.1.2.1.  TRC Update Discovery\n   - [ ] Update reference in CP [2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#section-2.3.1)[Reception of PCBs](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-08.html#name-reception-of-pcbs)  from figure to explicitly mentioning `TRCRequest ` to avoid this confusion by the reader (from Alvaro)\n      > [] If the Control Service doesn't have the relevant TRC(s) and certificate(s), are the PCBs considered invalid?  Or is the intent that when the information is received, the validity can be checked?  IOW, should the PCB be discarded (and then wait for the periodic update)...OR...should it be stored until the TRC/certificate information is received?\n   - [x]  Update any other references",
           "createdAt": "2025-12-30T16:40:33Z",
           "updatedAt": "2025-12-30T17:21:04Z"
+        },
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "> Observation from Ramon Keller related to this issue (libc):\n> \n> See \"Section 4.3\"\n> \n> According to the current definition, only the AS certificate is returned by the CA. However, given that the Control Place CA certificate is renewed approximately every 7\u20138 days, a new Control Place CA certificate can be expected with roughly every third AS certificate renewal. The draft does not specify how the updated CA certificate is to be disseminated, leaving this behavior to the implementation.\n> \n> Returning the Control Place CA certificate together with the CP AS certificate is one solution. The other option would be to provide and support the AIA extension in the certificates, but AIA is certainly not the most efficient solution.\n> \n> This is already described in the CP draft in Figure 30: Control Service gRPC API - Trust Material representation.\n\nJust in case this was not addressed: What Ramon writes here is wrong. The CA returns both the AS and CA certificate according to the OpenAPI definition here: https://github.com/scionproto/scion/blob/8d42e1571269b8bb24478b53f4606c30d8bd4b54/spec/ca/ra.yml#L89-L94\n\n",
+          "createdAt": "2026-01-12T12:58:06Z",
+          "updatedAt": "2026-01-12T12:58:06Z"
         }
       ]
     }
@@ -12642,28 +12657,57 @@
     {
       "number": 170,
       "id": "PR_kwDOJx2-rs66UIlP",
-      "title": "Final review before publication",
+      "title": "Final review before publication - Kevin",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/170",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt)\r\n[WDiff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/Final-check-for-grammar-and-readability/draft-dekater-scion-controlplane.txt&wdiff=1)\r\n\r\n",
       "createdAt": "2025-12-23T11:40:31Z",
-      "updatedAt": "2026-01-01T10:28:33Z",
+      "updatedAt": "2026-01-12T03:08:41Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Final-check-for-grammar-and-readability",
-      "headRefOid": "a039a169884a131158127213b6389c4aaa6791ef",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1f7c87facc8456938f1103f2c0a546cf2b3fdde1",
+      "closedAt": "2026-01-12T03:08:38Z",
+      "mergedAt": "2026-01-12T03:08:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1a576a8571955bb1bf5cf213395b34ea1ce01720"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7Zf_Iw",
+          "commit": {
+            "abbreviatedOid": "1f7c87f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-12T03:01:44Z",
+          "updatedAt": "2026-01-12T03:08:17Z",
+          "comments": [
+            {
+              "originalPosition": 559,
+              "body": "You edited this, but I'm not sure wether the original wording is wrong. I think it may be correct. Let's check. \r\n",
+              "createdAt": "2026-01-12T03:01:44Z",
+              "updatedAt": "2026-01-12T03:08:17Z"
+            },
+            {
+              "originalPosition": 559,
+              "body": "This wording comes from the docs: \r\nhttps://docs.scion.org/en/latest/protocols/scmp.html#checksum-calculation \r\nIt therefore needs to be left as it is",
+              "createdAt": "2026-01-12T03:06:42Z",
+              "updatedAt": "2026-01-12T03:08:17Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 173,
@@ -12675,15 +12719,15 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #172 \r\nCross references to this section added in PKI in https://github.com/scionassociation/scion-cppki_I-D/pull/113 \r\n\r\n\r\nPending questions: \r\n- [ ] how is a CSR is authenticated in case of renewal?\r\n- [ ] Double check all fields in the text. I left some TODOs.\r\n",
+      "body": "[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/cert-renewal-api/draft-dekater-scion-controlplane.txt)\r\nResolves #172 \r\nCross references to this section added in PKI in https://github.com/scionassociation/scion-cppki_I-D/pull/113 \r\n\r\n\r\nPending questions: \r\n- [ ] how is a CSR is authenticated in case of renewal?\r\n- [ ] Double check all fields in the text. I left some TODOs.\r\n",
       "createdAt": "2025-12-30T17:14:34Z",
-      "updatedAt": "2025-12-30T17:24:07Z",
+      "updatedAt": "2026-01-12T16:39:28Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "7adb052fe5983e4f8ab5fc17c9d22627a7f58b05",
+      "baseRefOid": "fec2acc113bae30e18982370fa77bc808acec619",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cert-renewal-api",
-      "headRefOid": "4370279972c684876a486254f8eee72849e399f5",
+      "headRefOid": "77dc39947a8a1b10f9c8e3318d6821453f2e24a2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -12707,6 +12751,210 @@
               "body": "I don't understand how messages are put one into another. In principle, it should be: \r\n- SignedMessage --> HeaderAndBody --> Body\r\n\r\nCan someone propose a clear text? Same for `ChainRenewalResponse`",
               "createdAt": "2025-12-30T17:16:41Z",
               "updatedAt": "2025-12-30T17:16:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Zl8k6",
+          "commit": {
+            "abbreviatedOid": "026bdae"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T12:46:41Z",
+          "updatedAt": "2026-01-12T12:56:37Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "This is left-over and not used anymore.\n\nPrior to the SSFN productization, we renewed certificates in-process in the CA. Once we implemented the delegating handler, we faced compatibility issues. We introduced the CMS based signatures such that third-party software can easily verify.\n\nYou can completely drop this field and just mark it as reserved.\n\nSee here: https://github.com/scionproto/scion/blob/8d42e1571269b8bb24478b53f4606c30d8bd4b54/private/ca/renewal/grpc/renewal.go#L68-L71\n\nLegacy introduced in https://github.com/scionproto/scion/commit/c275d3866f34d93e5bac40b1bab37ce8525eed61#diff-142decd76cf61474b9f1514ad949e90a4ac3665a21ccf50a4a5d9dcd6ed1b1e9\nand support dropped in https://github.com/scionproto/scion/commit/a0ef17123ecccdf6b58c03747a63c9618dd4ae15#diff-fd436ace49257bd3c8e392d11a42e6302c72be0d54e61060ca2733a995ea07bf\n\n",
+              "createdAt": "2026-01-12T12:46:41Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "This should be:\n\n- `cms_signed_request`: ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.\n\nWe do **not** use our signature format for the renewal process.\n\n",
+              "createdAt": "2026-01-12T12:48:42Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "You can drop this. It is unused.",
+              "createdAt": "2026-01-12T12:49:06Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "You can drop this field. It is legacy and unused. Mark it as reserved.",
+              "createdAt": "2026-01-12T12:53:08Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "Drop this message",
+              "createdAt": "2026-01-12T12:53:37Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 53,
+              "body": "Drop",
+              "createdAt": "2026-01-12T12:53:40Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 54,
+              "body": "The content is an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates.\n\nThere are exactly 2 certificates. First the AS certificate, second the CA certificate.\n\n\n",
+              "createdAt": "2026-01-12T12:56:05Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "```suggestion\n- New section: Renewal of Cryptographic Material\n```",
+              "createdAt": "2026-01-12T12:56:26Z",
+              "updatedAt": "2026-01-12T12:56:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ZpCbk",
+          "commit": {
+            "abbreviatedOid": "4370279"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T15:37:26Z",
+          "updatedAt": "2026-01-12T15:37:26Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Thanks, added your wording",
+              "createdAt": "2026-01-12T15:37:26Z",
+              "updatedAt": "2026-01-12T15:37:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ZpQBh",
+          "commit": {
+            "abbreviatedOid": "026bdae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T15:49:19Z",
+          "updatedAt": "2026-01-12T15:49:19Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Thanks. So what do I do with this field? Is there any reason why I cannot remove it completely?\r\n`    SignedMessage signed_request = 1;`\r\n\r\nMy options are:\r\n1.  I completely remove it from the protobuf definition\r\n2. I leave it and write something like  \"legacy OPTIONAL field.\"\r\n\r\nI'm very much for 1, it makes the text a lot easier to understand.",
+              "createdAt": "2026-01-12T15:49:19Z",
+              "updatedAt": "2026-01-12T15:54:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ZqHzu",
+          "commit": {
+            "abbreviatedOid": "026bdae"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T16:39:28Z",
+          "updatedAt": "2026-01-12T16:39:28Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "As I mentioned, the best action is to mark it as reserved:\r\n\r\nhttps://protobuf.dev/programming-guides/proto3/#fieldreserved\r\n\r\nBasically, just indicating that 1 was used at some point, but no longer is.\r\n",
+              "createdAt": "2026-01-12T16:39:28Z",
+              "updatedAt": "2026-01-12T16:39:28Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 174,
+      "id": "PR_kwDOJx2-rs68nEVd",
+      "title": "Final review before publication - Nico",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/174",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "[Wdiff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/nic-final-review/draft-dekater-scion-controlplane.txt&wdiff=1)\r\n[Wdiff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/nic-final-review/draft-dekater-scion-controlplane.txt&wdiff=1)\r\n\r\nOpen points:\r\n\r\n- [x] Clarify wording for SCMP checksum (continuing from #170)\r\n   > The checksum is the 16-bit one's complement of the one's complement sum of .. \r\n   Might relate to [this](url) code\r\n- [x] Clarify  if `SegmentLookupService` API is exposed by all ASes ([Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1768190263078229))\r\n   > This API is exposed on the SCION dataplane by the control services of ~core~ ASes and exposed on the intra-domain protocol network.\r\n- [x] understand why this field is optional  \r\n   > - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL. \r\n  Explanation ---> the timestamp that counts in PCBs is the one in [SegmentInformation](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-13.html#section-2.2.1-4). Therefore timestamps in each AS entry are not necessary.\r\n   \r\n   ",
+      "createdAt": "2026-01-12T02:59:40Z",
+      "updatedAt": "2026-01-12T11:14:45Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1a576a8571955bb1bf5cf213395b34ea1ce01720",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "nic-final-review",
+      "headRefOid": "ff9ef961bc9732f7e5e154a10cb694c36360946e",
+      "closedAt": "2026-01-12T11:14:42Z",
+      "mergedAt": "2026-01-12T11:14:42Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "fec2acc113bae30e18982370fa77bc808acec619"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7ZgIse",
+          "commit": {
+            "abbreviatedOid": "fb9e968"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-12T03:44:47Z",
+          "updatedAt": "2026-01-12T03:44:47Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Zg9sv",
+          "commit": {
+            "abbreviatedOid": "cd359ea"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T06:17:23Z",
+          "updatedAt": "2026-01-12T06:17:23Z",
+          "comments": [
+            {
+              "originalPosition": 300,
+              "body": "Comments?",
+              "createdAt": "2026-01-12T06:17:23Z",
+              "updatedAt": "2026-01-12T06:17:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ZhAL8",
+          "commit": {
+            "abbreviatedOid": "cd359ea"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-12T06:23:11Z",
+          "updatedAt": "2026-01-12T06:23:11Z",
+          "comments": [
+            {
+              "originalPosition": 300,
+              "body": "Resolved in slack https://scionproto.slack.com/archives/C8ADA9CEP/p1768190263078229",
+              "createdAt": "2026-01-12T06:23:11Z",
+              "updatedAt": "2026-01-12T06:23:11Z"
             }
           ]
         }
