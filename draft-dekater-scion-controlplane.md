@@ -1274,11 +1274,12 @@ The returned `trc` contains the raw TRC.
 
 ## Renewal of Cryptographic Material {#crypto-renewal}
 
-Control Services MAY renew cryptographic material for the PKI (see {{I-D.dekater-scion-pki}}) using the following protobuf messages through the `ChainRenewalService` RPC. They MAY also renew it out of band.
+To renew PKI cryptographic material (see {{I-D.dekater-scion-pki}}), Control Services MAY employ out-of-band mechanisms or utilize the `ChainRenewalService` RPC to exchange the Protobuf messages defined below.
 
 ~~~~~
 service ChainRenewalService {
-    rpc ChainRenewal(ChainRenewalRequest) returns (ChainRenewalResponse) {}
+    rpc ChainRenewal(ChainRenewalRequest) returns (
+      ChainRenewalResponse) {}
 }
 ~~~~~
 
@@ -1310,7 +1311,7 @@ message ChainRenewalResponse {
 A `ChainRenewalResponse` message includes the following fields:
 
 - `signed_response`: a legacy field that is not in use anymore and therefore is reserved.
-- `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.
+- `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
 
 # Deployment Considerations
 
