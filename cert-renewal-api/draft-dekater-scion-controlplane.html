@@ -3898,11 +3898,12 @@ message TRCResponse {
         <h3 id="name-renewal-of-cryptographic-ma">
 <a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-renewal-of-cryptographic-ma" class="section-name selfRef">Renewal of Cryptographic Material</a>
         </h3>
-<p id="section-2.5-1">Control Services <span class="bcp14">MAY</span> renew cryptographic material for the PKI (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>) using the following protobuf messages through the <code>ChainRenewalService</code> RPC. They <span class="bcp14">MAY</span> also renew it out of band.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-1">To renew PKI cryptographic material (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>), Control Services <span class="bcp14">MAY</span> employ out-of-band mechanisms or utilize the <code>ChainRenewalService</code> RPC to exchange the Protobuf messages defined below.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5-2">
 <pre>
 service ChainRenewalService {
-    rpc ChainRenewal(ChainRenewalRequest) returns (ChainRenewalResponse) {}
+    rpc ChainRenewal(ChainRenewalRequest) returns (
+      ChainRenewalResponse) {}
 }
 </pre><a href="#section-2.5-2" class="pilcrow">¶</a>
 </div>
@@ -3944,7 +3945,7 @@ message ChainRenewalResponse {
             <p id="section-2.5-11.1.1"><code>signed_response</code>: a legacy field that is not in use anymore and therefore is reserved.<a href="#section-2.5-11.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.5-11.2">
-            <p id="section-2.5-11.2.1"><code>cms_signed_response</code>: it contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.<a href="#section-2.5-11.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.5-11.2.1"><code>cms_signed_response</code>: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.<a href="#section-2.5-11.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
