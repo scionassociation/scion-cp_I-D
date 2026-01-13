@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 16 July 2026</td>
+<td class="center">Expires 17 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-12" class="published">12 January 2026</time>
+<time datetime="2026-01-13" class="published">13 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-07-16">16 July 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-17">17 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3915,20 +3915,38 @@ service ChainRenewalService {
 <div class="alignLeft art-text artwork" id="section-2.5-5">
 <pre>
 message ChainRenewalRequest {
+    reserved signed_request = 1;
     bytes cms_signed_request = 2;
 }
 </pre><a href="#section-2.5-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.5-6">A <code>ChainRenewalRequest</code> message contains the <code>cms_signed_request</code> field. It contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.<a href="#section-2.5-6" class="pilcrow">¶</a></p>
-<p id="section-2.5-7">The  protobuf message format for responses is:<a href="#section-2.5-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.5-8">
+<p id="section-2.5-6">A <code>ChainRenewalRequest</code> message includes the following fields:<a href="#section-2.5-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.5-7.1">
+            <p id="section-2.5-7.1.1"><code>signed_request</code>: a legacy field that is not in use anymore and therefore is reserved.<a href="#section-2.5-7.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.5-7.2">
+            <p id="section-2.5-7.2.1"><code>cms_signed_request</code>: it contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.<a href="#section-2.5-7.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-2.5-8">The  protobuf message format for responses is:<a href="#section-2.5-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.5-9">
 <pre>
 message ChainRenewalResponse {
+    reserved signed_response = 1;
     bytes cms_signed_response = 2;
 }
-</pre><a href="#section-2.5-8" class="pilcrow">¶</a>
+</pre><a href="#section-2.5-9" class="pilcrow">¶</a>
 </div>
-<p id="section-2.5-9">A <code>ChainRenewalResponse</code> message contains the <code>cms_signed_response</code> field. It contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.<a href="#section-2.5-9" class="pilcrow">¶</a></p>
+<p id="section-2.5-10">A <code>ChainRenewalResponse</code> message includes the following fields:<a href="#section-2.5-10" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.5-11.1">
+            <p id="section-2.5-11.1.1"><code>signed_response</code>: a legacy field that is not in use anymore and therefore is reserved.<a href="#section-2.5-11.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.5-11.2">
+            <p id="section-2.5-11.2.1"><code>cms_signed_response</code>: it contains an ASN.1 DER encoded CMS SignedData structure that contains the certificate chain. The chain is the concatenation of the ASN.1 DER encoded certificates. There are exactly 2 certificates. First the AS certificate, second the CA certificate.<a href="#section-2.5-11.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
