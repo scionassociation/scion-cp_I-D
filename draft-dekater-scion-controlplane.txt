@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 July 2026                                            S. Hitz
+Expires: 17 July 2026                                            S. Hitz
                                                          Anapaya Systems
-                                                         12 January 2026
+                                                         13 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 July 2026.
+   This Internet-Draft will expire on 17 July 2026.
 
 Copyright Notice
 
@@ -113,6 +113,7 @@ Table of Contents
        2.3.4.  Propagation Interval and Best PCBs Set Size
        2.3.5.  Propagation of Selected PCBs
      2.4.  Distribution of Cryptographic Material
+     2.5.  Renewal of Cryptographic Material
    3.  Deployment Considerations
      3.1.  Destination Mapping
      3.2.  Monitoring Considerations
@@ -1964,6 +1965,54 @@ Table of Contents
 
    The returned trc contains the raw TRC.
 
+2.5.  Renewal of Cryptographic Material
+
+   To renew PKI cryptographic material (see [I-D.dekater-scion-pki]),
+   Control Services MAY employ out-of-band mechanisms or utilize the
+   ChainRenewalService RPC to exchange the Protobuf messages defined
+   below.
+
+   service ChainRenewalService {
+       rpc ChainRenewal(ChainRenewalRequest) returns (
+         ChainRenewalResponse) {}
+   }
+
+   *  ChainRenewal(ChainRenewalRequest): returns a renewed certificate
+      chain.
+
+   The corresponding protobuf message format for requests is:
+
+   message ChainRenewalRequest {
+       reserved signed_request = 1;
+       bytes cms_signed_request = 2;
+   }
+
+   A ChainRenewalRequest message includes the following fields:
+
+   *  signed_request: a legacy field that is not in use anymore and
+      therefore is reserved.
+
+   *  cms_signed_request: it contains the ASN.1 DER encoded CMS
+      SignedData structure that contains an ASN.1 DER encoded PKCS #10
+      request.
+
+   The protobuf message format for responses is:
+
+   message ChainRenewalResponse {
+       reserved signed_response = 1;
+       bytes cms_signed_response = 2;
+   }
+
+   A ChainRenewalResponse message includes the following fields:
+
+   *  signed_response: a legacy field that is not in use anymore and
+      therefore is reserved.
+
+   *  cms_signed_response: it contains an ASN.1 DER encoded CMS
+      SignedData structure containing a two-certificate chain.  The
+      chain comprises the AS certificate followed by the CA certificate,
+      both encoded in ASN.1 DER.
+
 3.  Deployment Considerations
 
 3.1.  Destination Mapping
@@ -3746,17 +3795,17 @@ Acknowledgments
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
    (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
    Association), Kevin Meynell (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich), and Roger Lapuh (Extreme Networks) for reviewing
-   this document.  We also thank Daniel Galán Pascual and Christoph
-   Sprenger from the Information Security Group at ETH Zurich for their
-   inputs based on their formal verification work on SCION.  We are also
-   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
-   and feedback about every aspect of SCION.  Finally, we are indebted
-   to the SCION development teams of Anapaya, ETH Zurich, and the SCION
-   Association for their practical knowledge and for the documentation
-   about the SCION Control Plane, as well as to the authors of [CHUAT22]
-   - the book is an important source of input and inspiration for this
-   draft.
+   Prado (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh
+   (Extreme Networks) for reviewing this document.  We also thank Daniel
+   Galán Pascual and Christoph Sprenger from the Information Security
+   Group at ETH Zurich for their inputs based on their formal
+   verification work on SCION.  We are also very grateful to Adrian
+   Perrig (ETH Zurich), for providing guidance and feedback about every
+   aspect of SCION.  Finally, we are indebted to the SCION development
+   teams of Anapaya, ETH Zurich, and the SCION Association for their
+   practical knowledge and for the documentation about the SCION Control
+   Plane, as well as to the authors of [CHUAT22] - the book is an
+   important source of input and inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
@@ -3947,6 +3996,8 @@ draft-dekater-scion-controlplane-14
 
    *  Peer entry figure 14 - make fields consistent with protobuf
       definitions
+
+   *  New section: Renewal of Cryptographic Material
 
 draft-dekater-scion-controlplane-13
 
