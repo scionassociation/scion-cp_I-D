@@ -3526,10 +3526,13 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
           </ul>
 <p id="section-2.2.3-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.3-4">The example below contains the Protobuf definition of the <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span> should be referred to.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-4">The Protobuf message format of extensions is below. As an example, it mentions the <code>StaticInfoExtension</code>, a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of their message format are omitted and <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span> should be referred to.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.3-5">
 <pre>
-  message PathSegmentExtensions {
+message PathSegmentUnsignedExtensions {
+    }
+
+message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
   }
 </pre><a href="#section-2.2.3-5" class="pilcrow">¶</a>
@@ -4727,15 +4730,15 @@ A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit with
 <p id="section-6-5">The service resolution API Protobuf message format is:<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6-6">
 <pre>
-  message ServiceResolutionRequest {}
+message ServiceResolutionRequest {}
 
-  message ServiceResolutionResponse {
+message ServiceResolutionResponse {
     map&lt;string, Transport&gt; transports = 1;
-  }
+}
 
-  message Transport {
+message Transport {
     string address = 1;
-  }
+}
 </pre><a href="#section-6-6" class="pilcrow">¶</a>
 </div>
 </section>
