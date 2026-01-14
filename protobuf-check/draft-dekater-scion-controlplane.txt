@@ -1579,7 +1579,7 @@ Table of Contents
    to carry path segment metadata, such as segment latency, bandwidth,
    router coordinates, link type, number of internal hops.  This and
    other extensions are at time of writing experimental, so definitions
-   of their message format are omitted and [PCBExtensions] should be
+   of this message format are omitted and [PCBExtensions] should be
    referred to.
 
    message PathSegmentUnsignedExtensions {
@@ -3992,6 +3992,9 @@ draft-dekater-scion-controlplane-14
       SCION Association in 2026
 
    *  Overall review and wording polish
+
+   *  Protobuf messages syntax check, add missing empty
+      PathSegmentUnsignedExtensions message definition
 
    *  SegmentLookupService RPC: clarify wording on API exposure
 
