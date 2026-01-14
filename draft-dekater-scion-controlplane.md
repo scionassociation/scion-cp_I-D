@@ -1289,28 +1289,28 @@ The corresponding protobuf message format for requests is:
 
 ~~~~~
 message ChainRenewalRequest {
-    reserved signed_request = 1;
+    reserved 1;
     bytes cms_signed_request = 2;
 }
 ~~~~~
 
 A `ChainRenewalRequest` message includes the following fields:
 
-- `signed_request`: a legacy field that is not in use anymore and therefore is reserved.
+- Field number 1 is legacy and it is not in use.
 - `cms_signed_request`: it contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.
 
 The  protobuf message format for responses is:
 
 ~~~~~
 message ChainRenewalResponse {
-    reserved signed_response = 1;
+    reserved 1;
     bytes cms_signed_response = 2;
 }
 ~~~~~
 
 A `ChainRenewalResponse` message includes the following fields:
 
-- `signed_response`: a legacy field that is not in use anymore and therefore is reserved.
+- Field number 1 is legacy and it is not in use.
 - `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
 
 # Deployment Considerations
