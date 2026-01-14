@@ -1059,10 +1059,13 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 
 It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
-The example below contains the Protobuf definition of the `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and [PCBExtensions] should be referred to.
+The Protobuf message format of extensions is below. As an example, it mentions the `StaticInfoExtension`, a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of their message format are omitted and [PCBExtensions] should be referred to.
 
 ~~~~
-  message PathSegmentExtensions {
+message PathSegmentUnsignedExtensions {
+    }
+
+message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
   }
 ~~~~
@@ -1706,15 +1709,15 @@ Clients find the relevant Control Service at a given AS by resolving a 'service 
 The service resolution API Protobuf message format is:
 
 ~~~~~
-  message ServiceResolutionRequest {}
+message ServiceResolutionRequest {}
 
-  message ServiceResolutionResponse {
+message ServiceResolutionResponse {
     map<string, Transport> transports = 1;
-  }
+}
 
-  message Transport {
+message Transport {
     string address = 1;
-  }
+}
 ~~~~~
 
 # SCMP {#scmp}
