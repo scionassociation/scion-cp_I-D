@@ -2384,6 +2384,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Clarify bits in timestamps.
 - Remove  informative reference to I-D.dekater-panrg-scion-overview  and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
 - Overall review and wording polish
+- Protobuf messages syntax check, add missing empty `PathSegmentUnsignedExtensions` message definition
 - `SegmentLookupService` RPC: clarify wording on API exposure
 - Peer entry figure 14 - make fields consistent with protobuf definitions
 - New section: Renewal of Cryptographic Material
