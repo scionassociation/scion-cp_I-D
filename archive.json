@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-13T00:22:53.441621+00:00",
+  "timestamp": "2026-01-15T00:24:37.627804+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2761,7 +2761,7 @@
       ],
       "body": "Doubt triggered by [4791#](https://github.com/scionproto/scion/pull/4791#). \nThe PKI draft currently says: \n> Subsequent certificate renewals MAY be automated and can leverage the control plane communication infrastructure.\n\nHowever, in the CP draft there is no description of any interfaces for certificate renewal. We should either change wording, or clarify automated renewal.\n\n- [x] Are there any missing RPC definitions?\n- [x] Are there any other missing interfaces that need to be specified?\n",
       "createdAt": "2025-06-23T15:05:35Z",
-      "updatedAt": "2026-01-12T12:58:06Z",
+      "updatedAt": "2026-01-13T12:05:13Z",
       "closedAt": null,
       "comments": [
         {
@@ -2812,6 +2812,49 @@
           "body": "> Observation from Ramon Keller related to this issue (libc):\n> \n> See \"Section 4.3\"\n> \n> According to the current definition, only the AS certificate is returned by the CA. However, given that the Control Place CA certificate is renewed approximately every 7\u20138 days, a new Control Place CA certificate can be expected with roughly every third AS certificate renewal. The draft does not specify how the updated CA certificate is to be disseminated, leaving this behavior to the implementation.\n> \n> Returning the Control Place CA certificate together with the CP AS certificate is one solution. The other option would be to provide and support the AIA extension in the certificates, but AIA is certainly not the most efficient solution.\n> \n> This is already described in the CP draft in Figure 30: Control Service gRPC API - Trust Material representation.\n\nJust in case this was not addressed: What Ramon writes here is wrong. The CA returns both the AS and CA certificate according to the OpenAPI definition here: https://github.com/scionproto/scion/blob/8d42e1571269b8bb24478b53f4606c30d8bd4b54/spec/ca/ra.yml#L89-L94\n\n",
           "createdAt": "2026-01-12T12:58:06Z",
           "updatedAt": "2026-01-12T12:58:06Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Leaving it open until I have a 4 eye check from Dominik on the final content of #173 ",
+          "createdAt": "2026-01-13T12:05:13Z",
+          "updatedAt": "2026-01-13T12:05:13Z"
+        }
+      ]
+    },
+    {
+      "number": 175,
+      "id": "I_kwDOJx2-rs7jRuix",
+      "title": "Protobuf syntax check",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/175",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "Prio 1",
+        "editorial"
+      ],
+      "body": "When reviewing #173 @oncilla noticed some of the protobuf definitions had a typo. This issue is to track a final check of protobuf definitions.\n\nTODO: \n- Paste all definitions to https://www.protobufpal.com/  and validate the corresponding proto file\n\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/protobuf-check/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-01-14T12:47:16Z",
+      "updatedAt": "2026-01-14T13:29:13Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Issues found: \n\n- [x] Missing message:\n```\n   message PathSegmentUnsignedExtensions {\n    reserved 1000;\n    }\n```\n- [ ] ~missing `StaticInfoExtension` message~ (but on purpose - it should not be in the spec!) ",
+          "createdAt": "2026-01-14T12:50:04Z",
+          "updatedAt": "2026-01-14T13:28:43Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I get all green after adding the two missing messages with this proto file\n\n<details>\n<summary>Click to expand scion.proto</summary>\n\n\n\n```\nsyntax = \"proto3\";\nimport \"google/protobuf/timestamp.proto\";\n\n\n   message SignedMessage {\n       bytes header_and_body = 1;\n       bytes signature = 2;\n   }\n   message HeaderAndBody {\n       bytes header = 1;\n       bytes body = 2;\n   }\n \n message Header {\n       SignatureAlgorithm signature_algorithm = 1;\n       bytes verification_key_id = 2;\n       google.protobuf.Timestamp timestamp = 3;\n       bytes metadata = 4;\n       int32 associated_data_length = 5;\n   }\n\n  enum SignatureAlgorithm {\n    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;\n  }  \n    message VerificationKeyID {\n       uint64 isd_as = 1;\n       bytes subject_key_id = 2;\n       uint64 trc_base = 3;\n       uint64 trc_serial = 4;\n   }\n\n   message ASEntrySignedBody {\n       uint64 isd_as = 1;\n       uint64 next_isd_as = 2;\n       HopEntry hop_entry = 3;\n       repeated PeerEntry peer_entries = 4;\n       uint32 mtu = 5;\n       PathSegmentExtensions extensions = 6;\n   }\n   message HopEntry {\n       HopField hop_field = 1;\n       uint32 ingress_mtu = 2;\n   }\n   message PeerEntry {\n       uint64 peer_isd_as = 1;\n       uint64 peer_interface = 2;\n       uint32 peer_mtu = 3;\n       HopField hop_field = 4;\n   }\n   \n   message HopField {\n       uint64 ingress = 1;\n       uint64 egress = 2;\n       uint32 exp_time = 3;\n       bytes mac = 4;\n   }\n\n  message PathSegmentExtensions {\n    StaticInfoExtension static_info = 1;\n  }\n  message StaticInfoExtension {\n    reserved 1;\n  } \n   message ASEntry {\n       SignedMessage signed = 1;\n       PathSegmentUnsignedExtensions unsigned = 2;\n   }\n   \n   \n\n   message PathSegment {\n       bytes segment_info = 1;\n       repeated ASEntry as_entries = 2;\n   }\n   \n   message PathSegmentUnsignedExtensions {\n    reserved 1000;\n    }\n    \n       service SegmentCreationService {\n       rpc Beacon(BeaconRequest) returns (BeaconResponse) {}\n   }\n\n   message BeaconRequest {\n       PathSegment segment = 1;\n   }\n\n   message BeaconResponse {}\n\n\nservice TrustMaterialService {\n    rpc Chains(ChainsRequest) returns (ChainsResponse) {}\n    rpc TRC(TRCRequest) returns (TRCResponse) {}\n}\n\nmessage ChainsRequest {\n    uint64 isd_as = 1;\n    bytes subject_key_id = 2;\n    google.protobuf.Timestamp at_least_valid_until = 3;\n    google.protobuf.Timestamp at_least_valid_since = 4;\n}\n\nmessage ChainsResponse {\n    repeated Chain chains = 1;\n}\n\nmessage Chain {\n    bytes as_cert = 1;\n    bytes ca_cert = 2;\n}\n\nmessage TRCRequest {\n    uint32 isd = 1;\n    uint64 base = 2;\n    uint64 serial = 3;\n}\n\nmessage TRCResponse {\n    bytes trc = 1;\n}\n\n\nservice ChainRenewalService {\n    rpc ChainRenewal(ChainRenewalRequest) returns (\n      ChainRenewalResponse) {}\n}\n\nmessage ChainRenewalRequest {\n    reserved 1;\n    bytes cms_signed_request = 2;\n}\n\nmessage ChainRenewalResponse {\n    reserved 1;\n    bytes cms_signed_response = 2;\n}\n\n\n\n   enum SegmentType {\n       SEGMENT_TYPE_UNSPECIFIED = 0;\n       SEGMENT_TYPE_UP = 1;\n       SEGMENT_TYPE_DOWN = 2;\n       SEGMENT_TYPE_CORE = 3;\n   }\n\n   service SegmentRegistrationService {\n       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (\n         SegmentsRegistrationResponse) {}\n   }\n\n   message SegmentsRegistrationRequest {\n       message Segments {\n           repeated PathSegment segments = 1;\n       }\n\n       map<int32, Segments> segments = 1;\n   }\n\n   message SegmentsRegistrationResponse {}\n   \n   \n \n service SegmentLookupService {\n    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}\n}\n\nmessage SegmentsRequest {\n    uint64 src_isd_as = 1;\n    uint64 dst_isd_as = 2;\n}\n\nmessage SegmentsResponse {\n    message Segments {\n        repeated PathSegment segments = 1;\n    }\n    map<int32, Segments> segments = 1;\n}\n\n\n  message ServiceResolutionRequest {}\n\n  message ServiceResolutionResponse {\n    map<string, Transport> transports = 1;\n  }\n\n  message Transport {\n    string address = 1;\n  }\n```\n\n</details>",
+          "createdAt": "2026-01-14T13:11:12Z",
+          "updatedAt": "2026-01-14T13:11:12Z"
         }
       ]
     }
@@ -12714,25 +12757,35 @@
       "id": "PR_kwDOJx2-rs67AH-T",
       "title": "New section:  renewal of Cryptographic Material",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/173",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/cert-renewal-api/draft-dekater-scion-controlplane.txt)\r\nResolves #172 \r\nCross references to this section added in PKI in https://github.com/scionassociation/scion-cppki_I-D/pull/113 \r\n\r\n\r\nPending questions: \r\n- [ ] how is a CSR is authenticated in case of renewal?\r\n- [ ] Double check all fields in the text. I left some TODOs.\r\n",
+      "body": "[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/cert-renewal-api/draft-dekater-scion-controlplane.txt)\r\nResolves #172 \r\nCross references to this section added in PKI in https://github.com/scionassociation/scion-cppki_I-D/pull/113 \r\n\r\n\r\nPending questions: \r\n- [x] how is a CSR is authenticated in case of renewal?\r\n- [x] Double check all fields in the text. I left some TODOs.\r\n",
       "createdAt": "2025-12-30T17:14:34Z",
-      "updatedAt": "2026-01-12T16:39:28Z",
+      "updatedAt": "2026-01-13T12:03:34Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "fec2acc113bae30e18982370fa77bc808acec619",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cert-renewal-api",
-      "headRefOid": "77dc39947a8a1b10f9c8e3318d6821453f2e24a2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "dd0646bf0c279371f6262475f60e8f9f00d1c0ab",
+      "closedAt": "2026-01-13T11:50:54Z",
+      "mergedAt": "2026-01-13T11:50:53Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "d3634d9f638155fc5fb20789e2dcfe88c384b47b"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "JFYI @knmeynell I was still waiting for one last look from @oncilla. \r\n@oncilla if you see any issue with the text I'll create another PR\r\n",
+          "createdAt": "2026-01-13T12:03:34Z",
+          "updatedAt": "2026-01-13T12:03:34Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs7Xs0Q0",
@@ -12875,6 +12928,59 @@
               "updatedAt": "2026-01-12T16:39:28Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Z27ff",
+          "commit": {
+            "abbreviatedOid": "026bdae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-13T10:26:21Z",
+          "updatedAt": "2026-01-13T10:26:22Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Done, I re-added the fields as: \r\n>     `reserved signed_request = 1;`\r\n\r\nAnd described them as: \r\n> - `signed_request`: a legacy field that is not in use anymore and therefore is reserved.\r\n \r\n ",
+              "createdAt": "2026-01-13T10:26:21Z",
+              "updatedAt": "2026-01-13T10:26:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Z3ZKu",
+          "commit": {
+            "abbreviatedOid": "026bdae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-13T10:57:24Z",
+          "updatedAt": "2026-01-13T10:57:24Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "@oncilla is the updated text ok for you? \r\nTo see how the final product looks like, I suggest you look at the [compiled draft diff](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/cert-renewal-api/draft-dekater-scion-controlplane.txt)\r\n\r\nIf you are ok with the text, we then merge and send it to the ISE editor. \r\nP.S. I also listed your name in the acknowledgement section, let me know if you have anything against.\r\n",
+              "createdAt": "2026-01-13T10:57:24Z",
+              "updatedAt": "2026-01-13T10:57:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7Z4LCi",
+          "commit": {
+            "abbreviatedOid": "dd0646b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-13T11:50:43Z",
+          "updatedAt": "2026-01-13T11:50:43Z",
+          "comments": []
         }
       ]
     },
@@ -12957,6 +13063,46 @@
               "updatedAt": "2026-01-12T06:23:11Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 176,
+      "id": "PR_kwDOJx2-rs69JqrZ",
+      "title": "protobuf messages syntax check",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/176",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #175 \r\nFixes protobuf syntax issue introduced in #172 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/protobuf-check/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-01-14T12:56:11Z",
+      "updatedAt": "2026-01-14T13:39:17Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "d3634d9f638155fc5fb20789e2dcfe88c384b47b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "protobuf-check",
+      "headRefOid": "3c93fef27dacc9ca7a7e3a05bd08f5f69cf24a7b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7aMyk8",
+          "commit": {
+            "abbreviatedOid": "3c93fef"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-14T13:39:17Z",
+          "updatedAt": "2026-01-14T13:39:17Z",
+          "comments": []
         }
       ]
     }
