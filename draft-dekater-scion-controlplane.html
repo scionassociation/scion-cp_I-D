@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 17 July 2026</td>
+<td class="center">Expires 19 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-13" class="published">13 January 2026</time>
+<time datetime="2026-01-15" class="published">15 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-07-17">17 July 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-19">19 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3526,10 +3526,13 @@ associated_data(ps, i) = ps.segment_info ||
 </li>
           </ul>
 <p id="section-2.2.3-3">It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.<a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.3-4">The example below contains the Protobuf definition of the <code>StaticInfoExtension</code>. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span> should be referred to.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-4">The Protobuf message format of extensions is below. As an example, it mentions the <code>StaticInfoExtension</code>, a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and <span>[<a href="#PCBExtensions" class="cite xref">PCBExtensions</a>]</span> should be referred to.<a href="#section-2.2.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.3-5">
 <pre>
-  message PathSegmentExtensions {
+message PathSegmentUnsignedExtensions {
+    }
+
+message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
   }
 </pre><a href="#section-2.2.3-5" class="pilcrow">¶</a>
@@ -3916,7 +3919,7 @@ service ChainRenewalService {
 <div class="alignLeft art-text artwork" id="section-2.5-5">
 <pre>
 message ChainRenewalRequest {
-    reserved signed_request = 1;
+    reserved 1;
     bytes cms_signed_request = 2;
 }
 </pre><a href="#section-2.5-5" class="pilcrow">¶</a>
@@ -3924,7 +3927,7 @@ message ChainRenewalRequest {
 <p id="section-2.5-6">A <code>ChainRenewalRequest</code> message includes the following fields:<a href="#section-2.5-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.5-7.1">
-            <p id="section-2.5-7.1.1"><code>signed_request</code>: a legacy field that is not in use anymore and therefore is reserved.<a href="#section-2.5-7.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.5-7.1.1">Field number 1 is legacy and it is not in use.<a href="#section-2.5-7.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.5-7.2">
             <p id="section-2.5-7.2.1"><code>cms_signed_request</code>: it contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.<a href="#section-2.5-7.2.1" class="pilcrow">¶</a></p>
@@ -3934,7 +3937,7 @@ message ChainRenewalRequest {
 <div class="alignLeft art-text artwork" id="section-2.5-9">
 <pre>
 message ChainRenewalResponse {
-    reserved signed_response = 1;
+    reserved 1;
     bytes cms_signed_response = 2;
 }
 </pre><a href="#section-2.5-9" class="pilcrow">¶</a>
@@ -3942,7 +3945,7 @@ message ChainRenewalResponse {
 <p id="section-2.5-10">A <code>ChainRenewalResponse</code> message includes the following fields:<a href="#section-2.5-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.5-11.1">
-            <p id="section-2.5-11.1.1"><code>signed_response</code>: a legacy field that is not in use anymore and therefore is reserved.<a href="#section-2.5-11.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.5-11.1.1">Field number 1 is legacy and it is not in use.<a href="#section-2.5-11.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.5-11.2">
             <p id="section-2.5-11.2.1"><code>cms_signed_response</code>: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.<a href="#section-2.5-11.2.1" class="pilcrow">¶</a></p>
@@ -4727,15 +4730,15 @@ A <code>ServiceResolutionRequest</code> <span class="bcp14">MUST</span> fit with
 <p id="section-6-5">The service resolution API Protobuf message format is:<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6-6">
 <pre>
-  message ServiceResolutionRequest {}
+message ServiceResolutionRequest {}
 
-  message ServiceResolutionResponse {
+message ServiceResolutionResponse {
     map&lt;string, Transport&gt; transports = 1;
-  }
+}
 
-  message Transport {
+message Transport {
     string address = 1;
-  }
+}
 </pre><a href="#section-6-6" class="pilcrow">¶</a>
 </div>
 </section>
@@ -6711,13 +6714,16 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-D.1-1.3.1">Overall review and wording polish<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.4">
-            <p id="appendix-D.1-1.4.1"><code>SegmentLookupService</code> RPC: clarify wording on API exposure<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.4.1">Protobuf messages syntax check, add missing empty <code>PathSegmentUnsignedExtensions</code> message definition<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.5">
-            <p id="appendix-D.1-1.5.1">Peer entry figure 14 - make fields consistent with protobuf definitions<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.5.1"><code>SegmentLookupService</code> RPC: clarify wording on API exposure<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.6">
-            <p id="appendix-D.1-1.6.1">New section: Renewal of Cryptographic Material<a href="#appendix-D.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.6.1">Peer entry figure 14 - make fields consistent with protobuf definitions<a href="#appendix-D.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.7">
+            <p id="appendix-D.1-1.7.1">New section: Renewal of Cryptographic Material<a href="#appendix-D.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
