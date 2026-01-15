@@ -1059,10 +1059,13 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 
 It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
 
-The example below contains the Protobuf definition of the `StaticInfoExtension`. It is a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and [PCBExtensions] should be referred to.
+The Protobuf message format of extensions is below. As an example, it mentions the `StaticInfoExtension`, a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and [PCBExtensions] should be referred to.
 
 ~~~~
-  message PathSegmentExtensions {
+message PathSegmentUnsignedExtensions {
+    }
+
+message PathSegmentExtensions {
     StaticInfoExtension static_info = 1;
   }
 ~~~~
@@ -1289,28 +1292,28 @@ The corresponding protobuf message format for requests is:
 
 ~~~~~
 message ChainRenewalRequest {
-    reserved signed_request = 1;
+    reserved 1;
     bytes cms_signed_request = 2;
 }
 ~~~~~
 
 A `ChainRenewalRequest` message includes the following fields:
 
-- `signed_request`: a legacy field that is not in use anymore and therefore is reserved.
+- Field number 1 is legacy and it is not in use.
 - `cms_signed_request`: it contains the ASN.1 DER encoded CMS SignedData structure that contains an ASN.1 DER encoded PKCS #10 request.
 
 The  protobuf message format for responses is:
 
 ~~~~~
 message ChainRenewalResponse {
-    reserved signed_response = 1;
+    reserved 1;
     bytes cms_signed_response = 2;
 }
 ~~~~~
 
 A `ChainRenewalResponse` message includes the following fields:
 
-- `signed_response`: a legacy field that is not in use anymore and therefore is reserved.
+- Field number 1 is legacy and it is not in use.
 - `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
 
 # Deployment Considerations
@@ -1706,15 +1709,15 @@ Clients find the relevant Control Service at a given AS by resolving a 'service 
 The service resolution API Protobuf message format is:
 
 ~~~~~
-  message ServiceResolutionRequest {}
+message ServiceResolutionRequest {}
 
-  message ServiceResolutionResponse {
+message ServiceResolutionResponse {
     map<string, Transport> transports = 1;
-  }
+}
 
-  message Transport {
+message Transport {
     string address = 1;
-  }
+}
 ~~~~~
 
 # SCMP {#scmp}
@@ -2381,6 +2384,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Clarify bits in timestamps.
 - Remove  informative reference to I-D.dekater-panrg-scion-overview  and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
 - Overall review and wording polish
+- Protobuf messages syntax check, add missing empty `PathSegmentUnsignedExtensions` message definition
 - `SegmentLookupService` RPC: clarify wording on API exposure
 - Peer entry figure 14 - make fields consistent with protobuf definitions
 - New section: Renewal of Cryptographic Material
