@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-15T00:24:37.627804+00:00",
+  "timestamp": "2026-01-18T00:29:18.602283+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2748,7 +2748,7 @@
       "id": "I_kwDOJx2-rs7gwDbb",
       "title": "Clarify automated certificate renewal",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/172",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2761,8 +2761,8 @@
       ],
       "body": "Doubt triggered by [4791#](https://github.com/scionproto/scion/pull/4791#). \nThe PKI draft currently says: \n> Subsequent certificate renewals MAY be automated and can leverage the control plane communication infrastructure.\n\nHowever, in the CP draft there is no description of any interfaces for certificate renewal. We should either change wording, or clarify automated renewal.\n\n- [x] Are there any missing RPC definitions?\n- [x] Are there any other missing interfaces that need to be specified?\n",
       "createdAt": "2025-06-23T15:05:35Z",
-      "updatedAt": "2026-01-13T12:05:13Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-15T14:25:49Z",
+      "closedAt": "2026-01-15T14:25:49Z",
       "comments": [
         {
           "author": "oncilla",
@@ -2827,7 +2827,7 @@
       "id": "I_kwDOJx2-rs7jRuix",
       "title": "Protobuf syntax check",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/175",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2839,8 +2839,8 @@
       ],
       "body": "When reviewing #173 @oncilla noticed some of the protobuf definitions had a typo. This issue is to track a final check of protobuf definitions.\n\nTODO: \n- Paste all definitions to https://www.protobufpal.com/  and validate the corresponding proto file\n\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/protobuf-check/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-01-14T12:47:16Z",
-      "updatedAt": "2026-01-14T13:29:13Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-15T14:26:24Z",
+      "closedAt": "2026-01-15T14:26:24Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -13071,24 +13071,26 @@
       "id": "PR_kwDOJx2-rs69JqrZ",
       "title": "protobuf messages syntax check",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/176",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #175 \r\nFixes protobuf syntax issue introduced in #172 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/protobuf-check/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-01-14T12:56:11Z",
-      "updatedAt": "2026-01-14T13:39:17Z",
+      "updatedAt": "2026-01-15T14:26:23Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "d3634d9f638155fc5fb20789e2dcfe88c384b47b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "protobuf-check",
       "headRefOid": "3c93fef27dacc9ca7a7e3a05bd08f5f69cf24a7b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-01-15T14:26:23Z",
+      "mergedAt": "2026-01-15T14:26:23Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12"
+      },
       "comments": [],
       "reviews": [
         {
@@ -13102,6 +13104,19 @@
           "body": "",
           "createdAt": "2026-01-14T13:39:17Z",
           "updatedAt": "2026-01-14T13:39:17Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7affsd",
+          "commit": {
+            "abbreviatedOid": "3c93fef"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-15T13:38:50Z",
+          "updatedAt": "2026-01-15T13:38:50Z",
           "comments": []
         }
       ]
