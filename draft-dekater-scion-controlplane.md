@@ -200,7 +200,7 @@ This document contains new approaches to secure path aware networking. It is not
 
 # Introduction
 
-SCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.
+SCION (Scalability, Control, and Isolation On Next-generation networks) is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.
 
 SCION has been developed with the following goals:
 
@@ -239,9 +239,9 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
-**Hop Field (HF)**: As they traverse the network, Path Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
+**Hop Field (HF)**: As they traverse the network, Path-Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
 
-**Info Field (INF)**: Each Path Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
+**Info Field (INF)**: Each Path-Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
 **Isolation Domain (ISD)**: SCION ASes are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction).
 
@@ -249,9 +249,9 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
-**Path Segment**: These are derived from Path Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Up to three path segments can be used to create a forwarding path.
+**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Up to three path segments can be used to create a forwarding path.
 
-**Path Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.
+**Path-Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.
 
 **SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
@@ -265,7 +265,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 SCION routers and endpoints connect to each other via links. A link refers to a physical or logical connection between two SCION nodes (e.g. router or endpoint). A SCION path between two endpoints traverses one or more links.
 
-SCION ASes are organized into logical groups called Isolation Domains (ISDs). Each ISD consists of ASes that are part of a uniform trust environment (i.e. a common jurisdiction) and is administered by a set of distinguished ASes called core ASes.
+SCION ASes - each being a network under a common administrative control - are organized into logical groups called Isolation Domains (ISDs). Each ISD consists of ASes that are part of a uniform trust environment (i.e. a common jurisdiction) and is administered by a set of distinguished ASes called core ASes.
 
 SCION distinguishes three types of links between ASes: (1) core links, (2) parent-child links, and (3) peering links.
 
@@ -309,15 +309,15 @@ Each link connecting SCION routers is bi-directional and is identified by its co
 
 SCION provides path-aware inter-domain routing between SCION ASes. The SCION Control Plane is responsible for discovering these inter-domain paths and making them available to the endpoints within the ASes.
 
-SCION inter-domain routing operates on two levels: within an ISD which is called *intra*-ISD routing, and between ISDs which is called *inter*-ISD routing. Both levels use *Path Segment Construction Beacons (PCBs)* to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
+SCION inter-domain routing operates on two levels: within an ISD which is called *intra*-ISD routing, and between ISDs which is called *inter*-ISD routing. Both levels use *Path-Segment Construction Beacons (PCBs)* to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
 
 The PCBs accumulate cryptographically protected path and forwarding information at an AS level and store this information in the form of *Hop Fields*. Endpoints use information from these Hop Fields to create end-to-end forwarding paths for data packets that carry this information in their headers. This also supports multi-path communication among endpoints.
 
 The creation of an end-to-end forwarding path consists of the following processes:
 
-1. *Path exploration (or beaconing)*: This is the process where an AS discovers paths to other ASes. See also [](#beaconing).
-2. *Path registration*: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. See also [](#path-segment-reg).
-3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. See also [](#lookup).
+1. *Path exploration (or beaconing)*: This is the process where an AS discovers paths to other ASes. See [](#beaconing).
+2. *Path registration*: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. See [](#path-segment-reg).
+3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. See [](#lookup).
 
 All processes operate concurrently.
 
@@ -327,7 +327,7 @@ The **Control Service** is responsible for the path exploration and registration
 - Selecting and registering the set of path segments via which the AS wants to be reached.
 - Distributing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in [](#crypto-api).
 
-**Note:** The Control Service of an AS is decoupled from SCION border routers. The Control Service of a specific AS is part of the Control Plane, is responsible for *finding and registering suitable paths*, and can be deployed anywhere inside the AS. Border routers are deployed at the edge of an AS and their main tasks are to *forward data packets*.
+**Note:** The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere anything within the AS.
 
 ### Path Segments
 
@@ -417,11 +417,11 @@ For example, the text representation of AS number ff00:0:1 in ISD number 15 is `
 
 ## Bootstrapping ability
 
-SCION avoids circular dependencies during network bootstrapping. One goal is that the SCION network can start up even after large outages or attacks, in addition to avoiding cascades of outages caused by fragile interdependencies. This section lists the concepts SCION uses to prevent circular dependencies:
+SCION uses the following mechanisms to avoid circular dependcencies during bootstrapping, and to provide resiliency after systemic failures:
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
-- Availability of certificates: In SCION, every entity is required to be in possession of all cryptographic material (including the ISD's TRC and certificates) that is needed to verify any message it sends. This (together with the path reversal) means that the receiver of a message can always obtain all this material by contacting the sender, thereby avoiding circular dependencies between the PKI and connectivity.<br>
+- Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, in order to verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
 
@@ -447,7 +447,7 @@ In case of failure, RPC calls return an error as specified by the RPC framework.
 
 **Path Exploration** is the process where a SCION AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing* and this section provides a detailed explanation of this.
 
-The *Control Service* of each SCION AS is responsible for the beaconing process. The Control Service generates, receives, and propagates *Path Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
+The *Control Service* of each SCION AS is responsible for the beaconing process. The Control Service generates, receives, and propagates *Path-Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
 PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *core* or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
