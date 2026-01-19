@@ -800,7 +800,6 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
 - `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
-- `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: May include metadata. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header. This field is OPTIONAL.
@@ -909,7 +908,6 @@ The `HopEntry` Protobuf message format is:
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 - `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
