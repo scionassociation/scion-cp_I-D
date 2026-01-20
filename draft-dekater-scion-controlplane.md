@@ -425,11 +425,6 @@ SCION uses the following mechanisms to avoid circular dependcencies during boots
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
 
-## Resistance to partitioning
-
-Partitioning occurs when a network splits into two because of link failures. No special failure mode is required as SCION ASes can always switch to already known paths that use other links.
-
-Recovering from a partitioned network is also seamless as onl	y coarse time synchronization between the partitions is required to resume normal operation and move forward with updates of the cryptographic material. [](#clock-inaccuracy) further describes the impact of time synchronization and path discovery time.
 
 ## Communication Protocol
 
