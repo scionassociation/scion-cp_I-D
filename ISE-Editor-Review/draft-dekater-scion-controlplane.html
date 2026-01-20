@@ -3462,7 +3462,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
                 <p id="section-2.2.2.6-3.3.1">The signed <code>header_and_body</code>/<code>signature</code> combination of each previous AS on this specific path segment.<a href="#section-2.2.2.6-3.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.2.6-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows:<a href="#section-2.2.2.6-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.6-4">The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed and concatenated <code>||</code> as follows:<a href="#section-2.2.2.6-4" class="pilcrow">¶</a></p>
 <p id="section-2.2.2.6-5">Sig<sub>i</sub> =
 K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )<a href="#section-2.2.2.6-5" class="pilcrow">¶</a></p>
 <p id="section-2.2.2.6-6">The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-2.2.2.6-6" class="pilcrow">¶</a></p>

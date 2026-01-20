@@ -1492,7 +1492,8 @@ Table of Contents
    *  The signed header_and_body/signature combination of each previous
       AS on this specific path segment.
 
-   The signature Sig_i of an AS entry ASE_i is now computed as follows:
+   The signature Sig_i of an AS entry ASE_i is now computed and
+   concatenated || as follows:
 
    Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 ||
    ... || ASE_(i-1)^(signed) || Sig_(i-1) )
