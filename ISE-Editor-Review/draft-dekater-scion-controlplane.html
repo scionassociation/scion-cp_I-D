@@ -3829,10 +3829,10 @@ message Chain {
             <p id="section-2.4-7.2.1"><code>subject_key_id</code>: Returns SubjectKeyID in the AS certificate.<a href="#section-2.4-7.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.4-7.3">
-            <p id="section-2.4-7.3.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.<a href="#section-2.4-7.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.4-7.3.1"><code>at_least_valid_until</code>: Point in time at which the AS certificate must still be valid - in seconds since Epoch according to <span>[<a href="#POSIX.1-2024" class="cite xref">POSIX.1-2024</a>]</span> Section 4.19, encoded as a 32-bit unsigned integer.<a href="#section-2.4-7.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.4-7.4">
-            <p id="section-2.4-7.4.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.<a href="#section-2.4-7.4.1" class="pilcrow">¶</a></p>
+            <p id="section-2.4-7.4.1"><code>at_least_valid_since</code>: Point in time at which the AS certificate must be or must have been valid - in seconds since Epoch according to <span>[<a href="#POSIX.1-2024" class="cite xref">POSIX.1-2024</a>]</span> Section 4.19, encoded as a 32-bit unsigned integer.<a href="#section-2.4-7.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.4-8">A <code>ChainsResponse</code> includes the following fields:<a href="#section-2.4-8" class="pilcrow">¶</a></p>
@@ -6067,6 +6067,10 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
 <dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
         <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-11</span>, <time datetime="2026-01-16" class="refDate">16 January 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-11">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-11</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="POSIX.1-2024">[POSIX.1-2024]</dt>
+        <dd>
+<span class="refTitle">"Standard for Information Technology--Portable Operating System Interface (POSIX™) Base Specifications, Issue 8"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html">https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="proto3">[proto3]</dt>
         <dd>

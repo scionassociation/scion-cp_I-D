@@ -1895,10 +1895,13 @@ Table of Contents
    *  subject_key_id: Returns SubjectKeyID in the AS certificate.
 
    *  at_least_valid_until: Point in time at which the AS certificate
-      must still be valid - in seconds since UNIX epoch.
+      must still be valid - in seconds since Epoch according to
+      [POSIX.1-2024] Section 4.19, encoded as a 32-bit unsigned integer.
 
    *  at_least_valid_since: Point in time at which the AS certificate
-      must be or must have been valid - in seconds since UNIX epoch.
+      must be or must have been valid - in seconds since Epoch according
+      to [POSIX.1-2024] Section 4.19, encoded as a 32-bit unsigned
+      integer.
 
    A ChainsResponse includes the following fields:
 
@@ -3662,6 +3665,12 @@ Table of Contents
               dekater-scion-pki-11, 16 January 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               scion-pki-11>.
+
+   [POSIX.1-2024]
+              "Standard for Information Technology--Portable Operating
+              System Interface (POSIX™) Base Specifications, Issue 8",
+              2024, <https://pubs.opengroup.org/onlinepubs/9799919799/
+              basedefs/V1_chap04.html>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
