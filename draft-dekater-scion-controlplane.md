@@ -771,9 +771,7 @@ Protobuf definition of the `HeaderAndBody` message used for signature computatio
    }
 ~~~~
 
-- For the specification of the signed header, see [](#ase-header).
-- For the specification of the signed body, see [](#ase-sign).
-- For the specification of the `signature` field, see [](#sign).
+The Signed Header, Signed Body, and Signature Fields are detailed below.
 
 #### AS Entry Signed Header {#ase-header}
 
