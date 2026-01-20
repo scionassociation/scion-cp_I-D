@@ -1139,11 +1139,8 @@ Table of Contents
           bytes body = 2;
       }
 
-   *  For the specification of the signed header, see Section 2.2.2.1.
-
-   *  For the specification of the signed body, see Section 2.2.2.2.
-
-   *  For the specification of the signature field, see Section 2.2.2.6.
+   The Signed Header, Signed Body, and Signature Fields are detailed
+   below.
 
 2.2.2.1.  AS Entry Signed Header
 
