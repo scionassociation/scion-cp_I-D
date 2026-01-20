@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-18T00:29:18.602283+00:00",
+  "timestamp": "2026-01-20T00:26:11.665124+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2855,6 +2855,35 @@
           "body": "I get all green after adding the two missing messages with this proto file\n\n<details>\n<summary>Click to expand scion.proto</summary>\n\n\n\n```\nsyntax = \"proto3\";\nimport \"google/protobuf/timestamp.proto\";\n\n\n   message SignedMessage {\n       bytes header_and_body = 1;\n       bytes signature = 2;\n   }\n   message HeaderAndBody {\n       bytes header = 1;\n       bytes body = 2;\n   }\n \n message Header {\n       SignatureAlgorithm signature_algorithm = 1;\n       bytes verification_key_id = 2;\n       google.protobuf.Timestamp timestamp = 3;\n       bytes metadata = 4;\n       int32 associated_data_length = 5;\n   }\n\n  enum SignatureAlgorithm {\n    SIGNATURE_ALGORITHM_UNSPECIFIED = 0;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 1;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 2;\n    SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 3;\n  }  \n    message VerificationKeyID {\n       uint64 isd_as = 1;\n       bytes subject_key_id = 2;\n       uint64 trc_base = 3;\n       uint64 trc_serial = 4;\n   }\n\n   message ASEntrySignedBody {\n       uint64 isd_as = 1;\n       uint64 next_isd_as = 2;\n       HopEntry hop_entry = 3;\n       repeated PeerEntry peer_entries = 4;\n       uint32 mtu = 5;\n       PathSegmentExtensions extensions = 6;\n   }\n   message HopEntry {\n       HopField hop_field = 1;\n       uint32 ingress_mtu = 2;\n   }\n   message PeerEntry {\n       uint64 peer_isd_as = 1;\n       uint64 peer_interface = 2;\n       uint32 peer_mtu = 3;\n       HopField hop_field = 4;\n   }\n   \n   message HopField {\n       uint64 ingress = 1;\n       uint64 egress = 2;\n       uint32 exp_time = 3;\n       bytes mac = 4;\n   }\n\n  message PathSegmentExtensions {\n    StaticInfoExtension static_info = 1;\n  }\n  message StaticInfoExtension {\n    reserved 1;\n  } \n   message ASEntry {\n       SignedMessage signed = 1;\n       PathSegmentUnsignedExtensions unsigned = 2;\n   }\n   \n   \n\n   message PathSegment {\n       bytes segment_info = 1;\n       repeated ASEntry as_entries = 2;\n   }\n   \n   message PathSegmentUnsignedExtensions {\n    reserved 1000;\n    }\n    \n       service SegmentCreationService {\n       rpc Beacon(BeaconRequest) returns (BeaconResponse) {}\n   }\n\n   message BeaconRequest {\n       PathSegment segment = 1;\n   }\n\n   message BeaconResponse {}\n\n\nservice TrustMaterialService {\n    rpc Chains(ChainsRequest) returns (ChainsResponse) {}\n    rpc TRC(TRCRequest) returns (TRCResponse) {}\n}\n\nmessage ChainsRequest {\n    uint64 isd_as = 1;\n    bytes subject_key_id = 2;\n    google.protobuf.Timestamp at_least_valid_until = 3;\n    google.protobuf.Timestamp at_least_valid_since = 4;\n}\n\nmessage ChainsResponse {\n    repeated Chain chains = 1;\n}\n\nmessage Chain {\n    bytes as_cert = 1;\n    bytes ca_cert = 2;\n}\n\nmessage TRCRequest {\n    uint32 isd = 1;\n    uint64 base = 2;\n    uint64 serial = 3;\n}\n\nmessage TRCResponse {\n    bytes trc = 1;\n}\n\n\nservice ChainRenewalService {\n    rpc ChainRenewal(ChainRenewalRequest) returns (\n      ChainRenewalResponse) {}\n}\n\nmessage ChainRenewalRequest {\n    reserved 1;\n    bytes cms_signed_request = 2;\n}\n\nmessage ChainRenewalResponse {\n    reserved 1;\n    bytes cms_signed_response = 2;\n}\n\n\n\n   enum SegmentType {\n       SEGMENT_TYPE_UNSPECIFIED = 0;\n       SEGMENT_TYPE_UP = 1;\n       SEGMENT_TYPE_DOWN = 2;\n       SEGMENT_TYPE_CORE = 3;\n   }\n\n   service SegmentRegistrationService {\n       rpc SegmentsRegistration(SegmentsRegistrationRequest) returns (\n         SegmentsRegistrationResponse) {}\n   }\n\n   message SegmentsRegistrationRequest {\n       message Segments {\n           repeated PathSegment segments = 1;\n       }\n\n       map<int32, Segments> segments = 1;\n   }\n\n   message SegmentsRegistrationResponse {}\n   \n   \n \n service SegmentLookupService {\n    rpc Segments(SegmentsRequest) returns (SegmentsResponse) {}\n}\n\nmessage SegmentsRequest {\n    uint64 src_isd_as = 1;\n    uint64 dst_isd_as = 2;\n}\n\nmessage SegmentsResponse {\n    message Segments {\n        repeated PathSegment segments = 1;\n    }\n    map<int32, Segments> segments = 1;\n}\n\n\n  message ServiceResolutionRequest {}\n\n  message ServiceResolutionResponse {\n    map<string, Transport> transports = 1;\n  }\n\n  message Transport {\n    string address = 1;\n  }\n```\n\n</details>",
           "createdAt": "2026-01-14T13:11:12Z",
           "updatedAt": "2026-01-14T13:11:12Z"
+        }
+      ]
+    },
+    {
+      "number": 177,
+      "id": "I_kwDOJx2-rs7kNhOo",
+      "title": "ISE final review - points",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/177",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 1",
+        "editorial"
+      ],
+      "body": "Please address the following points:\n\n- [x] 1 Please re-expand SCION AS and SCION on first use in the introduction.  I realize you do this in the abstract, but please do it again (and yes, I am aware that the glossary immediately follows).\n- [x] 2. In Section 1.3, it feels like there is a sentence missing between the first and second paragraphs that reminds the reader what an AS is.\n- [x] 3. For the definition of PCB, I suggest lower-casifying the word Segment or hyphenating path-segment, to make it more obvious as to why PCB is used rather than PSCB.\n- [x] 4. Also in that section, I suggest changing \"see also Section [245]\" to \"This is described in detail in Section [245]\".  Take this suggestion or leave it- it is stylistic, but \"See also\" is generally used when you are detailing something NOW but also have more to say later.  You are not detailing anything in Section 1.4 (a good thing).\n- [x] 5. The note at the bottom of Section 1.4 probably can be reduced to \"The Control Service of an AS is decoupled from SCION border routers: it may be deployed anywhere within that AS.\"  The other concepts in the note, I think, can be found elsewhere.\n- [x] 6. 1.6 Bootstrapping ability.  The chapeau can be shortened as follows: \"The following mechanisms are used to avoid circular dependcencies, and to provide resiliency after systemic failures:\"\n- [x] 7. Last bullet of that section.  The last sentence is awkward.  For one thing, \"this material\" isn't entirely clear as to its meaning.  Also, and this is anotehr personal style thing, I hate parenthetical statements.  Finally, I would suggest that the last phrase (\"thereby...\") is redundant and can be removed.  I might also expand TRC in that statement again, as a reminder.\n- [ ] 8. Section 1.7 needs a bit of work or should be removed.  For one thing, I suspect you are overpromising.  In particular, a partition can occur in more than one place, especially when virtual links are aggregated into a single physical link.  For another, it's awkardly worded.  If you're going to keep this section, maybe add an example as to how partitions are avoided/recovered.\n- [ ] 9. A caution about Section 1.8: it needs a brief discussion about domain name resolution relating to H3 and circular dependencies.  This can be elsewhere in the doc, but it needs to be somewhere.\n- [ ] 10. There are small issues with Figures 3 and 4 with side arrows not being properly represented in SVG in the HTML version.  I imagine you are pressed for space in the ASCII version?  If you I could ask one of the aasvg authors to have a look.  Before I do that, however, I am not sure those arrows are appropriate.  I think you're just meaning to expand what the PCB in each case is, rather than show flow of communication.  In that case, I might remove the arrows.\n- [ ] 11. In section 2.2.2, there is no need to forward reference into the subsections, other than to say, perhaps, \"The signed header, signed body, and signature fields are detailed below.\"\n- [ ] 12. One aspect that 2.2.2.1 brings home is a stylistic difference between us: I prefer to read the narrative and THEN see the header definition.  But what you have is fine, and it is consistently applied.  I particularly appreciate your proper captioning of the artwork.\n- [x] 13. After Figure 10, the first bullet is repeated as the second bullet.\n- [x] 14. Section 2.2.2.3 the ingress_mtu definition is repeated.\n- [ ] 15. Section 2.2.2.6, remind people that || = concatenation.\n- [ ] 16. Section 2.2.3 what if a receiver doesn't understand an extension?\n- [ ] 17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what.\n- [ ] 18. In Section 2.3.4, you write \"This set should have a fixed size, the best PCBs set size.\"  Is that meant to be the maximum sets be the same size?\n- [ ] 19. In Section 2.4, for calculating seconds since the UNIX epoch, does one include leap seconds or not?  Also, I would prefer you stated \"1 January 1970 00:00 UTC\" instead of the UNIX epoch.  This mostly matters with at_least_valid_since, since this stuff can propagate fast.\n- [ ] 20. Section 3 seems misplaced.  I would have expected it in front of Section 8.\n- [x] 21. Section 7: how are SCMP messages secured?\n- [ ] 22. Section 8.4.  You don't list a mitigation.",
+      "createdAt": "2026-01-19T09:15:20Z",
+      "updatedAt": "2026-01-19T12:18:58Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Let me comment on some points you raised: \n> Section 1.7 needs a bit of work or should be removed.  For one thing, I suspect you are overpromising.  In particular, a partition can occur in more than one place, especially when virtual links are aggregated into a single physical link.  For another, it's awkardly worded.  If you're going to keep this section, maybe add an example as to how partitions are avoided/recovered.\n\nI had the same thought when reviewing the document recently. We can drop this section.\n\n> A caution about Section 1.8: it needs a brief discussion about domain name resolution relating to H3 and circular dependencies.  This can be elsewhere in the doc, but it needs to be somewhere.\n\nThere is no domain name resolution involved there, we can clarify that.\n\n> In Section 2.4, for calculating seconds since the UNIX epoch, does one include leap seconds or not?  Also, I would prefer you stated \"1 January 1970 00:00 UTC\" instead of the UNIX epoch.  This mostly matters with at_least_valid_since, since this stuff can propagate fast.\n\nGood point, we could add a reference to [[POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html)] Section 4.19 as we did in -dataplane. The reference defines exactly how to calculate seconds since epoch.\n\n> Section 7: how are SCMP messages secured\n\nWe have some text about this [here](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-8.3.4-10) in the security considerations. Do you feel we should add more? Authentication mechanisms are still experimental.",
+          "createdAt": "2026-01-19T09:16:12Z",
+          "updatedAt": "2026-01-19T09:16:12Z"
         }
       ]
     }
@@ -13120,6 +13149,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 178,
+      "id": "PR_kwDOJx2-rs69_hMA",
+      "title": "Addresses Eliot points 1-7",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/178",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #177 ",
+      "createdAt": "2026-01-19T12:07:37Z",
+      "updatedAt": "2026-01-19T12:47:47Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Eliot's-Review",
+      "headRefOid": "0f1c9002eb6ea93d92a309a1a2a830ca6f20aace",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
