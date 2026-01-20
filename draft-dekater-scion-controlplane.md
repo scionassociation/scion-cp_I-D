@@ -52,6 +52,11 @@ normative:
     title: "Connect Protocol Reference"
     date: 2024
     target: https://connectrpc.com/docs/protocol/
+  POSIX.1-2024:
+    name: IEEE
+    title: "Standard for Information Technology--Portable Operating System Interface (POSIX™) Base Specifications, Issue 8"
+    date: 2024
+    target: https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html
 
 informative:
   ISD-AS-assignments:
@@ -1237,8 +1242,8 @@ A `ChainsRequest` message includes the following fields:
 
 - `isd_as`: Returns ISD-AS of Subject in the AS certificate.
 - `subject_key_id`: Returns SubjectKeyID in the AS certificate.
-- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since UNIX epoch.
-- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since UNIX epoch.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer.
 
 A `ChainsResponse` includes the following fields:
 
