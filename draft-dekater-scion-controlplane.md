@@ -682,7 +682,7 @@ The information to be included in each of these fields is described below.
 ~~~
 {: #figure-7 title="Segment Information Component"}
 
-Each PCB MUST include a ``SegmentInformation`` message with basic information about the PCB. Its Protobuf message format is:
+Each PCB MUST include a `SegmentInformation` message with basic information about the PCB. Its Protobuf message format is:
 
 ~~~~
    message SegmentInformation {
