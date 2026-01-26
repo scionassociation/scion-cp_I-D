@@ -353,7 +353,7 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 ### ISD Numbers
 
-An ISD number is the 16-bit global identifier for an ISD and MUST be globally unique.
+An ISD number is the 16-bit global identifier for an ISD. ISD numbers in the range 64 and 4094 are used for public ISDs and MUST be globally unique.
 
 The following table gives an overview of the ISD number allocation:
 
@@ -371,7 +371,7 @@ ISD numbers are allocated by the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this. AS numbers of public ASes MUST be globally unique.
 
 #### Wildcard Addressing {#serv-disc}
 
