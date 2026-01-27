@@ -1766,17 +1766,9 @@ This specification defines the message formats for the following SCMP messages:
 
 |Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
-|1    | Reserved for future use                                   |
 |2    | [Packet Too Big](#packet-too-big)                         |
-|3    | Reserved for future use                                   |
-|4    | Reserved for future use                                   |
 |5    | [External Interface Down](#external-interface-down)       |
 |6    | [Internal Connectivity Down](#internal-connectivity-down) |
-|     |                                                           |
-|100  | Private Experimentation                                   |
-|101  | Private Experimentation                                   |
-|     |                                                           |
-|127  | Reserved for expansion of SCMP error messages             |
 {: title="Error Message Types"}
 
 
@@ -1786,15 +1778,9 @@ This specification defines the message formats for the following SCMP messages:
 | 129  | [Echo Reply](#echo-reply)                                |
 | 130  | [Traceroute Request](#traceroute-request)                |
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
-| 200  | Private Experimentation                                  |
-| 201  | Private Experimentation                                  |
-|      |                                                          |
-| 255  | Reserved for expansion of SCMP informational messages    |
 {: title="Informational Message Types"}
 
-Type values 100, 101, 200, and 201 are reserved for private experimentation.
-
-All other values are reserved for future use.
+All other types are not relevant for path diagnosis and recovery. A complete list of types is given in [](#manipulate-selection).
 
 ## Checksum Calculation
 
