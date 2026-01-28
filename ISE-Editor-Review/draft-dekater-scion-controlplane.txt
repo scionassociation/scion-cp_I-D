@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 24 July 2026                                            S. Hitz
+Expires: 1 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         20 January 2026
+                                                         28 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 July 2026.
+   This Internet-Draft will expire on 1 August 2026.
 
 Copyright Notice
 
@@ -717,6 +717,8 @@ Table of Contents
    framework.  That is, a non-zero status code and an explanatory
    string.  Section 6 provides details about the establishment of the
    underlying QUIC connections.
+
+   SCION does not require any domain name resolution for communication.
 
 2.  Path Exploration or Beaconing
 
