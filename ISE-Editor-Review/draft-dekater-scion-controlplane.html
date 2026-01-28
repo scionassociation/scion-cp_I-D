@@ -1669,13 +1669,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.4-4">The creation of an end-to-end forwarding path consists of the following processes:<a href="#section-1.4-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.4-5">
 <li id="section-1.4-5.1">
-            <p id="section-1.4-5.1.1"><em>Path exploration (or beaconing)</em>: This is the process where an AS discovers paths to other ASes. See <a href="#beaconing" class="auto internal xref">Section 2</a>.<a href="#section-1.4-5.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-5.1.1"><em>Path exploration (or beaconing)</em>: This is the process where an AS discovers paths to other ASes. This is described in detail in <a href="#beaconing" class="auto internal xref">Section 2</a>.<a href="#section-1.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-1.4-5.2">
-            <p id="section-1.4-5.2.1"><em>Path registration</em>: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. See <a href="#path-segment-reg" class="auto internal xref">Section 3</a>.<a href="#section-1.4-5.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-5.2.1"><em>Path registration</em>: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in <a href="#path-segment-reg" class="auto internal xref">Section 3</a>.<a href="#section-1.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-1.4-5.3">
-            <p id="section-1.4-5.3.1"><em>Path resolution</em>: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. See <a href="#lookup" class="auto internal xref">Section 4</a>.<a href="#section-1.4-5.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-5.3.1"><em>Path resolution</em>: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. This is described in detail in <a href="#lookup" class="auto internal xref">Section 4</a>.<a href="#section-1.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-1.4-6">All processes operate concurrently.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
@@ -1691,7 +1691,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-8.3.1">Distributing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in <a href="#crypto-api" class="auto internal xref">Section 2.4</a>.<a href="#section-1.4-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere anything within the AS.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
+<p id="section-1.4-9"><strong>Note:</strong> The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere within the AS.<a href="#section-1.4-9" class="pilcrow">¶</a></p>
 <div id="path-segments">
 <section id="section-1.4.1">
           <h4 id="name-path-segments">
@@ -2934,7 +2934,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
               <p id="section-2.2.2-11.3.1">a signature.<a href="#section-2.2.2-11.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.2-12">In the Protobuf message format, the signed component of an AS entry is specified by the <code>SignedMessage</code>. It consists of a header-and-body part (<code>header_and_body</code>) and a raw signature (<code>signature</code>). See also the code block below.<a href="#section-2.2.2-12" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-12">In the Protobuf message format, the signed component of an AS entry is specified by the <code>SignedMessage</code>. It consists of a header-and-body part (<code>header_and_body</code>) and a raw signature (<code>signature</code>). Their protobuf message formats are:<a href="#section-2.2.2-12" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.2-13">
 <pre>
    message SignedMessage {

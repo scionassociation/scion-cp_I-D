@@ -456,20 +456,22 @@ Table of Contents
    following processes:
 
    1.  _Path exploration (or beaconing)_: This is the process where an
-       AS discovers paths to other ASes.  See Section 2.
+       AS discovers paths to other ASes.  This is described in detail in
+       Section 2.
 
    2.  _Path registration_: This is the process where an AS selects a
        few PCBs, according to defined policies, turns the selected PCBs
        into path segments, and adds these path segments to the relevant
        path infrastructure, thus making them available to other ASes.
-       See Section 3.
+       This is described in detail in Section 3.
 
    3.  _Path resolution_: This is the process of actually creating an
        end-to-end forwarding path from the source endpoint to the
        destination.  For this, an endpoint performs (a) a path lookup
        step to obtain path segments, and (b) a path combination step to
        combine the forwarding path from the segments.  This last step
-       takes place in the data plane.  See Section 4.
+       takes place in the data plane.  This is described in detail in
+       Section 4.
 
    All processes operate concurrently.
 
@@ -496,7 +498,7 @@ Table of Contents
       Section 2.4.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
-   routers and may be deployed anywhere anything within the AS.
+   routers and may be deployed anywhere within the AS.
 
 1.4.1.  Path Segments
 
@@ -1125,8 +1127,8 @@ Table of Contents
 
    In the Protobuf message format, the signed component of an AS entry
    is specified by the SignedMessage.  It consists of a header-and-body
-   part (header_and_body) and a raw signature (signature).  See also the
-   code block below.
+   part (header_and_body) and a raw signature (signature).  Their
+   protobuf message formats are:
 
       message SignedMessage {
           bytes header_and_body = 1;
