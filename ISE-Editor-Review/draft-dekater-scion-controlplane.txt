@@ -3951,6 +3951,8 @@ draft-dekater-scion-controlplane-15
    *  Section 1.7.  Communication Protocol: Clarify DNS resolution is
       not needed
 
+   *  Move "Deployment Considerations" from section 3 to 7
+
 draft-dekater-scion-controlplane-14
 
    *  Clarify bits in timestamps.
