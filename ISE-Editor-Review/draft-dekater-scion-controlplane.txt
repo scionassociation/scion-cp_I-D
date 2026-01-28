@@ -171,6 +171,7 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-15
      draft-dekater-scion-controlplane-14
      draft-dekater-scion-controlplane-13
      draft-dekater-scion-controlplane-12
@@ -1496,8 +1497,8 @@ Table of Contents
    *  The signed header_and_body/signature combination of each previous
       AS on this specific path segment.
 
-   The signature Sig_i of an AS entry ASE_i is now computed and
-   concatenated || as follows:
+   The signature Sig_i of an AS entry ASE_i is now computed as follows.
+   Symbol || represents concatenation.
 
    Sig_i = K_i( ASE_i^(signed) || SegInfo || ASE_0^(signed) || Sig_0 ||
    ... || ASE_(i-1)^(signed) || Sig_(i-1) )
@@ -3940,6 +3941,15 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-15
+
+   *  Wording polish following ISE Editor's feedback
+
+   *  Remove redundant section 1.7.  Resistance to partitioning
+
+   *  Section 1.7.  Communication Protocol: Clarify DNS resolution is
+      not needed
 
 draft-dekater-scion-controlplane-14
 
