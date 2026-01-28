@@ -439,6 +439,8 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
+SCION does not require any domain name resolution for communication.
+
 
 # Path Exploration or Beaconing {#beaconing}
 
