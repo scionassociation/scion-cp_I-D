@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 July 2026                                            S. Hitz
+Expires: 1 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         15 January 2026
+                                                         28 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 July 2026.
+   This Internet-Draft will expire on 1 August 2026.
 
 Copyright Notice
 
@@ -2580,7 +2580,7 @@ Table of Contents
        endpoint combines them into an end-to-end path in the data plane.
 
    7.  The destination endpoint, once it receives the first packet, MAY
-       revert the path in the received packet in order to construct a
+       reverse the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
 
@@ -2951,11 +2951,9 @@ Table of Contents
          +------+-----------------------------------------------+
          | 6    | Internal Connectivity Down (Section 7.5.3)    |
          +------+-----------------------------------------------+
-         +------+-----------------------------------------------+
          | 100  | Private Experimentation                       |
          +------+-----------------------------------------------+
          | 101  | Private Experimentation                       |
-         +------+-----------------------------------------------+
          +------+-----------------------------------------------+
          | 127  | Reserved for expansion of SCMP error messages |
          +------+-----------------------------------------------+
@@ -2976,7 +2974,6 @@ Table of Contents
      | 200  | Private Experimentation                               |
      +------+-------------------------------------------------------+
      | 201  | Private Experimentation                               |
-     +------+-------------------------------------------------------+
      +------+-------------------------------------------------------+
      | 255  | Reserved for expansion of SCMP informational messages |
      +------+-------------------------------------------------------+
@@ -3696,9 +3693,9 @@ Table of Contents
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-10, 6 September 2025,
+              dekater-scion-pki-11, 16 January 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-10>.
+              scion-pki-11>.
 
    [proto3]   "Protocol Buffers Language Guide version 3", 2023,
               <https://protobuf.dev/programming-guides/proto3/>.
