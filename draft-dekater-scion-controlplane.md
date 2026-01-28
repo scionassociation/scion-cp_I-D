@@ -2381,6 +2381,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Wording polish following ISE Editor's feedback
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
+- Move "Deployment Considerations" from section 3 to 7
 
 ## draft-dekater-scion-controlplane-14
 {:numbered="false"}
