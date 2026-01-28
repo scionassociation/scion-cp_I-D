@@ -320,9 +320,9 @@ The PCBs accumulate cryptographically protected path and forwarding information 
 
 The creation of an end-to-end forwarding path consists of the following processes:
 
-1. *Path exploration (or beaconing)*: This is the process where an AS discovers paths to other ASes. See [](#beaconing).
-2. *Path registration*: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. See [](#path-segment-reg).
-3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. See [](#lookup).
+1. *Path exploration (or beaconing)*: This is the process where an AS discovers paths to other ASes. This is described in detail in [](#beaconing).
+2. *Path registration*: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
+3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. This is described in detail in [](#lookup).
 
 All processes operate concurrently.
 
@@ -332,7 +332,7 @@ The **Control Service** is responsible for the path exploration and registration
 - Selecting and registering the set of path segments via which the AS wants to be reached.
 - Distributing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in [](#crypto-api).
 
-**Note:** The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere anything within the AS.
+**Note:** The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere within the AS.
 
 ### Path Segments
 
@@ -755,7 +755,7 @@ The signed component of an AS entry MUST include the following elements:
 - a body, and
 - a signature.
 
-In the Protobuf message format, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part (`header_and_body`) and a raw signature (`signature`). See also the code block below.
+In the Protobuf message format, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part (`header_and_body`) and a raw signature (`signature`). Their protobuf message formats are:
 
 ~~~~
    message SignedMessage {
