@@ -682,7 +682,7 @@ The information to be included in each of these fields is described below.
 ~~~
 {: #figure-7 title="Segment Information Component"}
 
-Each PCB MUST include a ``SegmentInformation`` message with basic information about the PCB. Its Protobuf message format is:
+Each PCB MUST include a `SegmentInformation` message with basic information about the PCB. Its Protobuf message format is:
 
 ~~~~
    message SegmentInformation {
@@ -1557,7 +1557,7 @@ The process to look up and fetch path segments consists of the following steps:
 4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
 6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
-7. The destination endpoint, once it receives the first packet, MAY revert the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
+7. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
 
 {{table-3}} below shows which Control Service provides the source endpoint with which type of path segment.
 
@@ -1772,10 +1772,8 @@ This specification defines the message formats for the following SCMP messages:
 |4    | Reserved for future use                                   |
 |5    | [External Interface Down](#external-interface-down)       |
 |6    | [Internal Connectivity Down](#internal-connectivity-down) |
-|     |                                                           |
 |100  | Private Experimentation                                   |
 |101  | Private Experimentation                                   |
-|     |                                                           |
 |127  | Reserved for expansion of SCMP error messages             |
 {: title="Error Message Types"}
 
@@ -1788,7 +1786,6 @@ This specification defines the message formats for the following SCMP messages:
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
 | 200  | Private Experimentation                                  |
 | 201  | Private Experimentation                                  |
-|      |                                                          |
 | 255  | Reserved for expansion of SCMP informational messages    |
 {: title="Informational Message Types"}
 
