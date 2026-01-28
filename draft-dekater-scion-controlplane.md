@@ -1027,7 +1027,7 @@ This is the input for the computation of the signature:
 - The `segment_info` component of the current AS. This is the encoded version of the `SegmentInformation` component containing basic information about the path segment represented by the PCB. For the specification of `SegmentInformation`, see [](#seginfo).
 - The signed `header_and_body`/`signature` combination of each previous AS on this specific path segment.
 
-The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed and concatenated `||` as follows:
+The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as follows. Symbol `||` represents concatenation.
 
 Sig<sub>i</sub> =
 K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )
@@ -2374,6 +2374,13 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-15
+{:numbered="false"}
+
+- Wording polish following ISE Editor's feedback
+- Remove redundant section 1.7. Resistance to partitioning
+- Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 
 ## draft-dekater-scion-controlplane-14
 {:numbered="false"}
