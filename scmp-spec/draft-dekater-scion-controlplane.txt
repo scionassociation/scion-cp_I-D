@@ -1551,6 +1551,10 @@ Table of Contents
        StaticInfoExtension static_info = 1;
      }
 
+   If a Control Service receives an unknown PCB extension, it SHOULD
+   skip the extension, but preserve it unmodified in case the PCB is
+   further propagated.
+
 2.2.4.  PCB Validity
 
    To be valid (that is, usable to construct a valid path), a PCB MUST:
