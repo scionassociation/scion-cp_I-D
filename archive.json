@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-27T00:28:33.857399+00:00",
+  "timestamp": "2026-01-29T00:30:59.266244+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2647,7 +2647,7 @@
       "id": "I_kwDOJx2-rs7XTvGe",
       "title": "Security considerations: Attacks to time sources",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/160",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2659,8 +2659,8 @@
       ],
       "body": "From Eliot: \n> In the dataplane draft, I think you need to add a security consideration relating to attacks on time sources.  If you're using NTP and NTP is attacked, what are the implications?  Same with GPS.  That should happen before this goes to the IESG.\n\nWe currently have sections about the impact of clock drift (introduced in https://github.com/scionassociation/scion-cp_I-D/issues/18  ) but I don'm think we say much on the security aspect of it. This issue might also affect -controlplane.\n\n[Slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1762452155817339)\n\nRelates to past issues: \n- #18\n- #117 \n\n ",
       "createdAt": "2025-11-06T17:06:59Z",
-      "updatedAt": "2025-11-12T23:05:47Z",
-      "closedAt": "2025-11-12T23:05:47Z",
+      "updatedAt": "2026-01-28T17:46:13Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
@@ -2668,6 +2668,13 @@
           "body": " My understanding is:\n\n**Data plane**:\n* an AS Routers --> its control service instances (to verify path segments)\n\n**Control plane**:\n*  different ASes control services (for beaconing)\n* An AS control service and endpoints (for path lookup)\nI\ns that all? Did I miss something?\n\nAnd what happens if an attacker manipulates time?\nI\u2019d say:\n* of a control service: beaconing stops. (why)?\n* of an endpoint: path lookup fail\n* of a router: packets get dropped",
           "createdAt": "2025-11-06T19:58:27Z",
           "updatedAt": "2025-11-06T19:58:27Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "From the final ISE review: \n> - [ ] 22. Section 8.4.  You don't list a mitigation.  ",
+          "createdAt": "2026-01-28T17:46:13Z",
+          "updatedAt": "2026-01-28T17:46:13Z"
         }
       ]
     },
@@ -2873,9 +2880,9 @@
         "Prio 1",
         "editorial"
       ],
-      "body": "Please address the following points:\n\n- [x] 1 Please re-expand SCION AS and SCION on first use in the introduction.  I realize you do this in the abstract, but please do it again (and yes, I am aware that the glossary immediately follows).\n- [x] 2. In Section 1.3, it feels like there is a sentence missing between the first and second paragraphs that reminds the reader what an AS is.\n- [x] 3. For the definition of PCB, I suggest lower-casifying the word Segment or hyphenating path-segment, to make it more obvious as to why PCB is used rather than PSCB.\n- [x] 4. Also in that section, I suggest changing \"see also Section [245]\" to \"This is described in detail in Section [245]\".  Take this suggestion or leave it- it is stylistic, but \"See also\" is generally used when you are detailing something NOW but also have more to say later.  You are not detailing anything in Section 1.4 (a good thing).\n- [x] 5. The note at the bottom of Section 1.4 probably can be reduced to \"The Control Service of an AS is decoupled from SCION border routers: it may be deployed anywhere within that AS.\"  The other concepts in the note, I think, can be found elsewhere.\n- [x] 6. 1.6 Bootstrapping ability.  The chapeau can be shortened as follows: \"The following mechanisms are used to avoid circular dependcencies, and to provide resiliency after systemic failures:\"\n- [x] 7. Last bullet of that section.  The last sentence is awkward.  For one thing, \"this material\" isn't entirely clear as to its meaning.  Also, and this is anotehr personal style thing, I hate parenthetical statements.  Finally, I would suggest that the last phrase (\"thereby...\") is redundant and can be removed.  I might also expand TRC in that statement again, as a reminder.\n- [x] 8. Section 1.7 needs a bit of work or should be removed.  For one thing, I suspect you are overpromising.  In particular, a partition can occur in more than one place, especially when virtual links are aggregated into a single physical link.  For another, it's awkardly worded.  If you're going to keep this section, maybe add an example as to how partitions are avoided/recovered.\n- [ ] 9. A caution about Section 1.8: it needs a brief discussion about domain name resolution relating to H3 and circular dependencies.  This can be elsewhere in the doc, but it needs to be somewhere.\n- [ ] 10. There are small issues with Figures 3 and 4 with side arrows not being properly represented in SVG in the HTML version.  I imagine you are pressed for space in the ASCII version?  If you I could ask one of the aasvg authors to have a look.  Before I do that, however, I am not sure those arrows are appropriate.  I think you're just meaning to expand what the PCB in each case is, rather than show flow of communication.  In that case, I might remove the arrows.\n- [x] 11. In section 2.2.2, there is no need to forward reference into the subsections, other than to say, perhaps, \"The signed header, signed body, and signature fields are detailed below.\"\n- [x] 12. One aspect that 2.2.2.1 brings home is a stylistic difference between us: I prefer to read the narrative and THEN see the header definition.  But what you have is fine, and it is consistently applied.  I particularly appreciate your proper captioning of the artwork.\n- [x] 13. After Figure 10, the first bullet is repeated as the second bullet.\n- [x] 14. Section 2.2.2.3 the ingress_mtu definition is repeated.\n- [x] 15. Section 2.2.2.6, remind people that || = concatenation.\n- [ ] 16. Section 2.2.3 what if a receiver doesn't understand an extension?\n- [ ] 17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what.\n- [ ] 18. In Section 2.3.4, you write \"This set should have a fixed size, the best PCBs set size.\"  Is that meant to be the maximum sets be the same size?\n- [x] 19. In Section 2.4, for calculating seconds since the UNIX epoch, does one include leap seconds or not?  Also, I would prefer you stated \"1 January 1970 00:00 UTC\" instead of the UNIX epoch.  This mostly matters with at_least_valid_since, since this stuff can propagate fast.\n- [ ] 20. Section 3 seems misplaced.  I would have expected it in front of Section 8.\n- [x] 21. Section 7: how are SCMP messages secured?\n- [ ] 22. Section 8.4.  You don't list a mitigation.",
+      "body": "Please address the following points:\n\n- [x] 1 Please re-expand SCION AS and SCION on first use in the introduction.  I realize you do this in the abstract, but please do it again (and yes, I am aware that the glossary immediately follows).\n- [x] 2. In Section 1.3, it feels like there is a sentence missing between the first and second paragraphs that reminds the reader what an AS is.\n- [x] 3. For the definition of PCB, I suggest lower-casifying the word Segment or hyphenating path-segment, to make it more obvious as to why PCB is used rather than PSCB.\n- [x] 4. Also in that section, I suggest changing \"see also Section [245]\" to \"This is described in detail in Section [245]\".  Take this suggestion or leave it- it is stylistic, but \"See also\" is generally used when you are detailing something NOW but also have more to say later.  You are not detailing anything in Section 1.4 (a good thing).\n- [x] 5. The note at the bottom of Section 1.4 probably can be reduced to \"The Control Service of an AS is decoupled from SCION border routers: it may be deployed anywhere within that AS.\"  The other concepts in the note, I think, can be found elsewhere.\n- [x] 6. 1.6 Bootstrapping ability.  The chapeau can be shortened as follows: \"The following mechanisms are used to avoid circular dependcencies, and to provide resiliency after systemic failures:\"\n- [x] 7. Last bullet of that section.  The last sentence is awkward.  For one thing, \"this material\" isn't entirely clear as to its meaning.  Also, and this is anotehr personal style thing, I hate parenthetical statements.  Finally, I would suggest that the last phrase (\"thereby...\") is redundant and can be removed.  I might also expand TRC in that statement again, as a reminder.\n- [x] 8. Section 1.7 needs a bit of work or should be removed.  For one thing, I suspect you are overpromising.  In particular, a partition can occur in more than one place, especially when virtual links are aggregated into a single physical link.  For another, it's awkardly worded.  If you're going to keep this section, maybe add an example as to how partitions are avoided/recovered.\n- [x] 9. A caution about Section 1.8: it needs a brief discussion about domain name resolution relating to H3 and circular dependencies.  This can be elsewhere in the doc, but it needs to be somewhere.\n- [x] 11. In section 2.2.2, there is no need to forward reference into the subsections, other than to say, perhaps, \"The signed header, signed body, and signature fields are detailed below.\"\n- [ ] 12. One aspect that 2.2.2.1 brings home is a stylistic difference between us: I prefer to read the narrative and THEN see the header definition.  But what you have is fine, and it is consistently applied.  I particularly appreciate your proper captioning of the artwork. --> Skipped, point taken, but it is a stylistic difference. In our case, hearers are not really bit headers, rather than a graphical representation of fields\n- [x] 13. After Figure 10, the first bullet is repeated as the second bullet.\n- [x] 14. Section 2.2.2.3 the ingress_mtu definition is repeated.\n- [x] 15. Section 2.2.2.6, remind people that || = concatenation.\n- [x] 16. Section 2.2.3 what if a receiver doesn't understand an extension? --> https://github.com/scionassociation/scion-cp_I-D/issues/182 \n- [x] 19. In Section 2.4, for calculating seconds since the UNIX epoch, does one include leap seconds or not?  Also, I would prefer you stated \"1 January 1970 00:00 UTC\" instead of the UNIX epoch.  This mostly matters with at_least_valid_since, since this stuff can propagate fast.\n- [x] 20. Section 3 seems misplaced.  I would have expected it in front of Section 8.\n- [x] 21. Section 7: how are SCMP messages secured?\n- [x] 22. Section 8.4.  You don't list a mitigation. --> https://github.com/scionassociation/scion-cp_I-D/issues/160 ",
       "createdAt": "2026-01-19T09:15:20Z",
-      "updatedAt": "2026-01-20T12:39:35Z",
+      "updatedAt": "2026-01-28T17:53:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -2894,14 +2901,36 @@
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/182",
       "state": "OPEN",
       "author": "tzaeschke",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Table 5 in section 7.2 does not list the SCMP errors 1 (destination unreachable) and 4 (parameter problem) as they are defined here: https://docs.scion.org/en/latest/protocols/scmp.html#scmp-error-messages\n\nhttps://github.com/scionassociation/scion-cp_I-D/blob/02c446ba36c25d3031808f1bd1a4d43fb274ee12/draft-dekater-scion-controlplane.md?plain=1#L1767-L1774\n\nHave these been removed?",
       "createdAt": "2026-01-26T15:22:16Z",
-      "updatedAt": "2026-01-26T15:22:16Z",
+      "updatedAt": "2026-01-28T17:49:20Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @tzaeschke, thanks for raising this. For context, let me summarize how SCMP got into the drafts.  \nInitially, we did not have SCMP in the drafts for various reasons:  it could be a separate draft of its own, it could have raised questions in relation to ICMP, and there is no finalized spec for SCMP authentication.  However,  feedback received below prompted us in the end to add parts of it anyways. \n- https://github.com/scionassociation/scion-dp_I-D/issues/8\n- https://github.com/scionassociation/scion-dp_I-D/issues/36 \n\nSo SCMP was first added to -dataplane in https://github.com/scionassociation/scion-dp_I-D/pull/49   The reviewer feedback was about handling of link failures, so link down messages were the important messages to be mentioned. Some messages error 1 and 4 were not added back then by JC. Reason: \n>  I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery\n\nI then added Echo request and Reply messages in: https://github.com/scionassociation/scion-dp_I-D/pull/59 .\nThen the SCMP spec was moved from -dataplane to -controlplane in https://github.com/scionassociation/scion-cp_I-D/pull/78 \n\n Regarding the missing messages, we write in the draft: \n```\n   This document only specifies the messages used for the purposes of\n   path diagnosis and recovery.  An extended specification can be found\n   in [SCMP].  \n```\n\nWhat can we do about it? \n\n1.  Leave it as it is and count on the reference to https://docs.scion.org/en/latest/protocols/scmp.html \n2.  Mention the messages in the table only, and point to the reference [SCMP]\n3.  Add the full spec of the two missing messages. However this might send the draft back to IESG review. \n   Also, adding these messages requires a lot of changes because: \n   - `destination unreachable` heavily reuses the format of https://datatracker.ietf.org/doc/html/rfc4443#section-3.1 , this would probably require a normative reference and clarifying the relationship between SCMP and rfc4443.\n  - `Parameter Problem` contains nearly 20 errors, which would require the appropriate cross-references from many other sections\n\n",
+          "createdAt": "2026-01-27T14:43:57Z",
+          "updatedAt": "2026-01-27T14:43:57Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the explanation.\n\nI created a 4th solution in #184. It removes the irrelevant entries (not related to path discovery/management) and clarifies the text.\nFell free to use it or any of your own propositions, either is fine by me.",
+          "createdAt": "2026-01-27T16:25:03Z",
+          "updatedAt": "2026-01-27T16:25:03Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I was going through the comments of the ISE editor in #177 . One of them is: \n> 16. Section 2.2.3 what if a receiver doesn't understand an extension?\n \nAnd the answer is: it MAY send a SCMP parameter problem. I will consult him about the two missing SCMP messages. \n\n",
+          "createdAt": "2026-01-28T17:49:20Z",
+          "updatedAt": "2026-01-28T17:49:20Z"
+        }
+      ]
     },
     {
       "number": 183,
@@ -2918,6 +2947,85 @@
       "updatedAt": "2026-01-26T16:07:51Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 186,
+      "id": "I_kwDOJx2-rs7mTuim",
+      "title": "17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what.",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/186",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-28T07:10:56Z",
+      "updatedAt": "2026-01-28T07:11:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I feel it's already explained that it's the Control Service of the AS.",
+          "createdAt": "2026-01-28T07:11:53Z",
+          "updatedAt": "2026-01-28T07:11:53Z"
+        }
+      ]
+    },
+    {
+      "number": 187,
+      "id": "I_kwDOJx2-rs7mTvkv",
+      "title": "Clarify PCBs set size",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/187",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "> 18. In Section 2.3.4, you write \"This set should have a fixed size, the best PCBs set size.\" Is that meant to be the maximum sets be the same size? ",
+      "createdAt": "2026-01-28T07:12:07Z",
+      "updatedAt": "2026-01-28T19:12:28Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I also feel that the best PCB set size is already explained in Section 2.3.4. We previously added numbers for clarity.",
+          "createdAt": "2026-01-28T07:13:43Z",
+          "updatedAt": "2026-01-28T07:13:43Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This is a follow up to famous #16  ",
+          "createdAt": "2026-01-28T19:07:46Z",
+          "updatedAt": "2026-01-28T19:07:46Z"
+        }
+      ]
+    },
+    {
+      "number": 188,
+      "id": "I_kwDOJx2-rs7mTxgl",
+      "title": "polish Figures 3 and 4",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/188",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-28T07:13:56Z",
+      "updatedAt": "2026-01-28T18:58:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I realised Figures 2, 3 and 4 can be greatly simplified to free up space and hopefully render properly as SVG. I've shown the PCBs as flowing to the ASes (which was not entirely clear previously), but we could tweak this further.",
+          "createdAt": "2026-01-28T07:15:51Z",
+          "updatedAt": "2026-01-28T07:15:51Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -13218,15 +13326,15 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #177",
+      "body": "Resolves #177\r\n\r\n- [x] Remove duplicate lines introduced in https://github.com/scionassociation/scion-cp_I-D/pull/174/commits/fb9e968afe6261a11e88971e65d9006086a63e9a ",
       "createdAt": "2026-01-20T11:52:35Z",
-      "updatedAt": "2026-01-20T13:18:22Z",
+      "updatedAt": "2026-01-28T17:53:17Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "ISE-Editor-Review",
-      "headRefOid": "73d206d2736f6442532a9b1827feb0cd85e98ca8",
+      "headRefOid": "f523c7d3d7e27e1cba0abb49d02dea02b979fcc2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -13241,12 +13349,12 @@
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/180",
       "state": "OPEN",
       "author": "tzaeschke",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Changes to enable private ISDs.",
+      "body": "Changes to enable [private ISDs](https://github.com/scionproto/scion/issues/4827#issuecomment-3576181453).",
       "createdAt": "2026-01-26T14:52:18Z",
-      "updatedAt": "2026-01-26T14:52:19Z",
+      "updatedAt": "2026-01-27T09:08:32Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
@@ -13265,20 +13373,95 @@
       "id": "PR_kwDOJx2-rs6_Yt_i",
       "title": "Typos",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/181",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- Changed \"revert\" to \"reverse\" because we are reversing (not reverting) the sequence of hops\r\n- Removed empty lines from SCMP code tables. My personal opinion: They suggest that there is something between these numbers, but there isn't.",
       "createdAt": "2026-01-26T15:08:04Z",
-      "updatedAt": "2026-01-26T15:11:53Z",
+      "updatedAt": "2026-01-28T08:15:20Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
       "headRepository": "tzaeschke/scion-cp_I-D",
       "headRefName": "tz-typos",
       "headRefOid": "6d25afdcc35a4b4ad85637fef63801ba7b4806ff",
+      "closedAt": "2026-01-28T08:15:20Z",
+      "mergedAt": "2026-01-28T08:15:20Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "38b3b76f4bc54d38767057740d6521c9eace3769"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7dcTVA",
+          "commit": {
+            "abbreviatedOid": "6d25afd"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-28T08:14:57Z",
+          "updatedAt": "2026-01-28T08:15:06Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "YOu are right, in DP we use \"Path Reversal\"\r\nhttps://www.ietf.org/archive/id/draft-dekater-scion-dataplane-10.html#name-path-reversal",
+              "createdAt": "2026-01-28T08:14:57Z",
+              "updatedAt": "2026-01-28T08:15:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 184,
+      "id": "PR_kwDOJx2-rs6_pRFy",
+      "title": "SCMP specification",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/184",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR removes unnecessary entries from the SCMP specification section. See also #182",
+      "createdAt": "2026-01-27T16:22:11Z",
+      "updatedAt": "2026-01-27T16:22:12Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
+      "headRepository": "tzaeschke/scion-cp_I-D",
+      "headRefName": "scmp-spec",
+      "headRefOid": "cb906ed89938056210296b86c70d676170b17f06",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 185,
+      "id": "PR_kwDOJx2-rs6_xl65",
+      "title": "Simplified figures",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/185",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I've reduced PCBs to one single box each, to avoid problems with confusing arrows.",
+      "createdAt": "2026-01-28T06:57:27Z",
+      "updatedAt": "2026-01-28T06:57:28Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Redrawn-Figures-2-4",
+      "headRefOid": "d3d6a4b91c887c76b5ba4471c2cb1a5a8cbfdf67",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
