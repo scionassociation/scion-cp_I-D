@@ -2014,7 +2014,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
           <h4 id="name-pcb-propagation-illustrated">
 <a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-pcb-propagation-illustrated" class="section-name selfRef">PCB Propagation - Illustrated Examples</a>
           </h4>
-<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration. Arrows represent the PCB propagation direction.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.1.3-2">In <a href="#_figure-3a" class="auto internal xref">Figure 2</a> below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "<em>Core - Out:2</em>" and "<em>Core - Out:1</em>", respectively).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-f"></span><div id="_figure-3a">
 <figure id="figure-2">
@@ -6598,13 +6598,16 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-D.1-1.1.1">Wording polish following ISE Editor's feedback<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.2">
-            <p id="appendix-D.1-1.2.1">Remove redundant section 1.7. Resistance to partitioning<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.2.1">Figures 2, 3, 4: improve arrows in SVG version<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.3">
-            <p id="appendix-D.1-1.3.1">Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.3.1">Remove redundant section 1.7. Resistance to partitioning<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.4">
-            <p id="appendix-D.1-1.4.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.4.1">Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.5">
+            <p id="appendix-D.1-1.5.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

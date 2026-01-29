@@ -802,7 +802,8 @@ Table of Contents
    The following three figures show how intra-ISD PCB propagation works,
    from the ISD's core AS down to child ASes.  Interface identifiers of
    each AS are numbered with integer values while ASes are described
-   with an upper case letter for the sake of illustration.
+   with an upper case letter for the sake of illustration.  Arrows
+   represent the PCB propagation direction.
 
    In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
    via two different links to child AS Y: PCB "a" leaves core AS X via
@@ -3937,6 +3938,8 @@ Change Log
 draft-dekater-scion-controlplane-15
 
    *  Wording polish following ISE Editor's feedback
+
+   *  Figures 2, 3, 4: improve arrows in SVG version
 
    *  Remove redundant section 1.7.  Resistance to partitioning
 
