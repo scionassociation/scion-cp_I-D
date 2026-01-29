@@ -57,11 +57,6 @@ normative:
     title: "Standard for Information Technology--Portable Operating System Interface (POSIX™) Base Specifications, Issue 8"
     date: 2024
     target: https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html
-
-informative:
-  ISD-AS-assignments:
-    title: "SCION Registry"
-    date: 2026
     target: http://scion.org/registry/
   CHUAT22:
     title: "The Complete Guide to SCION"
@@ -442,9 +437,6 @@ In case of failure, RPC calls return an error as specified by the RPC framework.
 SCION does not require any domain name resolution for communication.
 
 
-# Path Exploration or Beaconing {#beaconing}
-
-
 ## Introduction and Overview
 
 **Path Exploration** is the process where a SCION AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing* and this section provides a detailed explanation of this.
@@ -488,13 +480,13 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                            |    2   1    |
                            +----+---+----+
                                 |   |
-                   +--------+   |   |   +--------+
-                   | PCB a  |   |   |   | PCB b  |
-                   +========+   |   |   +========+
-                   | Core   |   |   |   |Core    |
-                   |- Out:2 |   |   |   |- Out:1 |
-                   +------+-+   |   |   +-+------+
-                          v     o   o     v
+                    +--------+  |   |  +--------+
+                    | PCB a  |  |   |  | PCB b  |
+                    +========+  |   |  +========+
+                    | Core   |  |   |  |Core    |
+                    |- Out:2 |  |   |  |- Out:1 |
+                    +----+---+  |   |  +---+----+
+                         v      o   o      v
                            +----+---+----+
                            |    AS Y     |
 ~~~
@@ -507,8 +499,8 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
 ~~~aasvg
                     +--------+  |   |  +--------+
                     | PCB a  |  |   |  | PCB b  |
-                    +------+-+  |   |  +-+------+
-                           v    |   |    v
+                    +----+---+  |   |  +---+----+
+                         v      |   |      v
                                 o   o
        +-------------+     +----+---+----+     +-------------+
        |             |     |    2   3    |     |             |
@@ -518,33 +510,33 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
        |             |     |    6   5    |     |             |
        +-------------+     +----+---+----+     +-------------+
                                 |   |
-         +--------+ +--------+  |   |  +--------+ +--------+
-         | PCB e  | | PCB c  |  |   |  | PCB d  | | PCB f  |
-         +========+ +========+  |   |  +========+ +========+
-         |Core X  | |Core X  |  |   |  |Core X  | |Core X  |
-         |- Out:1 | |- Out:2 |  |   |  |- Out:2 | |- Out:1 |
-         +--------+ +--------+  |   |  +--------+ +--------+
-         |AS Y    | |AS Y    |  |   |  |AS Y    | |AS Y    |
-         |-In:3   | |-In:2   |  |   |  |-In:2   | |-In:3   |
-         |-Out:6  | |-Out:6  |  |   |  |-Out:5  | |-Out:5  |
-         |-PeerV:1| |-PeerV:1|  |   |  |-PeerV:1| |-PeerV:1|
-         |-PeerW:4| |-PeerW:4|  |   |  |-PeerW:4| |-PeerW:4|
-         +------+-+ +------+-+  |   |  +-+------+ +-+------+
-                v          v    |   |    v          v
+        +--------+  +--------+  |   |  +--------+  +--------+
+        | PCB e  |  | PCB c  |  |   |  | PCB d  |  | PCB f  |
+        +========+  +========+  |   |  +========+  +========+
+        |Core X  |  |Core X  |  |   |  |Core X  |  |Core X  |
+        |- Out:1 |  |- Out:2 |  |   |  |- Out:2 |  |- Out:1 |
+        +--------+  +--------+  |   |  +--------+  +--------+
+        |AS Y    |  |AS Y    |  |   |  |AS Y    |  |AS Y    |
+        |-In:3   |  |-In:2   |  |   |  |-In:2   |  |-In:3   |
+        |-Out:6  |  |-Out:6  |  |   |  |-Out:5  |  |-Out:5  |
+        |-PeerV:1|  |-PeerV:1|  |   |  |-PeerV:1|  |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|  |   |  |-PeerW:4|  |-PeerW:4|
+        +----+---+  +----+---+  |   |  +---+----+  +---+----+
+             v           v      |   |      v           v
                                 o   o
                            +----+---+----+
                            |    AS Z     |
 ~~~
-{: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
+{: #figure-3b titl	e="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
 
 The following figure shows how the four PCBs "c", "d", "e", and "f" coming from AS Y are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further downwards over the same link (egress interface "3"), and extends the PCBs with the relevant information so that each of these includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~aasvg
-         +--------+ +--------+  |   |  +--------+ +--------+
-         | PCB e  | | PCB c  |  |   |  | PCB d  | | PCB f  |
-         +------+-+ +------+-+  |   |  +-+------+ +-+------+
-                v          v    |   |    v          v
+        +--------+  +--------+  |   |  +--------+  +--------+
+        | PCB e  |  | PCB c  |  |   |  | PCB d  |  | PCB f  |
+        +----+---+  +----+---+  |   |  +---+----+  +---+----+
+             v           v      |   |      v           v
                                 o   o
                            +----+---+----+
                            |    5   1    |
@@ -554,23 +546,23 @@ The following figure shows how the four PCBs "c", "d", "e", and "f" coming from 
                            |      3      |
                            +------+------+
                                   |
-         +--------+ +--------+    |    +--------+ +--------+
-         | PCB i  | | PCB g  |    |    | PCB h  | | PCB j  |
-         +========+ +========+    |    +========+ +========+
-         |Core X  | |Core X  |    |    |Core X  | |Core X  |
-         |- Out:1 | |- Out:2 |    |    |- Out:2 | |- Out:1 |
-         +--------+ +--------+    |    +--------+ +--------+
-         |AS Y    | |AS Y    |    |    |AS Y    | |AS Y    |
-         |-In:3   | |-In:2   |    |    |-In:2   | |-In:3   |
-         |-Out:6  | |-Out:6  |    |    |-Out:5  | |Out:5   |
-         |-PeerV:1| |-PeerV:1|    |    |-PeerV:1| |-PeerV:1|
-         |-PeerW:4| |-PeerW:4|    |    |-PeerW:4| |-PeerW:4|
-         +--------+ +--------+    |    +--------+ +--------+
-         |AS Z    | |AS Z    |    |    |AS Z    | |AS Z    |
-         |-In:5   | |-In:5   |    |    |-In:1   | |-In:1   |
-         |-Out:3  | |-Out:3  |    |    |-Out:3  | |-Out:3  |
-         +------+-+ +------+-+    |    +-+------+ +-+------+
-                v          v      o      v          v
+        +--------+  +--------+    |    +--------+  +--------+
+        | PCB i  |  | PCB g  |    |    | PCB h  |  | PCB j  |
+        +========+  +========+    |    +========+  +========+
+        |Core X  |  |Core X  |    |    |Core X  |  |Core X  |
+        |- Out:1 |  |- Out:2 |    |    |- Out:2 |  |- Out:1 |
+        +--------+  +--------+    |    +--------+  +--------+
+        |AS Y    |  |AS Y    |    |    |AS Y    |  |AS Y    |
+        |-In:3   |  |-In:2   |    |    |-In:2   |  |-In:3   |
+        |-Out:6  |  |-Out:6  |    |    |-Out:5  |  |Out:5   |
+        |-PeerV:1|  |-PeerV:1|    |    |-PeerV:1|  |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|    |    |-PeerW:4|  |-PeerW:4|
+        +--------+  +--------+    |    +--------+  +--------+
+        |AS Z    |  |AS Z    |    |    |AS Z    |  |AS Z    |
+        |-In:5   |  |-In:5   |    |    |-In:1   |  |-In:1   |
+        |-Out:3  |  |-Out:3  |    |    |-Out:3  |  |-Out:3  |
+        +----+---+  +----+---+    |    +---+----+  +---+----+
+             v           v        o        v           v
                                   |
 ~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
@@ -793,6 +785,10 @@ The Signed Header, Signed Body, and Signature Fields are detailed below.
 The header part carries information that is relevant to the computation and verification of the signature. It contains the following fields:
 
 - `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
+<<<<<<< Old File
+- `signature_algorithm`: Specifies the algorithm to compute the signature. Possible types are defined by the `SignatureAlgorithm` definition and are further discussed in {{I-D.dekater-scion-pki}}, but an unspecified signature algorithm is never valid. Other signature algorithms or curves MAY be used in the future. This field is REQUIRED.
+=======
+>>>>>>> External Changes
 - `verification_key_id`: Contains a `VerificationKeyID` message, carrying information relevant to signing and verifying PCBs and other control-plane messages. This field is REQUIRED.
 - `timestamp`: Defines the signature creation timestamp. This field is OPTIONAL.
 - `metadata`: May include metadata. While it is part of the generic `Header` message format, it MUST be empty in an AS entry signed header. This field is OPTIONAL.
@@ -1306,8 +1302,220 @@ A `ChainRenewalResponse` message includes the following fields:
 
 - Field number 1 is legacy and it is not in use.
 - `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
+<<<<<<< Local Changes
 
+# Deployment Considerations
+||||||| Old File
 
+# Deployment Considerations
+=======
+>>>>>>> External Changes
+
+<<<<<<< Local Changes
+## Destination Mapping
+||||||| Old File
+## Destination Mapping
+=======
+>>>>>>> External Changes
+
+<<<<<<< Local Changes
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document. One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
+
+## Monitoring Considerations
+
+In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
+
+- For routers (to enable correlation with link states): state of configured links (core, child, parent).
+
+- For any control service:
+  - Fraction of path lookups served successfully (see [](#lookup)).
+  - Time synchronization offset with other ASes (see [](#clock-inaccuracy)).
+  - Fraction of ASes found in non-expired segments for which a non-expired certificate exists.
+
+- For a core AS:
+  - Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments.
+  - Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was initiated during the last propagation interval.
+  - Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see [](#path-segment-reg)).
+
+- For a non-core AS:
+  - Number of up segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
+  - Fraction of up segments that were successfully registered as down segments (see [](#path-segment-reg)).
+  - Fraction of children ASes (preferably only those to which the link is up) to where a beacon was propagated during the last propagation interval.
+
+## Effects of Clock Inaccuracy {#clock-inaccuracy}
+
+A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
+
+* A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
+
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e. they SHOULD be around 6 hours.
+
+The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
+
+The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
+
+## Path Discovery Time and Scalability {#scalability}
+
+The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
+
+The resource costs for path discovery are as follows:
+
+- Communication overhead is transmitting the PCBs and occasionally obtaining the required PKI material.
+- Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the beaconing policies.
+- Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
+
+All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These in turn depend on the configured best PCBs set size ([](#propagation-interval-size)).
+
+Relevant metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery" (see [](#propagation-interval-size)).
+
+At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
+
+Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see {{I-D.dekater-scion-dataplane}} section "Handling Link Failures").
+
+To achieve scalability, SCION ASes are partitioned into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. More specific observations require a distinction between intra-ISD and core beaconing.
+
+### Intra-ISD Beaconing {#intra-isd-beaconing}
+
+In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
+
+This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
+
+Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
+
+Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily manageable even for highly connected ASes.
+
+To illustrate this, an AS with a rather large number of 100 parent links receives at most 5,000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50,000 AS entries.
+
+Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10,000 signature verifications per second.
+
+If the same AS has 1,000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link) - i.e. at most 50,000 signatures per propagation event. The total bandwidth for the propagation of the PCBs for all 1,000 child links would be roughly around 25 MB/s which is manageable with even modest consumer hardware.
+
+On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation interval and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see "fast recovery" in [](#propagation-interval-size)), the construction of a first path to connect each AS to the ISD core is accelerated.
+
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
+
+### Core Beaconing {#core-beaconing}
+
+In core beaconing (typically inter-ISD), PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
+
+The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
+
+Without making strong assumptions on the topology of the core network, it can be assumed that shortest paths through real world networks are relatively short - e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst it cannot be assumed that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
+
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
+
+On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
+On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
+
+||||||| Old File
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document. One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+
+SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
+
+## Monitoring Considerations
+
+In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
+
+- For routers (to enable correlation with link states): state of configured links (core, child, parent).
+
+- For any control service:
+  - Fraction of path lookups served successfully (see [](#lookup)).
+  - Time synchronization offset with other ASes (see [](#clock-inaccuracy)).
+  - Fraction of ASes found in non-expired segments for which a non-expired certificate exists.
+
+- For a core AS:
+  - Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments.
+  - Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was initiated during the last propagation interval.
+  - Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see [](#path-segment-reg)).
+
+- For a non-core AS:
+  - Number of up segments available (may be just 0/non-0) younger than the propagation interval (or some multiple thereof).
+  - Fraction of up segments that were successfully registered as down segments (see [](#path-segment-reg)).
+  - Fraction of children ASes (preferably only those to which the link is up) to where a beacon was propagated during the last propagation interval.
+
+## Effects of Clock Inaccuracy {#clock-inaccuracy}
+
+A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
+
+* A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
+
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e. they SHOULD be around 6 hours.
+
+The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
+
+The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
+
+## Path Discovery Time and Scalability {#scalability}
+
+The path discovery mechanism balances the number of discovered paths and the time it takes to discover them versus resource overhead of the discovery.
+
+The resource costs for path discovery are as follows:
+
+- Communication overhead is transmitting the PCBs and occasionally obtaining the required PKI material.
+- Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the beaconing policies.
+- Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
+
+All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These in turn depend on the configured best PCBs set size ([](#propagation-interval-size)).
+
+Relevant metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery" (see [](#propagation-interval-size)).
+
+At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
+
+Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see {{I-D.dekater-scion-dataplane}} section "Handling Link Failures").
+
+To achieve scalability, SCION ASes are partitioned into ISDs and in an ideal topology the inter-ISD core network should be kept to a moderate size. More specific observations require a distinction between intra-ISD and core beaconing.
+
+### Intra-ISD Beaconing {#intra-isd-beaconing}
+
+In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
+
+This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
+
+Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
+
+Ultimately, the number of PCBs received by an AS per propagation interval remains bounded by 50 for each parent link of an AS, and at most 50 PCBs per child link are propagated. The length of these PCBs and thus the number of AS entries to be processed and stored, is expected to be moderate and not grow considerably with network size. The total resource overhead for beacon propagation is easily manageable even for highly connected ASes.
+
+To illustrate this, an AS with a rather large number of 100 parent links receives at most 5,000 PCBs during a propagation interval. Assuming a generous average length of 10 AS entries for these PCBs, this corresponds to 50,000 AS entries.
+
+Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10,000 signature verifications per second.
+
+If the same AS has 1,000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link) - i.e. at most 50,000 signatures per propagation event. The total bandwidth for the propagation of the PCBs for all 1,000 child links would be roughly around 25 MB/s which is manageable with even modest consumer hardware.
+
+On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation interval and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see "fast recovery" in [](#propagation-interval-size)), the construction of a first path to connect each AS to the ISD core is accelerated.
+
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
+
+### Core Beaconing {#core-beaconing}
+
+In core beaconing (typically inter-ISD), PCBs are propagated omnidirectionally along core links. Each AS discovers path segments from itself to any other core AS.
+
+The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
+
+Without making strong assumptions on the topology of the core network, it can be assumed that shortest paths through real world networks are relatively short - e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst it cannot be assumed that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
+
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
+
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
+Assuming an average PCB length of 6 and the shortest propagation interval of 60 seconds, this corresponds to roughly 150,000 signature validations per second or roughly 38 MB/s. For much larger, more highly connected ASes, the path discovery tasks of the Control Service can be distributed over many instances in order to increase the PCB throughput.
+
+On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
+On a network bootstrap, full connectivity is obtained after a number of propagation steps corresponding to the diameter of the network. Assuming a network diameter of 6, this corresponds to roughly 3 minutes on average. When a new link is added to the network, it will be available to connect two ASes at distances D1 and D2 from the link respectively, at worst after a mean time (D1+D2)*T/2.
+
+=======
+>>>>>>> External Changes
 # Registration of Path Segments {#path-segment-reg}
 
 **Path registration** is the process where a SCION AS transforms selected PCBs into path segments, and adding these segments to the relevant path databases thereby making them available to other ASes.
@@ -2373,6 +2581,14 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Move "Deployment Considerations" from section 3 to 7
+~~~
+{: #figure-43 title="Sequence diagram illustrating a path lookup for a destination G in a remote ISD. The request (core, 0, (2, 0)) is for all path segments between a core AS in the source ISD and a core AS in ISD 2. Similarly, (down, (2, 0), G) is for down segments between any core AS in ISD 2 and destination G."}
+
+
+# Change Log
+{:numbered="false"}
+
+Changes made to drafts since ISE submission. This section is to be removed before publication.
 
 ## draft-dekater-scion-controlplane-14
 {:numbered="false"}
