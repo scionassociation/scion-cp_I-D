@@ -2014,74 +2014,58 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
           <h4 id="name-pcb-propagation-illustrated">
 <a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-pcb-propagation-illustrated" class="section-name selfRef">PCB Propagation - Illustrated Examples</a>
           </h4>
-<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-1">The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration. Arrows represent the PCB propagation direction.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.1.3-2">In <a href="#_figure-3a" class="auto internal xref">Figure 2</a> below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "<em>Core - Out:2</em>" and "<em>Core - Out:1</em>", respectively).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-intra-isd-pcb-propagation-f"></span><div id="_figure-3a">
 <figure id="figure-2">
             <div id="section-2.1.3-3.1">
               <div class="alignLeft art-svg artwork" id="section-2.1.3-3.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="272" width="424" viewBox="0 0 424 272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 8,112 L 8,192" fill="none" stroke="black"></path>
-                  <path d="M 80,112 L 80,192" fill="none" stroke="black"></path>
-                  <path d="M 128,128 L 128,160" fill="none" stroke="black"></path>
-                  <path d="M 152,32 L 152,96" fill="none" stroke="black"></path>
-                  <path d="M 152,160 L 152,192" fill="none" stroke="black"></path>
-                  <path d="M 152,224 L 152,240" fill="none" stroke="black"></path>
-                  <path d="M 176,128 L 176,160" fill="none" stroke="black"></path>
-                  <path d="M 192,96 L 192,224" fill="none" stroke="black"></path>
-                  <path d="M 224,96 L 224,224" fill="none" stroke="black"></path>
-                  <path d="M 240,128 L 240,160" fill="none" stroke="black"></path>
-                  <path d="M 264,32 L 264,96" fill="none" stroke="black"></path>
-                  <path d="M 264,160 L 264,192" fill="none" stroke="black"></path>
-                  <path d="M 264,224 L 264,240" fill="none" stroke="black"></path>
-                  <path d="M 288,128 L 288,160" fill="none" stroke="black"></path>
-                  <path d="M 344,112 L 344,192" fill="none" stroke="black"></path>
-                  <path d="M 416,112 L 416,192" fill="none" stroke="black"></path>
-                  <path d="M 152,32 L 264,32" fill="none" stroke="black"></path>
-                  <path d="M 152,96 L 264,96" fill="none" stroke="black"></path>
-                  <path d="M 8,112 L 80,112" fill="none" stroke="black"></path>
-                  <path d="M 344,112 L 416,112" fill="none" stroke="black"></path>
-                  <path d="M 128,128 L 176,128" fill="none" stroke="black"></path>
-                  <path d="M 240,128 L 288,128" fill="none" stroke="black"></path>
-                  <path d="M 8,142 L 80,142" fill="none" stroke="black"></path>
-                  <path d="M 8,146 L 80,146" fill="none" stroke="black"></path>
-                  <path d="M 96,144 L 120,144" fill="none" stroke="black"></path>
-                  <path d="M 296,144 L 328,144" fill="none" stroke="black"></path>
-                  <path d="M 344,142 L 416,142" fill="none" stroke="black"></path>
-                  <path d="M 344,146 L 416,146" fill="none" stroke="black"></path>
-                  <path d="M 128,160 L 176,160" fill="none" stroke="black"></path>
-                  <path d="M 240,160 L 288,160" fill="none" stroke="black"></path>
-                  <path d="M 8,192 L 80,192" fill="none" stroke="black"></path>
-                  <path d="M 344,192 L 416,192" fill="none" stroke="black"></path>
-                  <path d="M 152,224 L 264,224" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="336,144 324,138.4 324,149.6" fill="black" transform="rotate(0,328,144)"></polygon>
-                  <polygon class="arrowhead" points="272,192 260,186.4 260,197.6" fill="black" transform="rotate(90,264,192)"></polygon>
-                  <polygon class="arrowhead" points="160,192 148,186.4 148,197.6" fill="black" transform="rotate(90,152,192)"></polygon>
-                  <polygon class="arrowhead" points="104,144 92,138.4 92,149.6" fill="black" transform="rotate(180,96,144)"></polygon>
-                  <circle cx="192" cy="208" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="224" cy="208" r="6" class="opendot" fill="white" stroke="black"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="240" viewBox="0 0 240 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,160 L 8,240" fill="none" stroke="black"></path>
+                  <path d="M 48,240 L 48,256" fill="none" stroke="black"></path>
+                  <path d="M 64,32 L 64,128" fill="none" stroke="black"></path>
+                  <path d="M 64,272 L 64,288" fill="none" stroke="black"></path>
+                  <path d="M 80,160 L 80,240" fill="none" stroke="black"></path>
+                  <path d="M 104,128 L 104,272" fill="none" stroke="black"></path>
+                  <path d="M 136,128 L 136,272" fill="none" stroke="black"></path>
+                  <path d="M 160,160 L 160,240" fill="none" stroke="black"></path>
+                  <path d="M 176,32 L 176,128" fill="none" stroke="black"></path>
+                  <path d="M 176,272 L 176,288" fill="none" stroke="black"></path>
+                  <path d="M 192,240 L 192,256" fill="none" stroke="black"></path>
+                  <path d="M 232,160 L 232,240" fill="none" stroke="black"></path>
+                  <path d="M 64,32 L 176,32" fill="none" stroke="black"></path>
+                  <path d="M 64,128 L 176,128" fill="none" stroke="black"></path>
+                  <path d="M 8,160 L 80,160" fill="none" stroke="black"></path>
+                  <path d="M 160,160 L 232,160" fill="none" stroke="black"></path>
+                  <path d="M 8,190 L 80,190" fill="none" stroke="black"></path>
+                  <path d="M 8,194 L 80,194" fill="none" stroke="black"></path>
+                  <path d="M 160,190 L 232,190" fill="none" stroke="black"></path>
+                  <path d="M 160,194 L 232,194" fill="none" stroke="black"></path>
+                  <path d="M 8,240 L 80,240" fill="none" stroke="black"></path>
+                  <path d="M 160,240 L 232,240" fill="none" stroke="black"></path>
+                  <path d="M 64,272 L 176,272" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="200,256 188,250.4 188,261.6" fill="black" transform="rotate(90,192,256)"></polygon>
+                  <polygon class="arrowhead" points="56,256 44,250.4 44,261.6" fill="black" transform="rotate(90,48,256)"></polygon>
+                  <circle cx="104" cy="256" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="136" cy="256" r="6" class="opendot" fill="white" stroke="black"></circle>
                   <g class="text">
-                    <text x="188" y="52">Core</text>
-                    <text x="220" y="52">AS</text>
-                    <text x="240" y="52">X</text>
-                    <text x="192" y="84">2</text>
-                    <text x="224" y="84">1</text>
-                    <text x="32" y="132">PCB</text>
-                    <text x="56" y="132">a</text>
-                    <text x="368" y="132">PCB</text>
-                    <text x="392" y="132">b</text>
-                    <text x="144" y="148">PCB</text>
-                    <text x="168" y="148">a</text>
-                    <text x="256" y="148">PCB</text>
-                    <text x="280" y="148">b</text>
-                    <text x="36" y="164">Core</text>
-                    <text x="364" y="164">Core</text>
-                    <text x="16" y="180">-</text>
-                    <text x="48" y="180">Out:2</text>
-                    <text x="352" y="180">-</text>
-                    <text x="384" y="180">Out:1</text>
-                    <text x="196" y="244">AS</text>
-                    <text x="216" y="244">Y</text>
+                    <text x="100" y="84">Core</text>
+                    <text x="132" y="84">AS</text>
+                    <text x="152" y="84">X</text>
+                    <text x="104" y="116">2</text>
+                    <text x="136" y="116">1</text>
+                    <text x="32" y="180">PCB</text>
+                    <text x="56" y="180">a</text>
+                    <text x="184" y="180">PCB</text>
+                    <text x="208" y="180">b</text>
+                    <text x="36" y="212">Core</text>
+                    <text x="180" y="212">Core</text>
+                    <text x="16" y="228">-</text>
+                    <text x="48" y="228">Out:2</text>
+                    <text x="168" y="228">-</text>
+                    <text x="200" y="228">Out:1</text>
+                    <text x="108" y="292">AS</text>
+                    <text x="128" y="292">Y</text>
                   </g>
                 </svg><a href="#section-2.1.3-3.1.1" class="pilcrow">¶</a>
 </div>
@@ -2096,181 +2080,151 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
 <figure id="figure-3">
             <div id="section-2.1.3-6.1">
               <div class="alignLeft art-svg artwork" id="section-2.1.3-6.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="560" width="560" viewBox="0 0 560 560" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 8,320 L 8,496" fill="none" stroke="black"></path>
-                  <path d="M 64,128 L 64,208" fill="none" stroke="black"></path>
-                  <path d="M 80,320 L 80,496" fill="none" stroke="black"></path>
-                  <path d="M 104,240 L 104,416" fill="none" stroke="black"></path>
-                  <path d="M 176,128 L 176,208" fill="none" stroke="black"></path>
-                  <path d="M 176,240 L 176,416" fill="none" stroke="black"></path>
-                  <path d="M 200,32 L 200,64" fill="none" stroke="black"></path>
-                  <path d="M 200,320 L 200,352" fill="none" stroke="black"></path>
-                  <path d="M 200,432 L 200,464" fill="none" stroke="black"></path>
-                  <path d="M 224,64 L 224,96" fill="none" stroke="black"></path>
-                  <path d="M 224,128 L 224,224" fill="none" stroke="black"></path>
-                  <path d="M 224,352 L 224,384" fill="none" stroke="black"></path>
-                  <path d="M 224,464 L 224,496" fill="none" stroke="black"></path>
-                  <path d="M 224,528 L 224,544" fill="none" stroke="black"></path>
-                  <path d="M 248,32 L 248,64" fill="none" stroke="black"></path>
-                  <path d="M 248,320 L 248,352" fill="none" stroke="black"></path>
-                  <path d="M 248,432 L 248,464" fill="none" stroke="black"></path>
-                  <path d="M 264,32 L 264,128" fill="none" stroke="black"></path>
-                  <path d="M 264,224 L 264,528" fill="none" stroke="black"></path>
-                  <path d="M 296,32 L 296,128" fill="none" stroke="black"></path>
-                  <path d="M 296,224 L 296,528" fill="none" stroke="black"></path>
-                  <path d="M 312,32 L 312,64" fill="none" stroke="black"></path>
-                  <path d="M 312,320 L 312,352" fill="none" stroke="black"></path>
-                  <path d="M 312,432 L 312,464" fill="none" stroke="black"></path>
-                  <path d="M 336,64 L 336,96" fill="none" stroke="black"></path>
-                  <path d="M 336,128 L 336,224" fill="none" stroke="black"></path>
-                  <path d="M 336,352 L 336,384" fill="none" stroke="black"></path>
-                  <path d="M 336,464 L 336,496" fill="none" stroke="black"></path>
-                  <path d="M 336,528 L 336,544" fill="none" stroke="black"></path>
-                  <path d="M 360,32 L 360,64" fill="none" stroke="black"></path>
-                  <path d="M 360,320 L 360,352" fill="none" stroke="black"></path>
-                  <path d="M 360,432 L 360,464" fill="none" stroke="black"></path>
-                  <path d="M 384,128 L 384,208" fill="none" stroke="black"></path>
-                  <path d="M 384,240 L 384,416" fill="none" stroke="black"></path>
-                  <path d="M 456,240 L 456,416" fill="none" stroke="black"></path>
-                  <path d="M 480,320 L 480,496" fill="none" stroke="black"></path>
-                  <path d="M 496,128 L 496,208" fill="none" stroke="black"></path>
-                  <path d="M 552,320 L 552,496" fill="none" stroke="black"></path>
-                  <path d="M 200,32 L 248,32" fill="none" stroke="black"></path>
-                  <path d="M 312,32 L 360,32" fill="none" stroke="black"></path>
-                  <path d="M 200,64 L 248,64" fill="none" stroke="black"></path>
-                  <path d="M 312,64 L 360,64" fill="none" stroke="black"></path>
-                  <path d="M 64,128 L 176,128" fill="none" stroke="black"></path>
-                  <path d="M 224,128 L 336,128" fill="none" stroke="black"></path>
-                  <path d="M 384,128 L 496,128" fill="none" stroke="black"></path>
-                  <path d="M 192,160 L 208,160" fill="none" stroke="black"></path>
-                  <path d="M 352,192 L 368,192" fill="none" stroke="black"></path>
-                  <path d="M 64,208 L 176,208" fill="none" stroke="black"></path>
-                  <path d="M 384,208 L 496,208" fill="none" stroke="black"></path>
-                  <path d="M 224,224 L 336,224" fill="none" stroke="black"></path>
-                  <path d="M 104,240 L 176,240" fill="none" stroke="black"></path>
-                  <path d="M 384,240 L 456,240" fill="none" stroke="black"></path>
-                  <path d="M 104,270 L 176,270" fill="none" stroke="black"></path>
-                  <path d="M 104,274 L 176,274" fill="none" stroke="black"></path>
-                  <path d="M 384,270 L 456,270" fill="none" stroke="black"></path>
-                  <path d="M 384,274 L 456,274" fill="none" stroke="black"></path>
-                  <path d="M 8,320 L 80,320" fill="none" stroke="black"></path>
-                  <path d="M 104,320 L 176,320" fill="none" stroke="black"></path>
-                  <path d="M 200,320 L 248,320" fill="none" stroke="black"></path>
-                  <path d="M 312,320 L 360,320" fill="none" stroke="black"></path>
-                  <path d="M 384,320 L 456,320" fill="none" stroke="black"></path>
-                  <path d="M 480,320 L 552,320" fill="none" stroke="black"></path>
-                  <path d="M 8,350 L 80,350" fill="none" stroke="black"></path>
-                  <path d="M 8,354 L 80,354" fill="none" stroke="black"></path>
-                  <path d="M 200,352 L 248,352" fill="none" stroke="black"></path>
-                  <path d="M 312,352 L 360,352" fill="none" stroke="black"></path>
-                  <path d="M 480,350 L 552,350" fill="none" stroke="black"></path>
-                  <path d="M 480,354 L 552,354" fill="none" stroke="black"></path>
-                  <path d="M 8,400 L 80,400" fill="none" stroke="black"></path>
-                  <path d="M 480,400 L 552,400" fill="none" stroke="black"></path>
-                  <path d="M 104,416 L 176,416" fill="none" stroke="black"></path>
-                  <path d="M 384,416 L 456,416" fill="none" stroke="black"></path>
-                  <path d="M 200,432 L 248,432" fill="none" stroke="black"></path>
-                  <path d="M 312,432 L 360,432" fill="none" stroke="black"></path>
-                  <path d="M 96,448 L 192,448" fill="none" stroke="black"></path>
-                  <path d="M 368,448 L 464,448" fill="none" stroke="black"></path>
-                  <path d="M 200,464 L 248,464" fill="none" stroke="black"></path>
-                  <path d="M 312,464 L 360,464" fill="none" stroke="black"></path>
-                  <path d="M 8,496 L 80,496" fill="none" stroke="black"></path>
-                  <path d="M 480,496 L 552,496" fill="none" stroke="black"></path>
-                  <path d="M 224,528 L 336,528" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="472,448 460,442.4 460,453.6" fill="black" transform="rotate(0,464,448)"></polygon>
-                  <polygon class="arrowhead" points="344,496 332,490.4 332,501.6" fill="black" transform="rotate(90,336,496)"></polygon>
-                  <polygon class="arrowhead" points="344,384 332,378.4 332,389.6" fill="black" transform="rotate(90,336,384)"></polygon>
-                  <polygon class="arrowhead" points="344,96 332,90.4 332,101.6" fill="black" transform="rotate(90,336,96)"></polygon>
-                  <polygon class="arrowhead" points="232,496 220,490.4 220,501.6" fill="black" transform="rotate(90,224,496)"></polygon>
-                  <polygon class="arrowhead" points="232,384 220,378.4 220,389.6" fill="black" transform="rotate(90,224,384)"></polygon>
-                  <polygon class="arrowhead" points="232,96 220,90.4 220,101.6" fill="black" transform="rotate(90,224,96)"></polygon>
-                  <polygon class="arrowhead" points="104,448 92,442.4 92,453.6" fill="black" transform="rotate(180,96,448)"></polygon>
-                  <circle cx="264" cy="112" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="264" cy="512" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="296" cy="112" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="296" cy="512" r="6" class="opendot" fill="white" stroke="black"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="512" width="448" viewBox="0 0 448 512" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,112 L 8,208" fill="none" stroke="black"></path>
+                  <path d="M 16,240 L 16,416" fill="none" stroke="black"></path>
+                  <path d="M 56,416 L 56,432" fill="none" stroke="black"></path>
+                  <path d="M 88,240 L 88,416" fill="none" stroke="black"></path>
+                  <path d="M 112,32 L 112,64" fill="none" stroke="black"></path>
+                  <path d="M 112,240 L 112,416" fill="none" stroke="black"></path>
+                  <path d="M 120,112 L 120,208" fill="none" stroke="black"></path>
+                  <path d="M 152,64 L 152,80" fill="none" stroke="black"></path>
+                  <path d="M 152,416 L 152,432" fill="none" stroke="black"></path>
+                  <path d="M 168,112 L 168,208" fill="none" stroke="black"></path>
+                  <path d="M 168,464 L 168,480" fill="none" stroke="black"></path>
+                  <path d="M 184,32 L 184,64" fill="none" stroke="black"></path>
+                  <path d="M 184,240 L 184,416" fill="none" stroke="black"></path>
+                  <path d="M 208,32 L 208,112" fill="none" stroke="black"></path>
+                  <path d="M 208,208 L 208,464" fill="none" stroke="black"></path>
+                  <path d="M 240,32 L 240,112" fill="none" stroke="black"></path>
+                  <path d="M 240,208 L 240,464" fill="none" stroke="black"></path>
+                  <path d="M 264,32 L 264,64" fill="none" stroke="black"></path>
+                  <path d="M 264,240 L 264,416" fill="none" stroke="black"></path>
+                  <path d="M 280,112 L 280,208" fill="none" stroke="black"></path>
+                  <path d="M 280,464 L 280,480" fill="none" stroke="black"></path>
+                  <path d="M 296,64 L 296,80" fill="none" stroke="black"></path>
+                  <path d="M 296,416 L 296,432" fill="none" stroke="black"></path>
+                  <path d="M 328,112 L 328,208" fill="none" stroke="black"></path>
+                  <path d="M 336,32 L 336,64" fill="none" stroke="black"></path>
+                  <path d="M 336,240 L 336,416" fill="none" stroke="black"></path>
+                  <path d="M 360,240 L 360,416" fill="none" stroke="black"></path>
+                  <path d="M 392,416 L 392,432" fill="none" stroke="black"></path>
+                  <path d="M 432,240 L 432,416" fill="none" stroke="black"></path>
+                  <path d="M 440,112 L 440,208" fill="none" stroke="black"></path>
+                  <path d="M 112,32 L 184,32" fill="none" stroke="black"></path>
+                  <path d="M 264,32 L 336,32" fill="none" stroke="black"></path>
+                  <path d="M 112,64 L 184,64" fill="none" stroke="black"></path>
+                  <path d="M 264,64 L 336,64" fill="none" stroke="black"></path>
+                  <path d="M 8,112 L 120,112" fill="none" stroke="black"></path>
+                  <path d="M 168,112 L 280,112" fill="none" stroke="black"></path>
+                  <path d="M 328,112 L 440,112" fill="none" stroke="black"></path>
+                  <path d="M 136,144 L 152,144" fill="none" stroke="black"></path>
+                  <path d="M 296,176 L 312,176" fill="none" stroke="black"></path>
+                  <path d="M 8,208 L 120,208" fill="none" stroke="black"></path>
+                  <path d="M 168,208 L 280,208" fill="none" stroke="black"></path>
+                  <path d="M 328,208 L 440,208" fill="none" stroke="black"></path>
+                  <path d="M 16,240 L 88,240" fill="none" stroke="black"></path>
+                  <path d="M 112,240 L 184,240" fill="none" stroke="black"></path>
+                  <path d="M 264,240 L 336,240" fill="none" stroke="black"></path>
+                  <path d="M 360,240 L 432,240" fill="none" stroke="black"></path>
+                  <path d="M 16,270 L 88,270" fill="none" stroke="black"></path>
+                  <path d="M 16,274 L 88,274" fill="none" stroke="black"></path>
+                  <path d="M 112,270 L 184,270" fill="none" stroke="black"></path>
+                  <path d="M 112,274 L 184,274" fill="none" stroke="black"></path>
+                  <path d="M 264,270 L 336,270" fill="none" stroke="black"></path>
+                  <path d="M 264,274 L 336,274" fill="none" stroke="black"></path>
+                  <path d="M 360,270 L 432,270" fill="none" stroke="black"></path>
+                  <path d="M 360,274 L 432,274" fill="none" stroke="black"></path>
+                  <path d="M 16,320 L 88,320" fill="none" stroke="black"></path>
+                  <path d="M 112,320 L 184,320" fill="none" stroke="black"></path>
+                  <path d="M 264,320 L 336,320" fill="none" stroke="black"></path>
+                  <path d="M 360,320 L 432,320" fill="none" stroke="black"></path>
+                  <path d="M 16,416 L 88,416" fill="none" stroke="black"></path>
+                  <path d="M 112,416 L 184,416" fill="none" stroke="black"></path>
+                  <path d="M 264,416 L 336,416" fill="none" stroke="black"></path>
+                  <path d="M 360,416 L 432,416" fill="none" stroke="black"></path>
+                  <path d="M 168,464 L 280,464" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="400,432 388,426.4 388,437.6" fill="black" transform="rotate(90,392,432)"></polygon>
+                  <polygon class="arrowhead" points="304,432 292,426.4 292,437.6" fill="black" transform="rotate(90,296,432)"></polygon>
+                  <polygon class="arrowhead" points="304,80 292,74.4 292,85.6" fill="black" transform="rotate(90,296,80)"></polygon>
+                  <polygon class="arrowhead" points="160,432 148,426.4 148,437.6" fill="black" transform="rotate(90,152,432)"></polygon>
+                  <polygon class="arrowhead" points="160,80 148,74.4 148,85.6" fill="black" transform="rotate(90,152,80)"></polygon>
+                  <polygon class="arrowhead" points="64,432 52,426.4 52,437.6" fill="black" transform="rotate(90,56,432)"></polygon>
+                  <circle cx="208" cy="96" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="208" cy="448" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="240" cy="96" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="240" cy="448" r="6" class="opendot" fill="white" stroke="black"></circle>
                   <g class="text">
-                    <text x="216" y="52">PCB</text>
-                    <text x="240" y="52">a</text>
-                    <text x="328" y="52">PCB</text>
-                    <text x="352" y="52">b</text>
-                    <text x="264" y="148">2</text>
-                    <text x="296" y="148">3</text>
-                    <text x="184" y="164">p</text>
-                    <text x="216" y="164">p</text>
-                    <text x="240" y="164">1</text>
-                    <text x="108" y="180">AS</text>
-                    <text x="128" y="180">V</text>
-                    <text x="268" y="180">AS</text>
-                    <text x="288" y="180">Y</text>
-                    <text x="428" y="180">AS</text>
-                    <text x="448" y="180">W</text>
-                    <text x="320" y="196">4</text>
-                    <text x="344" y="196">p</text>
-                    <text x="376" y="196">p</text>
-                    <text x="264" y="212">6</text>
-                    <text x="296" y="212">5</text>
-                    <text x="128" y="260">PCB</text>
-                    <text x="152" y="260">c</text>
-                    <text x="408" y="260">PCB</text>
-                    <text x="432" y="260">d</text>
-                    <text x="124" y="292">Core</text>
-                    <text x="152" y="292">X</text>
-                    <text x="404" y="292">Core</text>
-                    <text x="432" y="292">X</text>
-                    <text x="112" y="308">-</text>
-                    <text x="144" y="308">Out:2</text>
-                    <text x="392" y="308">-</text>
-                    <text x="424" y="308">Out:2</text>
-                    <text x="32" y="340">PCB</text>
-                    <text x="56" y="340">e</text>
-                    <text x="116" y="340">AS</text>
-                    <text x="136" y="340">Y</text>
-                    <text x="188" y="340">&lt;-</text>
-                    <text x="216" y="340">PCB</text>
-                    <text x="240" y="340">c</text>
-                    <text x="328" y="340">PCB</text>
-                    <text x="352" y="340">d</text>
-                    <text x="372" y="340">-&gt;</text>
-                    <text x="396" y="340">AS</text>
-                    <text x="416" y="340">Y</text>
-                    <text x="504" y="340">PCB</text>
-                    <text x="528" y="340">f</text>
-                    <text x="128" y="356">-In:2</text>
-                    <text x="408" y="356">-In:2</text>
-                    <text x="28" y="372">Core</text>
-                    <text x="56" y="372">X</text>
-                    <text x="132" y="372">-Out:6</text>
-                    <text x="412" y="372">-Out:5</text>
-                    <text x="500" y="372">Core</text>
-                    <text x="528" y="372">X</text>
-                    <text x="16" y="388">-</text>
-                    <text x="48" y="388">Out:1</text>
-                    <text x="140" y="388">-PeerV:1</text>
-                    <text x="420" y="388">-PeerV:1</text>
-                    <text x="488" y="388">-</text>
-                    <text x="520" y="388">Out:1</text>
-                    <text x="140" y="404">-PeerW:4</text>
-                    <text x="420" y="404">-PeerW:4</text>
-                    <text x="20" y="420">AS</text>
-                    <text x="40" y="420">Y</text>
-                    <text x="492" y="420">AS</text>
-                    <text x="512" y="420">Y</text>
-                    <text x="32" y="436">-In:3</text>
-                    <text x="504" y="436">-In:3</text>
-                    <text x="36" y="452">-Out:6</text>
-                    <text x="216" y="452">PCB</text>
-                    <text x="240" y="452">e</text>
-                    <text x="328" y="452">PCB</text>
-                    <text x="352" y="452">f</text>
-                    <text x="508" y="452">-Out:5</text>
-                    <text x="44" y="468">-PeerV:1</text>
-                    <text x="516" y="468">-PeerV:1</text>
-                    <text x="44" y="484">-PeerW:4</text>
-                    <text x="516" y="484">-PeerW:4</text>
-                    <text x="268" y="548">AS</text>
-                    <text x="288" y="548">Z</text>
+                    <text x="136" y="52">PCB</text>
+                    <text x="160" y="52">a</text>
+                    <text x="288" y="52">PCB</text>
+                    <text x="312" y="52">b</text>
+                    <text x="208" y="132">2</text>
+                    <text x="240" y="132">3</text>
+                    <text x="128" y="148">p</text>
+                    <text x="160" y="148">p</text>
+                    <text x="184" y="148">1</text>
+                    <text x="52" y="164">AS</text>
+                    <text x="72" y="164">V</text>
+                    <text x="212" y="164">AS</text>
+                    <text x="232" y="164">Y</text>
+                    <text x="372" y="164">AS</text>
+                    <text x="392" y="164">W</text>
+                    <text x="264" y="180">4</text>
+                    <text x="288" y="180">p</text>
+                    <text x="320" y="180">p</text>
+                    <text x="208" y="196">6</text>
+                    <text x="240" y="196">5</text>
+                    <text x="40" y="260">PCB</text>
+                    <text x="64" y="260">e</text>
+                    <text x="136" y="260">PCB</text>
+                    <text x="160" y="260">c</text>
+                    <text x="288" y="260">PCB</text>
+                    <text x="312" y="260">d</text>
+                    <text x="384" y="260">PCB</text>
+                    <text x="408" y="260">f</text>
+                    <text x="36" y="292">Core</text>
+                    <text x="64" y="292">X</text>
+                    <text x="132" y="292">Core</text>
+                    <text x="160" y="292">X</text>
+                    <text x="284" y="292">Core</text>
+                    <text x="312" y="292">X</text>
+                    <text x="380" y="292">Core</text>
+                    <text x="408" y="292">X</text>
+                    <text x="24" y="308">-</text>
+                    <text x="56" y="308">Out:1</text>
+                    <text x="120" y="308">-</text>
+                    <text x="152" y="308">Out:2</text>
+                    <text x="272" y="308">-</text>
+                    <text x="304" y="308">Out:2</text>
+                    <text x="368" y="308">-</text>
+                    <text x="400" y="308">Out:1</text>
+                    <text x="28" y="340">AS</text>
+                    <text x="48" y="340">Y</text>
+                    <text x="124" y="340">AS</text>
+                    <text x="144" y="340">Y</text>
+                    <text x="276" y="340">AS</text>
+                    <text x="296" y="340">Y</text>
+                    <text x="372" y="340">AS</text>
+                    <text x="392" y="340">Y</text>
+                    <text x="40" y="356">-In:3</text>
+                    <text x="136" y="356">-In:2</text>
+                    <text x="288" y="356">-In:2</text>
+                    <text x="384" y="356">-In:3</text>
+                    <text x="44" y="372">-Out:6</text>
+                    <text x="140" y="372">-Out:6</text>
+                    <text x="292" y="372">-Out:5</text>
+                    <text x="388" y="372">-Out:5</text>
+                    <text x="52" y="388">-PeerV:1</text>
+                    <text x="148" y="388">-PeerV:1</text>
+                    <text x="300" y="388">-PeerV:1</text>
+                    <text x="396" y="388">-PeerV:1</text>
+                    <text x="52" y="404">-PeerW:4</text>
+                    <text x="148" y="404">-PeerW:4</text>
+                    <text x="300" y="404">-PeerW:4</text>
+                    <text x="396" y="404">-PeerW:4</text>
+                    <text x="212" y="484">AS</text>
+                    <text x="232" y="484">Z</text>
                   </g>
                 </svg><a href="#section-2.1.3-6.1.1" class="pilcrow">¶</a>
 </div>
@@ -2284,189 +2238,159 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
 <figure id="figure-4">
             <div id="section-2.1.3-8.1">
               <div class="alignLeft art-svg artwork" id="section-2.1.3-8.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="608" width="560" viewBox="0 0 560 608" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 8,304 L 8,544" fill="none" stroke="black"></path>
-                  <path d="M 80,304 L 80,544" fill="none" stroke="black"></path>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="544" width="432" viewBox="0 0 432 544" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
+                  <path d="M 8,240 L 8,480" fill="none" stroke="black"></path>
+                  <path d="M 48,64 L 48,80" fill="none" stroke="black"></path>
+                  <path d="M 48,480 L 48,496" fill="none" stroke="black"></path>
+                  <path d="M 80,32 L 80,64" fill="none" stroke="black"></path>
+                  <path d="M 80,240 L 80,480" fill="none" stroke="black"></path>
+                  <path d="M 104,32 L 104,64" fill="none" stroke="black"></path>
                   <path d="M 104,240 L 104,480" fill="none" stroke="black"></path>
-                  <path d="M 160,32 L 160,64" fill="none" stroke="black"></path>
-                  <path d="M 176,64 L 176,96" fill="none" stroke="black"></path>
+                  <path d="M 144,64 L 144,80" fill="none" stroke="black"></path>
+                  <path d="M 144,480 L 144,496" fill="none" stroke="black"></path>
+                  <path d="M 160,112 L 160,208" fill="none" stroke="black"></path>
+                  <path d="M 176,32 L 176,64" fill="none" stroke="black"></path>
                   <path d="M 176,240 L 176,480" fill="none" stroke="black"></path>
-                  <path d="M 200,80 L 200,112" fill="none" stroke="black"></path>
-                  <path d="M 208,32 L 208,64" fill="none" stroke="black"></path>
-                  <path d="M 208,368 L 208,400" fill="none" stroke="black"></path>
-                  <path d="M 208,496 L 208,528" fill="none" stroke="black"></path>
-                  <path d="M 224,112 L 224,144" fill="none" stroke="black"></path>
-                  <path d="M 224,176 L 224,272" fill="none" stroke="black"></path>
-                  <path d="M 232,400 L 232,432" fill="none" stroke="black"></path>
-                  <path d="M 232,528 L 232,560" fill="none" stroke="black"></path>
-                  <path d="M 248,80 L 248,112" fill="none" stroke="black"></path>
-                  <path d="M 256,368 L 256,400" fill="none" stroke="black"></path>
-                  <path d="M 256,496 L 256,528" fill="none" stroke="black"></path>
-                  <path d="M 264,32 L 264,176" fill="none" stroke="black"></path>
-                  <path d="M 280,272 L 280,576" fill="none" stroke="black"></path>
-                  <path d="M 296,32 L 296,176" fill="none" stroke="black"></path>
-                  <path d="M 304,368 L 304,400" fill="none" stroke="black"></path>
-                  <path d="M 304,496 L 304,528" fill="none" stroke="black"></path>
-                  <path d="M 312,80 L 312,112" fill="none" stroke="black"></path>
-                  <path d="M 328,400 L 328,432" fill="none" stroke="black"></path>
-                  <path d="M 328,528 L 328,560" fill="none" stroke="black"></path>
-                  <path d="M 336,112 L 336,144" fill="none" stroke="black"></path>
-                  <path d="M 336,176 L 336,272" fill="none" stroke="black"></path>
+                  <path d="M 200,32 L 200,112" fill="none" stroke="black"></path>
+                  <path d="M 216,208 L 216,512" fill="none" stroke="black"></path>
+                  <path d="M 232,32 L 232,112" fill="none" stroke="black"></path>
+                  <path d="M 256,32 L 256,64" fill="none" stroke="black"></path>
+                  <path d="M 256,240 L 256,480" fill="none" stroke="black"></path>
+                  <path d="M 272,112 L 272,208" fill="none" stroke="black"></path>
+                  <path d="M 288,64 L 288,80" fill="none" stroke="black"></path>
+                  <path d="M 288,480 L 288,496" fill="none" stroke="black"></path>
+                  <path d="M 328,32 L 328,64" fill="none" stroke="black"></path>
+                  <path d="M 328,240 L 328,480" fill="none" stroke="black"></path>
                   <path d="M 352,32 L 352,64" fill="none" stroke="black"></path>
-                  <path d="M 352,368 L 352,400" fill="none" stroke="black"></path>
-                  <path d="M 352,496 L 352,528" fill="none" stroke="black"></path>
-                  <path d="M 360,80 L 360,112" fill="none" stroke="black"></path>
-                  <path d="M 384,64 L 384,96" fill="none" stroke="black"></path>
-                  <path d="M 384,240 L 384,480" fill="none" stroke="black"></path>
-                  <path d="M 400,32 L 400,64" fill="none" stroke="black"></path>
-                  <path d="M 456,240 L 456,480" fill="none" stroke="black"></path>
-                  <path d="M 480,304 L 480,544" fill="none" stroke="black"></path>
-                  <path d="M 552,304 L 552,544" fill="none" stroke="black"></path>
-                  <path d="M 160,32 L 208,32" fill="none" stroke="black"></path>
-                  <path d="M 352,32 L 400,32" fill="none" stroke="black"></path>
-                  <path d="M 160,64 L 208,64" fill="none" stroke="black"></path>
-                  <path d="M 352,64 L 400,64" fill="none" stroke="black"></path>
-                  <path d="M 200,80 L 248,80" fill="none" stroke="black"></path>
-                  <path d="M 312,80 L 360,80" fill="none" stroke="black"></path>
-                  <path d="M 200,112 L 248,112" fill="none" stroke="black"></path>
-                  <path d="M 312,112 L 360,112" fill="none" stroke="black"></path>
-                  <path d="M 224,176 L 336,176" fill="none" stroke="black"></path>
+                  <path d="M 352,240 L 352,480" fill="none" stroke="black"></path>
+                  <path d="M 384,64 L 384,80" fill="none" stroke="black"></path>
+                  <path d="M 384,480 L 384,496" fill="none" stroke="black"></path>
+                  <path d="M 424,32 L 424,64" fill="none" stroke="black"></path>
+                  <path d="M 424,240 L 424,480" fill="none" stroke="black"></path>
+                  <path d="M 8,32 L 80,32" fill="none" stroke="black"></path>
+                  <path d="M 104,32 L 176,32" fill="none" stroke="black"></path>
+                  <path d="M 256,32 L 328,32" fill="none" stroke="black"></path>
+                  <path d="M 352,32 L 424,32" fill="none" stroke="black"></path>
+                  <path d="M 8,64 L 80,64" fill="none" stroke="black"></path>
+                  <path d="M 104,64 L 176,64" fill="none" stroke="black"></path>
+                  <path d="M 256,64 L 328,64" fill="none" stroke="black"></path>
+                  <path d="M 352,64 L 424,64" fill="none" stroke="black"></path>
+                  <path d="M 160,112 L 272,112" fill="none" stroke="black"></path>
+                  <path d="M 160,208 L 272,208" fill="none" stroke="black"></path>
+                  <path d="M 8,240 L 80,240" fill="none" stroke="black"></path>
                   <path d="M 104,240 L 176,240" fill="none" stroke="black"></path>
-                  <path d="M 384,240 L 456,240" fill="none" stroke="black"></path>
+                  <path d="M 256,240 L 328,240" fill="none" stroke="black"></path>
+                  <path d="M 352,240 L 424,240" fill="none" stroke="black"></path>
+                  <path d="M 8,270 L 80,270" fill="none" stroke="black"></path>
+                  <path d="M 8,274 L 80,274" fill="none" stroke="black"></path>
                   <path d="M 104,270 L 176,270" fill="none" stroke="black"></path>
                   <path d="M 104,274 L 176,274" fill="none" stroke="black"></path>
-                  <path d="M 224,272 L 336,272" fill="none" stroke="black"></path>
-                  <path d="M 384,270 L 456,270" fill="none" stroke="black"></path>
-                  <path d="M 384,274 L 456,274" fill="none" stroke="black"></path>
-                  <path d="M 8,304 L 80,304" fill="none" stroke="black"></path>
-                  <path d="M 480,304 L 552,304" fill="none" stroke="black"></path>
+                  <path d="M 256,270 L 328,270" fill="none" stroke="black"></path>
+                  <path d="M 256,274 L 328,274" fill="none" stroke="black"></path>
+                  <path d="M 352,270 L 424,270" fill="none" stroke="black"></path>
+                  <path d="M 352,274 L 424,274" fill="none" stroke="black"></path>
+                  <path d="M 8,320 L 80,320" fill="none" stroke="black"></path>
                   <path d="M 104,320 L 176,320" fill="none" stroke="black"></path>
-                  <path d="M 384,320 L 456,320" fill="none" stroke="black"></path>
-                  <path d="M 8,334 L 80,334" fill="none" stroke="black"></path>
-                  <path d="M 8,338 L 80,338" fill="none" stroke="black"></path>
-                  <path d="M 480,334 L 552,334" fill="none" stroke="black"></path>
-                  <path d="M 480,338 L 552,338" fill="none" stroke="black"></path>
-                  <path d="M 208,368 L 256,368" fill="none" stroke="black"></path>
-                  <path d="M 304,368 L 352,368" fill="none" stroke="black"></path>
-                  <path d="M 8,384 L 80,384" fill="none" stroke="black"></path>
-                  <path d="M 480,384 L 552,384" fill="none" stroke="black"></path>
-                  <path d="M 208,400 L 256,400" fill="none" stroke="black"></path>
-                  <path d="M 304,400 L 352,400" fill="none" stroke="black"></path>
+                  <path d="M 256,320 L 328,320" fill="none" stroke="black"></path>
+                  <path d="M 352,320 L 424,320" fill="none" stroke="black"></path>
+                  <path d="M 8,416 L 80,416" fill="none" stroke="black"></path>
                   <path d="M 104,416 L 176,416" fill="none" stroke="black"></path>
-                  <path d="M 384,416 L 456,416" fill="none" stroke="black"></path>
+                  <path d="M 256,416 L 328,416" fill="none" stroke="black"></path>
+                  <path d="M 352,416 L 424,416" fill="none" stroke="black"></path>
                   <path d="M 8,480 L 80,480" fill="none" stroke="black"></path>
                   <path d="M 104,480 L 176,480" fill="none" stroke="black"></path>
-                  <path d="M 384,480 L 456,480" fill="none" stroke="black"></path>
-                  <path d="M 480,480 L 552,480" fill="none" stroke="black"></path>
-                  <path d="M 208,496 L 256,496" fill="none" stroke="black"></path>
-                  <path d="M 304,496 L 352,496" fill="none" stroke="black"></path>
-                  <path d="M 96,512 L 200,512" fill="none" stroke="black"></path>
-                  <path d="M 360,512 L 456,512" fill="none" stroke="black"></path>
-                  <path d="M 208,528 L 256,528" fill="none" stroke="black"></path>
-                  <path d="M 304,528 L 352,528" fill="none" stroke="black"></path>
-                  <path d="M 8,544 L 80,544" fill="none" stroke="black"></path>
-                  <path d="M 480,544 L 552,544" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="464,512 452,506.4 452,517.6" fill="black" transform="rotate(0,456,512)"></polygon>
-                  <polygon class="arrowhead" points="392,96 380,90.4 380,101.6" fill="black" transform="rotate(90,384,96)"></polygon>
-                  <polygon class="arrowhead" points="344,144 332,138.4 332,149.6" fill="black" transform="rotate(90,336,144)"></polygon>
-                  <polygon class="arrowhead" points="336,560 324,554.4 324,565.6" fill="black" transform="rotate(90,328,560)"></polygon>
-                  <polygon class="arrowhead" points="336,432 324,426.4 324,437.6" fill="black" transform="rotate(90,328,432)"></polygon>
-                  <polygon class="arrowhead" points="240,560 228,554.4 228,565.6" fill="black" transform="rotate(90,232,560)"></polygon>
-                  <polygon class="arrowhead" points="240,432 228,426.4 228,437.6" fill="black" transform="rotate(90,232,432)"></polygon>
-                  <polygon class="arrowhead" points="232,144 220,138.4 220,149.6" fill="black" transform="rotate(90,224,144)"></polygon>
-                  <polygon class="arrowhead" points="184,96 172,90.4 172,101.6" fill="black" transform="rotate(90,176,96)"></polygon>
-                  <polygon class="arrowhead" points="104,512 92,506.4 92,517.6" fill="black" transform="rotate(180,96,512)"></polygon>
-                  <circle cx="264" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="280" cy="560" r="6" class="opendot" fill="white" stroke="black"></circle>
-                  <circle cx="296" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <path d="M 256,480 L 328,480" fill="none" stroke="black"></path>
+                  <path d="M 352,480 L 424,480" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="392,496 380,490.4 380,501.6" fill="black" transform="rotate(90,384,496)"></polygon>
+                  <polygon class="arrowhead" points="392,80 380,74.4 380,85.6" fill="black" transform="rotate(90,384,80)"></polygon>
+                  <polygon class="arrowhead" points="296,496 284,490.4 284,501.6" fill="black" transform="rotate(90,288,496)"></polygon>
+                  <polygon class="arrowhead" points="296,80 284,74.4 284,85.6" fill="black" transform="rotate(90,288,80)"></polygon>
+                  <polygon class="arrowhead" points="152,496 140,490.4 140,501.6" fill="black" transform="rotate(90,144,496)"></polygon>
+                  <polygon class="arrowhead" points="152,80 140,74.4 140,85.6" fill="black" transform="rotate(90,144,80)"></polygon>
+                  <polygon class="arrowhead" points="56,496 44,490.4 44,501.6" fill="black" transform="rotate(90,48,496)"></polygon>
+                  <polygon class="arrowhead" points="56,80 44,74.4 44,85.6" fill="black" transform="rotate(90,48,80)"></polygon>
+                  <circle cx="200" cy="96" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="216" cy="496" r="6" class="opendot" fill="white" stroke="black"></circle>
+                  <circle cx="232" cy="96" r="6" class="opendot" fill="white" stroke="black"></circle>
                   <g class="text">
-                    <text x="176" y="52">PCB</text>
-                    <text x="200" y="52">c</text>
-                    <text x="368" y="52">PCB</text>
-                    <text x="392" y="52">d</text>
-                    <text x="216" y="100">PCB</text>
-                    <text x="240" y="100">e</text>
-                    <text x="328" y="100">PCB</text>
-                    <text x="352" y="100">f</text>
-                    <text x="264" y="196">5</text>
-                    <text x="296" y="196">1</text>
-                    <text x="268" y="228">AS</text>
-                    <text x="288" y="228">Z</text>
+                    <text x="32" y="52">PCB</text>
+                    <text x="56" y="52">e</text>
+                    <text x="128" y="52">PCB</text>
+                    <text x="152" y="52">c</text>
+                    <text x="280" y="52">PCB</text>
+                    <text x="304" y="52">d</text>
+                    <text x="376" y="52">PCB</text>
+                    <text x="400" y="52">f</text>
+                    <text x="200" y="132">5</text>
+                    <text x="232" y="132">1</text>
+                    <text x="204" y="164">AS</text>
+                    <text x="224" y="164">Z</text>
+                    <text x="216" y="196">3</text>
+                    <text x="32" y="260">PCB</text>
+                    <text x="56" y="260">i</text>
                     <text x="128" y="260">PCB</text>
                     <text x="152" y="260">g</text>
-                    <text x="280" y="260">3</text>
-                    <text x="408" y="260">PCB</text>
-                    <text x="432" y="260">h</text>
+                    <text x="280" y="260">PCB</text>
+                    <text x="304" y="260">h</text>
+                    <text x="376" y="260">PCB</text>
+                    <text x="400" y="260">j</text>
+                    <text x="28" y="292">Core</text>
+                    <text x="56" y="292">X</text>
                     <text x="124" y="292">Core</text>
                     <text x="152" y="292">X</text>
-                    <text x="404" y="292">Core</text>
-                    <text x="432" y="292">X</text>
+                    <text x="276" y="292">Core</text>
+                    <text x="304" y="292">X</text>
+                    <text x="372" y="292">Core</text>
+                    <text x="400" y="292">X</text>
+                    <text x="16" y="308">-</text>
+                    <text x="48" y="308">Out:1</text>
                     <text x="112" y="308">-</text>
                     <text x="144" y="308">Out:2</text>
-                    <text x="392" y="308">-</text>
-                    <text x="424" y="308">Out:2</text>
-                    <text x="32" y="324">PCB</text>
-                    <text x="56" y="324">i</text>
-                    <text x="504" y="324">PCB</text>
-                    <text x="528" y="324">j</text>
+                    <text x="264" y="308">-</text>
+                    <text x="296" y="308">Out:2</text>
+                    <text x="360" y="308">-</text>
+                    <text x="392" y="308">Out:1</text>
+                    <text x="20" y="340">AS</text>
+                    <text x="40" y="340">Y</text>
                     <text x="116" y="340">AS</text>
                     <text x="136" y="340">Y</text>
-                    <text x="396" y="340">AS</text>
-                    <text x="416" y="340">Y</text>
-                    <text x="28" y="356">Core</text>
-                    <text x="56" y="356">X</text>
+                    <text x="268" y="340">AS</text>
+                    <text x="288" y="340">Y</text>
+                    <text x="364" y="340">AS</text>
+                    <text x="384" y="340">Y</text>
+                    <text x="32" y="356">-In:3</text>
                     <text x="128" y="356">-In:2</text>
-                    <text x="408" y="356">-In:2</text>
-                    <text x="500" y="356">Core</text>
-                    <text x="528" y="356">X</text>
-                    <text x="16" y="372">-</text>
-                    <text x="48" y="372">Out:1</text>
+                    <text x="280" y="356">-In:2</text>
+                    <text x="376" y="356">-In:3</text>
+                    <text x="36" y="372">-Out:6</text>
                     <text x="132" y="372">-Out:6</text>
-                    <text x="412" y="372">-Out:5</text>
-                    <text x="488" y="372">-</text>
-                    <text x="520" y="372">Out:1</text>
+                    <text x="284" y="372">-Out:5</text>
+                    <text x="376" y="372">Out:5</text>
+                    <text x="44" y="388">-PeerV:1</text>
                     <text x="140" y="388">-PeerV:1</text>
-                    <text x="196" y="388">&lt;-</text>
-                    <text x="224" y="388">PCB</text>
-                    <text x="248" y="388">g</text>
-                    <text x="320" y="388">PCB</text>
-                    <text x="344" y="388">h</text>
-                    <text x="364" y="388">-&gt;</text>
-                    <text x="420" y="388">-PeerV:1</text>
-                    <text x="20" y="404">AS</text>
-                    <text x="40" y="404">Y</text>
+                    <text x="292" y="388">-PeerV:1</text>
+                    <text x="388" y="388">-PeerV:1</text>
+                    <text x="44" y="404">-PeerW:4</text>
                     <text x="140" y="404">-PeerW:4</text>
-                    <text x="420" y="404">-PeerW:4</text>
-                    <text x="492" y="404">AS</text>
-                    <text x="512" y="404">Y</text>
-                    <text x="32" y="420">-In:3</text>
-                    <text x="504" y="420">-In:3</text>
-                    <text x="36" y="436">-Out:6</text>
+                    <text x="292" y="404">-PeerW:4</text>
+                    <text x="388" y="404">-PeerW:4</text>
+                    <text x="20" y="436">AS</text>
+                    <text x="40" y="436">Z</text>
                     <text x="116" y="436">AS</text>
                     <text x="136" y="436">Z</text>
-                    <text x="396" y="436">AS</text>
-                    <text x="416" y="436">Z</text>
-                    <text x="504" y="436">Out:5</text>
-                    <text x="44" y="452">-PeerV:1</text>
+                    <text x="268" y="436">AS</text>
+                    <text x="288" y="436">Z</text>
+                    <text x="364" y="436">AS</text>
+                    <text x="384" y="436">Z</text>
+                    <text x="32" y="452">-In:5</text>
                     <text x="128" y="452">-In:5</text>
-                    <text x="408" y="452">-In:1</text>
-                    <text x="516" y="452">-PeerV:1</text>
-                    <text x="44" y="468">-PeerW:4</text>
+                    <text x="280" y="452">-In:1</text>
+                    <text x="376" y="452">-In:1</text>
+                    <text x="36" y="468">-Out:3</text>
                     <text x="132" y="468">-Out:3</text>
-                    <text x="412" y="468">-Out:3</text>
-                    <text x="516" y="468">-PeerW:4</text>
-                    <text x="20" y="500">AS</text>
-                    <text x="40" y="500">Z</text>
-                    <text x="492" y="500">AS</text>
-                    <text x="512" y="500">Z</text>
-                    <text x="32" y="516">-In:5</text>
-                    <text x="224" y="516">PCB</text>
-                    <text x="248" y="516">i</text>
-                    <text x="320" y="516">PCB</text>
-                    <text x="344" y="516">j</text>
-                    <text x="504" y="516">-In:1</text>
-                    <text x="36" y="532">-Out:3</text>
-                    <text x="508" y="532">-Out:3</text>
+                    <text x="284" y="468">-Out:3</text>
+                    <text x="380" y="468">-Out:3</text>
                   </g>
                 </svg><a href="#section-2.1.3-8.1.1" class="pilcrow">¶</a>
 </div>
@@ -6674,13 +6598,16 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-D.1-1.1.1">Wording polish following ISE Editor's feedback<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.2">
-            <p id="appendix-D.1-1.2.1">Remove redundant section 1.7. Resistance to partitioning<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.2.1">Figures 2, 3, 4: improve arrows in SVG version<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.3">
-            <p id="appendix-D.1-1.3.1">Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.3.1">Remove redundant section 1.7. Resistance to partitioning<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.4">
-            <p id="appendix-D.1-1.4.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.4.1">Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.5">
+            <p id="appendix-D.1-1.5.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
