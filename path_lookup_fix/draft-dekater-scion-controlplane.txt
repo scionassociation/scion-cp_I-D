@@ -2248,33 +2248,33 @@ Table of Contents
        endpoint in up to three SegmentsResponse.  Specifically, for each
        segment type:
 
-   3.  up segments are stored in its path database.  It returns them
-       immediately.
+       *  up segments are stored in its path database.  It returns them
+          immediately.
 
-   4.  core segments may be cached.  Otherwise, it queries the Control
-       Services of the reachable core ASes in the source ISD for core
-       segments to core ASes in the destination ISD.  To reach the core
-       Control Services, the Control Service of the source AS uses the
-       locally stored up segments.  Once obtained, it returns the core
-       segments.
+       *  core segments may be cached.  Otherwise, it queries the
+          Control Services of the reachable core ASes in the source ISD
+          for core segments to core ASes in the destination ISD.  To
+          reach the core Control Services, the Control Service of the
+          source AS uses the locally stored up segments.  Once obtained,
+          it returns the core segments.
 
-   5.  down segments may be cached.  Otherwise it queries the Control
-       Services of the remote core ASes in the destination ISD to fetch
-       down segments to the destination AS.  To reach the remote core
-       ASes, the Control Service of the source AS uses the previously
-       obtained and combined up and core segments.  Once obtained, it
-       returns the down segments.
+       *  down segments may be cached.  Otherwise it queries the Control
+          Services of the remote core ASes in the destination ISD to
+          fetch down segments to the destination AS.  To reach the
+          remote core ASes, the Control Service of the source AS uses
+          the previously obtained and combined up and core segments.
+          Once obtained, it returns the down segments.
 
-   6.  As the source endpoint receives each path segment, it verifies
+   3.  As the source endpoint receives each path segment, it verifies
        the SegmentInformation timestamp validity (see Section 2.2.4),
        the AS entry signature for each AS entry (see Section 2.2.2.6),
        and requests any missing AS or intermediate certificates from the
        Control Service (see Section 2.4).
 
-   7.  Once it has obtained some valid path segments, the source
+   4.  Once it has obtained some valid path segments, the source
        endpoint combines them into an end-to-end path in the data plane.
 
-   8.  The destination endpoint, once it receives the first packet, MAY
+   5.  The destination endpoint, once it receives the first packet, MAY
        reverse the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
@@ -3937,6 +3937,9 @@ Change Log
    removed before publication.
 
 draft-dekater-scion-controlplane-15
+
+   *  Lookup Process: reword steps to clarify that requests happen in
+      parallel
 
    *  Wording polish following ISE Editor's feedback
 
