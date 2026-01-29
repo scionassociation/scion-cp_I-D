@@ -102,6 +102,7 @@ informative:
   RFC4271:
   RFC5398:
   RFC6996:
+  RFC8915:
   RFC9217:
   RFC9473:
   PCBExtensions:
@@ -2170,6 +2171,8 @@ Care should be taken to maintain coarse time synchronization among Control Servi
 - An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
+It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}.
+
 ## Denial of Service Attacks {#dos-cp}
 
 The beaconing process in the SCION Control Plane relies on control plane communication. ASes exchange control plane messages within each other when propagating PCBs to downstream neighbors, when registering PCBs as path segments, or during core path lookup. Volumetric DoS attacks, where attackers overload a link may make it difficult to exchange these messages.
@@ -2373,6 +2376,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Move "Deployment Considerations" from section 3 to 7
+- Attacks on time sources: recommend use of secure time synchronization
 
 ## draft-dekater-scion-controlplane-14
 {:numbered="false"}
