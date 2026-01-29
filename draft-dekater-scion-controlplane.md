@@ -1617,7 +1617,7 @@ The SCION Control Message Protocol (SCMP) provides functionality for network dia
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
 
-**Note:** There is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
+Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
 
@@ -1657,15 +1657,9 @@ This specification defines the message formats for the following SCMP messages:
 
 |Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
-|1    | Reserved for future use                                   |
 |2    | [Packet Too Big](#packet-too-big)                         |
-|3    | Reserved for future use                                   |
-|4    | Reserved for future use                                   |
 |5    | [External Interface Down](#external-interface-down)       |
 |6    | [Internal Connectivity Down](#internal-connectivity-down) |
-|100  | Private Experimentation                                   |
-|101  | Private Experimentation                                   |
-|127  | Reserved for expansion of SCMP error messages             |
 {: title="Error Message Types"}
 
 
@@ -1675,14 +1669,9 @@ This specification defines the message formats for the following SCMP messages:
 | 129  | [Echo Reply](#echo-reply)                                |
 | 130  | [Traceroute Request](#traceroute-request)                |
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
-| 200  | Private Experimentation                                  |
-| 201  | Private Experimentation                                  |
-| 255  | Reserved for expansion of SCMP informational messages    |
 {: title="Informational Message Types"}
 
-Type values 100, 101, 200, and 201 are reserved for private experimentation.
-
-All other values are reserved for future use.
+Further SCMP errors are covered in {{SCMP}}.
 
 ## Checksum Calculation
 
