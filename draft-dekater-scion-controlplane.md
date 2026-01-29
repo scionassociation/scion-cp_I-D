@@ -1444,9 +1444,10 @@ The process to look up and fetch path segments consists of the following steps:
 
 1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three parallel `SegmentsRequest`, respectively for up, core and down segments.
 2. The Control Service of the source AS returns segments to the endpoint in up to three `SegmentsResponse`. Specifically, for each segment type:
-  1. up segments are stored in its path database. It returns them immediately.
-  2. core segments may be cached. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
-  3. down segments may be cached. Otherwise it queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
+
+   - up segments are stored in its path database. It returns them immediately.
+   - core segments may be cached. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
+   - down segments may be cached. Otherwise it queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
 6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
@@ -2369,6 +2370,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
 
+- Lookup Process: reword steps to clarify that requests happen in parallel
 - Wording polish following ISE Editor's feedback
 - Figures 2, 3, 4: improve arrows in SVG version
 - Remove redundant section 1.7. Resistance to partitioning
