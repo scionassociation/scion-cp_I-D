@@ -475,23 +475,26 @@ For every selected PCB and egress interface combination, the AS appends an *AS e
 
 ### PCB Propagation - Illustrated Examples
 
-The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration.
+The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration. Arrows represent the PCB propagation direction.
 
 In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~aasvg
                            +-------------+
+                           |             |
+                           |             |
                            |  Core AS X  |
                            |             |
                            |    2   1    |
                            +----+---+----+
-         +--------+             |   |              +--------+
-         | PCB a  |     +-----+ |   | +-----+      | PCB b  |
-         +========+ <---|PCB a| |   | |PCB b|----> +========+
-         | Core   |     +--+--+ |   | +--+--+      |Core    |
-         |- Out:2 |        |    |   |    |         |- Out:1 |
-         +--------+        v    |   |    v         +--------+
-                                o   o
+                                |   |
+                    +--------+  |   |  +--------+
+                    | PCB a  |  |   |  | PCB b  |
+                    +========+  |   |  +========+
+                    | Core   |  |   |  |Core    |
+                    |- Out:2 |  |   |  |- Out:1 |
+                    +----+---+  |   |  +---+----+
+                         v      o   o      v
                            +----+---+----+
                            |    AS Y     |
 ~~~
@@ -502,36 +505,32 @@ AS Y receives the two PCBs "a" and "b" through two different (ingress) interface
 AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4" respectively, which is included in the information in the PCBs. Thus, each forwarded PCB accumulates path information on its way "down" from core AS X.
 
 ~~~aasvg
-                        +-----+ |   | +-----+
-                        |PCB a| |   | |PCB b|
-                        +--+--+ |   | +--+--+
-                           |    |   |    |
-                           v    |   |    v
+                    +--------+  |   |  +--------+
+                    | PCB a  |  |   |  | PCB b  |
+                    +----+---+  |   |  +---+----+
+                         v      |   |      v
                                 o   o
        +-------------+     +----+---+----+     +-------------+
        |             |     |    2   3    |     |             |
        |             +p---p+ 1           |     |             |
        |    AS V     |     |    AS Y     |     |    AS W     |
        |             |     |           4 +p---p+             |
-       +-------------+     |    6   5    |     +-------------+
-                           +----+---+----+
-            +--------+          |   |          +--------+
-            | PCB c  |          |   |          | PCB d  |
-            +========+          |   |          +========+
-            |Core X  |          |   |          |Core X  |
-            |- Out:2 |          |   |          |- Out:2 |
-+--------+  +--------+  +-----+ |   | +-----+  +--------+  +--------+
-| PCB e  |  |AS Y    |<-|PCB c| |   | |PCB d|->|AS Y    |  | PCB f  |
-+========+  |-In:2   |  +--+--+ |   | +--+--+  |-In:2   |  +========+
-|Core X  |  |-Out:6  |     |    |   |    |     |-Out:5  |  |Core X  |
-|- Out:1 |  |-PeerV:1|     v    |   |    v     |-PeerV:1|  |- Out:1 |
-+--------+  |-PeerW:4|          |   |          |-PeerW:4|  +--------+
-|AS Y    |  +--------+          |   |          +--------+  |AS Y    |
-|-In:3   |              +-----+ |   | +-----+              |-In:3   |
-|-Out:6  | <------------|PCB e| |   | |PCB f|------------> |-Out:5  |
-|-PeerV:1|              +--+--+ |   | +--+--+              |-PeerV:1|
-|-PeerW:4|                 |    |   |    |                 |-PeerW:4|
-+--------+                 v    |   |    v                 +--------+
+       |             |     |    6   5    |     |             |
+       +-------------+     +----+---+----+     +-------------+
+                                |   |
+        +--------+  +--------+  |   |  +--------+  +--------+
+        | PCB e  |  | PCB c  |  |   |  | PCB d  |  | PCB f  |
+        +========+  +========+  |   |  +========+  +========+
+        |Core X  |  |Core X  |  |   |  |Core X  |  |Core X  |
+        |- Out:1 |  |- Out:2 |  |   |  |- Out:2 |  |- Out:1 |
+        +--------+  +--------+  |   |  +--------+  +--------+
+        |AS Y    |  |AS Y    |  |   |  |AS Y    |  |AS Y    |
+        |-In:3   |  |-In:2   |  |   |  |-In:2   |  |-In:3   |
+        |-Out:6  |  |-Out:6  |  |   |  |-Out:5  |  |-Out:5  |
+        |-PeerV:1|  |-PeerV:1|  |   |  |-PeerV:1|  |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|  |   |  |-PeerW:4|  |-PeerW:4|
+        +----+---+  +----+---+  |   |  +---+----+  +---+----+
+             v           v      |   |      v           v
                                 o   o
                            +----+---+----+
                            |    AS Z     |
@@ -542,43 +541,37 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
 The following figure shows how the four PCBs "c", "d", "e", and "f" coming from AS Y are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further downwards over the same link (egress interface "3"), and extends the PCBs with the relevant information so that each of these includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~aasvg
-
-                   +-----+      |   |      +-----+
-                   |PCB c|      |   |      |PCB d|
-                   +-+---+      |   |      +---+-+
-                     |  +-----+ |   | +-----+  |
-                     v  |PCB e| |   | |PCB f|  v
-                        +--+--+ |   | +--+--+
-                           |    |   |    |
-                           v    |   |    v
+        +--------+  +--------+  |   |  +--------+  +--------+
+        | PCB e  |  | PCB c  |  |   |  | PCB d  |  | PCB f  |
+        +----+---+  +----+---+  |   |  +---+----+  +---+----+
+             v           v      |   |      v           v
                                 o   o
                            +----+---+----+
                            |    5   1    |
                            |             |
                            |    AS Z     |
-            +--------+     |             |     +--------+
-            | PCB g  |     |      3      |     | PCB h  |
-            +========+     +------+------+     +========+
-            |Core X  |            |            |Core X  |
-+--------+  |- Out:2 |            |            |- Out:2 |  +--------+
-| PCB i  |  +--------+            |            +--------+  | PCB j  |
-+========+  |AS Y    |            |            |AS Y    |  +========+
-|Core X  |  |-In:2   |            |            |-In:2   |  |Core X  |
-|- Out:1 |  |-Out:6  |   +-----+  |  +-----+   |-Out:5  |  |- Out:1 |
-+--------+  |-PeerV:1| <-|PCB g|  |  |PCB h|-> |-PeerV:1|  +--------+
-|AS Y    |  |-PeerW:4|   +--+--+  |  +--+--+   |-PeerW:4|  |AS Y    |
-|-In:3   |  +--------+      |     |     |      +--------+  |-In:3   |
-|-Out:6  |  |AS Z    |      v     |     v      |AS Z    |  |Out:5   |
-|-PeerV:1|  |-In:5   |            |            |-In:1   |  |-PeerV:1|
-|-PeerW:4|  |-Out:3  |            |            |-Out:3  |  |-PeerW:4|
-+--------+  +--------+            |            +--------+  +--------+
-|AS Z    |               +-----+  |  +-----+               |AS Z    |
-|-In:5   | <-------------|PCB i|  |  |PCB j|------------>  |-In:1   |
-|-Out:3  |               +--+--+  |  +--+--+               |-Out:3  |
-+--------+                  |     |     |                  +--------+
-                            v     o     v
+                           |             |
+                           |      3      |
+                           +------+------+
                                   |
-
+        +--------+  +--------+    |    +--------+  +--------+
+        | PCB i  |  | PCB g  |    |    | PCB h  |  | PCB j  |
+        +========+  +========+    |    +========+  +========+
+        |Core X  |  |Core X  |    |    |Core X  |  |Core X  |
+        |- Out:1 |  |- Out:2 |    |    |- Out:2 |  |- Out:1 |
+        +--------+  +--------+    |    +--------+  +--------+
+        |AS Y    |  |AS Y    |    |    |AS Y    |  |AS Y    |
+        |-In:3   |  |-In:2   |    |    |-In:2   |  |-In:3   |
+        |-Out:6  |  |-Out:6  |    |    |-Out:5  |  |Out:5   |
+        |-PeerV:1|  |-PeerV:1|    |    |-PeerV:1|  |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|    |    |-PeerW:4|  |-PeerW:4|
+        +--------+  +--------+    |    +--------+  +--------+
+        |AS Z    |  |AS Z    |    |    |AS Z    |  |AS Z    |
+        |-In:5   |  |-In:5   |    |    |-In:1   |  |-In:1   |
+        |-Out:3  |  |-Out:3  |    |    |-Out:3  |  |-Out:3  |
+        +----+---+  +----+---+    |    +---+----+  +---+----+
+             v           v        o        v           v
+                                  |
 ~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
@@ -2376,6 +2369,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Wording polish following ISE Editor's feedback
+- Figures 2, 3, 4: improve arrows in SVG version
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Move "Deployment Considerations" from section 3 to 7
