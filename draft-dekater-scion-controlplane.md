@@ -508,7 +508,8 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
                     | PCB a  |  |   |  | PCB b  |
                     +------+-+  |   |  +-+------+
                            |    |   |    |
-                           v    o   o    v
+                           v    |   |    v
+                                o   o
        +-------------+     +----+---+----+     +-------------+
        |             |     |    2   3    |     |             |
        |             +p---p+ 1           |     |             |
@@ -530,13 +531,13 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
         +--------+  |-PeerW:4|  |   |  |-PeerW:4|  +--------+
         |AS Y    |  +------+-+  |   |  +-+------+  |AS Y    |
         |-In:3   |         |    |   |    |         |-In:3   |
-        |-Out:6  |         |    |   |    |         |-Out:5  |
-        |-PeerV:1|         |    |   |    |         |-PeerV:1|
-        |-PeerW:4|         |    |   |    |         |-PeerW:4|
-        +------+-+         |    |   |    |         +-+------+
-               |           v    o   o    v           |
-               |           +----+---+----+           |
-               +---------->|    AS Z     |<----------+
+        |-Out:6  |         v    |   |    v         |-Out:5  |
+        |-PeerV:1|              |   |              |-PeerV:1|
+        |-PeerW:4|              |   |              |-PeerW:4|
+        +------+-+              |   |              +-+------+
+               |                o   o                |
+               v           +----+---+----+           v
+                           |    AS Z     |
 ~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
 
@@ -548,10 +549,10 @@ The following figure shows how the four PCBs "c", "d", "e", and "f" coming from 
                     | PCB c  |  |   |  | PCB d  |
         +--------+  +------+-+  |   |  +-+------+  +--------+
         | PCB e  |         |    |   |    |         | PCB f  |
-        +------+-+         |    |   |    |         +-+------+
-               |           v    o   o    v           |
-               |           +----+---+----+           |
-               +---------->|    5   1    |<----------+
+        +------+-+         v    |   |    v         +-+------+
+               |                o   o                |
+               v           +----+---+----+           v
+                           |    5   1    |
                            |             |
                            |    AS Z     |
                            |             |
@@ -575,11 +576,10 @@ The following figure shows how the four PCBs "c", "d", "e", and "f" coming from 
         |-PeerV:1|  |-Out:3  |    |    |-Out:3  |  |-PeerV:1|
         |-PeerW:4|  +------+-+    |    +-+------+  |-PeerW:4|
         +--------+         |      |      |         +--------+
-        |AS Z    |         |      |      |         |AS Z    |
-        |-In:5   |         v      |      v         |-In:1   |
+        |AS Z    |         v      |      v         |AS Z    |
+        |-In:5   |                |                |-In:1   |
         |-Out:3  |                |                |-Out:3  |
         +------+-+                |                +-+------+
-               |                  |                  |
                |                  o                  |
                v                  |                  v
 ~~~
