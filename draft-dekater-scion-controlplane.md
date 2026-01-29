@@ -1061,6 +1061,8 @@ message PathSegmentExtensions {
   }
 ~~~~
 
+If a Control Service receives an unknown PCB extension, it SHOULD skip the extension, but preserve it unmodified in case the PCB is further propagated.
+
 ### PCB Validity {#pcb-validity}
 
 To be valid (that is, usable to construct a valid path), a PCB MUST:
