@@ -487,13 +487,14 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                            |             |
                            |    2   1    |
                            +----+---+----+
-                    +--------+  |   |  +--------+
-                    | PCB a  |  |   |  | PCB b  |
-                    +========+  |   |  +========+
-                    | Core   |  |   |  |Core    |
-                    |- Out:2 |  |   |  |- Out:1 |
-                    +----+---+  |   |  +---+----+
-                         v      o   o      v
+                                |   |
+                   +--------+   |   |   +--------+
+                   | PCB a  |   |   |   | PCB b  |
+                   +========+   |   |   +========+
+                   | Core   |   |   |   |Core    |
+                   |- Out:2 |   |   |   |- Out:1 |
+                   +------+-+   |   |   +-+------+
+                          v     o   o     v
                            +----+---+----+
                            |    AS Y     |
 ~~~
@@ -507,7 +508,6 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
                     +--------+  |   |  +--------+
                     | PCB a  |  |   |  | PCB b  |
                     +------+-+  |   |  +-+------+
-                           |    |   |    |
                            v    |   |    v
                                 o   o
        +-------------+     +----+---+----+     +-------------+
@@ -518,25 +518,21 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
        |             |     |    6   5    |     |             |
        +-------------+     +----+---+----+     +-------------+
                                 |   |
-                    +--------+  |   |  +--------+
-                    | PCB c  |  |   |  | PCB d  |
-                    +========+  |   |  +========+
-                    |Core X  |  |   |  |Core X  |
-                    |- Out:2 |  |   |  |- Out:2 |
-        +--------+  +--------+  |   |  +--------+  +--------+
-        | PCB e  |  |AS Y    |  |   |  |AS Y    |  | PCB f  |
-        +========+  |-In:2   |  |   |  |-In:2   |  +========+
-        |Core X  |  |-Out:6  |  |   |  |-Out:5  |  |Core X  |
-        |- Out:1 |  |-PeerV:1|  |   |  |-PeerV:1|  |- Out:1 |
-        +--------+  |-PeerW:4|  |   |  |-PeerW:4|  +--------+
-        |AS Y    |  +------+-+  |   |  +-+------+  |AS Y    |
-        |-In:3   |         |    |   |    |         |-In:3   |
-        |-Out:6  |         v    |   |    v         |-Out:5  |
-        |-PeerV:1|              |   |              |-PeerV:1|
-        |-PeerW:4|              |   |              |-PeerW:4|
-        +------+-+              |   |              +-+------+
-               |                o   o                |
-               v           +----+---+----+           v
+        +--------+  +--------+  |   |  +--------+ +--------+
+        | PCB e  |  | PCB c  |  |   |  | PCB d  | | PCB f  |
+        +========+  +========+  |   |  +========+ +========+
+        |Core X  |  |Core X  |  |   |  |Core X  | |Core X  |
+        |- Out:1 |  |- Out:2 |  |   |  |- Out:2 | |- Out:1 |
+        +--------+  +--------+  |   |  +--------+ +--------+
+        |AS Y    |  |AS Y    |  |   |  |AS Y    | |AS Y    |
+        |-In:3   |  |-In:2   |  |   |  |-In:2   | |-In:3   |
+        |-Out:6  |  |-Out:6  |  |   |  |-Out:5  | |-Out:5  |
+        |-PeerV:1|  |-PeerV:1|  |   |  |-PeerV:1| |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|  |   |  |-PeerW:4| |-PeerW:4|
+        +------+-+  +------+-+  |   |  +-+------+ +-+------+
+               v           v    |   |    v          v
+                                o   o
+                           +----+---+----+
                            |    AS Z     |
 ~~~
 {: #figure-3b title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 2"}
@@ -545,13 +541,12 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
 The following figure shows how the four PCBs "c", "d", "e", and "f" coming from AS Y are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further downwards over the same link (egress interface "3"), and extends the PCBs with the relevant information so that each of these includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~aasvg
-                    +--------+  |   |  +--------+
-                    | PCB c  |  |   |  | PCB d  |
-        +--------+  +------+-+  |   |  +-+------+  +--------+
-        | PCB e  |         |    |   |    |         | PCB f  |
-        +------+-+         v    |   |    v         +-+------+
-               |                o   o                |
-               v           +----+---+----+           v
+         +--------+ +--------+  |   |  +--------+ +--------+
+         | PCB e  | | PCB c  |  |   |  | PCB d  | | PCB f  |
+         +------+-+ +------+-+  |   |  +-+------+ +-+------+
+                v          v    |   |    v          v
+                                o   o
+                           +----+---+----+
                            |    5   1    |
                            |             |
                            |    AS Z     |
@@ -559,29 +554,24 @@ The following figure shows how the four PCBs "c", "d", "e", and "f" coming from 
                            |      3      |
                            +------+------+
                                   |
-                    +--------+    |    +--------+
-                    | PCB g  |    |    | PCB h  |
-                    +========+    |    +========+
-                    |Core X  |    |    |Core X  |
-                    |- Out:2 |    |    |- Out:2 |
-        +--------+  +--------+    |    +--------+  +--------+
-        | PCB i  |  |AS Y    |    |    |AS Y    |  | PCB j  |
-        +========+  |-In:2   |    |    |-In:2   |  +========+
-        |Core X  |  |-Out:6  |    |    |-Out:5  |  |Core X  |
-        |- Out:1 |  |-PeerV:1|    |    |-PeerV:1|  |- Out:1 |
-        +--------+  |-PeerW:4|    |    |-PeerW:4|  +--------+
-        |AS Y    |  +--------+    |    +--------+  |AS Y    |
-        |-In:3   |  |AS Z    |    |    |AS Z    |  |-In:3   |
-        |-Out:6  |  |-In:5   |    |    |-In:1   |  |Out:5   |
-        |-PeerV:1|  |-Out:3  |    |    |-Out:3  |  |-PeerV:1|
-        |-PeerW:4|  +------+-+    |    +-+------+  |-PeerW:4|
-        +--------+         |      |      |         +--------+
-        |AS Z    |         v      |      v         |AS Z    |
-        |-In:5   |                |                |-In:1   |
-        |-Out:3  |                |                |-Out:3  |
-        +------+-+                |                +-+------+
-               |                  o                  |
-               v                  |                  v
+        +--------+  +--------+    |    +--------+ +--------+
+        | PCB i  |  | PCB g  |    |    | PCB h  | | PCB j  |
+        +========+  +========+    |    +========+ +========+
+        |Core X  |  |Core X  |    |    |Core X  | |Core X  |
+        |- Out:1 |  |- Out:2 |    |    |- Out:2 | |- Out:1 |
+        +--------+  +--------+    |    +--------+ +--------+
+        |AS Y    |  |AS Y    |    |    |AS Y    | |AS Y    |
+        |-In:3   |  |-In:2   |    |    |-In:2   | |-In:3   |
+        |-Out:6  |  |-Out:6  |    |    |-Out:5  | |Out:5   |
+        |-PeerV:1|  |-PeerV:1|    |    |-PeerV:1| |-PeerV:1|
+        |-PeerW:4|  |-PeerW:4|    |    |-PeerW:4| |-PeerW:4|
+        +--------+  +--------+    |    +--------+ +--------+
+        |AS Z    |  |AS Z    |    |    |AS Z    | |AS Z    |
+        |-In:5   |  |-In:5   |    |    |-In:1   | |-In:1   |
+        |-Out:3  |  |-Out:3  |    |    |-Out:3  | |-Out:3  |
+        +------+-+  +------+-+    |    +-+------+ +-+------+
+               v           v      o      v          v
+                                  |
 ~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
 
