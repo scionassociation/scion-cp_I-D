@@ -518,19 +518,19 @@ AS Y also has two peering links to its neighboring peers V and W, through the in
        |             |     |    6   5    |     |             |
        +-------------+     +----+---+----+     +-------------+
                                 |   |
-        +--------+  +--------+  |   |  +--------+ +--------+
-        | PCB e  |  | PCB c  |  |   |  | PCB d  | | PCB f  |
-        +========+  +========+  |   |  +========+ +========+
-        |Core X  |  |Core X  |  |   |  |Core X  | |Core X  |
-        |- Out:1 |  |- Out:2 |  |   |  |- Out:2 | |- Out:1 |
-        +--------+  +--------+  |   |  +--------+ +--------+
-        |AS Y    |  |AS Y    |  |   |  |AS Y    | |AS Y    |
-        |-In:3   |  |-In:2   |  |   |  |-In:2   | |-In:3   |
-        |-Out:6  |  |-Out:6  |  |   |  |-Out:5  | |-Out:5  |
-        |-PeerV:1|  |-PeerV:1|  |   |  |-PeerV:1| |-PeerV:1|
-        |-PeerW:4|  |-PeerW:4|  |   |  |-PeerW:4| |-PeerW:4|
-        +------+-+  +------+-+  |   |  +-+------+ +-+------+
-               v           v    |   |    v          v
+         +--------+ +--------+  |   |  +--------+ +--------+
+         | PCB e  | | PCB c  |  |   |  | PCB d  | | PCB f  |
+         +========+ +========+  |   |  +========+ +========+
+         |Core X  | |Core X  |  |   |  |Core X  | |Core X  |
+         |- Out:1 | |- Out:2 |  |   |  |- Out:2 | |- Out:1 |
+         +--------+ +--------+  |   |  +--------+ +--------+
+         |AS Y    | |AS Y    |  |   |  |AS Y    | |AS Y    |
+         |-In:3   | |-In:2   |  |   |  |-In:2   | |-In:3   |
+         |-Out:6  | |-Out:6  |  |   |  |-Out:5  | |-Out:5  |
+         |-PeerV:1| |-PeerV:1|  |   |  |-PeerV:1| |-PeerV:1|
+         |-PeerW:4| |-PeerW:4|  |   |  |-PeerW:4| |-PeerW:4|
+         +------+-+ +------+-+  |   |  +-+------+ +-+------+
+                v          v    |   |    v          v
                                 o   o
                            +----+---+----+
                            |    AS Z     |
@@ -554,23 +554,23 @@ The following figure shows how the four PCBs "c", "d", "e", and "f" coming from 
                            |      3      |
                            +------+------+
                                   |
-        +--------+  +--------+    |    +--------+ +--------+
-        | PCB i  |  | PCB g  |    |    | PCB h  | | PCB j  |
-        +========+  +========+    |    +========+ +========+
-        |Core X  |  |Core X  |    |    |Core X  | |Core X  |
-        |- Out:1 |  |- Out:2 |    |    |- Out:2 | |- Out:1 |
-        +--------+  +--------+    |    +--------+ +--------+
-        |AS Y    |  |AS Y    |    |    |AS Y    | |AS Y    |
-        |-In:3   |  |-In:2   |    |    |-In:2   | |-In:3   |
-        |-Out:6  |  |-Out:6  |    |    |-Out:5  | |Out:5   |
-        |-PeerV:1|  |-PeerV:1|    |    |-PeerV:1| |-PeerV:1|
-        |-PeerW:4|  |-PeerW:4|    |    |-PeerW:4| |-PeerW:4|
-        +--------+  +--------+    |    +--------+ +--------+
-        |AS Z    |  |AS Z    |    |    |AS Z    | |AS Z    |
-        |-In:5   |  |-In:5   |    |    |-In:1   | |-In:1   |
-        |-Out:3  |  |-Out:3  |    |    |-Out:3  | |-Out:3  |
-        +------+-+  +------+-+    |    +-+------+ +-+------+
-               v           v      o      v          v
+         +--------+ +--------+    |    +--------+ +--------+
+         | PCB i  | | PCB g  |    |    | PCB h  | | PCB j  |
+         +========+ +========+    |    +========+ +========+
+         |Core X  | |Core X  |    |    |Core X  | |Core X  |
+         |- Out:1 | |- Out:2 |    |    |- Out:2 | |- Out:1 |
+         +--------+ +--------+    |    +--------+ +--------+
+         |AS Y    | |AS Y    |    |    |AS Y    | |AS Y    |
+         |-In:3   | |-In:2   |    |    |-In:2   | |-In:3   |
+         |-Out:6  | |-Out:6  |    |    |-Out:5  | |Out:5   |
+         |-PeerV:1| |-PeerV:1|    |    |-PeerV:1| |-PeerV:1|
+         |-PeerW:4| |-PeerW:4|    |    |-PeerW:4| |-PeerW:4|
+         +--------+ +--------+    |    +--------+ +--------+
+         |AS Z    | |AS Z    |    |    |AS Z    | |AS Z    |
+         |-In:5   | |-In:5   |    |    |-In:1   | |-In:1   |
+         |-Out:3  | |-Out:3  |    |    |-Out:3  | |-Out:3  |
+         +------+-+ +------+-+    |    +-+------+ +-+------+
+                v          v      o      v          v
                                   |
 ~~~
 {: #figure-3c title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 3"}
