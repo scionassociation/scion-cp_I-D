@@ -487,15 +487,13 @@ In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via t
                            |             |
                            |    2   1    |
                            +----+---+----+
-                                |   |
                     +--------+  |   |  +--------+
                     | PCB a  |  |   |  | PCB b  |
                     +========+  |   |  +========+
                     | Core   |  |   |  |Core    |
                     |- Out:2 |  |   |  |- Out:1 |
-                    +------+-+  |   |  +-+------+
-                           |    |   |    |
-                           v    o   o    v
+                    +----+---+  |   |  +---+----+
+                         v      o   o      v
                            +----+---+----+
                            |    AS Y     |
 ~~~
