@@ -2241,7 +2241,7 @@ Table of Contents
 
    1.  The source endpoint queries the Control Service in its own AS
        (i.e. the source AS) for the required segments by sending up to
-       three parallel SegmentsRequest, respectively for up, core and
+       three SegmentsRequest messages, respectively for up, core and
        down segments.
 
    2.  The Control Service of the source AS answers each request with a
