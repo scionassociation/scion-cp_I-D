@@ -362,7 +362,7 @@ The following table gives an overview of the ISD number allocation:
 | 0            | The wildcard ISD                                                                        |
 | 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
 | 16 - 63      | Private use (analogous to {{RFC6996}}) - can be used for testing and private deployments |
-| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers |
+| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers. They MUST be globally unique. |
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
