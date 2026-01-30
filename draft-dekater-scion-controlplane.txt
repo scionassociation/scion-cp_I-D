@@ -1551,6 +1551,10 @@ Table of Contents
        StaticInfoExtension static_info = 1;
      }
 
+   If a Control Service receives an unknown PCB extension, it SHOULD
+   skip the extension, but preserve it unmodified in case the PCB is
+   further propagated.
+
 2.2.4.  PCB Validity
 
    To be valid (that is, usable to construct a valid path), a PCB MUST:
@@ -2585,7 +2589,7 @@ Table of Contents
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
 
-   *Note:* There is not currently a defined mechanism for converting
+   Note that there is not currently a defined mechanism for converting
    ICMP messages to SCMP messages, or vice-versa.
 
 6.1.  General Format
@@ -2630,54 +2634,33 @@ Table of Contents
    This specification defines the message formats for the following SCMP
    messages:
 
-         +======+===============================================+
-         | Type | Meaning                                       |
-         +======+===============================================+
-         | 1    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 2    | Packet Too Big (Section 6.5.1)                |
-         +------+-----------------------------------------------+
-         | 3    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 4    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 5    | External Interface Down (Section 6.5.2)       |
-         +------+-----------------------------------------------+
-         | 6    | Internal Connectivity Down (Section 6.5.3)    |
-         +------+-----------------------------------------------+
-         | 100  | Private Experimentation                       |
-         +------+-----------------------------------------------+
-         | 101  | Private Experimentation                       |
-         +------+-----------------------------------------------+
-         | 127  | Reserved for expansion of SCMP error messages |
-         +------+-----------------------------------------------+
+           +======+============================================+
+           | Type | Meaning                                    |
+           +======+============================================+
+           | 2    | Packet Too Big (Section 6.5.1)             |
+           +------+--------------------------------------------+
+           | 5    | External Interface Down (Section 6.5.2)    |
+           +------+--------------------------------------------+
+           | 6    | Internal Connectivity Down (Section 6.5.3) |
+           +------+--------------------------------------------+
 
-                       Table 5: Error Message Types
+                        Table 5: Error Message Types
 
-     +======+=======================================================+
-     | Type | Meaning                                               |
-     +======+=======================================================+
-     | 128  | Echo Request (Section 6.6.1)                          |
-     +------+-------------------------------------------------------+
-     | 129  | Echo Reply (Section 6.6.2)                            |
-     +------+-------------------------------------------------------+
-     | 130  | Traceroute Request (Section 6.6.3)                    |
-     +------+-------------------------------------------------------+
-     | 131  | Traceroute Reply (Section 6.6.4)                      |
-     +------+-------------------------------------------------------+
-     | 200  | Private Experimentation                               |
-     +------+-------------------------------------------------------+
-     | 201  | Private Experimentation                               |
-     +------+-------------------------------------------------------+
-     | 255  | Reserved for expansion of SCMP informational messages |
-     +------+-------------------------------------------------------+
+               +======+====================================+
+               | Type | Meaning                            |
+               +======+====================================+
+               | 128  | Echo Request (Section 6.6.1)       |
+               +------+------------------------------------+
+               | 129  | Echo Reply (Section 6.6.2)         |
+               +------+------------------------------------+
+               | 130  | Traceroute Request (Section 6.6.3) |
+               +------+------------------------------------+
+               | 131  | Traceroute Reply (Section 6.6.4)   |
+               +------+------------------------------------+
 
-                   Table 6: Informational Message Types
+                    Table 6: Informational Message Types
 
-   Type values 100, 101, 200, and 201 are reserved for private
-   experimentation.
-
-   All other values are reserved for future use.
+   Further SCMP errors are covered in [SCMP].
 
 6.3.  Checksum Calculation
 
