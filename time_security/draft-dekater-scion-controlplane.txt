@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 August 2026                                           S. Hitz
+Expires: 3 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         29 January 2026
+                                                         30 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 August 2026.
+   This Internet-Draft will expire on 3 August 2026.
 
 Copyright Notice
 
@@ -548,29 +548,29 @@ Table of Contents
 
 1.5.1.  ISD Numbers
 
-   An ISD number is the 16-bit global identifier for an ISD and MUST be
-   globally unique.
+   An ISD number is the 16-bit global identifier for an ISD.
 
    The following table gives an overview of the ISD number allocation:
 
-     +==============+================================================+
-     | ISD          | Description                                    |
-     +==============+================================================+
-     | 0            | The wildcard ISD                               |
-     +--------------+------------------------------------------------+
-     | 1 - 15       | Reserved for documentation and sample code     |
-     |              | (analogous to [RFC5398]).                      |
-     +--------------+------------------------------------------------+
-     | 16 - 63      | Private use (analogous to [RFC6996]) - can be  |
-     |              | used for testing and private deployments       |
-     +--------------+------------------------------------------------+
-     | 64 - 4094    | Public ISDs - should be allocated in ascending |
-     |              | order, without gaps and "vanity" numbers       |
-     +--------------+------------------------------------------------+
-     | 4095 - 65535 | Unallocated                                    |
-     +--------------+------------------------------------------------+
+      +==============+=============================================+
+      | ISD          | Description                                 |
+      +==============+=============================================+
+      | 0            | The wildcard ISD                            |
+      +--------------+---------------------------------------------+
+      | 1 - 15       | Reserved for documentation and sample code  |
+      |              | (analogous to [RFC5398]).                   |
+      +--------------+---------------------------------------------+
+      | 16 - 63      | Private use (analogous to [RFC6996]) - can  |
+      |              | be used for testing and private deployments |
+      +--------------+---------------------------------------------+
+      | 64 - 4094    | Public ISDs - should be allocated in        |
+      |              | ascending order, without gaps and "vanity"  |
+      |              | numbers.  They MUST be globally unique.     |
+      +--------------+---------------------------------------------+
+      | 4095 - 65535 | Unallocated                                 |
+      +--------------+---------------------------------------------+
 
-                      Table 1: ISD number allocations
+                     Table 1: ISD number allocations
 
    The wildcard ISD is not directly used by the control or data plane.
    It may, however, be used by implementations to represent any ISD, for
@@ -584,7 +584,8 @@ Table of Contents
    numbers and BGP ASNs as defined by [RFC4271].  For historical reasons
    some SCION Autonomous Systems use an AS number where the first 16
    bits are 0 and the remaining 32 bits are identical to their BGP ASN,
-   but there is no technical requirement for this.
+   but there is no technical requirement for this.  AS numbers of public
+   ASes MUST be globally unique.
 
 1.5.2.1.  Wildcard Addressing
 
@@ -1551,6 +1552,10 @@ Table of Contents
        StaticInfoExtension static_info = 1;
      }
 
+   If a Control Service receives an unknown PCB extension, it SHOULD
+   skip the extension, but preserve it unmodified in case the PCB is
+   further propagated.
+
 2.2.4.  PCB Validity
 
    To be valid (that is, usable to construct a valid path), a PCB MUST:
@@ -1718,10 +1723,10 @@ Table of Contents
    intra-ISD beaconing (Section 7.4.1) and core beaconing
    (Section 7.4.2).  At each propagation event, the AS control service
    selects a set of the best PCBs from the candidates in the Beacon
-   Store according to the AS's selection policy.  This set should have a
-   fixed size, the _best PCBs set size_.
+   Store according to the AS's selection policy.
 
-   The _best PCBs set size_ should be:
+   The size of this set is called the _best PCBs set size_. It should
+   be:
 
    *  For intra-ISD beaconing (i.e. propagating to children ASes): at
       most 50.
@@ -2240,40 +2245,40 @@ Table of Contents
    following steps:
 
    1.  The source endpoint queries the Control Service in its own AS
-       (i.e. the source AS) for the required segments by sending a
-       SegmentsRequest.  The Control Service has up segments stored in
-       its path database and additionally checks if it has appropriate
-       core segments and down segments stored as well, and in this case
-       returns them immediately in a SegmentsResponse.
+       (i.e. the source AS) for the required segments by sending up to
+       three SegmentsRequest messages, respectively for up, core and
+       down segments.
 
-   2.  If there are no appropriate core segments and down segments, the
-       Control Service in the source AS queries the Control Services of
-       the reachable core ASes in the source ISD for core segments to
-       core ASes in the destination ISD.  To reach the core Control
-       Services, the Control Service of the source AS uses the locally
-       stored up segments.
+   2.  The Control Service of the source AS answers each request with a
+       SegmentsResponse message.  Specifically, for each segment type:
 
-   3.  The Control Service of the source AS combines up segments with
-       the newly retrieved core segments.  The Control Service then
-       queries the Control Services of the remote core ASes in the
-       destination ISD to fetch down segments to the destination AS.  To
-       reach the remote core ASes, the Control Service of the source AS
-       uses the previously obtained and combined up segments and core
-       segments.
+       *  up segments are stored in the path database of the local
+          Control Service and can be returned immediately.
 
-   4.  The Control Service of the source AS returns all retrieved path
-       segments to the source endpoint.
+       *  core segments may be cached.  Otherwise, it queries the
+          Control Services of the reachable core ASes in the source ISD
+          for core segments to core ASes in the destination ISD.  To
+          reach the core Control Services, the Control Service of the
+          source AS uses the locally stored up segments.  Once obtained,
+          it returns the core segments.
 
-   5.  As the source endpoint receives each path segment, it verifies
+       *  down segments may be cached.  Otherwise it queries the Control
+          Services of the remote core ASes in the destination ISD to
+          fetch down segments to the destination AS.  To reach the
+          remote core ASes, the Control Service of the source AS uses
+          the previously obtained and combined up and core segments.
+          Once obtained, it returns the down segments.
+
+   3.  As the source endpoint receives each path segment, it verifies
        the SegmentInformation timestamp validity (see Section 2.2.4),
        the AS entry signature for each AS entry (see Section 2.2.2.6),
        and requests any missing AS or intermediate certificates from the
        Control Service (see Section 2.4).
 
-   6.  Once it has obtained some valid path segments, the source
+   4.  Once it has obtained some valid path segments, the source
        endpoint combines them into an end-to-end path in the data plane.
 
-   7.  The destination endpoint, once it receives the first packet, MAY
+   5.  The destination endpoint, once it receives the first packet, MAY
        reverse the path in the received packet in order to construct a
        response.  This ensures that traffic flows on the same path
        bidirectionally.
@@ -2585,7 +2590,7 @@ Table of Contents
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
 
-   *Note:* There is not currently a defined mechanism for converting
+   Note that there is not currently a defined mechanism for converting
    ICMP messages to SCMP messages, or vice-versa.
 
 6.1.  General Format
@@ -2630,54 +2635,33 @@ Table of Contents
    This specification defines the message formats for the following SCMP
    messages:
 
-         +======+===============================================+
-         | Type | Meaning                                       |
-         +======+===============================================+
-         | 1    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 2    | Packet Too Big (Section 6.5.1)                |
-         +------+-----------------------------------------------+
-         | 3    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 4    | Reserved for future use                       |
-         +------+-----------------------------------------------+
-         | 5    | External Interface Down (Section 6.5.2)       |
-         +------+-----------------------------------------------+
-         | 6    | Internal Connectivity Down (Section 6.5.3)    |
-         +------+-----------------------------------------------+
-         | 100  | Private Experimentation                       |
-         +------+-----------------------------------------------+
-         | 101  | Private Experimentation                       |
-         +------+-----------------------------------------------+
-         | 127  | Reserved for expansion of SCMP error messages |
-         +------+-----------------------------------------------+
+           +======+============================================+
+           | Type | Meaning                                    |
+           +======+============================================+
+           | 2    | Packet Too Big (Section 6.5.1)             |
+           +------+--------------------------------------------+
+           | 5    | External Interface Down (Section 6.5.2)    |
+           +------+--------------------------------------------+
+           | 6    | Internal Connectivity Down (Section 6.5.3) |
+           +------+--------------------------------------------+
 
-                       Table 5: Error Message Types
+                        Table 5: Error Message Types
 
-     +======+=======================================================+
-     | Type | Meaning                                               |
-     +======+=======================================================+
-     | 128  | Echo Request (Section 6.6.1)                          |
-     +------+-------------------------------------------------------+
-     | 129  | Echo Reply (Section 6.6.2)                            |
-     +------+-------------------------------------------------------+
-     | 130  | Traceroute Request (Section 6.6.3)                    |
-     +------+-------------------------------------------------------+
-     | 131  | Traceroute Reply (Section 6.6.4)                      |
-     +------+-------------------------------------------------------+
-     | 200  | Private Experimentation                               |
-     +------+-------------------------------------------------------+
-     | 201  | Private Experimentation                               |
-     +------+-------------------------------------------------------+
-     | 255  | Reserved for expansion of SCMP informational messages |
-     +------+-------------------------------------------------------+
+               +======+====================================+
+               | Type | Meaning                            |
+               +======+====================================+
+               | 128  | Echo Request (Section 6.6.1)       |
+               +------+------------------------------------+
+               | 129  | Echo Reply (Section 6.6.2)         |
+               +------+------------------------------------+
+               | 130  | Traceroute Request (Section 6.6.3) |
+               +------+------------------------------------+
+               | 131  | Traceroute Reply (Section 6.6.4)   |
+               +------+------------------------------------+
 
-                   Table 6: Informational Message Types
+                    Table 6: Informational Message Types
 
-   Type values 100, 101, 200, and 201 are reserved for private
-   experimentation.
-
-   All other values are reserved for future use.
+   Further SCMP errors are covered in [SCMP].
 
 6.3.  Checksum Calculation
 
@@ -3754,16 +3738,17 @@ Table of Contents
 Acknowledgments
 
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
-   (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION
-   Association), Kevin Meynell (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh
-   (Extreme Networks) for reviewing this document.  We also thank Daniel
-   Galán Pascual and Christoph Sprenger from the Information Security
-   Group at ETH Zurich for their inputs based on their formal
-   verification work on SCION.  We are also very grateful to Adrian
-   Perrig (ETH Zurich), for providing guidance and feedback about every
-   aspect of SCION.  Finally, we are indebted to the SCION development
-   teams of Anapaya, ETH Zurich, and the SCION Association for their
+   (Ericsson), Brian Trammel (Google), William Boye (Swiss National
+   Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION
+   Association), Jean-Christophe Hugly (SCION Association), Juan A.
+   Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos
+   (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing
+   this document.  We also thank Daniel Galán Pascual and Christoph
+   Sprenger from the Information Security Group at ETH Zurich for their
+   inputs based on their formal verification work on SCION.  We are also
+   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
+   and feedback about every aspect of SCION.  Finally, we are indebted
+   to the SCION development teams of Anapaya and ETH Zurich for their
    practical knowledge and for the documentation about the SCION Control
    Plane, as well as to the authors of [CHUAT22] - the book is an
    important source of input and inspiration for this draft.
@@ -3945,6 +3930,9 @@ Change Log
 
 draft-dekater-scion-controlplane-15
 
+   *  Lookup Process: reword steps to clarify how an endpoint requests
+      path segments
+
    *  Wording polish following ISE Editor's feedback
 
    *  Figures 2, 3, 4: improve arrows in SVG version
@@ -3958,6 +3946,8 @@ draft-dekater-scion-controlplane-15
 
    *  Attacks on time sources: recommend use of secure time
       synchronization
+
+   *  Acknowledgements: ensure all reviewers are there
 
 draft-dekater-scion-controlplane-14
 
