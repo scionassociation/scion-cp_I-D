@@ -2370,7 +2370,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
 
-- Lookup Process: reword steps to clarify that requests happen in parallel
+- Lookup Process: reword steps to clarify how an endpoint requests path segments
 - Wording polish following ISE Editor's feedback
 - Figures 2, 3, 4: improve arrows in SVG version
 - Remove redundant section 1.7. Resistance to partitioning
