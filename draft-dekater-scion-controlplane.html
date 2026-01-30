@@ -1732,7 +1732,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-isd-numbers">
 <a href="#section-1.5.1" class="section-number selfRef">1.5.1. </a><a href="#name-isd-numbers" class="section-name selfRef">ISD Numbers</a>
           </h4>
-<p id="section-1.5.1-1">An ISD number is the 16-bit global identifier for an ISD and <span class="bcp14">MUST</span> be globally unique.<a href="#section-1.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.1-1">An ISD number is the 16-bit global identifier for an ISD.<a href="#section-1.5.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.5.1-2">The following table gives an overview of the ISD number allocation:<a href="#section-1.5.1-2" class="pilcrow">¶</a></p>
 <span id="name-isd-number-allocations"></span><div id="_table-1">
 <table class="center" id="table-1">
@@ -1761,7 +1761,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">64 - 4094</td>
-                <td class="text-left" rowspan="1" colspan="1">Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers</td>
+                <td class="text-left" rowspan="1" colspan="1">Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers. They <span class="bcp14">MUST</span> be globally unique.</td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">4095 - 65535</td>
@@ -1779,7 +1779,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
           <h4 id="name-scion-as-numbers">
 <a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-scion-as-numbers" class="section-name selfRef">SCION AS Numbers</a>
           </h4>
-<p id="section-1.5.2-1">A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by <span>[<a href="#RFC4271" class="cite xref">RFC4271</a>]</span>. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.2-1">A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by <span>[<a href="#RFC4271" class="cite xref">RFC4271</a>]</span>. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this. AS numbers of public ASes <span class="bcp14">MUST</span> be globally unique.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
 <div id="serv-disc">
 <section id="section-1.5.2.1">
             <h5 id="name-wildcard-addressing">
