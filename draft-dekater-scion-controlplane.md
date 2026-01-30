@@ -1443,7 +1443,7 @@ The actual number of required path segments depends on the location of the desti
 The process to look up and fetch path segments consists of the following steps:
 
 1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three parallel `SegmentsRequest`, respectively for up, core and down segments.
-2. The Control Service of the source AS returns segments to the endpoint in up to three `SegmentsResponse`. Specifically, for each segment type:
+2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:
 
    - up segments are stored in its path database. It returns them immediately.
    - core segments may be cached. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
