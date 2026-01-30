@@ -59,6 +59,7 @@ normative:
     target: https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html
 
 informative:
+  BCP223:
   ISD-AS-assignments:
     title: "SCION Registry"
     date: 2026
@@ -105,6 +106,7 @@ informative:
   RFC8915:
   RFC9217:
   RFC9473:
+  RFC9523:
   PCBExtensions:
     title: PCB Path Metadata Extension
     date: 2025
@@ -2164,7 +2166,7 @@ Care should be taken to maintain coarse time synchronization among Control Servi
 - An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 
-It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}.
+It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g. GNSS and network-based).
 
 ## Denial of Service Attacks {#dos-cp}
 
