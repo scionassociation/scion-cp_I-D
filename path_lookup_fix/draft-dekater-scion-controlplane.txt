@@ -2247,8 +2247,8 @@ Table of Contents
    2.  The Control Service of the source AS answers each request with a
        SegmentsResponse message.  Specifically, for each segment type:
 
-       *  up segments are stored in its path database.  It returns them
-          immediately.
+       *  up segments are stored in the path database of the local
+          Control Service and can be returned immediately.
 
        *  core segments may be cached.  Otherwise, it queries the
           Control Services of the reachable core ASes in the source ISD
