@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 August 2026                                           S. Hitz
+Expires: 3 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         29 January 2026
+                                                         30 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 August 2026.
+   This Internet-Draft will expire on 3 August 2026.
 
 Copyright Notice
 
@@ -1718,10 +1718,10 @@ Table of Contents
    intra-ISD beaconing (Section 7.4.1) and core beaconing
    (Section 7.4.2).  At each propagation event, the AS control service
    selects a set of the best PCBs from the candidates in the Beacon
-   Store according to the AS's selection policy.  This set should have a
-   fixed size, the _best PCBs set size_.
+   Store according to the AS's selection policy.
 
-   The _best PCBs set size_ should be:
+   The size of this set is called the _best PCBs set size_. It should
+   be:
 
    *  For intra-ISD beaconing (i.e. propagating to children ASes): at
       most 50.
