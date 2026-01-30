@@ -2364,11 +2364,15 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
 
-- Lookup Process: reword steps to clarify how an endpoint requests path segments
 - Wording polish following ISE Editor's feedback
-- Figures 2, 3, 4: improve arrows in SVG version
+- ISD and AS numbers: clarify that identifiers in public ranges must be unique
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
+- Figures 2, 3, 4: improve arrows in SVG version
+- PCB Extensions: clarify behavior in case of unknown extensions
+- Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
+- Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
+- SCMP: remove experimental values from table and mention more error messages are in referenced spec
 - Move "Deployment Considerations" from section 3 to 7
 - Attacks on time sources: recommend use of secure time synchronization
 - Acknowledgements: ensure all reviewers are there
