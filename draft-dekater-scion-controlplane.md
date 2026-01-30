@@ -358,7 +358,7 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 ### ISD Numbers
 
-An ISD number is the 16-bit global identifier for an ISD and MUST be globally unique.
+An ISD number is the 16-bit global identifier for an ISD.
 
 The following table gives an overview of the ISD number allocation:
 
@@ -367,7 +367,7 @@ The following table gives an overview of the ISD number allocation:
 | 0            | The wildcard ISD                                                                        |
 | 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
 | 16 - 63      | Private use (analogous to {{RFC6996}}) - can be used for testing and private deployments |
-| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers |
+| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers. They MUST be globally unique. |
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
@@ -376,7 +376,7 @@ ISD numbers are allocated by the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this. AS numbers of public ASes MUST be globally unique.
 
 #### Wildcard Addressing {#serv-disc}
 
