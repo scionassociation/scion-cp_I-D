@@ -1128,9 +1128,9 @@ To ensure reachability, PCB selection policies should forward as many PCBs as po
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.
 
-The *best PCBs set size* should be:
+The size of this set is called the *best PCBs set size*. It should be:
 
   - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
