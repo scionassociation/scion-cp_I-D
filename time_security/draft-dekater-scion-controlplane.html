@@ -5880,7 +5880,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-8.4-3">It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS <span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<p id="section-8.4-3">It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS <span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>, <span>[<a href="#BCP223" class="cite xref">BCP223</a>]</span>, or Khronos <span>[<a href="#RFC9523" class="cite xref">RFC9523</a>]</span>, or to leverage multiple diverse time sources (e.g. GNSS and network-based).<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dos-cp">
@@ -5983,6 +5983,14 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="BCP223">[BCP223]</dt>
+        <dd>
+<div class="refInstance">Best Current Practice 223, <span>&lt;<a href="https://www.rfc-editor.org/info/bcp223">https://www.rfc-editor.org/info/bcp223</a>&gt;</span>.<br><span>At the time of writing, this BCP comprises the following:</span>
+</div>
+<div class="refInstance" id="RFC8633">
+            <span class="refAuthor">Reilly, D.</span>, <span class="refAuthor">Stenn, H.</span>, and <span class="refAuthor">D. Sibold</span>, <span class="refTitle">"Network Time Protocol Best Current Practices"</span>, <span class="seriesInfo">BCP 223</span>, <span class="seriesInfo">RFC 8633</span>, <span class="seriesInfo">DOI 10.17487/RFC8633</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8633">https://www.rfc-editor.org/info/rfc8633</a>&gt;</span>. </div>
+</dd>
+<dd class="break"></dd>
 <dt id="BollRio-2000">[BollRio-2000]</dt>
         <dd>
 <span class="refAuthor">Bollobás, B.</span> and <span class="refAuthor">O. Riordan</span>, <span class="refTitle">"The diameter of a scale-free random graph"</span>, <span>n.d.</span>, <span>&lt;<a href="https://kam.mff.cuni.cz/~ksemweb/clanky/BollobasR-scale_free_random.pdf">https://kam.mff.cuni.cz/~ksemweb/clanky/BollobasR-scale_free_random.pdf</a>&gt;</span>. </dd>
@@ -6026,6 +6034,10 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
 <dt id="RFC9473">[RFC9473]</dt>
         <dd>
 <span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9523">[RFC9523]</dt>
+        <dd>
+<span class="refAuthor">Rozen-Schiff, N.</span>, <span class="refAuthor">Dolev, D.</span>, <span class="refAuthor">Mizrahi, T.</span>, and <span class="refAuthor">M. Schapira</span>, <span class="refTitle">"A Secure Selection and Filtering Mechanism for the Network Time Protocol with Khronos"</span>, <span class="seriesInfo">RFC 9523</span>, <span class="seriesInfo">DOI 10.17487/RFC9523</span>, <time datetime="2024-02" class="refDate">February 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9523">https://www.rfc-editor.org/rfc/rfc9523</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCIONLAB">[SCIONLAB]</dt>
         <dd>

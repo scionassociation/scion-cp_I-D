@@ -3550,7 +3550,9 @@ Table of Contents
       intended expiration time (see Section 2.2.2.5).
 
    It is therefore recommended to leverage secure time synchronization
-   mechanisms, such as NTS [RFC8915].
+   mechanisms, such as NTS [RFC8915], [BCP223], or Khronos [RFC9523], or
+   to leverage multiple diverse time sources (e.g. GNSS and network-
+   based).
 
 8.5.  Denial of Service Attacks
 
@@ -3672,6 +3674,15 @@ Table of Contents
 
 10.2.  Informative References
 
+   [BCP223]   Best Current Practice 223,
+              <https://www.rfc-editor.org/info/bcp223>.
+              At the time of writing, this BCP comprises the following:
+
+              Reilly, D., Stenn, H., and D. Sibold, "Network Time
+              Protocol Best Current Practices", BCP 223, RFC 8633,
+              DOI 10.17487/RFC8633, July 2019,
+              <https://www.rfc-editor.org/info/rfc8633>.
+
    [BollRio-2000]
               Bollobás, B. and O. Riordan, "The diameter of a scale-free
               random graph", n.d.,
@@ -3721,6 +3732,12 @@ Table of Contents
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
+   [RFC9523]  Rozen-Schiff, N., Dolev, D., Mizrahi, T., and M. Schapira,
+              "A Secure Selection and Filtering Mechanism for the
+              Network Time Protocol with Khronos", RFC 9523,
+              DOI 10.17487/RFC9523, February 2024,
+              <https://www.rfc-editor.org/rfc/rfc9523>.
 
    [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
               M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
