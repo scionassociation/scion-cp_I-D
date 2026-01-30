@@ -353,7 +353,7 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 ### ISD Numbers
 
-An ISD number is the 16-bit global identifier for an ISD. ISD numbers in the range 64 and 4094 are used for public ISDs and MUST be globally unique.
+An ISD number is the 16-bit global identifier for an ISD.
 
 The following table gives an overview of the ISD number allocation:
 
