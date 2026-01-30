@@ -359,7 +359,7 @@ Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete S
 
 ### ISD Numbers
 
-An ISD number is the 16-bit global identifier for an ISD and MUST be globally unique.
+An ISD number is the 16-bit global identifier for an ISD.
 
 The following table gives an overview of the ISD number allocation:
 
@@ -368,7 +368,7 @@ The following table gives an overview of the ISD number allocation:
 | 0            | The wildcard ISD                                                                        |
 | 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
 | 16 - 63      | Private use (analogous to {{RFC6996}}) - can be used for testing and private deployments |
-| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers |
+| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers. They MUST be globally unique. |
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
@@ -377,7 +377,7 @@ ISD numbers are allocated by the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
 
-A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this.
+A SCION AS number is the 48-bit identifier for an AS. Although they play a similar role, there is no relationship between SCION AS numbers and BGP ASNs as defined by {{RFC4271}}. For historical reasons some SCION Autonomous Systems use an AS number where the first 16 bits are 0 and the remaining 32 bits are identical to their BGP ASN, but there is no technical requirement for this. AS numbers of public ASes MUST be globally unique.
 
 #### Wildcard Addressing {#serv-disc}
 
@@ -1062,6 +1062,8 @@ message PathSegmentExtensions {
   }
 ~~~~
 
+If a Control Service receives an unknown PCB extension, it SHOULD skip the extension, but preserve it unmodified in case the PCB is further propagated.
+
 ### PCB Validity {#pcb-validity}
 
 To be valid (that is, usable to construct a valid path), a PCB MUST:
@@ -1129,9 +1131,9 @@ To ensure reachability, PCB selection policies should forward as many PCBs as po
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy. This set should have a fixed size, the *best PCBs set size*.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.
 
-The *best PCBs set size* should be:
+The size of this set is called the *best PCBs set size*. It should be:
 
   - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
   - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
@@ -1443,10 +1445,12 @@ The actual number of required path segments depends on the location of the desti
 
 The process to look up and fetch path segments consists of the following steps:
 
-1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending a SegmentsRequest. The Control Service has up segments stored in its path database and additionally checks if it has appropriate core segments and down segments stored as well, and in this case returns them immediately in a SegmentsResponse.
-2. If there are no appropriate core segments and down segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments.
-3. The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.
-4. The Control Service of the source AS returns all retrieved path segments to the source endpoint.
+1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.
+2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:
+
+   - up segments are stored in the path database of the local Control Service and can be returned immediately.
+   - core segments may be cached. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
+   - down segments may be cached. Otherwise it queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
 6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
@@ -1618,7 +1622,7 @@ The SCION Control Message Protocol (SCMP) provides functionality for network dia
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
 
-**Note:** There is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
+Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
 
@@ -1658,15 +1662,9 @@ This specification defines the message formats for the following SCMP messages:
 
 |Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
-|1    | Reserved for future use                                   |
 |2    | [Packet Too Big](#packet-too-big)                         |
-|3    | Reserved for future use                                   |
-|4    | Reserved for future use                                   |
 |5    | [External Interface Down](#external-interface-down)       |
 |6    | [Internal Connectivity Down](#internal-connectivity-down) |
-|100  | Private Experimentation                                   |
-|101  | Private Experimentation                                   |
-|127  | Reserved for expansion of SCMP error messages             |
 {: title="Error Message Types"}
 
 
@@ -1676,14 +1674,9 @@ This specification defines the message formats for the following SCMP messages:
 | 129  | [Echo Reply](#echo-reply)                                |
 | 130  | [Traceroute Request](#traceroute-request)                |
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
-| 200  | Private Experimentation                                  |
-| 201  | Private Experimentation                                  |
-| 255  | Reserved for expansion of SCMP informational messages    |
 {: title="Informational Message Types"}
 
-Type values 100, 101, 200, and 201 are reserved for private experimentation.
-
-All other values are reserved for future use.
+Further SCMP errors are covered in {{SCMP}}.
 
 ## Checksum Calculation
 
@@ -2201,7 +2194,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Juan A. Garcia Prado (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and the SCION Association for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), Brian Trammel (Google), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Jean-Christophe Hugly (SCION Association), Juan A. Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 # Deployment Testing: SCIONLab
 {:numbered="false"}
@@ -2371,12 +2364,14 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
 
+- Lookup Process: reword steps to clarify how an endpoint requests path segments
 - Wording polish following ISE Editor's feedback
 - Figures 2, 3, 4: improve arrows in SVG version
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Move "Deployment Considerations" from section 3 to 7
 - Attacks on time sources: recommend use of secure time synchronization
+- Acknowledgements: ensure all reviewers are there
 
 ## draft-dekater-scion-controlplane-14
 {:numbered="false"}
