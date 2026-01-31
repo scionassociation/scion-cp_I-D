@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 August 2026                                           S. Hitz
+Expires: 4 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         30 January 2026
+                                                         31 January 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 August 2026.
+   This Internet-Draft will expire on 4 August 2026.
 
 Copyright Notice
 
@@ -3549,6 +3549,11 @@ Table of Contents
    *  A router: packets may be dropped ahead of the control service
       intended expiration time (see Section 2.2.2.5).
 
+   It is therefore recommended to leverage secure time synchronization
+   mechanisms, such as NTS [RFC8915], [BCP223], or Khronos [RFC9523], or
+   to leverage multiple diverse time sources (e.g. GNSS and network-
+   based).
+
 8.5.  Denial of Service Attacks
 
    The beaconing process in the SCION Control Plane relies on control
@@ -3669,6 +3674,15 @@ Table of Contents
 
 10.2.  Informative References
 
+   [BCP223]   Best Current Practice 223,
+              <https://www.rfc-editor.org/info/bcp223>.
+              At the time of writing, this BCP comprises the following:
+
+              Reilly, D., Stenn, H., and D. Sibold, "Network Time
+              Protocol Best Current Practices", BCP 223, RFC 8633,
+              DOI 10.17487/RFC8633, July 2019,
+              <https://www.rfc-editor.org/info/rfc8633>.
+
    [BollRio-2000]
               Bollobás, B. and O. Riordan, "The diameter of a scale-free
               random graph", n.d.,
@@ -3706,6 +3720,11 @@ Table of Contents
               Private Use", BCP 6, RFC 6996, DOI 10.17487/RFC6996, July
               2013, <https://www.rfc-editor.org/rfc/rfc6996>.
 
+   [RFC8915]  Franke, D., Sibold, D., Teichel, K., Dansarie, M., and R.
+              Sundblad, "Network Time Security for the Network Time
+              Protocol", RFC 8915, DOI 10.17487/RFC8915, September 2020,
+              <https://www.rfc-editor.org/rfc/rfc8915>.
+
    [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
               Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
               <https://www.rfc-editor.org/rfc/rfc9217>.
@@ -3713,6 +3732,12 @@ Table of Contents
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
+   [RFC9523]  Rozen-Schiff, N., Dolev, D., Mizrahi, T., and M. Schapira,
+              "A Secure Selection and Filtering Mechanism for the
+              Network Time Protocol with Khronos", RFC 9523,
+              DOI 10.17487/RFC9523, February 2024,
+              <https://www.rfc-editor.org/rfc/rfc9523>.
 
    [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
               M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
@@ -3922,19 +3947,33 @@ Change Log
 
 draft-dekater-scion-controlplane-15
 
-   *  Lookup Process: reword steps to clarify how an endpoint requests
-      path segments
-
    *  Wording polish following ISE Editor's feedback
 
-   *  Figures 2, 3, 4: improve arrows in SVG version
+   *  ISD and AS numbers: clarify that identifiers in public ranges must
+      be unique
 
    *  Remove redundant section 1.7.  Resistance to partitioning
 
    *  Section 1.7.  Communication Protocol: Clarify DNS resolution is
       not needed
 
+   *  Figures 2, 3, 4: improve arrows in SVG version
+
+   *  PCB Extensions: clarify behavior in case of unknown extensions
+
+   *  Timestaps: add normative reference to POSIX.1-2024 to clarify
+      counting of leap seconds
+
+   *  Path Lookup Process: reformat and reword steps to clarify how an
+      endpoint requests path segments
+
+   *  SCMP: remove experimental values from table and mention more error
+      messages are in referenced spec
+
    *  Move "Deployment Considerations" from section 3 to 7
+
+   *  Attacks on time sources: recommend use of secure time
+      synchronization
 
    *  Acknowledgements: ensure all reviewers are there
 
