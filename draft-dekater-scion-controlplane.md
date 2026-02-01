@@ -1087,7 +1087,7 @@ For the purpose of constructing and propagating path segments, an AS Control Ser
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
-In addition, an AS Control Service must be configured with the algorithm used to compute the Hop Field MAC ([](#hopfield)) which must be the same as that used by routers within the AS.
+In addition, an AS Control Service must be configured with the algorithm used to compute the Hop Field MAC ([](#hopfield)) which is also used by routers within the AS.
 The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
 
