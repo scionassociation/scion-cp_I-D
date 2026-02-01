@@ -603,7 +603,10 @@ Table of Contents
    +----------------+---------------+---------------------------------+
    | 1 - 4294967295 | ~4.3 billion  | Public SCION AS numbers         |
    +----------------+---------------+---------------------------------+
-   | 1:0:0 -        | ~4.3 billion  | Public SCION AS numbers         |
+   | 1:0:0 -        | ~4.3 billion  | Public SCION AS numbers -       |
+   | 1:ffff:ffff    |               | future allocations              |
+   +----------------+---------------+---------------------------------+
+   | 2:0:0 -        | ~4.3 billion  | Public SCION AS numbers         |
    | 2:ffff:ffff    |               |                                 |
    +----------------+---------------+---------------------------------+
    | 3:0:0 -        | ~280 trillion | Unallocated                     |
