@@ -3964,6 +3964,8 @@ draft-dekater-scion-controlplane-15
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
+   *  Configuration: mention MAC algorithm as a configuration item
+
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
 
