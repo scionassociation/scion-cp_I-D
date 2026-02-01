@@ -2193,11 +2193,6 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 
 --- back
 
-# Acknowledgments
-{:numbered="false"}
-
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), Brian Trammel (Google), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Jean-Christophe Hugly (SCION Association), Juan A. Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
-
 # Deployment Testing: SCIONLab
 {:numbered="false"}
 
@@ -2527,3 +2522,8 @@ Minor changes:
 - General edits to make terminology consistent, remove duplication and rationalize text
 - Removed forward references
 - Added RFC2119 compliant terminology
+
+# Acknowledgments
+{:numbered="false"}
+
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), Brian Trammel (Google), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Jean-Christophe Hugly (SCION Association), Juan A. Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
