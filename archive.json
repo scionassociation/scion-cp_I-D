@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-29T00:30:59.266244+00:00",
+  "timestamp": "2026-02-01T00:37:18.510491+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2647,7 +2647,7 @@
       "id": "I_kwDOJx2-rs7XTvGe",
       "title": "Security considerations: Attacks to time sources",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/160",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2659,8 +2659,8 @@
       ],
       "body": "From Eliot: \n> In the dataplane draft, I think you need to add a security consideration relating to attacks on time sources.  If you're using NTP and NTP is attacked, what are the implications?  Same with GPS.  That should happen before this goes to the IESG.\n\nWe currently have sections about the impact of clock drift (introduced in https://github.com/scionassociation/scion-cp_I-D/issues/18  ) but I don'm think we say much on the security aspect of it. This issue might also affect -controlplane.\n\n[Slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1762452155817339)\n\nRelates to past issues: \n- #18\n- #117 \n\n ",
       "createdAt": "2025-11-06T17:06:59Z",
-      "updatedAt": "2026-01-28T17:46:13Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-31T06:46:23Z",
+      "closedAt": "2026-01-31T06:46:23Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2675,6 +2675,13 @@
           "body": "From the final ISE review: \n> - [ ] 22. Section 8.4.  You don't list a mitigation.  ",
           "createdAt": "2026-01-28T17:46:13Z",
           "updatedAt": "2026-01-28T17:46:13Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "From Marc Frei: \n> I think these are very good recommendations, especially the points about having multiple, diverse time sources. In addition, we could also mention RFC 9523 as a recommendation for a secure selection and filtering mechanism of time sources, although I'm currently not aware of any widely-used NTP implementations offering this.Soon there will also be an RFC for Roughtime that lets clients securely obtain an authenticated \"rough\" current time: https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime/And in the spirit of adding redundancy to the mix, I'd also recommend having a GNSS receiver as an additional, cost-effective, and accurate source of reference time.",
+          "createdAt": "2026-01-30T08:21:47Z",
+          "updatedAt": "2026-01-30T08:21:47Z"
         }
       ]
     },
@@ -2870,7 +2877,7 @@
       "id": "I_kwDOJx2-rs7kNhOo",
       "title": "ISE final review - points",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/177",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -2882,8 +2889,8 @@
       ],
       "body": "Please address the following points:\n\n- [x] 1 Please re-expand SCION AS and SCION on first use in the introduction.  I realize you do this in the abstract, but please do it again (and yes, I am aware that the glossary immediately follows).\n- [x] 2. In Section 1.3, it feels like there is a sentence missing between the first and second paragraphs that reminds the reader what an AS is.\n- [x] 3. For the definition of PCB, I suggest lower-casifying the word Segment or hyphenating path-segment, to make it more obvious as to why PCB is used rather than PSCB.\n- [x] 4. Also in that section, I suggest changing \"see also Section [245]\" to \"This is described in detail in Section [245]\".  Take this suggestion or leave it- it is stylistic, but \"See also\" is generally used when you are detailing something NOW but also have more to say later.  You are not detailing anything in Section 1.4 (a good thing).\n- [x] 5. The note at the bottom of Section 1.4 probably can be reduced to \"The Control Service of an AS is decoupled from SCION border routers: it may be deployed anywhere within that AS.\"  The other concepts in the note, I think, can be found elsewhere.\n- [x] 6. 1.6 Bootstrapping ability.  The chapeau can be shortened as follows: \"The following mechanisms are used to avoid circular dependcencies, and to provide resiliency after systemic failures:\"\n- [x] 7. Last bullet of that section.  The last sentence is awkward.  For one thing, \"this material\" isn't entirely clear as to its meaning.  Also, and this is anotehr personal style thing, I hate parenthetical statements.  Finally, I would suggest that the last phrase (\"thereby...\") is redundant and can be removed.  I might also expand TRC in that statement again, as a reminder.\n- [x] 8. Section 1.7 needs a bit of work or should be removed.  For one thing, I suspect you are overpromising.  In particular, a partition can occur in more than one place, especially when virtual links are aggregated into a single physical link.  For another, it's awkardly worded.  If you're going to keep this section, maybe add an example as to how partitions are avoided/recovered.\n- [x] 9. A caution about Section 1.8: it needs a brief discussion about domain name resolution relating to H3 and circular dependencies.  This can be elsewhere in the doc, but it needs to be somewhere.\n- [x] 11. In section 2.2.2, there is no need to forward reference into the subsections, other than to say, perhaps, \"The signed header, signed body, and signature fields are detailed below.\"\n- [ ] 12. One aspect that 2.2.2.1 brings home is a stylistic difference between us: I prefer to read the narrative and THEN see the header definition.  But what you have is fine, and it is consistently applied.  I particularly appreciate your proper captioning of the artwork. --> Skipped, point taken, but it is a stylistic difference. In our case, hearers are not really bit headers, rather than a graphical representation of fields\n- [x] 13. After Figure 10, the first bullet is repeated as the second bullet.\n- [x] 14. Section 2.2.2.3 the ingress_mtu definition is repeated.\n- [x] 15. Section 2.2.2.6, remind people that || = concatenation.\n- [x] 16. Section 2.2.3 what if a receiver doesn't understand an extension? --> https://github.com/scionassociation/scion-cp_I-D/issues/182 \n- [x] 19. In Section 2.4, for calculating seconds since the UNIX epoch, does one include leap seconds or not?  Also, I would prefer you stated \"1 January 1970 00:00 UTC\" instead of the UNIX epoch.  This mostly matters with at_least_valid_since, since this stuff can propagate fast.\n- [x] 20. Section 3 seems misplaced.  I would have expected it in front of Section 8.\n- [x] 21. Section 7: how are SCMP messages secured?\n- [x] 22. Section 8.4.  You don't list a mitigation. --> https://github.com/scionassociation/scion-cp_I-D/issues/160 ",
       "createdAt": "2026-01-19T09:15:20Z",
-      "updatedAt": "2026-01-28T17:53:26Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-29T11:16:13Z",
+      "closedAt": "2026-01-29T11:16:13Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2899,15 +2906,15 @@
       "id": "I_kwDOJx2-rs7l3FrM",
       "title": "SCMP errors 1 and 4?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/182",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tzaeschke",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Table 5 in section 7.2 does not list the SCMP errors 1 (destination unreachable) and 4 (parameter problem) as they are defined here: https://docs.scion.org/en/latest/protocols/scmp.html#scmp-error-messages\n\nhttps://github.com/scionassociation/scion-cp_I-D/blob/02c446ba36c25d3031808f1bd1a4d43fb274ee12/draft-dekater-scion-controlplane.md?plain=1#L1767-L1774\n\nHave these been removed?",
       "createdAt": "2026-01-26T15:22:16Z",
-      "updatedAt": "2026-01-28T17:49:20Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-30T11:04:12Z",
+      "closedAt": "2026-01-30T11:04:12Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -2918,7 +2925,7 @@
         },
         {
           "author": "tzaeschke",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "Thanks for the explanation.\n\nI created a 4th solution in #184. It removes the irrelevant entries (not related to path discovery/management) and clarifies the text.\nFell free to use it or any of your own propositions, either is fine by me.",
           "createdAt": "2026-01-27T16:25:03Z",
           "updatedAt": "2026-01-27T16:25:03Z"
@@ -2929,6 +2936,20 @@
           "body": "I was going through the comments of the ISE editor in #177 . One of them is: \n> 16. Section 2.2.3 what if a receiver doesn't understand an extension?\n \nAnd the answer is: it MAY send a SCMP parameter problem. I will consult him about the two missing SCMP messages. \n\n",
           "createdAt": "2026-01-28T17:49:20Z",
           "updatedAt": "2026-01-28T17:49:20Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Feedback by ISE editor: \n> Some options would be: \n> 1. We could list the two messages in Table 5, and there link the reference to [SCMP] where they are specified. \n>2. Add the full spec of the two missing messages. Note that the destination unreachable message is similar to ICMPv6 >([rfc4443](https://datatracker.ietf.org/doc/html/rfc4443#section-3)), however we clarify in the draft:  \n>   ```\n>   *Note:* There is not currently a defined mechanism for converting\n>   ICMP messages to SCMP messages, or vice-versa.\n>   ```\n>  In both cases we could then cross-reference the SCMP section from 2.2.3. PCB Extensions. What do you feel would be the best option?\n\nNo, I think it's good enough to say that, like ICMP, errors are covered elsewhere.\n\n\nSo I'll go with Tills proposal. Then, to address the ISE editor's question, I'll add a note in the extension section.",
+          "createdAt": "2026-01-29T16:58:23Z",
+          "updatedAt": "2026-01-29T16:58:23Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I was wrong about Eliot's comment. He referred to what happens if a CP receives an unknown _PCB extension_, not a router receiving an unknown header extension. In this case, it just needs to forward it.",
+          "createdAt": "2026-01-29T17:33:03Z",
+          "updatedAt": "2026-01-29T17:33:03Z"
         }
       ]
     },
@@ -2937,30 +2958,40 @@
       "id": "I_kwDOJx2-rs7l3kQu",
       "title": "Segment request procedure seems wrong",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/183",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tzaeschke",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The segment request procedure in section 5.1 seem wrong to me:\n\nhttps://github.com/scionassociation/scion-cp_I-D/blob/02c446ba36c25d3031808f1bd1a4d43fb274ee12/draft-dekater-scion-controlplane.md?plain=1#L1554-L1560\n\nIt also seems to contradict the description in section 5.1.1:\n\nhttps://github.com/scionassociation/scion-cp_I-D/blob/02c446ba36c25d3031808f1bd1a4d43fb274ee12/draft-dekater-scion-controlplane.md?plain=1#L1571-L1577\n\n\n**Note:** To avoid misunderstanding, I assume the [New endhost API](https://github.com/scionproto/scion/issues/4834) is not yet standardized and therefore not described here. If this indeed describes the new endhost API, then Section 5.1.1 is wrong.\n\n\nSpecifically:\n\n- Ad 1. `The Control Service has up segments stored in its path database and additionally checks if it has appropriate core segments and down segments stored as well, and in this case returns them immediately in a SegmentsResponse.`\nThis sounds like as if, when receiving an UP segment request, the CS would also check for CORE and DOWN segments (and return them as well).\nI don't this is not the case. As described in section 5.1.1, requests for UP, CORE and DOWN are issued and answered separately.\n\n- Ad 3. `The Control Service of the source AS combines up segments with the newly retrieved core segments. The Control Service then queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments.`\nI don't think that is the case, the CS does not combine path segments.\n\nI wonder if this could be changed to:\n\n```\n1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending a `SegmentsRequest` separately for up, core and down segments. \n   1. The Control Service has up segments stored in its path database and returns them immediately in a `SegmentsResponse`. \n   2. The Control Service may have appropriate core segments available in its cache, and in this case returns them immediately in a `SegmentsResponse`. If there are no appropriate core segments, the Control Service in the source AS queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. \n   3. The Control Service may have appropriate down segments available in its cache, and in this case returns them immediately in a `SegmentsResponse`. If there are no appropriate down segments, the Control Service of the source AS queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up segments and core segments. \n2. The Control Service of the source AS returns all retrieved segments to the source endpoint. \n3. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)). \n4. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane. \n5. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally. \n```\n\nAlternatively, I wonder if these points could all be removed. The endhost activity is already described in section 5.1.1. CS activity is described in section 5.2. And the last point about path reversal is described elsewhere in the document.\nI suggest removing this list.\n\nPath segment combination is also described in the [DP draft](https://github.com/scionassociation/scion-dp_I-D/blob/main/draft-dekater-scion-dataplane.md#path-construction-segment-combinations-construction)",
       "createdAt": "2026-01-26T15:52:40Z",
-      "updatedAt": "2026-01-26T16:07:51Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-01-30T11:53:50Z",
+      "closedAt": "2026-01-30T11:53:50Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Good point, what do you think about the rewording in #193? ",
+          "createdAt": "2026-01-29T19:09:03Z",
+          "updatedAt": "2026-01-29T19:09:03Z"
+        }
+      ]
     },
     {
       "number": 186,
       "id": "I_kwDOJx2-rs7mTuim",
-      "title": "17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what.",
+      "title": "Avoid passive tense to clarify subject",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/186",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [],
-      "body": "",
+      "body": "> 17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what. ",
       "createdAt": "2026-01-28T07:10:56Z",
-      "updatedAt": "2026-01-28T07:11:53Z",
+      "updatedAt": "2026-01-30T08:31:39Z",
       "closedAt": null,
       "comments": [
         {
@@ -2969,6 +3000,13 @@
           "body": "I feel it's already explained that it's the Control Service of the AS.",
           "createdAt": "2026-01-28T07:11:53Z",
           "updatedAt": "2026-01-28T07:11:53Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> An AS MUST select which PCBs to propagate further. \n\n--> An AS Control Service MUST ... ",
+          "createdAt": "2026-01-30T08:31:39Z",
+          "updatedAt": "2026-01-30T08:31:39Z"
         }
       ]
     },
@@ -2977,15 +3015,15 @@
       "id": "I_kwDOJx2-rs7mTvkv",
       "title": "Clarify PCBs set size",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/187",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "> 18. In Section 2.3.4, you write \"This set should have a fixed size, the best PCBs set size.\" Is that meant to be the maximum sets be the same size? ",
       "createdAt": "2026-01-28T07:12:07Z",
-      "updatedAt": "2026-01-28T19:12:28Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-30T01:03:33Z",
+      "closedAt": "2026-01-30T01:03:33Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -3008,15 +3046,15 @@
       "id": "I_kwDOJx2-rs7mTxgl",
       "title": "polish Figures 3 and 4",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/188",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "> 10. There are small issues with Figures 3 and 4 with side arrows not being properly represented in SVG in the HTML version.  I imagine you are pressed for space in the ASCII version?  If you I could ask one of the aasvg authors to have a look.  Before I do that, however, I am not sure those arrows are appropriate.  I think you're just meaning to expand what the PCB in each case is, rather than show flow of communication.  In that case, I might remove the arrows.\n",
       "createdAt": "2026-01-28T07:13:56Z",
-      "updatedAt": "2026-01-28T18:58:12Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-29T14:11:05Z",
+      "closedAt": "2026-01-29T14:11:05Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -3024,6 +3062,44 @@
           "body": "I realised Figures 2, 3 and 4 can be greatly simplified to free up space and hopefully render properly as SVG. I've shown the PCBs as flowing to the ASes (which was not entirely clear previously), but we could tweak this further.",
           "createdAt": "2026-01-28T07:15:51Z",
           "updatedAt": "2026-01-28T07:15:51Z"
+        }
+      ]
+    },
+    {
+      "number": 189,
+      "id": "I_kwDOJx2-rs7mujJ0",
+      "title": "Clarify uniqueness of ASes and ISDs",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/189",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "In relation to the[ private ISD proposal ](https://github.com/scionproto/scion/issues/4827#issuecomment-3576181453)\n\nOn this point, the current registry policy says:\n>  whereas it is operationally desirable to use globally unique numbers to identify SCION Autonomous Systems (ASes). These need to be assigned by a Registration Authority (RA) in order to assure their uniqueness.  \n",
+      "createdAt": "2026-01-29T14:22:23Z",
+      "updatedAt": "2026-01-30T17:41:59Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell also, how do we deal with this discrepancy: \n\n<img width=\"660\" height=\"783\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/53197407-e845-4be5-a818-e6ec5d5fa9a1\" />\n\n<img width=\"680\" height=\"522\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/504ad940-4313-4f17-9664-345f689205f0\" />",
+          "createdAt": "2026-01-29T14:34:07Z",
+          "updatedAt": "2026-01-29T14:34:07Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "At the moment the 1:0:0 - 1:f:ffff block is not allocated to Anapaya. The intention is to do so - at their request as the current registry operators - when we launch the new registry, but that has yet to happen.\n",
+          "createdAt": "2026-01-30T06:11:07Z",
+          "updatedAt": "2026-01-30T06:11:07Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Since this will happen very soon, @knmeynell  shall we simply mention that the range 1:0:0 - 2:f:ffff is overall for public ASes? \nThis way we include Anapaya's new range..",
+          "createdAt": "2026-01-30T17:41:45Z",
+          "updatedAt": "2026-01-30T17:41:59Z"
         }
       ]
     }
@@ -13321,52 +13397,156 @@
       "id": "PR_kwDOJx2-rs6-MmHX",
       "title": "ISE Editor Review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/179",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #177\r\n\r\n- [x] Remove duplicate lines introduced in https://github.com/scionassociation/scion-cp_I-D/pull/174/commits/fb9e968afe6261a11e88971e65d9006086a63e9a ",
       "createdAt": "2026-01-20T11:52:35Z",
-      "updatedAt": "2026-01-28T17:53:17Z",
+      "updatedAt": "2026-01-29T11:16:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "ISE-Editor-Review",
       "headRefOid": "f523c7d3d7e27e1cba0abb49d02dea02b979fcc2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-01-29T11:16:11Z",
+      "mergedAt": "2026-01-29T11:16:11Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "6894a19fd5563da69247806de061d4c1deef920c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7d2nnT",
+          "commit": {
+            "abbreviatedOid": "f523c7d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-29T11:15:58Z",
+          "updatedAt": "2026-01-29T11:15:58Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 180,
       "id": "PR_kwDOJx2-rs6_YhR-",
-      "title": "Enable private ISDs",
+      "title": "Clarify uniqueness of ISD and AS numbers",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/180",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Changes to enable [private ISDs](https://github.com/scionproto/scion/issues/4827#issuecomment-3576181453).",
+      "body": "Changes to enable [private ISDs](https://github.com/scionproto/scion/issues/4827#issuecomment-3576181453).\r\n\r\nResolves #189 ",
       "createdAt": "2026-01-26T14:52:18Z",
-      "updatedAt": "2026-01-27T09:08:32Z",
+      "updatedAt": "2026-01-30T17:34:47Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
       "headRepository": "tzaeschke/scion-cp_I-D",
       "headRefName": "private-isd-enablement",
-      "headRefOid": "fd70393738990254ac7230eccd8cceacd14f82cb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "9f05d70ef415ba3552e31abda8b1b2a8cf1b9a1e",
+      "closedAt": "2026-01-30T17:34:47Z",
+      "mergedAt": "2026-01-30T17:34:47Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "33bad95c588e34fdf0664ba72720e994fcff5bf6"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7d6JbJ",
+          "commit": {
+            "abbreviatedOid": "fd70393"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Hi Til, OK for ISD uniqueness\n\nFor AS uniqueness, see my comments",
+          "createdAt": "2026-01-29T14:16:10Z",
+          "updatedAt": "2026-01-29T14:38:41Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\n| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and \"vanity\" numbers. They MUST be globally unique. |\n```",
+              "createdAt": "2026-01-29T14:16:10Z",
+              "updatedAt": "2026-01-29T14:38:41Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "How about we mention it directly in the table?  (see my proposal later on)\n```suggestion\nAn ISD number is the 16-bit global identifier for an ISD.\n```",
+              "createdAt": "2026-01-29T14:16:50Z",
+              "updatedAt": "2026-01-29T14:38:41Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "Do we need to add this requirement to the draft, or is it enough that this is part of the registry policy? \nAnd should the uniqueness requirement only apply to public ASes (same as for the ISDs)?\n\nThe current registry policy says: \n>  whereas it is operationally desirable to use globally unique numbers to identify SCION Autonomous Systems (ASes). These need to be assigned by a Registration Authority (RA) in order to assure their uniqueness. \n\nCC: @knmeynell \n\n",
+              "createdAt": "2026-01-29T14:24:54Z",
+              "updatedAt": "2026-01-29T14:38:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eEuSD",
+          "commit": {
+            "abbreviatedOid": "fd70393"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T01:05:37Z",
+          "updatedAt": "2026-01-30T01:05:37Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "It's more registry policy that public AS numbers must be globally unique, although in practice we want to encourage it so I don't see any specific issue with adding the statement.",
+              "createdAt": "2026-01-30T01:05:37Z",
+              "updatedAt": "2026-01-30T01:05:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eMH1Y",
+          "commit": {
+            "abbreviatedOid": "e3bee72"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:23:19Z",
+          "updatedAt": "2026-01-30T11:23:19Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Added ",
+              "createdAt": "2026-01-30T11:23:19Z",
+              "updatedAt": "2026-01-30T11:23:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eTMSH",
+          "commit": {
+            "abbreviatedOid": "9f05d70"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-30T17:34:28Z",
+          "updatedAt": "2026-01-30T17:34:28Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 181,
@@ -13422,46 +13602,657 @@
       "id": "PR_kwDOJx2-rs6_pRFy",
       "title": "SCMP specification",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/184",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tzaeschke",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This PR removes unnecessary entries from the SCMP specification section. See also #182",
       "createdAt": "2026-01-27T16:22:11Z",
-      "updatedAt": "2026-01-27T16:22:12Z",
+      "updatedAt": "2026-01-30T09:50:20Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
       "headRepository": "tzaeschke/scion-cp_I-D",
       "headRefName": "scmp-spec",
       "headRefOid": "cb906ed89938056210296b86c70d676170b17f06",
-      "closedAt": null,
+      "closedAt": "2026-01-29T17:10:02Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Moved this change to #190 since I don't have write access to your branch. \r\n\r\n@tzaeschke I gave you write access to the repo, so that you can create branches directly in here or edit active branches",
+          "createdAt": "2026-01-29T17:10:02Z",
+          "updatedAt": "2026-01-29T17:10:02Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7d6vKx",
+          "commit": {
+            "abbreviatedOid": "cb906ed"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Le'ts keep this on hold until I get feedback from the ISE Editor about the two missing SCMP messages",
+          "createdAt": "2026-01-29T14:40:41Z",
+          "updatedAt": "2026-01-29T14:40:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7d9xg3",
+          "commit": {
+            "abbreviatedOid": "cb906ed"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-29T17:02:15Z",
+          "updatedAt": "2026-01-29T17:02:15Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "JFYI this is also mentioned a few lines above: \n\n> This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection). ",
+              "createdAt": "2026-01-29T17:02:15Z",
+              "updatedAt": "2026-01-29T17:02:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eKpgC",
+          "commit": {
+            "abbreviatedOid": "cb906ed"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T09:49:13Z",
+          "updatedAt": "2026-01-30T09:49:14Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "```suggestion\nAll other types in [](#manipulate-selection) are not relevant for path diagnosis and recovery.\n```",
+              "createdAt": "2026-01-30T09:49:14Z",
+              "updatedAt": "2026-01-30T09:49:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eKqTX",
+          "commit": {
+            "abbreviatedOid": "cb906ed"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T09:50:05Z",
+          "updatedAt": "2026-01-30T09:50:05Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Yes, it's a duplication, but I thought we should clarify what \"other types\" means...",
+              "createdAt": "2026-01-30T09:50:05Z",
+              "updatedAt": "2026-01-30T09:50:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eKqhf",
+          "commit": {
+            "abbreviatedOid": "cb906ed"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T09:50:20Z",
+          "updatedAt": "2026-01-30T09:50:20Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Is that better?",
+              "createdAt": "2026-01-30T09:50:20Z",
+              "updatedAt": "2026-01-30T09:50:20Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 185,
       "id": "PR_kwDOJx2-rs6_xl65",
       "title": "Simplified figures",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/185",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "I've reduced PCBs to one single box each, to avoid problems with confusing arrows.",
+      "body": "Resolves #188 \r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Redrawn-Figures-2-4/draft-dekater-scion-controlplane.txt)\r\nI've reduced PCBs to one single box each, to avoid problems with confusing arrows.",
       "createdAt": "2026-01-28T06:57:27Z",
-      "updatedAt": "2026-01-28T06:57:28Z",
+      "updatedAt": "2026-01-29T14:11:07Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "02c446ba36c25d3031808f1bd1a4d43fb274ee12",
+      "baseRefOid": "6894a19fd5563da69247806de061d4c1deef920c",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Redrawn-Figures-2-4",
-      "headRefOid": "d3d6a4b91c887c76b5ba4471c2cb1a5a8cbfdf67",
+      "headRefOid": "eacc7cc6fb2aa58e3faaf1c288a09697c8e81329",
+      "closedAt": "2026-01-29T14:11:04Z",
+      "mergedAt": "2026-01-29T14:11:04Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "3c4494eb8a4ff8b8ab7844ff81b686a905a9f9d5"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Before-after: \r\n<img width=\"1594\" height=\"1317\" alt=\"Screenshot 2026-01-29 at 12 25 43\" src=\"https://github.com/user-attachments/assets/9602e9f4-08d0-4975-8b65-0473acd2fa2b\" />\r\n<img width=\"1522\" height=\"695\" alt=\"Screenshot 2026-01-29 at 12 26 43\" src=\"https://github.com/user-attachments/assets/d86c4ef5-9491-4d9d-85a5-aba37acffcbb\" />\r\n\r\n\r\nI like that you removed the \"small\" PCBs, but I find the arrows connecting to the next AS a bit weird (as the explanation specifically refers to a specific incoming interface.. I'd prefer to leave teh arrows floating like you did in figure 4: \r\n<img width=\"604\" height=\"257\" alt=\"Screenshot 2026-01-29 at 12 31 26\" src=\"https://github.com/user-attachments/assets/f7283933-ca8a-455c-835c-99f7c1e7c496\" />\r\n\r\n \r\n",
+          "createdAt": "2026-01-29T11:25:58Z",
+          "updatedAt": "2026-01-29T11:33:40Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7d3Xx6",
+          "commit": {
+            "abbreviatedOid": "fd9fdef"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-29T12:03:49Z",
+          "updatedAt": "2026-01-29T12:03:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7d3cT4",
+          "commit": {
+            "abbreviatedOid": "2b862ae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "@knmeynell I made some more changes, what do you think? Can you 4 eye check, and if they look ok for you, can you merge? \n\n<img width=\"1629\" height=\"1391\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/858f4b40-27f2-4b4a-93c9-e94b30b2a8e6\" />\n\n<img width=\"1582\" height=\"689\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/cf103a8a-50e1-4908-be66-6af04ce66628\" />\n",
+          "createdAt": "2026-01-29T12:08:15Z",
+          "updatedAt": "2026-01-29T12:48:27Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7d6BY2",
+          "commit": {
+            "abbreviatedOid": "eacc7cc"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "<img width=\"1612\" height=\"1346\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/4cc1c101-f640-408b-bec0-81257bf1503c\" />\n\n<img width=\"1575\" height=\"694\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/60d185e2-cd3d-4671-8422-585e2491e40d\" />",
+          "createdAt": "2026-01-29T14:09:29Z",
+          "updatedAt": "2026-01-29T14:09:29Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 190,
+      "id": "PR_kwDOJx2-rs7AL7qD",
+      "title": "SCMP: remove unnecessary entries. PCB Extensions: clarify behavior in case of unknown extensions",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/190",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #182 \r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/scmp-spec/draft-dekater-scion-controlplane.txt) \r\n\r\nRework of #184 ",
+      "createdAt": "2026-01-29T17:09:06Z",
+      "updatedAt": "2026-01-30T11:04:15Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3c4494eb8a4ff8b8ab7844ff81b686a905a9f9d5",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "scmp-spec",
+      "headRefOid": "39965c934b1e4f73894cb24056065453366fd9e3",
+      "closedAt": "2026-01-30T11:04:11Z",
+      "mergedAt": "2026-01-30T11:04:11Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5d793d1371ca0f690d70ec12cbbb6d915e34b63f"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke what do you think? (I cannot set you as reviewer somehow)",
+          "createdAt": "2026-01-29T17:47:41Z",
+          "updatedAt": "2026-01-29T17:47:41Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eKDbl",
+          "commit": {
+            "abbreviatedOid": "39965c9"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2026-01-30T09:14:08Z",
+          "updatedAt": "2026-01-30T09:14:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 191,
+      "id": "PR_kwDOJx2-rs7AMfhu",
+      "title": "Clarify PCB best set size",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/191",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #187 \r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/pcb_set_size/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-01-29T17:52:12Z",
+      "updatedAt": "2026-01-30T01:03:38Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3c4494eb8a4ff8b8ab7844ff81b686a905a9f9d5",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "pcb_set_size",
+      "headRefOid": "f622cc61f988899aa3526f004ce8f57afeda58cb",
+      "closedAt": "2026-01-30T01:03:32Z",
+      "mergedAt": "2026-01-30T01:03:32Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "8054b53b5ed79decec906c2259deb5b5c0c30734"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you 4 eye check and merge? ",
+          "createdAt": "2026-01-29T17:53:47Z",
+          "updatedAt": "2026-01-29T17:53:47Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eEsYH",
+          "commit": {
+            "abbreviatedOid": "f622cc6"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-30T01:03:24Z",
+          "updatedAt": "2026-01-30T01:03:24Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 192,
+      "id": "PR_kwDOJx2-rs7ANAhF",
+      "title": "attacks to time sources: recommend secure time sync",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/192",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #160\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/time_security/draft-dekater-scion-controlplane.txt)\r\n\r\nSlack [question](https://scionproto.slack.com/archives/C8ADA9CEP/p1769710277323639?thread_ts=1762452155.817339&cid=C8ADA9CEP)",
+      "createdAt": "2026-01-29T18:34:15Z",
+      "updatedAt": "2026-01-31T15:29:01Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "33bad95c588e34fdf0664ba72720e994fcff5bf6",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "time_security",
+      "headRefOid": "a996c6704d23029ead6528979099e5e0c3100a26",
+      "closedAt": "2026-01-31T06:46:23Z",
+      "mergedAt": "2026-01-31T06:46:22Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "89967d0063193c8253034a4f34f53c72978db0aa"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell please review but wait before merging. I want to hear back on Slack\r\n",
+          "createdAt": "2026-01-30T18:56:38Z",
+          "updatedAt": "2026-01-30T18:56:38Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eb4a4",
+          "commit": {
+            "abbreviatedOid": "a996c67"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-31T06:46:06Z",
+          "updatedAt": "2026-01-31T06:46:06Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 193,
+      "id": "PR_kwDOJx2-rs7ANY6V",
+      "title": "path lookup process: reword to clarify that requests are in parallel",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/193",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #183 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/path_lookup_fix/draft-dekater-scion-controlplane.txt)\r\n[wdiff](https://author-tools.ietf.org/diff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/path_lookup_fix/draft-dekater-scion-controlplane.txt&wdiff=1)",
+      "createdAt": "2026-01-29T19:08:31Z",
+      "updatedAt": "2026-01-30T17:33:34Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "3c4494eb8a4ff8b8ab7844ff81b686a905a9f9d5",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "path_lookup_fix",
+      "headRefOid": "6b5427d4767a28ddbeaa6c3bca96235dd433285e",
+      "closedAt": "2026-01-30T11:53:49Z",
+      "mergedAt": "2026-01-30T11:53:49Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "14fdf8f7b281bc836fe91867289635f12877d3bb"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Waiting for @tzaeschke 's feedback before merging",
+          "createdAt": "2026-01-30T08:12:58Z",
+          "updatedAt": "2026-01-30T08:12:58Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you please look in PR if there are unresolved discussions before merging? \r\nI'll continue with TIll's edits in another PR\r\n",
+          "createdAt": "2026-01-30T17:30:13Z",
+          "updatedAt": "2026-01-30T17:30:13Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eErjd",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-30T01:02:27Z",
+          "updatedAt": "2026-01-30T01:02:27Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eKFb5",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "LGTM % changes",
+          "createdAt": "2026-01-30T09:16:16Z",
+          "updatedAt": "2026-01-30T09:30:08Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\n1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.\n```",
+              "createdAt": "2026-01-30T09:16:16Z",
+              "updatedAt": "2026-01-30T09:30:08Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\n2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:\n```",
+              "createdAt": "2026-01-30T09:21:50Z",
+              "updatedAt": "2026-01-30T09:30:08Z"
+            },
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\n   - up segments are stored in the path database of the local Control Service and can be returned immediately.\n```",
+              "createdAt": "2026-01-30T09:22:55Z",
+              "updatedAt": "2026-01-30T09:30:08Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\n   - core segments may be cached in the local Control Service. Otherwise, the local Control Service queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.\n```",
+              "createdAt": "2026-01-30T09:24:43Z",
+              "updatedAt": "2026-01-30T09:30:08Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\n   - down segments may be cached in the local Control Service. Otherwise the local Control Service queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.\n```",
+              "createdAt": "2026-01-30T09:25:49Z",
+              "updatedAt": "2026-01-30T09:30:09Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "They don\u00b4t need to be queried in parallel, and not all libraries do that.",
+              "createdAt": "2026-01-30T09:27:33Z",
+              "updatedAt": "2026-01-30T09:30:09Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\n- Lookup Process: reword steps to clarify how an endpoint requests path segments\n```",
+              "createdAt": "2026-01-30T09:29:11Z",
+              "updatedAt": "2026-01-30T09:30:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eL65N",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:09:18Z",
+          "updatedAt": "2026-01-30T11:09:18Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n   - core segments may be cached in the local Control Service. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.\r\n```\r\nJust to avoid having \"control service 3 times in the same sentence. I think it is clear anyways ",
+              "createdAt": "2026-01-30T11:09:18Z",
+              "updatedAt": "2026-01-30T11:09:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eL7Vh",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:09:44Z",
+          "updatedAt": "2026-01-30T11:09:45Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n   - down segments may be cached in the local Control Service. Otherwise it queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.\r\n```",
+              "createdAt": "2026-01-30T11:09:45Z",
+              "updatedAt": "2026-01-30T11:09:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eMlY2",
+          "commit": {
+            "abbreviatedOid": "6b5427d"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:51:19Z",
+          "updatedAt": "2026-01-30T11:51:20Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I did this to make clear where it is cached, that may not be clear otherwise?",
+              "createdAt": "2026-01-30T11:51:19Z",
+              "updatedAt": "2026-01-30T11:51:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eMsRG",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:56:06Z",
+          "updatedAt": "2026-01-30T11:56:06Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "I tried to make clear what \"it\" is, it could potentially be misunderstood as \"it\"=endpoint?",
+              "createdAt": "2026-01-30T11:56:06Z",
+              "updatedAt": "2026-01-30T11:56:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eMscw",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T11:56:18Z",
+          "updatedAt": "2026-01-30T11:56:18Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Oh it is merged already. Nevermind.",
+              "createdAt": "2026-01-30T11:56:18Z",
+              "updatedAt": "2026-01-30T11:56:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7eTLft",
+          "commit": {
+            "abbreviatedOid": "6422e45"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-30T17:33:33Z",
+          "updatedAt": "2026-01-30T17:33:34Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Sorry, let's add this in #195 ",
+              "createdAt": "2026-01-30T17:33:34Z",
+              "updatedAt": "2026-01-30T17:33:34Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 194,
+      "id": "PR_kwDOJx2-rs7AWj1P",
+      "title": "Acknowledge Brian, Till, JC",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/194",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #177 ",
+      "createdAt": "2026-01-30T09:47:47Z",
+      "updatedAt": "2026-01-30T11:53:01Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "8054b53b5ed79decec906c2259deb5b5c0c30734",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "acknowledgements",
+      "headRefOid": "c7645c0fe14c467cc5c1bed4b513a01d9bfe26bd",
+      "closedAt": "2026-01-30T11:52:57Z",
+      "mergedAt": "2026-01-30T11:52:57Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "b0952ec8e4d39fc8de54fa62ee20f5a40d462e27"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Did I forget anyone @knmeynell ? \r\nOtherwise, just merge it",
+          "createdAt": "2026-01-30T09:48:03Z",
+          "updatedAt": "2026-01-30T11:12:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eMnib",
+          "commit": {
+            "abbreviatedOid": "c7645c0"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-30T11:52:47Z",
+          "updatedAt": "2026-01-30T11:52:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 195,
+      "id": "PR_kwDOJx2-rs7AceyU",
+      "title": "path lookup: wordsmithing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/195",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Follow up of #193 ",
+      "createdAt": "2026-01-30T17:33:03Z",
+      "updatedAt": "2026-01-30T17:33:09Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "14fdf8f7b281bc836fe91867289635f12877d3bb",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "path_lookup_fix_2",
+      "headRefOid": "1627024c28166801f3b81d954147a87b22b4871b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
