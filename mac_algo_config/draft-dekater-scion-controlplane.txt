@@ -1596,9 +1596,8 @@ Table of Contents
 
    In addition, an AS Control Service must be configured with the
    algorithm used to compute the Hop Field MAC (Section 2.2.2.5) which
-   must be the same as that used by routers within the AS.  The maximum
-   MTU supported by all intra-AS links may also be configured by the
-   operator.
+   is also used by routers within the AS.  The maximum MTU supported by
+   all intra-AS links may also be configured by the operator.
 
 2.3.  Propagation of PCBs
 
