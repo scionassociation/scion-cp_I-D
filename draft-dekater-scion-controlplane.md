@@ -2373,6 +2373,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
+- Configuration: mention MAC algorithm as a configuration item
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
