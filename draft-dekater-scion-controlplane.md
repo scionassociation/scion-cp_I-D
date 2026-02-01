@@ -391,7 +391,8 @@ SCION endpoints use wildcard AS `0` to designate any core AS, e.g. to place requ
 |------------------+-------------+-----------------------------------------------------------------------------|
 | `0`          | 1           | The wildcard AS                                                             |
 | `1 - 4294967295`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
-| `1:0:0 - 2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
+| `1:0:0 - 1:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers - future allocations                       |
+| `2:0:0 - 2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
 | `3:0:0 - feff:ffff:ffff`| ~280&nbsp;trillion| Unallocated                                                    |
 | `ff00:0:0 - ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}) |
 | `ff00:1:0 - ffa9:ffff:ffff`| ~730&nbsp;billion | Unallocated                                                 |
