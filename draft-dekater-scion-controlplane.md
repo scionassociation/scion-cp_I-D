@@ -245,7 +245,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
-**Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).
+**Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. Endpoints can create one with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
 **Hop Field (HF)**: As they traverse the network, Path-Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
 
@@ -257,7 +257,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
-**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Up to three path segments can be used to create a forwarding path.
+**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Endpoints use up to three path segments to create a forwarding path.
 
 **Path-Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.
 
@@ -283,7 +283,7 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 
 SCION paths are comprised of at most three path segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Each path segment is established over one or more links.
 
-SCION paths are always "valley free" whereby a child AS does not carry transit traffic from a parent AS to another parent AS. These paths can contain at most one peering link which can be used as shortcut between two path segments containing two peer ASes.
+SCION paths are always "valley free" whereby a child AS does not carry transit traffic from a parent AS to another parent AS. These paths can contain at most one peering link, which endpoints can use as shortcut between two path segments containing two peer ASes.
 
 {{#figure-1}} shows the three types of links for one small ISD with two core ASes A and C, and four non-core ASes D,E,F, and G.
 
@@ -335,7 +335,7 @@ The **Control Service** is responsible for the path exploration and registration
 - Selecting and registering the set of path segments via which the AS wants to be reached.
 - Distributing certificates and keys to secure inter-AS communication. Each PCB contains signatures of all on-path ASes and each time the Control Service of an AS receives a PCB, it validates the PCB's authenticity. When the Control Service lacks an intermediate certificate, it can query the Control Service of the neighboring AS that sent the PCB through the API described in [](#crypto-api).
 
-**Note:** The Control Service of an AS is decoupled from SCION border routers and may be deployed anywhere within the AS.
+**Note:** The Control Service of an AS is decoupled from SCION border routers and operators may deploy it anywhere within the AS.
 
 ### Path Segments
 
@@ -370,7 +370,7 @@ The following table gives an overview of the ISD number allocation:
 | 0            | The wildcard ISD                                                                        |
 | 1 - 15       | Reserved for documentation and sample code (analogous to {{RFC5398}}).                  |
 | 16 - 63      | Private use (analogous to {{RFC6996}}) - can be used for testing and private deployments |
-| 64 - 4094    | Public ISDs - should be allocated in ascending order, without gaps and "vanity" numbers. They MUST be globally unique. |
+| 64 - 4094    | Public ISDs. They MUST be globally unique. |
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
