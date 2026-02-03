@@ -299,9 +299,9 @@ Table of Contents
    defined in [RFC9473].
 
    *Forwarding Path*: A complete end-to-end path between two SCION
-   endpoints which is used to transmit packets in the data plane.  It
-   can be created with a combination of up to three path segments (an up
-   segment, a core segment, and a down segment).
+   endpoints which is used to transmit packets in the data plane.
+   Endpoints can create one with a combination of up to three path
+   segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, Path-Segment
    Construction Beacons (PCBs) accumulate cryptographically protected
@@ -333,7 +333,7 @@ Table of Contents
    between a non-core AS and a core AS in the same ISD), (2) a down
    segment (i.e. the same as an up segment, but in the opposite
    direction), or (3) a core segment (i.e. a path between core ASes).
-   Up to three path segments can be used to create a forwarding path.
+   Endpoints use up to three path segments to create a forwarding path.
 
    *Path-Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
@@ -395,8 +395,8 @@ Table of Contents
 
    SCION paths are always "valley free" whereby a child AS does not
    carry transit traffic from a parent AS to another parent AS.  These
-   paths can contain at most one peering link which can be used as
-   shortcut between two path segments containing two peer ASes.
+   paths can contain at most one peering link, which endpoints can use
+   as shortcut between two path segments containing two peer ASes.
 
    Figure 1 shows the three types of links for one small ISD with two
    core ASes A and C, and four non-core ASes D,E,F, and G.
@@ -500,7 +500,7 @@ Table of Contents
       Section 2.4.
 
    *Note:* The Control Service of an AS is decoupled from SCION border
-   routers and may be deployed anywhere within the AS.
+   routers and operators may deploy it anywhere within the AS.
 
 1.4.1.  Path Segments
 
@@ -564,9 +564,7 @@ Table of Contents
       | 16 - 63      | Private use (analogous to [RFC6996]) - can  |
       |              | be used for testing and private deployments |
       +--------------+---------------------------------------------+
-      | 64 - 4094    | Public ISDs - should be allocated in        |
-      |              | ascending order, without gaps and "vanity"  |
-      |              | numbers.  They MUST be globally unique.     |
+      | 64 - 4094    | Public ISDs.  They MUST be globally unique. |
       +--------------+---------------------------------------------+
       | 4095 - 65535 | Unallocated                                 |
       +--------------+---------------------------------------------+
