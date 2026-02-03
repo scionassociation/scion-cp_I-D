@@ -3341,7 +3341,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
               </figcaption></figure>
 </div>
 <p id="section-2.2.2.5-2">The Hop Field, part of both hop and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.<a href="#section-2.2.2.5-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.2.5-3">The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS <span class="bcp14">MUST</span> use the same algorithm. Implementations <span class="bcp14">MUST</span> also support the Default Hop Field MAC algorithm. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.<a href="#section-2.2.2.5-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.5-3">The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS <span class="bcp14">MUST</span> use the same algorithm. Implementations <span class="bcp14">MUST</span> also support the Default Hop Field MAC algorithm. See <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Authorizing Segments through Chained MACs" for more information including configuration. Endpoints do not compute MACs.<a href="#section-2.2.2.5-3" class="pilcrow">¶</a></p>
 <p id="section-2.2.2.5-4">The <code>HopField</code> Protobuf message format is:<a href="#section-2.2.2.5-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2.2.5-5">
 <pre>
@@ -3467,7 +3467,7 @@ message PathSegmentExtensions {
           <h4 id="name-configuration">
 <a href="#section-2.2.5" class="section-number selfRef">2.2.5. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
           </h4>
-<p id="section-2.2.5-1">For the purpose of constructing and propagating path segments, an AS Control Service must be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values <span class="bcp14">MUST</span> be configured:<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.5-1">For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values <span class="bcp14">MUST</span> be configured:<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.5-2.1">
               <p id="section-2.2.5-2.1.1">Local Interface ID. This <span class="bcp14">MUST</span> be unique within each AS.<a href="#section-2.2.5-2.1.1" class="pilcrow">¶</a></p>
@@ -3482,7 +3482,8 @@ message PathSegmentExtensions {
               <p id="section-2.2.5-2.4.1">Neighbor interface underlay address<a href="#section-2.2.5-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.5-3">The maximum MTU supported by all intra-AS links may also be configured by the operator.<a href="#section-2.2.5-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.5-3">In addition, a network operator needs to configure an AS Control Service with the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.
+The maximum MTU supported by all intra-AS links may also be configured by the operator.<a href="#section-2.2.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6591,22 +6592,25 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.6.1">PCB Extensions: clarify behavior in case of unknown extensions<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.7">
-            <p id="appendix-C.1-1.7.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.7.1">Configuration: mention MAC algorithm and forwarding key as a configuration item<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.8">
-            <p id="appendix-C.1-1.8.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.8.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.9">
-            <p id="appendix-C.1-1.9.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.9.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.10">
-            <p id="appendix-C.1-1.10.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.10.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.11">
-            <p id="appendix-C.1-1.11.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.11.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.12">
-            <p id="appendix-C.1-1.12.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.12.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.13">
+            <p id="appendix-C.1-1.13.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

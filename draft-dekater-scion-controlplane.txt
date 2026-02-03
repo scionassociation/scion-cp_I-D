@@ -1438,7 +1438,7 @@ Table of Contents
    choice, although the Control Services and border routers within an AS
    MUST use the same algorithm.  Implementations MUST also support the
    Default Hop Field MAC algorithm.  See [I-D.dekater-scion-dataplane]
-   section "Authorizing Segments through Chained MACs") for more
+   section "Authorizing Segments through Chained MACs" for more
    information including configuration.  Endpoints do not compute MACs.
 
    The HopField Protobuf message format is:
@@ -1578,11 +1578,11 @@ Table of Contents
 
 2.2.5.  Configuration
 
-   For the purpose of constructing and propagating path segments, an AS
-   Control Service must be configured with links to neighboring ASes.
-   Such information may be conveyed to the Control Service in an out-of-
-   band fashion (e.g. in a configuration file).  For each link, these
-   values MUST be configured:
+   For the purpose of constructing and propagating path segments, a
+   network operator needs to configure an AS Control Service with links
+   to neighboring ASes.  Such information may be conveyed to the Control
+   Service in an out-of-band fashion (e.g. in a configuration file).
+   For each link, these values MUST be configured:
 
    *  Local Interface ID.  This MUST be unique within each AS.
 
@@ -1594,8 +1594,12 @@ Table of Contents
 
    *  Neighbor interface underlay address
 
-   The maximum MTU supported by all intra-AS links may also be
-   configured by the operator.
+   In addition, a network operator needs to configure an AS Control
+   Service with the algorithm and forwarding key used to compute the Hop
+   Field MAC, which are also used by routers within the AS.  These are
+   further described in [I-D.dekater-scion-dataplane].  The maximum MTU
+   supported by all intra-AS links may also be configured by the
+   operator.
 
 2.3.  Propagation of PCBs
 
@@ -3945,6 +3949,9 @@ draft-dekater-scion-controlplane-15
    *  Figures 2, 3, 4: improve arrows in SVG version
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
+
+   *  Configuration: mention MAC algorithm and forwarding key as a
+      configuration item
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
