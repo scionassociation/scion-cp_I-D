@@ -374,7 +374,7 @@ The following table gives an overview of the ISD number allocation:
 | 4095&nbsp;-&nbsp;65535 | Unallocated                                                                   |
 {: #table-1 title="ISD number allocations"}
 
-The wildcard ISD is not directly used by the control or data plane. It may, however, be used by implementations to represent any ISD, for example in path filters.
+The wildcard ISD is not directly used by the control or data plane. Implementations may use it to represent any ISD, for example in path filters.
 ISD numbers are allocated by the SCION Association ({{ISD-AS-assignments}}).
 
 ### SCION AS Numbers
@@ -480,7 +480,7 @@ For every selected PCB and egress interface combination, the AS Control Service 
 
 The following three figures show how intra-ISD PCB propagation works, from the ISD's core AS down to child ASes. Interface identifiers of each AS are numbered with integer values while ASes are described with an upper case letter for the sake of illustration. Arrows represent the PCB propagation direction.
 
-In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
+In {{figure-3a}} below, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as shown in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~aasvg
                            +-------------+
@@ -904,7 +904,7 @@ The `HopEntry` Protobuf message format is:
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured by operators, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
@@ -1007,7 +1007,7 @@ The `HopField` Protobuf message format is:
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction. That is, in the direction of beaconing through the current AS).
 
-**Note:** For the core AS that initiates the PCB, the ingress interface identifier MUST be set to the "unspecified" value (see {{I-D.dekater-scion-dataplane}} section "Terminology").
+**Note:** The core AS initiating a PCB MUST set the ingress interface identifier to the "unspecified" value (see {{I-D.dekater-scion-dataplane}} section "Terminology").
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)` and the minimum duration is therefore 337.5 seconds. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)), so the absolute expiration time of the Hop Field is the sum of these two values.
@@ -1028,7 +1028,7 @@ The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is now computed as 
 Sig<sub>i</sub> =
 K<sub>i</sub>( ASE<sub>i</sub><sup>(signed)</sup> || SegInfo || ASE<sub>0</sub><sup>(signed)</sup> || Sig<sub>0</sub> || ... || ASE<sub>i-1</sub><sup>(signed)</sup> || Sig<sub>i-1</sub> )
 
-The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key to be used to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
+The signature metadata minimally contains the ISD-AS number of the signing entity and the key identifier of the public key that other ASes can use to verify the message. For more information on signing and verifying control plane messages, see 'Signing and Verifying Control Plane Messages' in {{I-D.dekater-scion-pki}}.
 
 Some of the data used as an input to the signature comes from previous ASes in the path segment. This data is therefore called "associated data" and it gives the signature a nested structure. The content of associated data defined in Protobuf is:
 
@@ -1099,8 +1099,8 @@ This section describes how PCBs are received, selected and further propagated in
 
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
-1. PCB validity: The Control Service MUST check the validity of the PCB (see [](#pcb-validity)) and invalid PCBs MUST be discarded. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
-2. Loop avoidance: The Control Service MUST check whether the PCB is from a core AS and whether it includes duplicate hop entries created by the core AS itself or by other ASes. If so, the PCB MUST be discarded in order to avoid loops and is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate - e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
+1. PCB validity: The Control Service MUST check the validity of the PCB (see [](#pcb-validity)) and it MUST discard invalid PCBs. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
+2. Loop avoidance: The Control Service MUST check whether the PCB is from a core AS and whether it includes duplicate hop entries created by the core AS itself or by other ASes. If so, it MUST discard the PCB in order to avoid loops. This is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate - e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
 3. Incoming Interface: The Control Service MUST check that the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) corresponds with the ISD-AS neighbor of the interface where the PCB was received. In addition, the corresponding link MUST be core or parent, otherwise the PCB MUST be discarded.
 4. Continuity: When the Control Service receives a PCB containing two or more AS entries, it MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
@@ -1344,7 +1344,7 @@ The Control Service of a non-core performs the following steps to "terminate" a 
      - In Protobuf message format, this means that the value of the `next_isd_as` field in the `ASEntrySignedBody` component MUST be "0".
    - The egress interface in the Hop Field component MUST NOT be specified.
      - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
-2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The egress Interface ID in the Hop Field component of each added peer entry MUST NOT be specified.
+2. If the AS has peering links, the Control Service MAY add corresponding peer entry components to the signed body of the AS entry - one peer entry component for each peering link that the AS wants to advertise. The Control Service MUST NOT specify the egress Interface ID in the Hop Field component of each added peer entry.
    - In Protobuf message format, this means that the value of the `egress` field in the `HopField` component MUST be "0".
 3. The Control Service MUST sign the modified PCB and append the computed signature.
 
@@ -1515,7 +1515,7 @@ message SegmentsResponse {
 
 ### Caching
 
-For the sake of efficiency, the Control Service of the source AS SHOULD cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations and is also essential to ensure that the path lookup process is scalable and can be performed with low latency.
+For the sake of efficiency, the Control Service of the source AS SHOULD cache each returned path segment request. Caching ensures that path lookups are fast for frequently used destinations and is also essential to ensure that the path lookup process is scalable and that endpoints can perform it with low latency.
 
 In general, to improve overall efficiency, the Control Services of all ASes SHOULD do the following:
 
@@ -1600,9 +1600,9 @@ Clients find the relevant Control Service at a given AS by resolving a 'service 
 2. The ingress border router at the destination AS resolves the service destination to an actual endpoint address. This document does not mandate any specific method for this resolution.
 3. The ingress border router forwards the message to the resolved address.
 4. The destination service responds to the client with a `ServiceResolutionResponse`. It contains one or more transport options and it MUST fit within a UDP datagram.
-  Known transports are "QUIC". Unknown values MUST be ignored by clients. The response includes a `Transport` message containing supported addresses and port to reach the service.
+  Known transports are "QUIC". Clients MUST ignore unknown values. The response includes a `Transport` message containing supported addresses and port to reach the service.
   Supported address formats for QUIC are IPv4 and IPv6. An example of the corresponding address format is:
-  `192.0.2.1:80` and `[2001:db8::1]:80`. A missing, zero or non-existent port value MUST be treated by clients as an error.
+  `192.0.2.1:80` and `[2001:db8::1]:80`. Clients MUST treat a missing, zero or non-existent port value as an error.
 5. The client uses the address and port from the "QUIC" option to establish a QUIC connection, which can then be used for other RPCs.
 
 The service resolution API Protobuf message format is:
@@ -1730,7 +1730,7 @@ The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulat
 
 A **Packet Too Big** message SHOULD be originated by a router in response to a
 packet that cannot be forwarded because the packet is larger than the MTU of the
-outgoing link. The MTU value is set to the maximum size a SCION packet can have
+outgoing link. The router sets the MTU value to the maximum size a SCION packet can have
 to still fit on the next-hop link, as the sender has no knowledge of the
 underlay.
 
@@ -2023,7 +2023,7 @@ All of these are dependent on the number and length of the discovered path segme
 
 Relevant metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery" (see [](#propagation-interval-size)).
 
-At each AS, the PCB will be processed and propagated at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
+At each AS, the Control Service will process and propagate the PCB at the subsequent propagation event. As propagation events are not synchronized between different ASes, a PCB arrives at a random point in time during the interval and may be buffered before potentially being propagated. With a propagation interval T at each AS, the mean time until the PCB is propagated in one AS therefore is T / 2 and the mean total time for the propagation steps of a PCB of length L is at worst L * T / 2 (with a variance of L * T^2 / 12).
 
 Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane (see {{I-D.dekater-scion-dataplane}} section "Handling Link Failures").
 
@@ -2148,7 +2148,7 @@ In general, the number of PCBs that an adversary can announce this way scales ex
 **Wormhole Attack** <br>
 A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but also out-of-band to another non-neighbor colluding malicious AS M2. This creates new segments to M2 and M2's downstream neighbor ASes, simulating a link between M1 and M2 which may not correspond to an actual link in the network topology.
 
-Similarly, a fake path can be announced through a fake peering link between two colluding ASes even if in different ISDs. An adversary can advertise fake peering links between the two colluding ASes, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
+Similarly, two colluding ASes could announce a path through a fake peering link between them, even if in different ISDs, thus offering short paths to many destination ASes. Downstream ASes might have a policy of preferring paths with many peering links and thus are more likely to disseminate PCBs from the adversary. Endpoints are also more likely to choose short paths that make use of peering links.
 
 In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.
 
@@ -2161,7 +2161,7 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 
 ## Attacks on time sources {#time-security}
 
-Care should be taken to maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
+Operators should maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
 
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
 - An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
@@ -2184,7 +2184,7 @@ For RPC methods exposed to other ASes, the Control Service implementation minimi
 - `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
 - `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address MUST match the local ISD and the number of path segments MUST be 1.
 
-A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, the Control Service SHOULD be deployed in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
+A combination of the mechanism above is used to prevent flooding attacks on the Control Service. In addition, operators SHOULD deploy the Control Service in a distributed and replicated manner so that requests can be balanced and a single instance failure does not result in a complete failure of the control plane of a SCION AS.
 
 # IANA Considerations
 
