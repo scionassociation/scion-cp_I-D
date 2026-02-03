@@ -3488,13 +3488,16 @@ message PathSegmentExtensions {
               <p id="section-2.2.5-4.1.1">the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-2.2.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.5-4.2">
-              <p id="section-2.2.5-4.2.1">propagation interval and best PCBs set size (see <a href="#propagation-interval-size" class="auto internal xref">Section 2.3.4</a>).<a href="#section-2.2.5-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.5-4.2.1">registration interval (see <a href="#intra-reg" class="auto internal xref">Section 3.1</a>).<a href="#section-2.2.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.5-4.3">
-              <p id="section-2.2.5-4.3.1">the maximum MTU supported by all intra-AS links may also be configured by the operator.<a href="#section-2.2.5-4.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.5-4.3.1">propagation interval and best PCBs set size (see <a href="#propagation-interval-size" class="auto internal xref">Section 2.3.4</a>).<a href="#section-2.2.5-4.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.5-4.4">
-              <p id="section-2.2.5-4.4.1">Hop Field expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>). Current implementations default to 63, corresponding to 6 hours.<a href="#section-2.2.5-4.4.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.5-4.4.1">the maximum MTU supported by all intra-AS links may also be configured by the operator.<a href="#section-2.2.5-4.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.5-4.5">
+              <p id="section-2.2.5-4.5.1">Hop Field expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>). Current implementations default to 63, corresponding to 6 hours.<a href="#section-2.2.5-4.5.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.2.5-5">Optionally, it may configure per-link MTU (see <a href="#hopentry" class="auto internal xref">Section 2.2.2.3</a>) and PCB selection policies (see <a href="#selection" class="auto internal xref">Section 2.3.3</a>).<a href="#section-2.2.5-5" class="pilcrow">¶</a></p>
@@ -3886,7 +3889,7 @@ message ChainRenewalResponse {
         <h3 id="name-intra-isd-path-segment-regi">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-intra-isd-path-segment-regi" class="section-name selfRef">Intra-ISD Path Segment Registration</a>
         </h3>
-<p id="section-3.1-1">Every <em>registration period</em> (determined by each AS) the AS's Control Service selects two sets of PCBs to transform into two types of path segments:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Every <em>registration interval</em> (configured by each AS) the AS's Control Service selects two sets of PCBs to transform into two types of path segments:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1-2.1">
             <p id="section-3.1-2.1.1">Up segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
@@ -3959,7 +3962,7 @@ message ChainRenewalResponse {
           <h4 id="name-transforming-a-pcb-into-an-">
 <a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-transforming-a-pcb-into-an-" class="section-name selfRef">Transforming a PCB into an Up Segment</a>
           </h4>
-<p id="section-3.1.2-1">Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into up segments:<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-1">Every registration interval, the Control Service of a non-core AS performs the following steps to transform PCBs into up segments:<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.1.2-2">
 <li id="section-3.1.2-2.1">
               <p id="section-3.1.2-2.1.1">The Control Service selects the PCBs that it wants to transform into up segments from the candidate PCBs in the Beacon Store.<a href="#section-3.1.2-2.1.1" class="pilcrow">¶</a></p>
@@ -3979,7 +3982,7 @@ message ChainRenewalResponse {
           <h4 id="name-transforming-a-pcb-into-a-d">
 <a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-transforming-a-pcb-into-a-d" class="section-name selfRef">Transforming a PCB into a Down Segment</a>
           </h4>
-<p id="section-3.1.3-1">Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-1">Every registration interval, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.1.3-2">
 <li id="section-3.1.3-2.1">
               <p id="section-3.1.3-2.1.1">The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.<a href="#section-3.1.3-2.1.1" class="pilcrow">¶</a></p>
@@ -4002,7 +4005,7 @@ message ChainRenewalResponse {
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-core-path-segment-registrat" class="section-name selfRef">Core Path Segment Registration</a>
         </h3>
 <p id="section-3.2-1">The core beaconing process creates path segments from core AS to core AS. These core segments are then added to the Control Service path database of the core AS that created the segment so that local and remote endpoints can obtain and use these core segments. In contrast to the intra-ISD registration procedure, there is no need to register core segments with other core ASes as each core AS will receive PCBs originated from every other core AS.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">In every registration period, the Control Service of a core AS performs the following operations:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">In every registration interval, the Control Service of a core AS performs the following operations:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2-3">
 <li id="section-3.2-3.1">
             <p id="section-3.2-3.1.1">The core Control Service selects the best PCBs towards each core AS observed so far.<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
@@ -6606,25 +6609,28 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.6.1">PCB Extensions: clarify behavior in case of unknown extensions<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.7">
-            <p id="appendix-C.1-1.7.1">Configuration: ensure all items are mentioned and cross referenced<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.7.1">Configuration: ensure all items are mentioned and cross referenced.<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.8">
-            <p id="appendix-C.1-1.8.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.8.1">Rename "registration period" to "registration interval" to ensure consistence with "propagation interval"<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.9">
-            <p id="appendix-C.1-1.9.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.9.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.10">
-            <p id="appendix-C.1-1.10.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.10.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.11">
-            <p id="appendix-C.1-1.11.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.11.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.12">
-            <p id="appendix-C.1-1.12.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.12.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.13">
-            <p id="appendix-C.1-1.13.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.13.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.14">
+            <p id="appendix-C.1-1.14.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

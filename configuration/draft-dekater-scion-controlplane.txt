@@ -1601,6 +1601,8 @@ Table of Contents
       MAC, which are also used by routers within the AS.  These are
       further described in [I-D.dekater-scion-dataplane].
 
+   *  registration interval (see Section 3.1).
+
    *  propagation interval and best PCBs set size (see Section 2.3.4).
 
    *  the maximum MTU supported by all intra-AS links may also be
@@ -2023,9 +2025,9 @@ Table of Contents
 
 3.1.  Intra-ISD Path Segment Registration
 
-   Every _registration period_ (determined by each AS) the AS's Control
-   Service selects two sets of PCBs to transform into two types of path
-   segments:
+   Every _registration interval_ (configured by each AS) the AS's
+   Control Service selects two sets of PCBs to transform into two types
+   of path segments:
 
    *  Up segments, which allow the infrastructure entities and endpoints
       in this AS to communicate with core ASes; and
@@ -2090,7 +2092,7 @@ Table of Contents
 
 3.1.2.  Transforming a PCB into an Up Segment
 
-   Every registration period, the Control Service of a non-core AS
+   Every registration interval, the Control Service of a non-core AS
    performs the following steps to transform PCBs into up segments:
 
    1.  The Control Service selects the PCBs that it wants to transform
@@ -2108,7 +2110,7 @@ Table of Contents
 
 3.1.3.  Transforming a PCB into a Down Segment
 
-   Every registration period, the Control Service of a non-core AS
+   Every registration interval, the Control Service of a non-core AS
    performs the following steps to transform PCBs into down segments:
 
    1.  The Control Service selects the PCBs that it wants to transform
@@ -2140,7 +2142,7 @@ Table of Contents
    core segments with other core ASes as each core AS will receive PCBs
    originated from every other core AS.
 
-   In every registration period, the Control Service of a core AS
+   In every registration interval, the Control Service of a core AS
    performs the following operations:
 
    1.  The core Control Service selects the best PCBs towards each core
@@ -3961,7 +3963,11 @@ draft-dekater-scion-controlplane-15
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
-   *  Configuration: ensure all items are mentioned and cross referenced
+   *  Configuration: ensure all items are mentioned and cross
+      referenced.
+
+   *  Rename "registration period" to "registration interval" to ensure
+      consistence with "propagation interval"
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
