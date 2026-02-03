@@ -391,7 +391,7 @@ SCION endpoints use wildcard AS `0` to designate any core AS, e.g. to place requ
 |------------------+-------------+-----------------------------------------------------------------------------|
 | `0`          | 1           | The wildcard AS                                                             |
 | `1 - 4294967295`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
-| `1:0:0 - 1:ffff:ffff`| ~4.3&nbsp;billion| Unallocated                                                        |
+| `1:0:0 - 1:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers - future allocations                       |
 | `2:0:0 - 2:ffff:ffff`| ~4.3&nbsp;billion| Public SCION AS numbers                                            |
 | `3:0:0 - feff:ffff:ffff`| ~280&nbsp;trillion| Unallocated                                                    |
 | `ff00:0:0 - ff00:0:ffff`| 65536      | Reserved for documentation and sample code (analogous to {{RFC5398}}) |
@@ -991,7 +991,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 The Hop Field, part of both hop and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs" for more information including configuration. Endpoints do not compute MACs.
 
 The `HopField` Protobuf message format is:
 
@@ -1080,13 +1080,14 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 ### Configuration {#configuration}
 
-For the purpose of constructing and propagating path segments, an AS Control Service must be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
+For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
+In addition, a network operator needs to configure an AS Control Service with the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
 The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
 
@@ -1450,9 +1451,9 @@ The process to look up and fetch path segments consists of the following steps:
 1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.
 2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:
 
-   - up segments are stored in the path database of the local Control Service and can be returned immediately.
-   - core segments may be cached. Otherwise, it queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
-   - down segments may be cached. Otherwise it queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
+   - up segments: The local Control Service has up segments stored in the path database and returns them immediately.
+   - core segments: The local Control Service may return locally cached core segments or query the Control Services of the reachable core ASes in the source ISD. These core ASes return core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments and adds them to the local cache for future request.
+   - down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These remote core ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
 6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
@@ -2193,11 +2194,6 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 
 --- back
 
-# Acknowledgments
-{:numbered="false"}
-
-Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), Brian Trammel (Google), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Jean-Christophe Hugly (SCION Association), Juan A. Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
-
 # Deployment Testing: SCIONLab
 {:numbered="false"}
 
@@ -2372,6 +2368,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
+- Configuration: mention MAC algorithm and forwarding key as a configuration item
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
@@ -2527,3 +2524,8 @@ Minor changes:
 - General edits to make terminology consistent, remove duplication and rationalize text
 - Removed forward references
 - Added RFC2119 compliant terminology
+
+# Acknowledgments
+{:numbered="false"}
+
+Many thanks go to Alvaro Retana (Futurewei), Joel M. Halpern (Ericsson), Brian Trammel (Google), William Boye (Swiss National Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION Association), Jean-Christophe Hugly (SCION Association), Juan A. Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing this document. We also thank Daniel Galán Pascual and Christoph Sprenger from the Information Security Group at ETH Zurich for their inputs based on their formal verification work on SCION. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about every aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich for their practical knowledge and for the documentation about the SCION Control Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
