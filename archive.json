@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-01T00:37:18.510491+00:00",
+  "timestamp": "2026-02-03T00:33:30.737043+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3070,15 +3070,15 @@
       "id": "I_kwDOJx2-rs7mujJ0",
       "title": "Clarify uniqueness of ASes and ISDs",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/189",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "In relation to the[ private ISD proposal ](https://github.com/scionproto/scion/issues/4827#issuecomment-3576181453)\n\nOn this point, the current registry policy says:\n>  whereas it is operationally desirable to use globally unique numbers to identify SCION Autonomous Systems (ASes). These need to be assigned by a Registration Authority (RA) in order to assure their uniqueness.  \n",
       "createdAt": "2026-01-29T14:22:23Z",
-      "updatedAt": "2026-01-30T17:41:59Z",
-      "closedAt": null,
+      "updatedAt": "2026-02-01T22:00:38Z",
+      "closedAt": "2026-02-01T22:00:38Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -14246,7 +14246,7 @@
       "labels": [],
       "body": "Follow up of #193 ",
       "createdAt": "2026-01-30T17:33:03Z",
-      "updatedAt": "2026-01-30T17:33:09Z",
+      "updatedAt": "2026-02-02T09:46:30Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "14fdf8f7b281bc836fe91867289635f12877d3bb",
@@ -14257,6 +14257,181 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7e0KWw",
+          "commit": {
+            "abbreviatedOid": "1627024"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "As suggested in the other PR, should we clarify the location of the cache?",
+          "createdAt": "2026-02-02T09:22:55Z",
+          "updatedAt": "2026-02-02T09:46:30Z",
+          "comments": [
+            {
+              "originalPosition": 3,
+              "body": "```suggestion\n   - up segments: The local Control Service has up segments stored in the path database and returns them immediately.\n```",
+              "createdAt": "2026-02-02T09:22:56Z",
+              "updatedAt": "2026-02-02T09:46:30Z"
+            },
+            {
+              "originalPosition": 3,
+              "body": "Change to be in line with core/down",
+              "createdAt": "2026-02-02T09:23:15Z",
+              "updatedAt": "2026-02-02T09:46:30Z"
+            },
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\n   - core segments: The local Control Service may return locally cache core segments or query the Control Services of the reachable core ASes in the source ISD. These core ASes return core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments and adds them to a local cache for future request.\n```",
+              "createdAt": "2026-02-02T09:28:40Z",
+              "updatedAt": "2026-02-02T09:46:30Z"
+            },
+            {
+              "originalPosition": 6,
+              "body": "As suggested in https://github.com/scionassociation/scion-cp_I-D/pull/193#discussion_r2745893400 ,\nI wanted to clarify where the cache is located (e.g. not in the endpoint and not in other ASes).\n\nThis also splits up the the long sentence about whom to query and what the query returns.",
+              "createdAt": "2026-02-02T09:31:15Z",
+              "updatedAt": "2026-02-02T09:46:30Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\n   - down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.\n```",
+              "createdAt": "2026-02-02T09:39:29Z",
+              "updatedAt": "2026-02-02T09:46:30Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 196,
+      "id": "PR_kwDOJx2-rs7AwIxp",
+      "title": "align AS alloction to current registry policy",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/196",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #189 ",
+      "createdAt": "2026-02-01T19:51:56Z",
+      "updatedAt": "2026-02-01T22:00:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "89967d0063193c8253034a4f34f53c72978db0aa",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "as_range",
+      "headRefOid": "b970995f24dd380c6ebd4d8d831460cad9db1284",
+      "closedAt": "2026-02-01T22:00:37Z",
+      "mergedAt": "2026-02-01T22:00:36Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "0150069ba9c2219a009923804878a31e9ee9b79c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7eucjC",
+          "commit": {
+            "abbreviatedOid": "b970995"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-01T22:00:30Z",
+          "updatedAt": "2026-02-01T22:00:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 197,
+      "id": "PR_kwDOJx2-rs7AxDCC",
+      "title": "Control Service & PCB actions",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/197",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #186 ",
+      "createdAt": "2026-02-01T21:59:55Z",
+      "updatedAt": "2026-02-02T08:54:54Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "89967d0063193c8253034a4f34f53c72978db0aa",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Control-Services-and-PCBs",
+      "headRefOid": "983ac19b6456e9309651f845ed9aebd4356e710f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 198,
+      "id": "PR_kwDOJx2-rs7AxNvX",
+      "title": "MAC algorithm - mention it in configuration section",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/198",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "An ISE comment in https://github.com/scionassociation/scion-dp_I-D/issues/132 made me realize that we do mention in CP that the MAC algorithm has to be configured, but we forgot to mention it in the configuration section. This PR mentions it in that section too.\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/mac_algo_config/draft-dekater-scion-controlplane.txt)\r\n",
+      "createdAt": "2026-02-01T22:26:21Z",
+      "updatedAt": "2026-02-01T22:32:27Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "0150069ba9c2219a009923804878a31e9ee9b79c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "mac_algo_config",
+      "headRefOid": "723f594080e375c26137e4f47639e9a591218e16",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell please wait [Slack](https://scionassociation.slack.com/archives/C06JRLBMAT0/p1769985135272749) before merging",
+          "createdAt": "2026-02-01T22:32:26Z",
+          "updatedAt": "2026-02-01T22:32:26Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 199,
+      "id": "PR_kwDOJx2-rs7Axdaa",
+      "title": "move acknowledgements to the end",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/199",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Requested by ISE ",
+      "createdAt": "2026-02-01T22:58:31Z",
+      "updatedAt": "2026-02-01T22:59:50Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "0150069ba9c2219a009923804878a31e9ee9b79c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "ack_end",
+      "headRefOid": "8aee70b02fb0a3c32cff183c769c7ac754ca0cbf",
+      "closedAt": "2026-02-01T22:59:46Z",
+      "mergedAt": "2026-02-01T22:59:46Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2940b55f59630f9b48aa52685b512858a4216210"
+      },
       "comments": [],
       "reviews": []
     }
