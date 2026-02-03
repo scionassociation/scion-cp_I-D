@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 August 2026                                           S. Hitz
+Expires: 7 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         30 January 2026
+                                                         3 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 August 2026.
+   This Internet-Draft will expire on 7 August 2026.
 
 Copyright Notice
 
@@ -2251,8 +2251,8 @@ Table of Contents
    2.  The Control Service of the source AS answers each request with a
        SegmentsResponse message.  Specifically, for each segment type:
 
-       *  up segments are stored in the path database of the local
-          Control Service and can be returned immediately.
+       *  up segments: The local Control Service has up segments stored
+          in the path database and returns them immediately.
 
        *  core segments may be cached.  Otherwise, the local Control
           Service queries the Control Services of the reachable core
