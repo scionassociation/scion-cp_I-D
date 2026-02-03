@@ -323,8 +323,8 @@ The PCBs accumulate cryptographically protected path and forwarding information 
 
 The creation of an end-to-end forwarding path consists of the following processes:
 
-1. *Path exploration (or beaconing)*: This is the process where an AS discovers paths to other ASes. This is described in detail in [](#beaconing).
-2. *Path registration*: This is the process where an AS selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
+1. *Path exploration (or beaconing)*: This is the process where an AS Control Service discovers paths to other ASes. This is described in detail in [](#beaconing).
+2. *Path registration*: This is the process where an AS Control Service selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
 3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. This is described in detail in [](#lookup).
 
 All processes operate concurrently.
@@ -427,7 +427,7 @@ For example, the text representation of AS number ff00:0:1 in ISD number 15 is `
 
 SCION uses the following mechanisms to avoid circular dependcencies during bootstrapping, and to provide resiliency after systemic failures:
 
-- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
+- Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS Control Service only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
 - Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, in order to verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
 
@@ -468,12 +468,12 @@ PCBs do not traverse peering links, but peering links are instead announced alon
 
 ### Appending Entries to a PCB {#pcb-appending}
 
-Every propagation interval (as configured by the AS), the Control Service:
+Every propagation interval (as configured by the AS operator), the Control Service:
 
 - selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
 - propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
 
-For every selected PCB and egress interface combination, the AS appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
+For every selected PCB and egress interface combination, the AS Control Service appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
 
 
 ### PCB Propagation - Illustrated Examples
@@ -1083,7 +1083,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
-- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between operators of the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
@@ -1108,13 +1108,13 @@ If the PCB verification is successful, the Control Service decides whether to st
 
 ### Storing Candidate PCBs {#storing}
 
-An AS stores candidate PCBs in a temporary storage called the *Beacon Store*. The management of this storage is implementation specific, but current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
+An AS Control Service stores candidate PCBs in a temporary storage called the *Beacon Store*. The management of this storage is implementation specific, but current practice is to retain all PCBs until expired or replaced by one describing the same path with a later origination time.
 
 ### PCB Selection Policies {#selection}
 
 The Control Service of an AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
-In order to avoid excessive overhead on the path discovery system in bigger networks, an AS should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction, in accordance with [](#propagation-interval-size).
+In order to avoid excessive overhead on the path discovery system in bigger networks, an AS Control Service should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction, in accordance with [](#propagation-interval-size).
 
 As SCION does not provide any in-band signal about the intentions of endpoints nor about the policies of downstream ASes, the policy will typically select a somewhat diverse set optimized for multiple, generic parameters. Selection may be based on criteria such as:
 
@@ -1145,11 +1145,11 @@ These values reflect a tradeoff between scalability — limited by the computati
 
 In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core best PCBs set size (e.g. 20) can be used.
 
-Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
+Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS Control Service should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
 - The *propagation interval* should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-Note that to ensure establish quick connectivity, an AS MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
+Note that to ensure establish quick connectivity, an AS Control Service MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
 
 - because the corresponding RPC failed;
 - or because no beacon was available to propagate.
@@ -1331,11 +1331,11 @@ Every *registration period* (determined by each AS) the AS's Control Service sel
 - Up segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and
 - Down segments, which allow remote entities to reach this AS.
 
-The up segments and down segments do not have to be equal as an AS may want to communicate with core ASes via one or more up segments that differ from the down segment(s) through which it wants to be reached. Therefore, an AS can define different selection policies for the up segment and down segment sets. In addition, the processes of transforming a PCB in an up segment or a down segment differ slightly.
+The up segments and down segments do not have to be equal as an AS may want to communicate with core ASes via one or more up segments that differ from the down segment(s) through which it wants to be reached. Therefore, an AS operator can define different selection policies for the up segment and down segment sets. In addition, the processes of transforming a PCB in an up segment or a down segment differ slightly.
 
 ### Terminating a PCB {#term-pcb}
 
-Both the up segments and down segments end at the AS, so by transforming a PCB into a path segment, an AS "terminates" the PCB for this AS ingress interface and at that moment in time.
+Both the up segments and down segments end at the AS, so by transforming a PCB into a path segment, an AS Control Service "terminates" the PCB for this AS ingress interface and at that moment in time.
 
 The Control Service of a non-core performs the following steps to "terminate" a PCB:
 
@@ -1975,7 +1975,7 @@ SCION-unaware endpoints may interface with a SCION network through a SCION IP Ga
 
 ## Monitoring Considerations
 
-In order to maintain service availability, an AS SHOULD monitor the following aspects when deploying the SCION control plane:
+In order to maintain service availability, an AS operator SHOULD monitor the following aspects when deploying the SCION control plane:
 
 - For routers (to enable correlation with link states): state of configured links (core, child, parent).
 
@@ -2362,7 +2362,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
 
-- Wording polish following ISE Editor's feedback
+- Wording polish following ISE Editor's feedback.
+- Reduce use of passive tense and clarify subject (e.g. an AS --> An AS operator)
 - ISD and AS numbers: clarify that identifiers in public ranges must be unique
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
