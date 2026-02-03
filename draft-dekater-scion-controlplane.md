@@ -1092,6 +1092,7 @@ In addition, a network operator needs to configure an AS Control Service with:
 - the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
 - propagation interval and best PCBs set size (see [](#propagation-interval-size)).
 - the maximum MTU supported by all intra-AS links may also be configured by the operator.
+- Hop Field expiration time (see [](#hopfield)). Current implementations default to 63, corresponding to 6 hours.
 
 Optionally, it may configure per-link MTU (see [](#hopentry)) and PCB selection policies (see [](#selection)).
 
