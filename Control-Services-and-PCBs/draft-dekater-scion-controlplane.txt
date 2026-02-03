@@ -1587,7 +1587,7 @@ Table of Contents
 
    *  Neighbor type (core, parent, child, peer), depending on link type
       (see Section 1.3).  Link type depends on mutual agreements between
-      operators of the ASes at each end of each link.
+      the organizations operating the ASes at each end of each link.
 
    *  Neighbor ISD-AS number
 
