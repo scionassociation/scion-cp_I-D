@@ -3467,7 +3467,7 @@ message PathSegmentExtensions {
           <h4 id="name-configuration">
 <a href="#section-2.2.5" class="section-number selfRef">2.2.5. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
           </h4>
-<p id="section-2.2.5-1">For the purpose of constructing and propagating path segments, an AS Control Service must be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values <span class="bcp14">MUST</span> be configured:<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.5-1">For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values <span class="bcp14">MUST</span> be configured:<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.5-2.1">
               <p id="section-2.2.5-2.1.1">Local Interface ID. This <span class="bcp14">MUST</span> be unique within each AS.<a href="#section-2.2.5-2.1.1" class="pilcrow">¶</a></p>
@@ -3482,7 +3482,7 @@ message PathSegmentExtensions {
               <p id="section-2.2.5-2.4.1">Neighbor interface underlay address<a href="#section-2.2.5-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.5-3">In addition, an AS Control Service must be configured with the algorithm used to compute the Hop Field MAC (<a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) which is also used by routers within the AS.
+<p id="section-2.2.5-3">In addition, a network operator needs to configure an AS Control Service with the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.
 The maximum MTU supported by all intra-AS links may also be configured by the operator.<a href="#section-2.2.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -6592,7 +6592,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.6.1">PCB Extensions: clarify behavior in case of unknown extensions<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.7">
-            <p id="appendix-C.1-1.7.1">Configuration: mention MAC algorithm as a configuration item<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.7.1">Configuration: mention MAC algorithm and forwarding key as a configuration item<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.8">
             <p id="appendix-C.1-1.8.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>

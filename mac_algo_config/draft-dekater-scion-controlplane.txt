@@ -1578,11 +1578,11 @@ Table of Contents
 
 2.2.5.  Configuration
 
-   For the purpose of constructing and propagating path segments, an AS
-   Control Service must be configured with links to neighboring ASes.
-   Such information may be conveyed to the Control Service in an out-of-
-   band fashion (e.g. in a configuration file).  For each link, these
-   values MUST be configured:
+   For the purpose of constructing and propagating path segments, a
+   network operator needs to configure an AS Control Service with links
+   to neighboring ASes.  Such information may be conveyed to the Control
+   Service in an out-of-band fashion (e.g. in a configuration file).
+   For each link, these values MUST be configured:
 
    *  Local Interface ID.  This MUST be unique within each AS.
 
@@ -1594,10 +1594,12 @@ Table of Contents
 
    *  Neighbor interface underlay address
 
-   In addition, an AS Control Service must be configured with the
-   algorithm used to compute the Hop Field MAC (Section 2.2.2.5) which
-   is also used by routers within the AS.  The maximum MTU supported by
-   all intra-AS links may also be configured by the operator.
+   In addition, a network operator needs to configure an AS Control
+   Service with the algorithm and forwarding key used to compute the Hop
+   Field MAC, which are also used by routers within the AS.  These are
+   further described in [I-D.dekater-scion-dataplane].  The maximum MTU
+   supported by all intra-AS links may also be configured by the
+   operator.
 
 2.3.  Propagation of PCBs
 
@@ -3948,7 +3950,8 @@ draft-dekater-scion-controlplane-15
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
-   *  Configuration: mention MAC algorithm as a configuration item
+   *  Configuration: mention MAC algorithm and forwarding key as a
+      configuration item
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
