@@ -1083,7 +1083,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
-- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between operators of the ASes at each end of each link.
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
