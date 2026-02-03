@@ -1083,13 +1083,17 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
-- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
-- Neighbor ISD-AS number
-- Neighbor interface underlay address
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between operators of the ASes at each end of each link.
+- Neighbor ISD-AS number.
+- Neighbor interface underlay address.
 
-In addition, a network operator needs to configure an AS Control Service with the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
-The maximum MTU supported by all intra-AS links may also be configured by the operator.
+In addition, a network operator needs to configure an AS Control Service with:
 
+- the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
+- propagation interval and best PCBs set size (see [](#propagation-interval-size)).
+- the maximum MTU supported by all intra-AS links may also be configured by the operator.
+
+Optionally, it may configure per-link MTU (see [](#hopentry)) and PCB selection policies (see [](#selection)).
 
 ## Propagation of PCBs {#path-prop}
 
@@ -2016,7 +2020,7 @@ The path discovery mechanism balances the number of discovered paths and the tim
 The resource costs for path discovery are as follows:
 
 - Communication overhead is transmitting the PCBs and occasionally obtaining the required PKI material.
-- Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the beaconing policies.
+- Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the PCB selection policies.
 - Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 
 All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These in turn depend on the configured best PCBs set size ([](#propagation-interval-size)).
@@ -2368,7 +2372,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
-- Configuration: mention MAC algorithm and forwarding key as a configuration item
+- Configuration: ensure all items are mentioned and cross referenced
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
