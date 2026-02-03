@@ -1606,6 +1606,9 @@ Table of Contents
    *  the maximum MTU supported by all intra-AS links may also be
       configured by the operator.
 
+   *  Hop Field expiration time (see Section 2.2.2.5).  Current
+      implementations default to 63, corresponding to 6 hours.
+
    Optionally, it may configure per-link MTU (see Section 2.2.2.3) and
    PCB selection policies (see Section 2.3.3).
 
