@@ -991,7 +991,7 @@ In this description, MTU and packet size are to be understood in the same sense 
 
 The Hop Field, part of both hop and peer entries, is used directly in the data plane for packet forwarding and specifies the incoming and outgoing interfaces of the ASes on the forwarding path. This information is authenticated with a Message Authentication Code (MAC) which is used by the Control Service of an AS to authenticate path segments with its border routers during packet forwarding.
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs") for more information including configuration. Endpoints do not compute MACs.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm. See {{I-D.dekater-scion-dataplane}} section "Authorizing Segments through Chained MACs" for more information including configuration. Endpoints do not compute MACs.
 
 The `HopField` Protobuf message format is:
 
@@ -1080,13 +1080,14 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 ### Configuration {#configuration}
 
-For the purpose of constructing and propagating path segments, an AS Control Service must be configured with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
+For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number
 - Neighbor interface underlay address
 
+In addition, a network operator needs to configure an AS Control Service with the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
 The maximum MTU supported by all intra-AS links may also be configured by the operator.
 
 
@@ -2367,6 +2368,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
+- Configuration: mention MAC algorithm and forwarding key as a configuration item
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
