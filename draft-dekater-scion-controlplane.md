@@ -1090,6 +1090,7 @@ For the purpose of constructing and propagating path segments, a network operato
 In addition, a network operator needs to configure an AS Control Service with:
 
 - the algorithm and forwarding key used to compute the Hop Field MAC, which are also used by routers within the AS. These are further described in {{I-D.dekater-scion-dataplane}}.
+- registration interval (see [](#intra-reg)).
 - propagation interval and best PCBs set size (see [](#propagation-interval-size)).
 - the maximum MTU supported by all intra-AS links may also be configured by the operator.
 - Hop Field expiration time (see [](#hopfield)). Current implementations default to 63, corresponding to 6 hours.
@@ -1331,7 +1332,7 @@ Both processes are described below.
 
 ## Intra-ISD Path Segment Registration {#intra-reg}
 
-Every *registration period* (determined by each AS) the AS's Control Service selects two sets of PCBs to transform into two types of path segments:
+Every *registration interval* (configured by each AS) the AS's Control Service selects two sets of PCBs to transform into two types of path segments:
 
 - Up segments, which allow the infrastructure entities and endpoints in this AS to communicate with core ASes; and
 - Down segments, which allow remote entities to reach this AS.
@@ -1362,7 +1363,7 @@ The Control Service of a non-core performs the following steps to "terminate" a 
 
 ### Transforming a PCB into an Up Segment
 
-Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into up segments:
+Every registration interval, the Control Service of a non-core AS performs the following steps to transform PCBs into up segments:
 
 1. The Control Service selects the PCBs that it wants to transform into up segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **up segments**.
@@ -1372,7 +1373,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 ### Transforming a PCB into a Down Segment
 
-Every registration period, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:
+Every registration interval, the Control Service of a non-core AS performs the following steps to transform PCBs into down segments:
 
 1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
@@ -1384,7 +1385,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 The core beaconing process creates path segments from core AS to core AS. These core segments are then added to the Control Service path database of the core AS that created the segment so that local and remote endpoints can obtain and use these core segments. In contrast to the intra-ISD registration procedure, there is no need to register core segments with other core ASes as each core AS will receive PCBs originated from every other core AS.
 
-In every registration period, the Control Service of a core AS performs the following operations:
+In every registration interval, the Control Service of a core AS performs the following operations:
 
 1. The core Control Service selects the best PCBs towards each core AS observed so far.
 2. The core Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **core segments**.
@@ -2373,7 +2374,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
-- Configuration: ensure all items are mentioned and cross referenced
+- Configuration: ensure all items are mentioned and cross referenced.
+- Rename "registration period" to "registration interval" to ensure consistence with "propagation interval"
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
