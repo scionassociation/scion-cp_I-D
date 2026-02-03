@@ -1447,7 +1447,7 @@ The process to look up and fetch path segments consists of the following steps:
 1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.
 2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:
 
-   - up segments are stored in the path database of the local Control Service and can be returned immediately.
+   - up segments: The local Control Service has up segments stored in the path database and returns them immediately.
    - core segments may be cached. Otherwise, the local Control Service queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.
    - down segments may be cached. Otherwise the local Control Service queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
