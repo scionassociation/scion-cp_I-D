@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 August 2026                                           S. Hitz
+Expires: 7 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         1 February 2026
+                                                         3 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 August 2026.
+   This Internet-Draft will expire on 7 August 2026.
 
 Copyright Notice
 
@@ -167,7 +167,6 @@ Table of Contents
    10. References
      10.1.  Normative References
      10.2.  Informative References
-   Acknowledgments
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
@@ -183,6 +182,7 @@ Table of Contents
      draft-dekater-scion-controlplane-06
      draft-dekater-scion-controlplane-05
      draft-dekater-scion-controlplane-04
+   Acknowledgments
    Authors' Addresses
 
 1.  Introduction
@@ -2254,19 +2254,22 @@ Table of Contents
    2.  The Control Service of the source AS answers each request with a
        SegmentsResponse message.  Specifically, for each segment type:
 
-       *  up segments are stored in the path database of the local
-          Control Service and can be returned immediately.
+       *  up segments: The local Control Service has up segments stored
+          in the path database and returns them immediately.
 
-       *  core segments may be cached.  Otherwise, it queries the
-          Control Services of the reachable core ASes in the source ISD
-          for core segments to core ASes in the destination ISD.  To
-          reach the core Control Services, the Control Service of the
-          source AS uses the locally stored up segments.  Once obtained,
-          it returns the core segments.
+       *  core segments: The local Control Service may return locally
+          cached core segments or query the Control Services of the
+          reachable core ASes in the source ISD.  These core ASes return
+          core segments to core ASes in the destination ISD.  To reach
+          the core Control Services, the Control Service of the source
+          AS uses the locally stored up segments.  Once obtained, it
+          returns the core segments and adds them to the local cache for
+          future request.
 
-       *  down segments may be cached.  Otherwise it queries the Control
-          Services of the remote core ASes in the destination ISD to
-          fetch down segments to the destination AS.  To reach the
+       *  down segments: The local Control Service may return locally
+          cached core segments or query the Control Services of the
+          remote core ASes in the destination ISD.  These remote core
+          ASes return down segments to the destination AS.  To reach the
           remote core ASes, the Control Service of the source AS uses
           the previously obtained and combined up and core segments.
           Once obtained, it returns the down segments.
@@ -3754,24 +3757,6 @@ Table of Contents
               Documentation", 2024,
               <https://docs.scion.org/en/latest/sig.html>.
 
-Acknowledgments
-
-   Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
-   (Ericsson), Brian Trammel (Google), William Boye (Swiss National
-   Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION
-   Association), Jean-Christophe Hugly (SCION Association), Juan A.
-   Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos
-   (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing
-   this document.  We also thank Daniel Galán Pascual and Christoph
-   Sprenger from the Information Security Group at ETH Zurich for their
-   inputs based on their formal verification work on SCION.  We are also
-   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
-   and feedback about every aspect of SCION.  Finally, we are indebted
-   to the SCION development teams of Anapaya and ETH Zurich for their
-   practical knowledge and for the documentation about the SCION Control
-   Plane, as well as to the authors of [CHUAT22] - the book is an
-   important source of input and inspiration for this draft.
-
 Deployment Testing: SCIONLab
 
    SCIONLab is a global research network that is available to test the
@@ -4205,6 +4190,24 @@ draft-dekater-scion-controlplane-04
    *  Removed forward references
 
    *  Added RFC2119 compliant terminology
+
+Acknowledgments
+
+   Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
+   (Ericsson), Brian Trammel (Google), William Boye (Swiss National
+   Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION
+   Association), Jean-Christophe Hugly (SCION Association), Juan A.
+   Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos
+   (Anapaya Systems), and Roger Lapuh (Extreme Networks) for reviewing
+   this document.  We also thank Daniel Galán Pascual and Christoph
+   Sprenger from the Information Security Group at ETH Zurich for their
+   inputs based on their formal verification work on SCION.  We are also
+   very grateful to Adrian Perrig (ETH Zurich), for providing guidance
+   and feedback about every aspect of SCION.  Finally, we are indebted
+   to the SCION development teams of Anapaya and ETH Zurich for their
+   practical knowledge and for the documentation about the SCION Control
+   Plane, as well as to the authors of [CHUAT22] - the book is an
+   important source of input and inspiration for this draft.
 
 Authors' Addresses
 
