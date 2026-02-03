@@ -4114,10 +4114,10 @@ message ChainRenewalResponse {
                 <p id="section-4.1-5.2.2.1.1">up segments: The local Control Service has up segments stored in the path database and returns them immediately.<a href="#section-4.1-5.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1-5.2.2.2">
-                <p id="section-4.1-5.2.2.2.1">core segments may be cached. Otherwise, the local Control Service queries the Control Services of the reachable core ASes in the source ISD for core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments.<a href="#section-4.1-5.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.1-5.2.2.2.1">core segments: The local Control Service may return locally cached core segments or query the Control Services of the reachable core ASes in the source ISD. These core ASes return core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments and adds them to the local cache for future request.<a href="#section-4.1-5.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1-5.2.2.3">
-                <p id="section-4.1-5.2.2.3.1">down segments may be cached. Otherwise the local Control Service queries the Control Services of the remote core ASes in the destination ISD to fetch down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.<a href="#section-4.1-5.2.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-4.1-5.2.2.3.1">down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These remote core ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.<a href="#section-4.1-5.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
