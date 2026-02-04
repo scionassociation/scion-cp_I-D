@@ -1086,6 +1086,7 @@ For the purpose of constructing and propagating path segments, a network operato
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between operators of the ASes at each end of each link.
 - Neighbor ISD-AS number.
 - Neighbor interface underlay address.
+- For peering links, neighbor Interface ID.
 
 In addition, a network operator needs to configure an AS Control Service with:
 
