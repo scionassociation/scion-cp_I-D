@@ -3978,7 +3978,8 @@ draft-dekater-scion-controlplane-15
    *  Section 1.7.  Communication Protocol: Clarify DNS resolution is
       not needed
 
-   *  Figures 2, 3, 4: improve arrows in SVG version
+   *  Figures 2, 3, 4: improve arrows in SVG version, move description
+      text to after the figures
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
