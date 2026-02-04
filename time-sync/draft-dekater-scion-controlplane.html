@@ -5898,7 +5898,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.4">
-            <p id="section-8.4-2.4.1">A Certificate Authority (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>): it may issue AS certificates with the wrong validity, that won't appear valid by verifiers.<a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-2.4.1">A Certificate Authority (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.<a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.4-3">It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS <span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>, <span>[<a href="#BCP223" class="cite xref">BCP223</a>]</span>, or Khronos <span>[<a href="#RFC9523" class="cite xref">RFC9523</a>]</span>, or to leverage multiple diverse time sources (e.g. GNSS and network-based).<a href="#section-8.4-3" class="pilcrow">¶</a></p>

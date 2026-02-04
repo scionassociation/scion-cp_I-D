@@ -3571,8 +3571,8 @@ Table of Contents
       intended expiration time (see Section 2.2.2.5).
 
    *  A Certificate Authority (see [I-D.dekater-scion-pki]): it may
-      issue AS certificates with the wrong validity, that won't appear
-      valid by verifiers.
+      issue AS certificates with incorrect validity periods, causing
+      them to be rejected by verifiers.
 
    It is therefore recommended to leverage secure time synchronization
    mechanisms, such as NTS [RFC8915], [BCP223], or Khronos [RFC9523], or
