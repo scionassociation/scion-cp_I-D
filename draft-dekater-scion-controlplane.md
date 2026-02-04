@@ -1320,7 +1320,7 @@ A `ChainRenewalResponse` message includes the following fields:
 
 As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
 
-The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called *intra-ISD path segment registration*. As a result, a core AS's Control Service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the *core segment registration* process.
+The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called *intra-ISD path segment registration*. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the *core segment registration* process.
 
 Both processes are described below.
 
@@ -1371,7 +1371,7 @@ Every registration period, the Control Service of a non-core AS performs the fol
 
 1. The Control Service selects the PCBs that it wants to transform into down segments from the candidate PCBs in the Beacon Store.
 2. The Control Service "terminates" the selected PCBs by performing the steps described in [](#term-pcb). From this moment on, the modified PCBs are called **down segments**.
-3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered, otherwise the core AS MUST reject the segment.
+3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered, otherwise the core AS MUST reject the segment. As a result, a core AS’s Control Service contains all down segments registered by its direct or indirect customer ASes.
 
 **Note:** For more information on possible selection strategies of PCBs, see [](#selection).
 
@@ -2371,6 +2371,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - PCB Extensions: clarify behavior in case of unknown extensions
 - Configuration: mention MAC algorithm and forwarding key as a configuration item
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
+- Registration of Path Segments: clarify that a core AS has down segments registered by its direct or indirect customer ASes
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
 - Move "Deployment Considerations" from section 3 to 7
