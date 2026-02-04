@@ -2374,7 +2374,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - ISD and AS numbers: clarify that identifiers in public ranges must be unique
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
-- Figures 2, 3, 4: improve arrows in SVG version
+- Figures 2, 3, 4: improve arrows in SVG version, move description text to after the figures
 - PCB Extensions: clarify behavior in case of unknown extensions
 - Configuration: ensure all items are mentioned and cross referenced.
 - Rename "registration period" to "registration interval" to ensure consistency with "propagation interval"
