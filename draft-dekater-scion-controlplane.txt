@@ -3980,7 +3980,7 @@ draft-dekater-scion-controlplane-15
    *  Rename "registration period" to "registration interval" to ensure
       consistency with "propagation interval"
 
-   *  Timestaps: add normative reference to POSIX.1-2024 to clarify
+   *  Timestamps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
 
    *  Registration of Path Segments: clarify that a core AS has down
