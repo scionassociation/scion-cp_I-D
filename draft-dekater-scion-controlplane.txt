@@ -2003,11 +2003,10 @@ Table of Contents
 
    The next step is to register the selected down segments with the
    Control Service of the relevant core ASes in accordance with a
-   process called _intra-ISD path segment registration_. As a result, a
-   core AS's Control Service contains all intra-ISD path segments
-   registered by the non-core ASes of its ISD.  In addition, each core
-   AS Control Service also stores the preferred core path segments to
-   other core ASes during the _core segment registration_ process.
+   process called _intra-ISD path segment registration_. In addition,
+   each core AS Control Service also stores the preferred core path
+   segments to other core ASes during the _core segment registration_
+   process.
 
    Both processes are described below.
 
@@ -2117,7 +2116,9 @@ Table of Contents
        call (RPC) in the Control Services of the relevant core ASes (see
        also Section 3.3).  The first ISD-AS entry of the path segment
        SHOULD be equal to the core ISD-AS where the segment is being
-       registered, otherwise the core AS MUST reject the segment.
+       registered, otherwise the core AS MUST reject the segment.  As a
+       result, a core AS’s Control Service contains all down segments
+       registered by its direct or indirect customer ASes.
 
    *Note:* For more information on possible selection strategies of
    PCBs, see Section 2.3.3.
@@ -3958,6 +3959,9 @@ draft-dekater-scion-controlplane-15
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
+
+   *  Registration of Path Segments: clarify that a core AS has down
+      segments registered by its direct or indirect customer ASes
 
    *  Path Lookup Process: reformat and reword steps to clarify how an
       endpoint requests path segments

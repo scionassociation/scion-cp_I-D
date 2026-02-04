@@ -3865,7 +3865,7 @@ message ChainRenewalResponse {
       </h2>
 <p id="section-3-1"><strong>Path registration</strong> is the process where a SCION AS transforms selected PCBs into path segments, and adding these segments to the relevant path databases thereby making them available to other ASes.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called <em>intra-ISD path segment registration</em>. As a result, a core AS's Control Service contains all intra-ISD path segments registered by the non-core ASes of its ISD. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the <em>core segment registration</em> process.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-3">The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called <em>intra-ISD path segment registration</em>. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the <em>core segment registration</em> process.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Both processes are described below.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <div id="intra-reg">
 <section id="section-3.1">
@@ -3974,7 +3974,7 @@ message ChainRenewalResponse {
               <p id="section-3.1.3-2.2.1">The Control Service "terminates" the selected PCBs by performing the steps described in <a href="#term-pcb" class="auto internal xref">Section 3.1.1</a>. From this moment on, the modified PCBs are called <strong>down segments</strong>.<a href="#section-3.1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-3.1.3-2.3">
-              <p id="section-3.1.3-2.3.1">The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the <code>SegmentRegistrationService.SegmentsRegistration</code> remote procedure call (RPC) in the Control Services of the relevant core ASes (see also <a href="#reg-proto" class="auto internal xref">Section 3.3</a>). The first ISD-AS entry of the path segment <span class="bcp14">SHOULD</span> be equal to the core ISD-AS where the segment is being registered, otherwise the core AS <span class="bcp14">MUST</span> reject the segment.<a href="#section-3.1.3-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-3.1.3-2.3.1">The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the <code>SegmentRegistrationService.SegmentsRegistration</code> remote procedure call (RPC) in the Control Services of the relevant core ASes (see also <a href="#reg-proto" class="auto internal xref">Section 3.3</a>). The first ISD-AS entry of the path segment <span class="bcp14">SHOULD</span> be equal to the core ISD-AS where the segment is being registered, otherwise the core AS <span class="bcp14">MUST</span> reject the segment. As a result, a core AS’s Control Service contains all down segments registered by its direct or indirect customer ASes.<a href="#section-3.1.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
 <p id="section-3.1.3-3"><strong>Note:</strong> For more information on possible selection strategies of PCBs, see <a href="#selection" class="auto internal xref">Section 2.3.3</a>.<a href="#section-3.1.3-3" class="pilcrow">¶</a></p>
@@ -6601,19 +6601,22 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.9.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.10">
-            <p id="appendix-C.1-1.10.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.10.1">Registration of Path Segments: clarify that a core AS has down segments registered by its direct or indirect customer ASes<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.11">
-            <p id="appendix-C.1-1.11.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.11.1">Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments<a href="#appendix-C.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.12">
-            <p id="appendix-C.1-1.12.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.12.1">SCMP: remove experimental values from table and mention more error messages are in referenced spec<a href="#appendix-C.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.13">
-            <p id="appendix-C.1-1.13.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.13.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.13.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.14">
-            <p id="appendix-C.1-1.14.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.14.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.15">
+            <p id="appendix-C.1-1.15.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.15.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
