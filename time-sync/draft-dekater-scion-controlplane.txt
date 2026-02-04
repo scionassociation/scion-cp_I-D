@@ -3975,7 +3975,7 @@ draft-dekater-scion-controlplane-15
       referenced.
 
    *  Rename "registration period" to "registration interval" to ensure
-      consistence with "propagation interval"
+      consistency with "propagation interval"
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
@@ -3992,7 +3992,7 @@ draft-dekater-scion-controlplane-15
    *  Move "Deployment Considerations" from section 3 to 7
 
    *  Attacks on time sources: recommend use of secure time
-      synchronization
+      synchronization and mention CAs
 
    *  Acknowledgements: ensure all reviewers are there
 
