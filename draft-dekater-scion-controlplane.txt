@@ -1587,18 +1587,31 @@ Table of Contents
 
    *  Neighbor type (core, parent, child, peer), depending on link type
       (see Section 1.3).  Link type depends on mutual agreements between
-      the organizations operating the ASes at each end of each link.
+      operators of the ASes at each end of each link.
 
-   *  Neighbor ISD-AS number
+   *  Neighbor ISD-AS number.
 
-   *  Neighbor interface underlay address
+   *  Neighbor interface underlay address.
 
    In addition, a network operator needs to configure an AS Control
-   Service with the algorithm and forwarding key used to compute the Hop
-   Field MAC, which are also used by routers within the AS.  These are
-   further described in [I-D.dekater-scion-dataplane].  The maximum MTU
-   supported by all intra-AS links may also be configured by the
-   operator.
+   Service with:
+
+   *  the algorithm and forwarding key used to compute the Hop Field
+      MAC, which are also used by routers within the AS.  These are
+      further described in [I-D.dekater-scion-dataplane].
+
+   *  registration interval (see Section 3.1).
+
+   *  propagation interval and best PCBs set size (see Section 2.3.4).
+
+   *  the maximum MTU supported by all intra-AS links may also be
+      configured by the operator.
+
+   *  Hop Field expiration time (see Section 2.2.2.5).  Current
+      implementations default to 63, corresponding to 6 hours.
+
+   Optionally, it may configure per-link MTU (see Section 2.2.2.3) and
+   PCB selection policies (see Section 2.3.3).
 
 2.3.  Propagation of PCBs
 
@@ -2012,9 +2025,9 @@ Table of Contents
 
 3.1.  Intra-ISD Path Segment Registration
 
-   Every _registration period_ (determined by each AS) the AS's Control
-   Service selects two sets of PCBs to transform into two types of path
-   segments:
+   Every _registration interval_ (configured by each AS) the AS's
+   Control Service selects two sets of PCBs to transform into two types
+   of path segments:
 
    *  Up segments, which allow the infrastructure entities and endpoints
       in this AS to communicate with core ASes; and
@@ -2081,7 +2094,7 @@ Table of Contents
 
 3.1.2.  Transforming a PCB into an Up Segment
 
-   Every registration period, the Control Service of a non-core AS
+   Every registration interval, the Control Service of a non-core AS
    performs the following steps to transform PCBs into up segments:
 
    1.  The Control Service selects the PCBs that it wants to transform
@@ -2099,7 +2112,7 @@ Table of Contents
 
 3.1.3.  Transforming a PCB into a Down Segment
 
-   Every registration period, the Control Service of a non-core AS
+   Every registration interval, the Control Service of a non-core AS
    performs the following steps to transform PCBs into down segments:
 
    1.  The Control Service selects the PCBs that it wants to transform
@@ -2133,7 +2146,7 @@ Table of Contents
    core segments with other core ASes as each core AS will receive PCBs
    originated from every other core AS.
 
-   In every registration period, the Control Service of a core AS
+   In every registration interval, the Control Service of a core AS
    performs the following operations:
 
    1.  The core Control Service selects the best PCBs towards each core
@@ -3148,7 +3161,7 @@ Table of Contents
 
    *  Processing overhead is validating the signatures of the AS
       entries, signing new AS entries, and to a lesser extent,
-      evaluating the beaconing policies.
+      evaluating the PCB selection policies.
 
    *  Storage overhead is both the temporary storage of PCBs before the
       next propagation interval, and the storage of complete discovered
@@ -3954,8 +3967,11 @@ draft-dekater-scion-controlplane-15
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
-   *  Configuration: mention MAC algorithm and forwarding key as a
-      configuration item
+   *  Configuration: ensure all items are mentioned and cross
+      referenced.
+
+   *  Rename "registration period" to "registration interval" to ensure
+      consistence with "propagation interval"
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
