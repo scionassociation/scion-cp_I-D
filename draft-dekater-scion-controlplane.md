@@ -2002,7 +2002,7 @@ In order to maintain service availability, an AS operator SHOULD monitor the fol
 
 ## Effects of Clock Inaccuracy {#clock-inaccuracy}
 
-A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
+A PCB originated by a given core AS Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:
 
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
@@ -2170,8 +2170,9 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 Operators should maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
 
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
-- An endpoint: the endpoint may fail to verify path segments during path lookup (see [](#lookup-process)).
+- An endpoint: it may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
+- A Certificate Authority (see {{I-D.dekater-scion-pki}}): it may issue AS certificates with the wrong validity, that won't appear valid by verifiers.
 
 It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g. GNSS and network-based).
 
