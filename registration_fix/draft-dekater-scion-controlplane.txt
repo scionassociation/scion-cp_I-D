@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 August 2026                                           S. Hitz
+Expires: 8 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         3 February 2026
+                                                         4 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 August 2026.
+   This Internet-Draft will expire on 8 August 2026.
 
 Copyright Notice
 
@@ -2114,7 +2114,7 @@ Table of Contents
        also Section 3.3).  The first ISD-AS entry of the path segment
        SHOULD be equal to the core ISD-AS where the segment is being
        registered, otherwise the core AS MUST reject the segment.  As a
-       result, a core AS’s Control Service contains all down-segments
+       result, a core AS’s Control Service contains all down segments
        registered by its direct or indirect customer ASes.
 
    *Note:* For more information on possible selection strategies of
