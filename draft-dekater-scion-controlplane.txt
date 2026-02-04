@@ -805,13 +805,6 @@ Table of Contents
    with an upper case letter for the sake of illustration.  Arrows
    represent the PCB propagation direction.
 
-   In Figure 2 below, core AS X sends the two different PCBs "a" and "b"
-   via two different links to child AS Y: PCB "a" leaves core AS X via
-   egress interface "2", whereas PCB "b" is sent over egress interface
-   "1".  Core AS X adds the respective egress information to the PCBs
-   when sending them off, as shown in the figure (the entries "_Core -
-   Out:2_" and "_Core - Out:1_", respectively).
-
                               +-------------+
                               |             |
                               |             |
@@ -833,17 +826,12 @@ Table of Contents
        Figure 2: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 1
 
-   AS Y receives the two PCBs "a" and "b" through two different
-   (ingress) interfaces, namely "2" and "3", respectively (see Figure 3
-   below).  Additionally, AS Y forwards to AS Z four PCBs that were
-   previously sent by core AS X.  For this, AS Y uses the two different
-   (egress) links "5" and "6".  AS Y appends the corresponding ingress
-   and egress interface information to the four PCBs.
-
-   AS Y also has two peering links to its neighboring peers V and W,
-   through the interfaces "1" and "4" respectively, which is included in
-   the information in the PCBs.  Thus, each forwarded PCB accumulates
-   path information on its way "down" from core AS X.
+   In Figure 2, core AS X sends the two different PCBs "a" and "b" via
+   two different links to child AS Y: PCB "a" leaves core AS X via
+   egress interface "2", whereas PCB "b" is sent over egress interface
+   "1".  Core AS X adds the respective egress information to the PCBs
+   when sending them off, as can be seen in the figure (the entries
+   "_Core - Out:2_" and "_Core - Out:1_", respectively).
 
                        +--------+  |   |  +--------+
                        | PCB a  |  |   |  | PCB b  |
@@ -878,14 +866,17 @@ Table of Contents
        Figure 3: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 2
 
-   The following figure shows how the four PCBs "c", "d", "e", and "f"
-   coming from AS Y are received by AS Z over two different links: PCBs
-   "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d"
-   and "f" enter AS Z via ingress interface "1".  Additionally, AS Z
-   propagates PCBs "g", "h", "i", and "j" further downwards over the
-   same link (egress interface "3"), and extends the PCBs with the
-   relevant information so that each of these includes AS hop entries
-   from core AS X, AS Y, and AS Z.
+   In Figure 3, AS Y receives the two PCBs "a" and "b" through two
+   different (ingress) interfaces, namely "2" and "3", respectively.
+   Additionally, AS Y forwards to AS Z four PCBs that were previously
+   sent by core AS X.  For this, AS Y uses the two different (egress)
+   links "5" and "6".  AS Y appends the corresponding ingress and egress
+   interface information to the four PCBs.
+
+   AS Y also has two peering links to its neighboring peers V and W,
+   through the interfaces "1" and "4" respectively, which is included in
+   the information in the PCBs.  Thus, each forwarded PCB accumulates
+   path information on its way "down" from core AS X.
 
            +--------+  +--------+  |   |  +--------+  +--------+
            | PCB e  |  | PCB c  |  |   |  | PCB d  |  | PCB f  |
@@ -922,16 +913,14 @@ Table of Contents
        Figure 4: Intra-ISD PCB propagation from the ISD core to child
                                ASes - Part 3
 
-   Based on the figures above, it appears that a PCB represents a single
-   path segment.  However, there is a difference between a PCB and a
-   registered path segment as a PCB is a so-called "travelling path
-   segment" that accumulates AS entries when traversing SCION networks.
-   A registered path segment is instead a "snapshot" of a travelling PCB
-   at a given time T and from the vantage point of a particular AS A.
-   This is illustrated by Figure 5 which shows several possible path
-   segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from
-   Figure 4 above.  It is up to AS Z to use all of these path segments
-   or just a selection of them.
+   In Figure 4, the four PCBs "c", "d", "e", and "f" are coming from AS
+   Y and are received by AS Z over two different links: PCBs "c" and "e"
+   reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter
+   AS Z via ingress interface "1".  Additionally, AS Z propagates PCBs
+   "g", "h", "i", and "j" further downwards over the same link (egress
+   interface "3"), and extends the PCBs with the relevant information so
+   that each of these includes AS hop entries from core AS X, AS Y, and
+   AS Z.
 
                   AS Entry Core        AS Entry Y          AS Entry Z
 
@@ -978,6 +967,17 @@ Table of Contents
                     Egress 1       Ingress 3 - Egress 5      Ingress 1
 
              Figure 5: Possible up- or down segments for AS Z
+
+   According to the Figure 2, Figure 3 and Figure 4 above, it appears
+   that a PCB represents a single path segment.  However, there is a
+   difference between a PCB and a registered path segment as a PCB is a
+   so-called "travelling path segment" that accumulates AS entries when
+   traversing SCION networks.  A registered path segment is instead a
+   "snapshot" of a travelling PCB at a given time T and from the vantage
+   point of a particular AS A.  This is illustrated by Figure 5 which
+   shows several possible path segments to reach AS Z, based on the PCBs
+   "g", "h", "i", and "j" from Figure 4 above.  It is up to AS Z to use
+   all of these path segments or just a selection of them.
 
 2.2.  PCB Message Format
 
@@ -3969,7 +3969,8 @@ draft-dekater-scion-controlplane-15
    *  Section 1.7.  Communication Protocol: Clarify DNS resolution is
       not needed
 
-   *  Figures 2, 3, 4: improve arrows in SVG version
+   *  Figures 2, 3, 4: improve arrows in SVG version, move description
+      text to after the figures
 
    *  PCB Extensions: clarify behavior in case of unknown extensions
 
