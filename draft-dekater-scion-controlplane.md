@@ -2377,13 +2377,13 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Figures 2, 3, 4: improve arrows in SVG version
 - PCB Extensions: clarify behavior in case of unknown extensions
 - Configuration: ensure all items are mentioned and cross referenced.
-- Rename "registration period" to "registration interval" to ensure consistence with "propagation interval"
+- Rename "registration period" to "registration interval" to ensure consistency with "propagation interval"
 - Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds
 - Registration of Path Segments: clarify that a core AS has down segments registered by its direct or indirect customer ASes
 - Path Lookup Process: reformat and reword steps to clarify how an endpoint requests path segments
 - SCMP: remove experimental values from table and mention more error messages are in referenced spec
 - Move "Deployment Considerations" from section 3 to 7
-- Attacks on time sources: recommend use of secure time synchronization
+- Attacks on time sources: recommend use of secure time synchronization and mention CAs
 - Acknowledgements: ensure all reviewers are there
 
 ## draft-dekater-scion-controlplane-14
