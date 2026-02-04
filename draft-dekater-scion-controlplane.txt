@@ -1593,6 +1593,8 @@ Table of Contents
 
    *  Neighbor interface underlay address.
 
+   *  For peering links, neighbor Interface ID.
+
    In addition, a network operator needs to configure an AS Control
    Service with:
 
