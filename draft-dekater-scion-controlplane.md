@@ -540,7 +540,6 @@ In {{figure-3b}}, AS Y receives the two PCBs "a" and "b" through two different (
 
 AS Y also has two peering links to its neighboring peers V and W, through the interfaces "1" and "4" respectively, which is included in the information in the PCBs. Thus, each forwarded PCB accumulates path information on its way "down" from core AS X.
 
-The following figure shows how the four PCBs "c", "d", "e", and "f" coming from AS Y are received by AS Z over two different links: PCBs "c" and "e" reach AS Z over ingress interface "5", whereas PCBs "d" and "f" enter AS Z via ingress interface "1". Additionally, AS Z propagates PCBs "g", "h", "i", and "j" further downwards over the same link (egress interface "3"), and extends the PCBs with the relevant information so that each of these includes AS hop entries from core AS X, AS Y, and AS Z.
 
 ~~~aasvg
         +--------+  +--------+  |   |  +--------+  +--------+
