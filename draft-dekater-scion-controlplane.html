@@ -5681,7 +5681,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
         <h3 id="name-effects-of-clock-inaccuracy">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>
         </h3>
-<p id="section-7.3-1">A PCB originated by a given Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">A PCB originated by a given core AS Control Service is validated by all the Control Services that receive it. All have different clocks and their differences affect the validation process:<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3-2.1">
             <p id="section-7.3-2.1.1">A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.<a href="#section-7.3-2.1.1" class="pilcrow">¶</a></p>
@@ -5895,10 +5895,13 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="section-8.4-2.1.1">A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>) or correctly add timestamps to propagated PCBs (see <a href="#pcb-appending" class="auto internal xref">Section 2.1.2</a>).<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.2">
-            <p id="section-8.4-2.2.1">An endpoint: the endpoint may fail to verify path segments during path lookup (see <a href="#lookup-process" class="auto internal xref">Section 4.1</a>).<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-2.2.1">An endpoint: it may fail to verify path segments during path lookup (see <a href="#lookup-process" class="auto internal xref">Section 4.1</a>).<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.3">
             <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-2.4">
+            <p id="section-8.4-2.4.1">A Certificate Authority (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.<a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.4-3">It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS <span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>, <span>[<a href="#BCP223" class="cite xref">BCP223</a>]</span>, or Khronos <span>[<a href="#RFC9523" class="cite xref">RFC9523</a>]</span>, or to leverage multiple diverse time sources (e.g. GNSS and network-based).<a href="#section-8.4-3" class="pilcrow">¶</a></p>
@@ -6618,7 +6621,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.8.1">Configuration: ensure all items are mentioned and cross referenced.<a href="#appendix-C.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.9">
-            <p id="appendix-C.1-1.9.1">Rename "registration period" to "registration interval" to ensure consistence with "propagation interval"<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.9.1">Rename "registration period" to "registration interval" to ensure consistency with "propagation interval"<a href="#appendix-C.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.10">
             <p id="appendix-C.1-1.10.1">Timestaps: add normative reference to POSIX.1-2024 to clarify counting of leap seconds<a href="#appendix-C.1-1.10.1" class="pilcrow">¶</a></p>
@@ -6636,7 +6639,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.14.1">Move "Deployment Considerations" from section 3 to 7<a href="#appendix-C.1-1.14.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.15">
-            <p id="appendix-C.1-1.15.1">Attacks on time sources: recommend use of secure time synchronization<a href="#appendix-C.1-1.15.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.15.1">Attacks on time sources: recommend use of secure time synchronization and mention CAs<a href="#appendix-C.1-1.15.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.16">
             <p id="appendix-C.1-1.16.1">Acknowledgements: ensure all reviewers are there<a href="#appendix-C.1-1.16.1" class="pilcrow">¶</a></p>

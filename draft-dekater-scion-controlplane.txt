@@ -3109,9 +3109,9 @@ Table of Contents
 
 7.3.  Effects of Clock Inaccuracy
 
-   A PCB originated by a given Control Service is validated by all the
-   Control Services that receive it.  All have different clocks and
-   their differences affect the validation process:
+   A PCB originated by a given core AS Control Service is validated by
+   all the Control Services that receive it.  All have different clocks
+   and their differences affect the validation process:
 
    *  A fast clock at origination or a slow clock at reception will
       yield a lengthened expiration time for hops, and possibly an
@@ -3566,11 +3566,15 @@ Table of Contents
       cannot verify the validity of received PCBs (see Section 2.2.4) or
       correctly add timestamps to propagated PCBs (see Section 2.1.2).
 
-   *  An endpoint: the endpoint may fail to verify path segments during
-      path lookup (see Section 4.1).
+   *  An endpoint: it may fail to verify path segments during path
+      lookup (see Section 4.1).
 
    *  A router: packets may be dropped ahead of the control service
       intended expiration time (see Section 2.2.2.5).
+
+   *  A Certificate Authority (see [I-D.dekater-scion-pki]): it may
+      issue AS certificates with incorrect validity periods, causing
+      them to be rejected by verifiers.
 
    It is therefore recommended to leverage secure time synchronization
    mechanisms, such as NTS [RFC8915], [BCP223], or Khronos [RFC9523], or
@@ -3973,7 +3977,7 @@ draft-dekater-scion-controlplane-15
       referenced.
 
    *  Rename "registration period" to "registration interval" to ensure
-      consistence with "propagation interval"
+      consistency with "propagation interval"
 
    *  Timestaps: add normative reference to POSIX.1-2024 to clarify
       counting of leap seconds
@@ -3990,7 +3994,7 @@ draft-dekater-scion-controlplane-15
    *  Move "Deployment Considerations" from section 3 to 7
 
    *  Attacks on time sources: recommend use of secure time
-      synchronization
+      synchronization and mention CAs
 
    *  Acknowledgements: ensure all reviewers are there
 
