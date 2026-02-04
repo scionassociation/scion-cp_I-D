@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 August 2026                                           S. Hitz
+Expires: 8 August 2026                                           S. Hitz
                                                          Anapaya Systems
-                                                         3 February 2026
+                                                         4 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 August 2026.
+   This Internet-Draft will expire on 8 August 2026.
 
 Copyright Notice
 
@@ -1593,6 +1593,8 @@ Table of Contents
    *  Neighbor ISD-AS number.
 
    *  Neighbor interface underlay address.
+
+   *  For peering links, neighbor Interface ID.
 
    In addition, a network operator needs to configure an AS Control
    Service with:
