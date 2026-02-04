@@ -2172,7 +2172,7 @@ Operators should maintain coarse time synchronization among Control Service inst
 - A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
 - An endpoint: it may fail to verify path segments during path lookup (see [](#lookup-process)).
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
-- A Certificate Authority (see {{I-D.dekater-scion-pki}}): it may issue AS certificates with the wrong validity, that won't appear valid by verifiers.
+- A Certificate Authority (see {{I-D.dekater-scion-pki}}): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.
 
 It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g. GNSS and network-based).
 
