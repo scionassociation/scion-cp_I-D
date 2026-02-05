@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-03T00:33:30.737043+00:00",
+  "timestamp": "2026-02-05T00:33:03.074750+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2168,8 +2168,8 @@
       ],
       "body": "- [x] Reword to clarify that the certificate MUST expire later than the segment.\n- [x] Clarify allowance in 2.2.3\n\n### Feedback Alvaro:\n```\n1364\t2.2.1.4.3.  AS Entry Signature\n\n1366\t   Each AS entry MUST be signed with the AS certificate's private key\n1367\t   K_i.  The certificate MUST have a validity period fully containing\n1368\t   that of the segment being verified, regardless of current time.  The\n1369\t   signature Sig_i of an AS entry ASE_i is computed over the AS entry's\n1370\t   signed component.\n```\n\n[] \"The certificate MUST have a validity period fully containing that of the segment being verified...\"\n\nI can read this a couple of different ways...but neither seems fully specified!\n\n1- What is the validity time of the segment?  Is that the Expiration Time in the Hop Field?  Which one?  If so, then it should be specified that if the certificate's validity period is less than the Expiration Time, the PCB MUST be discarded (?).\n\n2- If we're not talking about the Expiration Time, the PCB MUST become invalid when the certificate's validity period ends.\n\n\n```\n...\n1620\t2.2.3.  PCB Validity\n...\n1630\t   For the purpose of validation, a timestamp is considered \"future\" if\n1631\t   it is later than the current time at the point of validation plus an\n1632\t   allowance for differences between the validator's and originator's\n1633\t   clock.  As an allowance, it is recommended to use the granularity of\n1634\t   the hopfield expiration time (that is 337.5 seconds, see\n1635\t   Section 2.2.1.6).\n\n1637\t   For the purpose of validation, a hop is considered expired if its\n1638\t   absolute expiration time, calculated as defined in Section 2.2.1.6,\n1639\t   is later than the current time at the point of validation.\n```\n> [] Should the same allowance be made in this case?\n\n@jiceatscion how is this allowance counted for hops? We now point to section 2.2.1.6 which says: \n```\n   *  exp_time: The 8-bit encoded expiration time of the Hop Field,\n      indicating its validity.  This field expresses a duration in\n      seconds according to the formula: duration = (1 + exp_time) *\n      (24*60*60/256).  The minimum duration is therefore 337.5 s.  This\n      duration is relative to the PCB creation timestamp set in the\n      PCB's segment information component (see also Section 2.2.1.2).\n      Therefore, the absolute expiration time of the Hop Field is the\n      sum of these two values.\n```\n\nI assume that the 1 in the formula represents the allowance, do you confirm that? ",
       "createdAt": "2025-06-25T08:41:14Z",
-      "updatedAt": "2025-10-13T20:27:47Z",
-      "closedAt": "2025-10-13T20:27:46Z",
+      "updatedAt": "2026-02-04T09:48:23Z",
+      "closedAt": "2026-02-04T09:48:23Z",
       "comments": [
         {
           "author": "jiceathome",
@@ -2982,7 +2982,7 @@
       "id": "I_kwDOJx2-rs7mTuim",
       "title": "Avoid passive tense to clarify subject",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/186",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -2991,8 +2991,8 @@
       "labels": [],
       "body": "> 17. In Section 2.3.1 and elsewhere in the section, you write that ASes must do this, may do that, etc.  Do you mean the AS constrol service or what?  Also, in these documents, I highly recommend avoiding passive tense (e.g., \"MUST be discarded\"), so that everyone understands which element MUST do what. ",
       "createdAt": "2026-01-28T07:10:56Z",
-      "updatedAt": "2026-01-30T08:31:39Z",
-      "closedAt": null,
+      "updatedAt": "2026-02-04T08:35:20Z",
+      "closedAt": "2026-02-04T08:35:20Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -3102,6 +3102,56 @@
           "updatedAt": "2026-01-30T17:41:59Z"
         }
       ]
+    },
+    {
+      "number": 200,
+      "id": "I_kwDOJx2-rs7n7-74",
+      "title": "Ensure configuration section is complete",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/200",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Do we have everything? Current section says: \n```\n2.2.5.  Configuration\n\n   For the purpose of constructing and propagating path segments, an AS\n   Control Service must be configured with links to neighboring ASes.\n   Such information may be conveyed to the Control Service in an out-of-\n   band fashion (e.g. in a configuration file).  For each link, these\n   values MUST be configured:\n\n   *  Local Interface ID.  This MUST be unique within each AS.\n\n   *  Neighbor type (core, parent, child, peer), depending on link type\n      (see Section 1.3).  Link type depends on mutual agreements between\n      the organizations operating the ASes at each end of each link.\n\n   *  Neighbor ISD-AS number\n\n   *  Neighbor interface underlay address\n\n   The maximum MTU supported by all intra-AS links may also be\n   configured by the operator.\n```\n\nWe were missing: \n- [x] AS MAC algo and forwarding key (added in #198 )\n- [x] Propagation interval (distinct for core, non core)\n- [x] best PCBs set size\n- [x] MTU of links (optional)\n- [x] beaconing policies (optional)\n- [x] Expiration time (`MaxExpTime` in scionproto)\nReference: https://docs.scion.org/en/latest/manuals/control.html ",
+      "createdAt": "2026-02-03T13:22:49Z",
+      "updatedAt": "2026-02-04T12:40:39Z",
+      "closedAt": "2026-02-04T12:40:39Z",
+      "comments": []
+    },
+    {
+      "number": 202,
+      "id": "I_kwDOJx2-rs7oCIk4",
+      "title": "Segment registration - inconsistency",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/202",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "We say in [section 4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-4-3): \n> As a result, a core AS's Control Service contains all intra-ISD path segments registered by the non-core ASes of its ISD. \n\nBut then in [4.3](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-4.3-1) we say: \n> The Control Service of a non-core AS has to register the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. \n\n\nThis was developed in https://github.com/scionproto/scion/pull/3747 and discussed [in Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1588670470176500) in 2020.\n\n\nWording in section 4 comes from [version -01](https://github.com/scionassociation/scion-cp_I-D/commit/38e5e307f15a9371a4b7a9ca14cd9071a942424f) (August 2023) and this is likely how it used to be in an early design. Docs [was updated](https://github.com/scionproto/scion/pull/4361/changes#diff-598a1a36ae29697fdd68e36f6dd1ba3b3367c490d3c6c22329f0e3c9b4a978f8R193) a few weeks later (23 Aug 2023) with a different wording. ",
+      "createdAt": "2026-02-03T19:40:16Z",
+      "updatedAt": "2026-02-04T11:06:35Z",
+      "closedAt": "2026-02-04T11:06:35Z",
+      "comments": []
+    },
+    {
+      "number": 204,
+      "id": "I_kwDOJx2-rs7oM0TY",
+      "title": "Review time, allowances, clock inaccuracy",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/204",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [],
+      "body": " We need to double check the topic of time through the draft. There are a few affected sections:\n\n- [2.2.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-2.2.4)[PCB Validity](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#name-pcb-validity) \n  - [x] Is the optional [AS Entry signature creation timestamp](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-2.2.2.1-3.4.1) used to check validity? (relates to how core CS instance tell if a registered segment is in the future) \n  --> \"we do not check timestamp in the future or not\" source: @oncilla [here](https://scionproto.slack.com/archives/C8ADA9CEP/p1770202431809119?thread_ts=1770140451.343509&cid=C8ADA9CEP)\n  - [x] Is the clock skew allowance really 337.5s ? Or is it shorter (Anapya)? This affects how CS instances tolerate future certs/segments\n  --> The allowance was added in #25 on 5 Jun 2024,  then discussed mentioned by Matthias [here](https://github.com/scionassociation/scion-cp_I-D/issues/46#issuecomment-2214391631) in July 2024, then discussed again in #80. @oncilla confirmed [on Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1770208993292049?thread_ts=1770140451.343509&cid=C8ADA9CEP) that there is no allowance in the current implementation, as it does not check for future segments. Indeed, there are two issues in scionproto to address this: \nhttps://github.com/scionproto/scion/issues/4538\nhttps://github.com/scionproto/scion/issues/4534\nConclusion: the allowance should stay in the draft to stay consistent with the requirement that future beacons and segments are rejected.  On the value itself, Matthias mentioned it is a value, let's go with it for now. But I feel it may be revisited in future implementations.\n\n- [3.3. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-3.3)[Effects of Clock Inaccuracy](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#name-effects-of-clock-inaccuracy)\n  - [ ] Mention offsets related to PKI (CA, TRCs) --> https://github.com/scionassociation/scion-cppki_I-D/issues/121 \n\n- [8.4. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-8.4)[Attacks on time sources](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#name-attacks-on-time-sources)\n  - [x] Mention CAs\n\n\n\n\n\n## Overview about time dependencies: \n\nThis is my understanding when it comes to clock skew tolerance. The most important clock is the one of core ASes control services, since they originate path segments that include a timestamp in `segment_info`. [timestamp](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-2.2.1-4.1.1).\n\nThis timestamp is then validated by:\n- other AS control services at: \n     - beaconing: when verifying incoming PCBs ( PathSegment containing origination timestamp and signature). ~Possibly also optional signature timestamp?~\n     - When selecting which beacons to propagate (remaining validity)\n     - At segment registration: when verifying the AS entry, the signature must be signed with a currently valid cert. Dependency is therefore with the CA, that needs to have the right time when issuing certs. \n The optional [signature creation timestamp](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-2.2.2.1-3.4.1) is not checked. Also, the segment ID timestamp was originated by the same Core AS registering the segment, therefore there can't be skew.  @oncilla confirmed [on Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1770208722927379?thread_ts=1770140451.343509&cid=C8ADA9CEP) that a cert issued with a wrong time is the only case that may result in registrations being refused. \n- Endpoints: during path lookup (PathSegment contains PathSegment.segment_info.timestamp and signature )\n- Routers: they check segment_info.timestamp\n\n\nThen there are other ASEs control's plane. They sign segments that contain an optional timestamp. \n- If used and verified, then they need to be in sync with endpoints, all ASes\n- If not, then only the cert has to be in sync (so CA)\n\n\nThen the PKI:\n- CAs: they must be in sync with all ASes and endpoints. Otherwise certs issued won't be accepted if in the future or if they expired. Various components rely on issued certs to:\n     - Endpoints to validate PathSegment at path lookups\n     - Core ASes to validate segment registrations\n     - All ASes CPs to validate PCB during beaconing & maybe during registration.\n     - All ASes CPs and endpoints for ISD TRC verification and TRC updates\n\nThis is also confirmed by the book's dependency analysis. In yellow things that depend on time for cert validation.  I don't see routers in there.\n<img width=\"888\" height=\"936\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/a9a3a635-759b-4518-bb13-389d40f5cb4a\" />\n\n## Related/past issues: \n\n- https://github.com/scionassociation/scion-dp_I-D/issues/135\n- #25 \n- #80\n- #117 \n\nscionproto: \n- https://github.com/scionproto/scion/issues/4538\n- https://github.com/scionproto/scion/issues/4534",
+      "createdAt": "2026-02-04T09:57:36Z",
+      "updatedAt": "2026-02-04T16:50:29Z",
+      "closedAt": "2026-02-04T16:50:29Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -10291,7 +10341,7 @@
       "labels": [],
       "body": "Addresses #104 \r\nAddresses #114\r\nContributes to #113 on links and paths\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/New_Diagrams/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-06-02T10:25:52Z",
-      "updatedAt": "2025-07-02T14:05:41Z",
+      "updatedAt": "2026-02-04T14:49:12Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "43795f51c05e4ad8972272c389f48b5afd735bf6",
@@ -10502,7 +10552,7 @@
       "labels": [],
       "body": "Addresses some of \r\n- #113 (partially)\r\n- #112 \r\n- #120 (partially)",
       "createdAt": "2025-06-13T03:31:42Z",
-      "updatedAt": "2025-06-27T16:20:23Z",
+      "updatedAt": "2026-02-04T14:49:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5b1c3fc677c83f3207637b66308ba91aa7e301ab",
@@ -10919,7 +10969,7 @@
       "labels": [],
       "body": "Resolves \r\n-  #113 \r\nContinues work done in \r\n- https://github.com/scionassociation/scion-cp_I-D/pull/115 \r\n\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Alvaro-feedback/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-07-03T10:12:51Z",
-      "updatedAt": "2025-07-07T10:14:00Z",
+      "updatedAt": "2026-02-04T14:49:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "b2f88a5c26ee585ef0b09630a0835770fc40f802",
@@ -11036,7 +11086,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-07T18:01:41Z",
-      "updatedAt": "2025-07-07T18:10:05Z",
+      "updatedAt": "2026-02-04T14:49:15Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a1ea042e524931fae1096d84f418ddafc8f539fe",
@@ -11284,7 +11334,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-07-18T02:13:51Z",
-      "updatedAt": "2025-07-18T02:15:59Z",
+      "updatedAt": "2026-02-04T14:49:32Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a51ae4adc7338c6b7fd1187bebea0d240a509d2b",
@@ -12126,7 +12176,7 @@
       "labels": [],
       "body": "Resolves #90 ([these](https://github.com/scionassociation/scion-cp_I-D/issues/90#issuecomment-3004831347) points)",
       "createdAt": "2025-10-16T13:56:29Z",
-      "updatedAt": "2025-10-16T17:59:19Z",
+      "updatedAt": "2026-02-04T14:49:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "d98a416bca68f567fb2d77fc4e54f7aae0631a39",
@@ -12253,7 +12303,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-10-17T13:45:19Z",
-      "updatedAt": "2025-10-17T16:45:24Z",
+      "updatedAt": "2026-02-04T14:49:16Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "17e858b80ab2ce69f175fc4f32d71780facaacee",
@@ -12724,7 +12774,7 @@
       "labels": [],
       "body": "Resolves #162 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Clarifies-validation-of-path-segments/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2025-11-12T12:37:43Z",
-      "updatedAt": "2025-11-13T16:20:55Z",
+      "updatedAt": "2026-02-04T14:49:20Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "789e714b9e4938e84ae2315fef17dbb062b6ddca",
@@ -13323,7 +13373,7 @@
       "labels": [],
       "body": "Resolves #175 \r\nFixes protobuf syntax issue introduced in #172 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/protobuf-check/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-01-14T12:56:11Z",
-      "updatedAt": "2026-01-15T14:26:23Z",
+      "updatedAt": "2026-02-04T14:49:24Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "d3634d9f638155fc5fb20789e2dcfe88c384b47b",
@@ -14239,24 +14289,26 @@
       "id": "PR_kwDOJx2-rs7AceyU",
       "title": "path lookup: wordsmithing",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/195",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Follow up of #193 ",
       "createdAt": "2026-01-30T17:33:03Z",
-      "updatedAt": "2026-02-02T09:46:30Z",
+      "updatedAt": "2026-02-04T14:48:58Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "14fdf8f7b281bc836fe91867289635f12877d3bb",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "path_lookup_fix_2",
-      "headRefOid": "1627024c28166801f3b81d954147a87b22b4871b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6fe613e7ef6a70b814cf95c0ea01713dc510d2a1",
+      "closedAt": "2026-02-03T12:00:59Z",
+      "mergedAt": "2026-02-03T12:00:59Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "329174e048115dca7194cd3d7293ff2e602ab2d6"
+      },
       "comments": [],
       "reviews": [
         {
@@ -14297,9 +14349,29 @@
             },
             {
               "originalPosition": 7,
-              "body": "```suggestion\n   - down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.\n```",
+              "body": "```suggestion\n   - down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These remote core ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.\n```",
               "createdAt": "2026-02-02T09:39:29Z",
-              "updatedAt": "2026-02-02T09:46:30Z"
+              "updatedAt": "2026-02-03T10:02:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fNf-Z",
+          "commit": {
+            "abbreviatedOid": "c8d8139"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-03T11:58:57Z",
+          "updatedAt": "2026-02-03T11:58:58Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\n   - core segments: The local Control Service may return locally cached core segments or query the Control Services of the reachable core ASes in the source ISD. These core ASes return core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments and adds them to the local cache for future request.\n```",
+              "createdAt": "2026-02-03T11:58:58Z",
+              "updatedAt": "2026-02-03T11:58:58Z"
             }
           ]
         }
@@ -14350,52 +14422,145 @@
     {
       "number": 197,
       "id": "PR_kwDOJx2-rs7AxDCC",
-      "title": "Control Service & PCB actions",
+      "title": "Reduce use of passive tense and clarify subject",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/197",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #186 ",
+      "body": "Resolves #186 \r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Control-Services-and-PCBs/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-01T21:59:55Z",
-      "updatedAt": "2026-02-02T08:54:54Z",
+      "updatedAt": "2026-02-04T14:48:54Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "89967d0063193c8253034a4f34f53c72978db0aa",
+      "baseRefOid": "43bd5e7312f07a2797f74c74eecfbb0a6180f966",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Control-Services-and-PCBs",
-      "headRefOid": "983ac19b6456e9309651f845ed9aebd4356e710f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "5e4bb558e04ca4735fa5671970eab89acf058903",
+      "closedAt": "2026-02-04T08:35:18Z",
+      "mergedAt": "2026-02-04T08:35:18Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "9fa9d81a5bb4fbb9b3cba5dc08d394054b9c2d87"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @knmeynell , I did a lot more wordsmithing on passive tense here: https://github.com/scionassociation/scion-cp_I-D/pull/197 \r\nCould you give it a look? ",
+          "createdAt": "2026-02-03T16:38:47Z",
+          "updatedAt": "2026-02-03T16:38:47Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think the changes to the passive tense look fine.",
+          "createdAt": "2026-02-04T05:25:32Z",
+          "updatedAt": "2026-02-04T05:25:50Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7fSLIH",
+          "commit": {
+            "abbreviatedOid": "490effd"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-03T15:54:29Z",
+          "updatedAt": "2026-02-03T15:54:29Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "@knmeynell I think this is an assignment policy issue, so we should not mention it in the draft. What do you think?",
+              "createdAt": "2026-02-03T15:54:29Z",
+              "updatedAt": "2026-02-03T15:54:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fdhLg",
+          "commit": {
+            "abbreviatedOid": "490effd"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T05:21:59Z",
+          "updatedAt": "2026-02-04T05:21:59Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "I'd remove it.",
+              "createdAt": "2026-02-04T05:21:59Z",
+              "updatedAt": "2026-02-04T05:21:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ff5BT",
+          "commit": {
+            "abbreviatedOid": "5e4bb55"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T08:34:55Z",
+          "updatedAt": "2026-02-04T08:34:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ff5Sw",
+          "commit": {
+            "abbreviatedOid": "490effd"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T08:35:14Z",
+          "updatedAt": "2026-02-04T08:35:14Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Which I did in the change. Merging",
+              "createdAt": "2026-02-04T08:35:14Z",
+              "updatedAt": "2026-02-04T08:35:14Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 198,
       "id": "PR_kwDOJx2-rs7AxNvX",
       "title": "MAC algorithm - mention it in configuration section",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/198",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "An ISE comment in https://github.com/scionassociation/scion-dp_I-D/issues/132 made me realize that we do mention in CP that the MAC algorithm has to be configured, but we forgot to mention it in the configuration section. This PR mentions it in that section too.\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/mac_algo_config/draft-dekater-scion-controlplane.txt)\r\n",
       "createdAt": "2026-02-01T22:26:21Z",
-      "updatedAt": "2026-02-01T22:32:27Z",
+      "updatedAt": "2026-02-04T14:48:56Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "0150069ba9c2219a009923804878a31e9ee9b79c",
+      "baseRefOid": "329174e048115dca7194cd3d7293ff2e602ab2d6",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "mac_algo_config",
-      "headRefOid": "723f594080e375c26137e4f47639e9a591218e16",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "951c27366971fd5a024ded6c81704e10e13e06fa",
+      "closedAt": "2026-02-03T13:04:45Z",
+      "mergedAt": "2026-02-03T13:04:45Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "43bd5e7312f07a2797f74c74eecfbb0a6180f966"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -14405,7 +14570,21 @@
           "updatedAt": "2026-02-01T22:32:26Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7fOmaT",
+          "commit": {
+            "abbreviatedOid": "951c273"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-03T13:04:18Z",
+          "updatedAt": "2026-02-03T13:04:18Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 199,
@@ -14434,6 +14613,357 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 201,
+      "id": "PR_kwDOJx2-rs7BPsC9",
+      "title": "Configuration: ensure all items are mentioned",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/201",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #200 \r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/configuration/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-02-03T17:04:35Z",
+      "updatedAt": "2026-02-04T13:00:09Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "43bd5e7312f07a2797f74c74eecfbb0a6180f966",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "configuration",
+      "headRefOid": "dce004b4154493cb662a1818a44f6b293f510033",
+      "closedAt": "2026-02-04T12:40:38Z",
+      "mergedAt": "2026-02-04T12:40:38Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "69f1c3ab9700fc2f0fb8a4b22bcfac54c886e5e7"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you review? \r\n\r\nPlease wait for feedback on expiration time [in this slack discussion](https://scionproto.slack.com/archives/C8ADA9CEP/p1770140451343509) before merging.\r\n",
+          "createdAt": "2026-02-03T17:05:27Z",
+          "updatedAt": "2026-02-03T18:04:48Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "For the records, from [Anapaya](https://scionproto.slack.com/archives/C8ADA9CEP/p1720446254828389?thread_ts=1720431398.661119&cid=C8ADA9CEP): \r\n```\r\n[beaconing]\r\norigination_interval = \"30s\"\r\npropagation_interval = \"30s\"\r\nregistration_interval = \"5s\"\r\n```\r\n",
+          "createdAt": "2026-02-03T19:18:23Z",
+          "updatedAt": "2026-02-03T19:18:23Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7fdgSK",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T05:21:10Z",
+          "updatedAt": "2026-02-04T05:21:10Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fg-Ph",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T09:31:23Z",
+          "updatedAt": "2026-02-04T10:34:22Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "For peering links, we require also the remote Interface ID:\n\nhttps://github.com/scionproto/scion/blob/8e07e8f088f935e38d17d393748d17cb93277605/proto/control_plane/v1/seg.proto#L148-L159",
+              "createdAt": "2026-02-04T09:31:23Z",
+              "updatedAt": "2026-02-04T10:34:22Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "What makes this optional? IMO, the neighbors need to agree on the SCION MTU for the link",
+              "createdAt": "2026-02-04T09:32:14Z",
+              "updatedAt": "2026-02-04T10:34:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fityE",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T11:08:03Z",
+          "updatedAt": "2026-02-04T11:08:04Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Do we need to further clarify this?",
+              "createdAt": "2026-02-04T11:08:04Z",
+              "updatedAt": "2026-02-04T11:08:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fj_bF",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T12:22:11Z",
+          "updatedAt": "2026-02-04T12:22:11Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "@oncilla the reason we write optional is that [later in the text](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#section-2.2.2.3-5.2.1) we write\r\n\r\n> ingress_mtu: .... How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice to make it a configuration item. Path MTU is further discussed in [Section 4.4](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-14.html#path-mtu).\r\n",
+              "createdAt": "2026-02-04T12:22:11Z",
+              "updatedAt": "2026-02-04T12:23:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fkDBO",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T12:25:50Z",
+          "updatedAt": "2026-02-04T12:25:51Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "```suggestion\r\n- For peering links, neighbor Interface ID\r\n\r\n```",
+              "createdAt": "2026-02-04T12:25:51Z",
+              "updatedAt": "2026-02-04T12:25:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7fksLx",
+          "commit": {
+            "abbreviatedOid": "dce004b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T13:00:09Z",
+          "updatedAt": "2026-02-04T13:00:09Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Added this line in #205 ",
+              "createdAt": "2026-02-04T13:00:09Z",
+              "updatedAt": "2026-02-04T13:00:09Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 203,
+      "id": "PR_kwDOJx2-rs7BS_4n",
+      "title": "Registration: clarify which  core AS registers down segments",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/203",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #202\r\n",
+      "createdAt": "2026-02-03T21:11:33Z",
+      "updatedAt": "2026-02-04T14:49:01Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "43bd5e7312f07a2797f74c74eecfbb0a6180f966",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "registration_fix",
+      "headRefOid": "5306779d65dcdb23bf97d5d7dad65a1ab5de20da",
+      "closedAt": "2026-02-04T11:06:34Z",
+      "mergedAt": "2026-02-04T11:06:34Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "777ca4ba94d0b0a0e8a19a7886246c38f77c6dff"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell can you review, but please wait for confirmation from this [Slack](https://scionproto.slack.com/archives/C8ADA9CEP/p1770153381067049) thread before merging",
+          "createdAt": "2026-02-03T21:16:59Z",
+          "updatedAt": "2026-02-03T21:16:59Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7fdfHA",
+          "commit": {
+            "abbreviatedOid": "880461e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2026-02-04T05:20:02Z",
+          "updatedAt": "2026-02-04T05:20:20Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "We should be consistent about hyphenation throughout the text. We've generally used 'down segments' (and 'up segments'). \n\nIMO, hyphenation is not required for 'down segments'. ",
+              "createdAt": "2026-02-04T05:20:02Z",
+              "updatedAt": "2026-02-04T05:20:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ff3Nl",
+          "commit": {
+            "abbreviatedOid": "880461e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-04T08:32:55Z",
+          "updatedAt": "2026-02-04T08:32:56Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\n3. The Control Service registers the newly created down segments with the Control Services of the core ASes that originated the corresponding PCBs. This is done by invoking the `SegmentRegistrationService.SegmentsRegistration` remote procedure call (RPC) in the Control Services of the relevant core ASes (see also [](#reg-proto)). The first ISD-AS entry of the path segment SHOULD be equal to the core ISD-AS where the segment is being registered, otherwise the core AS MUST reject the segment. As a result, a core AS\u2019s Control Service contains all down segments registered by its direct or indirect customer ASes.\r\n```",
+              "createdAt": "2026-02-04T08:32:55Z",
+              "updatedAt": "2026-02-04T08:32:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7firsY",
+          "commit": {
+            "abbreviatedOid": "5306779"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T11:06:21Z",
+          "updatedAt": "2026-02-04T11:06:21Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 205,
+      "id": "PR_kwDOJx2-rs7Bdg_O",
+      "title": "Configuration: mention peering links interface IDs",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/205",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Sequel to #201 ",
+      "createdAt": "2026-02-04T12:59:46Z",
+      "updatedAt": "2026-02-04T15:31:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "69f1c3ab9700fc2f0fb8a4b22bcfac54c886e5e7",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "configuration",
+      "headRefOid": "5d2eb004745cb31e5a8c6e45e98ce13770c88a2b",
+      "closedAt": "2026-02-04T15:31:39Z",
+      "mergedAt": "2026-02-04T15:31:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "21cad8d6293f227ad7556777fdac3e34966260ff"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 206,
+      "id": "PR_kwDOJx2-rs7BfeVF",
+      "title": "Attacks on time sources: mention CAs too",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/206",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves one point in #204 ",
+      "createdAt": "2026-02-04T15:12:45Z",
+      "updatedAt": "2026-02-04T16:50:18Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "69f1c3ab9700fc2f0fb8a4b22bcfac54c886e5e7",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "time-sync",
+      "headRefOid": "1ee892c3b8e01ab4e81ac4ebb767ae4463b712dd",
+      "closedAt": "2026-02-04T16:50:18Z",
+      "mergedAt": "2026-02-04T16:50:18Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "74a7974e27044f3b13d61b66f5e6408123cae25b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 207,
+      "id": "PR_kwDOJx2-rs7BkJda",
+      "title": "PCB propagation: move text to after figures",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/207",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/pcb_propagation_reorder/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-02-04T21:14:26Z",
+      "updatedAt": "2026-02-04T21:31:17Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "74a7974e27044f3b13d61b66f5e6408123cae25b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "pcb_propagation_reorder",
+      "headRefOid": "e8412caa34e4c473f731e79354df289c00c90723",
+      "closedAt": "2026-02-04T21:31:11Z",
+      "mergedAt": "2026-02-04T21:31:11Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "dd75a22a298836f11a549363807328d801e21d55"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7fuEGh",
+          "commit": {
+            "abbreviatedOid": "e8412ca"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T21:29:33Z",
+          "updatedAt": "2026-02-04T21:29:33Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
