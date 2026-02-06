@@ -1323,7 +1323,7 @@ A `ChainRenewalResponse` message includes the following fields:
 
 **Path registration** is the process where a SCION AS transforms selected PCBs into path segments, and adding these segments to the relevant path databases thereby making them available to other ASes.
 
-As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
+A non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
 
 The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called *intra-ISD path segment registration*. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the *core segment registration* process.
 
@@ -1529,7 +1529,7 @@ In general, to improve overall efficiency, the Control Services of all ASes SHOU
 
 ## Behavior of Actors in the Lookup Process
 
-As described above, the source endpoint resolves paths with a sequence of segment requests to the Control Service of the source AS. The Control Service in the source AS either answers directly or forwards these requests to the responsible Control Services of core ASes. In SCION, the instances that handle these segment requests at the Control Services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively.
+The source endpoint resolves paths with a sequence of segment requests to the Control Service of the source AS. The Control Service in the source AS either answers directly or forwards these requests to the responsible Control Services of core ASes. In SCION, the instances that handle these segment requests at the Control Services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively.
 
 This section specifies the behavior of the segment request handlers in the lookup process.
 
@@ -1585,9 +1585,10 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
-* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
-* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
-* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
+* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}.
+* When the local AS is a core AS: Core ASes craft PCBs and send them to their neighbors with on-hop paths.
+* Paths to non-neighboring ASes are obtained from PCBs that are received from neighboring ASes.
+* PCB are registered with the Control Service at the origin core AS.
 * Control Services respond to requests from remote ASes by reversing the path via which the request came.
 
 Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
