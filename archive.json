@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-05T00:33:03.074750+00:00",
+  "timestamp": "2026-02-08T00:41:10.964738+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -14962,6 +14962,185 @@
           "createdAt": "2026-02-04T21:29:33Z",
           "updatedAt": "2026-02-04T21:29:33Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 208,
+      "id": "PR_kwDOJx2-rs7CAy6_",
+      "title": "Chapter 1 review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/208",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Another pass (more detailed).\r\n\r\nBeyond what is proposed here, I'd be in favor of removing the Leaf-AS term, it is hardly used in the document. I propose that in a separate PR.",
+      "createdAt": "2026-02-06T14:31:02Z",
+      "updatedAt": "2026-02-06T15:26:18Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-section-1",
+      "headRefOid": "baf7e3ea5abf6ff6130ca4a7e3917e08708c3388",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7gUeVZ",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-06T14:35:17Z",
+          "updatedAt": "2026-02-06T14:38:57Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"one\" is ambiguous.",
+              "createdAt": "2026-02-06T14:35:17Z",
+              "updatedAt": "2026-02-06T14:38:57Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "The sentence further down (All processes operate concurrently) indicates that this is not about a single path but about all paths. For a single paths, the processes cannot operate concurrently but have to follow an order. This is also why I changes 1), 2), ... to \"-\", i.e. because we are talking about concurrent process here, not ordered processes.",
+              "createdAt": "2026-02-06T14:37:14Z",
+              "updatedAt": "2026-02-06T14:39:44Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "Path combination does not take place on the dataplane. It takes place on the endhost, but is described in the DP draft.",
+              "createdAt": "2026-02-06T14:38:08Z",
+              "updatedAt": "2026-02-06T14:38:57Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "SCION very much uses domain name resolution (see also RHINE, etc.), only the CP can do without.",
+              "createdAt": "2026-02-06T14:38:51Z",
+              "updatedAt": "2026-02-06T14:38:57Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 209,
+      "id": "PR_kwDOJx2-rs7CBhRg",
+      "title": "Chapter 2 review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/209",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.",
+      "createdAt": "2026-02-06T15:27:12Z",
+      "updatedAt": "2026-02-06T16:27:17Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-section-2",
+      "headRefOid": "2f9df57a743fec83890b74433946944340bbb74b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke Thanks a lot for your reviews, I'll have a look early next week",
+          "createdAt": "2026-02-06T16:27:17Z",
+          "updatedAt": "2026-02-06T16:27:17Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7gVe93",
+          "commit": {
+            "abbreviatedOid": "2f9df57"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-06T15:28:41Z",
+          "updatedAt": "2026-02-06T15:30:41Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "I am not sure what this sentence means. PCBs are never propagated over known paths.",
+              "createdAt": "2026-02-06T15:28:41Z",
+              "updatedAt": "2026-02-06T15:30:41Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "Clarified sentence, there is only one set. Does that capture what was meant here?",
+              "createdAt": "2026-02-06T15:29:35Z",
+              "updatedAt": "2026-02-06T15:30:41Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "On this level intra-ISD and inter-ISD are identical (to the best of my knowledge), no need to describe them twice.",
+              "createdAt": "2026-02-06T15:30:28Z",
+              "updatedAt": "2026-02-06T15:30:41Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 210,
+      "id": "PR_kwDOJx2-rs7CCqar",
+      "title": "Chapter 3-5 review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/210",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.",
+      "createdAt": "2026-02-06T16:55:03Z",
+      "updatedAt": "2026-02-06T16:56:34Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-chapter-3",
+      "headRefOid": "2ab7e2f1b4a4274a70980c20cb3db51fb199909a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7gXIi_",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-06T16:56:34Z",
+          "updatedAt": "2026-02-06T16:56:34Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Path to neighboring ASes are not obtained from neighbors, they are obtained from PCBs.\n\n",
+              "createdAt": "2026-02-06T16:56:34Z",
+              "updatedAt": "2026-02-06T16:56:34Z"
+            }
+          ]
         }
       ]
     }
