@@ -1644,7 +1644,7 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 ## Processing Rules
 
-The following rules apply when processing SCMP messages:
+Endhosts may use a single process to forward incoming SCMP messages to other processes. For the forwarding process, the following rules apply when processing SCMP messages:
 
    - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
    - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
