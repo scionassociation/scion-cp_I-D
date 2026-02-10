@@ -214,7 +214,7 @@ SCION has been developed with the following goals:
 
 *Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path), and provide continuity in the presence of adversaries.
 
-*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and to enable users to decide where their data travels. This routing information can be unambiguously attributed to a SCION AS, thereby ensuring that packets are only forwarded along authorized path segments (e.g. to enable geofencing). Security properties are further discussed in [](#security-properties).
+*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trustworthiness in routing information to prevent traffic hijacking, and to enable users to decide where their data travels. This routing information can be unambiguously attributed to a SCION AS, thereby ensuring that packets are only forwarded along authorized path segments (e.g., to enable geofencing). Security properties are further discussed in [](#security-properties).
 
 *Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD), and between ISDs which incurs minimal overhead and resource requirements on routers.
 
@@ -237,7 +237,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Beaconing**: The Control Plane process where an AS discovers paths to other ASes.
 
-**Control Plane**: The SCION Control Plane is responsible for the propagation and discovery of network paths, i.e. for the exchange of routing information between SCION nodes. The Control Plane thus determines where traffic can be sent and deals with questions such as how paths are discovered, which paths exist, and how they are disseminated to endpoints, etc. Within a SCION AS, such functionalities are carried out by the Control Service whereas packet forwarding is a task carried out by the data plane.
+**Control Plane**: The SCION Control Plane is responsible for the propagation and discovery of network paths, i.e., for the exchange of routing information between SCION nodes. The Control Plane thus determines where traffic can be sent and deals with questions such as how paths are discovered, which paths exist, and how they are disseminated to endpoints, etc. Within a SCION AS, such functionalities are carried out by the Control Service whereas packet forwarding is a task carried out by the data plane.
 
 **Control Service**: The Control Service is the main control plane infrastructure component within a SCION AS. It is responsible for the path exploration and registration processes that take place within the Control Plane.
 
@@ -251,15 +251,15 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Info Field (INF)**: Each Path-Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
-**Isolation Domain (ISD)**: SCION ASes are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction).
+**Isolation Domain (ISD)**: SCION ASes are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction).
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
 **Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
-**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e. a path between core ASes). Endpoints use up to three path segments to create a forwarding path.
+**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e., the same as an up segment but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Endpoints use up to three path segments to create a forwarding path.
 
-**Path-Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for traffic forwarding.
+**Path-Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for forwarding.
 
 **SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
@@ -271,9 +271,9 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 ## Paths and Links {#paths-links}
 
-SCION routers and endpoints connect to each other via links. A link refers to a physical or logical connection between two SCION nodes (e.g. router or endpoint). A SCION path between two endpoints traverses one or more links.
+SCION routers and endpoints connect to each other via links. A link refers to a physical or logical connection between two SCION nodes (e.g., router or endpoint). A SCION path between two endpoints traverses one or more links.
 
-SCION ASes - each being a network under a common administrative control - are organized into logical groups called Isolation Domains (ISDs). Each ISD consists of ASes that are part of a uniform trust environment (i.e. a common jurisdiction) and is administered by a set of distinguished ASes called core ASes.
+SCION ASes - each being a network under a common administrative control - are organized into logical groups called Isolation Domains (ISDs). Each ISD consists of ASes that are part of a uniform trust environment (i.e., a common jurisdiction) and is administered by a set of distinguished ASes called core ASes.
 
 SCION distinguishes three types of links between ASes: (1) core links, (2) parent-child links, and (3) peering links.
 
@@ -357,7 +357,7 @@ For fast validation of the path information carried in individual packets during
 
 Inter-domain SCION routing is based on an <ISD, AS> tuple. Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. The endpoint address is of variable length, does not need to be globally unique, and can thus be an IPv4, IPv6, or link layer address.
 
-**Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g. IS-IS, OSPF, SR) and communication fabric (e.g. IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
+**Note:** As a consequence of the fact that SCION relies on existing routing protocols (e.g., IS-IS, OSPF, SR) and communication fabric (e.g., IP, MPLS) for intra-domain forwarding, existing internal routers do not need to be changed to support SCION.
 
 ### ISD Numbers
 
@@ -383,7 +383,7 @@ A SCION AS number is the 48-bit identifier for an AS. Although they play a simil
 
 #### Wildcard Addressing {#serv-disc}
 
-SCION endpoints use wildcard AS `0` to designate any core AS, e.g. to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
+SCION endpoints use wildcard AS `0` to designate any core AS, e.g., to place requests for core segments or down segments during path lookup. These wildcard addresses are of the form I-0, to designate any AS in ISD I. For more information, see [](#wildcard).
 
 #### SCION AS numbers
 
@@ -411,8 +411,8 @@ The text representation of SCION ISD numbers MUST be its decimal ASCII represent
 
 The text representation of SCION AS numbers is as follows:
 
-- SCION AS numbers in the lower 32-bit range MUST be printed as decimal by implementations. Implementations may parse AS numbers in the lower 32-bit range in hexadecimal notation too (e.g., a program may accept AS number '0:1:f' for AS 65551).
-- SCION AS numbers in the higher 32-bit range MUST be printed using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g., `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
+- SCION AS numbers in the lower 32-bit range MUST be printed as decimal by implementations. Implementations may parse AS numbers in the lower 32-bit range in hexadecimal notation too (e.g.,, a program may accept AS number '0:1:f' for AS 65551).
+- SCION AS numbers in the higher 32-bit range MUST be printed using big-endian hexadecimal notation in 3 groups of 4, in the range `1:0:0` to `ffff:ffff:ffff`. Leading zeros in each group are omitted, with the exception that one zero MUST be notated if a group is entirely zeros (e.g.,, `1:0:1`). The `::` zero-compression feature of IPv6 MUST NOT be used.
 - A range of AS numbers can be shortened with a notation similar to the one used for CIDR IP ranges ({{RFC4632}}). In such case, hexadecimal notation MUST be used. For example, the range of the lowest 32-bit AS numbers (0-4294967295) can be represented as `0:0:0/16`.
 
 
@@ -428,7 +428,7 @@ For example, the text representation of AS number ff00:0:1 in ISD number 15 is `
 SCION uses the following mechanisms to avoid circular dependcencies during bootstrapping, and to provide resiliency after systemic failures:
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS Control Service only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
-- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
+- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path.
 - Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, in order to verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
@@ -438,7 +438,7 @@ SCION uses the following mechanisms to avoid circular dependcencies during boots
 
 All communication between the Control Services in different SCION ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backwardly compatible with {{gRPC}} which is supported but deprecated.
+The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is compatible with {{gRPC}} which is supported but deprecated.
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
@@ -470,7 +470,7 @@ PCBs do not traverse peering links, but peering links are instead announced alon
 
 Every propagation interval (as configured by the AS operator), the Control Service:
 
-- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
+- selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e., a child AS or a core AS). This is described in [](#selection).
 - propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
 
 For every selected PCB and egress interface combination, the AS Control Service appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
@@ -501,7 +501,7 @@ The following three figures show how intra-ISD PCB propagation works, from the I
 ~~~
 {: #figure-3a title="Intra-ISD PCB propagation from the ISD core to child ASes - Part 1"}
 
-In {{figure-3a}}, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" leaves core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
+In {{figure-3a}}, core AS X sends the two different PCBs "a" and "b" via two different links to child AS Y: PCB "a" exits core AS X via egress interface "2", whereas PCB "b" is sent over egress interface "1". Core AS X adds the respective egress information to the PCBs when sending them off, as can be seen in the figure (the entries "*Core - Out:2*" and "*Core - Out:1*", respectively).
 
 ~~~aasvg
                     +--------+  |   |  +--------+
@@ -1049,8 +1049,6 @@ AS entries in PCBs may carry a number of optional extensions that accumulate inf
 - Unsigned extensions `PathSegmentUnsignedExtensions`. They are part of the AS entry component (the `ASEntry` message, see also [](#as-entry)).
 - Signed extensions `PathSegmentExtensions`. They are part of the signed body component of an AS entry (the `ASEntrySignedBody` message, see also [](#ase-sign)).
 
-It is recommended to keep the size of signed extensions small, since they are an integral part of the input to every AS’s signature.
-
 The Protobuf message format of extensions is below. As an example, it mentions the `StaticInfoExtension`, a signed extension that is used to carry path segment metadata, such as segment latency, bandwidth, router coordinates, link type, number of internal hops. This and other extensions are at time of writing experimental, so definitions of this message format are omitted and [PCBExtensions] should be referred to.
 
 ~~~~
@@ -1078,7 +1076,7 @@ For the purpose of validation, a hop is considered expired if its absolute expir
 
 ### Configuration {#configuration}
 
-For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g. in a configuration file). For each link, these values MUST be configured:
+For the purpose of constructing and propagating path segments, a network operator needs to configure an AS Control Service with links to neighboring ASes. Such information may be conveyed to the Control Service in an out-of-band fashion (e.g., in a configuration file). For each link, these values MUST be configured:
 
 - Local Interface ID. This MUST be unique within each AS.
 - Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between operators of the ASes at each end of each link.
@@ -1105,7 +1103,7 @@ This section describes how PCBs are received, selected and further propagated in
 Upon receiving a PCB, the Control Service of an AS performs the following checks:
 
 1. PCB validity: The Control Service MUST check the validity of the PCB (see [](#pcb-validity)) and it MUST discard invalid PCBs. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
-2. Loop avoidance: The Control Service MUST check whether the PCB is from a core AS and whether it includes duplicate hop entries created by the core AS itself or by other ASes. If so, it MUST discard the PCB in order to avoid loops. This is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate - e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
+2. Loop avoidance: The Control Service MUST check whether the PCB is from a core AS and whether it includes duplicate hop entries created by the core AS itself or by other ASes. If so, it MUST discard the PCB in order to avoid loops. This is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate - e.g., if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
 3. Incoming Interface: The Control Service MUST check that the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) corresponds with the ISD-AS neighbor of the interface where the PCB was received. In addition, the corresponding link MUST be core or parent, otherwise the PCB MUST be discarded.
 4. Continuity: When the Control Service receives a PCB containing two or more AS entries, it MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
 
@@ -1117,7 +1115,7 @@ An AS Control Service stores candidate PCBs in a temporary storage called the *B
 
 ### PCB Selection Policies {#selection}
 
-The Control Service of an AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g. length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
+The Control Service of an AS MUST select which PCBs to propagate further. The selection process can inspect and compare the properties of the candidate PCBs (e.g., length, disjointness across different paths, age, expiration time) and/or take into account which PCBs have been propagated in the past. The PCBs to select or eliminate is determined by the policy of the AS.
 
 In order to avoid excessive overhead on the path discovery system in bigger networks, an AS Control Service should only propagate those candidate PCBs with the highest probability of meeting the needs of the endpoints that will perform path construction, in accordance with [](#propagation-interval-size).
 
@@ -1132,10 +1130,10 @@ As SCION does not provide any in-band signal about the intentions of endpoints n
 
   The relative disjointness of two PCBs A and B may be calculated by assigning a disjointness score, calculated as the number of links in A that don't appear in B. For example, the beacon that has the highest disjointness score and is not the shortest path should be selected, but if this not better than what has already been selected, then the beacon with the shortest path yet to be selected should be chosen instead.
 
-A PCB Selection Policy can be expressed as a stateful filter of segments, i.e. a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
+A PCB Selection Policy can be expressed as a stateful filter of segments, i.e., a function which indicates whether to accept or deny a given segment. This filter is stateful in that it can be updated each time its AS registers a new segment.
 It is expected that an AS's policy will select PCBs corresponding to paths that are commercially or otherwise operationally viable.
 
-To ensure reachability, PCB selection policies should forward as many PCBs as possible as PCB selection is not intended as a mechanism for traffic engineering (e.g. by excluding specific PCBs for that purpose).
+To ensure reachability, PCB selection policies should forward as many PCBs as possible as PCB selection is not intended as a mechanism for traffic engineering (e.g., by excluding specific PCBs for that purpose).
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
@@ -1143,18 +1141,18 @@ PCBs are propagated in batches to each neighboring AS at a fixed frequency known
 
 The size of this set is called the *best PCBs set size*. It should be:
 
-  - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
-  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
+  - For intra-ISD beaconing (i.e., propagating to children ASes): at most 50.
+  - For core beaconing (i.e., propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
 
 These values reflect a tradeoff between scalability — limited by the computational overhead of signature verification — and the number of paths discovered. The PCBs set size should not be too low to ensure that beaconing can discover a significant number of paths. Further discussion on these trade-offs is provided in [](#scalability).
 
-In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core best PCBs set size (e.g. 20) can be used.
+In current practice the intra-ISD set size is typically 20. Current practice also showed that in small SCION core networks, higher values of the core best PCBs set size (e.g., 20) can be used.
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS Control Service should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
 - The *propagation interval* should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
 
-Note that to ensure establish quick connectivity, an AS Control Service MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
+Note that to quickly (re-)establish connectivity, an AS Control Service MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
 
 - because the corresponding RPC failed;
 - or because no beacon was available to propagate.
@@ -1428,12 +1426,12 @@ The Control Service of a non-core AS has to register the newly created down segm
 
 ## Path MTU {#path-mtu}
 
-SCION paths represent a sequence of ASes and inter-AS links, each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS networks it traverses. Such MTU information is disseminated during path construction:
+SCION paths represent a sequence of ASes and inter-AS links, each with possibly different MTUs. As a result, the path MTU is the minimum of the MTUs of each inter-AS link and intra-AS network it traverses. Such MTU information is disseminated during path construction:
 
 * The MTU of each intra-AS network traversed (represented by the MTU field of the corresponding [AS Entries](#ase-sign))
 * The MTU of each inter-AS link or peering link (indicated by the ingress_mtu field of each [](#hopentry) or the peer_mtu field of each [](#peerentry) used)
 
-Such information is then made available to source endpoints during the path lookup process (see [](#lookup)). Note that the destination endpoint does not receive such information, so when using path reversibility it should use mechanisms to estimate the reverse path MTU (e.g., MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes, so when looking up a path they should assume that all hops are also constrained by the intra-AS MTU of each AS traversed.
+Such information is then made available to source endpoints during the path lookup process (see [](#lookup)). Note that the destination endpoint does not receive such information, so when using path reversibility it should use mechanisms to estimate the reverse path MTU (e.g.,, MTU discovery or estimate MTU from the largest packet received). SCION endpoints are oblivious to the internal topology of intermediate ASes, so when looking up a path they should assume that all hops are also constrained by the intra-AS MTU of each AS traversed.
 
 # Path Lookup {#lookup}
 
@@ -1453,7 +1451,7 @@ The actual number of required path segments depends on the location of the desti
 
 The process to look up and fetch path segments consists of the following steps:
 
-1. The source endpoint queries the Control Service in its own AS (i.e. the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.
+1. The source endpoint queries the Control Service in its own AS (i.e., the source AS) for the required segments by sending up to three `SegmentsRequest` messages, respectively for up, core and down segments.
 2. The Control Service of the source AS answers each request with  a `SegmentsResponse` message. Specifically, for each segment type:
 
    - up segments: The local Control Service has up segments stored in the path database and returns them immediately.
@@ -1664,7 +1662,7 @@ The messages have the following general format:
 
 ## Message Types
 
-SCMP messages are grouped into two classes: error messages and informational messages. Error messages are identified by a zero in the high-order bit of the type value - i.e. error messages have a type value in the range of 0-127. Informational messages have type values in the range of 128-255.
+SCMP messages are grouped into two classes: error messages and informational messages. Error messages are identified by a zero in the high-order bit of the type value - i.e., error messages have a type value in the range of 0-127. Informational messages have type values in the range of 128-255.
 
 This specification defines the message formats for the following SCMP messages:
 
@@ -1974,7 +1972,7 @@ The identifier is set to the identifier value from the [Traceroute Request messa
 
 ## Destination Mapping
 
-The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document. One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g. DNS).
+The mechanism by which endpoints determine the destination ISD-AS corresponding to a given destination address is outside the scope of this document. One option, still experimental in existing deployments, is that SCION-aware endpoints may resolve destination SCION addresses using a naming system (e.g., DNS).
 
 SCION-unaware endpoints may interface with a SCION network through a SCION IP Gateway (SIG), which tunnels IP traffic over SCION. In such cases, the source SIG is responsible for mapping destination IPs to the appropriate destination ISD-AS and gateway. More information can be found at {{SIG}}.
 
@@ -2006,7 +2004,7 @@ A PCB originated by a given core AS Control Service is validated by all the Cont
 * A fast clock at origination or a slow clock at reception will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at reception will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e. they SHOULD be around 6 hours.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e., they SHOULD be around 6 hours.
 
 The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
@@ -2024,7 +2022,7 @@ The resource costs for path discovery are as follows:
 - Processing overhead is validating the signatures of the AS entries, signing new AS entries, and to a lesser extent, evaluating the PCB selection policies.
 - Storage overhead is both the temporary storage of PCBs before the next propagation interval, and the storage of complete discovered path segments.
 
-All of these are dependent on the number and length of the discovered path segments, i.e. the total number of AS entries of the discovered path segments. These in turn depend on the configured best PCBs set size ([](#propagation-interval-size)).
+All of these are dependent on the number and length of the discovered path segments, i.e., the total number of AS entries of the discovered path segments. These in turn depend on the configured best PCBs set size ([](#propagation-interval-size)).
 
 Relevant metrics for scalability and speed of path discovery are the time until all discoverable path segments have been discovered after a network bootstrap, and the time until a new link is usable. In general, the time until a specific PCB is built depends on its length, the propagation interval, and whether on-path ASes use "fast recovery" (see [](#propagation-interval-size)).
 
@@ -2038,7 +2036,7 @@ To achieve scalability, SCION ASes are partitioned into ISDs and in an ideal top
 
 In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
-This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
+This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g., local, regional, national provider, then core).
 
 Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
 
@@ -2048,7 +2046,7 @@ To illustrate this, an AS with a rather large number of 100 parent links receive
 
 Due to the variable length fields in AS entries, the sizes for storage and transmission cannot be predicted exactly, but assume an average of 250 bytes per AS entry. At the shortest recommended propagation interval of 5 seconds, this corresponds to an average bandwidth of around 2.5 MB/s and the processing of 10,000 signature verifications per second.
 
-If the same AS has 1,000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link) - i.e. at most 50,000 signatures per propagation event. The total bandwidth for the propagation of the PCBs for all 1,000 child links would be roughly around 25 MB/s which is manageable with even modest consumer hardware.
+If the same AS has 1,000 child links, the propagation of the beacons will require signing one new AS entry for each of the propagated PCBs for each link (at most 50 per link) - i.e., at most 50,000 signatures per propagation event. The total bandwidth for the propagation of the PCBs for all 1,000 child links would be roughly around 25 MB/s which is manageable with even modest consumer hardware.
 
 On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation interval and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see "fast recovery" in [](#propagation-interval-size)), the construction of a first path to connect each AS to the ISD core is accelerated.
 
@@ -2060,7 +2058,7 @@ In core beaconing (typically inter-ISD), PCBs are propagated omnidirectionally a
 
 The number of distinct paths through the core network is typically very large. To keep the overhead manageable, at most 5 path segments to every destination AS are discovered and the propagation frequency is slower than in the intra-ISD beaconing (at least 60 seconds between propagation events).
 
-Without making strong assumptions on the topology of the core network, it can be assumed that shortest paths through real world networks are relatively short - e.g. the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst it cannot be assumed that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
+Without making strong assumptions on the topology of the core network, it can be assumed that shortest paths through real world networks are relatively short - e.g., the Barabási-Albert random graph model predicts a diameter of log(N)/log(log(N)) for a network with N nodes {{BollRio-2000}} and the average distance scales in the same way. Whilst it cannot be assumed that the selected PCBs are strictly the shortest paths through the network, they are likely to be not very much longer than the shortest paths either.
 
 With N the number of participating core ASes, an AS receives up to 5 * N PCBs per propagation interval per core link interface. For highly connected ASes, the number of PCBs received thus becomes rather large and in a network of 1,000 ASes, an AS with 300 core links receives up to 1.5 million PCBs per propagation interval.
 
@@ -2082,7 +2080,7 @@ This section discusses three kinds of threats to the control plane:
 
 ## Security Properties {#security-properties}
 
-The SCION control plane provides various security properties, as discussed below. Here a SCION AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g. uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is one created by an honest AS.
+The SCION control plane provides various security properties, as discussed below. Here a SCION AS is described as 'honest' if its private keys are unknown to the attacker and it correctly performs operations in accordance with this specification (e.g., uses a unique interface identifier for each link). An honest path is one that only traverses honest ASes. An honest segment is one created by an honest AS.
 
 Security properties are:
 
@@ -2117,7 +2115,7 @@ A malicious AS M might try to manipulate the beaconing process between two neigh
 - The adversary could modify the Hop Fields of an already existing path in order to insert its own AS in the path.
 - The adversary could fully block traffic between AS A and AS B in order to force traffic redirection through an alternate path that includes its own AS.
 
-The first type of attack is detectable and blocked by downstream ASes (e.g. AS B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B and protected by A's signature. If AS M manipulates the PCB while in flight from AS A to AS B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain AS A's correct signature (see [](#reception)).
+The first type of attack is detectable and blocked by downstream ASes (e.g., AS B) because a PCB disseminated by AS A towards AS B contains the "Next ISD AS" field in the entry of AS A, pointing to AS B and protected by A's signature. If AS M manipulates the PCB while in flight from AS A to AS B, then verification of the manipulated inbound PCBs will fail at AS B, as the adversary's PCBs cannot contain AS A's correct signature (see [](#reception)).
 
 The second type of attack is made impossible by the Hop Field's MAC which protects the Hop Field's integrity and chains it with the previous Hop Fields on the path.
 
@@ -2143,7 +2141,7 @@ SCION endpoints select inter-domain forwarding paths and this section discusses 
 
 In SCION, overall path selection is the result of three steps. Firstly, each AS selects which PCBs are further forwarded to its neighbors. Secondly, each AS chooses the paths it wants to register at the local Control Service (as up segments) and at the core Control Service (as down segments). Thirdly, the endpoint performs path selection among all available paths resulting from a path lookup process.
 
-These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g. by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
+These attacks are only successful if the adversary is located within the same ISD and upstream relative to the victim AS. It is not possible to attract traffic away from the core as traffic travels upstream towards the core. Furthermore, the attack may either be discovered downstream (e.g., by seeing large numbers of paths becoming available), or during path registrations. After detection, non-core ASes will be able to identify paths traversing the adversary AS and avoid these paths.
 
 **Announcing Large Numbers of Path Segments** <br>
 This attack is possible if the adversary controls at least two ASes. The adversary can create a large number of links between the ASes under its control which do not necessarily correspond to physical links. This allows the adversary to multiply the number of PCBs forwarded to its downstream neighbor ASes and in turn increases the chance that one or several of these forwarded PCBs are selected by the downstream ASes.
@@ -2160,7 +2158,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
 
 **Rogue SCMP Error Messages**  <br>
-SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
+SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g., by actively probing whether the affected path is actually down).
 
 Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
 
@@ -2173,7 +2171,7 @@ Operators should maintain coarse time synchronization among Control Service inst
 - A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
 - A Certificate Authority (see {{I-D.dekater-scion-pki}}): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.
 
-It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g. GNSS and network-based).
+It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g., GNSS and network-based).
 
 ## Denial of Service Attacks {#dos-cp}
 
@@ -2181,11 +2179,11 @@ The beaconing process in the SCION Control Plane relies on control plane communi
 
 SCION limits the impact of such attacks which aim to exhaust network bandwidth on links as ASes can switch to alternative paths that do not contain the congested links. Reflection-based attacks are also prevented as response packets are returned on the same path to the actual sender.
 
-Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet - e.g. filtering, geo-blocking or using cookies.
+Other mechanisms are required to avoid transport protocol attacks where the attacker tries to exhaust the resources on a target server, such as for the Control Services, by opening many connections to this. The means to mitigate these kind of DoS attacks are basically the same as for the current Internet - e.g., filtering, geo-blocking or using cookies.
 
 Thanks to its path awareness, SCION enables more fine-grained filtering mechanisms based on certain path properties. For example, control plane RPC methods that are available to endpoints within an AS are strictly separate from methods available to endpoints from other ASes. Specifically, expensive recursive path segment and trust material lookups are thus shielded from abuse by unauthorized entities.
 
-For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e. immediately after determining the request type. For example:
+For RPC methods exposed to other ASes, the Control Service implementation minimizes its attack surface by rejecting illegitimate callers based on ISD/AS, path type and length and any other available data points as soon as possible, i.e., immediately after determining the request type. For example:
 
 - `SegmentCreationService.Beacon` can only be called by direct neighbors and thus calls from peers with a path length greater than one can immediately be discarded.
 - `SegmentRegistrationService.SegmentsRegistration` can only be called from within the same ISD, thus the source address MUST match the local ISD and the number of path segments MUST be 1.
@@ -2213,7 +2211,7 @@ More information can be found on the SCIONLab website and in the {{SCIONLAB}} pa
 
 To illustrate how the path lookup works, two path-lookup examples are shown in sequence diagrams. The network topology of the examples is represented in {{figure-41}} below, where in both the source endpoint is in AS A.
 
-{{figure-42}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-43}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not - i.e. there is no up-segment from A to C. "CS" stands for Control Service.
+{{figure-42}} shows the sequence diagram for the path lookup process in case the destination is in AS D, whereas {{figure-43}} shows the path lookup sequence diagram if the destination is in AS G. ASes B and C are core ASes in the source ISD, while E and F are core ASes in a remote ISD. Core AS B is a provider of the local AS, but AS C is not - i.e., there is no up-segment from A to C. "CS" stands for Control Service.
 
 ~~~aasvg
 +----------------------------+     +----------------------------+
@@ -2369,7 +2367,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Wording polish following ISE Editor's feedback.
-- Reduce use of passive tense and clarify subject (e.g. an AS --> An AS operator)
+- Reduce use of passive tense and clarify subject (e.g., an AS --> An AS operator)
 - ISD and AS numbers: clarify that identifiers in public ranges must be unique
 - Remove redundant section 1.7. Resistance to partitioning
 - Section 1.7.  Communication Protocol: Clarify DNS resolution is not needed
