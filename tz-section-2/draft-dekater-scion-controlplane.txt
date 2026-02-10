@@ -442,7 +442,7 @@ Table of Contents
    SCION inter-domain routing operates on two levels: within an ISD
    which is called _intra_-ISD routing, and between ISDs which is called
    _inter_-ISD routing.  Both levels use _Path-Segment Construction
-   Beacons (PCBs)_ to explore network paths.  A PCB is initiated by a
+   Beacons (PCBs)_ to explore network paths.  A PCB is originated by a
    core AS and then disseminated either within an ISD to explore intra-
    ISD paths, or among core ASes to explore core paths across different
    ISDs.
@@ -747,11 +747,11 @@ Table of Contents
    *  _Core or Inter-ISD beaconing_ is the process of constructing path
       segments between core ASes in the same or in different ISDs.
       During core beaconing, the Control Service of a core AS either
-      initiates PCBs or propagates PCBs received from neighboring core
+      originates PCBs or propagates PCBs received from neighboring core
       ASes to other neighboring core ASes.
 
    *  _Intra-ISD beaconing_ creates path segments from core ASes to non-
-      core ASes.  For this, the Control Services of core ASes create
+      core ASes.  For this, the Control Services of core ASes originates
       PCBs and sends them to the non-core child ASes (typically customer
       ASes) at regular intervals.  The Control Service of a non-core
       child AS receives these PCBs and forwards them to its child ASes,
@@ -1451,7 +1451,7 @@ Table of Contents
       of the path construction.  That is, in the direction of beaconing
       through the current AS).
 
-   *Note:* The core AS initiating a PCB MUST set the ingress interface
+   *Note:* The core AS originating a PCB MUST set the ingress interface
    identifier to the "unspecified" value (see
    [I-D.dekater-scion-dataplane] section "Terminology").
 
@@ -3058,7 +3058,7 @@ Table of Contents
          is up) that can be found in non-expired core segments.
 
       -  Fraction of ASes, core or children, (preferably only those to
-         which the link is up) to where a beacon was initiated during
+         which the link is up) to where a beacon was originated during
          the last propagation interval.
 
       -  Fraction of freshly propagated beacons for which at least one
@@ -3926,6 +3926,8 @@ Change Log
 draft-dekater-scion-controlplane-15
 
    *  Final read, wording
+
+   *  "originating/initiating" PCBs --> consistently use originating
 
    *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
       intra-ISD propagation, since steps are the same

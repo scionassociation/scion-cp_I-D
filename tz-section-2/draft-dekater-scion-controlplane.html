@@ -1670,7 +1670,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-routing" class="section-name selfRef">Routing</a>
         </h3>
 <p id="section-1.4-1">SCION provides path-aware inter-domain routing between SCION ASes. The SCION Control Plane is responsible for discovering these inter-domain paths and making them available to the endpoints within the ASes.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
-<p id="section-1.4-2">SCION inter-domain routing operates on two levels: within an ISD which is called <em>intra</em>-ISD routing, and between ISDs which is called <em>inter</em>-ISD routing. Both levels use <em>Path-Segment Construction Beacons (PCBs)</em> to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.<a href="#section-1.4-2" class="pilcrow">¶</a></p>
+<p id="section-1.4-2">SCION inter-domain routing operates on two levels: within an ISD which is called <em>intra</em>-ISD routing, and between ISDs which is called <em>inter</em>-ISD routing. Both levels use <em>Path-Segment Construction Beacons (PCBs)</em> to explore network paths. A PCB is originated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.<a href="#section-1.4-2" class="pilcrow">¶</a></p>
 <p id="section-1.4-3">The PCBs accumulate cryptographically protected path and forwarding information at an AS level and store this information in the form of <em>Hop Fields</em>. Endpoints use information from these Hop Fields to create end-to-end forwarding paths for data packets that carry this information in their headers. This also supports multi-path communication among endpoints.<a href="#section-1.4-3" class="pilcrow">¶</a></p>
 <p id="section-1.4-4">The creation of an end-to-end forwarding path consists of the following processes:<a href="#section-1.4-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.4-5">
@@ -1980,10 +1980,10 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
 <p id="section-2.1-3">PCBs contain inter-domain topology and authentication information, and can include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where <em>core</em> or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and <em>intra-ISD</em> beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD <span class="bcp14">MUST</span> have at least one core AS.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-4.1">
-            <p id="section-2.1-4.1.1"><em>Core or Inter-ISD beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.1.1"><em>Core or Inter-ISD beaconing</em> is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either originates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes.<a href="#section-2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-4.2">
-            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children. As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-4.2.1"><em>Intra-ISD beaconing</em> creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes originates PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children. As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.<a href="#section-2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.1-5">On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in <a href="#pcbs" class="auto internal xref">Section 2.2</a>. PCBs are used to construct path segments. ASes register them to make them available to other ASes, as described in <a href="#path-segment-reg" class="auto internal xref">Section 3</a>.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
@@ -3362,7 +3362,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
                 <p id="section-2.2.2.5-6.1.1"><code>ingress</code>: The 16-bit ingress interface identifier (in the direction of the path construction. That is, in the direction of beaconing through the current AS).<a href="#section-2.2.2.5-6.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.2.5-7"><strong>Note:</strong> The core AS initiating a PCB <span class="bcp14">MUST</span> set the ingress interface identifier to the "unspecified" value (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Terminology").<a href="#section-2.2.2.5-7" class="pilcrow">¶</a></p>
+<p id="section-2.2.2.5-7"><strong>Note:</strong> The core AS originating a PCB <span class="bcp14">MUST</span> set the ingress interface identifier to the "unspecified" value (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Terminology").<a href="#section-2.2.2.5-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.2.5-8.1">
                 <p id="section-2.2.2.5-8.1.1"><code>egress</code>: The 16-bit egress interface identifier (in the direction of beaconing).<a href="#section-2.2.2.5-8.1.1" class="pilcrow">¶</a></p>
@@ -5618,7 +5618,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
                 <p id="section-7.2-2.3.2.1.1">Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments.<a href="#section-7.2-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.2-2.3.2.2">
-                <p id="section-7.2-2.3.2.2.1">Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was initiated during the last propagation interval.<a href="#section-7.2-2.3.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-7.2-2.3.2.2.1">Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was originated during the last propagation interval.<a href="#section-7.2-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.2-2.3.2.3">
                 <p id="section-7.2-2.3.2.3.1">Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see <a href="#path-segment-reg" class="auto internal xref">Section 3</a>).<a href="#section-7.2-2.3.2.3.1" class="pilcrow">¶</a></p>
@@ -6566,7 +6566,10 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-C.1-1.1.1">Final read, wording<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.2">
-            <p id="appendix-C.1-1.2.1">Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.2.1">"originating/initiating" PCBs --&gt; consistently use originating<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.3">
+            <p id="appendix-C.1-1.3.1">Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
