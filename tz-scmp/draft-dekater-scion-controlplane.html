@@ -4675,28 +4675,22 @@ message Transport {
         <h3 id="name-processing-rules">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
         </h3>
-<p id="section-6.4-1">Endhosts may use a single process to forward incoming SCMP messages to other processes. For the forwarding process, the following rules apply when processing SCMP messages:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">The following rules apply when processing SCMP messages:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4-2.1">
-            <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received at its destination, it <span class="bcp14">MUST</span> be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-2.1.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Deployment Considerations/MTU").<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-2.2">
-            <p id="section-6.4-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-2.2.1">Endpoint implementations may use the  original packet in the body of the SCMP error message to pass the SCMP error message to the upper-layer process. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-2.3">
-            <p id="section-6.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Deployment Considerations/MTU").<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.4-2.4">
-            <p id="section-6.4-2.4.1">In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.4-2.5">
-            <p id="section-6.4-2.5.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-2.3.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4-2.5.2.1">
-                <p id="section-6.4-2.5.2.1.1">An SCMP error message.<a href="#section-6.4-2.5.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.4-2.3.2.1">
+                <p id="section-6.4-2.3.2.1.1">An SCMP error message.<a href="#section-6.4-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.4-2.5.2.2">
-                <p id="section-6.4-2.5.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.5.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.4-2.3.2.2">
+                <p id="section-6.4-2.3.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -6553,6 +6547,9 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
 </li>
           <li class="normal" id="appendix-B.1-1.3">
             <p id="appendix-B.1-1.3.1">Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.4">
+            <p id="appendix-B.1-1.4.1">SCMP processing rules: remove unnecessary steps<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
