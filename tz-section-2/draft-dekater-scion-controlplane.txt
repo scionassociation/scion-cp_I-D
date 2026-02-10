@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 10 August 2026                                          S. Hitz
+Expires: 14 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                         6 February 2026
+                                                        10 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2026.
+   This Internet-Draft will expire on 14 August 2026.
 
 Copyright Notice
 
@@ -170,6 +170,7 @@ Table of Contents
    Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-15
      draft-dekater-scion-controlplane-15
      draft-dekater-scion-controlplane-14
      draft-dekater-scion-controlplane-13
@@ -785,7 +786,8 @@ Table of Contents
       described in Section 2.3.3.
 
    *  propagates each selected PCB to the selected egress interface(s)
-      associated with it.  This is described in Section 2.3.5.
+      associated with it.  Selection policies are described in
+      Section 2.3.5.
 
    For every selected PCB and egress interface combination, the AS
    Control Service appends an _AS entry_ to the selected PCB.  This
@@ -1782,18 +1784,7 @@ Table of Contents
 
 2.3.5.  Propagation of Selected PCBs
 
-   To bootstrap initial communication with a neighboring beacon service,
-   ASes use one-hop paths.  This special kind of path handles beaconing
-   between neighboring ASes for which no forwarding path may be
-   available yet.  It is the task of beaconing to discover such
-   forwarding paths and the purpose of one-hop paths is to break this
-   circular dependency.  The One-Hop Path Type is described in more
-   detail in [I-D.dekater-scion-dataplane].
-
-2.3.5.1.  Propagation of PCBs
-
-   The propagation process in intra-ISD beaconing includes the following
-   steps:
+   The propagation process includes the following steps:
 
    1.  From the candidate PCBs stored in the Beacon Store, the Control
        Service of an AS selects the best PCBs to propagate to its
@@ -1811,9 +1802,17 @@ Table of Contents
        to the neighboring AS specified in the new AS entry by invoking
        the SegmentCreationService.Beacon remote procedure call (RPC) in
        the Control Services of the neighboring ASes (see also
-       Section 2.3.5.2).
+       Section 2.3.5.1).
 
-2.3.5.2.  Propagation of PCBs in Protobuf Message Format
+   To bootstrap initial communication with a neighboring beacon service,
+   ASes use one-hop paths.  This special kind of path handles beaconing
+   between neighboring ASes for which no forwarding path may be
+   available yet.  It is the task of beaconing to discover such
+   forwarding paths and the purpose of one-hop paths is to break this
+   circular dependency.  The One-Hop Path Type is described in more
+   detail in [I-D.dekater-scion-dataplane].
+
+2.3.5.1.  Propagation of PCBs in Protobuf Message Format
 
    The last step of the above described core and intra-ISD propagation
    procedures is implemented as follows in Protobuf message format:
@@ -3923,6 +3922,13 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-controlplane-15
+
+   *  Final read, wording
+
+   *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
+      intra-ISD propagation, since steps are the same
 
 draft-dekater-scion-controlplane-15
 
