@@ -471,7 +471,7 @@ PCBs do not traverse peering links, but peering links are instead announced alon
 Every propagation interval (as configured by the AS operator), the Control Service:
 
 - selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
-- propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
+- propagates each selected PCB to the selected egress interface(s) associated with it. Selection policies are described in [](#path-segment-prop).
 
 For every selected PCB and egress interface combination, the AS Control Service appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
 
@@ -1161,16 +1161,14 @@ Note that to ensure establish quick connectivity, an AS Control Service MAY atte
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
-To bootstrap initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
-
-#### Propagation of PCBs {#pcb-prop}
-
-The propagation process in intra-ISD beaconing includes the following steps:
+The propagation process includes the following steps:
 
 1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)) including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
+
+To bootstrap initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 
 #### Propagation of PCBs in Protobuf Message Format {#prop-proto}
 
@@ -2353,6 +2351,13 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+
+## draft-dekater-scion-controlplane-15
+{:numbered="false"}
+
+- Final read, wording
+- Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
