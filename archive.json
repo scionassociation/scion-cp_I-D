@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-08T00:41:10.964738+00:00",
+  "timestamp": "2026-02-10T00:38:54.182427+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3152,6 +3152,79 @@
       "updatedAt": "2026-02-04T16:50:29Z",
       "closedAt": "2026-02-04T16:50:29Z",
       "comments": []
+    },
+    {
+      "number": 211,
+      "id": "I_kwDOJx2-rs7pXaAd",
+      "title": "Final read feedback",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/211",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "Some minor grammar/polishing feedback from Adrian is [here](https://drive.google.com/file/d/1AieRUAPHg462oD1eo-pr33r2EYhKh_85/view?usp=sharing). \n\nTODO: Implement in conformance with https://datatracker.ietf.org/doc/html/rfc7322 \n",
+      "createdAt": "2026-02-09T08:56:46Z",
+      "updatedAt": "2026-02-09T09:18:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 212,
+      "id": "I_kwDOJx2-rs7pXkB6",
+      "title": "Replace SCIONLab reference",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/212",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-09T09:05:48Z",
+      "updatedAt": "2026-02-09T12:48:29Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "TODO: can we have a single reference to docs.scion.org? We have several now: \n\n  [SCMP]     Anapaya, ETH Zuerich, and SCION Association, \"SCMP\n              Documentation\", 2025,\n              <https://docs.scion.org/en/latest/protocols/scmp.html>.\n\n   [SIG]      Anapaya, ETH Zuerich, and SCION, \"SCION IP Gateway\n              Documentation\", 2024,\n              <https://docs.scion.org/en/latest/sig.html>.\n\n   [PCBExtensions]\n              Anapaya, ETH, and SCION Association, \"PCB Path Metadata\n              Extension\", 2025,\n              <https://docs.scion.org/en/latest/beacon-metadata.html>.",
+          "createdAt": "2026-02-09T12:48:29Z",
+          "updatedAt": "2026-02-09T12:48:29Z"
+        }
+      ]
+    },
+    {
+      "number": 213,
+      "id": "I_kwDOJx2-rs7paT5v",
+      "title": "Clarify SCMP process",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/213",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 6.4:\n```\n* If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.\n\n* If an SCMP informational message of unknown type is received, it MUST be silently dropped.\n\n* [...]\n\n* In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n\n* [...]\n```\n\nThis could benefit from some clarification:\n\n- Ad 1): How can a socket determine if an incoming packet was triggered by an outgoing packet (let alone which process)? Note: the type is unknown which means the header length is unknown so the payload cannot be extracted. Even with payload available, it is unclear how that would work.\n- Ad 1): What is the purpose of forwarding unknown SCMP messages to the application layer? Even for *known* SCMP messages it is not obvious how this is meant to work, should processes know SCMP messages? And for *unknown* SCMP messages? \n- Why are unknown types of Error and Info treated differently?\n- ~Shouldn't there be a process requirement/recommendation about authenticating SCMP messages before processing?~ EDIT:  Section 8.3 states that SCMP authentication is still experimental and not specified here.\n- Ad 4): How does a SCION library know whether it is required to do that?\n\nA partial insight: Point 4) suggests that the upper layer protocol is used to identify upper layer processes. Does this refer to a design where a SCION kernel socket passes traffic on to a UDP kernel socket (here called a \"process\")?\n\nSee also discussion here: https://scionproto.slack.com/archives/C8ADA9CEP/p1770398184282579",
+      "createdAt": "2026-02-09T11:49:47Z",
+      "updatedAt": "2026-02-09T16:57:08Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I understand now that this was written with the dispatcher/SHIM in mind. \n\nMaybe we could clarify this by adding a small note about dispatcher/SHIM or general on-machine forwarding...?\n\n",
+          "createdAt": "2026-02-09T15:04:57Z",
+          "updatedAt": "2026-02-09T15:04:57Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "My preferred solution would be to remove rules 1), 2), and 4), and keep only 3) and 5). \n\nIf that is too big of a change (so late in the process), #217 offers a small(-ish) change to clarify the applicability of the rules.",
+          "createdAt": "2026-02-09T16:57:08Z",
+          "updatedAt": "2026-02-09T16:57:08Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -15143,6 +15216,139 @@
           ]
         }
       ]
+    },
+    {
+      "number": 214,
+      "id": "PR_kwDOJx2-rs7CebLp",
+      "title": "Chapter 8 Review",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/214",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-09T12:53:15Z",
+      "updatedAt": "2026-02-09T12:54:15Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-chapter-8",
+      "headRefOid": "0c8b403bb38ba48d396ea64c4a5f6249646fc92d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7g5Xzm",
+          "commit": {
+            "abbreviatedOid": "0c8b403"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-09T12:54:15Z",
+          "updatedAt": "2026-02-09T12:54:15Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "The key problem here is that we don\u00b4t need _all_ core ASes to be compromised, only those that pertain to a given downstream AS.",
+              "createdAt": "2026-02-09T12:54:15Z",
+              "updatedAt": "2026-02-09T12:54:15Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 215,
+      "id": "PR_kwDOJx2-rs7CekKh",
+      "title": "Remove SCIONlab?",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/215",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "SCIONlab appears to be phased out, registration is disabled.\r\n\r\nMaybe we should not advertise it anymore and remove it from the spec?\r\n\r\nresolves #212 ",
+      "createdAt": "2026-02-09T13:03:56Z",
+      "updatedAt": "2026-02-09T22:40:39Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-scionlab",
+      "headRefOid": "e8f09b7aff610b0ac4b16f455794cc3a6b894ce1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "One reviewer back then asked about a reference to where to test SCION. I'll circle back with Eliot on this, before removing  the section ",
+          "createdAt": "2026-02-09T22:40:39Z",
+          "updatedAt": "2026-02-09T22:40:39Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 216,
+      "id": "PR_kwDOJx2-rs7CetGe",
+      "title": "Remove Leaf ASes",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/216",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The term `leaf-AS` is hardly used in the document and it seems weird that it deserves its own definition.\r\n\r\nI propose to remove it from the terminology section.\r\n\r\nThis PR also removes it from the rest of the document, but it could be left in place. When talking about graphs in computer science, the term \"leaf\" should probably not require a definition?",
+      "createdAt": "2026-02-09T13:13:39Z",
+      "updatedAt": "2026-02-09T13:13:40Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-leaf-as",
+      "headRefOid": "7abb19109c816cc4c7698b227f405a560ebf9b9d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 217,
+      "id": "PR_kwDOJx2-rs7Ch1Ed",
+      "title": "Clarify SCMP processing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/217",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This aims to solve #213.\r\n\r\nMy preferred solution would be to remove rules 1), 2), and 4), and keep only 3) and 5).\r\nIf that is too big of a change (so late in the process), this PR offers a smallish change to clarify the applicability of the rules.",
+      "createdAt": "2026-02-09T16:55:28Z",
+      "updatedAt": "2026-02-09T16:57:35Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-scmp",
+      "headRefOid": "f91bc5eb601d7d1b519cc6591d7cd973d018dcfd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
