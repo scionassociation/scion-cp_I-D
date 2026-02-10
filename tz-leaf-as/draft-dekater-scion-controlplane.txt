@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 13 August 2026                                          S. Hitz
+Expires: 14 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                         9 February 2026
+                                                        10 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 August 2026.
+   This Internet-Draft will expire on 14 August 2026.
 
 Copyright Notice
 
@@ -3205,7 +3205,7 @@ Table of Contents
    path segments from itself to the core ASes of its ISD.
 
    This produces an acyclic graph which is typically narrow at the top,
-   widens towards the downstream ASes, and is relatively shallow.
+   widens towards downstream ASes, and is relatively shallow.
    Intermediate provider ASes will typically have a large number of
    children whilst only having a small number of parents.  Therefore the
    chain of intermediate providers from a downstream AS to a core AS is
