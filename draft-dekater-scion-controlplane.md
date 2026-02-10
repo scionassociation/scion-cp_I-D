@@ -282,7 +282,7 @@ Each link connecting SCION routers is bi-directional and is identified by its co
 
 SCION provides path-aware inter-domain routing between SCION ASes. The SCION Control Plane is responsible for discovering these inter-domain paths and making them available to the endpoints within the ASes.
 
-SCION inter-domain routing operates on two levels: within an ISD which is called *intra*-ISD routing, and between ISDs which is called *inter*-ISD routing. Both levels use *Path-Segment Construction Beacons (PCBs)* to explore network paths. A PCB is initiated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
+SCION inter-domain routing operates on two levels: within an ISD which is called *intra*-ISD routing, and between ISDs which is called *inter*-ISD routing. Both levels use *Path-Segment Construction Beacons (PCBs)* to explore network paths. A PCB is originated by a core AS and then disseminated either within an ISD to explore intra-ISD paths, or among core ASes to explore core paths across different ISDs.
 
 The PCBs accumulate cryptographically protected path and forwarding information at an AS level and store this information in the form of *Hop Fields*. Endpoints use information from these Hop Fields to create end-to-end forwarding paths for data packets that carry this information in their headers. This also supports multi-path communication among endpoints.
 
@@ -415,14 +415,14 @@ SCION does not require any domain name resolution for communication.
 
 ## Introduction and Overview
 
-**Path Exploration** is the process where a SCION AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing* and this section provides a detailed explanation of this.
+**Path Exploration** is the process where a SCION AS discovers paths to other ASes. In SCION, this process is referred to as *beaconing*.
 
 The *Control Service* of each SCION AS is responsible for the beaconing process. The Control Service generates, receives, and propagates *Path-Segment Construction Beacons (PCBs)* on a regular basis, to iteratively construct path segments.
 
-PCBs contain inter-domain topology and authentication information, and can also include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *core* or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
+PCBs contain inter-domain topology and authentication information, and can include additional metadata that helps with path management and selection. The beaconing process itself is divided into routing processes on two levels, where *core* or inter-ISD is based on the (selective) sending of PCBs without a defined direction, and *intra-ISD* beaconing on top-to-bottom propagation. Beaconing is initiated by core ASes, therefore each ISD MUST have at least one core AS.
 
-- *Core or Inter-ISD beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either initiates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes. PCBs are periodically sent over policy compliant paths to discover multiple paths between any pair of core ASes.
-- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes create PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children. As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
+- *Core or Inter-ISD beaconing* is the process of constructing path segments between core ASes in the same or in different ISDs. During core beaconing, the Control Service of a core AS either originates PCBs or propagates PCBs received from neighboring core ASes to other neighboring core ASes.
+- *Intra-ISD beaconing* creates path segments from core ASes to non-core ASes. For this, the Control Services of core ASes originates PCBs and sends them to the non-core child ASes (typically customer ASes) at regular intervals. The Control Service of a non-core child AS receives these PCBs and forwards them to its child ASes, and so on until the PCB reaches an AS without any children. As a result, all ASes within an ISD receive path segments to reach the core ASes of their ISD and register reciprocal segments with the Control Service of the associated core ASes.
 
 On its way, a PCB accumulates cryptographically protected path and forwarding information per traversed AS. At every AS, metadata as well as information about the AS's ingress and egress interfaces is added to the PCB. The full PCB message format is described in [](#pcbs). PCBs are used to construct path segments. ASes register them to make them available to other ASes, as described in [](#path-segment-reg).
 
@@ -436,7 +436,7 @@ PCBs do not traverse peering links, but peering links are instead announced alon
 Every propagation interval (as configured by the AS operator), the Control Service:
 
 - selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e. a child AS or a core AS). This is described in [](#selection).
-- propagates each selected PCB to the selected egress interface(s) associated with it. This is described in [](#path-segment-prop).
+- propagates each selected PCB to the selected egress interface(s) associated with it. Selection policies are described in [](#path-segment-prop).
 
 For every selected PCB and egress interface combination, the AS Control Service appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
 
@@ -592,7 +592,7 @@ Path Segment 4 |             |     |             |     |             |
 ~~~
 {: #figure-4 title="Possible up- or down segments for AS Z"}
 
-According to the {{figure-3a}}, {{figure-3b}} and {{figure-3c}} above, it appears that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing SCION networks. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}} which shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to use all of these path segments or just a selection of them.
+According to {{figure-3a}}, {{figure-3b}} and {{figure-3c}} above, it appears that a PCB represents a single path segment. However, there is a difference between a PCB and a registered path segment as a PCB is a so-called "travelling path segment" that accumulates AS entries when traversing SCION networks. A registered path segment is instead a "snapshot" of a travelling PCB at a given time T and from the vantage point of a particular AS A. This is illustrated by {{figure-4}} which shows several possible path segments to reach AS Z, based on the PCBs "g", "h", "i", and "j" from {{figure-3c}} above. It is up to AS Z to choose which of these path segments to use.
 
 ## PCB Message Format {#pcbs}
 
@@ -970,7 +970,7 @@ The `HopField` Protobuf message format is:
 
 - `ingress`: The 16-bit ingress interface identifier (in the direction of the path construction. That is, in the direction of beaconing through the current AS).
 
-**Note:** The core AS initiating a PCB MUST set the ingress interface identifier to the "unspecified" value (see {{I-D.dekater-scion-dataplane}} section "Terminology").
+**Note:** The core AS originating a PCB MUST set the ingress interface identifier to the "unspecified" value (see {{I-D.dekater-scion-dataplane}} section "Terminology").
 
 - `egress`: The 16-bit egress interface identifier (in the direction of beaconing).
 - `exp_time`: The 8-bit encoded expiration time of the Hop Field, indicating its validity. This field expresses a duration in seconds according to the formula: `duration = (1 + exp_time) * (24*60*60/256)` and the minimum duration is therefore 337.5 seconds. This duration is relative to the PCB creation timestamp set in the PCB's segment information component (see also [](#seginfo)), so the absolute expiration time of the Hop Field is the sum of these two values.
@@ -1072,7 +1072,7 @@ Upon receiving a PCB, the Control Service of an AS performs the following checks
 1. PCB validity: The Control Service MUST check the validity of the PCB (see [](#pcb-validity)) and it MUST discard invalid PCBs. The PCB contains the version numbers of the TRC(s) and certificate(s) that MUST be used to verify its signatures which enables the Control Service to check whether it has the relevant TRC(s) and certificate(s). If not, they can be requested from the Control Service of the sending AS through the API described in [](#crypto-api).
 2. Loop avoidance: The Control Service MUST check whether the PCB is from a core AS and whether it includes duplicate hop entries created by the core AS itself or by other ASes. If so, it MUST discard the PCB in order to avoid loops. This is necessary because core beaconing is based on propagating PCBs to all AS neighbors. Additionally, core ASes SHOULD discard PCBs that were propagated at any point by a non-core AS. Ultimately, core ASes MAY make a policy decision to propagate beacons containing path segments that traverse the same ISD more than once as this can be legitimate - e.g. if the ISD spans a large geographical area, a path between different ASes transiting another ISD may constitute a shortcut.
 3. Incoming Interface: The Control Service MUST check that the last ISD-AS entry in a received PCB (in its AS Entry Signed Body) corresponds with the ISD-AS neighbor of the interface where the PCB was received. In addition, the corresponding link MUST be core or parent, otherwise the PCB MUST be discarded.
-4. Continuity: When the Control Service receives a PCB containing two or more AS entries, it MUST check every AS entry except the last and discard beacons where the ISD-AS of an entry does not equal the ISD-AS of the next entry.
+4. Continuity: When the Control Service receives a PCB containing two or more AS entries, it MUST check every AS entry except the last and discard beacons where the `next_isd_as` of an entry does not equal the `isd_as` of the next entry.
 
 If the PCB verification is successful, the Control Service decides whether to store the PCB as a candidate for propagation based on selection criteria and polices specific for each AS.
 
@@ -1109,7 +1109,7 @@ PCBs are propagated in batches to each neighboring AS at a fixed frequency known
 The size of this set is called the *best PCBs set size*. It should be:
 
   - For intra-ISD beaconing (i.e. propagating to children ASes): at most 50.
-  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is that each set is chosen among the PCBs received from each neighbor.
+  - For core beaconing (i.e. propagation between core ASes): at most 5 per immediate neighbor core AS. Current practice is for the set to contain an equal amount of PCBs from each neighbor.
 
 These values reflect a tradeoff between scalability — limited by the computational overhead of signature verification — and the number of paths discovered. The PCBs set size should not be too low to ensure that beaconing can discover a significant number of paths. Further discussion on these trade-offs is provided in [](#scalability).
 
@@ -1126,27 +1126,14 @@ Note that to ensure establish quick connectivity, an AS Control Service MAY atte
 
 ### Propagation of Selected PCBs {#path-segment-prop}
 
-To bootstrap initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
+The propagation process includes the following steps:
 
-#### Propagation of PCBs in Intra-ISD Beaconing {#intra-prop}
-
-The propagation process in intra-ISD beaconing includes the following steps:
-
-1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
+1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring ASes, according to the AS selection policy (see [](#selection)). Core ASes propagate PCBs over both core and parent-child links; additionally, they originate new PCBs over these same links. Non-core ASes propagate PCBs exclusively over parent-child links.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)) including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
 
-#### Propagation of PCBs in Core Beaconing
-
-The propagation process in core beaconing includes the following steps:
-
-1. The core Control Service selects the best PCBs to forward to neighboring core ASes observed so far.
-2. The service adds a new AS entry to every selected PCB which MUST include:
-   - The egress interface to the neighboring core AS in the Hop Field component.
-   - The ISD_AS number of the neighboring core AS in the signed body component of the AS entry.
-3. The core Control Service MUST sign the extended PCBs and append the computed signature.
-4. As a final step, the service propagates the extended PCBs to the neighboring core ASes by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring core ASes (see also [](#prop-proto)).
+To bootstrap initial communication with a neighboring beacon service, ASes use one-hop paths. This special kind of path handles beaconing between neighboring ASes for which no forwarding path may be available yet. It is the task of beaconing to discover such forwarding paths and the purpose of one-hop paths is to break this circular dependency. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 
 #### Propagation of PCBs in Protobuf Message Format {#prop-proto}
 
@@ -1956,7 +1943,7 @@ In order to maintain service availability, an AS operator SHOULD monitor the fol
 
 - For a core AS:
   - Fraction of core ASes (preferably only those to which the link is up) that can be found in non-expired core segments.
-  - Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was initiated during the last propagation interval.
+  - Fraction of ASes, core or children, (preferably only those to which the link is up) to where a beacon was originated during the last propagation interval.
   - Fraction of freshly propagated beacons for which at least one corresponding down segment has been registered (see [](#path-segment-reg)).
 
 - For a non-core AS:
@@ -2321,6 +2308,14 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+
+## draft-dekater-scion-controlplane-15
+{:numbered="false"}
+
+- Final read, wording
+- "originating/initiating" PCBs --> consistently use originating
+- Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
