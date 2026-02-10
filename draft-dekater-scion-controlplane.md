@@ -1163,7 +1163,7 @@ Note that to ensure establish quick connectivity, an AS Control Service MAY atte
 
 The propagation process includes the following steps:
 
-1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.
+1. From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring ASes, according to the AS selection policy (see [](#selection)). Core ASes propagate PCBs over both core and parent-child links; additionally, they originate new PCBs over these same links. Non-core ASes propagate PCBs exclusively over parent-child links.
 2. The Control Service MUST add a new AS entry (see [](#as-entry)) including any Peer Entry information (see [](#peerentry)) the AS is configured to advertise to every selected PCB.
 3. The Control Service MUST sign each selected, extended PCB and append the computed signature.
 4. As a final step, the Control Service propagates each extended PCB to the neighboring AS specified in the new AS entry by invoking the `SegmentCreationService.Beacon` remote procedure call (RPC) in the Control Services of the neighboring ASes (see also [](#prop-proto)).
