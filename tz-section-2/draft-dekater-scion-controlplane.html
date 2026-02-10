@@ -3625,7 +3625,7 @@ It is expected that an AS's policy will select PCBs corresponding to paths that 
 <p id="section-2.3.5-1">The propagation process includes the following steps:<a href="#section-2.3.5-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-2.3.5-2">
 <li id="section-2.3.5-2.1">
-              <p id="section-2.3.5-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring child ASes, based on a selection algorithm specific for this AS.<a href="#section-2.3.5-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.5-2.1.1">From the candidate PCBs stored in the Beacon Store, the Control Service of an AS selects the best PCBs to propagate to its neighboring ASes, according to the AS selection policy (see <a href="#selection" class="auto internal xref">Section 2.3.3</a>). Core ASes propagate PCBs over both core and parent-child links; additionally, they originate new PCBs over these same links. Non-core ASes propagate PCBs exclusively over parent-child links.<a href="#section-2.3.5-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-2.3.5-2.2">
               <p id="section-2.3.5-2.2.1">The Control Service <span class="bcp14">MUST</span> add a new AS entry (see <a href="#as-entry" class="auto internal xref">Section 2.2.2</a>) including any Peer Entry information (see <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a>) the AS is configured to advertise to every selected PCB.<a href="#section-2.3.5-2.2.1" class="pilcrow">¶</a></p>

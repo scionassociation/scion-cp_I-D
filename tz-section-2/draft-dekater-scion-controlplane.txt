@@ -1788,8 +1788,11 @@ Table of Contents
 
    1.  From the candidate PCBs stored in the Beacon Store, the Control
        Service of an AS selects the best PCBs to propagate to its
-       neighboring child ASes, based on a selection algorithm specific
-       for this AS.
+       neighboring ASes, according to the AS selection policy (see
+       Section 2.3.3).  Core ASes propagate PCBs over both core and
+       parent-child links; additionally, they originate new PCBs over
+       these same links.  Non-core ASes propagate PCBs exclusively over
+       parent-child links.
 
    2.  The Control Service MUST add a new AS entry (see Section 2.2.2)
        including any Peer Entry information (see Section 2.2.2.4) the AS
