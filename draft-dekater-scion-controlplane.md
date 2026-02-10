@@ -2103,7 +2103,7 @@ A core AS may reach other core ASes in the same ISD via other ISDs, depending on
 
 ## Manipulation of the Beaconing Process by a Core Adversary {#topdown-manipulate}
 
-The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. Non-core ASes depend on core ASes for beaconing. If an adversary stops a core AS from propagating PCBs, the discovery of new paths for will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. Since non-core ASes are often connected to multiple core ASes, they will continue to receive beacons from other core ASes. This is an unlikely attack scenario, as it would require compromise of all core ASes of a given downstream AS to be effective.
+The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. Non-core ASes depend on core ASes for beaconing. If an adversary compromises all upstream core ASes of a target AS and suppresses PCB propagation, the discovery of new paths for will halt. Although the downstream AS will no longer receive new PCBs, previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely attack scenario, as it would require compromise of all core ASes of a given downstream AS to be effective.
 
 ## Manipulation of the Beaconing Process by a Non-Core Adversary {#manipulate-beaconing}
 
