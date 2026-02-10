@@ -101,6 +101,7 @@ informative:
         org: ETH Zuerich
   RFC1122:
   RFC4271:
+  RFC4443:
   RFC5398:
   RFC6996:
   RFC8915:
@@ -1582,6 +1583,7 @@ The SCION Control Message Protocol (SCMP) provides functionality for network dia
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
 
+The logic, some message formats, and processing rules are derived from {{RFC4443}} and adapted for the SCION architecture.
 Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
@@ -2314,7 +2316,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Final read, wording
 - "originating/initiating" PCBs --> consistently use originating
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
-- SCMP processing rules: remove unnecessary steps
+- SCMP: clarify relationship with RFC4443 and remove unnecessary processing rules
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
