@@ -325,7 +325,7 @@ The creation of end-to-end forwarding paths consists of the following processes:
 
 - *Path exploration (or beaconing)*: This is the process where an AS Control Service discovers paths to other ASes. This is described in detail in [](#beaconing).
 - *Path registration*: This is the process where an AS Control Service selects PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
-- *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. Step (a) is described in {{I-D.dekater-scion-dataplane}} section "Path Construction (Segment Combinations)" and step (b) is described in detail in [](#lookup).
+- *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. Step (a) is described in detail in [](#lookup) and step (b) is described in {{I-D.dekater-scion-dataplane}} section "Path Construction (Segment Combinations)".
 
 All processes operate concurrently.
 
