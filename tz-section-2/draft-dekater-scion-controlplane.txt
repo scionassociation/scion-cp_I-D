@@ -167,7 +167,6 @@ Table of Contents
    10. References
      10.1.  Normative References
      10.2.  Informative References
-   Deployment Testing: SCIONLab
    Path-Lookup Examples
    Change Log
      draft-dekater-scion-controlplane-15
@@ -320,9 +319,6 @@ Table of Contents
    groups called Isolation Domains or ISDs.  Each ISD consists of ASes
    that span an area with a uniform trust environment (e.g. a common
    jurisdiction).
-
-   *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
-   ASes.
 
    *Message Authentication Code (MAC)*. In the rest of this document,
    "MAC" always refers to "Message Authentication Code" and never to
@@ -3176,15 +3172,16 @@ Table of Contents
 7.4.1.  Intra-ISD Beaconing
 
    In the intra-ISD beaconing, PCBs are propagated top down along
-   parent-child links from core to leaf ASes.  Each AS discovers path
-   segments from itself to the core ASes of its ISD.
+   parent-child links from core to downstream ASes.  Each AS discovers
+   path segments from itself to the core ASes of its ISD.
 
-   This typically produces an acyclic graph which is narrow at the top,
-   widens towards the leafs, and is relatively shallow.  Intermediate
-   provider ASes will typically have a large number of children whilst
-   only having a small number of parents.  Therefore the chain of
-   intermediate providers from a leaf AS to a core AS is typically not
-   long (e.g. local, regional, national provider, then core).
+   This produces an acyclic graph which is typically narrow at the top,
+   widens towards downstream ASes, and is relatively shallow.
+   Intermediate provider ASes will typically have a large number of
+   children whilst only having a small number of parents.  Therefore the
+   chain of intermediate providers from a downstream AS to a core AS is
+   typically not long (e.g. local, regional, national provider, then
+   core).
 
    Each AS potentially receives PCBs for all down path segments from the
    core to itself.  While the number of distinct provider chains to the
@@ -3231,10 +3228,10 @@ Table of Contents
 
    When a new parent-child link is added to the network, the parent AS
    will propagate the available PCBs in the next propagation event.  If
-   the AS on the child side of the new link is a leaf AS, path discovery
-   is complete after at most one propagation interval.  Otherwise, child
-   ASes at distance D below the new link, learn of the new link after at
-   worst D further propagation intervals.
+   the AS on the child side of the new link has no children of its own,
+   path discovery is complete after at most one propagation interval.
+   Otherwise, child ASes at distance D below the new link, learn of the
+   new link after at worst D further propagation intervals.
 
 7.4.2.  Core Beaconing
 
@@ -3738,11 +3735,6 @@ Table of Contents
               DOI 10.17487/RFC9523, February 2024,
               <https://www.rfc-editor.org/rfc/rfc9523>.
 
-   [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
-              M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
-              Generation Internet Testbed", 2020,
-              <https://ieeexplore.ieee.org/abstract/document/9259355>.
-
    [SCMP]     Anapaya, ETH Zuerich, and SCION Association, "SCMP
               Documentation", 2025,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
@@ -3750,16 +3742,6 @@ Table of Contents
    [SIG]      Anapaya, ETH Zuerich, and SCION, "SCION IP Gateway
               Documentation", 2024,
               <https://docs.scion.org/en/latest/sig.html>.
-
-Deployment Testing: SCIONLab
-
-   SCIONLab is a global research network that is available to test the
-   SCION architecture.  You can create and use your ASes using your own
-   computation resources which allows you to gain real-world experience
-   of deploying and managing a SCION network.
-
-   More information can be found on the SCIONLab website and in the
-   [SCIONLAB] paper.
 
 Path-Lookup Examples
 
