@@ -145,39 +145,6 @@ informative:
       -
         ins: SCION Association
         org: SCION Association
-  SCIONLAB:
-    title: SCIONLAB - A Next-Generation Internet Testbed
-    date: 2020
-    target: https://ieeexplore.ieee.org/abstract/document/9259355
-    author:
-      -
-        ins: J. Kown
-        name: Jonghoon Kwon
-        org: ETH Zuerich
-      -
-        ins: J. García-Pardo
-        name: Juan A. García-Pardo
-        org: ETH Zuerich
-      -
-        ins: M. Legner
-        name: Markus Legner
-        org: ETH Zuerich
-      -
-        ins: F. Wirz
-        name: François Wirz
-        org: ETH Zuerich
-      -
-        ins: M. Frei
-        name: Matthias Frei
-        org: ETH Zuerich
-      -
-        ins: D. Hausheer
-        name: David Hausheer
-        org: Otto von Guericke University Magdeburg
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
   SIG:
     title: SCION IP Gateway Documentation
     date: 2024
@@ -252,8 +219,6 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 **Info Field (INF)**: Each Path-Segment Construction Beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
 **Isolation Domain (ISD)**: SCION ASes are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction).
-
-**Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
 **Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
@@ -2023,9 +1988,9 @@ To achieve scalability, SCION ASes are partitioned into ISDs and in an ideal top
 
 ### Intra-ISD Beaconing {#intra-isd-beaconing}
 
-In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to leaf ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
+In the intra-ISD beaconing, PCBs are propagated top down along parent-child links from core to downstream ASes. Each AS discovers path segments from itself to the core ASes of its ISD.
 
-This typically produces an acyclic graph which is narrow at the top, widens towards the leafs, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a leaf AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
+This produces an acyclic graph which is typically narrow at the top, widens towards downstream ASes, and is relatively shallow. Intermediate provider ASes will typically have a large number of children whilst only having a small number of parents. Therefore the chain of intermediate providers from a downstream AS to a core AS is typically not long (e.g. local, regional, national provider, then core).
 
 Each AS potentially receives PCBs for all down path segments from the core to itself. While the number of distinct provider chains to the core is typically moderate, the multiplicity of links between provider ASes has multiplicative effect on the number of PCBs. Once this number grows above the maximum recommended best PCB set size of 50, ASes SHOULD trim the set of PCBs propagated.
 
@@ -2039,7 +2004,7 @@ If the same AS has 1,000 child links, the propagation of the beacons will requir
 
 On a network bootstrap, path segments to each AS are discovered within a number of propagation steps proportional to the longest path. With a 5 second propagation interval and a generous longest path of length 10, all path segments are discovered after 25 seconds on average. When all ASes start propagation just after they've received the first PCBs from any of their upstreams (see "fast recovery" in [](#propagation-interval-size)), the construction of a first path to connect each AS to the ISD core is accelerated.
 
-When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link is a leaf AS, path discovery is complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
+When a new parent-child link is added to the network, the parent AS will propagate the available PCBs in the next propagation event. If the AS on the child side of the new link has no children of its own, path discovery is complete after at most one propagation interval. Otherwise, child ASes at distance D below the new link, learn of the new link after at worst D further propagation intervals.
 
 ### Core Beaconing {#core-beaconing}
 
@@ -2186,14 +2151,6 @@ This document has no IANA actions.
 The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see {{ISD-AS-assignments}}).
 
 --- back
-
-# Deployment Testing: SCIONLab
-{:numbered="false"}
-
-SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
-
-More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
-
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
