@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 10 August 2026                                          S. Hitz
+Expires: 14 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                         6 February 2026
+                                                        10 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2026.
+   This Internet-Draft will expire on 14 August 2026.
 
 Copyright Notice
 
@@ -471,9 +471,9 @@ Table of Contents
       destination.  For this, an endpoint performs (a) a path lookup
       step to obtain path segments, and (b) a path combination step to
       combine the forwarding path from the segments.  Step (a) is
-      described in [I-D.dekater-scion-dataplane] section "Path
-      Construction (Segment Combinations)" and step (b) is described in
-      detail in Section 4.
+      described in detail in Section 4 and step (b) is described in
+      [I-D.dekater-scion-dataplane] section "Path Construction (Segment
+      Combinations)".
 
    All processes operate concurrently.
 
