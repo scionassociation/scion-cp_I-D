@@ -145,39 +145,6 @@ informative:
       -
         ins: SCION Association
         org: SCION Association
-  SCIONLAB:
-    title: SCIONLAB - A Next-Generation Internet Testbed
-    date: 2020
-    target: https://ieeexplore.ieee.org/abstract/document/9259355
-    author:
-      -
-        ins: J. Kown
-        name: Jonghoon Kwon
-        org: ETH Zuerich
-      -
-        ins: J. García-Pardo
-        name: Juan A. García-Pardo
-        org: ETH Zuerich
-      -
-        ins: M. Legner
-        name: Markus Legner
-        org: ETH Zuerich
-      -
-        ins: F. Wirz
-        name: François Wirz
-        org: ETH Zuerich
-      -
-        ins: M. Frei
-        name: Matthias Frei
-        org: ETH Zuerich
-      -
-        ins: D. Hausheer
-        name: David Hausheer
-        org: Otto von Guericke University Magdeburg
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
   SIG:
     title: SCION IP Gateway Documentation
     date: 2024
@@ -2197,14 +2164,6 @@ This document has no IANA actions.
 The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see {{ISD-AS-assignments}}).
 
 --- back
-
-# Deployment Testing: SCIONLab
-{:numbered="false"}
-
-SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
-
-More information can be found on the SCIONLab website and in the {{SCIONLAB}} paper.
-
 
 # Path-Lookup Examples {#app-c}
 {:numbered="false"}
