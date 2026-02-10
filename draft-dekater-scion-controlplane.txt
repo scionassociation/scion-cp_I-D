@@ -300,7 +300,7 @@ Table of Contents
 
    *Forwarding Path*: A complete end-to-end path between two SCION
    endpoints which is used to transmit packets in the data plane.
-   Endpoints can create one with a combination of up to three path
+   Endpoints can create paths with a combination of up to three path
    segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, Path-Segment
@@ -450,27 +450,27 @@ Table of Contents
    information in their headers.  This also supports multi-path
    communication among endpoints.
 
-   The creation of an end-to-end forwarding path consists of the
-   following processes:
+   The creation of end-to-end forwarding paths consists of the following
+   processes:
 
-   1.  _Path exploration (or beaconing)_: This is the process where an
-       AS Control Service discovers paths to other ASes.  This is
-       described in detail in Section 2.
+   *  _Path exploration (or beaconing)_: This is the process where an AS
+      Control Service discovers paths to other ASes.  This is described
+      in detail in Section 2.
 
-   2.  _Path registration_: This is the process where an AS Control
-       Service selects a few PCBs, according to defined policies, turns
-       the selected PCBs into path segments, and adds these path
-       segments to the relevant path infrastructure, thus making them
-       available to other ASes.  This is described in detail in
-       Section 3.
+   *  _Path registration_: This is the process where an AS Control
+      Service selects PCBs, according to defined policies, turns the
+      selected PCBs into path segments, and adds these path segments to
+      the relevant path infrastructure, thus making them available to
+      other ASes.  This is described in detail in Section 3.
 
-   3.  _Path resolution_: This is the process of actually creating an
-       end-to-end forwarding path from the source endpoint to the
-       destination.  For this, an endpoint performs (a) a path lookup
-       step to obtain path segments, and (b) a path combination step to
-       combine the forwarding path from the segments.  This last step
-       takes place in the data plane.  This is described in detail in
-       Section 4.
+   *  _Path resolution_: This is the process of actually creating an
+      end-to-end forwarding path from the source endpoint to the
+      destination.  For this, an endpoint performs (a) a path lookup
+      step to obtain path segments, and (b) a path combination step to
+      combine the forwarding path from the segments.  Step (a) is
+      described in detail in Section 4 and step (b) is described in
+      [I-D.dekater-scion-dataplane] section "Path Construction (Segment
+      Combinations)".
 
    All processes operate concurrently.
 
@@ -670,7 +670,7 @@ Table of Contents
 
 1.6.  Bootstrapping ability
 
-   SCION uses the following mechanisms to avoid circular dependcencies
+   SCION uses the following mechanisms to avoid circular dependencies
    during bootstrapping, and to provide resiliency after systemic
    failures:
 
@@ -718,7 +718,8 @@ Table of Contents
    string.  Section 5 provides details about the establishment of the
    underlying QUIC connections.
 
-   SCION does not require any domain name resolution for communication.
+   SCION's Control Plane does not require any domain name resolution for
+   communication.
 
 2.  Path Exploration or Beaconing
 
