@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 13 August 2026</td>
+<td class="center">Expires 14 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-09" class="published">9 February 2026</time>
+<time datetime="2026-02-10" class="published">10 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-13">13 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-14">14 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -5811,7 +5811,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
         <h3 id="name-manipulation-of-the-beaconi">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-manipulation-of-the-beaconi" class="section-name selfRef">Manipulation of the Beaconing Process by a Core Adversary</a>
         </h3>
-<p id="section-8.2-1">The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. Non-core ASes depend on core ASes for beaconing. If an adversary stops a core AS from propagating PCBs, the discovery of new paths for will halt. In this case, downstream ASes will notice that PCBs are no longer being propagated, but all previously discovered and still valid paths remain usable for data plane forwarding until they expire. Since non-core ASes are often connected to multiple core ASes, they will continue to receive beacons from other core ASes. This is an unlikely attack scenario, as it would require compromise of all core ASes of a given downstream AS to be effective.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">The first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. Non-core ASes depend on core ASes for beaconing. If an adversary compromises all upstream core ASes of a target AS and suppresses PCB propagation, the discovery of new paths for will halt. Although the downstream AS will no longer receive new PCBs, previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely attack scenario, as it would require compromise of all core ASes of a given downstream AS to be effective.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manipulate-beaconing">

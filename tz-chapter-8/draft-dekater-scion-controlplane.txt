@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 13 August 2026                                          S. Hitz
+Expires: 14 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                         9 February 2026
+                                                        10 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 August 2026.
+   This Internet-Draft will expire on 14 August 2026.
 
 Copyright Notice
 
@@ -3379,15 +3379,13 @@ Table of Contents
 
    The first risk to the beaconing process comes from an adversary
    controlling one or more core ASes in an ISD.  Non-core ASes depend on
-   core ASes for beaconing.  If an adversary stops a core AS from
-   propagating PCBs, the discovery of new paths for will halt.  In this
-   case, downstream ASes will notice that PCBs are no longer being
-   propagated, but all previously discovered and still valid paths
-   remain usable for data plane forwarding until they expire.  Since
-   non-core ASes are often connected to multiple core ASes, they will
-   continue to receive beacons from other core ASes.  This is an
-   unlikely attack scenario, as it would require compromise of all core
-   ASes of a given downstream AS to be effective.
+   core ASes for beaconing.  If an adversary compromises all upstream
+   core ASes of a target AS and suppresses PCB propagation, the
+   discovery of new paths for will halt.  Although the downstream AS
+   will no longer receive new PCBs, previously discovered and still
+   valid paths remain usable for data plane forwarding until they
+   expire.  This is an unlikely attack scenario, as it would require
+   compromise of all core ASes of a given downstream AS to be effective.
 
 8.3.  Manipulation of the Beaconing Process by a Non-Core Adversary
 
