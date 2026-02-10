@@ -2584,8 +2584,10 @@ Table of Contents
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
 
-   Note that there is not currently a defined mechanism for converting
-   ICMP messages to SCMP messages, or vice-versa.
+   The logic, some message formats, and processing rules are derived
+   from [RFC4443] and adapted for the SCION architecture.  Note that
+   there is not currently a defined mechanism for converting ICMP
+   messages to SCMP messages, or vice-versa.
 
 6.1.  General Format
 
@@ -3700,6 +3702,12 @@ Table of Contents
               DOI 10.17487/RFC4271, January 2006,
               <https://www.rfc-editor.org/rfc/rfc4271>.
 
+   [RFC4443]  Conta, A., Deering, S., and M. Gupta, Ed., "Internet
+              Control Message Protocol (ICMPv6) for the Internet
+              Protocol Version 6 (IPv6) Specification", STD 89,
+              RFC 4443, DOI 10.17487/RFC4443, March 2006,
+              <https://www.rfc-editor.org/rfc/rfc4443>.
+
    [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
               Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
               December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
@@ -3909,7 +3917,8 @@ draft-dekater-scion-controlplane-15
    *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
       intra-ISD propagation, since steps are the same
 
-   *  SCMP processing rules: remove unnecessary steps
+   *  SCMP: clarify relationship with RFC4443 and remove unnecessary
+      processing rules
 
 draft-dekater-scion-controlplane-15
 

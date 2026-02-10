@@ -4492,7 +4492,8 @@ message Transport {
       </h2>
 <p id="section-6-1">The SCION Control Message Protocol (SCMP) provides functionality for network diagnostics, such as traceroute and error messages that signal packet processing or network layer problems. SCMP is a helpful tool for network diagnostics and - in the case of External Interface Down and Internal Connectivity Down messages - a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>. Its security considerations are discussed in <a href="#manipulate-selection" class="auto internal xref">Section 8.3.4</a>.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-3">The logic, some message formats, and processing rules are derived from <span>[<a href="#RFC4443" class="cite xref">RFC4443</a>]</span> and adapted for the SCION architecture.
+Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div id="general-format">
 <section id="section-6.1">
         <h3 id="name-general-format">
@@ -5995,6 +5996,10 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
         <dd>
 <span class="refAuthor">Rekhter, Y., Ed.</span>, <span class="refAuthor">Li, T., Ed.</span>, and <span class="refAuthor">S. Hares, Ed.</span>, <span class="refTitle">"A Border Gateway Protocol 4 (BGP-4)"</span>, <span class="seriesInfo">RFC 4271</span>, <span class="seriesInfo">DOI 10.17487/RFC4271</span>, <time datetime="2006-01" class="refDate">January 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4271">https://www.rfc-editor.org/rfc/rfc4271</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4443">[RFC4443]</dt>
+        <dd>
+<span class="refAuthor">Conta, A.</span>, <span class="refAuthor">Deering, S.</span>, and <span class="refAuthor">M. Gupta, Ed.</span>, <span class="refTitle">"Internet Control Message Protocol (ICMPv6) for the Internet Protocol Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 89</span>, <span class="seriesInfo">RFC 4443</span>, <span class="seriesInfo">DOI 10.17487/RFC4443</span>, <time datetime="2006-03" class="refDate">March 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4443">https://www.rfc-editor.org/rfc/rfc4443</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5398">[RFC5398]</dt>
         <dd>
 <span class="refAuthor">Huston, G.</span>, <span class="refTitle">"Autonomous System (AS) Number Reservation for Documentation Use"</span>, <span class="seriesInfo">RFC 5398</span>, <span class="seriesInfo">DOI 10.17487/RFC5398</span>, <time datetime="2008-12" class="refDate">December 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5398">https://www.rfc-editor.org/rfc/rfc5398</a>&gt;</span>. </dd>
@@ -6549,7 +6554,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-B.1-1.3.1">Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.4">
-            <p id="appendix-B.1-1.4.1">SCMP processing rules: remove unnecessary steps<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.4.1">SCMP: clarify relationship with RFC4443 and remove unnecessary processing rules<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
