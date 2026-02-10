@@ -212,7 +212,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
-**Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. Endpoints can create one with a combination of up to three path segments (an up segment, a core segment, and a down segment).
+**Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. Endpoints can create paths with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
 **Hop Field (HF)**: As they traverse the network, Path-Segment Construction Beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing Interface IDs of the ASes on the forwarding path.
 
@@ -286,11 +286,11 @@ SCION inter-domain routing operates on two levels: within an ISD which is called
 
 The PCBs accumulate cryptographically protected path and forwarding information at an AS level and store this information in the form of *Hop Fields*. Endpoints use information from these Hop Fields to create end-to-end forwarding paths for data packets that carry this information in their headers. This also supports multi-path communication among endpoints.
 
-The creation of an end-to-end forwarding path consists of the following processes:
+The creation of end-to-end forwarding paths consists of the following processes:
 
-1. *Path exploration (or beaconing)*: This is the process where an AS Control Service discovers paths to other ASes. This is described in detail in [](#beaconing).
-2. *Path registration*: This is the process where an AS Control Service selects a few PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
-3. *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. This last step takes place in the data plane. This is described in detail in [](#lookup).
+- *Path exploration (or beaconing)*: This is the process where an AS Control Service discovers paths to other ASes. This is described in detail in [](#beaconing).
+- *Path registration*: This is the process where an AS Control Service selects PCBs, according to defined policies, turns the selected PCBs into path segments, and adds these path segments to the relevant path infrastructure, thus making them available to other ASes. This is described in detail in [](#path-segment-reg).
+- *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. Step (a) is described in detail in [](#lookup) and step (b) is described in {{I-D.dekater-scion-dataplane}} section "Path Construction (Segment Combinations)".
 
 All processes operate concurrently.
 
@@ -390,7 +390,7 @@ For example, the text representation of AS number ff00:0:1 in ISD number 15 is `
 
 ## Bootstrapping ability
 
-SCION uses the following mechanisms to avoid circular dependcencies during bootstrapping, and to provide resiliency after systemic failures:
+SCION uses the following mechanisms to avoid circular dependencies during bootstrapping, and to provide resiliency after systemic failures:
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS Control Service only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path backwards.
@@ -407,7 +407,7 @@ The RPC messages are transported via {{Connect}}'s RPC protocol that carries mes
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
-SCION does not require any domain name resolution for communication.
+SCION's Control Plane does not require any domain name resolution for communication.
 
 
 # Path Exploration or Beaconing {#beaconing}
