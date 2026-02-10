@@ -1644,12 +1644,10 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 ## Processing Rules
 
-Endhosts may use a single process to forward incoming SCMP messages to other processes. For the forwarding process, the following rules apply when processing SCMP messages:
+The following rules apply when processing SCMP messages:
 
-   - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
-   - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
    - Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
-   - In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
+   - Endpoint implementations may use the  original packet in the body of the SCMP error message to pass the SCMP error message to the upper-layer process. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
    - An SCMP error message MUST NOT be originated in response to any of the following:
      - An SCMP error message.
      - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
@@ -2316,6 +2314,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Final read, wording
 - "originating/initiating" PCBs --> consistently use originating
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
+- SCMP processing rules: remove unnecessary steps
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
