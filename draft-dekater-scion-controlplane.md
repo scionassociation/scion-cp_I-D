@@ -1275,7 +1275,7 @@ A `ChainRenewalResponse` message includes the following fields:
 
 **Path registration** is the process where a SCION AS transforms selected PCBs into path segments, and adding these segments to the relevant path databases thereby making them available to other ASes.
 
-As mentioned previously, a non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
+A non-core AS typically receives several PCBs representing several path segments to the core ASes of the ISD the AS belongs to. Out of these PCBs, the non-core AS selects those down path segments through which it wants to be reached, based on AS-specific selection criteria.
 
 The next step is to register the selected down segments with the Control Service of the relevant core ASes in accordance with a process called *intra-ISD path segment registration*. In addition, each core AS Control Service also stores the preferred core path segments to other core ASes during the *core segment registration* process.
 
@@ -1481,7 +1481,7 @@ In general, to improve overall efficiency, the Control Services of all ASes SHOU
 
 ## Behavior of Actors in the Lookup Process
 
-As described above, the source endpoint resolves paths with a sequence of segment requests to the Control Service of the source AS. The Control Service in the source AS either answers directly or forwards these requests to the responsible Control Services of core ASes. In SCION, the instances that handle these segment requests at the Control Services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively.
+The source endpoint resolves paths with a sequence of segment requests to the Control Service of the source AS. The Control Service in the source AS either answers directly or forwards these requests to the responsible Control Services of core ASes. In SCION, the instances that handle these segment requests at the Control Services are called *source AS segment-request handler* and *core AS segment-request handler*, respectively.
 
 This section specifies the behavior of the segment request handlers in the lookup process.
 
