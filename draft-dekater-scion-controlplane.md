@@ -1585,10 +1585,9 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
-* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}.
-* Core ASes that originate new PCBs send them to their neighbors with one-hop paths.
-* Paths to non-neighboring ASes are obtained from PCBs that are received from neighboring ASes.
-* PCB are registered with the Control Service at the origin core AS.
+* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
+* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally. 1
+* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
 * Control Services respond to requests from remote ASes by reversing the path via which the request came.
 
 Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
