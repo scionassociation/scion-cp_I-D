@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 August 2026                                          S. Hitz
+Expires: 15 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                        10 February 2026
+                                                        11 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2026.
+   This Internet-Draft will expire on 15 August 2026.
 
 Copyright Notice
 
@@ -2584,8 +2584,10 @@ Table of Contents
    in [SCMP].  Its security considerations are discussed in
    Section 8.3.4.
 
-   Note that there is not currently a defined mechanism for converting
-   ICMP messages to SCMP messages, or vice-versa.
+   The logic, some message formats, and processing rules are derived
+   from [RFC4443] and adapted for the SCION architecture.  Note that
+   there is not currently a defined mechanism for converting ICMP
+   messages to SCMP messages, or vice-versa.
 
 6.1.  General Format
 
@@ -2670,14 +2672,6 @@ Table of Contents
 
    The following rules apply when processing SCMP messages:
 
-   *  If an SCMP error message of unknown type is received at its
-      destination, it MUST be passed to the upper-layer process that
-      originated the packet that caused the error, if it can be
-      identified.
-
-   *  If an SCMP informational message of unknown type is received, it
-      MUST be silently dropped.
-
    *  Every SCMP error message MUST include as much of the offending
       SCION packet as possible.  The error message packet - including
       the SCION header and all extension headers MUST NOT exceed *1232
@@ -2685,13 +2679,11 @@ Table of Contents
       [I-D.dekater-scion-dataplane] section "Deployment Considerations/
       MTU").
 
-   *  In case the implementation is required to pass an SCMP error
-      message to the upper-layer process, the upper-layer protocol type
-      is extracted from the original packet in the body of the SCMP
-      error message and used to select the appropriate process to handle
-      the error.  In case the upper-layer protocol type cannot be
-      extracted from the SCMP error message body, the SCMP message MUST
-      be silently dropped.
+   *  Endpoint implementations may use the original packet in the body
+      of the SCMP error message to pass the SCMP error message to the
+      upper-layer process.  In case the upper-layer protocol type cannot
+      be extracted from the SCMP error message body, the SCMP message
+      MUST be silently dropped.
 
    *  An SCMP error message MUST NOT be originated in response to any of
       the following:
@@ -3710,6 +3702,12 @@ Table of Contents
               DOI 10.17487/RFC4271, January 2006,
               <https://www.rfc-editor.org/rfc/rfc4271>.
 
+   [RFC4443]  Conta, A., Deering, S., and M. Gupta, Ed., "Internet
+              Control Message Protocol (ICMPv6) for the Internet
+              Protocol Version 6 (IPv6) Specification", STD 89,
+              RFC 4443, DOI 10.17487/RFC4443, March 2006,
+              <https://www.rfc-editor.org/rfc/rfc4443>.
+
    [RFC5398]  Huston, G., "Autonomous System (AS) Number Reservation for
               Documentation Use", RFC 5398, DOI 10.17487/RFC5398,
               December 2008, <https://www.rfc-editor.org/rfc/rfc5398>.
@@ -3918,6 +3916,9 @@ draft-dekater-scion-controlplane-15
 
    *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
       intra-ISD propagation, since steps are the same
+
+   *  SCMP: clarify relationship with RFC4443 and remove unnecessary
+      processing rules
 
 draft-dekater-scion-controlplane-15
 
