@@ -2533,7 +2533,7 @@ Table of Contents
 
    *  Paths to non-neighboring ASes are obtained from neighboring ASes
       which allows multihop paths to be constructed and propagated
-      incrementally. 1
+      incrementally.
 
    *  Constructed multi-hop paths are registered with the Control
       Service at the origin core AS.
