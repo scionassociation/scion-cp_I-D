@@ -4443,19 +4443,16 @@ message SegmentsResponse {
 <p id="section-5-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1">
-          <p id="section-5-2.1.1">Neighboring ASes craft one-hop paths directly. They are described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.1.1">Neighboring ASes craft one-hop paths directly. They are described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.2">
-          <p id="section-5-2.2.1">Core ASes that originate new PCBs send them to their neighbors with one-hop paths.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.2.1">Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally. 1<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.3">
-          <p id="section-5-2.3.1">Paths to non-neighboring ASes are obtained from PCBs that are received from neighboring ASes.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.3.1">Constructed multi-hop paths are registered with the Control Service at the origin core AS.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.4">
-          <p id="section-5-2.4.1">PCB are registered with the Control Service at the origin core AS.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-5-2.5">
-          <p id="section-5-2.5.1">Control Services respond to requests from remote ASes by reversing the path via which the request came.<a href="#section-5-2.5.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.4.1">Control Services respond to requests from remote ASes by reversing the path via which the request came.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-5-3">Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:<a href="#section-5-3" class="pilcrow">¶</a></p>

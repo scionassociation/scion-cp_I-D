@@ -2529,15 +2529,14 @@ Table of Contents
    bootstrapping processes apply:
 
    *  Neighboring ASes craft one-hop paths directly.  They are described
-      in more detail in [I-D.dekater-scion-dataplane].
+      in more detail in [I-D.dekater-scion-dataplane]
 
-   *  Core ASes that originate new PCBs send them to their neighbors
-      with one-hop paths.
+   *  Paths to non-neighboring ASes are obtained from neighboring ASes
+      which allows multihop paths to be constructed and propagated
+      incrementally. 1
 
-   *  Paths to non-neighboring ASes are obtained from PCBs that are
-      received from neighboring ASes.
-
-   *  PCB are registered with the Control Service at the origin core AS.
+   *  Constructed multi-hop paths are registered with the Control
+      Service at the origin core AS.
 
    *  Control Services respond to requests from remote ASes by reversing
       the path via which the request came.
