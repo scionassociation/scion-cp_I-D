@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 10 August 2026                                          S. Hitz
+Expires: 15 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                         6 February 2026
+                                                        11 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2026.
+   This Internet-Draft will expire on 15 August 2026.
 
 Copyright Notice
 
@@ -2531,8 +2531,8 @@ Table of Contents
    *  Neighboring ASes craft one-hop paths directly.  They are described
       in more detail in [I-D.dekater-scion-dataplane].
 
-   *  When the local AS is a core AS: Core ASes craft PCBs and send them
-      to their neighbors with on-hop paths.
+   *  Core ASes that originate new PCBs send them to their neighbors
+      with one-hop paths.
 
    *  Paths to non-neighboring ASes are obtained from PCBs that are
       received from neighboring ASes.
