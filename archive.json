@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-10T00:38:54.182427+00:00",
+  "timestamp": "2026-02-12T00:32:38.654571+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3167,24 +3167,32 @@
       "labels": [],
       "body": "Some minor grammar/polishing feedback from Adrian is [here](https://drive.google.com/file/d/1AieRUAPHg462oD1eo-pr33r2EYhKh_85/view?usp=sharing). \n\nTODO: Implement in conformance with https://datatracker.ietf.org/doc/html/rfc7322 \n",
       "createdAt": "2026-02-09T08:56:46Z",
-      "updatedAt": "2026-02-09T09:18:28Z",
+      "updatedAt": "2026-02-10T08:17:58Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've addressed Adrian's corrections",
+          "createdAt": "2026-02-10T08:17:58Z",
+          "updatedAt": "2026-02-10T08:17:58Z"
+        }
+      ]
     },
     {
       "number": 212,
       "id": "I_kwDOJx2-rs7pXkB6",
       "title": "Replace SCIONLab reference",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/212",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-09T09:05:48Z",
-      "updatedAt": "2026-02-09T12:48:29Z",
-      "closedAt": null,
+      "updatedAt": "2026-02-10T15:15:34Z",
+      "closedAt": "2026-02-10T15:15:12Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -3192,13 +3200,20 @@
           "body": "TODO: can we have a single reference to docs.scion.org? We have several now: \n\n  [SCMP]     Anapaya, ETH Zuerich, and SCION Association, \"SCMP\n              Documentation\", 2025,\n              <https://docs.scion.org/en/latest/protocols/scmp.html>.\n\n   [SIG]      Anapaya, ETH Zuerich, and SCION, \"SCION IP Gateway\n              Documentation\", 2024,\n              <https://docs.scion.org/en/latest/sig.html>.\n\n   [PCBExtensions]\n              Anapaya, ETH, and SCION Association, \"PCB Path Metadata\n              Extension\", 2025,\n              <https://docs.scion.org/en/latest/beacon-metadata.html>.",
           "createdAt": "2026-02-09T12:48:29Z",
           "updatedAt": "2026-02-09T12:48:29Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed with Eliot. As we don't have a direct alternative, we'll just remove it",
+          "createdAt": "2026-02-10T15:15:34Z",
+          "updatedAt": "2026-02-10T15:15:34Z"
         }
       ]
     },
     {
       "number": 213,
       "id": "I_kwDOJx2-rs7paT5v",
-      "title": "Clarify SCMP process",
+      "title": "Clarify SCMP processing rules",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/213",
       "state": "OPEN",
       "author": "tzaeschke",
@@ -3207,7 +3222,7 @@
       "labels": [],
       "body": "Section 6.4:\n```\n* If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.\n\n* If an SCMP informational message of unknown type is received, it MUST be silently dropped.\n\n* [...]\n\n* In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n\n* [...]\n```\n\nThis could benefit from some clarification:\n\n- Ad 1): How can a socket determine if an incoming packet was triggered by an outgoing packet (let alone which process)? Note: the type is unknown which means the header length is unknown so the payload cannot be extracted. Even with payload available, it is unclear how that would work.\n- Ad 1): What is the purpose of forwarding unknown SCMP messages to the application layer? Even for *known* SCMP messages it is not obvious how this is meant to work, should processes know SCMP messages? And for *unknown* SCMP messages? \n- Why are unknown types of Error and Info treated differently?\n- ~Shouldn't there be a process requirement/recommendation about authenticating SCMP messages before processing?~ EDIT:  Section 8.3 states that SCMP authentication is still experimental and not specified here.\n- Ad 4): How does a SCION library know whether it is required to do that?\n\nA partial insight: Point 4) suggests that the upper layer protocol is used to identify upper layer processes. Does this refer to a design where a SCION kernel socket passes traffic on to a UDP kernel socket (here called a \"process\")?\n\nSee also discussion here: https://scionproto.slack.com/archives/C8ADA9CEP/p1770398184282579",
       "createdAt": "2026-02-09T11:49:47Z",
-      "updatedAt": "2026-02-09T16:57:08Z",
+      "updatedAt": "2026-02-11T09:32:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -3223,8 +3238,110 @@
           "body": "My preferred solution would be to remove rules 1), 2), and 4), and keep only 3) and 5). \n\nIf that is too big of a change (so late in the process), #217 offers a small(-ish) change to clarify the applicability of the rules.",
           "createdAt": "2026-02-09T16:57:08Z",
           "updatedAt": "2026-02-09T16:57:08Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> Ad 1): How can a socket determine if an incoming packet was triggered by an outgoing packet (let alone which process)? Note: the type is unknown which means the header length is unknown so the payload cannot be extracted. Even with payload available, it is unclear how that would work.\n\n> Ad 1): What is the purpose of forwarding unknown SCMP messages to the application layer? Even for known SCMP messages it is not obvious how this is meant to work, should processes know SCMP messages? And for unknown SCMP messages?\n\nThese are very good points. We could either change the MUST into a MAY, or remove the point. When the discpatcher was there, how did this work? ",
+          "createdAt": "2026-02-10T16:02:02Z",
+          "updatedAt": "2026-02-10T16:02:02Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "When the dispatcher was there, it worked mostly as described in these points. The dispatcher would determine the originating application from the port in the overlay.\nThe things I don't understand are:\n- How can we ever extract the overlay if the error type is unknown and we therefore cannot know where the payload (originating packet) begins\n- Why or why not an implementation is required to pass an SCMP error message to another application. I assume it is \"required\" if the first point applies or if the error message if of a known type?\n",
+          "createdAt": "2026-02-10T16:23:38Z",
+          "updatedAt": "2026-02-10T16:23:38Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Some background, these bullets were added to the draft in August 2024 https://github.com/scionassociation/scion-dp_I-D/pull/49 (when SCMP was in -dataplane). The text came from docs. It was moved to this draft in #78 and never touched again. The SCMP spec was added to docs back in 2020 here https://github.com/scionproto/scion/pull/3813 and it is mostly untouched since then.\n\nI think we can try to fix it.",
+          "createdAt": "2026-02-10T17:57:56Z",
+          "updatedAt": "2026-02-10T19:23:49Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke proposed this wording via chat: \n\n```\nEndhost implementations MUST respect the following rules when processing SCMP messages:\n\n- If an SCMP message of unknown type received, is it MUST be silently dropped. \n- SCMP traceroute messages must be silently dropped.\n- SCMP echo message SHOULD be answered.\n- Endhosts MUST not generate SCMP error messages -> TBC\n\n\nGeneral behavior of all SCION components (e.g. border routers):\n\n- Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - MUST NOT exceed 1232 bytes in order to fit into the minimum MTU (see [I-D.dekater-scion-dataplane] section \"Deployment Considerations/MTU\").\n\n- An SCMP error message MUST NOT be originated in response to any of the following:\n\n    -    An SCMP error message.\n\n    -    A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.\n\nThe maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.\n\n```\n\nI think it needs some changes:\n\n> - If an SCMP message of unknown type received, is it MUST be silently dropped. \n \nI'm thorn on this one, because in the draft we are only defining some SCMP messages.. What is \"unknown\"? Not in the RFC? Or not defined anywhere? I'd just gloss over this\n\n> - SCMP traceroute messages must be silently dropped.\n \nWell, not if they requested one themselves :) \n\n> - SCMP echo message SHOULD be answered.\n \nThis is already mentioned in the echo message description\n\n\n- Endhosts MUST not generate SCMP error messages -> TBC\n\nHmm why not? Could this change int he future? If we are not sure, I'd not say anything\n\nI proposed some new wording in the PR, perhaps we can start from there and if needed integrate some of your points\n\n\n",
+          "createdAt": "2026-02-10T18:27:32Z",
+          "updatedAt": "2026-02-10T18:28:01Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "P.S. This text mimics [rfc4443 section-2.4](https://datatracker.ietf.org/doc/html/rfc4443#section-2.4 ) \n\n```\nImplementations MUST observe the following rules when processing\n   ICMPv6 messages (from [[RFC-1122](https://datatracker.ietf.org/doc/html/rfc1122)]):\n\n   (a) If an ICMPv6 error message of unknown type is received at its\n       destination, it MUST be passed to the upper-layer process that\n       originated the packet that caused the error, where this can be\n       identified (see [Section 2.4](https://datatracker.ietf.org/doc/html/rfc4443#section-2.4), (d)).\n\n   (b) If an ICMPv6 informational message of unknown type is received,\n       it MUST be silently discarded.\n\n   (c) Every ICMPv6 error message (type < 128) MUST include as much of\n       the IPv6 offending (invoking) packet (the packet that caused the\n       error) as possible without making the error message packet exceed\n       the minimum [IPv6](https://datatracker.ietf.org/doc/html/rfc4443#ref-IPv6) MTU [IPv6].\n\n   (d) In cases where the internet-layer protocol is required to pass an\n       ICMPv6 error message to the upper-layer process, the upper-layer\n       protocol type is extracted from the original packet (contained in\n       the body of the ICMPv6 error message) and used to select the\n       appropriate upper-layer process to handle the error.\n\n       In cases where it is not possible to retrieve the upper-layer\n       protocol type from the ICMPv6 message, the ICMPv6 message is\n       silently dropped after any IPv6-layer processing.  One example of\n       such a case is an ICMPv6 message with an unusually large amount\n       of extension headers that does not have the upper-layer protocol\n       type due to truncation of the original packet to meet the minimum\n       [IPv6](https://datatracker.ietf.org/doc/html/rfc4443#ref-IPv6) MTU [IPv6] limit.  Another example is an ICMPv6 message with\n       an ESP extension header for which it is not possible to decrypt\n       the original packet due to either truncation or the\n       unavailability of the state necessary to decrypt the packet.\n\n   (e) An ICMPv6 error message MUST NOT be originated as a result of\n       receiving the following:\n\n       (e.1) An ICMPv6 error message.\n\n       (e.2) An ICMPv6 redirect message [[IPv6-DISC](https://datatracker.ietf.org/doc/html/rfc4443#ref-IPv6-DISC)].\n\n       (e.3) A packet destined to an IPv6 multicast address.  (There are\n             two exceptions to this rule: (1) the Packet Too Big Message\n             ([Section 3.2](https://datatracker.ietf.org/doc/html/rfc4443#section-3.2)) to allow Path MTU discovery to work for IPv6\n             multicast, and (2) the Parameter Problem Message, Code 2\n             ([Section 3.4](https://datatracker.ietf.org/doc/html/rfc4443#section-3.4)) reporting an unrecognized IPv6 option (see\n             Section 4.2 of [[IPv6](https://datatracker.ietf.org/doc/html/rfc4443#ref-IPv6)]) that has the Option Type highest-\n             order two bits set to 10).\n\n       (e.4) A packet sent as a link-layer multicast (the exceptions\n             from e.3 apply to this case, too).\n\n       (e.5) A packet sent as a link-layer broadcast (the exceptions\n             from e.3 apply to this case, too).\n\n       (e.6) A packet whose source address does not uniquely identify a\n             single node -- e.g., the IPv6 Unspecified Address, an IPv6\n             multicast address, or an address known by the ICMP message\n             originator to be an IPv6 anycast address.",
+          "createdAt": "2026-02-10T18:28:58Z",
+          "updatedAt": "2026-02-10T18:31:08Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Comparing RFC [rfc4443 section-2.4](https://datatracker.ietf.org/doc/html/rfc4443#section-2.4) to the current SCMP section:\n\n<img width=\"1658\" height=\"1134\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/5922e0ba-6d9e-4fdb-9c34-531337249b2c\" />",
+          "createdAt": "2026-02-10T19:09:46Z",
+          "updatedAt": "2026-02-10T19:12:12Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I was not aware that some sections of SCMP follow RFC4443 closely.  If so, we should either \n- Reorganize the section and only keep points relevant to SCION (as Til proposes)\n- remove the section and mention similar considerations to RFC4443 apply (but this would be an extra normative reference)\n- Leave it and add an informative reference to RFC4443",
+          "createdAt": "2026-02-10T19:21:20Z",
+          "updatedAt": "2026-02-10T20:55:20Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Same goes for other SCMP sections (example: section 6.1 [comparison](https://github.com/user-attachments/assets/c5a34683-99fd-4571-9f33-ac1b7b5502ac))\n\nComparison of similar sections is [here](https://drive.google.com/file/d/1JmblpAdprTcpgiLLgHjAsV3fRkfAKsuV/view?usp=drive_link)",
+          "createdAt": "2026-02-10T19:53:43Z",
+          "updatedAt": "2026-02-10T20:50:46Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@oncilla could you give us some input: \n\n- What do you think about @tzaeschke 's questions up [here](https://github.com/scionassociation/scion-cp_I-D/issues/213#issuecomment-3879058397)\n- What processing rules do make sense for you and should be in the draft? (since most of them were taken from RFC4443)?\n",
+          "createdAt": "2026-02-11T09:20:32Z",
+          "updatedAt": "2026-02-11T09:20:32Z"
+        },
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "> [@oncilla](https://github.com/oncilla) could you give us some input:\n> \n> * What do you think about [@tzaeschke](https://github.com/tzaeschke) 's questions up [here](https://github.com/scionassociation/scion-cp_I-D/issues/213#issuecomment-3879058397)\n\nReplied in slack.\n\n> * What processing rules do make sense for you and should be in the draft? (since most of them were taken from RFC4443)?\n\nI think all of them make sense.\n\n",
+          "createdAt": "2026-02-11T09:32:52Z",
+          "updatedAt": "2026-02-11T09:32:52Z"
         }
       ]
+    },
+    {
+      "number": 219,
+      "id": "I_kwDOJx2-rs7pvlKN",
+      "title": "Core beaconing: ensure consistent wording",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/219",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "We use different wording about how core ASes create PCBs: \n\ninitiating\n\n- Control Service of a core AS either initiates PCBs or\n\n\noriginat*\n\n- This means that the originating core AS MUST add its AS entry to each PCB it creates, \n- timestamp: The timestamp indicates the creation time of this PCB. It is set by the originating core AS\n- and many more \n\ncreat*\n\n- For this, the Control Services of core ASes create PCBs\n- The timestamp indicates the creation time of this\n- The core beaconing process creates path segments f\n- This duration is relative to the PCB creation timestamp\n- The core beaconing process creates path segments\n- The Control Service adds the newly created core segments \n- The Control Service of a non-core AS has to register the newly created down segments \n\nNote that the RPC is called `SegmentCreationService`, so there is a plus in using creation\n\nI think a potential approach is to leave \"creat*\" for both core and non-core AS, and be more specific when talking about how Core ASes start beaconing by using originat*",
+      "createdAt": "2026-02-10T13:47:31Z",
+      "updatedAt": "2026-02-10T15:45:54Z",
+      "closedAt": "2026-02-10T15:45:54Z",
+      "comments": []
+    },
+    {
+      "number": 221,
+      "id": "I_kwDOJx2-rs7p-KHf",
+      "title": "Clarify that SegID is random",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/221",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Relates to Adrian's DP review in https://github.com/scionassociation/scion-cp_I-D/issues/211 \n",
+      "createdAt": "2026-02-11T08:42:49Z",
+      "updatedAt": "2026-02-11T08:43:41Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -15043,24 +15160,26 @@
       "id": "PR_kwDOJx2-rs7CAy6_",
       "title": "Chapter 1 review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/208",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Another pass (more detailed).\r\n\r\nBeyond what is proposed here, I'd be in favor of removing the Leaf-AS term, it is hardly used in the document. I propose that in a separate PR.",
+      "body": "Another pass (more detailed).\r\n\r\nBeyond what is proposed here, I'd be in favor of removing the Leaf-AS term, it is hardly used in the document. I propose that in a separate PR.\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-section-1/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-06T14:31:02Z",
-      "updatedAt": "2026-02-06T15:26:18Z",
+      "updatedAt": "2026-02-10T17:27:10Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-section-1",
-      "headRefOid": "baf7e3ea5abf6ff6130ca4a7e3917e08708c3388",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "418fbd5306a286dd94712d804ced1683b0c57ce4",
+      "closedAt": "2026-02-10T17:27:10Z",
+      "mergedAt": "2026-02-10T17:27:10Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "4faf41d2c512578cc556f66616dbac6cec5f771c"
+      },
       "comments": [],
       "reviews": [
         {
@@ -15100,6 +15219,112 @@
               "updatedAt": "2026-02-06T14:38:57Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hNrqP",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T11:45:42Z",
+          "updatedAt": "2026-02-10T11:45:42Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "LGTM ",
+              "createdAt": "2026-02-10T11:45:42Z",
+              "updatedAt": "2026-02-10T11:45:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hNs-i",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T11:47:02Z",
+          "updatedAt": "2026-02-10T11:47:02Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "I think you mixed up the references, it should be:\r\n```suggestion\r\n- *Path resolution*: This is the process of actually creating an end-to-end forwarding path from the source endpoint to the destination. For this, an endpoint performs (a) a path lookup step to obtain path segments, and (b) a path combination step to combine the forwarding path from the segments. Step (a) is described in detail in [](#lookup) and step (b) is described in {{I-D.dekater-scion-dataplane}} section \"Path Construction (Segment Combinations)\".\r\n```",
+              "createdAt": "2026-02-10T11:47:02Z",
+              "updatedAt": "2026-02-10T11:47:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hNtnX",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T11:47:41Z",
+          "updatedAt": "2026-02-10T11:47:41Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Good point, LGTM ",
+              "createdAt": "2026-02-10T11:47:41Z",
+              "updatedAt": "2026-02-10T11:47:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hNuNp",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "I proposed a minor change, apart from that LGTM",
+          "createdAt": "2026-02-10T11:48:17Z",
+          "updatedAt": "2026-02-10T11:48:17Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hNusS",
+          "commit": {
+            "abbreviatedOid": "baf7e3e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T11:48:47Z",
+          "updatedAt": "2026-02-10T11:48:47Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Makes sense",
+              "createdAt": "2026-02-10T11:48:47Z",
+              "updatedAt": "2026-02-10T11:48:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hVXcv",
+          "commit": {
+            "abbreviatedOid": "418fbd5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-10T17:26:56Z",
+          "updatedAt": "2026-02-10T17:26:56Z",
+          "comments": []
         }
       ]
     },
@@ -15108,24 +15333,26 @@
       "id": "PR_kwDOJx2-rs7CBhRg",
       "title": "Chapter 2 review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/209",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.",
+      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-section-2/draft-dekater-scion-controlplane.txt)\r\nResolves #219 ",
       "createdAt": "2026-02-06T15:27:12Z",
-      "updatedAt": "2026-02-06T16:27:17Z",
+      "updatedAt": "2026-02-10T15:45:53Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "baseRefOid": "d3e8945d8523a604355af6b7ebdbb829438f0011",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-section-2",
-      "headRefOid": "2f9df57a743fec83890b74433946944340bbb74b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "057ae44c8b7d5ec1fea284ca80b934e406b6c8df",
+      "closedAt": "2026-02-10T15:45:53Z",
+      "mergedAt": "2026-02-10T15:45:53Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "ed785be67fa38a27533d7d96ab4b6a64566a3add"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -15167,6 +15394,108 @@
               "updatedAt": "2026-02-06T15:30:41Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hN2Nf",
+          "commit": {
+            "abbreviatedOid": "2f9df57"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T11:56:08Z",
+          "updatedAt": "2026-02-10T11:56:08Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Where does this wording come from?\r\nThis sentence was introduced in -00 back [here](https://github.com/scionassociation/scion-cp_I-D/commit/d427570b5b9d0ed0f7155e895bb87e185dec9688#diff-77486f1193fc52b885e0bf5dc01dd62de87526bc5631beff5ace24beb1adb7d6R242). The wording comes from the  [scion docs](https://docs.scion.org/en/latest/control-plane.html#introduction), it was introduced [here](https://github.com/scionproto/scion/commit/df0d6673fe78592d6bdcbd5d5b5f311a72b11424) by Matthias (August 2023)\r\n> In the latter case, the PCBs are sent over policy-compliant paths to discover multiple paths between any pair of core ASes. ",
+              "createdAt": "2026-02-10T11:56:08Z",
+              "updatedAt": "2026-02-10T11:56:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hN-Y9",
+          "commit": {
+            "abbreviatedOid": "2f9df57"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T12:02:51Z",
+          "updatedAt": "2026-02-10T12:02:52Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "I think we can remove this sentence, since we already mention policies a bit later in [2.1.2. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-2.1.2)[Appending Entries to a PCB](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#name-appending-entries-to-a-pcb)",
+              "createdAt": "2026-02-10T12:02:51Z",
+              "updatedAt": "2026-02-10T12:02:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hOADx",
+          "commit": {
+            "abbreviatedOid": "584fc70"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "@tzaeschke thank you for your feedback. I think unifying the paragraph made a lot of sense, but this required some more work, which I did to clarify the difference between core and non-core propagation. \r\n\r\nCould you please review my proposed changes? I Approve the PR, so if you like them, you can just click merge\r\n\r\nP.S. Wording on origination of PCBs was not consistent, I tried to address this #219 ",
+          "createdAt": "2026-02-10T12:04:21Z",
+          "updatedAt": "2026-02-10T14:35:17Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\n- propagates each selected PCB to the selected egress interface(s) associated with it. Selection policies are described in [](#path-segment-prop).\n```\n\nSince we removed it a few lines above, I'd be more explicit here",
+              "createdAt": "2026-02-10T12:04:21Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "I proposed a slight different wording there, resolving this discussion",
+              "createdAt": "2026-02-10T12:04:47Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "GitHub shows the diff weird. All I did was to rename \n> This is described  \n\nWith \n> Selection policies are described\n",
+              "createdAt": "2026-02-10T12:06:37Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "Yes, it makes sense",
+              "createdAt": "2026-02-10T12:11:13Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "Good point, this distinction comes from -00 ([here](https://github.com/scionassociation/scion-cp_I-D/commit/b652927759ca8f6c8767cc9e3ef44a71b0702f23#diff-77486f1193fc52b885e0bf5dc01dd62de87526bc5631beff5ace24beb1adb7d6R905)). The two versions had only a few differences: \r\n\r\n1. Peering links were only mentioned in intra-ISD beaconing.  I think this is not necessary, as the specs leaves peering links open between any AS\r\n\r\n2. Adding the ingress interface ID was only mentioned in intra-ISD beaconing. The actual difference here is that interface ID MUST be set to 0 and we clarify this  later in [2.2.2.5. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-2.2.2.5)[Hop Field](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#name-hop-field)\r\n    >  Note: The core AS initiating a PCB MUST set the ingress interface identifier to the \"unspecified\" value (see [[I-D.dekater-scion-dataplane](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#I-D.dekater-scion-dataplane)] section \"Terminology\"). \r\n    \r\n I therefore think we can unify the sections",
+              "createdAt": "2026-02-10T12:26:37Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "For the records, difference between the two sections: \r\n<img width=\"1639\" height=\"455\" alt=\"Screenshot 2026-02-10 at 14 21 02\" src=\"https://github.com/user-attachments/assets/f7cc3946-acfd-422d-8591-c8d8b86a84f2\" />\r\n",
+              "createdAt": "2026-02-10T13:21:16Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "Since this diff was showing weird, I committed the change directly from my laptop",
+              "createdAt": "2026-02-10T13:26:05Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "I unified the sections and directly removed the redundant subsection\r\n",
+              "createdAt": "2026-02-10T13:31:09Z",
+              "updatedAt": "2026-02-10T14:34:21Z"
+            }
+          ]
         }
       ]
     },
@@ -15175,24 +15504,26 @@
       "id": "PR_kwDOJx2-rs7CCqar",
       "title": "Chapter 3-5 review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/210",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.",
+      "body": "Another pass (more detailed).\r\nThanks to @FR4NK-W for discussion on this one.\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-chapter-3/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-06T16:55:03Z",
-      "updatedAt": "2026-02-06T16:56:34Z",
+      "updatedAt": "2026-02-11T12:34:13Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-chapter-3",
-      "headRefOid": "2ab7e2f1b4a4274a70980c20cb3db51fb199909a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "b16e83f3eed5c784458b599c9b1c89bbca8908a9",
+      "closedAt": "2026-02-11T12:34:02Z",
+      "mergedAt": "2026-02-11T12:34:01Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "cf4a55a0e3623cbe01b6e4b8a3a4de3d6acb951e"
+      },
       "comments": [],
       "reviews": [
         {
@@ -15214,6 +15545,179 @@
               "updatedAt": "2026-02-06T16:56:34Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hRxjD",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "See my comment - if it is easier, happy to talk directly",
+          "createdAt": "2026-02-10T14:59:09Z",
+          "updatedAt": "2026-02-10T15:05:42Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "> * When the local AS is a core AS: Core ASes craft PCBs and send them to their neighbors with on-hop paths. \r\n\r\nThis step is not really about service discovery, rather about PCB propagation. Indeed, there is already a section about this in [2.3.5. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-2.3.5)[Propagation of Selected PCBs](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#name-propagation-of-selected-pcb): \r\n\r\n> To bootstrap initial communication with a neighboring beacon service, ASes use one-hop paths. ...\r\n\r\nThe same concept is also in [1.6. ](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-1.6)[Bootstrapping ability](https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#name-bootstrapping-ability) \r\n\r\nI think one-hop paths are already covered by the previous bullet (that generically mentions one-hop paths, for both core and non-core ASes).\r\nI'm not sure if there is something special for service discovery in core beaconing, so I don't think we need this extra line. Or perhaps I'm missing something?\r\n",
+              "createdAt": "2026-02-10T14:59:09Z",
+              "updatedAt": "2026-02-10T15:05:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hTObh",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T15:55:28Z",
+          "updatedAt": "2026-02-10T15:55:29Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "In the following bullet I changes \"Paths ... are obtained from neighboring ASes\" to \"Paths ... are obtained from PCBs ...\"\n\nBy inserting the bullet, I wanted to explain where the PCBs come from. We can remove it when you think it is obvious.",
+              "createdAt": "2026-02-10T15:55:29Z",
+              "updatedAt": "2026-02-10T15:55:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hVduc",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T17:31:55Z",
+          "updatedAt": "2026-02-10T17:31:55Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "> In the following bullet I changes \"Paths ... are obtained from neighboring ASes\" to \"Paths ... are obtained from PCBs ...\"\r\n\r\nThis bullet is ok I like your wording. Thank you for proposing it. The bullet that I feel not necessary is the one above: \r\n> When the local AS is a core AS: Core ASes craft PCBs and send them to their neighbors with on-hop paths. \r\n\r\n",
+              "createdAt": "2026-02-10T17:31:55Z",
+              "updatedAt": "2026-02-10T17:31:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hg6oO",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T08:43:03Z",
+          "updatedAt": "2026-02-11T08:43:04Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Yes, I introduced it because of the change to the following bullet, i.e. to explain where the PCBs come from; I felt this step is missing, we rely on PCBs, but we don't explain where they are sent during the bootstrapping process. \r\n\r\nIf you feel it is unnecessary, it can be removed.",
+              "createdAt": "2026-02-11T08:43:04Z",
+              "updatedAt": "2026-02-11T08:43:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hiDd8",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T09:50:08Z",
+          "updatedAt": "2026-02-11T09:50:09Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\n* Core ASes that originate new PCBs send them to their neighbors with one-hop paths.\r\n```\r\nAs discussed with @tzaeschke ",
+              "createdAt": "2026-02-11T09:50:08Z",
+              "updatedAt": "2026-02-11T09:50:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hiN5y",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T09:59:52Z",
+          "updatedAt": "2026-02-11T09:59:52Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "JFYI I just saw that Sam also proposed a similar change in https://github.com/scionassociation/scion-cp_I-D/pull/220/changes ",
+              "createdAt": "2026-02-11T09:59:52Z",
+              "updatedAt": "2026-02-11T09:59:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hjLbJ",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T10:54:03Z",
+          "updatedAt": "2026-02-11T10:54:03Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "I think Sam proposal is more complete, I tried to propose a merge of the two proposals [there.](https://github.com/scionassociation/scion-cp_I-D/pull/220#discussion_r2792605804)\r\n",
+              "createdAt": "2026-02-11T10:54:03Z",
+              "updatedAt": "2026-02-11T10:54:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hkiSH",
+          "commit": {
+            "abbreviatedOid": "2ab7e2f"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T12:16:56Z",
+          "updatedAt": "2026-02-11T12:16:56Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Sam\u00b4s proposal is fine.",
+              "createdAt": "2026-02-11T12:16:56Z",
+              "updatedAt": "2026-02-11T12:16:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hk2gd",
+          "commit": {
+            "abbreviatedOid": "b16e83f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-11T12:33:55Z",
+          "updatedAt": "2026-02-11T12:33:55Z",
+          "comments": []
         }
       ]
     },
@@ -15222,25 +15726,35 @@
       "id": "PR_kwDOJx2-rs7CebLp",
       "title": "Chapter 8 Review",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/214",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-09T12:53:15Z",
-      "updatedAt": "2026-02-09T12:54:15Z",
+      "updatedAt": "2026-02-10T17:51:12Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-chapter-8",
-      "headRefOid": "0c8b403bb38ba48d396ea64c4a5f6249646fc92d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "6ad755c5c100d4dd7cf7e43898494b1f166311f8",
+      "closedAt": "2026-02-10T17:51:11Z",
+      "mergedAt": "2026-02-10T17:51:11Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2a880ee3263eb9e0d3f99176a16dbc2316547d15"
+      },
+      "comments": [
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM, please merge if you are happy.",
+          "createdAt": "2026-02-10T16:00:16Z",
+          "updatedAt": "2026-02-10T16:00:16Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOJx2-rs7g5Xzm",
@@ -15261,6 +15775,65 @@
               "updatedAt": "2026-02-09T12:54:15Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hS9sk",
+          "commit": {
+            "abbreviatedOid": "0c8b403"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "LGTM  except I proposed a slightly different wording. What do you think?",
+          "createdAt": "2026-02-10T15:45:24Z",
+          "updatedAt": "2026-02-10T15:46:24Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "How about this wording: \n\n```suggestion\nThe first risk to the beaconing process comes from an adversary controlling one or more core ASes in an ISD. Non-core ASes depend on core ASes for beaconing. If an adversary compromises all upstream core ASes of a target AS and suppresses PCB propagation, the discovery of new paths for will halt. Although the downstream AS will no longer receive new PCBs, previously discovered and still valid paths remain usable for data plane forwarding until they expire. This is an unlikely attack scenario, as it would require compromise of all core ASes of a given downstream AS to be effective.\n```",
+              "createdAt": "2026-02-10T15:45:25Z",
+              "updatedAt": "2026-02-10T15:46:24Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "Good point. I just proposed a slightly different wording. ",
+              "createdAt": "2026-02-10T15:45:44Z",
+              "updatedAt": "2026-02-10T15:46:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hTTWv",
+          "commit": {
+            "abbreviatedOid": "0c8b403"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-10T15:58:22Z",
+          "updatedAt": "2026-02-10T15:58:22Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "LGTM",
+              "createdAt": "2026-02-10T15:58:22Z",
+              "updatedAt": "2026-02-10T15:58:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hV3Dv",
+          "commit": {
+            "abbreviatedOid": "6ad755c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-10T17:51:05Z",
+          "updatedAt": "2026-02-10T17:51:05Z",
+          "comments": []
         }
       ]
     },
@@ -15269,24 +15842,26 @@
       "id": "PR_kwDOJx2-rs7CekKh",
       "title": "Remove SCIONlab?",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/215",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "SCIONlab appears to be phased out, registration is disabled.\r\n\r\nMaybe we should not advertise it anymore and remove it from the spec?\r\n\r\nresolves #212 ",
       "createdAt": "2026-02-09T13:03:56Z",
-      "updatedAt": "2026-02-09T22:40:39Z",
+      "updatedAt": "2026-02-10T15:15:11Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scionlab",
       "headRefOid": "e8f09b7aff610b0ac4b16f455794cc3a6b894ce1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-10T15:15:10Z",
+      "mergedAt": "2026-02-10T15:15:10Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "d3e8945d8523a604355af6b7ebdbb829438f0011"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -15294,29 +15869,149 @@
           "body": "One reviewer back then asked about a reference to where to test SCION. I'll circle back with Eliot on this, before removing  the section ",
           "createdAt": "2026-02-09T22:40:39Z",
           "updatedAt": "2026-02-09T22:40:39Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> One reviewer back then asked about a reference to where to test SCION.\r\n\r\nAre you sure he wanted that to be added to the spec? It feels like an odd addition to me...?",
+          "createdAt": "2026-02-10T09:28:49Z",
+          "updatedAt": "2026-02-10T09:28:49Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7hSLzG",
+          "commit": {
+            "abbreviatedOid": "e8f09b7"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Discussed with Eliot. Fine to remove it",
+          "createdAt": "2026-02-10T15:15:02Z",
+          "updatedAt": "2026-02-10T15:15:02Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 216,
       "id": "PR_kwDOJx2-rs7CetGe",
       "title": "Remove Leaf ASes",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/216",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The term `leaf-AS` is hardly used in the document and it seems weird that it deserves its own definition.\r\n\r\nI propose to remove it from the terminology section.\r\n\r\nThis PR also removes it from the rest of the document, but it could be left in place. When talking about graphs in computer science, the term \"leaf\" should probably not require a definition?",
       "createdAt": "2026-02-09T13:13:39Z",
-      "updatedAt": "2026-02-09T13:13:40Z",
+      "updatedAt": "2026-02-10T15:14:21Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-leaf-as",
-      "headRefOid": "7abb19109c816cc4c7698b227f405a560ebf9b9d",
+      "headRefOid": "63f0f7cc487ecb72095ccbe5afc790f182518024",
+      "closedAt": "2026-02-10T15:14:18Z",
+      "mergedAt": "2026-02-10T15:14:18Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "ffc2c7643a7acf01f605a30972c6e9ab9e5e15ce"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7hSKbb",
+          "commit": {
+            "abbreviatedOid": "7abb191"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I also thought about removing them a while ago. Let's do it!",
+          "createdAt": "2026-02-10T15:14:10Z",
+          "updatedAt": "2026-02-10T15:14:10Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 217,
+      "id": "PR_kwDOJx2-rs7Ch1Ed",
+      "title": "Clarify SCMP processing",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/217",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This aims to solve #213.\r\n\r\nMy preferred solution would be to remove rules 1), 2), and 4), and keep only 3) and 5).\r\nIf that is too big of a change (so late in the process), this PR offers a smallish change to clarify the applicability of the rules.",
+      "createdAt": "2026-02-09T16:55:28Z",
+      "updatedAt": "2026-02-11T12:04:24Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "2a880ee3263eb9e0d3f99176a16dbc2316547d15",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tz-scmp",
+      "headRefOid": "62984bbe2a9bb15e1913b1a6bbe13b1c6881a59a",
+      "closedAt": "2026-02-11T07:01:17Z",
+      "mergedAt": "2026-02-11T07:01:17Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "f5166cf404516278fac5f6d84accab749341ce50"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I proposed some new wording removing the offending lines Til pointed to, but I am still not convinced. I posted some thoughts in the issue\r\n",
+          "createdAt": "2026-02-10T18:32:32Z",
+          "updatedAt": "2026-02-10T18:32:32Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@tzaeschke I reverted this, let's continue doing changes on the same branch in #223 ",
+          "createdAt": "2026-02-11T12:04:12Z",
+          "updatedAt": "2026-02-11T12:04:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7hfm05",
+          "commit": {
+            "abbreviatedOid": "62984bb"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-11T07:01:07Z",
+          "updatedAt": "2026-02-11T07:01:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 218,
+      "id": "PR_kwDOJx2-rs7CpdCE",
+      "title": "Adrian corrections",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/218",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-10T05:57:24Z",
+      "updatedAt": "2026-02-10T05:57:24Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "Adrian-Perrig-changes",
+      "headRefOid": "f01a071ce028bfbe5c2edb84d341ba1fee9d8e89",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -15325,24 +16020,139 @@
       "reviews": []
     },
     {
-      "number": 217,
-      "id": "PR_kwDOJx2-rs7Ch1Ed",
-      "title": "Clarify SCMP processing",
-      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/217",
+      "number": 220,
+      "id": "PR_kwDOJx2-rs7C8KKh",
+      "title": "minor editing pass",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/220",
       "state": "OPEN",
-      "author": "tzaeschke",
+      "author": "shitz",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "This aims to solve #213.\r\n\r\nMy preferred solution would be to remove rules 1), 2), and 4), and keep only 3) and 5).\r\nIf that is too big of a change (so late in the process), this PR offers a smallish change to clarify the applicability of the rules.",
-      "createdAt": "2026-02-09T16:55:28Z",
-      "updatedAt": "2026-02-09T16:57:35Z",
+      "body": "- Reworded the control service bootstrapping process\r\n- Made usage of `Control Service` (instead of `control service`) consistent\r\n- Other minor wording changes.",
+      "createdAt": "2026-02-11T08:20:26Z",
+      "updatedAt": "2026-02-11T12:14:22Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "baseRefOid": "f5166cf404516278fac5f6d84accab749341ce50",
+      "headRepository": "shitz/scion-cp_I-D",
+      "headRefName": "small_editing_pass",
+      "headRefOid": "92041db6726638c65cbe644bb483561df7b5250f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Compiled [diff with main](https://author-tools.ietf.org/80b10596-2498-4acd-8fed-ccdef5636922) - not updated since this branch is in another repo",
+          "createdAt": "2026-02-11T10:14:46Z",
+          "updatedAt": "2026-02-11T10:15:25Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7hin-U",
+          "commit": {
+            "abbreviatedOid": "92041db"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks a lot, looks good! I just proposed two small wording changes below. What do you think? ",
+          "createdAt": "2026-02-11T10:22:02Z",
+          "updatedAt": "2026-02-11T10:53:02Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\n- `as_entries`: Contains the `ASEntry` component of all ASes on the path segment represented by this PCB. The order of the AS entries MUST correspond to the path traversal order in the PCB propagation direction.\n```\nI would clarify this. Also, we use this wording about direction quite a lot.",
+              "createdAt": "2026-02-11T10:22:02Z",
+              "updatedAt": "2026-02-11T10:53:02Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "JFYI @tzaeschke was also proposing a similar change in #210. \n\nThis is what is currently in the other PR (pasting here just to see the diff, not to be applied)\n```suggestion\n* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}.\n* Paths to non-neighboring ASes are obtained from PCBs that are received from neighboring ASes.\n* PCB are registered with the Control Service at the origin core AS.\n* Core ASes that originate new PCBs send them to their neighbors with one-hop paths.\n```",
+              "createdAt": "2026-02-11T10:24:29Z",
+              "updatedAt": "2026-02-11T10:53:02Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "I like your wording. How about just including this minor point  that was being discussed in #210 with @tzaeschke) ?  Feel free to add the change below:\r\n```suggestion\r\n* Neighboring ASes communicate using one-hop paths, as described in {{I-D.dekater-scion-dataplane}}. Core ASes leverage this mechanism when originating new PCBs.\r\n* Paths to non-neighboring ASes are discovered and constructed incrementally by propagating beacons received from neighbors via these one-hop paths.\r\n* The resulting multi-hop path segments are registered with the Control Service of the origin Core AS (see {{intra-reg}}).\r\n* Control Services respond to requests from remote ASes by reversing the path carried in the request packet.\r\n```",
+              "createdAt": "2026-02-11T10:50:41Z",
+              "updatedAt": "2026-02-11T10:53:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7hkemv",
+          "commit": {
+            "abbreviatedOid": "92041db"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-11T12:14:21Z",
+          "updatedAt": "2026-02-11T12:14:22Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "```suggestion\n* Paths to non-neighboring ASes are constructed from PCBs that are received from neighbors via these one-hop paths.\n```\nI'm trying to clarify that paths are derived from incoming beacons, not from beacons that the AS propagates (the phrasing seems ambiguous to me).",
+              "createdAt": "2026-02-11T12:14:21Z",
+              "updatedAt": "2026-02-11T12:14:54Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 222,
+      "id": "PR_kwDOJx2-rs7C_Bjl",
+      "title": "Revert \"Clarify SCMP processing (#217)\"",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/222",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This reverts commit f5166cf404516278fac5f6d84accab749341ce50.",
+      "createdAt": "2026-02-11T12:01:16Z",
+      "updatedAt": "2026-02-11T12:01:38Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f5166cf404516278fac5f6d84accab749341ce50",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "revert-scmp",
+      "headRefOid": "fa7f4142432cdb6c0b8c8ccb7843fbabe9e4e827",
+      "closedAt": "2026-02-11T12:01:32Z",
+      "mergedAt": "2026-02-11T12:01:32Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "347586e026e87a83ac99e2938216ab62d23f01af"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 223,
+      "id": "PR_kwDOJx2-rs7C_Cly",
+      "title": "Clarify SCMP processing (second PR)",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/223",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Includes commits that were in #217 ",
+      "createdAt": "2026-02-11T12:02:28Z",
+      "updatedAt": "2026-02-11T12:03:26Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "347586e026e87a83ac99e2938216ab62d23f01af",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scmp",
-      "headRefOid": "f91bc5eb601d7d1b519cc6591d7cd973d018dcfd",
+      "headRefOid": "62984bbe2a9bb15e1913b1a6bbe13b1c6881a59a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
