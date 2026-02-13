@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 August 2026                                          S. Hitz
+Expires: 17 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                        10 February 2026
+                                                        13 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2026.
+   This Internet-Draft will expire on 17 August 2026.
 
 Copyright Notice
 
@@ -1979,11 +1979,11 @@ Table of Contents
    selected PCBs into path segments, and adding these segments to the
    relevant path databases thereby making them available to other ASes.
 
-   As mentioned previously, a non-core AS typically receives several
-   PCBs representing several path segments to the core ASes of the ISD
-   the AS belongs to.  Out of these PCBs, the non-core AS selects those
-   down path segments through which it wants to be reached, based on AS-
-   specific selection criteria.
+   A non-core AS typically receives several PCBs representing several
+   path segments to the core ASes of the ISD the AS belongs to.  Out of
+   these PCBs, the non-core AS selects those down path segments through
+   which it wants to be reached, based on AS-specific selection
+   criteria.
 
    The next step is to register the selected down segments with the
    Control Service of the relevant core ASes in accordance with a
@@ -2370,13 +2370,13 @@ Table of Contents
 
 4.2.  Behavior of Actors in the Lookup Process
 
-   As described above, the source endpoint resolves paths with a
-   sequence of segment requests to the Control Service of the source AS.
-   The Control Service in the source AS either answers directly or
-   forwards these requests to the responsible Control Services of core
-   ASes.  In SCION, the instances that handle these segment requests at
-   the Control Services are called _source AS segment-request handler_
-   and _core AS segment-request handler_, respectively.
+   The source endpoint resolves paths with a sequence of segment
+   requests to the Control Service of the source AS.  The Control
+   Service in the source AS either answers directly or forwards these
+   requests to the responsible Control Services of core ASes.  In SCION,
+   the instances that handle these segment requests at the Control
+   Services are called _source AS segment-request handler_ and _core AS
+   segment-request handler_, respectively.
 
    This section specifies the behavior of the segment request handlers
    in the lookup process.
