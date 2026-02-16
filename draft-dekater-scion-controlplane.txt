@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 August 2026                                          S. Hitz
+Expires: 20 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                        11 February 2026
+                                                        16 February 2026
 
 
                           SCION Control Plane
@@ -29,8 +29,8 @@ Abstract
    combined into forwarding paths to transmit packets in the data plane.
    This document describes mechanisms of path exploration through
    beaconing and path registration.  In addition, it describes how
-   Endpoints construct end-to-end paths from a set of possible path
-   segments through a path lookup process.
+   Endpoints construct end-to-end paths by combining path segments
+   obtained through a path lookup process.
 
    This document contains new approaches to secure path aware
    networking.  It is not an Internet Standard, has not received any
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2026.
+   This Internet-Draft will expire on 20 August 2026.
 
 Copyright Notice
 
@@ -1004,7 +1004,9 @@ Table of Contents
       specified in detail in Section 2.2.1.
 
    *  as_entries: Contains the ASEntry component of all ASes on the path
-      segment represented by this PCB.
+      segment represented by this PCB.  The order of the AS entries MUST
+      correspond to the path traversal order in the PCB propagation
+      direction.
 
    *  ASEntry: The ASEntry component contains the complete path
       information of a specific AS that is part of the path segment
@@ -1273,8 +1275,8 @@ Table of Contents
 
    *  mtu: The maximum transmission unit (MTU) in bytes that is
       supported by all intra-domain links within the current AS.  This
-      value is set by the control service when adding the AS entry to
-      the beacon.  How the control service obtains this information is
+      value is set by the Control Service when adding the AS entry to
+      the beacon.  How the Control Service obtains this information is
       implementation dependent, but current practice is to make it a
       configuration item.
 
@@ -1318,7 +1320,7 @@ Table of Contents
       ingress interface (in beaconing direction) of the hop being
       described.  The MTU of paths constructed from the containing
       beacon is necessarily less than or equal to this value.  How the
-      control service obtains the MTU of an inter-AS link is
+      Control Service obtains the MTU of an inter-AS link is
       implementation dependent.  It may be discovered or configured by
       operators, but current practice to make it a configuration item.
       Path MTU is further discussed in Section 3.4.
@@ -1363,8 +1365,8 @@ Table of Contents
 
    *  peer_mtu: Specifies the maximum transmission unit (MTU) of the
       peering link being described.  The MTU of paths via such link is
-      necessarily less than or equal to this value.  How the control
-      service obtains the MTU of an inter-AS link is implementation
+      necessarily less than or equal to this value.  How the Control
+      Service obtains the MTU of an inter-AS link is implementation
       dependent.  It may be discovered or configured, but current
       practice is to make it a configuration item.
 
@@ -1735,7 +1737,7 @@ Table of Contents
    PCBs are propagated in batches to each neighboring AS at a fixed
    frequency known as the _propagation interval_ which happens for both
    intra-ISD beaconing (Section 7.4.1) and core beaconing
-   (Section 7.4.2).  At each propagation event, the AS control service
+   (Section 7.4.2).  At each propagation event, the AS Control Service
    selects a set of the best PCBs from the candidates in the Beacon
    Store according to the AS's selection policy.
 
@@ -1765,9 +1767,8 @@ Table of Contents
    Control Service should have a suitable pre-selection of candidate
    PCBs in place in order to keep the Beacon Store capacity limited.
 
-   *  The _propagation interval_ should be at least "5" (seconds) for
-      intra-ISD beaconing and at least "60" (seconds) for core
-      beaconing.
+   *  The _propagation interval_ should be at least 5 seconds for intra-
+      ISD beaconing and at least 60 seconds for core beaconing.
 
    Note that to ensure establish quick connectivity, an AS Control
    Service MAY attempt to forward a PCB more frequently ("fast
@@ -2497,18 +2498,19 @@ Table of Contents
    itself the source of path segment information, the following
    bootstrapping processes apply:
 
-   *  Neighboring ASes craft one-hop paths directly.  They are described
-      in more detail in [I-D.dekater-scion-dataplane]
+   *  Neighboring ASes communicate using one-hop paths, as described in
+      [I-D.dekater-scion-dataplane].  Core ASes leverage this mechanism
+      when originating new PCBs.
 
-   *  Paths to non-neighboring ASes are obtained from neighboring ASes
-      which allows multihop paths to be constructed and propagated
-      incrementally.
+   *  Paths to non-neighboring ASes are discovered and constructed
+      incrementally by propagating beacons received from neighbors via
+      these one-hop paths.
 
-   *  Constructed multi-hop paths are registered with the Control
-      Service at the origin core AS.
+   *  The resulting multi-hop path segments are registered with the
+      Control Service of the origin Core AS (see Section 3.1).
 
    *  Control Services respond to requests from remote ASes by reversing
-      the path via which the request came.
+      the path carried in the request packet.
 
    Clients find the relevant Control Service at a given AS by resolving
    a 'service address' as follows:
@@ -3043,7 +3045,7 @@ Table of Contents
    *  For routers (to enable correlation with link states): state of
       configured links (core, child, parent).
 
-   *  For any control service:
+   *  For any Control Service:
 
       -  Fraction of path lookups served successfully (see Section 4).
 
@@ -3111,7 +3113,7 @@ Table of Contents
 
    Each administrator of a SCION Control Service is responsible for
    maintaining coarse time synchronization with SCION routers within the
-   AS, neighbor ASes control services, and endpoints within the AS.  In
+   AS, neighbor ASes Control Services, and endpoints within the AS.  In
    typical deployments, clock deviations on the order of several minutes
    are acceptable.
 
@@ -3516,7 +3518,7 @@ Table of Contents
    *Rogue SCMP Error Messages*
    SCMP External Interface Down (Section 6.5.2) and Internal
    Connectivity Down (Section 6.5.3) can potentially be abused by an
-   attacker to to disrupt forwarding of information and/or force the
+   attacker to disrupt forwarding of information and/or force the
    traffic through a different paths.  Endpoints should therefore
    consider them weak hints and apply heuristics to detect fraudulent
    SCMP messages (e.g. by actively probing whether the affected path is
@@ -3533,14 +3535,14 @@ Table of Contents
    Section 7.3.  An adversary that significantly alters the system time
    of a component can disrupt SCION operations:
 
-   *  A control service instance: its beaconing process may halt as it
+   *  A Control Service instance: its beaconing process may halt as it
       cannot verify the validity of received PCBs (see Section 2.2.4) or
       correctly add timestamps to propagated PCBs (see Section 2.1.2).
 
    *  An endpoint: it may fail to verify path segments during path
       lookup (see Section 4.1).
 
-   *  A router: packets may be dropped ahead of the control service
+   *  A router: packets may be dropped ahead of the Control Service
       intended expiration time (see Section 2.2.2.5).
 
    *  A Certificate Authority (see [I-D.dekater-scion-pki]): it may

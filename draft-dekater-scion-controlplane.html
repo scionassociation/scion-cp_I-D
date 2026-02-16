@@ -10,7 +10,7 @@
 <meta content="Samuel Hitz" name="author">
 <meta content="
        This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths. The SCION Control Plane is responsible for discovering these paths and making them available to the endpoints. 
-       The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process. 
+       The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths by combining path segments obtained through a path lookup process. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
@@ -169,7 +169,7 @@
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -177,7 +177,8 @@
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 }
 
 @font-face {
@@ -1052,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 15 August 2026</td>
+<td class="center">Expires 20 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-11" class="published">11 February 2026</time>
+<time datetime="2026-02-16" class="published">16 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-15">15 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-20">20 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths. The SCION Control Plane is responsible for discovering these paths and making them available to the endpoints.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths by combining path segments obtained through a path lookup process.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches in this work are offered to the community for its consideration in the further evolution of the Internet.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1125,7 +1126,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2681,7 +2682,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
             <p id="section-2.2-7.1.1"><code>segment_info</code>: This field is used as input for the PCB signature. It is the encoded version of the <code>SegmentInformation</code> component which provides basic information about the PCB. This component is specified in detail in <a href="#seginfo" class="auto internal xref">Section 2.2.1</a>.<a href="#section-2.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.2-7.2">
-            <p id="section-2.2-7.2.1"><code>as_entries</code>: Contains the <code>ASEntry</code> component of all ASes on the path segment represented by this PCB.<a href="#section-2.2-7.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-7.2.1"><code>as_entries</code>: Contains the <code>ASEntry</code> component of all ASes on the path segment represented by this PCB. The order of the AS entries <span class="bcp14">MUST</span> correspond to the path traversal order in the PCB propagation direction.<a href="#section-2.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.2-7.3">
             <p id="section-2.2-7.3.1"><code>ASEntry</code>: The <code>ASEntry</code> component contains the complete path information of a specific AS that is part of the path segment represented by the PCB. This component is specified in detail in <a href="#as-entry" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.2-7.3.1" class="pilcrow">¶</a></p>
@@ -3096,7 +3097,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
                 <p id="section-2.2.2.2-4.4.1"><code>peer_entries</code>: The list of optional peer entries (<code>PeerEntry</code>). For a specification of one peer entry, see <a href="#peerentry" class="auto internal xref">Section 2.2.2.4</a>.<a href="#section-2.2.2.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.2-4.5">
-                <p id="section-2.2.2.2-4.5.1"><code>mtu</code>: The maximum transmission unit (MTU) in bytes that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent, but current practice is to make it a configuration item.<a href="#section-2.2.2.2-4.5.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.2-4.5.1"><code>mtu</code>: The maximum transmission unit (MTU) in bytes that is supported by all intra-domain links within the current AS. This value is set by the Control Service when adding the AS entry to the beacon. How the Control Service obtains this information is implementation dependent, but current practice is to make it a configuration item.<a href="#section-2.2.2.2-4.5.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.2-4.6">
                 <p id="section-2.2.2.2-4.6.1"><code>extensions</code>: List of signed extensions (optional). PCB extensions defined here are part of the signed AS entry. This field <span class="bcp14">SHOULD</span> therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see <a href="#pcb-ext" class="auto internal xref">Section 2.2.3</a>.<a href="#section-2.2.2.2-4.6.1" class="pilcrow">¶</a></p>
@@ -3160,7 +3161,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
                 <p id="section-2.2.2.3-5.1.1"><code>hop_field</code>: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>.<a href="#section-2.2.2.3-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.3-5.2">
-                <p id="section-2.2.2.3-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured by operators, but current practice to make it a configuration item. Path MTU is further discussed in <a href="#path-mtu" class="auto internal xref">Section 3.4</a>.<a href="#section-2.2.2.3-5.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.3-5.2.1"><code>ingress_mtu</code>: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the Control Service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured by operators, but current practice to make it a configuration item. Path MTU is further discussed in <a href="#path-mtu" class="auto internal xref">Section 3.4</a>.<a href="#section-2.2.2.3-5.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-2.2.2.3-6">In this description, MTU and packet size are to be understood in the same sense as in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).<a href="#section-2.2.2.3-6" class="pilcrow">¶</a></p>
@@ -3233,7 +3234,7 @@ ISD numbers are allocated by the SCION Association (<span>[<a href="#ISD-AS-assi
                 <p id="section-2.2.2.4-5.2.1"><code>peer_interface</code>: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.<a href="#section-2.2.2.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.4-5.3">
-                <p id="section-2.2.2.4-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.2.4-5.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.2.2.4-5.3.1"><code>peer_mtu</code>: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the Control Service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.<a href="#section-2.2.2.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.2.2.4-5.4">
                 <p id="section-2.2.2.4-5.4.1"><code>hop_field</code>: Contains authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also <a href="#_figure-6" class="auto internal xref">Figure 6</a>). The data plane needs this information to forward packets through the current AS. For further specifications, see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>.<a href="#section-2.2.2.4-5.4.1" class="pilcrow">¶</a></p>
@@ -3584,7 +3585,7 @@ It is expected that an AS's policy will select PCBs corresponding to paths that 
           <h4 id="name-propagation-interval-and-be">
 <a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-propagation-interval-and-be" class="section-name selfRef">Propagation Interval and Best PCBs Set Size</a>
           </h4>
-<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing (<a href="#intra-isd-beaconing" class="auto internal xref">Section 7.4.1</a>) and core beaconing (<a href="#core-beaconing" class="auto internal xref">Section 7.4.2</a>). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-1">PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the <em>propagation interval</em> which happens for both intra-ISD beaconing (<a href="#intra-isd-beaconing" class="auto internal xref">Section 7.4.1</a>) and core beaconing (<a href="#core-beaconing" class="auto internal xref">Section 7.4.2</a>). At each propagation event, the AS Control Service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.4-2">The size of this set is called the <em>best PCBs set size</em>. It should be:<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.4-3.1">
@@ -3599,7 +3600,7 @@ It is expected that an AS's policy will select PCBs corresponding to paths that 
 <p id="section-2.3.4-6">Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the <em>best PCBs set size</em> in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS Control Service should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.<a href="#section-2.3.4-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.4-7.1">
-              <p id="section-2.3.4-7.1.1">The <em>propagation interval</em> should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.<a href="#section-2.3.4-7.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.4-7.1.1">The <em>propagation interval</em> should be at least 5 seconds for intra-ISD beaconing and at least 60 seconds for core beaconing.<a href="#section-2.3.4-7.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.3.4-8">Note that to ensure establish quick connectivity, an AS Control Service <span class="bcp14">MAY</span> attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:<a href="#section-2.3.4-8" class="pilcrow">¶</a></p>
@@ -4405,16 +4406,16 @@ message SegmentsResponse {
 <p id="section-5-1">The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1">
-          <p id="section-5-2.1.1">Neighboring ASes craft one-hop paths directly. They are described in more detail in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span><a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.1.1">Neighboring ASes communicate using one-hop paths, as described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. Core ASes leverage this mechanism when originating new PCBs.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.2">
-          <p id="section-5-2.2.1">Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.2.1">Paths to non-neighboring ASes are discovered and constructed incrementally by propagating beacons received from neighbors via these one-hop paths.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.3">
-          <p id="section-5-2.3.1">Constructed multi-hop paths are registered with the Control Service at the origin core AS.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.3.1">The resulting multi-hop path segments are registered with the Control Service of the origin Core AS (see <a href="#intra-reg" class="auto internal xref">Section 3.1</a>).<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.4">
-          <p id="section-5-2.4.1">Control Services respond to requests from remote ASes by reversing the path via which the request came.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.4.1">Control Services respond to requests from remote ASes by reversing the path carried in the request packet.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-5-3">Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:<a href="#section-5-3" class="pilcrow">¶</a></p>
@@ -5594,7 +5595,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
             <p id="section-7.2-2.1.1">For routers (to enable correlation with link states): state of configured links (core, child, parent).<a href="#section-7.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.2-2.2">
-            <p id="section-7.2-2.2.1">For any control service:<a href="#section-7.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.2-2.2.1">For any Control Service:<a href="#section-7.2-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2-2.2.2.1">
                 <p id="section-7.2-2.2.2.1.1">Fraction of path lookups served successfully (see <a href="#lookup" class="auto internal xref">Section 4</a>).<a href="#section-7.2-2.2.2.1.1" class="pilcrow">¶</a></p>
@@ -5654,7 +5655,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
         </ul>
 <p id="section-7.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e. they <span class="bcp14">SHOULD</span> be around 6 hours.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 <p id="section-7.3-4">The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The <span class="bcp14">RECOMMENDED</span> expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
-<p id="section-7.3-5">Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+<p id="section-7.3-5">Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes Control Services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
 <p id="section-7.3-6">The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in <a href="#time-security" class="auto internal xref">Section 8.4</a>.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -5840,7 +5841,7 @@ A malicious AS M1 can send a PCB not only to their downstream neighbor ASes, but
 <p id="section-8.3.4-8">In the data plane, whenever the adversary receives a packet containing a fake peering link, it can transparently exchange the fake peering Hop Fields with valid Hop Fields to the colluding AS. To avoid detection of the path alteration by the receiver, the colluding AS can replace the added Hop Fields with the fake peering link Hop Fields the sender inserted.<a href="#section-8.3.4-8" class="pilcrow">¶</a></p>
 <p id="section-8.3.4-9">To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.<a href="#section-8.3.4-9" class="pilcrow">¶</a></p>
 <p id="section-8.3.4-10"><strong>Rogue SCMP Error Messages</strong>  <br>
-SCMP External Interface Down (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>) and Internal Connectivity Down (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).<a href="#section-8.3.4-10" class="pilcrow">¶</a></p>
+SCMP External Interface Down (<a href="#external-interface-down" class="auto internal xref">Section 6.5.2</a>) and Internal Connectivity Down (<a href="#internal-connectivity-down" class="auto internal xref">Section 6.5.3</a>) can potentially be abused by an attacker to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).<a href="#section-8.3.4-10" class="pilcrow">¶</a></p>
 <p id="section-8.3.4-11">Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.<a href="#section-8.3.4-11" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -5854,13 +5855,13 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
 <p id="section-8.4-1">Operators should maintain coarse time synchronization among Control Service instances and other system components, as discussed in <a href="#clock-inaccuracy" class="auto internal xref">Section 7.3</a>. An adversary that significantly alters the system time of a component can disrupt SCION operations:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.4-2.1">
-            <p id="section-8.4-2.1.1">A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>) or correctly add timestamps to propagated PCBs (see <a href="#pcb-appending" class="auto internal xref">Section 2.1.2</a>).<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-2.1.1">A Control Service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see <a href="#pcb-validity" class="auto internal xref">Section 2.2.4</a>) or correctly add timestamps to propagated PCBs (see <a href="#pcb-appending" class="auto internal xref">Section 2.1.2</a>).<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.2">
             <p id="section-8.4-2.2.1">An endpoint: it may fail to verify path segments during path lookup (see <a href="#lookup-process" class="auto internal xref">Section 4.1</a>).<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.3">
-            <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the control service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.4-2.3.1">A router: packets may be dropped ahead of the Control Service intended expiration time (see <a href="#hopfield" class="auto internal xref">Section 2.2.2.5</a>).<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.4-2.4">
             <p id="section-8.4-2.4.1">A Certificate Authority (see <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.<a href="#section-8.4-2.4.1" class="pilcrow">¶</a></p>
