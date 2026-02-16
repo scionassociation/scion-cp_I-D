@@ -166,7 +166,7 @@ informative:
 
 This document describes the Control Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths. The SCION Control Plane is responsible for discovering these paths and making them available to the endpoints.
 
-The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths from a set of possible path segments through a path lookup process.
+The SCION Control Plane creates and securely disseminates path segments between SCION Autonomous Systems (AS) which can then be combined into forwarding paths to transmit packets in the data plane. This document describes mechanisms of path exploration through beaconing and path registration. In addition, it describes how Endpoints construct end-to-end paths by combining path segments obtained through a path lookup process.
 
 This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches in this work are offered to the community for its consideration in the further evolution of the Internet.
 
@@ -622,7 +622,7 @@ The PCB top level Protobuf message format is:
 ~~~
 
 - `segment_info`: This field is used as input for the PCB signature. It is the encoded version of the `SegmentInformation` component which provides basic information about the PCB. This component is specified in detail in [](#seginfo).
-- `as_entries`: Contains the `ASEntry` component of all ASes on the path segment represented by this PCB.
+- `as_entries`: Contains the `ASEntry` component of all ASes on the path segment represented by this PCB. The order of the AS entries MUST correspond to the path traversal order in the PCB propagation direction.
 - `ASEntry`: The `ASEntry` component contains the complete path information of a specific AS that is part of the path segment represented by the PCB. This component is specified in detail in [](#as-entry).
 
 The information to be included in each of these fields is described below.
@@ -836,7 +836,7 @@ The body of an AS entry MUST consist of the signed component `ASEntrySignedBody`
 - `next_isd_as`: The ISD-AS number of the downstream AS to which the PCB MUST be forwarded. The presence of this field prevents path hijacking attacks, as further discussed in [](#path-hijack).
 - `hop_entry`: The hop entry (`HopEntry`) with the information required by the data plane to forward this PCB through the current AS to the next AS. For the specification of the hop entry, see [](#hopentry).
 - `peer_entries`: The list of optional peer entries (`PeerEntry`). For a specification of one peer entry, see [](#peerentry).
-- `mtu`: The maximum transmission unit (MTU) in bytes that is supported by all intra-domain links within the current AS. This value is set by the control service when adding the AS entry to the beacon. How the control service obtains this information is implementation dependent, but current practice is to make it a configuration item.
+- `mtu`: The maximum transmission unit (MTU) in bytes that is supported by all intra-domain links within the current AS. This value is set by the Control Service when adding the AS entry to the beacon. How the Control Service obtains this information is implementation dependent, but current practice is to make it a configuration item.
 - `extensions`: List of signed extensions (optional). PCB extensions defined here are part of the signed AS entry. This field SHOULD therefore only contain extensions that include important metadata for which cryptographic protection is required. For more information on PCB extensions, see [](#pcb-ext).
 
 #### Hop Entry {#hopentry}
@@ -867,7 +867,7 @@ The `HopEntry` Protobuf message format is:
 ~~~~
 
 - `hop_field`: Contains the authenticated information about the ingress and egress interfaces in the direction of beaconing. Routers need this information to forward packets through the current AS. For further specifications, see [](#hopfield).
-- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured by operators, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
+- `ingress_mtu`: Specifies the maximum transmission unit (MTU) of the ingress interface (in beaconing direction) of the hop being described. The MTU of paths constructed from the containing beacon is necessarily less than or equal to this value. How the Control Service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured by operators, but current practice to make it a configuration item. Path MTU is further discussed in [](#path-mtu).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
@@ -902,7 +902,7 @@ The `PeerEntry` Protobuf message format is:
 
 - `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
 - `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
-- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the control service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.
+- `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the Control Service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.
 - `hop_field`: Contains authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
@@ -1104,7 +1104,7 @@ To ensure reachability, PCB selection policies should forward as many PCBs as po
 
 ### Propagation Interval and Best PCBs Set Size {#propagation-interval-size}
 
-PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS control service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.
+PCBs are propagated in batches to each neighboring AS at a fixed frequency known as the *propagation interval* which happens for both intra-ISD beaconing ([](#intra-isd-beaconing)) and core beaconing ([](#core-beaconing)). At each propagation event, the AS Control Service selects a set of the best PCBs from the candidates in the Beacon Store according to the AS's selection policy.
 
 The size of this set is called the *best PCBs set size*. It should be:
 
@@ -1117,7 +1117,7 @@ In current practice the intra-ISD set size is typically 20. Current practice als
 
 Depending on the selection criteria, it may be necessary to keep more candidate PCBs than the *best PCBs set size* in the Beacon Store in order to determine the best set of PCBs. If this is the case, an AS Control Service should have a suitable pre-selection of candidate PCBs in place in order to keep the Beacon Store capacity limited.
 
-- The *propagation interval* should be at least "5" (seconds) for intra-ISD beaconing and at least "60" (seconds) for core beaconing.
+- The *propagation interval* should be at least 5 seconds for intra-ISD beaconing and at least 60 seconds for core beaconing.
 
 Note that to ensure establish quick connectivity, an AS Control Service MAY attempt to forward a PCB more frequently ("fast recovery"). Current practice is to increase the frequency of attempts if no PCB propagation is known to have succeeded within the last propagation interval:
 
@@ -1537,10 +1537,10 @@ When the segment request handler of a *core AS* Control Service receives a path 
 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
-* Neighboring ASes craft one-hop paths directly. They are described in more detail in {{I-D.dekater-scion-dataplane}}
-* Paths to non-neighboring ASes are obtained from neighboring ASes which allows multihop paths to be constructed and propagated incrementally.
-* Constructed multi-hop paths are registered with the Control Service at the origin core AS.
-* Control Services respond to requests from remote ASes by reversing the path via which the request came.
+* Neighboring ASes communicate using one-hop paths, as described in {{I-D.dekater-scion-dataplane}}. Core ASes leverage this mechanism when originating new PCBs.
+* Paths to non-neighboring ASes are discovered and constructed incrementally by propagating beacons received from neighbors via these one-hop paths.
+* The resulting multi-hop path segments are registered with the Control Service of the origin Core AS (see {{intra-reg}}).
+* Control Services respond to requests from remote ASes by reversing the path carried in the request packet.
 
 Clients find the relevant Control Service at a given AS by resolving a 'service address' as follows:
 
@@ -1936,7 +1936,7 @@ In order to maintain service availability, an AS operator SHOULD monitor the fol
 
 - For routers (to enable correlation with link states): state of configured links (core, child, parent).
 
-- For any control service:
+- For any Control Service:
   - Fraction of path lookups served successfully (see [](#lookup)).
   - Time synchronization offset with other ASes (see [](#clock-inaccuracy)).
   - Fraction of ASes found in non-expired segments for which a non-expired certificate exists.
@@ -1962,7 +1962,7 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 
 The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes control services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
+Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes Control Services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
 
 The specific methods used to achieve this synchronization are outside the scope of this document. Security considerations on time synchronization are discussed in [](#time-security).
 
@@ -2112,7 +2112,7 @@ In the data plane, whenever the adversary receives a packet containing a fake pe
 To defend against this attack, methods to detect the wormhole attack are needed. Per link or path latency measurements can help reveal the wormhole and render the fake peering link suspicious or unattractive. Without specific detection mechanisms these so-called wormhole attacks are unavoidable in routing.
 
 **Rogue SCMP Error Messages**  <br>
-SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
+SCMP External Interface Down ([](#external-interface-down)) and Internal Connectivity Down ([](#internal-connectivity-down)) can potentially be abused by an attacker to disrupt forwarding of information and/or force the traffic through a different paths. Endpoints should therefore consider them weak hints and apply heuristics to detect fraudulent SCMP messages (e.g. by actively probing whether the affected path is actually down).
 
 Note that this would be mitigated through authentication of SCMP messages. Authentication is not specified here since it is currently still experimental.
 
@@ -2120,9 +2120,9 @@ Note that this would be mitigated through authentication of SCMP messages. Authe
 
 Operators should maintain coarse time synchronization among Control Service instances and other system components, as discussed in [](#clock-inaccuracy). An adversary that significantly alters the system time of a component can disrupt SCION operations:
 
-- A control service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
+- A Control Service instance: its beaconing process may halt as it cannot verify the validity of received PCBs (see [](#pcb-validity)) or correctly add timestamps to propagated PCBs (see [](#pcb-appending)).
 - An endpoint: it may fail to verify path segments during path lookup (see [](#lookup-process)).
-- A router: packets may be dropped ahead of the control service intended expiration time (see [](#hopfield)).
+- A router: packets may be dropped ahead of the Control Service intended expiration time (see [](#hopfield)).
 - A Certificate Authority (see {{I-D.dekater-scion-pki}}): it may issue AS certificates with incorrect validity periods, causing them to be rejected by verifiers.
 
 It is therefore recommended to leverage secure time synchronization mechanisms, such as NTS {{RFC8915}}, {{BCP223}}, or Khronos {{RFC9523}}, or to leverage multiple diverse time sources (e.g. GNSS and network-based).
