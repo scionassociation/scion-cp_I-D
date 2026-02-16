@@ -2502,9 +2502,8 @@ Table of Contents
       [I-D.dekater-scion-dataplane].  Core ASes leverage this mechanism
       when originating new PCBs.
 
-   *  Paths to non-neighboring ASes are discovered and constructed
-      incrementally by propagating beacons received from neighbors via
-      these one-hop paths.
+   *  Paths to non-neighboring ASes are constructed from PCBs that are
+      received from neighbors via these one-hop paths.
 
    *  The resulting multi-hop path segments are registered with the
       Control Service of the origin Core AS (see Section 3.1).

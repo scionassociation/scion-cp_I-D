@@ -4409,7 +4409,7 @@ message SegmentsResponse {
           <p id="section-5-2.1.1">Neighboring ASes communicate using one-hop paths, as described in <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span>. Core ASes leverage this mechanism when originating new PCBs.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.2">
-          <p id="section-5-2.2.1">Paths to non-neighboring ASes are discovered and constructed incrementally by propagating beacons received from neighbors via these one-hop paths.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.2.1">Paths to non-neighboring ASes are constructed from PCBs that are received from neighbors via these one-hop paths.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.3">
           <p id="section-5-2.3.1">The resulting multi-hop path segments are registered with the Control Service of the origin Core AS (see <a href="#intra-reg" class="auto internal xref">Section 3.1</a>).<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
