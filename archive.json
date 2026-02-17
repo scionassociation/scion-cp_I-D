@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-15T00:35:05.048861+00:00",
+  "timestamp": "2026-02-17T00:33:26.539156+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -16024,24 +16024,26 @@
       "id": "PR_kwDOJx2-rs7C8KKh",
       "title": "minor editing pass",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/220",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "shitz",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "- Reworded the control service bootstrapping process\r\n- Made usage of `Control Service` (instead of `control service`) consistent\r\n- Other minor wording changes.",
       "createdAt": "2026-02-11T08:20:26Z",
-      "updatedAt": "2026-02-12T14:37:52Z",
+      "updatedAt": "2026-02-16T16:57:00Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "f5166cf404516278fac5f6d84accab749341ce50",
       "headRepository": "shitz/scion-cp_I-D",
       "headRefName": "small_editing_pass",
       "headRefOid": "4286083be3e7a56eb01a0219b056f282e7639e3a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-16T16:56:01Z",
+      "mergedAt": "2026-02-16T16:56:01Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -16163,6 +16165,39 @@
               "updatedAt": "2026-02-12T14:37:29Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7jElMI",
+          "commit": {
+            "abbreviatedOid": "4286083"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-16T16:55:20Z",
+          "updatedAt": "2026-02-16T16:55:20Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7jEmk4",
+          "commit": {
+            "abbreviatedOid": "92041db"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-16T16:57:00Z",
+          "updatedAt": "2026-02-16T16:57:00Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "I'll commit this line in #223 since I don't think I can push to his branch.",
+              "createdAt": "2026-02-16T16:57:00Z",
+              "updatedAt": "2026-02-16T16:57:00Z"
+            }
+          ]
         }
       ]
     },
@@ -16206,13 +16241,13 @@
       "labels": [],
       "body": "Includes commits that were in #217 ",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-02-13T13:01:57Z",
+      "updatedAt": "2026-02-16T17:01:41Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "cf4a55a0e3623cbe01b6e4b8a3a4de3d6acb951e",
+      "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scmp",
-      "headRefOid": "e0f35749efe8557b3942a2617e820d5cf3c93ba3",
+      "headRefOid": "a82109e716ef8a66e7471650af531dbf64d02c63",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
