@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-17T00:33:26.539156+00:00",
+  "timestamp": "2026-02-19T00:33:54.968902+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -16241,7 +16241,7 @@
       "labels": [],
       "body": "Includes commits that were in #217 ",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-02-16T17:01:41Z",
+      "updatedAt": "2026-02-17T13:13:57Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
@@ -16252,8 +16252,77 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nicorusti Are we waiting for someone else to review this? Are you comfortable with my changes? I think we can actually keep all the ICMP rules as long as we clarify them a bit (as I tries to do in my commit).",
+          "createdAt": "2026-02-17T09:30:08Z",
+          "updatedAt": "2026-02-17T09:30:08Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7jQMAs",
+          "commit": {
+            "abbreviatedOid": "a82109e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-17T09:27:49Z",
+          "updatedAt": "2026-02-17T09:27:49Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\n- SCMP: clarify relationship with RFC4443 and adapt/clarify processing rules\n```",
+              "createdAt": "2026-02-17T09:27:49Z",
+              "updatedAt": "2026-02-17T09:27:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7jUtfv",
+          "commit": {
+            "abbreviatedOid": "a82109e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-17T13:04:29Z",
+          "updatedAt": "2026-02-17T13:04:29Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Suggest 'adapt'",
+              "createdAt": "2026-02-17T13:04:29Z",
+              "updatedAt": "2026-02-17T13:04:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7jU3oW",
+          "commit": {
+            "abbreviatedOid": "a82109e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-17T13:13:56Z",
+          "updatedAt": "2026-02-17T13:13:57Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "I think we are doing both, adapting them to SCMP and clarifying them where they seem lacking.",
+              "createdAt": "2026-02-17T13:13:56Z",
+              "updatedAt": "2026-02-17T13:13:57Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
