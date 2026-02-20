@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 20 August 2026                                          S. Hitz
+Expires: 24 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                        16 February 2026
+                                                        20 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 August 2026.
+   This Internet-Draft will expire on 24 August 2026.
 
 Copyright Notice
 
@@ -3926,7 +3926,7 @@ draft-dekater-scion-controlplane-15
    *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
       intra-ISD propagation, since steps are the same
 
-   *  SCMP: clarify relationship with RFC4443 and remove unnecessary
+   *  SCMP: clarify relationship with RFC4443 and adapt/clarify
       processing rules
 
 draft-dekater-scion-controlplane-15
