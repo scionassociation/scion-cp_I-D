@@ -2320,7 +2320,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Final read, wording
 - "originating/initiating" PCBs --> consistently use originating
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
-- SCMP: clarify relationship with RFC4443 and remove unnecessary processing rules
+- SCMP: clarify relationship with RFC4443 and adapt/clarify processing rules
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
