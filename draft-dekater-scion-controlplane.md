@@ -101,6 +101,7 @@ informative:
         org: ETH Zuerich
   RFC1122:
   RFC4271:
+  RFC4443:
   RFC5398:
   RFC6996:
   RFC8915:
@@ -1538,7 +1539,7 @@ When the segment request handler of a *core AS* Control Service receives a path 
 The Control Plane RPC APIs rely on QUIC connections over UDP/SCION (see {{I-D.dekater-scion-dataplane}}. Establishing such connection requires the initiator to identify the relevant peer (service resolution) and to select a path to it. Since the Control Service is itself the source of path segment information, the following bootstrapping processes apply:
 
 * Neighboring ASes communicate using one-hop paths, as described in {{I-D.dekater-scion-dataplane}}. Core ASes leverage this mechanism when originating new PCBs.
-* Paths to non-neighboring ASes are discovered and constructed incrementally by propagating beacons received from neighbors via these one-hop paths.
+* Paths to non-neighboring ASes are constructed from PCBs that are received from neighbors via these one-hop paths.
 * The resulting multi-hop path segments are registered with the Control Service of the origin Core AS (see {{intra-reg}}).
 * Control Services respond to requests from remote ASes by reversing the path carried in the request packet.
 
@@ -1582,6 +1583,7 @@ The SCION Control Message Protocol (SCMP) provides functionality for network dia
 
 This document only specifies the messages used for the purposes of path diagnosis and recovery. An extended specification can be found in {{SCMP}}. Its security considerations are discussed in [](#manipulate-selection).
 
+The logic, some message formats, and processing rules are derived from {{RFC4443}} and adapted for the SCION architecture.
 Note that there is not currently a defined mechanism for converting ICMP messages to SCMP messages, or vice-versa.
 
 ## General Format
@@ -1644,15 +1646,16 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 ## Processing Rules
 
-The following rules apply when processing SCMP messages:
+The rules for processing SCMP messages follow closely the rules in {{RFC4443}} section "Message Processing Rules". These rules apply to SCION nodes (routers, ...) and to endpoint processes that forward SCMP messages to other processes on the same endpoint. They do not apply to SCION aware user application processes on the endpoint. Implementations MUST respect the following rules when processing SCMP messages:
 
-   - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
-   - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
-   - Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
-   - In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
-   - An SCMP error message MUST NOT be originated in response to any of the following:
-     - An SCMP error message.
-     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
+1. If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified, see point 4.
+2. If an SCMP informational message of unknown type is received, it MUST be silently dropped.
+3. Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
+4. When needed, implementations extract the upper-layer protocol type from the original packet in the body of the SCMP error message and use it to select the appropriate upper-layer process to handle the error. In case of an unknown error type, the implementation should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and extract the network port of the originating process from the upper-layer protocol.  In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
+5. An SCMP error message MUST NOT be originated in response to any of the following:
+
+    - An SCMP error message.
+    - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
 
 The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.
 
@@ -2316,6 +2319,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Final read, wording
 - "originating/initiating" PCBs --> consistently use originating
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
+- SCMP: clarify relationship with RFC4443 and adapt/clarify processing rules
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
