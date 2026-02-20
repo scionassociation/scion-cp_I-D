@@ -2694,14 +2694,16 @@ Table of Contents
        [I-D.dekater-scion-dataplane] section "Deployment Considerations/
        MTU").
 
-   4.  Endpoint implementations may use the original packet in the body
-       of the SCMP error message to pass the SCMP error message to the
-       upper-layer process.  To identify the process, the implementation
-       can assume a length of 8 bytes for header of the SCMP error, then
-       verify that the subsequent bytes represent a valid SCION header,
-       and then extract the network port of the originating process from
-       the upper-layer protocol.  In case the extraction is not
-       successful, the SCMP message MUST be silently dropped.
+   4.  When needed, implementations extract the upper-layer protocol
+       type from the original packet in the body of the SCMP error
+       message and use it to select the appropriate upper-layer process
+       to handle the error.  In case of an unknown error type, the
+       implementation should assume a SCMP header length of 8 bytes,
+       verify that the subsequent bytes represent a SCION header, and
+       extract the network port of the originating process from the
+       upper-layer protocol.  In case the upper-layer protocol type
+       cannot be extracted from the SCMP error message body, the SCMP
+       message MUST be silently dropped.
 
    5.  An SCMP error message MUST NOT be originated in response to any
        of the following:
