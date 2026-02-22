@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-19T00:33:54.968902+00:00",
+  "timestamp": "2026-02-22T00:33:27.027388+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -16005,13 +16005,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-02-10T05:57:24Z",
-      "updatedAt": "2026-02-10T05:57:24Z",
+      "updatedAt": "2026-02-20T10:25:14Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "e0b4c63317ff4db7a4bf70b49b0d4c77630dba81",
+      "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Adrian-Perrig-changes",
-      "headRefOid": "f01a071ce028bfbe5c2edb84d341ba1fee9d8e89",
+      "headRefOid": "a3358015232a98e60497e97176924d53f1e97f53",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16239,15 +16239,15 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Includes commits that were in #217 ",
+      "body": "Includes commits that were in #217 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-02-17T13:13:57Z",
+      "updatedAt": "2026-02-20T17:04:47Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scmp",
-      "headRefOid": "a82109e716ef8a66e7471650af531dbf64d02c63",
+      "headRefOid": "aec7022e731ac1d2c3a9d8005e4d0ad4b2b0ceea",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16319,6 +16319,231 @@
               "body": "I think we are doing both, adapting them to SCMP and clarifying them where they seem lacking.",
               "createdAt": "2026-02-17T13:13:56Z",
               "updatedAt": "2026-02-17T13:13:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kVax5",
+          "commit": {
+            "abbreviatedOid": "a82109e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T08:54:11Z",
+          "updatedAt": "2026-02-20T08:54:11Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "This changelog will go away with RFC publication, so it doesn't make much of a difference\r\n",
+              "createdAt": "2026-02-20T08:54:11Z",
+              "updatedAt": "2026-02-20T08:54:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kWB_T",
+          "commit": {
+            "abbreviatedOid": "8ff8e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:30:29Z",
+          "updatedAt": "2026-02-20T09:30:30Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": ">  and to endpoint processes that forward SCMP messages to other processes on the same endpoint.  \r\n\r\nWhat about other cases? With this wording, it feels that we leave this completely unspecified. In fact, rules 1-3 do apply to any node. How about we delete this wording, and just make it clearer in rule 4?\r\n\r\n```suggestion\r\nThe following rules apply to SCION nodes (routers and endpoints) when processing SCMP messages.\r\n```\r\n\r\nOn the RFC4443 citation, we already clarify that processing rules are derived from there in the paragraph intro, so I don't think it adds much to cite it again here, especially as other RFC4443 rules do not apply.. So it is not required that the reader goes and checks that RFC4443 section \"Message Processing Rules\"",
+              "createdAt": "2026-02-20T09:30:30Z",
+              "updatedAt": "2026-02-20T09:41:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kWzxD",
+          "commit": {
+            "abbreviatedOid": "8ff8e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T10:12:27Z",
+          "updatedAt": "2026-02-20T10:12:27Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Three points: \n\n1. I'm not a fan on \"may\" as it is lowercase and makes it seem optional. How about we avoid using it.\n2. do we need to mention endpoints? What if the receiver of a SCMP error message is a router (it could be the case)\n3. The 8 bytes assumption only applies to unknown error types, right? \n\nA new wording based on my observations:\n\n```suggestion\n4. When needed, implementations extract the upper-layer protocol type from the original packet in the body of the SCMP error message and use it to select the appropriate upper-layer process to handle the error. In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, and attempt to extract the subsequent SCION header.  In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n```",
+              "createdAt": "2026-02-20T10:12:27Z",
+              "updatedAt": "2026-02-20T10:20:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kW--H",
+          "commit": {
+            "abbreviatedOid": "8ff8e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "@tzaeschke sorry, I couldn't look at this until now. I prosed some new wording here in the PR",
+          "createdAt": "2026-02-20T10:21:13Z",
+          "updatedAt": "2026-02-20T10:21:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kZJPr",
+          "commit": {
+            "abbreviatedOid": "aec7022"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T12:29:18Z",
+          "updatedAt": "2026-02-20T12:29:18Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "I'd say rules 1), 3) and 5) are not relevant for user application processes. Rule 2) is only accidentally relevant, because a user app should never answer to informational messages, regardless of whether the type is known or not. \nThat leaves rule 4), which is partly relevant, but also wrong, because user apps should probably always drop messages of unknown type (instead of trying to parse them), and because user apps cannot forward the packet to an \"originating process\".\n\nI would say only rule 4) can be applied to user apps, but it would need quite some clarification. How about instead adding a second set or rules for user apps? I think there would be only one rules, at most 2 or 3:\n\nThe rule for user apps would be:\n1) Don't answer to any SCMP messages\n\nIf we want we can also add the following rules, but I feel they are obvious and implicit from the 1..5 rules above:\n\n2) Immediately drop informational messages and messages of unknown type \n3) The beginning of the offending packet can be extracted from the error SCMP message after the error header.\n\n\nWhat do you think?\n\n-------------------------------------------------\nI mentioned \"Message Processing Rules\" is to clarify where this comes from, but we can remove it.\n",
+              "createdAt": "2026-02-20T12:29:18Z",
+              "updatedAt": "2026-02-20T12:29:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kZNgv",
+          "commit": {
+            "abbreviatedOid": "aec7022"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T12:34:02Z",
+          "updatedAt": "2026-02-20T12:34:11Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Another idea to clarify the text would be to have three sets of rules: a) for border routers, b) for endhost SHIM/kernel, c) for user apps.\n\na) would have rule 3), e.g. how to construct am SCMP message, and 5).\nb) would have rules 1), 2), 4), 5)\nc) would have \"don't answer to SCMP messages\"\n\nDoes that makes sense?",
+              "createdAt": "2026-02-20T12:34:03Z",
+              "updatedAt": "2026-02-20T12:34:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kZihU",
+          "commit": {
+            "abbreviatedOid": "aec7022"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T12:55:58Z",
+          "updatedAt": "2026-02-20T12:55:58Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Thinking a bit more about this, a simpler approach may be to remove all mentioning of \"originating applications\" and \"unknown types\" etc, then this would be a whole lot simpler. The rules would then simply be something like:\n1) Errors have part of the originating message attached (and some guide how to extract them)\n2) Never answer to SCMP errors\n\n?",
+              "createdAt": "2026-02-20T12:55:58Z",
+              "updatedAt": "2026-02-20T12:55:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kbalI",
+          "commit": {
+            "abbreviatedOid": "8ff8e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T14:39:48Z",
+          "updatedAt": "2026-02-20T14:39:48Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Discussion with Til: \r\nHow about we call it SCMP handler? (to refer to any code on the endpoint dealing with the SCMP message, wether this is in the SICON-enabled application, or in a shim layer? ",
+              "createdAt": "2026-02-20T14:39:48Z",
+              "updatedAt": "2026-02-20T14:39:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kb5Oa",
+          "commit": {
+            "abbreviatedOid": "8ff8e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T14:59:32Z",
+          "updatedAt": "2026-02-20T14:59:32Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Another question that came up during our discussion: today implementations are using port 30041 to receive SCMP. Do we need to specify it and is it needed? \r\nNow routers send the packet directly to the SCMP port, and this is not documented..",
+              "createdAt": "2026-02-20T14:59:32Z",
+              "updatedAt": "2026-02-20T14:59:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kc1sd",
+          "commit": {
+            "abbreviatedOid": "aec7022"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T15:48:27Z",
+          "updatedAt": "2026-02-20T16:04:04Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\n1. If an SCMP error message of unknown type is received by a border router in the destination AS, it MUST be sent to the endhost's network port that originated the packet that caused the error, if it can be identified, see point 4.\n```",
+              "createdAt": "2026-02-20T15:48:28Z",
+              "updatedAt": "2026-02-20T16:04:04Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "```suggestion\n4. In order to identify the the endhost port in the destination AS, border routers extract the upper-layer protocol type from the original packet in the body of the SCMP error message and use it to select the appropriate destination port on the endhost to handle the error. In case of an unknown error type, the border router MAY drop the packet. If the packet is not dropped, it should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and extract the network port on the originating endhost from the upper-layer protocol.  In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n```",
+              "createdAt": "2026-02-20T15:53:39Z",
+              "updatedAt": "2026-02-20T16:04:04Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "It turns out that the port extraction happens on the border routers. The current implementation simply drops them when the type is unknown.\n\nWith this in mind, I think with the two changes to 1) and 4), we can go back to the simple introduction\n`The following rules apply when processing SCMP messages:`\n\nThere is a small \"rub\" between the MUST in 1) and the MAY in 4), maybe the MUST in 1) should be a SHOULD?\nOtherwise we can discuss it with the team and see whether we should put more effort in handling SCMP messages on border routers.\n\nThoughts?",
+              "createdAt": "2026-02-20T15:58:21Z",
+              "updatedAt": "2026-02-20T16:04:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7kea5Q",
+          "commit": {
+            "abbreviatedOid": "aec7022"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T17:04:47Z",
+          "updatedAt": "2026-02-20T17:04:47Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Right now in life of a packet we don't discuss port extraction on the destination router. But the example has port 30041: \r\nhttps://www.ietf.org/archive/id/draft-dekater-scion-dataplane-11.html#section-3.3-11.1.1 ",
+              "createdAt": "2026-02-20T17:04:47Z",
+              "updatedAt": "2026-02-20T17:04:47Z"
             }
           ]
         }
