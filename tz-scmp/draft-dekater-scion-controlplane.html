@@ -4677,10 +4677,10 @@ Note that there is not currently a defined mechanism for converting ICMP message
         <h3 id="name-processing-rules">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
         </h3>
-<p id="section-6.4-1">The following rules apply to SCION nodes (routers and endpoints) when processing SCMP messages.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">The following rules apply to SCMP messages.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.4-2">
 <li id="section-6.4-2.1">
-            <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received by a border router in the destination AS, it <span class="bcp14">MUST</span> be sent to the endpoint's transport layer port that originated the packet that caused the error, if it can be identified, see point 4.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received at its destination, it <span class="bcp14">MUST</span> be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.4-2.2">
             <p id="section-6.4-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
@@ -4689,21 +4689,27 @@ Note that there is not currently a defined mechanism for converting ICMP message
             <p id="section-6.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Deployment Considerations/MTU").<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.4-2.4">
-            <p id="section-6.4-2.4.1">In order to identify the the endpoint's underlay transport layer port in the destination AS, border routers extract the upper-layer protocol type from the original packet in the body of the SCMP error message and use it to select the appropriate underlay transport layer port to handle the error. In case of an unknown error type, the border router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and extract the underlay transport layer of the originating endpoint from the upper-layer protocol.  In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-6.4-2.5">
-            <p id="section-6.4-2.5.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-2.4.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4-2.5.2.1">
-                <p id="section-6.4-2.5.2.1.1">An SCMP error message.<a href="#section-6.4-2.5.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.4-2.4.2.1">
+                <p id="section-6.4-2.4.2.1.1">An SCMP error message.<a href="#section-6.4-2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.4-2.5.2.2">
-                <p id="section-6.4-2.5.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.5.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.4-2.4.2.2">
+                <p id="section-6.4-2.4.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
         </ol>
-<p id="section-6.4-3">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">The following rules apply to the first or last SCION router on a path when processing and forwarding SCMP messages to endpoints:<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.4-4">
+<li id="section-6.4-4.1">
+            <p id="section-6.4-4.1.1">For error messages, the router uses the source port from the quoted offending packet as the underlay destination port. In case of an unknown error type, the router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. In case the port cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.4-4.2">
+            <p id="section-6.4-4.2.1">Echo Requests and Traceroute Requests <span class="bcp14">MUST</span> be forwarded on the default underlay port.<a href="#section-6.4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-6.4-5">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.<a href="#section-6.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scmp-notification">
@@ -5211,7 +5217,7 @@ AS.<a href="#section-6.5.3-4" class="pilcrow">¶</a></p>
               </tr>
             </tbody>
           </table>
-<p id="section-6.6.1-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.<a href="#section-6.6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.6.1-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests on the default underlay port and originates corresponding Echo replies.<a href="#section-6.6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="echo-reply">
