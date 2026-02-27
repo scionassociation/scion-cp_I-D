@@ -1646,16 +1646,20 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 ## Processing Rules
 
-The following rules apply to SCION nodes (routers and endpoints) when processing SCMP messages.
+The following rules apply to SCMP messages.
 
-1. If an SCMP error message of unknown type is received by a border router in the destination AS, it MUST be sent to the endpoint's transport layer port that originated the packet that caused the error, if it can be identified, see point 4.
+1. If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
 2. If an SCMP informational message of unknown type is received, it MUST be silently dropped.
 3. Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
-4. In order to identify the the endpoint's underlay transport layer port in the destination AS, border routers extract the upper-layer protocol type from the original packet in the body of the SCMP error message and use it to select the appropriate underlay transport layer port to handle the error. In case of an unknown error type, the border router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and extract the underlay transport layer of the originating endpoint from the upper-layer protocol.  In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
-5. An SCMP error message MUST NOT be originated in response to any of the following:
+4. An SCMP error message MUST NOT be originated in response to any of the following:
 
     - An SCMP error message.
     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
+
+The following rules apply to the first or last SCION router on a path when processing and forwarding SCMP messages to endpoints:
+
+5. For error messages, the router uses the source port from the quoted offending packet as the underlay destination port. In case of an unknown error type, the router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. In case the port cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
+6. Echo Requests and Traceroute Requests MUST be forwarded on the default underlay port.
 
 The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.
 
@@ -1815,7 +1819,7 @@ AS.
 | Data         | Variable length of arbitrary data                             |
 {: title="Informational Message field values"}
 
-Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests on the default underlay port and originates corresponding Echo replies.
 
 ### Echo Reply {#echo-reply}
 
