@@ -2671,13 +2671,8 @@ Table of Contents
 
 6.4.  Processing Rules
 
-   The rules for processing SCMP messages follow closely the rules in
-   [RFC4443] section "Message Processing Rules".  These rules apply to
-   SCION nodes (routers, ...) and to endpoint processes that forward
-   SCMP messages to other processes on the same endpoint.  They do not
-   apply to SCION aware user application processes on the endpoint.
-   Implementations MUST respect the following rules when processing SCMP
-   messages:
+   The following rules apply to SCION nodes (routers and endpoints) when
+   processing SCMP messages.
 
    1.  If an SCMP error message of unknown type is received by a border
        router in the destination AS, it MUST be sent to the endpoint's

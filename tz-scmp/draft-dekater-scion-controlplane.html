@@ -4677,7 +4677,7 @@ Note that there is not currently a defined mechanism for converting ICMP message
         <h3 id="name-processing-rules">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
         </h3>
-<p id="section-6.4-1">The rules for processing SCMP messages follow closely the rules in <span>[<a href="#RFC4443" class="cite xref">RFC4443</a>]</span> section "Message Processing Rules". These rules apply to SCION nodes (routers, ...) and to endpoint processes that forward SCMP messages to other processes on the same endpoint. They do not apply to SCION aware user application processes on the endpoint. Implementations <span class="bcp14">MUST</span> respect the following rules when processing SCMP messages:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">The following rules apply to SCION nodes (routers and endpoints) when processing SCMP messages.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.4-2">
 <li id="section-6.4-2.1">
             <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received by a border router in the destination AS, it <span class="bcp14">MUST</span> be sent to the endpoint's transport layer port that originated the packet that caused the error, if it can be identified, see point 4.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
