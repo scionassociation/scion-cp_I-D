@@ -1646,7 +1646,7 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 ## Processing Rules
 
-The rules for processing SCMP messages follow closely the rules in {{RFC4443}} section "Message Processing Rules". These rules apply to SCION nodes (routers, ...) and to endpoint processes that forward SCMP messages to other processes on the same endpoint. They do not apply to SCION aware user application processes on the endpoint. Implementations MUST respect the following rules when processing SCMP messages:
+The following rules apply to SCION nodes (routers and endpoints) when processing SCMP messages.
 
 1. If an SCMP error message of unknown type is received by a border router in the destination AS, it MUST be sent to the endpoint's transport layer port that originated the packet that caused the error, if it can be identified, see point 4.
 2. If an SCMP informational message of unknown type is received, it MUST be silently dropped.
