@@ -2694,16 +2694,17 @@ Table of Contents
        [I-D.dekater-scion-dataplane] section "Deployment Considerations/
        MTU").
 
-   4.  When needed, implementations extract the upper-layer protocol
-       type from the original packet in the body of the SCMP error
-       message and use it to select the appropriate upper-layer process
-       to handle the error.  In case of an unknown error type, the
-       implementation should assume a SCMP header length of 8 bytes,
-       verify that the subsequent bytes represent a SCION header, and
-       extract the network port of the originating process from the
-       upper-layer protocol.  In case the upper-layer protocol type
-       cannot be extracted from the SCMP error message body, the SCMP
-       message MUST be silently dropped.
+   4.  In order to identify the the endpoint's underlay transport layer
+       port in the destination AS, border routers extract the upper-
+       layer protocol type from the original packet in the body of the
+       SCMP error message and use it to select the appropriate underlay
+       transport layer port to handle the error.  In case of an unknown
+       error type, the border router should assume a SCMP header length
+       of 8 bytes, verify that the subsequent bytes represent a SCION
+       header, and extract the underlay transport layer of the
+       originating endpoint from the upper-layer protocol.  In case the
+       upper-layer protocol type cannot be extracted from the SCMP error
+       message body, the SCMP message MUST be silently dropped.
 
    5.  An SCMP error message MUST NOT be originated in response to any
        of the following:
