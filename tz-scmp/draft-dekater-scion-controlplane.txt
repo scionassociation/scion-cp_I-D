@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 24 August 2026                                          S. Hitz
+Expires: 31 August 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                        20 February 2026
+                                                        27 February 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 August 2026.
+   This Internet-Draft will expire on 31 August 2026.
 
 Copyright Notice
 
@@ -2679,10 +2679,10 @@ Table of Contents
    Implementations MUST respect the following rules when processing SCMP
    messages:
 
-   1.  If an SCMP error message of unknown type is received at its
-       destination, it MUST be passed to the upper-layer process that
-       originated the packet that caused the error, if it can be
-       identified, see point 4.
+   1.  If an SCMP error message of unknown type is received by a border
+       router in the destination AS, it MUST be sent to the endpoint's
+       transport layer port that originated the packet that caused the
+       error, if it can be identified, see point 4.
 
    2.  If an SCMP informational message of unknown type is received, it
        MUST be silently dropped.
