@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-01T00:36:43.070572+00:00",
+  "timestamp": "2026-03-03T00:33:38.078459+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -2913,15 +2913,15 @@
       "labels": [],
       "body": "Table 5 in section 7.2 does not list the SCMP errors 1 (destination unreachable) and 4 (parameter problem) as they are defined here: https://docs.scion.org/en/latest/protocols/scmp.html#scmp-error-messages\n\nhttps://github.com/scionassociation/scion-cp_I-D/blob/02c446ba36c25d3031808f1bd1a4d43fb274ee12/draft-dekater-scion-controlplane.md?plain=1#L1767-L1774\n\nHave these been removed?",
       "createdAt": "2026-01-26T15:22:16Z",
-      "updatedAt": "2026-01-30T11:04:12Z",
+      "updatedAt": "2026-03-02T12:34:56Z",
       "closedAt": "2026-01-30T11:04:12Z",
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Hi @tzaeschke, thanks for raising this. For context, let me summarize how SCMP got into the drafts.  \nInitially, we did not have SCMP in the drafts for various reasons:  it could be a separate draft of its own, it could have raised questions in relation to ICMP, and there is no finalized spec for SCMP authentication.  However,  feedback received below prompted us in the end to add parts of it anyways. \n- https://github.com/scionassociation/scion-dp_I-D/issues/8\n- https://github.com/scionassociation/scion-dp_I-D/issues/36 \n\nSo SCMP was first added to -dataplane in https://github.com/scionassociation/scion-dp_I-D/pull/49   The reviewer feedback was about handling of link failures, so link down messages were the important messages to be mentioned. Some messages error 1 and 4 were not added back then by JC. Reason: \n>  I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery\n\nI then added Echo request and Reply messages in: https://github.com/scionassociation/scion-dp_I-D/pull/59 .\nThen the SCMP spec was moved from -dataplane to -controlplane in https://github.com/scionassociation/scion-cp_I-D/pull/78 \n\n Regarding the missing messages, we write in the draft: \n```\n   This document only specifies the messages used for the purposes of\n   path diagnosis and recovery.  An extended specification can be found\n   in [SCMP].  \n```\n\nWhat can we do about it? \n\n1.  Leave it as it is and count on the reference to https://docs.scion.org/en/latest/protocols/scmp.html \n2.  Mention the messages in the table only, and point to the reference [SCMP]\n3.  Add the full spec of the two missing messages. However this might send the draft back to IESG review. \n   Also, adding these messages requires a lot of changes because: \n   - `destination unreachable` heavily reuses the format of https://datatracker.ietf.org/doc/html/rfc4443#section-3.1 , this would probably require a normative reference and clarifying the relationship between SCMP and rfc4443.\n  - `Parameter Problem` contains nearly 20 errors, which would require the appropriate cross-references from many other sections\n\n",
+          "body": "Hi @tzaeschke, thanks for raising this. For context, let me summarize how SCMP got into the drafts.  \nInitially, we did not have SCMP in the drafts for various reasons:  it could be a separate draft of its own, it could have raised questions in relation to ICMP, and there is no finalized spec for SCMP authentication.  However,  feedback received below prompted us in the end to add parts of it anyways. \n- https://github.com/scionassociation/scion-dp_I-D/issues/8\n- https://github.com/scionassociation/scion-dp_I-D/issues/36 \n\nSo SCMP was first added to -dataplane in https://github.com/scionassociation/scion-dp_I-D/pull/49   The reviewer feedback was about handling of link failures, so link down messages were the important messages to be mentioned. Some messages error 1 and 4 were not added back then by JC. Reason: \n>  I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery\n\nI then added Echo request and Reply messages in: https://github.com/scionassociation/scion-dp_I-D/pull/59 .\nThen the SCMP spec was moved from -dataplane to -controlplane in https://github.com/scionassociation/scion-cp_I-D/pull/78 .\n\n Regarding the missing messages, we write in the draft: \n```\n   This document only specifies the messages used for the purposes of\n   path diagnosis and recovery.  An extended specification can be found\n   in [SCMP].  \n```\n\nWhat can we do about it? \n\n1.  Leave it as it is and count on the reference to https://docs.scion.org/en/latest/protocols/scmp.html \n2.  Mention the messages in the table only, and point to the reference [SCMP]\n3.  Add the full spec of the two missing messages. However this might send the draft back to IESG review. \n   Also, adding these messages requires a lot of changes because: \n   - `destination unreachable` heavily reuses the format of https://datatracker.ietf.org/doc/html/rfc4443#section-3.1 , this would probably require a normative reference and clarifying the relationship between SCMP and rfc4443.\n  - `Parameter Problem` contains nearly 20 errors, which would require the appropriate cross-references from many other sections\n\n",
           "createdAt": "2026-01-27T14:43:57Z",
-          "updatedAt": "2026-01-27T14:43:57Z"
+          "updatedAt": "2026-03-02T12:34:56Z"
         },
         {
           "author": "tzaeschke",
@@ -16256,7 +16256,7 @@
       "labels": [],
       "body": "Includes commits that were in #217 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-02-27T18:21:52Z",
+      "updatedAt": "2026-03-02T13:37:56Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
@@ -16281,6 +16281,34 @@
           "body": "@tzaeschke I reorganized SCMP rules, and for the sake of clarity I separated generic rules, and processing steps at the last router. What do you think?",
           "createdAt": "2026-02-27T18:14:40Z",
           "updatedAt": "2026-02-27T18:15:56Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nicorusti In https://github.com/scionassociation/scion-cp_I-D/pull/223/changes/3d63d9d4ab2a0943e09ada7b60935d31b0dc4012, you reverted some of my proposed changes, e.g. bullet one is now back to talks about processes and has the reference to point 4 removed. Was that intentional?",
+          "createdAt": "2026-03-02T10:28:27Z",
+          "updatedAt": "2026-03-02T10:28:27Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nicorusti \r\n\r\n> @tzaeschke I reorganized SCMP rules, and for the sake of clarity I separated generic rules, and processing steps at the last router. What do you think?\r\n\r\nAh, I see know. I am not sure that works.\r\n* Rules 1) and 2) are also only relevant for the last border router. \r\n* Also, I think rule 1) should reference the rule that explains how to identify the originator (as it does in the ICMP RFC, but what was somehow removed form the SCMP rules on docs.scion.org).\r\n\r\n",
+          "createdAt": "2026-03-02T12:22:56Z",
+          "updatedAt": "2026-03-02T12:23:40Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> Rules 1) and 2) are also only relevant for the last border router.\r\nAre you referring to these, right? \r\n```\r\n   1.  If an SCMP error message of unknown type is received at its\r\n       destination, it MUST be passed to the upper-layer process that\r\n       originated the packet that caused the error, if it can be\r\n       identified.\r\n\r\n   2.  If an SCMP informational message of unknown type is received, it\r\n       MUST be silently dropped.\r\n```\r\nI like this wording, but you are right that this refers to the destination (so that would be the destination endpoint). Is there any reason why this should be the router? \r\n\r\nP.S. unfortunately bullets automatically restart from 1. 2, so right now there are two rules 1 and 2. I'll try to fix that. \r\n\r\n> Also, I think rule 1) should reference the rule that explains how to identify the originator (as it does in the ICMP RFC, but what was somehow removed form the SCMP rules on docs.scion.org).\r\n\r\nOk, makes sense. Let me first hear back from Eliot on the default underlay port, and then iterate again on this",
+          "createdAt": "2026-03-02T12:45:52Z",
+          "updatedAt": "2026-03-02T12:45:52Z"
+        },
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Is there any reason why this should be the router?\r\n\r\nYes. It is implemented on the router. If it were not implemented on the router, we would need a standard port (30041) on the endhost to receive the message and decode the overlay port :).\r\n\r\nAlso, since we are copying the ICMP spec, it makes sense to have the same 5 rules. We obviously have to modify them, but putting them into 2 groups with a total of 6 rules seems like more of a change than necessary? \r\n\r\nWe could extract the paragraph about overlay extraction and put it below the 5 rules, maybe that would clear it up a bit?",
+          "createdAt": "2026-03-02T13:37:56Z",
+          "updatedAt": "2026-03-02T13:37:56Z"
         }
       ],
       "reviews": [
