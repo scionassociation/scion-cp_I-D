@@ -160,7 +160,20 @@ informative:
       -
         ins: SCION
         org: SCION Association
-
+  SCION-UDP:
+    title: SCION IP/UDP underlay
+    date: 2026
+    target: https://docs.scion.org/en/latest/protocols/underlay.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
 
 
 --- abstract
