@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 31 August 2026                                          S. Hitz
+Expires: 15 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2026
+                                                           14 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 15 September 2026.
 
 Copyright Notice
 
@@ -3752,6 +3752,11 @@ Table of Contents
               Network Time Protocol with Khronos", RFC 9523,
               DOI 10.17487/RFC9523, February 2024,
               <https://www.rfc-editor.org/rfc/rfc9523>.
+
+   [SCION-UDP]
+              Anapaya, ETH, and SCION, "SCION IP/UDP underlay", 2026,
+              <https://docs.scion.org/en/latest/protocols/
+              underlay.html>.
 
    [SCMP]     Anapaya, ETH Zuerich, and SCION Association, "SCMP
               Documentation", 2025,
