@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-05T00:32:40.675406+00:00",
+  "timestamp": "2026-03-15T00:38:33.803543+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -16277,13 +16277,13 @@
       "labels": [],
       "body": "Includes commits that were in #217 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-03-02T13:37:56Z",
+      "updatedAt": "2026-03-14T12:40:06Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scmp",
-      "headRefOid": "d209600bbe43c8fb840704c8219a40a306de7c87",
+      "headRefOid": "cb235fb0d271cdc2de1f727b94e732affad5d19e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16695,6 +16695,32 @@
               "body": "> default underlay port \n\nThis refers to UDP 30041. It is to be clarified with Eliot if we can add IANA actions in this draft or perhaps in -dataplane (and then I'd add a reference).",
               "createdAt": "2026-02-27T18:15:40Z",
               "updatedAt": "2026-02-27T18:15:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7rXhxk",
+          "commit": {
+            "abbreviatedOid": "d209600"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "@tzaeschke I propose some adjustments to leave port issues out of the draft, while referring to the docs page. What do you think?\nHappy to have a quick call to summarize this, perhaps it is faster than many roundtrips over comments",
+          "createdAt": "2026-03-14T12:38:35Z",
+          "updatedAt": "2026-03-14T12:40:06Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Hi @tzaeschke, now that we have the scionproto ref nearly ready, how about we restore the SCMP processing rules to nearly how they were before, then we add a sentence pointing to the external ref? \n```suggestion\n1. If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.\n2. If an SCMP informational message of unknown type is received, it MUST be silently dropped.\n3. Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section \"Deployment Considerations/MTU\").\n4. An SCMP error message MUST NOT be originated in response to any of the following:\n\n    - An SCMP error message.\n    - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.\n\nThe following rules apply to the first or last SCION router on a path when processing and forwarding SCMP messages to endpoints:\n\n1. - To pass an SCMP error message to the upper-layer process, implementations extract the upper-layer protocol type from the quoted offending packet in the body of the SCMP error message and used to select the appropriate process to handle the error.  In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. \n\n[](SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.\n```",
+              "createdAt": "2026-03-14T12:38:35Z",
+              "updatedAt": "2026-03-14T12:40:06Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "```suggestion\nEvery node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.\n```",
+              "createdAt": "2026-03-14T12:39:11Z",
+              "updatedAt": "2026-03-14T12:40:06Z"
             }
           ]
         }
