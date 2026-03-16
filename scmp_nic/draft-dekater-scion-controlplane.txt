@@ -2686,13 +2686,14 @@ Table of Contents
       [I-D.dekater-scion-dataplane] section "Deployment Considerations/
       MTU").
 
-   *  For error messages, the router uses the source port from the
-      quoted offending packet as the underlay destination port.  In case
-      of an unknown error type, the router should assume a SCMP header
-      length of 8 bytes, verify that the subsequent bytes represent a
-      SCION header, and attempt to extract the offending packet.  In
-      case the port cannot be extracted from the SCMP error message
-      body, the SCMP message MUST be silently dropped.
+   *  To pass an SCMP error message to the upper-layer process,
+      implementations extract the upper-layer protocol type from the
+      quoted offending packet in the body of the SCMP error message and
+      used to select the appropriate process to handle the error.  In
+      case of an unknown error type, implementations should assume a
+      SCMP header length of 8 bytes, verify that the subsequent bytes
+      represent a SCION header, and attempt to extract the offending
+      packet.
 
    *  An SCMP error message MUST NOT be originated in response to any of
       the following:
