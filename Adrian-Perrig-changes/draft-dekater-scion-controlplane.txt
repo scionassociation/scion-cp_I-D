@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 24 August 2026                                          S. Hitz
+Expires: 17 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                        20 February 2026
+                                                           16 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 August 2026.
+   This Internet-Draft will expire on 17 September 2026.
 
 Copyright Notice
 
@@ -329,15 +329,16 @@ Table of Contents
    Beacons (PCBs).  A path segment can be (1) an up segment (i.e., a
    path between a non-core AS and a core AS in the same ISD), (2) a down
    segment (i.e., the same as an up segment but in the opposite
-   direction), or (3) a core segment (i.e., a path between core ASes).
-   Endpoints use up to three path segments to create a forwarding path.
+   direction), or (3) a core segment (i.e., a path between core ASes,
+   possibly traversing ISD boundaries).  Endpoints use up to three path
+   segments to create a forwarding path.
 
-   *Path-Segment Construction Beacon (PCB)*: Core AS control planes
-   generate PCBs to explore paths within their isolation domain (ISD)
-   and between different ISDs.  ASes further propagate selected PCBs to
-   their neighboring ASes.  These PCBs traverse each AS accumulating
-   information, including Hop Fields (HFs) which can subsequently be
-   used for forwarding.
+   *Path-Segment Construction Beacon (PCB)*: Core AS Control Service
+   instances generate PCBs to explore paths within their isolation
+   domain (ISD) and between different ISDs.  ASes further propagate
+   selected PCBs to their neighboring ASes.  These PCBs traverse each AS
+   accumulating information, including Hop Fields (HFs) which can
+   subsequently be used by the data plane for forwarding.
 
    *SCION Control Message Protocol (SCMP)*: A signaling protocol
    analogous to the Internet Control Message Protocol (ICMP).  This is
@@ -687,7 +688,8 @@ Table of Contents
    *  Path reversal: In SCION, every path is reversible.  That is, the
       receiver of a packet can reverse the path in the packet header in
       order to produce a reply packet without having to perform a path
-      lookup.  Such a packet follows the original packet's path.
+      lookup.  Such a packet follows the original packet's path in the
+      reverse direction.
 
    *  Availability of certificates: Every entity is required to be in
       possession of all cryptographic material including the ISD's TRC
@@ -709,8 +711,8 @@ Table of Contents
 
    The RPC messages are transported via [Connect]'s RPC protocol that
    carries messages over HTTP/3 (see [RFC9114])), which in turn uses
-   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is compatible
-   with [gRPC] which is supported but deprecated.
+   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backward
+   compatible with [gRPC] which is supported but deprecated.
 
    In case of failure, RPC calls return an error as specified by the RPC
    framework.  That is, a non-zero status code and an explanatory
