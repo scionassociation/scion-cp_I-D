@@ -1832,7 +1832,7 @@ AS.
 | Data         | Variable length of arbitrary data                             |
 {: title="Informational Message field values"}
 
-Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests on the default underlay port and originates corresponding Echo replies.
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
 
 ### Echo Reply {#echo-reply}
 
