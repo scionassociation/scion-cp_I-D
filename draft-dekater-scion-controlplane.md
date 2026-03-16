@@ -222,9 +222,9 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Message Authentication Code (MAC)**. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
-**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e., the same as an up segment but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Endpoints use up to three path segments to create a forwarding path.
+**Path Segment**: These are derived from Path-Segment Construction Beacons (PCBs). A path segment can be (1) an up segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e., the same as an up segment but in the opposite direction), or (3) a core segment (i.e., a path between core ASes, possibly traversing ISD boundaries). Endpoints use up to three path segments to create a forwarding path.
 
-**Path-Segment Construction Beacon (PCB)**: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used for forwarding.
+**Path-Segment Construction Beacon (PCB)**: Core AS Control Service instances generate PCBs to explore paths within their isolation domain (ISD) and between different ISDs. ASes further propagate selected PCBs to their neighboring ASes. These PCBs traverse each AS accumulating information, including Hop Fields (HFs) which can subsequently be used by the data plane for forwarding.
 
 **SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in [](#scmp).
 
@@ -393,7 +393,7 @@ For example, the text representation of AS number ff00:0:1 in ISD number 15 is `
 SCION uses the following mechanisms to avoid circular dependencies during bootstrapping, and to provide resiliency after systemic failures:
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS Control Service only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
-- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path.
+- Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path in the reverse direction.
 - Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, in order to verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
@@ -403,7 +403,7 @@ SCION uses the following mechanisms to avoid circular dependencies during bootst
 
 All communication between the Control Services in different SCION ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is compatible with {{gRPC}} which is supported but deprecated.
+The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backward compatible with {{gRPC}} which is supported but deprecated.
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
