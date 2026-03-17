@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-15T00:38:33.803543+00:00",
+  "timestamp": "2026-03-17T00:32:23.503712+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3158,7 +3158,7 @@
       "id": "I_kwDOJx2-rs7pXaAd",
       "title": "Final read feedback",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/211",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3167,8 +3167,8 @@
       "labels": [],
       "body": "Some minor grammar/polishing feedback from Adrian is [here](https://drive.google.com/file/d/1AieRUAPHg462oD1eo-pr33r2EYhKh_85/view?usp=sharing). \n\nTODO: Implement in conformance with https://datatracker.ietf.org/doc/html/rfc7322 \n",
       "createdAt": "2026-02-09T08:56:46Z",
-      "updatedAt": "2026-02-10T08:17:58Z",
-      "closedAt": null,
+      "updatedAt": "2026-03-16T07:27:03Z",
+      "closedAt": "2026-03-16T07:27:03Z",
       "comments": [
         {
           "author": "knmeynell",
@@ -16034,26 +16034,42 @@
       "id": "PR_kwDOJx2-rs7CpdCE",
       "title": "Adrian corrections",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/218",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/Adrian-Perrig-changes/draft-dekater-scion-controlplane.txt)\r\nResolves #211",
       "createdAt": "2026-02-10T05:57:24Z",
-      "updatedAt": "2026-02-20T10:25:14Z",
+      "updatedAt": "2026-03-16T07:27:02Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "Adrian-Perrig-changes",
-      "headRefOid": "a3358015232a98e60497e97176924d53f1e97f53",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "cf24388068c4a1d070d71c7c7360a7251c7d5951",
+      "closedAt": "2026-03-16T07:27:01Z",
+      "mergedAt": "2026-03-16T07:27:01Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "f28ee0d481417a657ff43c43e6de06cb8f08423c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7rjUBm",
+          "commit": {
+            "abbreviatedOid": "cf24388"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I added a couple more chances that Adrian proposed and that were missing. \nAll good now",
+          "createdAt": "2026-03-16T07:26:55Z",
+          "updatedAt": "2026-03-16T07:26:55Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 220,
@@ -16270,24 +16286,26 @@
       "id": "PR_kwDOJx2-rs7C_Cly",
       "title": "Clarify SCMP processing (second PR)",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/223",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Includes commits that were in #217 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/tz-scmp/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-02-11T12:02:28Z",
-      "updatedAt": "2026-03-14T12:40:06Z",
+      "updatedAt": "2026-03-16T11:59:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "24bfc9e3fff9a9ea85969e2c39d30f6529b5dee4",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tz-scmp",
-      "headRefOid": "cb235fb0d271cdc2de1f727b94e732affad5d19e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "53e3156435861f6f518e9db573ff27fcd7e73e73",
+      "closedAt": "2026-03-16T10:20:59Z",
+      "mergedAt": "2026-03-16T10:20:59Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c"
+      },
       "comments": [
         {
           "author": "tzaeschke",
@@ -16721,6 +16739,164 @@
               "body": "```suggestion\nEvery node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.\n```",
               "createdAt": "2026-03-14T12:39:11Z",
               "updatedAt": "2026-03-14T12:40:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7rmsWc",
+          "commit": {
+            "abbreviatedOid": "cb235fb"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-16T10:14:15Z",
+          "updatedAt": "2026-03-16T10:14:16Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Sorry, I am not sure how this makes it closer to the original SCMP rules? Your suggestion doesn't appear to change the first 4 rules (which are similar to the original 5 rules).\n\nIt seems you suggest only a change to the part that is not in the SCMP spec?\nI also don't think the proposed change is correct:\n- It mentions \"process\" again, but border routers do not forward anything to \"upper-layer processes\", they forward it to the originating application port.\n- There appear to be some spelling problems:\n   - There is only one rule now, the header talks about \"rules\"\n   - If there is only one rule, maybe we don't need a bullet list?\n   - The rule starts with \"1. -\" , I would remove either the number or the dash\n   - \"and used to\" -> \"and use it to\"\n\nHow about we merge it as is and I can propose a change that reintroduces the original rule number 4?",
+              "createdAt": "2026-03-16T10:14:16Z",
+              "updatedAt": "2026-03-16T10:14:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7rmxN4",
+          "commit": {
+            "abbreviatedOid": "53e3156"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM % I propose to create a separate PR for the rules update",
+          "createdAt": "2026-03-16T10:17:52Z",
+          "updatedAt": "2026-03-16T10:17:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ro1qQ",
+          "commit": {
+            "abbreviatedOid": "d209600"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-16T11:59:25Z",
+          "updatedAt": "2026-03-16T11:59:26Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Opened #224 ",
+              "createdAt": "2026-03-16T11:59:26Z",
+              "updatedAt": "2026-03-16T11:59:26Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 224,
+      "id": "PR_kwDOJx2-rs7K5dQi",
+      "title": "SCMP - restore original rules and link to underlay documentation",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/224",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Follow up to #223\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/scmp_nic/draft-dekater-scion-controlplane.txt)",
+      "createdAt": "2026-03-16T11:51:34Z",
+      "updatedAt": "2026-03-16T12:40:07Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "scmp_nic",
+      "headRefOid": "8c44c5e6b6135c101f23751bdc841f3f78161423",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7rpLq0",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-16T12:14:39Z",
+          "updatedAt": "2026-03-16T12:14:39Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "What do you think?  This wording is generic enough to say that mapping SCMP messages to the higher layer process should be done somewhere. We don't say this is done at the last router, but then there is a pointer to the forwarding behavior on top of the IP/UDP underlay below ",
+              "createdAt": "2026-03-16T12:14:39Z",
+              "updatedAt": "2026-03-16T12:14:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7rpNoN",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-16T12:16:15Z",
+          "updatedAt": "2026-03-16T12:16:15Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "With this wording, diff with last submission is also not too much:\r\n<img width=\"1020\" height=\"587\" alt=\"Screenshot 2026-03-16 at 20 15 31\" src=\"https://github.com/user-attachments/assets/54f29b25-31ab-4210-9a40-4c5bfb679b01\" />",
+              "createdAt": "2026-03-16T12:16:15Z",
+              "updatedAt": "2026-03-16T12:16:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7rpGzj",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I still think talking about processes here is wrong, this was correct in the past (dispatcher)  but not anymore.",
+          "createdAt": "2026-03-16T12:10:44Z",
+          "updatedAt": "2026-03-16T12:40:07Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\n- For error messages, the router in the destination AS uses the source port from the quoted offending packet as the underlay destination port. In case of an unknown error type, the router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. In case the port cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n```",
+              "createdAt": "2026-03-16T12:10:44Z",
+              "updatedAt": "2026-03-16T12:40:07Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\n- If an SCMP error message of unknown type is received at its destination, it MUST be passed to the address (IP/port) that originated the packet that caused the error, if it can be identified.\n```",
+              "createdAt": "2026-03-16T12:25:40Z",
+              "updatedAt": "2026-03-16T12:40:07Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\n- To pass an SCMP error message to the address that originated the packet, implementations extract the upper-layer protocol type from the quoted offending packet in the body of the SCMP error message and use it to determine the origin address to handle the error.  In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet.\n\nIn case the origin address cannot be extracted from the SCMP error message, the SCMP message MUST be silently dropped.\n```\nSummary:\n- Avoid use of \"process\"\n- Avoid use of \"port\", use address instead.\n- Added sentence about dropping packets. We can drop this sentence if you want and just claim that \"attempt to extract\" implies that the packet is dropped when the attempt fails.\n\nWhat do you think?",
+              "createdAt": "2026-03-16T12:27:08Z",
+              "updatedAt": "2026-03-16T12:40:07Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "I still think we should avoid the term \"upper-layer process\".\nThis is what the dispatcher used to do, but the currently implementation works differently. Yes, there can be a SHIM, but in many cases (ideally _all_) it will be the border router doing the IP/port extraction, so there is no upper-layer. ",
+              "createdAt": "2026-03-16T12:31:18Z",
+              "updatedAt": "2026-03-16T12:40:07Z"
             }
           ]
         }
