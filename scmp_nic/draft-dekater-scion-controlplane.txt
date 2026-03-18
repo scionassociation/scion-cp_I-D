@@ -2686,16 +2686,17 @@ Table of Contents
       [I-D.dekater-scion-dataplane] section "Deployment Considerations/
       MTU").
 
-   *  To pass an SCMP error message to the originator of the packet,
-      implementations extract the upper-layer protocol type from the
-      quoted offending packet in the body of the SCMP error message and
-      use it to determine the address of the originator to handle the
-      error.  In case of an unknown error type, implementations should
-      assume a SCMP header length of 8 bytes, verify that the subsequent
-      bytes represent a SCION header, and attempt to extract the
-      offending packet.  Considerations related to port selection when
-      using an UDP/IP underlay are described in [SCION-UDP].  In case
-      the origin address cannot be extracted from the SCMP error
+   *  Implementations MUST attempt to pass SCMP error messages to the
+      originator when possible.  When using an UDP/IP underlay,
+      implementations extract the upper-layer protocol type and port
+      from the quoted offending packet in the body of the SCMP error
+      message and use it to determine the address of the originator to
+      handle the error.  Considerations related to port selection when
+      using an UDP/IP underlay are described in [SCION-UDP].  In case of
+      an unknown error type, implementations should assume a SCMP header
+      length of 8 bytes, verify that the subsequent bytes represent a
+      SCION header, and attempt to extract the offending packet.  In
+      case the origin address cannot be extracted from the SCMP error
       message, the SCMP message MUST be silently dropped.
 
    *  An SCMP error message MUST NOT be originated in response to any of
@@ -2706,8 +2707,8 @@ Table of Contents
       -  A packet which source address does not uniquely identify a
          single node.  E.g., an IPv4 or IPv6 multicast address.
 
-   SCION-UDP specifies the forwarding behavior of SCMP messages over an
-   IP/UDP underlay.
+   [SCION-UDP] specifies the forwarding behavior of SCMP messages over
+   an IP/UDP underlay.
 
    The maximum size 1232 bytes is chosen so that the entire datagram, if
    encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header
