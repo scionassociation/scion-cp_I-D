@@ -1669,7 +1669,7 @@ In case the origin address cannot be extracted from the SCMP error message, the 
     - An SCMP error message.
     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
 
-[](SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.
+[](#SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.
 
 The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.
 
