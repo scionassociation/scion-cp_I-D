@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 September 2026                                       S. Hitz
+Expires: 19 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                           16 March 2026
+                                                           18 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 September 2026.
+   This Internet-Draft will expire on 19 September 2026.
 
 Copyright Notice
 
@@ -2686,14 +2686,17 @@ Table of Contents
       [I-D.dekater-scion-dataplane] section "Deployment Considerations/
       MTU").
 
-   *  To pass an SCMP error message to the upper-layer process,
+   *  To pass an SCMP error message to the originator of the packet,
       implementations extract the upper-layer protocol type from the
       quoted offending packet in the body of the SCMP error message and
-      used to select the appropriate process to handle the error.  In
-      case of an unknown error type, implementations should assume a
-      SCMP header length of 8 bytes, verify that the subsequent bytes
-      represent a SCION header, and attempt to extract the offending
-      packet.
+      use it to determine the address of the originator to handle the
+      error.  In case of an unknown error type, implementations should
+      assume a SCMP header length of 8 bytes, verify that the subsequent
+      bytes represent a SCION header, and attempt to extract the
+      offending packet.  Considerations related to port selection when
+      using an UDP/IP underlay are described in [SCION-UDP].  In case
+      the origin address cannot be extracted from the SCMP error
+      message, the SCMP message MUST be silently dropped.
 
    *  An SCMP error message MUST NOT be originated in response to any of
       the following:
