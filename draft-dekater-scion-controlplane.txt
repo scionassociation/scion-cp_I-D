@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 17 September 2026                                       S. Hitz
+Expires: 20 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                           16 March 2026
+                                                           19 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 September 2026.
+   This Internet-Draft will expire on 20 September 2026.
 
 Copyright Notice
 
@@ -1904,6 +1904,8 @@ Table of Contents
 
       -  ca_cert: Returns the CA certificate in the chain.
 
+   Certificates are ASN.1 DER encoded.
+
    For requesting TRCs, the protobuf messages are:
 
    message TRCRequest {
@@ -1924,7 +1926,8 @@ Table of Contents
 
    *  serial: Returns the serial number of the TRC.
 
-   The returned trc contains the raw TRC.
+   The returned trc contains the ASN.1 DER encoded CMS SignedData
+   structure containing the TRC.
 
 2.5.  Renewal of Cryptographic Material
 
@@ -3934,11 +3937,18 @@ draft-dekater-scion-controlplane-15
 
    *  "originating/initiating" PCBs --> consistently use originating
 
+   *  2.2.  PCB Message Format: clarify order of as_entries
+
    *  Section 2.3.5.  Propagation of Selected PCBs: unify core and
       intra-ISD propagation, since steps are the same
 
-   *  SCMP: clarify relationship with RFC4443 and adapt/clarify
-      processing rules
+   *  Distribution of Cryptographic Material: clarify certificate
+      encoding
+
+   *  SCMP: clarify relationship with RFC4443, clarify error processing
+      rules and add reference to the SCION-UDP underlay
+
+   *  Appendix: remove SCIONLab
 
 draft-dekater-scion-controlplane-15
 
