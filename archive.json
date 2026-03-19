@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-17T00:32:23.503712+00:00",
+  "timestamp": "2026-03-19T00:35:03.613194+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3378,6 +3378,22 @@
           "updatedAt": "2026-02-27T15:05:04Z"
         }
       ]
+    },
+    {
+      "number": 225,
+      "id": "I_kwDOJx2-rs7z91bL",
+      "title": "Clarify certificate encoding",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/225",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "In here  https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-2.4-9.1.2.1.1 \n\nText was added in https://github.com/scionassociation/scion-cp_I-D/pull/173 ",
+      "createdAt": "2026-03-18T06:35:36Z",
+      "updatedAt": "2026-03-18T14:26:58Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -16809,13 +16825,13 @@
       "labels": [],
       "body": "Follow up to #223\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/scmp_nic/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-03-16T11:51:34Z",
-      "updatedAt": "2026-03-16T12:40:07Z",
+      "updatedAt": "2026-03-18T13:18:48Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scmp_nic",
-      "headRefOid": "8c44c5e6b6135c101f23751bdc841f3f78161423",
+      "headRefOid": "80a14d2cd5e928a777785b12ba1169e467ce6c44",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16899,8 +16915,207 @@
               "updatedAt": "2026-03-16T12:40:07Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sBKae",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T10:32:54Z",
+          "updatedAt": "2026-03-17T10:32:54Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Hi Til, thank you for reviewing.\r\n\r\n> * Avoid use of \"process\"\r\n> * Avoid use of \"port\", use address instead.\r\n\r\n\r\nHmm, I understand your concern, but I'm not sure address is the right word either, since we are not talking about the underlay. Isn't there an upper layer process pretty much all the time somewhere (e.g., an HTTP server).  I can't think of better words (perhaps \"source\")? \r\n\r\n> * Added sentence about dropping packets. We can drop this sentence if you want and just claim that \"attempt to extract\" implies that the packet is dropped when the attempt fails.\r\n\r\nOk sounds good",
+              "createdAt": "2026-03-17T10:32:54Z",
+              "updatedAt": "2026-03-17T10:32:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sFZHL",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T13:37:23Z",
+          "updatedAt": "2026-03-17T13:37:24Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "> Hmm, I understand your concern, but I'm not sure address is the right word either, since we are not talking about the underlay. Isn't there an upper layer process pretty much all the time somewhere (e.g., an HTTP server). I can't think of better words (perhaps \"source\")?\r\n\r\nActually, I think we _are_  talking about the underlay? The port that we extract from the SCMP payload (yes, overlay) is the port that is used on the UDP _underlay_ between BR and endpoint (or potentially between SHIM and endpoint).\r\nIn addition we need to extract the address from the normal SCMP header, but that is also then used as underlay address.\r\n\r\nOr am I missing something?",
+              "createdAt": "2026-03-17T13:37:24Z",
+              "updatedAt": "2026-03-17T13:37:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sGAA7",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T13:58:15Z",
+          "updatedAt": "2026-03-17T13:58:15Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "> Isn't there an upper layer process pretty much all the time somewhere [...]\r\n\r\nWell, I have two points here:\r\n- While there is always some process in the end, I would hesitate to call it upper-layer if it is on another machine. I'd say this really the the same layer, not an upper-layer.\r\n- Yes there is always some process, for example a NAT has probably some process running on it that does something with an incoming packet on a specific port. But that would be somewhat confusing, because people usually would just say \"forward something to a port (or address)\" instead of \"passing it on to the upper-layer process on the NAT device\", I would find that confusing even if we are not talking about NASTs....  ?\r\n\r\n",
+              "createdAt": "2026-03-17T13:58:15Z",
+              "updatedAt": "2026-03-17T13:58:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sHUiG",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T14:44:08Z",
+          "updatedAt": "2026-03-17T14:44:08Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "> Actually, I think we are talking about the underlay? \r\n\r\nAll the current version says about the underlay is:\r\n\r\n```\r\n[SCION-UDP] specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.\r\n```\r\n\r\nI'm trying to decouple underlay forwarding behavior from this draft. This is why I think a generic text is good enough \r\n",
+              "createdAt": "2026-03-17T14:44:08Z",
+              "updatedAt": "2026-03-17T14:45:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sHjGx",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T14:50:57Z",
+          "updatedAt": "2026-03-17T14:50:57Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```\r\nthe origin address to handle the error.\r\n```\r\nThis sounds a bit weird, addresses do not really handle errors.. Perhaps the key questions here is: do we expect the last router to do something on mapping SCMP messages to the right process through the use of a different underlay identifier (e.g. port)? \r\nI'm not suer we know how this would look like on other underlays, therefore I'd leave it as generic as possible ",
+              "createdAt": "2026-03-17T14:50:57Z",
+              "updatedAt": "2026-03-17T14:50:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sdCl6",
+          "commit": {
+            "abbreviatedOid": "8c44c5e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-18T11:28:03Z",
+          "updatedAt": "2026-03-18T11:28:04Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n- To pass an SCMP error message to the originator of the packet, implementations extract the upper-layer protocol type from the quoted offending packet in the body of the SCMP error message and use it to determine the address of the originator to handle the error.  In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. Considerations related to port selection when using an UDP/IP underlay are described in [](#SCION-UDP).\r\nIn case the origin address cannot be extracted from the SCMP error message, the SCMP message MUST be silently dropped.\r\n```",
+              "createdAt": "2026-03-18T11:28:03Z",
+              "updatedAt": "2026-03-18T11:41:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sds4l",
+          "commit": {
+            "abbreviatedOid": "47ac366"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-18T11:51:44Z",
+          "updatedAt": "2026-03-18T11:51:44Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\n- Implementations MUST attempt to pass SCMP error messages to the originator when possible. When using an UDP/IP underlay, implementations extract the upper-layer protocol type and port from the quoted offending packet in the body of the SCMP error message and use it to determine the address of the originator to handle the error. Considerations related to port selection when using an UDP/IP underlay are described in [](#SCION-UDP).\nIn case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. \nIn case the origin address cannot be extracted from the SCMP error message, the SCMP message MUST be silently dropped.\n```",
+              "createdAt": "2026-03-18T11:51:44Z",
+              "updatedAt": "2026-03-18T11:52:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7sd3OY",
+          "commit": {
+            "abbreviatedOid": "f75f231"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-18T11:56:37Z",
+          "updatedAt": "2026-03-18T11:56:37Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\n[](#SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.\n```",
+              "createdAt": "2026-03-18T11:56:37Z",
+              "updatedAt": "2026-03-18T11:56:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7seGd-",
+          "commit": {
+            "abbreviatedOid": "00c1113"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2026-03-18T12:04:03Z",
+          "updatedAt": "2026-03-18T12:04:03Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 226,
+      "id": "PR_kwDOJx2-rs7LlIxB",
+      "title": "Clarify certificate encoding",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/226",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #225 ",
+      "createdAt": "2026-03-18T15:25:09Z",
+      "updatedAt": "2026-03-18T15:25:20Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "cert-encoding",
+      "headRefOid": "f80e80c978bef5870d9409fce14d33cdad35a9c5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
