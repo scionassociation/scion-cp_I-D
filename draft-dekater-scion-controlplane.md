@@ -1219,6 +1219,8 @@ A `ChainsResponse` includes the following fields:
   - `as_cert`: Returns the AS certificate in the chain.
   - `ca_cert`: Returns the CA certificate in the chain.
 
+Certificates are ASN.1 DER encoded.
+
 For requesting TRCs, the protobuf messages are:
 
 ~~~~~
@@ -1239,7 +1241,7 @@ A `TRCRequest` includes the following fields:
 - `base`: Returns the base number of the TRC.
 - `serial`: Returns the serial number of the TRC.
 
-The returned `trc` contains the raw TRC.
+The returned `trc` contains the ASN.1 DER encoded CMS SignedData structure containing the TRC.
 
 ## Renewal of Cryptographic Material {#crypto-renewal}
 
@@ -2333,8 +2335,11 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Final read, wording
 - "originating/initiating" PCBs --> consistently use originating
+- 2.2.  PCB Message Format: clarify order of as_entries
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
-- SCMP: clarify relationship with RFC4443 and adapt/clarify processing rules
+- Distribution of Cryptographic Material: clarify certificate encoding
+- SCMP: clarify relationship with RFC4443, clarify error processing rules and add reference to the SCION-UDP underlay
+- Appendix: remove SCIONLab
 
 ## draft-dekater-scion-controlplane-15
 {:numbered="false"}
