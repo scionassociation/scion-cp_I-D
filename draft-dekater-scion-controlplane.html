@@ -1053,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 20 September 2026</td>
+<td class="center">Expires 21 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-controlplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-19" class="published">19 March 2026</time>
+<time datetime="2026-03-20" class="published">20 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-20">20 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-21">21 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1126,7 +1126,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -4678,38 +4678,35 @@ Note that there is not currently a defined mechanism for converting ICMP message
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
         </h3>
 <p id="section-6.4-1">The following rules apply to SCMP messages.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.4-2">
-<li id="section-6.4-2.1">
+<ul class="normal">
+<li class="normal" id="section-6.4-2.1">
             <p id="section-6.4-2.1.1">If an SCMP error message of unknown type is received at its destination, it <span class="bcp14">MUST</span> be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.4-2.2">
+          <li class="normal" id="section-6.4-2.2">
             <p id="section-6.4-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.4-2.3">
+          <li class="normal" id="section-6.4-2.3">
             <p id="section-6.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <span>[<a href="#I-D.dekater-scion-dataplane" class="cite xref">I-D.dekater-scion-dataplane</a>]</span> section "Deployment Considerations/MTU").<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.4-2.4">
-            <p id="section-6.4-2.4.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.4-2.4.2.1">
-                <p id="section-6.4-2.4.2.1.1">An SCMP error message.<a href="#section-6.4-2.4.2.1.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.4-2.4">
+            <p id="section-6.4-2.4.1">Implementations <span class="bcp14">MUST</span> attempt to pass SCMP error messages to the originator when possible. When using an UDP/IP underlay, implementations extract the upper-layer protocol type and port from the quoted offending packet in the body of the SCMP error message and use it to determine the address of the originator to handle the error. Considerations related to port selection when using an UDP/IP underlay are described in <span>[<a href="#SCION-UDP" class="cite xref">SCION-UDP</a>]</span>.
+In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet.
+In case the origin address cannot be extracted from the SCMP error message, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.4-2.4.2.2">
-                <p id="section-6.4-2.4.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.4.2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.4-2.5">
+            <p id="section-6.4-2.5.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-6.4-2.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4-2.5.2.1">
+                <p id="section-6.4-2.5.2.1.1">An SCMP error message.<a href="#section-6.4-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-6.4-2.5.2.2">
+                <p id="section-6.4-2.5.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-6.4-2.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-        </ol>
-<p id="section-6.4-3">The following rules apply to the first or last SCION router on a path when processing and forwarding SCMP messages to endpoints:<a href="#section-6.4-3" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.4-4">
-<li id="section-6.4-4.1">
-            <p id="section-6.4-4.1.1">For error messages, the router uses the source port from the quoted offending packet as the underlay destination port. In case of an unknown error type, the router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. In case the port cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-6.4-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-6.4-4.2">
-            <p id="section-6.4-4.2.1">Echo Requests and Traceroute Requests <span class="bcp14">MUST</span> be forwarded on the default underlay port.<a href="#section-6.4-4.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<p id="section-6.4-5">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.<a href="#section-6.4-5" class="pilcrow">¶</a></p>
+        </ul>
+<p id="section-6.4-3"><span>[<a href="#SCION-UDP" class="cite xref">SCION-UDP</a>]</span> specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-4">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.<a href="#section-6.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scmp-notification">
@@ -6577,7 +6574,7 @@ SCMP External Interface Down (<a href="#external-interface-down" class="auto int
             <p id="appendix-B.1-1.5.1">Distribution of Cryptographic Material: clarify certificate encoding<a href="#appendix-B.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.6">
-            <p id="appendix-B.1-1.6.1">SCMP: clarify relationship with RFC4443, clarify error processing rules and add reference to the SCION-UDP underlay<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-1.6.1">SCMP: clarify relationship with RFC4443, clarify error processing rules and add informative reference to the SCION-UDP underlay<a href="#appendix-B.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-1.7">
             <p id="appendix-B.1-1.7.1">Appendix: remove SCIONLab<a href="#appendix-B.1-1.7.1" class="pilcrow">¶</a></p>

@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 20 September 2026                                       S. Hitz
+Expires: 21 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                           19 March 2026
+                                                           20 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 September 2026.
+   This Internet-Draft will expire on 21 September 2026.
 
 Copyright Notice
 
@@ -2674,42 +2674,44 @@ Table of Contents
 
    The following rules apply to SCMP messages.
 
-   1.  If an SCMP error message of unknown type is received at its
-       destination, it MUST be passed to the upper-layer process that
-       originated the packet that caused the error, if it can be
-       identified.
+   *  If an SCMP error message of unknown type is received at its
+      destination, it MUST be passed to the upper-layer process that
+      originated the packet that caused the error, if it can be
+      identified.
 
-   2.  If an SCMP informational message of unknown type is received, it
-       MUST be silently dropped.
+   *  If an SCMP informational message of unknown type is received, it
+      MUST be silently dropped.
 
-   3.  Every SCMP error message MUST include as much of the offending
-       SCION packet as possible.  The error message packet - including
-       the SCION header and all extension headers MUST NOT exceed *1232
-       bytes* in order to fit into the minimum MTU (see
-       [I-D.dekater-scion-dataplane] section "Deployment Considerations/
-       MTU").
+   *  Every SCMP error message MUST include as much of the offending
+      SCION packet as possible.  The error message packet - including
+      the SCION header and all extension headers MUST NOT exceed *1232
+      bytes* in order to fit into the minimum MTU (see
+      [I-D.dekater-scion-dataplane] section "Deployment Considerations/
+      MTU").
 
-   4.  An SCMP error message MUST NOT be originated in response to any
-       of the following:
+   *  Implementations MUST attempt to pass SCMP error messages to the
+      originator when possible.  When using an UDP/IP underlay,
+      implementations extract the upper-layer protocol type and port
+      from the quoted offending packet in the body of the SCMP error
+      message and use it to determine the address of the originator to
+      handle the error.  Considerations related to port selection when
+      using an UDP/IP underlay are described in [SCION-UDP].  In case of
+      an unknown error type, implementations should assume a SCMP header
+      length of 8 bytes, verify that the subsequent bytes represent a
+      SCION header, and attempt to extract the offending packet.  In
+      case the origin address cannot be extracted from the SCMP error
+      message, the SCMP message MUST be silently dropped.
 
-       *  An SCMP error message.
+   *  An SCMP error message MUST NOT be originated in response to any of
+      the following:
 
-       *  A packet which source address does not uniquely identify a
-          single node.  E.g., an IPv4 or IPv6 multicast address.
+      -  An SCMP error message.
 
-   The following rules apply to the first or last SCION router on a path
-   when processing and forwarding SCMP messages to endpoints:
+      -  A packet which source address does not uniquely identify a
+         single node.  E.g., an IPv4 or IPv6 multicast address.
 
-   1.  For error messages, the router uses the source port from the
-       quoted offending packet as the underlay destination port.  In
-       case of an unknown error type, the router should assume a SCMP
-       header length of 8 bytes, verify that the subsequent bytes
-       represent a SCION header, and attempt to extract the offending
-       packet.  In case the port cannot be extracted from the SCMP error
-       message body, the SCMP message MUST be silently dropped.
-
-   2.  Echo Requests and Traceroute Requests MUST be forwarded on the
-       default underlay port.
+   [SCION-UDP] specifies the forwarding behavior of SCMP messages over
+   an IP/UDP underlay.
 
    The maximum size 1232 bytes is chosen so that the entire datagram, if
    encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header
@@ -3946,7 +3948,7 @@ draft-dekater-scion-controlplane-15
       encoding
 
    *  SCMP: clarify relationship with RFC4443, clarify error processing
-      rules and add reference to the SCION-UDP underlay
+      rules and add informative reference to the SCION-UDP underlay
 
    *  Appendix: remove SCIONLab
 
