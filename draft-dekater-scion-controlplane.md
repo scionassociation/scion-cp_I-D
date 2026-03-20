@@ -1661,18 +1661,17 @@ The checksum is calculated as the 16-bit one's complement of the one's complemen
 
 The following rules apply to SCMP messages.
 
-1. If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
-2. If an SCMP informational message of unknown type is received, it MUST be silently dropped.
-3. Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
-4. An SCMP error message MUST NOT be originated in response to any of the following:
-
+- If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
+- If an SCMP informational message of unknown type is received, it MUST be silently dropped.
+- Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see {{I-D.dekater-scion-dataplane}} section "Deployment Considerations/MTU").
+- Implementations MUST attempt to pass SCMP error messages to the originator when possible. When using an UDP/IP underlay, implementations extract the upper-layer protocol type and port from the quoted offending packet in the body of the SCMP error message and use it to determine the address of the originator to handle the error. Considerations related to port selection when using an UDP/IP underlay are described in [](#SCION-UDP).
+In case of an unknown error type, implementations should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet.
+In case the origin address cannot be extracted from the SCMP error message, the SCMP message MUST be silently dropped.
+- An SCMP error message MUST NOT be originated in response to any of the following:
     - An SCMP error message.
     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
 
-The following rules apply to the first or last SCION router on a path when processing and forwarding SCMP messages to endpoints:
-
-1. For error messages, the router uses the source port from the quoted offending packet as the underlay destination port. In case of an unknown error type, the router should assume a SCMP header length of 8 bytes, verify that the subsequent bytes represent a SCION header, and attempt to extract the offending packet. In case the port cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
-2. Echo Requests and Traceroute Requests MUST be forwarded on the default underlay port.
+[](#SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.
 
 The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.
 
@@ -2338,7 +2337,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - 2.2.  PCB Message Format: clarify order of as_entries
 - Section 2.3.5. Propagation of Selected PCBs: unify core and intra-ISD propagation, since steps are the same
 - Distribution of Cryptographic Material: clarify certificate encoding
-- SCMP: clarify relationship with RFC4443, clarify error processing rules and add reference to the SCION-UDP underlay
+- SCMP: clarify relationship with RFC4443, clarify error processing rules and add informative reference to the SCION-UDP underlay
 - Appendix: remove SCIONLab
 
 ## draft-dekater-scion-controlplane-15
