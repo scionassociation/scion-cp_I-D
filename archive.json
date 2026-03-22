@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-19T00:35:03.613194+00:00",
+  "timestamp": "2026-03-22T00:35:01.852489+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3215,15 +3215,15 @@
       "id": "I_kwDOJx2-rs7paT5v",
       "title": "Clarify SCMP processing rules",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/213",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Section 6.4:\n```\n* If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.\n\n* If an SCMP informational message of unknown type is received, it MUST be silently dropped.\n\n* [...]\n\n* In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.\n\n* [...]\n```\n\nThis could benefit from some clarification:\n\n- Ad 1): How can a socket determine if an incoming packet was triggered by an outgoing packet (let alone which process)? Note: the type is unknown which means the header length is unknown so the payload cannot be extracted. Even with payload available, it is unclear how that would work.\n- Ad 1): What is the purpose of forwarding unknown SCMP messages to the application layer? Even for *known* SCMP messages it is not obvious how this is meant to work, should processes know SCMP messages? And for *unknown* SCMP messages? \n- Why are unknown types of Error and Info treated differently?\n- ~Shouldn't there be a process requirement/recommendation about authenticating SCMP messages before processing?~ EDIT:  Section 8.3 states that SCMP authentication is still experimental and not specified here.\n- Ad 4): How does a SCION library know whether it is required to do that?\n\nA partial insight: Point 4) suggests that the upper layer protocol is used to identify upper layer processes. Does this refer to a design where a SCION kernel socket passes traffic on to a UDP kernel socket (here called a \"process\")?\n\nSee also discussion here: https://scionproto.slack.com/archives/C8ADA9CEP/p1770398184282579",
       "createdAt": "2026-02-09T11:49:47Z",
-      "updatedAt": "2026-03-04T20:36:13Z",
-      "closedAt": null,
+      "updatedAt": "2026-03-20T04:27:21Z",
+      "closedAt": "2026-03-20T04:27:21Z",
       "comments": [
         {
           "author": "tzaeschke",
@@ -3384,15 +3384,15 @@
       "id": "I_kwDOJx2-rs7z91bL",
       "title": "Clarify certificate encoding",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/225",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "In here  https://www.ietf.org/archive/id/draft-dekater-scion-controlplane-15.html#section-2.4-9.1.2.1.1 \n\nText was added in https://github.com/scionassociation/scion-cp_I-D/pull/173 ",
       "createdAt": "2026-03-18T06:35:36Z",
-      "updatedAt": "2026-03-18T14:26:58Z",
-      "closedAt": null,
+      "updatedAt": "2026-03-19T05:39:22Z",
+      "closedAt": "2026-03-19T05:39:22Z",
       "comments": []
     }
   ],
@@ -16818,24 +16818,26 @@
       "id": "PR_kwDOJx2-rs7K5dQi",
       "title": "SCMP - restore original rules and link to underlay documentation",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/224",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Follow up to #223\r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?draft-dekater-scion-controlplane&url_2=https://scionassociation.github.io/scion-cp_I-D/scmp_nic/draft-dekater-scion-controlplane.txt)",
       "createdAt": "2026-03-16T11:51:34Z",
-      "updatedAt": "2026-03-18T13:18:48Z",
+      "updatedAt": "2026-03-20T04:26:51Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c",
+      "baseRefOid": "7d936d10042b20616254abb749b4f685b4db8163",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "scmp_nic",
-      "headRefOid": "80a14d2cd5e928a777785b12ba1169e467ce6c44",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "173f3174d675cdc540e86fcacfc4fcbdc4106a40",
+      "closedAt": "2026-03-20T04:26:50Z",
+      "mergedAt": "2026-03-20T04:26:50Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5f7b91222639fa9671fcf15067fe8491eb8966fc"
+      },
       "comments": [],
       "reviews": [
         {
@@ -17096,25 +17098,35 @@
       "id": "PR_kwDOJx2-rs7LlIxB",
       "title": "Clarify certificate encoding",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/226",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #225 ",
       "createdAt": "2026-03-18T15:25:09Z",
-      "updatedAt": "2026-03-18T15:25:20Z",
+      "updatedAt": "2026-03-19T05:39:26Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "78affe5ea95ba278651fbbc8a4fd4a423be0c52c",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "cert-encoding",
-      "headRefOid": "f80e80c978bef5870d9409fce14d33cdad35a9c5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "b051e27fa982e0db8bd665be6ab941744121862b",
+      "closedAt": "2026-03-19T05:39:20Z",
+      "mergedAt": "2026-03-19T05:39:20Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "7d936d10042b20616254abb749b4f685b4db8163"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Dominik Roos\u00a0\u00a0[1:37 PM]\r\nCert encoding :lgtm:",
+          "createdAt": "2026-03-19T05:39:24Z",
+          "updatedAt": "2026-03-19T05:39:24Z"
+        }
+      ],
       "reviews": []
     }
   ]
