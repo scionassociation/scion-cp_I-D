@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-22T00:35:01.852489+00:00",
+  "timestamp": "2026-03-24T00:30:20.494749+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -17127,6 +17127,32 @@
           "updatedAt": "2026-03-19T05:39:24Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 227,
+      "id": "PR_kwDOJx2-rs7MpmbG",
+      "title": "Rate limiting SCMP",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/227",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #213 \r\nChanges following feedback from IANA port reviewers. \r\nTODO: address how RFC 8085 requirements are met (perhaps in -dataplane)",
+      "createdAt": "2026-03-23T11:12:13Z",
+      "updatedAt": "2026-03-23T11:13:32Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "5f7b91222639fa9671fcf15067fe8491eb8966fc",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "iana-feedback",
+      "headRefOid": "24c6298732325da042322a74d7e3a8643619c617",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
