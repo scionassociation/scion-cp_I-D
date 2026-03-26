@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-24T00:30:20.494749+00:00",
+  "timestamp": "2026-03-26T00:36:39.450873+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3393,6 +3393,22 @@
       "createdAt": "2026-03-18T06:35:36Z",
       "updatedAt": "2026-03-19T05:39:22Z",
       "closedAt": "2026-03-19T05:39:22Z",
+      "comments": []
+    },
+    {
+      "number": 228,
+      "id": "I_kwDOJx2-rs72lBHi",
+      "title": "Clarify ways to satisfy RFC 8085 requirements",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/issues/228",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Following feedback from the IANA port reviewers: \n> - Finally, requests to IANA for UDP port numbers have to explain how the system ensures that the requirements of RFC 8085 (UDP Usage Guidelines) are fulfilled. For instance, this could require an explanation how congestion control is implemented for SCION control/diagnostic messages. If the port will also be used for encapsulated data traffic, this could e.g. require \"circuit breakers\" or the like. There are examples how to deal with RFC 8085 requirements in many UDP-based protocols defined on IETF standards track. \n\nTODO: \n-controlplane\n- [ ] rate limiting for SCMP\n- [ ]  clarifying that congestion control for control plane messages is taken care of by the fact that they use RPCs over QUIC \n\n-dataplane\n- [ ] circuit breakers for raw inner UDP?? \nRFC8085 says: \n   > IP-based unicast traffic is generally assumed to be congestion\n   controlled, i.e., it is assumed that the transport protocols\n   generating IP-based unicast traffic at the sender already employ\n   mechanisms that are sufficient to address congestion on the path.\n   Consequently, a tunnel carrying IP-based unicast traffic should\n   already interact appropriately with other traffic sharing the path,\n   and specific congestion control mechanisms for the tunnel are not\n   necessary. ...\n   > A circuit breaker\n       mechanism may provide benefit by controlling the envelope of the\n       aggregated traffic.\n\n   It is IMHO not necessary to have further recommendations, except for SCMP. \n- [ ] Some mechanisms for forwarding SCMP/HBH/E2E/~BFD~?\n   > A tunnel generates UDP traffic at a volume that corresponds to\n       the volume of payload traffic, and the payload traffic is not\n       known to be IP based, or is known to be IP based but not\n       congestion controlled. \n\n- [ ] Avoiding fragmentation? (recommend MTU discovery mechanisms)?\n- [ ] Does the underlay use UDP checksum? Should we have some guidance in -dataplane or in the external reference? \n- [ ] Do UDP/SCION packets use checksums (likely not yet: https://github.com/scionproto/scion/issues/4265 )",
+      "createdAt": "2026-03-25T16:47:27Z",
+      "updatedAt": "2026-03-25T18:10:15Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -17139,9 +17155,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Contributes to #213 \r\nChanges following feedback from IANA port reviewers. \r\nTODO: address how RFC 8085 requirements are met (perhaps in -dataplane)",
+      "body": "Contributes to #213 \r\nContributes to #228 \r\nChanges following feedback from IANA port reviewers. \r\nTODO: address how RFC 8085 requirements are met (perhaps in -dataplane)",
       "createdAt": "2026-03-23T11:12:13Z",
-      "updatedAt": "2026-03-23T11:13:32Z",
+      "updatedAt": "2026-03-25T17:19:47Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5f7b91222639fa9671fcf15067fe8491eb8966fc",
@@ -17153,7 +17169,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7uYFYL",
+          "commit": {
+            "abbreviatedOid": "24c6298"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2026-03-24T13:40:48Z",
+          "updatedAt": "2026-03-24T13:40:48Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
