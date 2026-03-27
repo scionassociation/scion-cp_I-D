@@ -417,7 +417,7 @@ SCION uses the following mechanisms to avoid circular dependencies during bootst
 
 All communication between the Control Services in different SCION ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backward compatible with {{gRPC}} which is supported but deprecated.
+The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) to handle transport and congestion control. Connect is backward compatible with {{gRPC}} which is supported but deprecated.
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
@@ -2331,7 +2331,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-controlplane-17
 {:numbered="false"}
 
-- SCMP: add normative language on rate limiting
+- SCMP: add normative language on rate limiting, mention congestion control when discussing QUIC transport for RPCs
 
 ## draft-dekater-scion-controlplane-16
 {:numbered="false"}
