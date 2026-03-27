@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 24 September 2026                                       S. Hitz
+Expires: 28 September 2026                                       S. Hitz
                                                          Anapaya Systems
-                                                           23 March 2026
+                                                           27 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 September 2026.
+   This Internet-Draft will expire on 28 September 2026.
 
 Copyright Notice
 
@@ -712,8 +712,9 @@ Table of Contents
 
    The RPC messages are transported via [Connect]'s RPC protocol that
    carries messages over HTTP/3 (see [RFC9114])), which in turn uses
-   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backward
-   compatible with [gRPC] which is supported but deprecated.
+   QUIC/UDP ([RFC9000]) to handle transport and congestion control.
+   Connect is backward compatible with [gRPC] which is supported but
+   deprecated.
 
    In case of failure, RPC calls return an error as specified by the RPC
    framework.  That is, a non-zero status code and an explanatory
@@ -3938,7 +3939,8 @@ Change Log
 
 draft-dekater-scion-controlplane-17
 
-   *  SCMP: add normative language on rate limiting
+   *  SCMP: add normative language on rate limiting, mention congestion
+      control when discussing QUIC transport for RPCs
 
 draft-dekater-scion-controlplane-16
 
