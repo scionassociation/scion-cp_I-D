@@ -417,7 +417,7 @@ SCION uses the following mechanisms to avoid circular dependencies during bootst
 
 All communication between the Control Services in different SCION ASes is expressed in terms of RPC remote procedure calls. Service interfaces and messages are defined in the Protocol Buffer "proto3" interface definition language (for details, see {{proto3}}).
 
-The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) as a transport layer. Connect is backward compatible with {{gRPC}} which is supported but deprecated.
+The RPC messages are transported via {{Connect}}'s RPC protocol that carries messages over HTTP/3 (see {{RFC9114}})), which in turn uses QUIC/UDP ({{RFC9000}}) to handle transport and congestion control. Connect is backward compatible with {{gRPC}} which is supported but deprecated.
 
 In case of failure, RPC calls return an error as specified by the RPC framework. That is, a non-zero status code and an explanatory string. {{service-discovery}} provides details about the establishment of the underlying QUIC connections.
 
@@ -1670,7 +1670,7 @@ In case the origin address cannot be extracted from the SCMP error message, the 
 - An SCMP error message MUST NOT be originated in response to any of the following:
     - An SCMP error message.
     - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
-
+- A SCION node MUST limit the rate of SCMP error messages it originates. Similar considerations to {{RFC4443}} section 2.4 point (f) apply.
 [](#SCION-UDP) specifies the forwarding behavior of SCMP messages over an IP/UDP underlay.
 
 The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that this MTU can also be safely expected when using IPv4.
@@ -2328,8 +2328,12 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-controlplane-17
+{:numbered="false"}
 
-## draft-dekater-scion-controlplane-15
+- SCMP: add normative language on rate limiting, mention congestion control when discussing QUIC transport for RPCs
+
+## draft-dekater-scion-controlplane-16
 {:numbered="false"}
 
 - Final read, wording
