@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-29T00:38:39.020908+00:00",
+  "timestamp": "2026-03-31T00:37:05.143103+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -17150,24 +17150,26 @@
       "id": "PR_kwDOJx2-rs7MpmbG",
       "title": "Rate limiting SCMP",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/227",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Contributes to #213 \r\nContributes to #228 \r\nChanges following feedback from IANA port reviewers. \r\nTODO: address how RFC 8085 requirements are met (perhaps in -dataplane)",
       "createdAt": "2026-03-23T11:12:13Z",
-      "updatedAt": "2026-03-27T20:09:52Z",
+      "updatedAt": "2026-03-30T08:22:51Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5f7b91222639fa9671fcf15067fe8491eb8966fc",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "iana-feedback",
       "headRefOid": "b084e6aaef8d72586a13156cc0e0466104020d0c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-03-30T08:22:44Z",
+      "mergedAt": "2026-03-30T08:22:44Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "858716efd60c669307a30d4b2135c6cce42ab91b"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -17192,6 +17194,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 229,
+      "id": "PR_kwDOJx2-rs7OoC4F",
+      "title": "Update peering links description in SCION document",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/229",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Clarify peering description.\r\n\r\nAs far as I can tell after extensive discussion:\r\n\r\n-   CORE segments do not contain peering information\r\n-   Peering can only happen between an UP and a DOWN segment\r\n-   Unless I still misunderstand things, there are edge cases where a CORE segment can be turned into an UP or DOWN segment, but in the end that still means only UP and DOWN segments can participate in peering. Also, these edge cases need a bit more explanation than what can be done in the terminology section.\r\n\r\n\r\nThis brings the text in line with this (mentioning explicitly UP and DOWN):\r\nhttps://github.com/scionassociation/scion-dp_I-D/blob/0b0d4e04ef22476c6d6c544bcced559a1ba3a3c3/draft-dekater-scion-dataplane.md?plain=1#L385\r\n\r\nSee also https://github.com/scionassociation/scion-dp_I-D/pull/160",
+      "createdAt": "2026-03-30T13:39:53Z",
+      "updatedAt": "2026-03-30T13:39:56Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "858716efd60c669307a30d4b2135c6cce42ab91b",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "tzaeschke-peering",
+      "headRefOid": "581828ddc5100b3141d9f9b824155db59299a0fc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
