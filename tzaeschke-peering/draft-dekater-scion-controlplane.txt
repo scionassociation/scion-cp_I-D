@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 October 2026                                          S. Hitz
+Expires: 2 October 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                           30 March 2026
+                                                           31 March 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 October 2026.
+   This Internet-Draft will expire on 2 October 2026.
 
 Copyright Notice
 
@@ -772,10 +772,11 @@ Table of Contents
 2.1.1.  Peering Links
 
    PCBs do not traverse peering links, but peering links are instead
-   announced along with a regular path in a PCB.  If both ASes at either
-   end of a peering link have registered path segments that include this
-   specific peering link, then it is possible to use this during segment
-   combination to create the end-to-end path.
+   announced along with a regular path in a PCB in an up or down
+   segment.  If both ASes at either end of a peering link have
+   registered path segments that include this specific peering link,
+   then it is possible to use this during segment combination to create
+   the end-to-end path.
 
 2.1.2.  Appending Entries to a PCB
 
