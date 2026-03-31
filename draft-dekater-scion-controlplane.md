@@ -258,7 +258,7 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 
 - *Core* links connect two core ASes, which are either within the same or in different ISDs. Core links can exist for various reasons, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
-- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). They can be established between any two ASes (core or non-core) between an UP and a DOWN segment. They can cross ISD boundaries.
+- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). Network operators can establish peering links between any two ASes (core or non-core), including across ISD boundaries.
 
 SCION paths are comprised of at most three path segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Each path segment is established over one or more links.
 
