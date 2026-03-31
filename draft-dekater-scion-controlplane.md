@@ -442,7 +442,7 @@ On its way, a PCB accumulates cryptographically protected path and forwarding in
 
 ### Peering Links
 
-PCBs do not traverse peering links, but peering links are instead announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this during segment combination to create the end-to-end path.
+PCBs do not traverse peering links, but peering links are instead announced along with a regular path in a PCB in an up or down segment. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this during segment combination to create the end-to-end path.
 
 
 ### Appending Entries to a PCB {#pcb-appending}
