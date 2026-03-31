@@ -383,9 +383,9 @@ Table of Contents
       typically have a provider-customer relationship.
 
    *  _Peering_ links exist between ASes with a peering relationship
-      (settlement-free or paid).  They can be established between any
-      two ASes (core or non-core) between an UP and a DOWN segment.
-      They can cross ISD boundaries.
+      (settlement-free or paid).  Network operators can establish
+      peering links between any two ASes (core or non-core), including
+      across ISD boundaries.
 
    SCION paths are comprised of at most three path segments: an up
    segment, traversing links from child to parent, then a core segment
