@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 October 2026                                          S. Hitz
+Expires: 3 October 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                           30 March 2026
+                                                            1 April 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 October 2026.
+   This Internet-Draft will expire on 3 October 2026.
 
 Copyright Notice
 
@@ -383,8 +383,9 @@ Table of Contents
       typically have a provider-customer relationship.
 
    *  _Peering_ links exist between ASes with a peering relationship
-      (settlement-free or paid).  They can be established between any
-      two ASes (core or non-core) and can cross ISD boundaries.
+      (settlement-free or paid).  Network operators can establish
+      peering links between any two ASes (core or non-core), including
+      across ISD boundaries.
 
    SCION paths are comprised of at most three path segments: an up
    segment, traversing links from child to parent, then a core segment
@@ -771,10 +772,11 @@ Table of Contents
 2.1.1.  Peering Links
 
    PCBs do not traverse peering links, but peering links are instead
-   announced along with a regular path in a PCB.  If both ASes at either
-   end of a peering link have registered path segments that include this
-   specific peering link, then it is possible to use this during segment
-   combination to create the end-to-end path.
+   announced along with a regular path in a PCB in an up or down
+   segment.  If both ASes at either end of a peering link have
+   registered path segments that include this specific peering link,
+   then it is possible to use this during segment combination to create
+   the end-to-end path.
 
 2.1.2.  Appending Entries to a PCB
 
@@ -3941,6 +3943,9 @@ draft-dekater-scion-controlplane-17
 
    *  SCMP: add normative language on rate limiting, mention congestion
       control when discussing QUIC transport for RPCs
+
+   *  Peering links: clarify they are established in an up or down
+      segment
 
 draft-dekater-scion-controlplane-16
 
