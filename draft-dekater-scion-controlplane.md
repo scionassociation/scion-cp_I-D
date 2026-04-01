@@ -258,7 +258,7 @@ SCION distinguishes three types of links between ASes: (1) core links, (2) paren
 
 - *Core* links connect two core ASes, which are either within the same or in different ISDs. Core links can exist for various reasons, including provider-customer (where the customer pays the provider for traffic) and peering relationships.
 - *Parent-child* links create a hierarchy between the parent and the child AS within the same ISD. ASes with a parent-child link typically have a provider-customer relationship.
-- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). They can be established between any two ASes (core or non-core) and can cross ISD boundaries.
+- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). Network operators can establish peering links between any two ASes (core or non-core), including across ISD boundaries.
 
 SCION paths are comprised of at most three path segments: an up segment, traversing links from child to parent, then a core segment consisting of core links, followed by a down segment traversing links from parent to child. Each path segment is established over one or more links.
 
@@ -442,7 +442,7 @@ On its way, a PCB accumulates cryptographically protected path and forwarding in
 
 ### Peering Links
 
-PCBs do not traverse peering links, but peering links are instead announced along with a regular path in a PCB. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this during segment combination to create the end-to-end path.
+PCBs do not traverse peering links, but peering links are instead announced along with a regular path in a PCB in an up or down segment. If both ASes at either end of a peering link have registered path segments that include this specific peering link, then it is possible to use this during segment combination to create the end-to-end path.
 
 
 ### Appending Entries to a PCB {#pcb-appending}
@@ -2332,6 +2332,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - SCMP: add normative language on rate limiting, mention congestion control when discussing QUIC transport for RPCs
+- Peering links: clarify they are established in an up or down segment
 
 ## draft-dekater-scion-controlplane-16
 {:numbered="false"}
