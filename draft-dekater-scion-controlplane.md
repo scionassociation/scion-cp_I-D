@@ -2332,7 +2332,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - SCMP: add normative language on rate limiting, mention congestion control when discussing QUIC transport for RPCs
-- Peering links: clarify they are established in an up or down segment
+- Peering links: clarify they are established in an up or down segment.
 
 ## draft-dekater-scion-controlplane-16
 {:numbered="false"}
