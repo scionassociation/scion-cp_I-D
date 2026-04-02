@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-31T00:37:05.143103+00:00",
+  "timestamp": "2026-04-02T00:34:48.063737+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3405,9 +3405,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Following feedback from the IANA port reviewers: \n> - Finally, requests to IANA for UDP port numbers have to explain how the system ensures that the requirements of RFC 8085 (UDP Usage Guidelines) are fulfilled. For instance, this could require an explanation how congestion control is implemented for SCION control/diagnostic messages. If the port will also be used for encapsulated data traffic, this could e.g. require \"circuit breakers\" or the like. There are examples how to deal with RFC 8085 requirements in many UDP-based protocols defined on IETF standards track. \n\nTODO: \n-controlplane (#227 )\n- [x] rate limiting for SCMP\n- [x]  clarifying that congestion control for control plane messages is taken care of by the fact that they use RPCs over QUIC \n\n-dataplane\n- [ ] circuit breakers for raw inner UDP?? \nRFC8085 says: \n   > IP-based unicast traffic is generally assumed to be congestion\n   controlled, i.e., it is assumed that the transport protocols\n   generating IP-based unicast traffic at the sender already employ\n   mechanisms that are sufficient to address congestion on the path.\n   Consequently, a tunnel carrying IP-based unicast traffic should\n   already interact appropriately with other traffic sharing the path,\n   and specific congestion control mechanisms for the tunnel are not\n   necessary. ...\n   > A circuit breaker\n       mechanism may provide benefit by controlling the envelope of the\n       aggregated traffic.\n\n   It is IMHO not necessary to have further recommendations, except for SCMP. \n- [ ] Some mechanisms for forwarding SCMP/HBH/E2E/~BFD~?\n   > A tunnel generates UDP traffic at a volume that corresponds to\n       the volume of payload traffic, and the payload traffic is not\n       known to be IP based, or is known to be IP based but not\n       congestion controlled. \n\n- [ ] Avoiding fragmentation? (recommend MTU discovery mechanisms)?\n- [x] Clarify checksums for both the underlay (https://github.com/scionproto/scion/pull/4910 )\n- [ ] Do UDP/SCION packets use checksums (not yet: https://github.com/scionproto/scion/issues/4265 )",
+      "body": "Following feedback from the IANA port reviewers: \n> - Finally, requests to IANA for UDP port numbers have to explain how the system ensures that the requirements of RFC 8085 (UDP Usage Guidelines) are fulfilled. For instance, this could require an explanation how congestion control is implemented for SCION control/diagnostic messages. If the port will also be used for encapsulated data traffic, this could e.g. require \"circuit breakers\" or the like. There are examples how to deal with RFC 8085 requirements in many UDP-based protocols defined on IETF standards track. \n\nTODO: \n-controlplane (#227 )\n- [x] rate limiting for SCMP\n- [x]  clarifying that congestion control for control plane messages is taken care of by the fact that they use RPCs over QUIC \n\n-dataplane\n- [ ] circuit breakers for raw inner UDP?? \nRFC8085 says: \n   > IP-based unicast traffic is generally assumed to be congestion\n   controlled, i.e., it is assumed that the transport protocols\n   generating IP-based unicast traffic at the sender already employ\n   mechanisms that are sufficient to address congestion on the path.\n   Consequently, a tunnel carrying IP-based unicast traffic should\n   already interact appropriately with other traffic sharing the path,\n   and specific congestion control mechanisms for the tunnel are not\n   necessary. ...\n   > A circuit breaker\n       mechanism may provide benefit by controlling the envelope of the\n       aggregated traffic.\n\n   It is IMHO not necessary to have further recommendations, except for SCMP. \n- [ ] Some mechanisms for forwarding SCMP/HBH/E2E/~BFD~?\n   > A tunnel generates UDP traffic at a volume that corresponds to\n       the volume of payload traffic, and the payload traffic is not\n       known to be IP based, or is known to be IP based but not\n       congestion controlled. \n\n- [ ] ~Avoiding fragmentation? (recommend MTU discovery mechanisms)?~ --> we do already in 5.2.  Packet Fragmentation\n\n- [x] Clarify checksums for both the underlay (https://github.com/scionproto/scion/pull/4910 )\n- [x] Do UDP/SCION packets use checksums (not yet: https://github.com/scionproto/scion/issues/4265 )",
       "createdAt": "2026-03-25T16:47:27Z",
-      "updatedAt": "2026-03-27T20:59:11Z",
+      "updatedAt": "2026-03-31T13:00:35Z",
       "closedAt": null,
       "comments": []
     }
@@ -17200,26 +17200,242 @@
       "id": "PR_kwDOJx2-rs7OoC4F",
       "title": "Update peering links description in SCION document",
       "url": "https://github.com/scionassociation/scion-cp_I-D/pull/229",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Clarify peering description.\r\n\r\nAs far as I can tell after extensive discussion:\r\n\r\n-   CORE segments do not contain peering information\r\n-   Peering can only happen between an UP and a DOWN segment\r\n-   Unless I still misunderstand things, there are edge cases where a CORE segment can be turned into an UP or DOWN segment, but in the end that still means only UP and DOWN segments can participate in peering. Also, these edge cases need a bit more explanation than what can be done in the terminology section.\r\n\r\n\r\nThis brings the text in line with this (mentioning explicitly UP and DOWN):\r\nhttps://github.com/scionassociation/scion-dp_I-D/blob/0b0d4e04ef22476c6d6c544bcced559a1ba3a3c3/draft-dekater-scion-dataplane.md?plain=1#L385\r\n\r\nSee also https://github.com/scionassociation/scion-dp_I-D/pull/160",
       "createdAt": "2026-03-30T13:39:53Z",
-      "updatedAt": "2026-03-30T13:39:56Z",
+      "updatedAt": "2026-04-01T11:08:55Z",
       "baseRepository": "scionassociation/scion-cp_I-D",
       "baseRefName": "main",
       "baseRefOid": "858716efd60c669307a30d4b2135c6cce42ab91b",
       "headRepository": "scionassociation/scion-cp_I-D",
       "headRefName": "tzaeschke-peering",
-      "headRefOid": "581828ddc5100b3141d9f9b824155db59299a0fc",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6c46b8b608e58af24e96f65f546a879c1a22b40c",
+      "closedAt": "2026-04-01T11:08:55Z",
+      "mergedAt": "2026-04-01T11:08:55Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1528ee12d79aae23f9803188aebfede73e78969c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOJx2-rs7wnojg",
+          "commit": {
+            "abbreviatedOid": "581828d"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T12:13:23Z",
+          "updatedAt": "2026-03-31T12:13:24Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "It doesn't make sense to add it here, since we are talking only about links between ASes at this point. Any two ASes can be linked via peering link. It can be a link between two non-core ASes, between core AS and non-core AS, and between two core ASes. It can be there without any further specification.",
+              "createdAt": "2026-03-31T12:13:24Z",
+              "updatedAt": "2026-03-31T12:13:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7woXWh",
+          "commit": {
+            "abbreviatedOid": "581828d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T12:44:53Z",
+          "updatedAt": "2026-03-31T12:44:54Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "> between an UP and a DOWN segment \r\n\r\nI find this wording confusing: peerling links are not between segments.. Since this section is an intro, how about we specify this later in the text, in section 2.1.1.  Peering Links",
+              "createdAt": "2026-03-31T12:44:54Z",
+              "updatedAt": "2026-03-31T12:45:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wobPY",
+          "commit": {
+            "abbreviatedOid": "581828d"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T12:47:40Z",
+          "updatedAt": "2026-03-31T12:47:41Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I'd restore the original wording here. See my next commit with wording in section 2.1.1\r\n```suggestion\r\n- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). They can be established between any two ASes (core or non-core) and can cross ISD boundaries.\r\n```",
+              "createdAt": "2026-03-31T12:47:40Z",
+              "updatedAt": "2026-03-31T12:47:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wodDW",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T12:48:58Z",
+          "updatedAt": "2026-03-31T12:48:58Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Would this work better? \n\n> If both ASes at either end of a peering link have registered path segments that include this specific peering link \n\n@katyatitkova does this wording still hold based on the latest implementation?",
+              "createdAt": "2026-03-31T12:48:58Z",
+              "updatedAt": "2026-03-31T12:48:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wooub",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T12:56:28Z",
+          "updatedAt": "2026-03-31T12:56:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "@katyatitkova Thanks for your feedback!\n\nI guess the problem here is that we disagree on who is meant to \"establish\" the link.\nI assume you say it is the network operators, because clearly the can create peering links whenever they want Correct?\n\nI read it as the customer or endhost who is trying to connect a remote machine and may establish peering links among their segments, in this case, it is (in my opinion) not possible to connect any two ASes. \n\nYou are of course right that the previous sentence indicates that this is talking about operators. But most of this document is about how peering works with segments, so I'd say this is at least confusing.\n\nAs I learned from another WG, passive tense should be avoided because it can be unclear *who* is doing something.\n\nProposal:\n```suggestion\n- *Peering* links exist between ASes with a peering relationship (settlement-free or paid). Network operators can establish peering links between any two ASes (core or non-core), including across ISD boundaries.\n```",
+              "createdAt": "2026-03-31T12:56:28Z",
+              "updatedAt": "2026-03-31T12:56:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wo35x",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T13:06:26Z",
+          "updatedAt": "2026-03-31T13:06:26Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "> I assume you say it is the network operators, because clearly the can create peering links whenever they want Correct?\r\n\r\nYes, it's the same as with other kinds of links.\r\n\r\n> may establish peering links among their segments\r\n\r\nWhat do you mean? The peering links are established between ASes, not segments (same as with core and non-core links)\r\n\r\n> But most of this document is about how peering works with segments\r\n\r\nMaybe I'm missing something from the document, but to me it's more about how we pass the info about peering links with beacons in a situation when we explicitly say that beacons are not traversing peering links (which, in my opinion, is quite bad legacy that we're left with in the draft, but it's something that can't be fixed anymore)",
+              "createdAt": "2026-03-31T13:06:26Z",
+              "updatedAt": "2026-03-31T13:06:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wo_zk",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T13:11:37Z",
+          "updatedAt": "2026-03-31T13:11:37Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Yes, it still holds and won't be changed by any of my PRs",
+              "createdAt": "2026-03-31T13:11:37Z",
+              "updatedAt": "2026-03-31T13:11:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wr9Tz",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T14:57:48Z",
+          "updatedAt": "2026-03-31T14:57:49Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "I like the wording.",
+              "createdAt": "2026-03-31T14:57:48Z",
+              "updatedAt": "2026-03-31T14:57:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7wr9fL",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T14:57:55Z",
+          "updatedAt": "2026-03-31T14:57:56Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "@katyatitkova \n\n> What do you mean? The peering links are established between ASes, not segments (same as with core and non-core links)\n\nWhat I means it that the word \"establish\" is not specific. One can perfectly say that we can \"establish\" a peering link between two segments. This may not be how *we* usually talk about peering links, but it is perfectly good English. \n\nIs my last proposal acceptable?\nIt would help me, and as far as I can tell it would not conflict with your view.\n\n@katyatitkova @nicorusti Please fell free to reject/adapt/merge this PR as you see fit.",
+              "createdAt": "2026-03-31T14:57:56Z",
+              "updatedAt": "2026-03-31T14:57:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7ws8d7",
+          "commit": {
+            "abbreviatedOid": "596ec25"
+          },
+          "author": "katyatitkova",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-31T15:37:45Z",
+          "updatedAt": "2026-03-31T15:37:45Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "If we are talking about the explicitly added note regarding network operators, it looks good to me!",
+              "createdAt": "2026-03-31T15:37:45Z",
+              "updatedAt": "2026-03-31T15:37:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOJx2-rs7w2U5b",
+          "commit": {
+            "abbreviatedOid": "6c46b8b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Thank you both, LGTM. Before merging, I'd ask for a quick look by @oncilla so he is aware",
+          "createdAt": "2026-03-31T23:18:20Z",
+          "updatedAt": "2026-03-31T23:18:20Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
