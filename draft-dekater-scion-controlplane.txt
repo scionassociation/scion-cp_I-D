@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 October 2026                                          S. Hitz
+Expires: 4 October 2026                                          S. Hitz
                                                          Anapaya Systems
-                                                            1 April 2026
+                                                            2 April 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 October 2026.
+   This Internet-Draft will expire on 4 October 2026.
 
 Copyright Notice
 
@@ -3640,9 +3640,9 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-12, 19 March 2026,
+              draft-dekater-scion-dataplane-13, 2 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-12>.
+              scion-dataplane-13>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -3945,7 +3945,7 @@ draft-dekater-scion-controlplane-17
       control when discussing QUIC transport for RPCs
 
    *  Peering links: clarify they are established in an up or down
-      segment
+      segment.
 
 draft-dekater-scion-controlplane-16
 
