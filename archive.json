@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-02T00:34:48.063737+00:00",
+  "timestamp": "2026-04-05T00:39:17.352105+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -3400,16 +3400,24 @@
       "id": "I_kwDOJx2-rs72lBHi",
       "title": "Clarify ways to satisfy RFC 8085 requirements",
       "url": "https://github.com/scionassociation/scion-cp_I-D/issues/228",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Following feedback from the IANA port reviewers: \n> - Finally, requests to IANA for UDP port numbers have to explain how the system ensures that the requirements of RFC 8085 (UDP Usage Guidelines) are fulfilled. For instance, this could require an explanation how congestion control is implemented for SCION control/diagnostic messages. If the port will also be used for encapsulated data traffic, this could e.g. require \"circuit breakers\" or the like. There are examples how to deal with RFC 8085 requirements in many UDP-based protocols defined on IETF standards track. \n\nTODO: \n-controlplane (#227 )\n- [x] rate limiting for SCMP\n- [x]  clarifying that congestion control for control plane messages is taken care of by the fact that they use RPCs over QUIC \n\n-dataplane\n- [ ] circuit breakers for raw inner UDP?? \nRFC8085 says: \n   > IP-based unicast traffic is generally assumed to be congestion\n   controlled, i.e., it is assumed that the transport protocols\n   generating IP-based unicast traffic at the sender already employ\n   mechanisms that are sufficient to address congestion on the path.\n   Consequently, a tunnel carrying IP-based unicast traffic should\n   already interact appropriately with other traffic sharing the path,\n   and specific congestion control mechanisms for the tunnel are not\n   necessary. ...\n   > A circuit breaker\n       mechanism may provide benefit by controlling the envelope of the\n       aggregated traffic.\n\n   It is IMHO not necessary to have further recommendations, except for SCMP. \n- [ ] Some mechanisms for forwarding SCMP/HBH/E2E/~BFD~?\n   > A tunnel generates UDP traffic at a volume that corresponds to\n       the volume of payload traffic, and the payload traffic is not\n       known to be IP based, or is known to be IP based but not\n       congestion controlled. \n\n- [ ] ~Avoiding fragmentation? (recommend MTU discovery mechanisms)?~ --> we do already in 5.2.  Packet Fragmentation\n\n- [x] Clarify checksums for both the underlay (https://github.com/scionproto/scion/pull/4910 )\n- [x] Do UDP/SCION packets use checksums (not yet: https://github.com/scionproto/scion/issues/4265 )",
       "createdAt": "2026-03-25T16:47:27Z",
-      "updatedAt": "2026-03-31T13:00:35Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-04-02T16:08:53Z",
+      "closedAt": "2026-04-02T16:08:53Z",
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Mechanisms that apply to tunnels may also apply to the SCION UDP/IP underlay, underlay, which is not directly described in -dataplane, rather in an external reference. I therefore don't think we need edits in -dataplane.",
+          "createdAt": "2026-04-02T16:08:53Z",
+          "updatedAt": "2026-04-02T16:08:53Z"
+        }
+      ]
     }
   ],
   "pulls": [
