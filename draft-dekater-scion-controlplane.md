@@ -2328,6 +2328,12 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-controlplane-18
+{:numbered="false"}
+
+- Fix typo
+
+
 ## draft-dekater-scion-controlplane-17
 {:numbered="false"}
 
@@ -2481,7 +2487,7 @@ Minor changes:
 - Clarify typical vs recommended-limits values for best PCB set size and for certificate validity duration.
 - Clarify text representation of ISD-AS
 - General rewording
-- Added reference to SCIONLab as a testbed for implementors
+- Added reference to SCIONLab as a testbed for implementers
 - Introduced this change log
 
 ## draft-dekater-scion-controlplane-05
