@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 19 October 2026                                         S. Hitz
+Expires: 1 November 2026                                         S. Hitz
                                                          Anapaya Systems
-                                                           17 April 2026
+                                                           30 April 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 October 2026.
+   This Internet-Draft will expire on 1 November 2026.
 
 Copyright Notice
 
@@ -169,6 +169,7 @@ Table of Contents
      10.2.  Informative References
    Path-Lookup Examples
    Change Log
+     draft-dekater-scion-controlplane-18
      draft-dekater-scion-controlplane-17
      draft-dekater-scion-controlplane-16
      draft-dekater-scion-controlplane-15
@@ -3647,9 +3648,9 @@ Table of Contents
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-11, 16 January 2026,
+              dekater-scion-pki-12, 20 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-11>.
+              scion-pki-12>.
 
    [POSIX.1-2024]
               "Standard for Information Technology--Portable Operating
@@ -3939,6 +3940,10 @@ Change Log
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
 
+draft-dekater-scion-controlplane-18
+
+   *  Fix typo
+
 draft-dekater-scion-controlplane-17
 
    *  SCMP: add normative language on rate limiting, mention congestion
@@ -4191,7 +4196,7 @@ draft-dekater-scion-controlplane-06
 
    *  General rewording
 
-   *  Added reference to SCIONLab as a testbed for implementors
+   *  Added reference to SCIONLab as a testbed for implementers
 
    *  Introduced this change log
 
