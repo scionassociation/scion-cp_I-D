@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-05T00:39:17.352105+00:00",
+  "timestamp": "2026-05-03T00:49:29.880269+00:00",
   "repo": "scionassociation/scion-cp_I-D",
   "labels": [
     {
@@ -17444,6 +17444,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 230,
+      "id": "PR_kwDOJx2-rs7XGJAy",
+      "title": "typo",
+      "url": "https://github.com/scionassociation/scion-cp_I-D/pull/230",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-30T12:20:51Z",
+      "updatedAt": "2026-04-30T12:21:11Z",
+      "baseRepository": "scionassociation/scion-cp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "cf3e958127b28bd0927668afe9e60fd605c26aa0",
+      "headRepository": "scionassociation/scion-cp_I-D",
+      "headRefName": "typo",
+      "headRefOid": "28869e98640224deea1c331e0d437b0f06b3c930",
+      "closedAt": "2026-04-30T12:21:07Z",
+      "mergedAt": "2026-04-30T12:21:07Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "36aba4e5658ff60450427f1d5b29cb9f6a0c0062"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
