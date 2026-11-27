@@ -36,8 +36,10 @@ author:
 normative:
   I-D.dekater-scion-dataplane:
   I-D.dekater-scion-pki:
+  RFC3279:
   RFC4632:
   RFC5280:
+  RFC5652:
   RFC9000:
   RFC9114:
   gRPC:
@@ -408,7 +410,7 @@ SCION uses the following mechanisms to avoid circular dependencies during bootst
 
 - Neighbor-based path discovery: Path discovery in SCION is performed by the beaconing mechanism. In order to participate in this process, an AS Control Service only needs to be aware of its direct neighbors. As long as no path segments are available, communicating with the neighboring ASes is possible with the one-hop path type which does not rely on any path information. SCION uses these *one-hop paths* to propagate PCBs to neighboring ASes to which no forwarding path is available yet. The One-Hop Path Type is described in more detail in {{I-D.dekater-scion-dataplane}}.
 - Path reversal: In SCION, every path is reversible. That is, the receiver of a packet can reverse the path in the packet header in order to produce a reply packet without having to perform a path lookup. Such a packet follows the original packet's path in the reverse direction.
-- Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, in order to verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
+- Availability of certificates: Every entity is required to be in possession of all cryptographic material including the ISD's TRC and AS certificates, so that a receiver can verify any message it sends. This together with the path reversal means that the receiver of a message can always obtain all this material by contacting the sender.<br>
 
 **Note:** For a detailed description of a TRC and more information on the availability of certificates and TRCs, see {{I-D.dekater-scion-pki}}.
 
@@ -450,7 +452,7 @@ PCBs do not traverse peering links, but peering links are instead announced alon
 Every propagation interval (as configured by the AS operator), the Control Service:
 
 - selects the best combinations of PCBs and interfaces connecting to a neighboring AS (i.e., a child AS or a core AS). This is described in [](#selection).
-- propagates each selected PCB to the selected egress interface(s) associated with it. Selection policies are described in [](#path-segment-prop).
+- propagates each selected PCB to the selected egress interface(s) associated with it. Propagation is described in [](#path-segment-prop).
 
 For every selected PCB and egress interface combination, the AS Control Service appends an *AS entry* to the selected PCB. This includes a Hop Field that specifies the ingress and egress interface for the packet forwarding through this AS, in the beaconing direction. The AS entry can also contain peer entries.
 
@@ -728,7 +730,7 @@ The signed component of an AS entry MUST include the following elements:
 - a body, and
 - a signature.
 
-In the Protobuf message format, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part (`header_and_body`) and a raw signature (`signature`). Their protobuf message formats are:
+In the Protobuf message format, the signed component of an AS entry is specified by the `SignedMessage`. It consists of a header-and-body part (`header_and_body`) and a signature (`signature`). An ECDSA signature is the DER encoding of `Ecdsa-Sig-Value` (see {{RFC3279}}, Section 2.2.3). Their protobuf message formats are:
 
 ~~~~
    message SignedMessage {
@@ -833,7 +835,7 @@ For more information on signing and verifying control plane messages (such as PC
 ~~~
 {: #figure-11 title="AS Entry Signed Body"}
 
-The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of all the ASes in the path segment represented by the PCB, up until and including the current AS. Its Protobuf message format is:
+The body of an AS entry MUST consist of the signed component `ASEntrySignedBody` of the current AS, i.e., the AS that creates the AS entry. Its Protobuf message format is:
 
 ~~~~
    message ASEntrySignedBody {
@@ -917,7 +919,7 @@ The `PeerEntry` Protobuf message format is:
 - `peer_isd_as`: The ISD-AS number of the peer AS. This number is used to match peering segments during path construction.
 - `peer_interface`: The 16-bit interface identifier of the peering link on the peer AS side. This identifier is used to match peering segments during path construction.
 - `peer_mtu`: Specifies the maximum transmission unit (MTU) of the peering link being described. The MTU of paths via such link is necessarily less than or equal to this value. How the Control Service obtains the MTU of an inter-AS link is implementation dependent. It may be discovered or configured, but current practice is to make it a configuration item.
-- `hop_field`: Contains authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-6}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
+- `hop_field`: Contains authenticated information about the ingress and egress interfaces in the current AS (coming from the peering link, in the direction of beaconing - see also {{figure-15}}). The data plane needs this information to forward packets through the current AS. For further specifications, see [](#hopfield).
 
 In this description, MTU and packet size are to be understood in the same sense as in {{RFC1122}}. That is, exclusive of any layer 2 framing or packet encapsulation (for links using an underlay network).
 
@@ -992,7 +994,7 @@ The `HopField` Protobuf message format is:
 
 #### AS Entry Signature {#sign}
 
-Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The certificate MUST have a validity period that is longer than the Hop Field absolute expiration time (described in [](#hopfield)). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The `notAfter` time of the certificate MUST NOT be earlier than the absolute expiration time (described in [](#hopfield)) of any Hop Field in the AS entry, that is the Hop Field of the hop entry and the Hop Fields of the peer entries. If needed, the Control Service shortens the expiration time of these Hop Fields to meet this requirement. When verifying the signature of an AS entry, a validator MUST check that the certificate is valid during the whole period from the PCB timestamp (see [](#seginfo)) to the absolute expiration time of the Hop Field in the hop entry, and MUST otherwise consider the signature invalid. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
 This is the input for the computation of the signature:
 
@@ -1013,12 +1015,14 @@ Some of the data used as an input to the signature comes from previous ASes in t
 input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
 associated_data(ps, i) = ps.segment_info ||
-                         ps.as_entries[1].signed.header_and_body ||
-                         ps.as_entries[1].signed.signature ||
+                         ps.as_entries[0].signed.header_and_body ||
+                         ps.as_entries[0].signed.signature ||
                          ...
                          ps.as_entries[i-1].signed.header_and_body ||
                          ps.as_entries[i-1].signed.signature
 ~~~
+
+That is, for each j from 0 to i-1, the `header_and_body` and then the `signature` of AS entry j are appended once. For i = 0 (the AS entry of the originating core AS), no AS entries are appended and the associated data only consists of `segment_info`.
 
 
 ### PCB Extensions {#pcb-ext}
@@ -1051,7 +1055,7 @@ To be valid (that is, usable to construct a valid path), a PCB MUST:
 
 It is recommend to use the hopfield expiration time (that is 337.5 seconds, see [](#hopfield)) as the allowance for differences between the clocks of the validator and originator.
 
-For the purpose of validation, a hop is considered expired if its absolute expiration time (as defined in [](#hopfield)), is later than the current time + allowance at the point of validation.
+For the purpose of validation, a hop is considered expired if its absolute expiration time (as defined in [](#hopfield)), is earlier than the current time minus the allowance at the point of validation.
 
 ### Configuration {#configuration}
 
@@ -1184,7 +1188,7 @@ service TrustMaterialService {
 ~~~~~
 
 - `Chains(ChainsRequest)`: Returns the certificate chains that match the request.
-- `TRC(TRCRequest)`: Returns a specific TRC that matches the request.
+- `TRC(TRCRequest)`: Returns the requested TRC. If `base` and `serial` are 0, returns the latest TRC available to the server for the requested ISD.
 
 The corresponding protobuf message formats are:
 
@@ -1210,8 +1214,8 @@ A `ChainsRequest` message includes the following fields:
 
 - `isd_as`: Returns ISD-AS of Subject in the AS certificate.
 - `subject_key_id`: Returns SubjectKeyID in the AS certificate.
-- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer.
-- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer.
+- `at_least_valid_until`: Point in time at which the AS certificate must still be valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19.
+- `at_least_valid_since`: Point in time at which the AS certificate must be or must have been valid - in seconds since Epoch according to {{POSIX.1-2024}} Section 4.19.
 
 A `ChainsResponse` includes the following fields:
 
@@ -1240,6 +1244,8 @@ A `TRCRequest` includes the following fields:
 - `isd`: Returns the ISD number of the TRC.
 - `base`: Returns the base number of the TRC.
 - `serial`: Returns the serial number of the TRC.
+
+`base` = 0 and `serial` = 0 request the latest TRC of the ISD. A request with only one of them set to 0 is invalid.
 
 The returned `trc` contains the ASN.1 DER encoded CMS SignedData structure containing the TRC.
 
@@ -1282,7 +1288,9 @@ message ChainRenewalResponse {
 A `ChainRenewalResponse` message includes the following fields:
 
 - Field number 1 is legacy and it is not in use.
-- `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
+- `cms_signed_response`: it contains an ASN.1 DER encoded CMS SignedData structure ({{RFC5652}}) containing a two-certificate chain. The chain comprises the AS certificate followed by the CA certificate, both encoded in ASN.1 DER.
+
+The chain is carried in the `eContent` field of the SignedData structure, as the two encodings one after the other, with `eContentType` `id-data`. The Control Service of the issuing AS signs the SignedData structure with the private key of its own Control Plane AS Certificate (see 'Control Plane AS Certificate' in {{I-D.dekater-scion-pki}}), and the `certificates` field contains the certificate chain of this signer. The receiver MAY verify this signature. The procedure described in 'Verifying a Control Plane Message' in {{I-D.dekater-scion-pki}} does not apply to this response. In any case, the receiver MUST verify the renewed certificate chain against the trust anchor pool of its ISD (see 'Certification Path - Trust Anchor Pool' in {{I-D.dekater-scion-pki}}) before using it.
 
 
 # Registration of Path Segments {#path-segment-reg}
@@ -1308,7 +1316,7 @@ The up segments and down segments do not have to be equal as an AS may want to c
 
 Both the up segments and down segments end at the AS, so by transforming a PCB into a path segment, an AS Control Service "terminates" the PCB for this AS ingress interface and at that moment in time.
 
-The Control Service of a non-core performs the following steps to "terminate" a PCB:
+The Control Service of an AS performs the following steps to "terminate" a PCB:
 
 1. The Control Service adds a new AS entry to the PCB which MUST be defined as follows:
    - The next AS MUST NOT be specified.
@@ -1390,7 +1398,7 @@ The Control Service of a non-core AS has to register the newly created down segm
 - `SegmentType`: Specifies the type of the path segment to be registered. Currently, only the following type is used:
   - `SEGMENT_TYPE_DOWN`: Specifies a down segment.
 - `map<int32, Segments> segments`: Represents a separate list of segments for each path segment type. The key is the integer representation of the corresponding `SegmentType`.
-- `SegmentRegistrationResponse`: an empty message returned as an acknowledgement upon success.
+- `SegmentsRegistrationResponse`: an empty message returned as an acknowledgement upon success.
 
 ## Path MTU {#path-mtu}
 
@@ -1424,7 +1432,7 @@ The process to look up and fetch path segments consists of the following steps:
 
    - up segments: The local Control Service has up segments stored in the path database and returns them immediately.
    - core segments: The local Control Service may return locally cached core segments or query the Control Services of the reachable core ASes in the source ISD. These core ASes return core segments to core ASes in the destination ISD. To reach the core Control Services, the Control Service of the source AS uses the locally stored up segments. Once obtained, it returns the core segments and adds them to the local cache for future request.
-   - down segments: The local Control Service may return locally cached core segments or query the Control Services of the remote core ASes in the destination ISD. These remote core ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
+   - down segments: The local Control Service may return locally cached down segments or query the Control Services of the remote core ASes in the destination ISD. These remote core ASes return down segments to the destination AS. To reach the remote core ASes, the Control Service of the source AS uses the previously obtained and combined up and core segments. Once obtained, it returns the down segments.
 5. As the source endpoint receives each path segment, it verifies the `SegmentInformation` timestamp validity (see [](#pcb-validity)), the AS entry signature for each AS entry (see [](#sign)), and requests any missing AS or intermediate certificates from the Control Service (see [](#crypto-api)).
 6. Once it has obtained some valid path segments, the source endpoint combines them into an end-to-end path in the data plane.
 7. The destination endpoint, once it receives the first packet, MAY reverse the path in the received packet in order to construct a response. This ensures that traffic flows on the same path bidirectionally.
@@ -1466,8 +1474,7 @@ They use the following protobuf messages: a `SegmentsRequest`, which includes:
 
 The corresponding `SegmentsResponse` returns:
 
-- `segments`: a list of `PathSegment` matching the request.
-- a mapping from path segment type to path segments, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
+- `segments`: a mapping from path segment type to the list of `PathSegment` matching the request, where the key is the integer representation of the `SegmentType` enum defined in [](#reg-proto).
 
 ~~~~
 message SegmentsRequest {
@@ -1589,6 +1596,10 @@ message Transport {
     string address = 1;
 }
 ~~~~~
+
+The TLS handshake of the QUIC connection can authenticate the peer with its Control Plane AS Certificate. To authenticate a TLS peer, a Control Service MUST verify the certificate chain of the peer against the trust anchor pool of the peer's ISD (see 'Certification Path - Trust Anchor Pool' in {{I-D.dekater-scion-pki}}), check that the AS certificate includes the extended key usage of the peer's role (`id-kp-serverAuth` for a server, `id-kp-clientAuth` for a client, see '`extKeyUsage` Extension' in {{I-D.dekater-scion-pki}}), and check that the ISD-AS number in the AS certificate is the expected one. For a server, this is the ISD-AS number of the AS that the client selected. For a client, this is an ISD-AS number that is allowed to make the call (see [](#dos-cp)).
+
+The RPCs specified in this document do not rely on TLS peer authentication for the authenticity of the data they carry: PCBs and path segments are signed (see [](#sign)), and certificate chains and TRCs are verified against the trust anchor pool. Moreover, a client may not yet hold the trust material needed to authenticate a server, for example when it fetches this material through the `TrustMaterialService` RPCs (see [](#crypto-api)). Clients MAY therefore call these RPCs without authenticating the server. Servers MAY request a client certificate, but none of the RPCs specified in this document requires an authenticated client.
 
 # SCMP {#scmp}
 
@@ -1979,7 +1990,9 @@ A PCB originated by a given core AS Control Service is validated by all the Cont
 
 This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval, typically around one minute. As a result of this and the manner in which they are iteratively constructed, PCBs with N hops may be validated up to N intervals (so maximally N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfield)) would make any PCB describing a path longer than 5 hops expire. For this reason it is unadvisable to create hops with a short expiration time - i.e., they SHOULD be around 6 hours.
 
-The Control Service and its clients authenticate each other in accordance with their respective AS's certificate. Path segments are authenticated based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+TLS peers are authenticated in accordance with their respective AS's certificate (see [](#service-discovery)), and path segments based on the certificates of the ASes that they refer to. The RECOMMENDED expiration time of a SCION AS certificate is between 3h and 3 days, although some deployments use up to 5 days. In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Operators choose the Hop Field expiration time together with the validity and the renewal margin of AS certificates, so that the AS certificate used to sign an AS entry is still valid when the Hop Fields of that entry expire (see [](#sign) and 'Control Plane AS Certificate' in {{I-D.dekater-scion-pki}}). If the remaining validity of the AS certificate is shorter than the configured Hop Field expiration time, the Control Service shortens the Hop Field expiration time accordingly. For example, Hop Fields of 6 hours require AS certificates that are valid for longer than 6 hours and are renewed at least 6 hours before they expire.
 
 Each administrator of a SCION Control Service is responsible for maintaining coarse time synchronization with SCION routers within the AS, neighbor ASes Control Services, and endpoints within the AS. In typical deployments, clock deviations on the order of several minutes are acceptable.
 
@@ -2062,7 +2075,7 @@ Security properties are:
     - its sequence of AS entries corresponds to a continuous SCION forwarding path in the network of inter-domain links
     - the inter-domain network topology remains unchanged since the segment was first generated.
 - Loop Freedom - For every honest path segment registered in any AS, its sequence of AS entries contains no duplicates, including current and next ISD-AS and Interface IDs.
-- Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the previous one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
+- Path Authorization - For every honest path segment registered in any AS and any AS X appearing on that segment (except for the last one), AS X propagated a PCB corresponding to the segment portion ending in its own entry to its successor AS on the segment.
 
 To ensure that the properties hold across the overall SCION network, these are the prerequisites to follow:
   - all core ASes MUST be able to reach each other with some sequence of core links;
@@ -2327,6 +2340,18 @@ To illustrate how the path lookup works, two path-lookup examples are shown in s
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-controlplane-19
+{:numbered="false"}
+
+- AS Entry: specify DER encoding of ECDSA signatures
+- AS Entry Signature: fix index of first AS entry in associated data, compare certificate `notAfter` with Hop Field expiration time and state what validators check
+- PCB Validity: fix comparison and sign of the allowance in the definition of an expired hop
+- Distribution of Cryptographic Material: specify how to request the latest TRC
+- Renewal of Cryptographic Material: specify encoding and signer of the renewal response
+- Control Service Discovery: describe TLS peer authentication
+- Effects of Clock Inaccuracy: align Hop Field expiration time with AS certificate validity and renewal
+- Editorial fixes in sections 1.6, 2.1.2, 2.2.2.2, 2.2.2.4, 2.4, 3.1.1, 3.3, 4.1, 4.1.2 and 8.1
 
 ## draft-dekater-scion-controlplane-18
 {:numbered="false"}
