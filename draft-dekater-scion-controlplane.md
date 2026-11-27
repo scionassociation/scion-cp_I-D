@@ -994,7 +994,7 @@ The `HopField` Protobuf message format is:
 
 #### AS Entry Signature {#sign}
 
-Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The `notAfter` time of the certificate MUST NOT be earlier than the absolute expiration time (described in [](#hopfield)) of any Hop Field in the AS entry, that is the Hop Field of the hop entry and the Hop Fields of the peer entries. If needed, the Control Service shortens the expiration time of these Hop Fields to meet this requirement. When verifying the signature of an AS entry, a validator MUST check that the certificate is valid during the whole period from the PCB timestamp (see [](#seginfo)) to the absolute expiration time of the Hop Field in the hop entry, and MUST otherwise consider the signature invalid. The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
+Each AS entry MUST be signed with the AS certificate's private key K<sub>i</sub>. The `notAfter` time of the certificate MUST NOT be earlier than the Hop Field absolute expiration time (described in [](#hopfield)). The signature Sig<sub>i</sub> of an AS entry ASE<sub>i</sub> is computed over the AS entry's signed component.
 
 This is the input for the computation of the signature:
 
