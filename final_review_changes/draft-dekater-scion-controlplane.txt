@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 21 September 2026                                       S. Hitz
+Expires: 31 May 2027                                             S. Hitz
                                                          Anapaya Systems
-                                                           20 March 2026
+                                                        27 November 2026
 
 
                           SCION Control Plane
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 September 2026.
+   This Internet-Draft will expire on 31 May 2027.
 
 Copyright Notice
 
@@ -169,7 +169,10 @@ Table of Contents
      10.2.  Informative References
    Path-Lookup Examples
    Change Log
-     draft-dekater-scion-controlplane-15
+     draft-dekater-scion-controlplane-19
+     draft-dekater-scion-controlplane-18
+     draft-dekater-scion-controlplane-17
+     draft-dekater-scion-controlplane-16
      draft-dekater-scion-controlplane-15
      draft-dekater-scion-controlplane-14
      draft-dekater-scion-controlplane-13
@@ -382,8 +385,9 @@ Table of Contents
       typically have a provider-customer relationship.
 
    *  _Peering_ links exist between ASes with a peering relationship
-      (settlement-free or paid).  They can be established between any
-      two ASes (core or non-core) and can cross ISD boundaries.
+      (settlement-free or paid).  Network operators can establish
+      peering links between any two ASes (core or non-core), including
+      across ISD boundaries.
 
    SCION paths are comprised of at most three path segments: an up
    segment, traversing links from child to parent, then a core segment
@@ -693,10 +697,10 @@ Table of Contents
 
    *  Availability of certificates: Every entity is required to be in
       possession of all cryptographic material including the ISD's TRC
-      and AS certificates, in order to verify any message it sends.
-      This together with the path reversal means that the receiver of a
-      message can always obtain all this material by contacting the
-      sender.
+      and AS certificates, so that a receiver can verify any message it
+      sends.  This together with the path reversal means that the
+      receiver of a message can always obtain all this material by
+      contacting the sender.
 
    *Note:* For a detailed description of a TRC and more information on
    the availability of certificates and TRCs, see
@@ -711,8 +715,9 @@ Table of Contents
 
    The RPC messages are transported via [Connect]'s RPC protocol that
    carries messages over HTTP/3 (see [RFC9114])), which in turn uses
-   QUIC/UDP ([RFC9000]) as a transport layer.  Connect is backward
-   compatible with [gRPC] which is supported but deprecated.
+   QUIC/UDP ([RFC9000]) to handle transport and congestion control.
+   Connect is backward compatible with [gRPC] which is supported but
+   deprecated.
 
    In case of failure, RPC calls return an error as specified by the RPC
    framework.  That is, a non-zero status code and an explanatory
@@ -769,10 +774,11 @@ Table of Contents
 2.1.1.  Peering Links
 
    PCBs do not traverse peering links, but peering links are instead
-   announced along with a regular path in a PCB.  If both ASes at either
-   end of a peering link have registered path segments that include this
-   specific peering link, then it is possible to use this during segment
-   combination to create the end-to-end path.
+   announced along with a regular path in a PCB in an up or down
+   segment.  If both ASes at either end of a peering link have
+   registered path segments that include this specific peering link,
+   then it is possible to use this during segment combination to create
+   the end-to-end path.
 
 2.1.2.  Appending Entries to a PCB
 
@@ -784,8 +790,7 @@ Table of Contents
       described in Section 2.3.3.
 
    *  propagates each selected PCB to the selected egress interface(s)
-      associated with it.  Selection policies are described in
-      Section 2.3.5.
+      associated with it.  Propagation is described in Section 2.3.5.
 
    For every selected PCB and egress interface combination, the AS
    Control Service appends an _AS entry_ to the selected PCB.  This
@@ -1122,8 +1127,9 @@ Table of Contents
 
    In the Protobuf message format, the signed component of an AS entry
    is specified by the SignedMessage.  It consists of a header-and-body
-   part (header_and_body) and a raw signature (signature).  Their
-   protobuf message formats are:
+   part (header_and_body) and a signature (signature).  An ECDSA
+   signature is the DER encoding of Ecdsa-Sig-Value (see [RFC3279],
+   Section 2.2.3).  Their protobuf message formats are:
 
       message SignedMessage {
           bytes header_and_body = 1;
@@ -1247,9 +1253,8 @@ Table of Contents
                     Figure 11: AS Entry Signed Body
 
    The body of an AS entry MUST consist of the signed component
-   ASEntrySignedBody of all the ASes in the path segment represented by
-   the PCB, up until and including the current AS.  Its Protobuf message
-   format is:
+   ASEntrySignedBody of the current AS, i.e., the AS that creates the AS
+   entry.  Its Protobuf message format is:
 
       message ASEntrySignedBody {
           uint64 isd_as = 1;
@@ -1373,7 +1378,7 @@ Table of Contents
 
    *  hop_field: Contains authenticated information about the ingress
       and egress interfaces in the current AS (coming from the peering
-      link, in the direction of beaconing - see also Figure 6).  The
+      link, in the direction of beaconing - see also Figure 14).  The
       data plane needs this information to forward packets through the
       current AS.  For further specifications, see Section 2.2.2.5.
 
@@ -1474,10 +1479,17 @@ Table of Contents
 2.2.2.6.  AS Entry Signature
 
    Each AS entry MUST be signed with the AS certificate's private key
-   K_i.  The certificate MUST have a validity period that is longer than
-   the Hop Field absolute expiration time (described in
-   Section 2.2.2.5).  The signature Sig_i of an AS entry ASE_i is
-   computed over the AS entry's signed component.
+   K_i.  The notAfter time of the certificate MUST NOT be earlier than
+   the absolute expiration time (described in Section 2.2.2.5) of any
+   Hop Field in the AS entry, that is the Hop Field of the hop entry and
+   the Hop Fields of the peer entries.  If needed, the Control Service
+   shortens the expiration time of these Hop Fields to meet this
+   requirement.  When verifying the signature of an AS entry, a
+   validator MUST check that the certificate is valid during the whole
+   period from the PCB timestamp (see Section 2.2.1) to the absolute
+   expiration time of the Hop Field in the hop entry, and MUST otherwise
+   consider the signature invalid.  The signature Sig_i of an AS entry
+   ASE_i is computed over the AS entry's signed component.
 
    This is the input for the computation of the signature:
 
@@ -1511,11 +1523,16 @@ Table of Contents
    input(ps, i) = signed.header_and_body || associated_data(ps, i)
 
    associated_data(ps, i) = ps.segment_info ||
-                            ps.as_entries[1].signed.header_and_body ||
-                            ps.as_entries[1].signed.signature ||
+                            ps.as_entries[0].signed.header_and_body ||
+                            ps.as_entries[0].signed.signature ||
                             ...
                             ps.as_entries[i-1].signed.header_and_body ||
                             ps.as_entries[i-1].signed.signature
+
+   That is, for each j from 0 to i-1, the header_and_body and then the
+   signature of AS entry j are appended once.  For i = 0 (the AS entry
+   of the originating core AS), no AS entries are appended and the
+   associated data only consists of segment_info.
 
 2.2.3.  PCB Extensions
 
@@ -1567,8 +1584,8 @@ Table of Contents
    between the clocks of the validator and originator.
 
    For the purpose of validation, a hop is considered expired if its
-   absolute expiration time (as defined in Section 2.2.2.5), is later
-   than the current time + allowance at the point of validation.
+   absolute expiration time (as defined in Section 2.2.2.5), is earlier
+   than the current time minus the allowance at the point of validation.
 
 2.2.5.  Configuration
 
@@ -1860,7 +1877,9 @@ Table of Contents
    *  Chains(ChainsRequest): Returns the certificate chains that match
       the request.
 
-   *  TRC(TRCRequest): Returns a specific TRC that matches the request.
+   *  TRC(TRCRequest): Returns the requested TRC.  If base and serial
+      are 0, returns the latest TRC available to the server for the
+      requested ISD.
 
    The corresponding protobuf message formats are:
 
@@ -1888,12 +1907,11 @@ Table of Contents
 
    *  at_least_valid_until: Point in time at which the AS certificate
       must still be valid - in seconds since Epoch according to
-      [POSIX.1-2024] Section 4.19, encoded as a 32-bit unsigned integer.
+      [POSIX.1-2024] Section 4.19.
 
    *  at_least_valid_since: Point in time at which the AS certificate
       must be or must have been valid - in seconds since Epoch according
-      to [POSIX.1-2024] Section 4.19, encoded as a 32-bit unsigned
-      integer.
+      to [POSIX.1-2024] Section 4.19.
 
    A ChainsResponse includes the following fields:
 
@@ -1925,6 +1943,9 @@ Table of Contents
    *  base: Returns the base number of the TRC.
 
    *  serial: Returns the serial number of the TRC.
+
+   base = 0 and serial = 0 request the latest TRC of the ISD.  A request
+   with only one of them set to 0 is invalid.
 
    The returned trc contains the ASN.1 DER encoded CMS SignedData
    structure containing the TRC.
@@ -1971,9 +1992,22 @@ Table of Contents
    *  Field number 1 is legacy and it is not in use.
 
    *  cms_signed_response: it contains an ASN.1 DER encoded CMS
-      SignedData structure containing a two-certificate chain.  The
-      chain comprises the AS certificate followed by the CA certificate,
-      both encoded in ASN.1 DER.
+      SignedData structure ([RFC5652]) containing a two-certificate
+      chain.  The chain comprises the AS certificate followed by the CA
+      certificate, both encoded in ASN.1 DER.
+
+   The chain is carried in the eContent field of the SignedData
+   structure, as the two encodings one after the other, with
+   eContentType id-data.  The Control Service of the issuing AS signs
+   the SignedData structure with the private key of its own Control
+   Plane AS Certificate (see 'Control Plane AS Certificate' in
+   [I-D.dekater-scion-pki]), and the certificates field contains the
+   certificate chain of this signer.  The receiver MAY verify this
+   signature.  The procedure described in 'Verifying a Control Plane
+   Message' in [I-D.dekater-scion-pki] does not apply to this response.
+   In any case, the receiver MUST verify the renewed certificate chain
+   against the trust anchor pool of its ISD (see 'Certification Path -
+   Trust Anchor Pool' in [I-D.dekater-scion-pki]) before using it.
 
 3.  Registration of Path Segments
 
@@ -2022,7 +2056,7 @@ Table of Contents
    "terminates" the PCB for this AS ingress interface and at that moment
    in time.
 
-   The Control Service of a non-core performs the following steps to
+   The Control Service of an AS performs the following steps to
    "terminate" a PCB:
 
    1.  The Control Service adds a new AS entry to the PCB which MUST be
@@ -2173,7 +2207,7 @@ Table of Contents
       segments for each path segment type.  The key is the integer
       representation of the corresponding SegmentType.
 
-   *  SegmentRegistrationResponse: an empty message returned as an
+   *  SegmentsRegistrationResponse: an empty message returned as an
       acknowledgement upon success.
 
 3.4.  Path MTU
@@ -2259,7 +2293,7 @@ Table of Contents
           future request.
 
        *  down segments: The local Control Service may return locally
-          cached core segments or query the Control Services of the
+          cached down segments or query the Control Services of the
           remote core ASes in the destination ISD.  These remote core
           ASes return down segments to the destination AS.  To reach the
           remote core ASes, the Control Service of the source AS uses
@@ -2336,11 +2370,9 @@ Table of Contents
 
    The corresponding SegmentsResponse returns:
 
-   *  segments: a list of PathSegment matching the request.
-
-   *  a mapping from path segment type to path segments, where the key
-      is the integer representation of the SegmentType enum defined in
-      Section 3.3.
+   *  segments: a mapping from path segment type to the list of
+      PathSegment matching the request, where the key is the integer
+      representation of the SegmentType enum defined in Section 3.3.
 
    message SegmentsRequest {
        uint64 src_isd_as = 1;
@@ -2569,6 +2601,30 @@ Table of Contents
        string address = 1;
    }
 
+   The TLS handshake of the QUIC connection can authenticate the peer
+   with its Control Plane AS Certificate.  To authenticate a TLS peer, a
+   Control Service MUST verify the certificate chain of the peer against
+   the trust anchor pool of the peer's ISD (see 'Certification Path -
+   Trust Anchor Pool' in [I-D.dekater-scion-pki]), check that the AS
+   certificate includes the extended key usage of the peer's role (id-
+   kp-serverAuth for a server, id-kp-clientAuth for a client, see
+   'extKeyUsage Extension' in [I-D.dekater-scion-pki]), and check that
+   the ISD-AS number in the AS certificate is the expected one.  For a
+   server, this is the ISD-AS number of the AS that the client selected.
+   For a client, this is an ISD-AS number that is allowed to make the
+   call (see Section 8.5).
+
+   The RPCs specified in this document do not rely on TLS peer
+   authentication for the authenticity of the data they carry: PCBs and
+   path segments are signed (see Section 2.2.2.6), and certificate
+   chains and TRCs are verified against the trust anchor pool.
+   Moreover, a client may not yet hold the trust material needed to
+   authenticate a server, for example when it fetches this material
+   through the TrustMaterialService RPCs (see Section 2.4).  Clients MAY
+   therefore call these RPCs without authenticating the server.  Servers
+   MAY request a client certificate, but none of the RPCs specified in
+   this document requires an authenticated client.
+
 6.  SCMP
 
    The SCION Control Message Protocol (SCMP) provides functionality for
@@ -2710,8 +2766,10 @@ Table of Contents
       -  A packet which source address does not uniquely identify a
          single node.  E.g., an IPv4 or IPv6 multicast address.
 
-   [SCION-UDP] specifies the forwarding behavior of SCMP messages over
-   an IP/UDP underlay.
+   *  A SCION node MUST limit the rate of SCMP error messages it
+      originates.  Similar considerations to [RFC4443] section 2.4 point
+      (f) apply.  [SCION-UDP] specifies the forwarding behavior of SCMP
+      messages over an IP/UDP underlay.
 
    The maximum size 1232 bytes is chosen so that the entire datagram, if
    encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header
@@ -3113,13 +3171,23 @@ Table of Contents
    create hops with a short expiration time - i.e., they SHOULD be
    around 6 hours.
 
-   The Control Service and its clients authenticate each other in
-   accordance with their respective AS's certificate.  Path segments are
-   authenticated based on the certificates of the ASes that they refer
-   to.  The RECOMMENDED expiration time of a SCION AS certificate is
-   between 3h and 3 days, although some deployments use up to 5 days.
-   In comparison to these time scales, clock offsets in the order of
-   minutes are immaterial.
+   TLS peers are authenticated in accordance with their respective AS's
+   certificate (see Section 5), and path segments based on the
+   certificates of the ASes that they refer to.  The RECOMMENDED
+   expiration time of a SCION AS certificate is between 3h and 3 days,
+   although some deployments use up to 5 days.  In comparison to these
+   time scales, clock offsets in the order of minutes are immaterial.
+
+   Operators choose the Hop Field expiration time together with the
+   validity and the renewal margin of AS certificates, so that the AS
+   certificate used to sign an AS entry is still valid when the Hop
+   Fields of that entry expire (see Section 2.2.2.6 and 'Control Plane
+   AS Certificate' in [I-D.dekater-scion-pki]).  If the remaining
+   validity of the AS certificate is shorter than the configured Hop
+   Field expiration time, the Control Service shortens the Hop Field
+   expiration time accordingly.  For example, Hop Fields of 6 hours
+   require AS certificates that are valid for longer than 6 hours and
+   are renewed at least 6 hours before they expire.
 
    Each administrator of a SCION Control Service is responsible for
    maintaining coarse time synchronization with SCION routers within the
@@ -3339,10 +3407,9 @@ Table of Contents
       current and next ISD-AS and Interface IDs.
 
    *  Path Authorization - For every honest path segment registered in
-      any AS and any AS X appearing on that segment (except for the
-      previous one), AS X propagated a PCB corresponding to the segment
-      portion ending in its own entry to its successor AS on the
-      segment.
+      any AS and any AS X appearing on that segment (except for the last
+      one), AS X propagated a PCB corresponding to the segment portion
+      ending in its own entry to its successor AS on the segment.
 
    To ensure that the properties hold across the overall SCION network,
    these are the prerequisites to follow: - all core ASes MUST be able
@@ -3634,16 +3701,16 @@ Table of Contents
    [I-D.dekater-scion-dataplane]
               de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-11, 6 February 2026,
+              draft-dekater-scion-dataplane-15, 24 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-11>.
+              scion-dataplane-15>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-11, 16 January 2026,
+              dekater-scion-pki-15, 23 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-11>.
+              scion-pki-15>.
 
    [POSIX.1-2024]
               "Standard for Information Technology--Portable Operating
@@ -3659,6 +3726,12 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC3279]  Bassham, L., Polk, W., and R. Housley, "Algorithms and
+              Identifiers for the Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 3279, DOI 10.17487/RFC3279, May 2002,
+              <https://www.rfc-editor.org/rfc/rfc3279>.
+
    [RFC4632]  Fuller, V. and T. Li, "Classless Inter-domain Routing
               (CIDR): The Internet Address Assignment and Aggregation
               Plan", BCP 122, RFC 4632, DOI 10.17487/RFC4632, August
@@ -3669,6 +3742,10 @@ Table of Contents
               Infrastructure Certificate and Certificate Revocation List
               (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
               <https://www.rfc-editor.org/rfc/rfc5280>.
+
+   [RFC5652]  Housley, R., "Cryptographic Message Syntax (CMS)", STD 70,
+              RFC 5652, DOI 10.17487/RFC5652, September 2009,
+              <https://www.rfc-editor.org/rfc/rfc5652>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -3933,7 +4010,44 @@ Change Log
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
 
-draft-dekater-scion-controlplane-15
+draft-dekater-scion-controlplane-19
+
+   *  AS Entry: specify DER encoding of ECDSA signatures
+
+   *  AS Entry Signature: fix index of first AS entry in associated
+      data, compare certificate notAfter with Hop Field expiration time
+      and state what validators check
+
+   *  PCB Validity: fix comparison and sign of the allowance in the
+      definition of an expired hop
+
+   *  Distribution of Cryptographic Material: specify how to request the
+      latest TRC
+
+   *  Renewal of Cryptographic Material: specify encoding and signer of
+      the renewal response
+
+   *  Control Service Discovery: describe TLS peer authentication
+
+   *  Effects of Clock Inaccuracy: align Hop Field expiration time with
+      AS certificate validity and renewal
+
+   *  Editorial fixes in sections 1.6, 2.1.2, 2.2.2.2, 2.2.2.4, 2.4,
+      3.1.1, 3.3, 4.1, 4.1.2 and 8.1
+
+draft-dekater-scion-controlplane-18
+
+   *  Fix typo
+
+draft-dekater-scion-controlplane-17
+
+   *  SCMP: add normative language on rate limiting, mention congestion
+      control when discussing QUIC transport for RPCs
+
+   *  Peering links: clarify they are established in an up or down
+      segment.
+
+draft-dekater-scion-controlplane-16
 
    *  Final read, wording
 
@@ -4177,7 +4291,7 @@ draft-dekater-scion-controlplane-06
 
    *  General rewording
 
-   *  Added reference to SCIONLab as a testbed for implementors
+   *  Added reference to SCIONLab as a testbed for implementers
 
    *  Introduced this change log
 
@@ -4225,7 +4339,7 @@ draft-dekater-scion-controlplane-04
 Acknowledgments
 
    Many thanks go to Alvaro Retana (Futurewei), Joel M.  Halpern
-   (Ericsson), Brian Trammel (Google), William Boye (Swiss National
+   (Ericsson), Brian Trammell (Google), William Boye (Swiss National
    Bank), Matthias Frei (SCION Association), Kevin Meynell (SCION
    Association), Jean-Christophe Hugly (SCION Association), Juan A.
    Garcia Prado (ETH Zurich), Tilmann Zäschke (ETH Zurich), Dominik Roos
